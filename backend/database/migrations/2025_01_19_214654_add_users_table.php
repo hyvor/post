@@ -11,13 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('hyvor_user_id');
-            
-            $table->timestamp('trial_ends_at')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable();
-        });
+        $query = <<<SQL
+
+        CREATE TABLE users (
+            hyvor_user_id BIGSERIAL PRIMARY KEY,
+            trial_ends_at TIMESTAMP NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NULL
+        );
+
+        SQL;
+
+        DB::unprepared($query);
     }
 
     /**
