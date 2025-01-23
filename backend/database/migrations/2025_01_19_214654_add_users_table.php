@@ -17,7 +17,7 @@ return new class extends Migration
             hyvor_user_id BIGSERIAL PRIMARY KEY,
             trial_ends_at TIMESTAMP NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP NULL
+            updated_at TIMESTAMP CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
 
         SQL;

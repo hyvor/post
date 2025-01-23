@@ -13,9 +13,9 @@ return new class extends Migration
     {
         $query = <<<SQL
 
-        CREATE TABLE projects (
+        CREATE TABLE lists (
             id BIGSERIAL PRIMARY KEY,
-            user_id BIGINT NOT NULL,
+            project_id BIGINT NOT NULL,
             name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('lists');
     }
 };
