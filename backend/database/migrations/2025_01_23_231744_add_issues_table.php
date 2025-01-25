@@ -18,6 +18,7 @@ return new class extends Migration
         CREATE TABLE newsletter_issues (
             id BIGSERIAL PRIMARY KEY,
             uuid VARCHAR(255) UNIQUE NOT NULL,
+            list_id BIGINT NOT NULL,
             subject VARCHAR(255) NULL,
             from_name VARCHAR(255) NULL,
             from_email VARCHAR(255) NOT NULL,
