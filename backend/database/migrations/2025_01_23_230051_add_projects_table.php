@@ -15,10 +15,10 @@ return new class extends Migration
 
         CREATE TABLE projects (
             id BIGSERIAL PRIMARY KEY,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
             user_id BIGINT NOT NULL,
-            name VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            name VARCHAR(255) NOT NULL
         );
 
         SQL;

@@ -13,22 +13,25 @@ return new class extends Migration
     {
         $query = <<<SQL
 
+        DROP TYPE IF EXISTS subscriber_status;
+        DROP TYPE IF EXISTS subscriber_source;
+
         CREATE TYPE subscriber_status AS ENUM ('subscribed', 'unsubscribed', 'pending');
         CREATE TYPE subscriber_source AS ENUM ('console', 'form', 'import', 'auto_subscribe');
 
         CREATE TABLE subscribers (
             id BIGSERIAL PRIMARY KEY,
-            list_id BIGINT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            list_id BIGINT NOT NULL references lists(id),
             email VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_status DEFAULT 'pending',
-            subscribed_at TIMESTAMP NULL,
-            unsubscribed_at TIMESTAMP NULL,
+            subscribed_at TIMESTAMP,
+            unsubscribed_at TIMESTAMP,
             source subscriber_source DEFAULT 'form',
-            soure_id TEXT,
-            subscribe_ip VARCHAR(255) NULL,
-            unsubscribe_reason TEXT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            source_id VARCHAR(255),
+            subscribe_ip VARCHAR(255),
+            unsubscribe_reason VARCHAR(255)
         );
 
         SQL;

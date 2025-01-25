@@ -13,28 +13,30 @@ return new class extends Migration
     {
         $query = <<<SQL
 
+        DROP TYPE IF EXISTS issues_status;
+
         CREATE TYPE issues_status AS ENUM ('draft', 'scheduled', 'sending', 'failed', 'sent');
 
-        CREATE TABLE newsletter_issues (
+        CREATE TABLE issues (
             id BIGSERIAL PRIMARY KEY,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
             uuid VARCHAR(255) UNIQUE NOT NULL,
-            list_id BIGINT NOT NULL,
-            subject VARCHAR(255) NULL,
-            from_name VARCHAR(255) NULL,
+            list_id BIGINT NOT NULL references lists(id),
+            subject VARCHAR(255),
+            from_name VARCHAR(255),
             from_email VARCHAR(255) NOT NULL,
-            reply_to_email VARCHAR(255) NULL,
+            reply_to_email VARCHAR(255),
             content TEXT NULL,
             status issues_status,
             html TEXT NULL,
             text TEXT NULL,
-            scheduled_at TIMESTAMP NULL,
-            sending_at TIMESTAMP NULL,
-            failed_at TIMESTAMP NULL,
-            sent_at TIMESTAMP NULL,
-            error_private TEXT NULL,
-            batch_id VARCHAR(255) UNIQUE NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            scheduled_at TIMESTAMP,
+            sending_at TIMESTAMP,
+            failed_at TIMESTAMP,
+            sent_at TIMESTAMP,
+            error_private TEXT,
+            batch_id VARCHAR(255) UNIQUE
         );
 
         SQL;
@@ -47,6 +49,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscribers');
+        Schema::dropIfExists('issues');
     }
 };

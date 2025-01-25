@@ -15,7 +15,7 @@ return new class extends Migration
 
         CREATE TABLE lists (
             id BIGSERIAL PRIMARY KEY,
-            project_id BIGINT NOT NULL,
+            project_id BIGINT NOT NULL references projects(id),
             name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
