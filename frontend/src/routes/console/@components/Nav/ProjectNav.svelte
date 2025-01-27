@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { NavLink} from '@hyvor/design/components';
+	import { NavLink, Tag} from '@hyvor/design/components';
 	import { page } from '$app/stores';
     import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
     import IconHouse from '@hyvor/icons/IconHouse';
@@ -11,6 +11,7 @@
 
     // TODO: Remove fake project
     const currentProject = {
+        id: 1,
         name: "My Project",
     };
 
@@ -26,14 +27,18 @@
 			<div class="name">
 				{currentProject.name}
 			</div>
+            <div class="id">
+                ID
+				<Tag size="x-small"><strong> {currentProject.id}</strong></Tag>
+			</div>
 		</div>
 		<IconChevronExpand />
 	</button>
 
 	<div class="nav-links">
 		<NavLink
-			href={consoleUrl(currentProject.name.toString())}
-			active={$page.url.pathname === `/console/${currentProject.name}`}
+			href={consoleUrl(currentProject.id.toString())}
+			active={$page.url.pathname === `/console/${currentProject.id}`}
 		>
             <NavItem>
                 <IconHouse slot="icon" />
@@ -42,8 +47,8 @@
 		</NavLink>
 
 		<NavLink
-			href={consoleUrl(currentProject.name.toString() + '/subscibers')}
-			active={$page.url.pathname === `/console/${currentProject.name}/subscibers`}
+			href={consoleUrl(currentProject.id.toString() + '/subscibers')}
+			active={$page.url.pathname === `/console/${currentProject.id}/subscibers`}
 		>
             <NavItem>
                 <IconPeople slot="icon" />
@@ -52,8 +57,8 @@
 		</NavLink>
 
         <NavLink
-			href={consoleUrl(currentProject.name.toString() + '/issues')}
-			active={$page.url.pathname === `/console/${currentProject.name}/issues`}
+			href={consoleUrl(currentProject.id.toString() + '/issues')}
+			active={$page.url.pathname === `/console/${currentProject.id}/issues`}
 		>
             <NavItem>
                 <IconSend slot="icon" />
@@ -62,8 +67,8 @@
 		</NavLink>
 
         <NavLink
-			href={consoleUrl(currentProject.name.toString() + '/settings')}
-			active={$page.url.pathname === `/console/${currentProject.name}/settings`}
+			href={consoleUrl(currentProject.id.toString() + '/settings')}
+			active={$page.url.pathname === `/console/${currentProject.id}/settings`}
 		>
             <NavItem>
                 <IconGear slot="icon" />
