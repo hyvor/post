@@ -2,3 +2,5 @@
     import {HyvorBar} from "@hyvor/design/components"
 
 </script>
+
+<HyvorBar product='blogs'/>
