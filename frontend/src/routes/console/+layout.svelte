@@ -1,8 +1,8 @@
 <script lang="ts">
     import {HyvorBar, InternationalizationProvider} from "@hyvor/design/components";
-    import en from '../../../locale/en-US.json';
-    import fr from '../../../locale/fr-FR.json';
-	import Nav from "./@components/Nav/Nav.svelte";
+    import en from '../../../../locale/en-US.json';
+    import fr from '../../../../locale/fr-FR.json';
+	import Nav from "./[id]/@components/Nav/Nav.svelte";
 
 </script>
 
