@@ -3,8 +3,8 @@
 	import { page } from '$app/stores';
     import IconCoin from '@hyvor/icons/IconCoin';
     import IconHouse from '@hyvor/icons/IconHouse';
-	import { consoleUrl } from '../../lib/consoleUrl';
 	import NavItem from './NavItem.svelte';
+	import { consoleUrl } from '../../../lib/consoleUrl';
 </script>
 
 <div class="wrap hds-box">

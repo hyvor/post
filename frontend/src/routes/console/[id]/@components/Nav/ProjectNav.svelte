@@ -6,7 +6,7 @@
     import IconPeople from '@hyvor/icons/IconPeople';
     import IconSend from '@hyvor/icons/IconSend';
     import IconGear from '@hyvor/icons/IconGear';
-	import { consoleUrl } from '../../lib/consoleUrl';
+	import { consoleUrl } from '../../../lib/consoleUrl';
 	import NavItem from './NavItem.svelte';
 
     // TODO: Remove fake project
