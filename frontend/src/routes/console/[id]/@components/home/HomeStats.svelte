@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Loader } from '@hyvor/design/components';
-	import type { Stats } from '../types';
-	import { consoleUrl } from '../lib/consoleUrl';
+	import type { Stats } from '../../../types';
+	import { consoleUrl } from '../../../lib/consoleUrl';
 	import Stat from './Stat.svelte';
 
 
