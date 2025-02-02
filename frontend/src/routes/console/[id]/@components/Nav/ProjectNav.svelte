@@ -1,0 +1,149 @@
+<script lang="ts">
+	import { NavLink, Tag} from '@hyvor/design/components';
+	import { page } from '$app/stores';
+    import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
+    import IconHouse from '@hyvor/icons/IconHouse';
+    import IconPeople from '@hyvor/icons/IconPeople';
+    import IconSend from '@hyvor/icons/IconSend';
+    import IconGear from '@hyvor/icons/IconGear';
+	import { consoleUrl } from '../../../lib/consoleUrl';
+	import NavItem from './NavItem.svelte';
+
+    // TODO: Remove fake project
+    const currentProject = {
+        id: 1,
+        name: "My Project",
+    };
+
+	let width: number;
+
+</script>
+
+<svelte:window bind:innerWidth={width} />
+
+<div class="wrap hds-box">
+	<button class="current">
+		<div class="left">
+			<div class="name">
+				{currentProject.name}
+			</div>
+            <div class="id">
+                ID
+				<Tag size="x-small"><strong> {currentProject.id}</strong></Tag>
+			</div>
+		</div>
+		<IconChevronExpand />
+	</button>
+
+	<div class="nav-links">
+		<NavLink
+			href={consoleUrl(currentProject.id.toString())}
+			active={$page.url.pathname === `/console/${currentProject.id}`}
+		>
+            <NavItem>
+                <IconHouse slot="icon" />
+                <span slot="text">Home</span>
+            </NavItem>
+		</NavLink>
+
+		<NavLink
+			href={consoleUrl(currentProject.id.toString() + '/subscibers')}
+			active={$page.url.pathname === `/console/${currentProject.id}/subscibers`}
+		>
+            <NavItem>
+                <IconPeople slot="icon" />
+                <span slot="text">Subscribers</span>
+            </NavItem>
+		</NavLink>
+
+        <NavLink
+			href={consoleUrl(currentProject.id.toString() + '/issues')}
+			active={$page.url.pathname === `/console/${currentProject.id}/issues`}
+		>
+            <NavItem>
+                <IconSend slot="icon" />
+                <span slot="text">Issues</span>
+            </NavItem>
+		</NavLink>
+
+        <NavLink
+			href={consoleUrl(currentProject.id.toString() + '/settings')}
+			active={$page.url.pathname === `/console/${currentProject.id}/settings`}
+		>
+            <NavItem>
+                <IconGear slot="icon" />
+                <span slot="text">Settings</span>
+            </NavItem>
+		</NavLink>
+
+	</div>
+</div>
+
+<style lang="scss">
+	.wrap {
+		padding-bottom: 15px;
+		padding-top: 5px;
+	}
+	.current {
+		margin: 10px;
+		display: flex;
+		align-items: center;
+		text-align: left;
+		width: calc(100% - 20px);
+		padding: 10px 20px;
+		border-radius: var(--box-radius);
+		cursor: pointer;
+		.left {
+			flex: 1;
+		}
+		.name {
+			font-weight: 600;
+		}
+		&:hover {
+			background-color: var(--hover);
+		}
+	}
+
+	@media (max-width: 992px) {
+		.wrap {
+			width: 100%;
+			z-index: 100;
+			border-radius: 0 !important;
+			padding-top: 5px;
+			padding-bottom: 0;
+		}
+		.nav-links {
+			display: flex;
+			border-top: 1px solid var(--border);
+			overflow-x: auto;
+
+			:global(a .middle) {
+				display: none;
+			}
+			:global(a .start) {
+				margin-right: 0 !important;
+			}
+			:global(a) {
+				border-left: none !important;
+				border-top: 3px solid transparent;
+				flex: 1;
+				justify-content: center;
+			}
+			:global(a.active) {
+				border-top-color: var(--accent);
+			}
+			:global(.line) {
+				display: none !important;
+			}
+		}
+		.current {
+			margin: 0px auto;
+			margin-bottom: 5px;
+		}
+		.current .left {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+	}
+</style>
