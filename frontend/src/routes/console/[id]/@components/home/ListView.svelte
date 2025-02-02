@@ -3,6 +3,9 @@
 	import { consoleUrl } from '../../../lib/consoleUrl';
     import ListRow from './ListRow.svelte';
 	import Stat from './Stat.svelte';
+	import CreateListButton from './CreateListButton.svelte';
+
+    let showCreateListModal = false;
 
     // TODO: Remove fake data
     const lists = [
@@ -36,7 +39,7 @@
 <div id="list-view">
     <div class="list-header">
         Lists
-        <Button color="accent">Create List</Button>
+        <CreateListButton />
     </div>
     {#each lists as list}
         <ListRow {list} />
@@ -54,27 +57,4 @@
         font-size: 1.5rem;
         font-weight: 600;
     }
-
-    .list-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 20px;
-        padding-left: 50px;
-        padding-right: 50px;
-        border-left: 3px solid transparent;
-        position: relative;
-        border-radius: 20px;
-        cursor: pointer;
-    }
-
-    .list-item:hover {
-		background: var(--hover);
-	}
-
-    .list-title {
-		width: 300px;
-		font-weight: 600;
-		word-break: break-all;
-	}
 </style>
