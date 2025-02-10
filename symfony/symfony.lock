@@ -26,6 +26,9 @@
             "migrations/.gitignore"
         ]
     },
+    "hyvor/internal-bundle": {
+        "version": "dev-symfony"
+    },
     "symfony/console": {
         "version": "7.2",
         "recipe": {

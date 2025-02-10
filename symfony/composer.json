@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "hyvor/internal-bundle": "@dev",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
@@ -71,5 +72,14 @@
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.62"
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../internal",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

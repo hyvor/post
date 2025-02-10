@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f58a4d4765b80c457a1c96668bb059e",
+    "content-hash": "07166b135ef04dc3c3039f48b7436d17",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -1219,6 +1219,30 @@
                 "source": "https://github.com/doctrine/sql-formatter/tree/1.5.2"
             },
             "time": "2025-01-24T11:45:48+00:00"
+        },
+        {
+            "name": "hyvor/internal-bundle",
+            "version": "dev-symfony",
+            "dist": {
+                "type": "path",
+                "url": "../internal",
+                "reference": "4db881ce96354012cf5db0b97f463fd9835ef0af"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hyvor\\InternalBundle\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Hyvor\\InternalBundle\\Tests\\": "tests/"
+                }
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "psr/cache",
@@ -4800,7 +4824,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "hyvor/internal-bundle": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
