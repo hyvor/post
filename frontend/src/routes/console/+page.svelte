@@ -1,6 +1,3 @@
 <script lang="ts">
-    import {HyvorBar} from "@hyvor/design/components"
-
+	import { HyvorBar } from '@hyvor/design/components';
 </script>
-
-<HyvorBar product='blogs'/>
