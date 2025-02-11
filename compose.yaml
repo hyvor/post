@@ -1,5 +1,4 @@
 services:
-
   hyvor-post-frontend:
     container_name: hyvor-post-frontend
     build:
@@ -7,16 +6,19 @@ services:
       target: frontend-dev
     develop:
       watch:
-        -   path: frontend/src
-            action: sync
-            target: /app/frontend/src
-        -   path: frontend/static
-            action: sync
-            target: /app/frontend/static
-        -   path: frontend/package.json
-            action: rebuild
-        -   path: frontend/package-lock.json
-            action: rebuild
+        - path: frontend/src
+          action: sync
+          target: /app/frontend/src
+        - path: frontend/static
+          action: sync
+          target: /app/frontend/static
+        - path: shared
+          action: sync
+          target: /app/shared
+        - path: frontend/package.json
+          action: rebuild
+        - path: frontend/package-lock.json
+          action: rebuild
     labels:
       traefik.enable: true
       traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.dev`)
@@ -28,7 +30,7 @@ services:
     networks:
       - hyvor-network
 
-    profiles: [ dev ]
+    profiles: [dev]
 
   hyvor-post-backend:
     container_name: hyvor-post-backend
@@ -37,11 +39,14 @@ services:
       target: backend-dev
     develop:
       watch:
-        -   path: backend
-            action: sync
-            target: /app/backend
-        -   path: backend/composer.lock
-            action: rebuild
+        - path: backend
+          action: sync
+          target: /app/backend
+        - path: shared
+          action: sync
+          target: /app/shared
+        - path: backend/composer.lock
+          action: rebuild
     labels:
       traefik.enable: true
       # backend
@@ -53,7 +58,7 @@ services:
       traefik.http.services.hyvor-post-backend.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
+    profiles: [dev]
 
 networks:
   hyvor-network:

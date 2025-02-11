@@ -1,22 +1,20 @@
 <script lang="ts">
-	import { NavLink, Tag} from '@hyvor/design/components';
+	import { NavLink, Tag } from '@hyvor/design/components';
 	import { page } from '$app/stores';
-    import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
-    import IconHouse from '@hyvor/icons/IconHouse';
-    import IconPeople from '@hyvor/icons/IconPeople';
-    import IconSend from '@hyvor/icons/IconSend';
-    import IconGear from '@hyvor/icons/IconGear';
-	import { consoleUrl } from '../../../lib/consoleUrl';
+	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
+	import IconHouse from '@hyvor/icons/IconHouse';
+	import IconPeople from '@hyvor/icons/IconPeople';
+	import IconSend from '@hyvor/icons/IconSend';
+	import IconGear from '@hyvor/icons/IconGear';
 	import NavItem from './NavItem.svelte';
 
-    // TODO: Remove fake project
-    const currentProject = {
-        id: 1,
-        name: "My Project",
-    };
+	// TODO: Remove fake project
+	const currentProject = {
+		id: 1,
+		name: 'My Project'
+	};
 
 	let width: number;
-
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -27,8 +25,8 @@
 			<div class="name">
 				{currentProject.name}
 			</div>
-            <div class="id">
-                ID
+			<div class="id">
+				ID
 				<Tag size="x-small"><strong> {currentProject.id}</strong></Tag>
 			</div>
 		</div>
@@ -37,45 +35,44 @@
 
 	<div class="nav-links">
 		<NavLink
-			href={consoleUrl(currentProject.id.toString())}
+			href={'/console/' + currentProject.id.toString()}
 			active={$page.url.pathname === `/console/${currentProject.id}`}
 		>
-            <NavItem>
-                <IconHouse slot="icon" />
-                <span slot="text">Home</span>
-            </NavItem>
+			<NavItem>
+				<IconHouse slot="icon" />
+				<span slot="text">Home</span>
+			</NavItem>
 		</NavLink>
 
 		<NavLink
-			href={consoleUrl(currentProject.id.toString() + '/subscibers')}
+			href={'/console/' + currentProject.id.toString() + '/subscibers'}
 			active={$page.url.pathname === `/console/${currentProject.id}/subscibers`}
 		>
-            <NavItem>
-                <IconPeople slot="icon" />
-                <span slot="text">Subscribers</span>
-            </NavItem>
+			<NavItem>
+				<IconPeople slot="icon" />
+				<span slot="text">Subscribers</span>
+			</NavItem>
 		</NavLink>
 
-        <NavLink
-			href={consoleUrl(currentProject.id.toString() + '/issues')}
+		<NavLink
+			href={'/console/' + currentProject.id.toString() + '/issues'}
 			active={$page.url.pathname === `/console/${currentProject.id}/issues`}
 		>
-            <NavItem>
-                <IconSend slot="icon" />
-                <span slot="text">Issues</span>
-            </NavItem>
+			<NavItem>
+				<IconSend slot="icon" />
+				<span slot="text">Issues</span>
+			</NavItem>
 		</NavLink>
 
-        <NavLink
-			href={consoleUrl(currentProject.id.toString() + '/settings')}
+		<NavLink
+			href={'/console/' + currentProject.id.toString() + '/settings'}
 			active={$page.url.pathname === `/console/${currentProject.id}/settings`}
 		>
-            <NavItem>
-                <IconGear slot="icon" />
-                <span slot="text">Settings</span>
-            </NavItem>
+			<NavItem>
+				<IconGear slot="icon" />
+				<span slot="text">Settings</span>
+			</NavItem>
 		</NavLink>
-
 	</div>
 </div>
 
