@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { NavLink } from '@hyvor/design/components';
 	import { page } from '$app/stores';
-    import IconCoin from '@hyvor/icons/IconCoin';
-    import IconHouse from '@hyvor/icons/IconHouse';
+	import IconCoin from '@hyvor/icons/IconCoin';
 	import NavItem from './NavItem.svelte';
-	import { consoleUrl } from '../../../lib/consoleUrl';
 </script>
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-		<NavLink href={consoleUrl('/billing')} active={$page.url.pathname === '/console/billing'}>
+		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'}>
 			<NavItem>
 				<IconCoin slot="icon" />
 				<span slot="text">Billing</span>
