@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Api\Resource\Controller;
+namespace App\Api\Console\Controller;
 
 use App\Permission;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
