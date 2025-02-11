@@ -9,6 +9,6 @@ return static function (SecurityConfig $security): void {
     // $security->enableAuthenticatorManager(true);
     // ....
 
-//    $security->firewall('main')
-//        ->customAuthenticators([HyvorAuthenticator::class]);
+    $security->firewall('main')
+        ->customAuthenticators([HyvorAuthenticator::class]);
 };
