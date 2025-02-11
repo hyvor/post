@@ -2,7 +2,6 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Permission;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +11,6 @@ class TestController extends AbstractController
 {
 
     #[Route('/test', methods: ['GET'])]
-    #[Permission]
     public function test(): Response
     {
         $user = $this->getUser();
