@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13.2",
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
+        "fakerphp/faker": "^1.24",
         "hyvor/internal": "^2.0",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
