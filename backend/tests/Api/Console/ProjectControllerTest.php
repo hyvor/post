@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Api\Console;
 
+use App\Api\Console\Controller\ProjectController;
 use App\Tests\Case\WebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ProjectController::class)]
 final class ProjectControllerTest extends WebTestCase
 {
     public function testCreateProject(): void
