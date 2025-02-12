@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Enum;
+
 enum SubscriberSource: string
 {
     case CONSOLE = 'console';

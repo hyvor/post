@@ -20,7 +20,10 @@ final class Version20250209024452 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(<<<SQL
-        CREATE TYPE issues_status AS ENUM ('draft', 'scheduled', 'sending', 'failed', 'sent');
+            CREATE TYPE issues_status AS ENUM ('draft', 'scheduled', 'sending', 'failed', 'sent');
+        SQL);
+
+        $this->addSql(<<<SQL
         CREATE TABLE issues (
             id BIGSERIAL PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
