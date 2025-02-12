@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Repository\SubscriberRepository;
 use Doctrine\ORM\Mapping as ORM;
-use SubsciberStatus;
-use SubscriberSource;
+use App\Enum\SubscriberStatus;
+use App\Enum\SubscriberSource;
 
 #[ORM\Entity(repositoryClass: SubscriberRepository::class)]
+#[ORM\Table(name: 'subscribers')]
 class Subscriber
 {
     #[ORM\Id]
@@ -28,8 +29,8 @@ class Subscriber
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true, enumType: SubsciberStatus::class)]
-    private ?SubsciberStatus $status = null;
+    #[ORM\Column(nullable: true, enumType: SubscriberStatus::class)]
+    private ?SubscriberStatus $status = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $subscribed_at = null;
@@ -102,12 +103,12 @@ class Subscriber
         return $this;
     }
 
-    public function getStatus(): ?SubsciberStatus
+    public function getStatus(): ?SubscriberStatus
     {
         return $this->status;
     }
 
-    public function setStatus(?SubsciberStatus $status): static
+    public function setStatus(?SubscriberStatus $status): static
     {
         $this->status = $status;
 

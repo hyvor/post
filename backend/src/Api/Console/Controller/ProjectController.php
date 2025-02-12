@@ -21,6 +21,7 @@ final class ProjectController extends AbstractController
 
         $project = new Project();
         $project->setName($data['name']);
+        $project->setUserId(1); # TODO: Replace with actual user ID
         $project->setCreatedAt(new \DateTimeImmutable());
         $project->setUpdatedAt(new \DateTimeImmutable());
 
