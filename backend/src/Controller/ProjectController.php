@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Project;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class ProjectController extends AbstractController
+{
+    #[Route('/project', name: 'create_project', methods: ['POST'])]
+    public function createProject(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if (!$data) {
+            return $this->json(['error' => 'Invalid JSON'], 400);
+        }
+
+        $project = new Project();
+        $project->setName($data['name']);
+        $project->setCreatedAt(new \DateTimeImmutable());
+        $project->setUpdatedAt(new \DateTimeImmutable());
+
+        $entityManager->persist($project);
+        $entityManager->flush();
+
+        return $this->json(['id' => $project->getId()]);
+    }
+}
