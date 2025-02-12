@@ -1,0 +1,188 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\SubscriberRepository;
+use Doctrine\ORM\Mapping as ORM;
+use SubsciberStatus;
+use SubscriberSource;
+
+#[ORM\Entity(repositoryClass: SubscriberRepository::class)]
+class Subscriber
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscribers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?NewsletterList $list_id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(nullable: true, enumType: SubsciberStatus::class)]
+    private ?SubsciberStatus $status = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $subscribed_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $unsubscribed_at = null;
+
+    #[ORM\Column(enumType: SubscriberSource::class)]
+    private ?SubscriberSource $source = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $source_id = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $subscribe_ip = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $unsubscribe_reason = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getListId(): ?NewsletterList
+    {
+        return $this->list_id;
+    }
+
+    public function setListId(?NewsletterList $list_id): static
+    {
+        $this->list_id = $list_id;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getStatus(): ?SubsciberStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?SubsciberStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getSubscribedAt(): ?\DateTimeImmutable
+    {
+        return $this->subscribed_at;
+    }
+
+    public function setSubscribedAt(?\DateTimeImmutable $subscribed_at): static
+    {
+        $this->subscribed_at = $subscribed_at;
+
+        return $this;
+    }
+
+    public function getUnsubscribedAt(): ?\DateTimeImmutable
+    {
+        return $this->unsubscribed_at;
+    }
+
+    public function setUnsubscribedAt(?\DateTimeImmutable $unsubscribed_at): static
+    {
+        $this->unsubscribed_at = $unsubscribed_at;
+
+        return $this;
+    }
+
+    public function getSource(): ?SubscriberSource
+    {
+        return $this->source;
+    }
+
+    public function setSource(SubscriberSource $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    public function getSourceId(): ?int
+    {
+        return $this->source_id;
+    }
+
+    public function setSourceId(?int $source_id): static
+    {
+        $this->source_id = $source_id;
+
+        return $this;
+    }
+
+    public function getSubscribeIp(): ?string
+    {
+        return $this->subscribe_ip;
+    }
+
+    public function setSubscribeIp(?string $subscribe_ip): static
+    {
+        $this->subscribe_ip = $subscribe_ip;
+
+        return $this;
+    }
+
+    public function getUnsubscribeReason(): ?string
+    {
+        return $this->unsubscribe_reason;
+    }
+
+    public function setUnsubscribeReason(?string $unsubscribe_reason): static
+    {
+        $this->unsubscribe_reason = $unsubscribe_reason;
+
+        return $this;
+    }
+}
