@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Enum;
+
 enum SubsciberStatus: string
 {
     case SUBSCRIBED = 'subscribed';

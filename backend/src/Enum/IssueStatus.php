@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Enum;
+
 enum IssueStatus: string
 {
     case DRAFT = 'draft';

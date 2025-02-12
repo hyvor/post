@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller;
+namespace App\Api\Console\Controller;
 
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ProjectController extends AbstractController
