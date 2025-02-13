@@ -19,11 +19,11 @@ class ProjectService
     ): Project
     {
 
-        $project = new Project();
-        $project->setName($name);
-        $project->setUserId(1); # TODO: Replace with actual user ID
-        $project->setCreatedAt(new \DateTimeImmutable());
-        $project->setUpdatedAt(new \DateTimeImmutable());
+        $project = new Project()
+            ->setName($name)
+            ->setUserId(1) # TODO: Replace with actual user ID
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($project);
         $this->entityManager->flush();
