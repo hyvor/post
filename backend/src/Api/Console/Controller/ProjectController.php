@@ -2,8 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\InputObject\CreateProjectInputObject;
-use App\Api\Console\OutputObject\ProjectOutputObject;
+use App\Api\Console\Input\CreateProjectInput;
+use App\Api\Console\Object\ProjectObject;
 use App\Service\Project\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,10 +20,10 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project', name: 'create_project', methods: ['POST'])]
-    public function createProject(#[MapRequestPayload] CreateProjectInputObject $input): JsonResponse
+    public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
         $project = $this->projectService->createProject($input->name);
-        return $this->json(new ProjectOutputObject($project));
+        return $this->json(new ProjectObject($project));
     }
 
     #[Route('/project', name: 'delete_project', methods: ['DELETE'])]

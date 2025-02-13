@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\Console\OutputObject;
+namespace App\Api\Console\Object;
 
 use App\Entity\Project;
 
-class ProjectOutputObject
+class ProjectObject
 {
 
     public int $id;
