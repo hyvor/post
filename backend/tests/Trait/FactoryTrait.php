@@ -4,14 +4,14 @@ namespace App\Tests\Trait;
 
 use App\Entity\Factory\FactoryAbstract;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
 
 trait FactoryTrait
 {
 
     /**
-     * @param class-string<FactoryAbstract> $factory
-     * @return void
+     * @template T of FactoryAbstract
+     * @param class-string<T> $factory
+     * @return T
      */
     public function factory(string $factory)
     {

@@ -2,22 +2,33 @@
 
 namespace App\Tests\Case;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
 
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->client = static::createClient();
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
     public function consoleApi(string $method, string $uri, array $data = []): Response
     {
-        $client = static::createClient();
         // TODO: add authentication here
-        $client->request(
+        $this->client->request(
             $method,
             '/api/console' . $uri,
             server: ['CONTENT_TYPE' => 'application/json'],
-            content: json_encode($data)
+            content: (string) json_encode($data)
         );
-        return $client->getResponse();
+        return $this->client->getResponse();
     }
 
 }
