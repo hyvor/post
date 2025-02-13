@@ -25,4 +25,11 @@ final class ProjectController extends AbstractController
         $project = $this->projectService->createProject($input->name);
         return $this->json(new ProjectOutputObject($project));
     }
+
+    #[Route('/project', name: 'delete_project', methods: ['DELETE'])]
+    public function deleteProject(int $id): JsonResponse
+    {
+        $this->projectService->deleteProject($id);
+        return $this->json(['message' => 'Project deleted']);
+    }
 }

@@ -32,4 +32,10 @@ class ProjectService
 
     }
 
+    public function deleteProject(int $id)
+    {
+        $this->entityManager->remove($this->entityManager->find(Project::class, $id));
+        $this->entityManager->flush();
+    }
+
 }
