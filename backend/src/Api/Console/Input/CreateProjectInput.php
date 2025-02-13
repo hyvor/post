@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\Console\InputObject;
+namespace App\Api\Console\Input;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateProjectInputObject
+class CreateProjectInput
 {
 
     #[Assert\NotBlank]
