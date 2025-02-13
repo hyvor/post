@@ -2,11 +2,14 @@
 
 namespace App\Tests\Case;
 
+use App\Tests\Trait\FactoryTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
+
+    use FactoryTrait;
 
     private KernelBrowser $client;
 
