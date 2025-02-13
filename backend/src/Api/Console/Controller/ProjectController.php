@@ -26,7 +26,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/project', name: 'delete_project', methods: ['DELETE'])]
+    #[Route('/projects/{id}', name: 'delete_project', methods: ['DELETE'])]
     public function deleteProject(int $id): JsonResponse
     {
         // TODO: Check if the project is there
