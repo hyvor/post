@@ -37,6 +37,8 @@ final class ProjectControllerTest extends WebTestCase
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
 
+        $response = $this->consoleApi('DELETE', '/project/' . $project->getId());
+
     }
 
 }
