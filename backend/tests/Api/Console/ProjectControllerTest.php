@@ -22,9 +22,13 @@ final class ProjectControllerTest extends WebTestCase
         $response = $this->consoleApi('POST', '/project', ['name' => 'Valid Project Name']);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertJson($response->getContent());
 
-        $data = json_decode($response->getContent(), true);
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
         $this->assertArrayHasKey('id', $data);
         $this->assertIsInt($data['id']);
         $this->assertSame('Valid Project Name', 'Valid Project Name'); // Ensure name is correct
@@ -36,6 +40,7 @@ final class ProjectControllerTest extends WebTestCase
         $project = $this
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+
 
         $response = $this->consoleApi('DELETE', '/project/' . $project->getId());
 

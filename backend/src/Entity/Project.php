@@ -17,10 +17,10 @@ class Project
     private int $id;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
     private ?int $user_id = null;
@@ -39,12 +39,19 @@ class Project
         $this->newsletterLists = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
     }

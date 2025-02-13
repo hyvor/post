@@ -2,12 +2,11 @@
 
 namespace App\Entity\Factory;
 
-use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 /**
- * @template T of Entity
+ * @template T of object
  */
 abstract class FactoryAbstract
 {
@@ -26,6 +25,7 @@ abstract class FactoryAbstract
 
     /**
      * @param ?callable(T, int): void $callback
+     * @return T[]
      */
     public function createMany(int $count, ?callable $callback = null): array
     {
