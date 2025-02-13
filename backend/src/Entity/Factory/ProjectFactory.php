@@ -10,16 +10,13 @@ use App\Entity\Project;
 class ProjectFactory extends FactoryAbstract
 {
 
-    public function define()
+    public function define() : Project
     {
-
         $project = new Project();
         $project->setCreatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
+        $project->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
         $project->setUserId(1);
-        // TODO:
-
         return $project;
-
     }
 
 }
