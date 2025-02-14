@@ -34,4 +34,24 @@ final class NewsletterListController extends AbstractController
         return $this->json(new NewsletterListObject($list));
     }
 
+    #[Route('/lists/{id}')]
+    public function getById(int $id): JsonResponse
+    {
+        $newsletterList = $this->newsletterListService->getNewsletterList($id);
+        if (!$newsletterList) {
+            return $this->json(['message' => 'List not found'], 404);
+        }
+        return $this->json(new NewsletterListObject($newsletterList));
+    }
+
+    #[Route('/lists/{id}', methods: 'DELETE')]
+    public function deleteNewsletterList(int $id): JsonResponse
+    {
+        $list = $this->newsletterListService->getNewsletterList($id);
+        if (!$list) {
+            return $this->json(['message' => 'List not found'], 404);
+        }
+        $this->newsletterListService->deleteNewsletterList($list);
+        return $this->json(['message' => 'List deleted']);
+    }
 }

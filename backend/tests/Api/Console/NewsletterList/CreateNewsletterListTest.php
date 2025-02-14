@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Tests\Api\Console;
+namespace Api\Console\NewsletterList;
 
 use App\Api\Console\Controller\NewsletterListController;
-use App\Api\Console\Controller\ProjectController;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\Project;
-use App\Repository\ProjectRepository;
-use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
