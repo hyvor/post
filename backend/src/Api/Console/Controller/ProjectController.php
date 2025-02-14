@@ -21,9 +21,9 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/projects', methods: 'GET')]
-    public function listProjects(): JsonResponse
+    public function getProjects(): JsonResponse
     {
-        $projects = $this->projectService->listProjects();
+        $projects = $this->projectService->getProjects();
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
 

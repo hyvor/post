@@ -27,7 +27,7 @@ class ProjectService
             ->setUpdatedAt(new \DateTimeImmutable());
 
         $project->addNewsletterList(
-            (new NewsletterList())
+            new NewsletterList()
                 ->setName('Default List')
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable())
@@ -52,7 +52,10 @@ class ProjectService
         return $project; // Return null if project not found
     }
 
-    public function listProjects()
+    /**
+     * @return list<Project>
+     */
+    public function getProjects()
     {
         return $this->entityManager->getRepository(Project::class)->findAll();
     }

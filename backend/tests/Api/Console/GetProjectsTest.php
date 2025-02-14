@@ -5,11 +5,11 @@ namespace App\Tests\Api\Console;
 use App\Api\Console\Controller\ProjectController;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
-use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversMethod(ProjectController::class, 'listProjects')]
-#[CoversMethod(ProjectService::class, 'listProjects')]
-class ListProjectsTest extends WebTestCase
+#[CoversClass(ProjectController::class)]
+#[CoversClass(ProjectService::class)]
+class GetProjectsTest extends WebTestCase
 {
 
     // TODO: tests for input validation
