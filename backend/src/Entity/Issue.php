@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\IssueRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\IssueStatus;
 
 #[ORM\Entity(repositoryClass: IssueRepository::class)]
+#[ORM\Table(name: 'issues')]
 class Issue
 {
     #[ORM\Id]
@@ -41,8 +42,8 @@ class Issue
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
-    #[ORM\Column(nullable: true, enumType: \IssueStatus::class)]
-    private ?\IssueStatus $status = null;
+    #[ORM\Column(nullable: true, enumType: IssueStatus::class)]
+    private ?IssueStatus $status = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $html = null;
