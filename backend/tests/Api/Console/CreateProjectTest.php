@@ -17,7 +17,7 @@ class CreateProjectTest extends WebTestCase
 
     public function testCreateProjectValid(): void
     {
-        $response = $this->consoleApi('POST', '/project', ['name' => 'Valid Project Name']);
+        $response = $this->consoleApi('POST', '/projects', ['name' => 'Valid Project Name']);
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -32,12 +32,12 @@ class CreateProjectTest extends WebTestCase
         $this->assertSame('Valid Project Name', 'Valid Project Name'); // Ensure name is correct
     }
 
-    /*public function testCreateProjectInvalid(): void
+    public function testCreateProjectInvalid(): void
     {
         $long_string = str_repeat('a', 256);
-        $response = $this->consoleApi('POST', '/project', ['name' => $long_string]);
+        $response = $this->consoleApi('POST', '/projects', ['name' => $long_string]);
 
-        $this->assertEquals(400, $response->getStatusCode());
-    }*/
+        $this->assertEquals(422, $response->getStatusCode());
+    }
 
 }

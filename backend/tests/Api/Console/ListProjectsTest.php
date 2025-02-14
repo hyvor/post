@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ProjectController::class, 'listProjects')]
 #[CoversMethod(ProjectService::class, 'listProjects')]
-class ListProjectTest extends WebTestCase
+class ListProjectsTest extends WebTestCase
 {
 
     // TODO: tests for input validation
