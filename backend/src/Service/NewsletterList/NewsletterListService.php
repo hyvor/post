@@ -36,6 +36,18 @@ class NewsletterListService
         return $list;
     }
 
+    public function deleteNewsletterList(NewsletterList $list): void
+    {
+        $this->entityManager->remove($list);
+        $this->entityManager->flush();
+    }
+
+    public function getNewsletterList(int $id): ?NewsletterList
+    {
+        $list = $this->entityManager->getRepository(NewsletterList::class)->find($id);
+        return $list;
+    }
+
     /**
      * @return list<NewsletterList>
      */
@@ -43,4 +55,6 @@ class NewsletterListService
     {
         return $this->entityManager->getRepository(NewsletterList::class)->findAll();
     }
+
+
 }
