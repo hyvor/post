@@ -16,7 +16,7 @@ class DeleteProjectTest extends WebTestCase
 
     // TODO: tests for input validation (when the project is not found)
     // TODO: tests for authentication
-    public function testDeleteProject(): void
+    public function testDeleteProjectFound(): void
     {
         $project = $this
             ->factory(ProjectFactory::class)
@@ -39,5 +39,12 @@ class DeleteProjectTest extends WebTestCase
 
         $find_project = $this->consoleApi('GET', '/project/' . $project_id);
         $this->assertEquals(404, $find_project->getStatusCode());
+    }
+
+    public function testDeleteProjectNotFound(): void
+    {
+        $response = $this->consoleApi('DELETE', '/projects/1');
+
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

@@ -51,4 +51,9 @@ class ProjectService
         $project = $this->entityManager->getRepository(Project::class)->find($id);
         return $project; // Return null if project not found
     }
+
+    public function listProjects()
+    {
+        return $this->entityManager->getRepository(Project::class)->findAll();
+    }
 }
