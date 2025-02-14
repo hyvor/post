@@ -2,6 +2,7 @@
 
 namespace App\Service\Project;
 
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,6 +26,13 @@ class ProjectService
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
+        $project->addNewsletterList(
+            (new NewsletterList())
+                ->setName('Default List')
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setUpdatedAt(new \DateTimeImmutable())
+        );
+
         $this->entityManager->persist($project);
         $this->entityManager->flush();
 
@@ -38,4 +46,9 @@ class ProjectService
         $this->entityManager->flush();
     }
 
+    public function getProject(int $id): ?Project
+    {
+        $project = $this->entityManager->getRepository(Project::class)->find($id);
+        return $project; // Return null if project not found
+    }
 }

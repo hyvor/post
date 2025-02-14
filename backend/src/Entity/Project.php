@@ -31,7 +31,7 @@ class Project
     /**
      * @var Collection<int, NewsletterList>
      */
-    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id')]
+    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id', cascade: ['persist'])]
     private Collection $newsletterLists;
 
     public function __construct()
@@ -111,7 +111,7 @@ class Project
     {
         if (!$this->newsletterLists->contains($newsletterList)) {
             $this->newsletterLists->add($newsletterList);
-            $newsletterList->setProjectId($this);
+            $newsletterList->setProject($this);
         }
 
         return $this;
@@ -121,8 +121,8 @@ class Project
     {
         if ($this->newsletterLists->removeElement($newsletterList)) {
             // set the owning side to null (unless already changed)
-            if ($newsletterList->getProjectId() === $this) {
-                $newsletterList->setProjectId(null);
+            if ($newsletterList->getProject() === $this) {
+                $newsletterList->setProject(null);
             }
         }
 

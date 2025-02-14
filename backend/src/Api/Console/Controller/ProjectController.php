@@ -4,7 +4,9 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\CreateProjectInput;
 use App\Api\Console\Object\ProjectObject;
+use App\Entity\Project;
 use App\Service\Project\ProjectService;
+use Illuminate\Support\Js;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -19,6 +21,16 @@ final class ProjectController extends AbstractController
     {
     }
 
+    #[Route('/project/{id}')]
+    public function getById(int $id): JsonResponse
+    {
+        $project = $this->projectService->getProject($id);
+        if (!$project) {
+            return $this->json(['message' => 'Project not found'], 404);
+        }
+        return $this->json(new ProjectObject($project));
+    }
+
     #[Route('/project', name: 'create_project', methods: ['POST'])]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
@@ -29,8 +41,11 @@ final class ProjectController extends AbstractController
     #[Route('/projects/{id}', name: 'delete_project', methods: ['DELETE'])]
     public function deleteProject(int $id): JsonResponse
     {
-        // TODO: Check if the project is there
-        $this->projectService->deleteProject($id);
+        $project = $this->projectService->getProject($id);
+        if (!$project) {
+            return $this->json(['message' => 'Project not found'], 404);
+        }
+        $this->projectService->deleteProject($project);
         return $this->json(['message' => 'Project deleted']);
     }
 }
