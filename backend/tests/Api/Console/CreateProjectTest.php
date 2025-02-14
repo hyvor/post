@@ -3,12 +3,14 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ProjectController;
+use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
-use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversMethod(ProjectController::class, 'createProject')]
-#[CoversMethod(ProjectService::class, 'createProject')]
+#[CoversClass(ProjectController::class)]
+#[CoversClass(ProjectService::class)]
+#[CoversClass(ProjectRepository::class)]
 class CreateProjectTest extends WebTestCase
 {
 
