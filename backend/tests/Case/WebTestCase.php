@@ -11,7 +11,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     use FactoryTrait;
 
-    private KernelBrowser $client;
+    protected KernelBrowser $client;
 
     protected function setUp(): void
     {

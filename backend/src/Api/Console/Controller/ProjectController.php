@@ -6,7 +6,6 @@ use App\Api\Console\Input\CreateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
-use Illuminate\Support\Js;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -21,7 +20,21 @@ final class ProjectController extends AbstractController
     {
     }
 
-    #[Route('/project/{id}')]
+    #[Route('/projects', methods: 'GET')]
+    public function listProjects(): JsonResponse
+    {
+        $projects = $this->projectService->listProjects();
+        return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
+    }
+
+    #[Route('/projects', methods: 'POST')]
+    public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
+    {
+        $project = $this->projectService->createProject($input->name);
+        return $this->json(new ProjectObject($project));
+    }
+
+    #[Route('/projects/{id}')]
     public function getById(int $id): JsonResponse
     {
         $project = $this->projectService->getProject($id);
@@ -31,14 +44,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/project', name: 'create_project', methods: ['POST'])]
-    public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
-    {
-        $project = $this->projectService->createProject($input->name);
-        return $this->json(new ProjectObject($project));
-    }
-
-    #[Route('/projects/{id}', name: 'delete_project', methods: ['DELETE'])]
+    #[Route('/projects/{id}', methods: 'DELETE')]
     public function deleteProject(int $id): JsonResponse
     {
         $project = $this->projectService->getProject($id);
@@ -49,10 +55,4 @@ final class ProjectController extends AbstractController
         return $this->json(['message' => 'Project deleted']);
     }
 
-    #[Route('/projects', name: 'list_projects', methods: ['GET'])]
-    public function listProjects(): JsonResponse
-    {
-        $projects = $this->projectService->listProjects();
-        return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
-    }
 }
