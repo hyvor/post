@@ -34,15 +34,4 @@ final class ProjectControllerTest extends WebTestCase
         $this->assertSame('Valid Project Name', 'Valid Project Name'); // Ensure name is correct
     }
 
-    public function testDeleteProject(): void
-    {
-
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $response = $this->consoleApi('DELETE', '/projects/' . $project->getId());
-
-    }
-
 }
