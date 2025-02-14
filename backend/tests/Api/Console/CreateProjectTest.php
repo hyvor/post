@@ -15,7 +15,7 @@ class CreateProjectTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testCreateProject(): void
+    public function testCreateProjectValid(): void
     {
         $response = $this->consoleApi('POST', '/project', ['name' => 'Valid Project Name']);
 
@@ -31,5 +31,13 @@ class CreateProjectTest extends WebTestCase
         $this->assertIsInt($data['id']);
         $this->assertSame('Valid Project Name', 'Valid Project Name'); // Ensure name is correct
     }
+
+    /*public function testCreateProjectInvalid(): void
+    {
+        $long_string = str_repeat('a', 256);
+        $response = $this->consoleApi('POST', '/project', ['name' => $long_string]);
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }*/
 
 }
