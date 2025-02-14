@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NewsletterListRepository::class)]
+#[ORM\Table(name: 'lists')]
 class NewsletterList
 {
     #[ORM\Id]
@@ -15,8 +16,8 @@ class NewsletterList
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'newsletterLists')]
-    private ?Project $project_id = null;
+    #[ORM\ManyToOne(inversedBy: 'newsletterLists', cascade: ['persist'])]
+    private ?Project $project = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -50,14 +51,14 @@ class NewsletterList
         return $this->id;
     }
 
-    public function getProjectId(): ?Project
+    public function getProject(): ?Project
     {
-        return $this->project_id;
+        return $this->project;
     }
 
-    public function setProjectId(?Project $project_id): static
+    public function setProject(?Project $project): static
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
 
         return $this;
     }

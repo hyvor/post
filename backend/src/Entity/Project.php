@@ -17,10 +17,10 @@ class Project
     private int $id;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
     private ?int $user_id = null;
@@ -31,7 +31,7 @@ class Project
     /**
      * @var Collection<int, NewsletterList>
      */
-    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id')]
+    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id', cascade: ['persist'])]
     private Collection $newsletterLists;
 
     public function __construct()
@@ -39,12 +39,19 @@ class Project
         $this->newsletterLists = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -104,7 +111,7 @@ class Project
     {
         if (!$this->newsletterLists->contains($newsletterList)) {
             $this->newsletterLists->add($newsletterList);
-            $newsletterList->setProjectId($this);
+            $newsletterList->setProject($this);
         }
 
         return $this;
@@ -114,8 +121,8 @@ class Project
     {
         if ($this->newsletterLists->removeElement($newsletterList)) {
             // set the owning side to null (unless already changed)
-            if ($newsletterList->getProjectId() === $this) {
-                $newsletterList->setProjectId(null);
+            if ($newsletterList->getProject() === $this) {
+                $newsletterList->setProject(null);
             }
         }
 
