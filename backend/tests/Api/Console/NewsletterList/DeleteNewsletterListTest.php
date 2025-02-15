@@ -5,7 +5,6 @@ namespace Api\Console\NewsletterList;
 use App\Api\Console\Controller\NewsletterListController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
-use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
