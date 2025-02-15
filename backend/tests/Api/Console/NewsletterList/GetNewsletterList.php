@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Console\Project;
+namespace Api\Console\NewsletterList;
 
 use App\Api\Console\Controller\NewsletterListController;
-use App\Api\Console\Controller\ProjectController;
-use App\Service\Project\ProjectService;
+use App\Entity\Factory\NewsletterListFactory;
+use App\Entity\Factory\ProjectFactory;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -31,4 +31,51 @@ class GetNewsletterList extends WebTestCase
         $this->assertEquals(0, count($data));
     }
 
+    public function testListNewsletterListNonEmpty(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterLists = $this
+            ->factory(NewsletterListFactory::class)
+            ->createMany(10, fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $response = $this->consoleApi('GET', '/lists');
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertEquals(10, count($data));
+    }
+
+    public function testGetSpecificList(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
+                ->setProject($project));
+
+        $response = $this->consoleApi('GET', '/lists/' . $newsletterList->getId());
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertSame($newsletterList->getId(), $data['id']);
+        $this->assertSame($newsletterList->getName(), $data['name']);
+        $this->assertSame($project->getId(), $data['project_id']);
+    }
 }
