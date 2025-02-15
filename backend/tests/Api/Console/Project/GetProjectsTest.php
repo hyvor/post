@@ -70,4 +70,19 @@ class GetProjectsTest extends WebTestCase
         $this->assertSame($project->getId(), $data['id']);
         $this->assertSame($project->getName(), $data['name']);
     }
+
+    public function testGetSpecificProjectNotFound(): void
+    {
+        $response = $this->consoleApi('GET', '/projects/999');
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertSame('Project not found', $data['message']);
+    }
 }
