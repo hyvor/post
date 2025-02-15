@@ -67,7 +67,7 @@ class GetProjectsTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertEquals($project->getId(), $data['id']);
-        $this->assertEquals($project->getName(), $data['name']);
+        $this->assertSame($project->getId(), $data['id']);
+        $this->assertSame($project->getName(), $data['name']);
     }
 }
