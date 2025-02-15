@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(NewsletterListController::class)]
 #[CoversClass(NewsletterListController::class)]
-class GetNewsletterList extends WebTestCase
+class GetNewsletterListTest extends WebTestCase
 {
 
     // TODO: tests for input validation
@@ -77,5 +77,16 @@ class GetNewsletterList extends WebTestCase
         $this->assertSame($newsletterList->getId(), $data['id']);
         $this->assertSame($newsletterList->getName(), $data['name']);
         $this->assertSame($project->getId(), $data['project_id']);
+    }
+
+    public function testGetSpecificListNotFound(): void
+    {
+        $response = $this->consoleApi('GET', '/lists/999');
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
     }
 }

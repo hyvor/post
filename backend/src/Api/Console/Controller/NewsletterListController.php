@@ -34,7 +34,7 @@ final class NewsletterListController extends AbstractController
         return $this->json(new NewsletterListObject($list));
     }
 
-    #[Route('/lists/{id}')]
+    #[Route('/lists/{id}', methods: 'GET')]
     public function getById(int $id): JsonResponse
     {
         $newsletterList = $this->newsletterListService->getNewsletterList($id);
