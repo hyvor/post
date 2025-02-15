@@ -18,7 +18,6 @@ class DeleteProjectTest extends WebTestCase
     // TODO: tests for authentication
     public function testDeleteProjectFound(): void
     {
-        //$this->markTestSkipped();
         $project = $this
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
@@ -35,7 +34,7 @@ class DeleteProjectTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        //$this->assertArrayHasKey('message', $data);
+        $this->assertArrayHasKey('message', $data);
         $this->assertSame('Project deleted', $data['message']);
 
         $find_project = $this->consoleApi('GET', '/project/' . $project_id);

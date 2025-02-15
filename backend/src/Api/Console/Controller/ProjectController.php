@@ -34,7 +34,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects/{id}')]
+    #[Route('/projects/{id}',  methods: 'GET')]
     public function getById(int $id): JsonResponse
     {
         $project = $this->projectService->getProject($id);
