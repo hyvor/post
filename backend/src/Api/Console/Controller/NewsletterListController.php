@@ -3,6 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\CreateNewsletterListInput;
+use App\Api\Console\Input\UpdateNewsletterListInput;
 use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Api\Console\Object\NewsletterListObject;
@@ -42,6 +43,24 @@ final class NewsletterListController extends AbstractController
             return $this->json(['message' => 'List not found'], 404);
         }
         return $this->json(new NewsletterListObject($newsletterList));
+    }
+
+    #[Route('/lists/{id}', methods: 'PATCH')]
+    public function updateNewsletterList(int $id, #[MapRequestPayload] UpdateNewsletterListInput $input): JsonResponse
+    {
+        $list = $this->newsletterListService->getNewsletterList($id);
+        if (!$list) {
+            return $this->json(['message' => 'List not found'], 404);
+        }
+        $list = $this->newsletterListService->updateNewsletterList(
+            $list,
+            $input->name ?? $list->getName(),
+            $input->project_id ?? $list->getProject()->getId()
+        );
+        if (!$list) {
+            return $this->json(['message' => 'Error when updating list'], 500);
+        }
+        return $this->json(new NewsletterListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]
