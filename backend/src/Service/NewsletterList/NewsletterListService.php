@@ -17,13 +17,9 @@ class NewsletterListService
 
     public function createNewsletterList(
         string $name,
-        int $projectId
+        Project $project
     ): NewsletterList
     {
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
-        if (!$project) {
-            throw new \Exception('Project not found');
-        }
         $list = new NewsletterList()
             ->setName($name)
             ->setProject($project)

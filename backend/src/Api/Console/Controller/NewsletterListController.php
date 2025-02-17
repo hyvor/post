@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\CreateNewsletterListInput;
 use App\Api\Console\Input\UpdateNewsletterListInput;
 use App\Entity\NewsletterList;
+use App\Entity\Project;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Api\Console\Object\NewsletterListObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,9 +30,12 @@ final class NewsletterListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'POST')]
-    public function createNewsletterList(#[MapRequestPayload] CreateNewsletterListInput $input): JsonResponse
+    public function createNewsletterList(
+        Project $project,
+        #[MapRequestPayload] CreateNewsletterListInput $input
+    ): JsonResponse
     {
-        $list = $this->newsletterListService->createNewsletterList($input->name, $input->project_id);
+        $list = $this->newsletterListService->createNewsletterList($input->name, $project);
         return $this->json(new NewsletterListObject($list));
     }
 
