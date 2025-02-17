@@ -23,7 +23,14 @@ class CreateNewsletterListTest extends WebTestCase
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
 
-        $response = $this->consoleApi('POST', '/lists', ['name' => 'Valid List Name', 'project_id' => $project->getId()]);
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => 'Valid List Name'
+            ],
+        );
 
         $content = $response->getContent();
         $this->assertEquals(200, $response->getStatusCode());

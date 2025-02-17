@@ -12,11 +12,10 @@ return static function (ContainerBuilder $container, SecurityConfig $security): 
         ->lazy(true)
         ->customAuthenticators([HyvorAuthenticator::class]);
 
-    /*
-    $security
+    /*$security
         ->accessControl()
         ->path('^/api/console')
-        ->roles(UserRole::USER);
-    */
+        ->roles(\Hyvor\Internal\Bundle\Security\UserRole::USER);*/
+
 
 };

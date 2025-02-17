@@ -20,9 +20,10 @@ final class ProjectController extends AbstractController
     {
     }
 
-    #[Route('/projects', methods: 'GET')]
+    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Resource-Id") === null')]
     public function getProjects(): JsonResponse
     {
+        // TODO: only return projects of the current user
         $projects = $this->projectService->getProjects();
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
@@ -30,27 +31,20 @@ final class ProjectController extends AbstractController
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
+        // TODO: check user authentication
         $project = $this->projectService->createProject($input->name);
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects/{id}',  methods: 'GET')]
-    public function getById(int $id): JsonResponse
+    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Resource-Id") !== null')]
+    public function getById(Project $project): JsonResponse
     {
-        $project = $this->projectService->getProject($id);
-        if (!$project) {
-            return $this->json(['message' => 'Project not found'], 404);
-        }
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects/{id}', methods: 'DELETE')]
-    public function deleteProject(int $id): JsonResponse
+    #[Route('/projects', methods: 'DELETE')]
+    public function deleteProject(Project $project): JsonResponse
     {
-        $project = $this->projectService->getProject($id);
-        if (!$project) {
-            return $this->json(['message' => 'Project not found'], 404);
-        }
         $this->projectService->deleteProject($project);
         return $this->json(['message' => 'Project deleted']);
     }
