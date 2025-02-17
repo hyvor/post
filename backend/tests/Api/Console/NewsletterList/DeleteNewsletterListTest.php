@@ -29,7 +29,11 @@ class DeleteNewsletterListTest extends WebTestCase
 
         $newsletterList_id = $newsletterList->getId();
 
-        $response = $this->consoleApi('DELETE', '/lists/' . $newsletterList->getId());
+        $response = $this->consoleApi(
+            $project,
+        'DELETE',
+            '/lists/' . $newsletterList->getId()
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -42,13 +46,21 @@ class DeleteNewsletterListTest extends WebTestCase
         $this->assertArrayHasKey('message', $data);
         $this->assertSame('List deleted', $data['message']);
 
-        $find_list = $this->consoleApi('GET', '/lists/' . $newsletterList_id);
+        $find_list = $this->consoleApi(
+            $project,
+            'GET',
+            '/lists/' . $newsletterList_id
+        );
         $this->assertEquals(404, $find_list->getStatusCode());
     }
 
     public function testDeleteNewsletterListNotFound(): void
     {
-        $response = $this->consoleApi('DELETE', '/lists/1');
+        $response = $this->consoleApi(
+            null,
+            'DELETE',
+            '/lists/1'
+        );
 
         $this->assertEquals(404, $response->getStatusCode());
     }

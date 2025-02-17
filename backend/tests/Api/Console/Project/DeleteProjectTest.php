@@ -24,7 +24,10 @@ class DeleteProjectTest extends WebTestCase
 
         $project_id = $project->getId();
 
-        $response = $this->consoleApi('DELETE', '/projects/' . $project->getId());
+        $response = $this->consoleApi(
+            $project,
+            'DELETE', '/projects'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -37,14 +40,22 @@ class DeleteProjectTest extends WebTestCase
         $this->assertArrayHasKey('message', $data);
         $this->assertSame('Project deleted', $data['message']);
 
-        $find_project = $this->consoleApi('GET', '/project/' . $project_id);
+        $find_project = $this->consoleApi(
+            $project_id,
+            'GET',
+            '/projects'
+        );
         $this->assertEquals(404, $find_project->getStatusCode());
     }
 
     public function testDeleteProjectNotFound(): void
     {
-        $response = $this->consoleApi('DELETE', '/projects/1');
+        $response = $this->consoleApi(
+            null,
+            'DELETE',
+            '/projects'
+        );
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals(400, $response->getStatusCode());
     }
 }

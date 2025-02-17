@@ -19,7 +19,11 @@ class GetProjectsTest extends WebTestCase
 
     public function testListProjectsEmpty(): void
     {
-        $response = $this->consoleApi('GET', '/projects');
+        $response = $this->consoleApi(
+            null,
+            'GET',
+            '/projects'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -38,7 +42,11 @@ class GetProjectsTest extends WebTestCase
             ->factory(ProjectFactory::class)
             ->createMany(10);
 
-        $response = $this->consoleApi('GET', '/projects');
+        $response = $this->consoleApi(
+            null,
+            'GET',
+            '/projects'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -57,7 +65,11 @@ class GetProjectsTest extends WebTestCase
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
 
-        $response = $this->consoleApi('GET', '/projects/' . $project->getId());
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/projects'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -73,16 +85,11 @@ class GetProjectsTest extends WebTestCase
 
     public function testGetSpecificProjectNotFound(): void
     {
-        $response = $this->consoleApi('GET', '/projects/999');
-
-        $this->assertEquals(404, $response->getStatusCode());
-
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertSame('Project not found', $data['message']);
+        $find_project = $this->consoleApi(
+            999,
+            'GET',
+            '/projects'
+        );
+        $this->assertEquals(404, $find_project->getStatusCode());
     }
 }

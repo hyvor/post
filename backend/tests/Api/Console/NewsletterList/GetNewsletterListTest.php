@@ -18,7 +18,11 @@ class GetNewsletterListTest extends WebTestCase
 
     public function testListNewsletterListEmpty(): void
     {
-        $response = $this->consoleApi('GET', '/lists');
+        $response = $this->consoleApi(
+            null,
+            'GET',
+            '/lists'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -41,7 +45,11 @@ class GetNewsletterListTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->createMany(10, fn ($newsletterList) => $newsletterList->setProject($project));
 
-        $response = $this->consoleApi('GET', '/lists');
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/lists'
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -61,11 +69,15 @@ class GetNewsletterListTest extends WebTestCase
             ->create();
 
         $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
-                ->setProject($project));
+        ->factory(NewsletterListFactory::class)
+        ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
+            ->setProject($project));
 
-        $response = $this->consoleApi('GET', '/lists/' . $newsletterList->getId());
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/lists/' . $newsletterList->getId()
+        );
         $this->assertEquals(200, $response->getStatusCode());
 
         $content = $response->getContent();
@@ -81,7 +93,11 @@ class GetNewsletterListTest extends WebTestCase
 
     public function testGetSpecificListNotFound(): void
     {
-        $response = $this->consoleApi('GET', '/lists/999');
+        $response = $this->consoleApi(
+            null,
+            'GET',
+            '/lists/999'
+        );
 
         $this->assertEquals(404, $response->getStatusCode());
 

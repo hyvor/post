@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { tempSubdomainStore } from "./temp";
+import { projectStore } from "./stores/projectStore";
 
 export interface ConsoleApiOptions {
     endpoint: string,
@@ -36,7 +37,7 @@ function getConsoleApi() {
         if (userApi) {
             url = baseUrl + endpoint;
         } else {
-            const projectSubdomain = subdomain
+            const projectSubdomain = subdomain || get(projectStore).id;
             url = baseUrl + projectSubdomain + endpoint;
         }
 

@@ -52,7 +52,14 @@ class CreateNewsletterListTest extends WebTestCase
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
 
         $long_string = str_repeat('a', 256);
-        $response = $this->consoleApi('POST', '/lists', ['name' => $long_string, 'project_id' => $project->getId()]);
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => $long_string, 'project_id' => $project->getId()
+            ]
+        );
 
         $this->assertEquals(422, $response->getStatusCode());
     }

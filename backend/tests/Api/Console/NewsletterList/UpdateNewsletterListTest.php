@@ -26,9 +26,14 @@ class UpdateNewsletterListTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->create(fn ($newsletterList) => $newsletterList->setProject($project));
 
-        $response = $this->consoleApi('PATCH', '/lists/' . $newsletterList->getId(), [
-            'name' => 'New Name',
-        ]);
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/lists/' . $newsletterList->getId(),
+            [
+                'name' => 'New Name',
+            ]
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -43,7 +48,11 @@ class UpdateNewsletterListTest extends WebTestCase
         $this->assertSame('New Name', $data['name']);
 
         // Get the list from the database
-        $response = $this->consoleApi('GET', '/lists/' . $newsletterList->getId());
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/lists/' . $newsletterList->getId()
+        );
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $data = json_decode($content, true);
@@ -64,9 +73,12 @@ class UpdateNewsletterListTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->create(fn ($newsletterList) => $newsletterList->setProject($project1));
 
-        $response = $this->consoleApi('PATCH', '/lists/' . $newsletterList->getId(), [
-            'project_id' => $project2->getId()
-        ]);
+        $response = $this->consoleApi($project1,
+            'PATCH', '/lists/' . $newsletterList->getId(),
+            [
+                'project_id' => $project2->getId()
+            ]
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -80,7 +92,10 @@ class UpdateNewsletterListTest extends WebTestCase
         $this->assertSame($project2->getId(), $data['project_id']);
 
         // Get the list from the database
-        $response = $this->consoleApi('GET', '/lists/' . $newsletterList->getId());
+        $response = $this->consoleApi(
+            $project2,
+            'GET', '/lists/' . $newsletterList->getId()
+        );
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $data = json_decode($content, true);
