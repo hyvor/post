@@ -1,3 +1,10 @@
+export type Project = {
+	id: number,
+	name: string,
+	created_at: string,
+	updated_at: string
+}
+
 export interface Stats {
 	subscribers: { total: number; last_30d: number };
 	issues: { total: number; last_30d: number };
