@@ -7,6 +7,7 @@
 	let isCreatingList = false;
 	let listName = '';
 
+	// TODO: Check list name availabilty of list name
 	function submitList() {
 		const toastId = toast.loading('Creating list...');
 		isCreatingList = true;
@@ -55,8 +56,9 @@
 		<FormControl>
 			<Label>Name</Label>
 			<TextInput 
-			placeholder="Enter list name" 
-			bind:value={listName}
+				maxlength={255}
+				placeholder="Enter list name" 
+				bind:value={listName}
 			/>
 		</FormControl>
 		<FormControl>

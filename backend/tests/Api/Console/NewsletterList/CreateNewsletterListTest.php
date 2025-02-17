@@ -34,7 +34,7 @@ class CreateNewsletterListTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('id', $data);
         $this->assertIsInt($data['id']);
-        $this->assertSame('Valid List Name', 'Valid List Name');
+        $this->assertSame('Valid List Name', $data['name']);
         $this->assertSame($project->getId(), $data['project_id']);
     }
 

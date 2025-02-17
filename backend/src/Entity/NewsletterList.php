@@ -17,7 +17,7 @@ class NewsletterList
     private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'newsletterLists', cascade: ['persist'])]
-    private ?Project $project = null;
+    private Project $project;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -58,12 +58,12 @@ class NewsletterList
         return $this->id;
     }
 
-    public function getProject(): ?Project
+    public function getProject(): Project
     {
         return $this->project;
     }
 
-    public function setProject(?Project $project): static
+    public function setProject(Project $project): static
     {
         $this->project = $project;
 

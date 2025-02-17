@@ -56,5 +56,22 @@ class NewsletterListService
         return $this->entityManager->getRepository(NewsletterList::class)->findAll();
     }
 
+    public function updateNewsletterList(NewsletterList $list, string $name, int $project_id): ?NewsletterList
+    {
+        $project = $this->entityManager->getRepository(Project::class)->find($project_id);
+        if (!$project) {
+            throw new \Exception('Project not found');
+        }
+
+        $list
+            ->setName($name)
+            ->setProject($project)
+            ->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->flush();
+
+        return $list;
+    }
+
 
 }
