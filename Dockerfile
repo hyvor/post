@@ -61,12 +61,12 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | b
     && apt install -y symfony-cli
 # pcov for coverage
 RUN install-php-extensions pcov
-COPY backend/composer.json backend/composer.lock /app/backend/
-RUN composer install --no-interaction
+#COPY backend/composer.json backend/composer.lock /app/backend/
+#RUN composer install --no-interaction
 # set up code and install composer packages
-COPY backend /app/backend/
+#COPY backend /app/backend/
 # use local internal library if exists
-RUN if [ -d "packages/internal" ]; then composer require hyvor/internal:@dev; fi
+#RUN if [ -d "packages/internal" ]; then composer require hyvor/internal:@dev; fi
 CMD symfony server:start --no-tls --listen-ip=0.0.0.0 --port=80
 
 ###################################################

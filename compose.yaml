@@ -4,21 +4,9 @@ services:
     build:
       context: .
       target: frontend-dev
-    develop:
-      watch:
-        - path: frontend/src
-          action: sync
-          target: /app/frontend/src
-        - path: frontend/static
-          action: sync
-          target: /app/frontend/static
-        - path: shared
-          action: sync
-          target: /app/shared
-        - path: frontend/package.json
-          action: rebuild
-        - path: frontend/package-lock.json
-          action: rebuild
+    volumes:
+      - ./frontend:/app/frontend
+      - ./shared:/app/shared
     labels:
       traefik.enable: true
       traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.dev`)
@@ -37,16 +25,8 @@ services:
     build:
       context: .
       target: backend-dev
-    develop:
-      watch:
-        - path: backend
-          action: sync
-          target: /app/backend
-        - path: shared
-          action: sync
-          target: /app/shared
-        - path: backend/composer.lock
-          action: rebuild
+    volumes:
+      - ./backend:/app/backend
     labels:
       traefik.enable: true
       # backend
