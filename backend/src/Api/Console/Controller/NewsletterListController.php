@@ -40,13 +40,9 @@ final class NewsletterListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'GET')]
-    public function getById(int $id): JsonResponse
+    public function getById(NewsletterList $list): JsonResponse
     {
-        $newsletterList = $this->newsletterListService->getNewsletterList($id);
-        if (!$newsletterList) {
-            return $this->json(['message' => 'List not found'], 404);
-        }
-        return $this->json(new NewsletterListObject($newsletterList));
+        return $this->json(new NewsletterListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
@@ -68,12 +64,8 @@ final class NewsletterListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]
-    public function deleteNewsletterList(int $id): JsonResponse
+    public function deleteNewsletterList(NewsletterList $list): JsonResponse
     {
-        $list = $this->newsletterListService->getNewsletterList($id);
-        if (!$list) {
-            return $this->json(['message' => 'List not found'], 404);
-        }
         $this->newsletterListService->deleteNewsletterList($list);
         return $this->json(['message' => 'List deleted']);
     }
