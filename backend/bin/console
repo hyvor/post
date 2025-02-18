@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+umask(0000);
+
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 

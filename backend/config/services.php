@@ -9,7 +9,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // ================ DEFAULTS =================
 
-    // Default configuration for services
+    // Default configurdevation for services
     $services->defaults()
         ->autowire(true)      // Automatically injects dependencies in your services.
         ->autoconfigure(true); // Automatically registers your services as commands, event subscribers, etc.
