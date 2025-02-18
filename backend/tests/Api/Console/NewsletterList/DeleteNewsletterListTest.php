@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\NewsletterList;
+namespace App\Tests\Api\Console\NewsletterList;
 
 use App\Api\Console\Controller\NewsletterListController;
 use App\Entity\Factory\NewsletterListFactory;
@@ -34,6 +34,8 @@ class DeleteNewsletterListTest extends WebTestCase
         'DELETE',
             '/lists/' . $newsletterList->getId()
         );
+
+        // TODO: calling two HTTP endpoints in the same test is not recommended
 
         $this->assertEquals(200, $response->getStatusCode());
 

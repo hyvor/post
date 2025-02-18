@@ -7,6 +7,7 @@ use App\Tests\Trait\FactoryTrait;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
@@ -22,7 +23,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
 
         $container = static::getContainer();
-
         AuthFake::enableForSymfony($container, ['id' => 1]);
     }
 
@@ -38,7 +38,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         $projectId = $project instanceof Project ? $project->getId() : $project;
 
-        // TODO: add authentication here
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'default'));
         $this->client->request(
             $method,
             '/api/console' . $uri,

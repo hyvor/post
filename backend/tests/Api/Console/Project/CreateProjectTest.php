@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Project;
+namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
 use App\Repository\ProjectRepository;
