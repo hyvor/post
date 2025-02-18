@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Api\Console\Resolver\ProjectResolver;
+use App\Api\Console\Resolver\EntityResolver;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -27,8 +28,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProjectResolver::class)
         ->tag(
             'controller.argument_value_resolver',
-            [
-                'name' => 'console_api_project', 'priority' => 150
-            ]
+            ['name' => 'console_api_project', 'priority' => 150]
+        );
+    $services->set(EntityResolver::class)
+        ->tag(
+            'controller.argument_value_resolver',
+            ['name' => 'console_api_resource', 'priority' => 150]
         );
 };

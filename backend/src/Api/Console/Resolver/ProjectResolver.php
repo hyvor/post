@@ -4,14 +4,12 @@ namespace App\Api\Console\Resolver;
 
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProjectResolver implements ValueResolverInterface
 {
@@ -41,6 +39,7 @@ class ProjectResolver implements ValueResolverInterface
 
         $controllerName = $argument->getControllerName();
 
+        dump($controllerName);
         if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
             return [];
         }

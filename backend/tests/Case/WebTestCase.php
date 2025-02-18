@@ -4,6 +4,7 @@ namespace App\Tests\Case;
 
 use App\Entity\Project;
 use App\Tests\Trait\FactoryTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -16,6 +17,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     use FactoryTrait;
 
     protected KernelBrowser $client;
+    protected EntityManagerInterface $em;
 
     protected function setUp(): void
     {
@@ -24,6 +26,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $container = static::getContainer();
         AuthFake::enableForSymfony($container, ['id' => 1]);
+
+        /** @var EntityManagerInterface $em */
+        $em = $container->get(EntityManagerInterface::class);
+        $this->em = $em;
     }
 
     /**
