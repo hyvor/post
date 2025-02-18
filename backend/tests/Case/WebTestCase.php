@@ -4,6 +4,8 @@ namespace App\Tests\Case;
 
 use App\Entity\Project;
 use App\Tests\Trait\FactoryTrait;
+use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +20,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         parent::setUp();
         $this->client = static::createClient();
+
+        $container = static::getContainer();
+
+        AuthFake::enableForSymfony($container, ['id' => 1]);
     }
 
     /**
