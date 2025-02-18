@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\NewsletterList;
+namespace App\Tests\Api\Console\NewsletterList;
 
 use App\Api\Console\Controller\NewsletterListController;
 use App\Entity\Factory\NewsletterListFactory;

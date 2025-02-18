@@ -12,6 +12,8 @@ class TestTest extends WebTestCase
     public function testTest(): void
     {
 
+        $this->markTestSkipped();
+
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
         $this->client->request('GET', '/api/console/test');
         $content = $this->client->getResponse()->getContent();

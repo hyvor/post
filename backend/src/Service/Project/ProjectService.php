@@ -16,13 +16,14 @@ class ProjectService
     }
 
     public function createProject(
+        int $userId,
         string $name,
     ): Project
     {
 
         $project = new Project()
             ->setName($name)
-            ->setUserId(1) # TODO: Replace with actual user ID
+            ->setUserId($userId)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 

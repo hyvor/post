@@ -6,6 +6,8 @@ use App\Api\Console\Input\CreateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
+use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Bundle\Security\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -31,8 +33,10 @@ final class ProjectController extends AbstractController
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
-        // TODO: check user authentication
-        $project = $this->projectService->createProject($input->name);
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+
+        $project = $this->projectService->createProject($user->id, $input->name);
         return $this->json(new ProjectObject($project));
     }
 
