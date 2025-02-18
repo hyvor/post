@@ -27,9 +27,6 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        if (!endpoint.startsWith('/'))
-            endpoint = '/' + endpoint;
-
         // const projectId = get(currentProjectIdStore);
         // let url = baseUrl + (projectApi ? "/project/" + projectId : "") + endpoint;
 

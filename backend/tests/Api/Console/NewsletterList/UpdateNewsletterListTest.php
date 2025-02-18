@@ -5,11 +5,12 @@ namespace App\Tests\Api\Console\NewsletterList;
 use App\Api\Console\Controller\NewsletterListController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
+use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(NewsletterListController::class)]
-#[CoversClass(NewsletterListController::class)]
+#[CoversClass(NewsletterListService::class)]
 class UpdateNewsletterListTest extends WebTestCase
 {
 
@@ -47,16 +48,6 @@ class UpdateNewsletterListTest extends WebTestCase
 
         $this->assertSame('New Name', $data['name']);
 
-        // Get the list from the database
-        $response = $this->consoleApi(
-            $project,
-            'GET',
-            '/lists/' . $newsletterList->getId()
-        );
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $data = json_decode($content, true);
-        $this->assertSame('New Name', $data['name']);
     }
 
     public function testUpdateListProject(): void

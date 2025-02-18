@@ -1,5 +1,5 @@
-import consoleApi from "../lib/consoleApi";
-import type { List } from "../types";
+import consoleApi from "../consoleApi";
+import type { List } from "../../types";
 
 export function createList(name: string, project_id: number) {
     return consoleApi.post<List>({
