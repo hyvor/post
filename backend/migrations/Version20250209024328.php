@@ -22,10 +22,10 @@ final class Version20250209024328 extends AbstractMigration
         $this->addSql(<<<SQL
         CREATE TABLE lists (
             id BIGSERIAL PRIMARY KEY,
-            project_id BIGINT NOT NULL references projects(id),
-            name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            project_id BIGINT NOT NULL references projects(id),
+            name VARCHAR(255) NOT NULL
         );
         SQL);
     }

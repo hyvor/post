@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\NewsletterList;
 use App\Api\Console\Controller\NewsletterListController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
+use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -82,15 +83,8 @@ class UpdateNewsletterListTest extends WebTestCase
         $this->assertArrayHasKey('name', $data);
         $this->assertSame($project2->getId(), $data['project_id']);
 
-        // Get the list from the database
-        $response = $this->consoleApi(
-            $project2,
-            'GET', '/lists/' . $newsletterList->getId()
-        );
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $data = json_decode($content, true);
-        $this->assertSame($project2->getId(), $data['project_id']);
+        $list_find = $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
+        $this->assertSame($project2->getId(), $list_find->getProject()->getId());
     }
 
 }

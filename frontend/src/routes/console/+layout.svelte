@@ -17,6 +17,16 @@
 	let isLoading = true;
 
 	onMount(() => {
+
+		/*consoleApi
+			.post<InitResponse>({
+				userApi: true,
+				endpoint: 'projects',
+				data: {
+					'name': 'Project1'
+				}
+			})*/
+
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,

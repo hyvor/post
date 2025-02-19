@@ -7,6 +7,7 @@ use App\Service\Project\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class ConsoleController extends AbstractController
 {
@@ -17,13 +18,13 @@ final class ConsoleController extends AbstractController
     {
     }
 
-    #[Route('/init', methods: 'GET')]
-    public function initConsole(): JsonResponse
+    #[Route('/init', methods: ['GET'])]
+    public function initConsole(SerializerInterface $serializer): JsonResponse
     {
         $projects = $this->projectService->getProjects();
-        return $this->json([
-            'projects' => $projects
-        ]);
+        $json = $serializer->serialize(['projects' => $projects], 'json', ['groups' => 'project:list']);
+
+        return new JsonResponse($json, 200, [], true);
     }
 
     /*

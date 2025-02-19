@@ -46,12 +46,8 @@ final class NewsletterListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
-    public function updateNewsletterList(int $id, #[MapRequestPayload] UpdateNewsletterListInput $input): JsonResponse
+    public function updateNewsletterList(NewsletterList $list, #[MapRequestPayload] UpdateNewsletterListInput $input): JsonResponse
     {
-        $list = $this->newsletterListService->getNewsletterList($id);
-        if (!$list) {
-            return $this->json(['message' => 'List not found'], 404);
-        }
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
