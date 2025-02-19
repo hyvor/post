@@ -6,6 +6,7 @@ use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'projects')]
@@ -14,24 +15,30 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['project:list', 'project:details'])]
     private int $id;
 
     #[ORM\Column]
+    #[Groups(['project:list', 'project:details'])]
     private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
+    #[Groups(['project:list', 'project:details'])]
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
+    #[Groups(['project:list', 'project:details'])]
     private ?int $user_id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project:list', 'project:details'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, NewsletterList>
      */
-    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project', cascade: ['persist'])]
+    #[Groups(['project:details'])]
     private Collection $newsletterLists;
 
     public function __construct()

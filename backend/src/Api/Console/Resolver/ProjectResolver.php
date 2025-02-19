@@ -39,7 +39,6 @@ class ProjectResolver implements ValueResolverInterface
 
         $controllerName = $argument->getControllerName();
 
-        dump($controllerName);
         if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
             return [];
         }
@@ -53,7 +52,7 @@ class ProjectResolver implements ValueResolverInterface
         $project = $this->projectRepository->find($projectId);
 
         if (!$project) {
-            throw new NotFoundHttpException('Project not found');
+            return [];
         }
 
         // TODO: enable this after auth fake

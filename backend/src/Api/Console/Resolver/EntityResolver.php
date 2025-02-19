@@ -43,11 +43,15 @@ class EntityResolver implements ValueResolverInterface
             return [];
         }
 
+        if ($argumentType === Project::class) {
+            return [];
+        }
+
         $id = $request->attributes->get('id');
         $id = is_string($id) ? (int) $id : null;
 
         if (!$id) {
-            throw new BadRequestException('Invalid id parameter');
+            throw new BadRequestException('Invalid ID');
         }
 
         $route = $request->getPathInfo();
