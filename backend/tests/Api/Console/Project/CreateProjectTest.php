@@ -19,7 +19,8 @@ class CreateProjectTest extends WebTestCase
 
     public function testCreateProjectValid(): void
     {
-        $response = $this->consoleApi(null,
+        $response = $this->consoleApi(
+            null,
             'POST',
             '/projects',
             [
