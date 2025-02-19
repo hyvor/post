@@ -39,10 +39,6 @@ class ProjectResolver implements ValueResolverInterface
 
         $controllerName = $argument->getControllerName();
 
-        if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
-            return [];
-        }
-
         $projectId = $request->headers->get('X-Resource-Id');
 
         if (!$projectId) {
