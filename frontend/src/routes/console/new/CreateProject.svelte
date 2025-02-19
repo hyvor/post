@@ -49,10 +49,11 @@
 		}
 
 		isCreating = true;
-        
+
 		createProject(name)
 			.then((res) => {
 				toast.success('Project created successfully');
+                
 				addToProjectList(res);
 
 				goto('/console/' + res.id);
