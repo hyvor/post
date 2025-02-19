@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Resolver;
 
 use App\Api\Console\Resolver\EntityResolver;
+use App\Api\Console\Resolver\ProjectResolver;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 #[CoversClass(EntityResolver::class)]
+#[CoversClass(ProjectResolver::class)]
 class EntityResolverTest extends KernelTestCase
 {
 
