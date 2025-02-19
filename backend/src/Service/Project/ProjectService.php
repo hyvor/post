@@ -56,8 +56,8 @@ class ProjectService
     /**
      * @return list<Project>
      */
-    public function getProjects()
+    public function getProjects(int $userId): array
     {
-        return $this->entityManager->getRepository(Project::class)->findAll();
+        return $this->entityManager->getRepository(Project::class)->findBy(['user_id' => $userId]);
     }
 }

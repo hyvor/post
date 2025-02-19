@@ -9,24 +9,20 @@
 	import consoleApi from "./lib/consoleApi";
 	import { projectListStore } from "./lib/stores/projectListStore";
 	import { page } from "$app/stores";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	interface InitResponse {
 		projects: Project[];
 	}
 
-	let isLoading = true;
+	let isLoading = $state(true);;
 
 	onMount(() => {
-
-		/*consoleApi
-			.post<InitResponse>({
-				userApi: true,
-				endpoint: 'projects',
-				data: {
-					'name': 'Project1'
-				}
-			})*/
-
+		console.log("here")
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
@@ -82,12 +78,7 @@
 		</div>
 	{:else}
 		<HyvorBar product='blogs'/>
-		<div class="main-inner">
-			<Nav />
-			<div class="content">
-				<slot />
-			</div>
-		</div>
+		{@render children?.()}
 	{/if}
 </main>
 

@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,7 +22,10 @@ final class ConsoleController extends AbstractController
     #[Route('/init', methods: ['GET'])]
     public function initConsole(SerializerInterface $serializer): JsonResponse
     {
-        $projects = $this->projectService->getProjects();
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+
+        $projects = $this->projectService->getProjects($user->id);
         $json = $serializer->serialize(['projects' => $projects], 'json', ['groups' => 'project:list']);
 
         return new JsonResponse($json, 200, [], true);

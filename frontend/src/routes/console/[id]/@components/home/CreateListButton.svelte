@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ActionList, ActionListItem, Button, Caption, Dropdown, FormControl, IconButton, Label, Modal, Radio, TextInput, toast } from "@hyvor/design/components";
-	import { createList } from "../../listActions";
+	import { createList } from '../../../lib/actions/listActions'
 
     let modalOpen = false;
 	let showDropdown = false;
