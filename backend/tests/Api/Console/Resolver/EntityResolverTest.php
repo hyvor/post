@@ -6,11 +6,15 @@ use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\ProjectResolver;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Tests\Case\KernelTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[CoversClass(EntityResolver::class)]
 #[CoversClass(ProjectResolver::class)]
@@ -31,31 +35,17 @@ class EntityResolverTest extends KernelTestCase
         $this->assertSame([], $output);
     }
 
-    public function testDoesNotResolveNonEntityArguments(): void
+    #[TestWith(['App\SomeOther\Entity\Project'])]
+    #[TestWith(['App\Entity\Project'])]
+    public function testDoesNotResolveNonEntityAndProjectArguments(string $class): void
     {
-
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
 
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\ProjectController::getProjects');
-        $argument->method('getType')->willReturn('App\SomeOther\Entity\Project');
-
-        $output = $resolver->resolve($request, $argument);
-        $this->assertSame([], $output);
-    }
-
-    public function testDoesNotResolveProjectEntity(): void
-    {
-
-        /** @var EntityResolver $resolver */
-        $resolver = $this->container->get(EntityResolver::class);
-
-        $request = new Request();
-        $argument = $this->createMock(ArgumentMetadata::class);
-        $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\ProjectController::getProjects');
-        $argument->method('getType')->willReturn('App\Entity\Project');
+        $argument->method('getType')->willReturn($class);
 
         $output = $resolver->resolve($request, $argument);
         $this->assertSame([], $output);
@@ -99,9 +89,10 @@ class EntityResolverTest extends KernelTestCase
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
 
-        $request = new Request();
-        $request->attributes->set('id', '1');
-        $request->server->set('REQUEST_URI', '/api/console/invalid');
+        $request = new Request(
+            attributes: ['id' => '1'],
+            server: ['REQUEST_URI' => '/api/console/invalid']
+        );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
@@ -133,6 +124,9 @@ class EntityResolverTest extends KernelTestCase
 
         $output = $resolver->resolve($request, $argument);
         $this->assertCount(1, $output);
+        $outputList = ((array)$output)[0];
+        $this->assertInstanceOf(NewsletterList::class, $outputList);
+        $this->assertSame($newsletterList->getId(), $outputList->getId());
     }
 
     public function testDoesNotResolveEntityForPathWhenProjectNotFound(): void
@@ -156,6 +150,7 @@ class EntityResolverTest extends KernelTestCase
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Project not found');
         $resolver->resolve($request, $argument);
     }
@@ -181,6 +176,7 @@ class EntityResolverTest extends KernelTestCase
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Entity not found');
         $resolver->resolve($request, $argument);
     }

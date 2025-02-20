@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\Console\Input;
+namespace App\Api\Console\Input\List;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateNewsletterListInput
+class CreateListInput
 {
 
     #[Assert\NotBlank]

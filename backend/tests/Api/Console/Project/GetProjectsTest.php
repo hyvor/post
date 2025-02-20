@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
 #[CoversClass(ProjectService::class)]
+#[CoversClass(Project::class)]
 class GetProjectsTest extends WebTestCase
 {
 
