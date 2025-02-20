@@ -3,7 +3,7 @@
 	import Nav from "./@components/Nav/Nav.svelte";
 	import { page } from '$app/state';
 	import { loadProject } from "../lib/projectLoader";
-	import { toast } from "@hyvor/design/components";
+	import { Loader, toast } from "@hyvor/design/components";
 
 	let isLoading = $state(true);
 
@@ -21,10 +21,16 @@
 </script>
 
 <div class="main-inner">
-    <Nav />
-    <div class="content">
-        <slot />
-    </div>
+	{#if isLoading}
+		<div class="full-loader">
+			<Loader size="large" />
+		</div>
+	{:else}
+		<Nav />
+		<div class="content">
+			<slot />
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -43,6 +49,14 @@
 		width: 100%;
 		height: 100%;
 		min-width: 0;
+	}
+
+	.full-loader {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	@media (max-width: 992px) {
