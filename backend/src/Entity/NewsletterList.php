@@ -2,36 +2,32 @@
 
 namespace App\Entity;
 
-use App\Repository\NewsletterListRepository;
+use App\Repository\ListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: NewsletterListRepository::class)]
+#[ORM\Entity(repositoryClass: ListRepository::class)]
 #[ORM\Table(name: 'lists')]
 class NewsletterList
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['project:details'])]
     private int $id;
 
-    #[ORM\ManyToOne(inversedBy: 'newsletterLists', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'lists', cascade: ['persist'])]
     #[Groups([])]
     private Project $project;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['project:details'])]
     private string $name;
 
     #[ORM\Column]
-    #[Groups(['project:details'])]
     private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    #[Groups(['project:details'])]
     private \DateTimeImmutable $updated_at;
 
     /**
