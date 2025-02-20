@@ -108,7 +108,7 @@ class Project
         return $this->lists;
     }
 
-    public function addNewsletterList(NewsletterList $newsletterList): static
+    public function addList(NewsletterList $newsletterList): static
     {
         if (!$this->lists->contains($newsletterList)) {
             $this->lists->add($newsletterList);
@@ -118,7 +118,7 @@ class Project
         return $this;
     }
 
-    public function removeNewsletterList(NewsletterList $newsletterList): static
+    public function removeList(NewsletterList $newsletterList): static
     {
         if ($this->lists->removeElement($newsletterList)) {
             // set the owning side to null (unless already changed)

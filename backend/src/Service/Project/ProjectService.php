@@ -27,7 +27,7 @@ class ProjectService
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
-        $project->addNewsletterList(
+        $project->addList(
             new NewsletterList()
                 ->setName('Default List')
                 ->setCreatedAt(new \DateTimeImmutable())
