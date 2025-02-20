@@ -43,11 +43,15 @@ class EntityResolver implements ValueResolverInterface
             return [];
         }
 
+        if ($argumentType === Project::class) {
+            return [];
+        }
+
         $id = $request->attributes->get('id');
         $id = is_string($id) ? (int) $id : null;
 
         if (!$id) {
-            throw new BadRequestException('Invalid id parameter');
+            throw new BadRequestException('Invalid ID');
         }
 
         $route = $request->getPathInfo();
@@ -84,10 +88,6 @@ class EntityResolver implements ValueResolverInterface
             controllerName: $controllerName
         );
         $currentProject = (array) $this->projectResolver->resolve($request, $argumentMetadata);
-
-        if (count($currentProject) === 0) {
-            throw new \Exception('Project not found');
-        }
 
         if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
             throw new AccessDeniedHttpException('Entity does not belong to the project');

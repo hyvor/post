@@ -2,18 +2,18 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\CreateNewsletterListInput;
-use App\Api\Console\Input\UpdateNewsletterListInput;
+use App\Api\Console\Input\List\CreateListInput;
+use App\Api\Console\Input\List\UpdateListInput;
+use App\Api\Console\Object\ListObject;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Api\Console\Object\NewsletterListObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class NewsletterListController extends AbstractController
+final class ListController extends AbstractController
 {
 
     public function __construct(
@@ -26,41 +26,36 @@ final class NewsletterListController extends AbstractController
     public function getNewsletterLists(): JsonResponse
     {
         $lists = $this->newsletterListService->getNewsletterLists();
-        return $this->json(array_map(fn (NewsletterList $list) => new NewsletterListObject($list), $lists));
+        return $this->json(array_map(fn (NewsletterList $list) => new ListObject($list), $lists));
     }
 
     #[Route('/lists', methods: 'POST')]
     public function createNewsletterList(
         Project $project,
-        #[MapRequestPayload] CreateNewsletterListInput $input
+        #[MapRequestPayload] CreateListInput $input
     ): JsonResponse
     {
         $list = $this->newsletterListService->createNewsletterList($input->name, $project);
-        return $this->json(new NewsletterListObject($list));
+        return $this->json(new ListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'GET')]
     public function getById(NewsletterList $list): JsonResponse
     {
-        return $this->json(new NewsletterListObject($list));
+        return $this->json(new ListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
-    public function updateNewsletterList(int $id, #[MapRequestPayload] UpdateNewsletterListInput $input): JsonResponse
+    public function updateNewsletterList(
+        NewsletterList $list,
+        #[MapRequestPayload] UpdateListInput $input
+    ): JsonResponse
     {
-        $list = $this->newsletterListService->getNewsletterList($id);
-        if (!$list) {
-            return $this->json(['message' => 'List not found'], 404);
-        }
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
-            $input->project_id ?? $list->getProject()->getId()
         );
-        if (!$list) {
-            return $this->json(['message' => 'Error when updating list'], 500);
-        }
-        return $this->json(new NewsletterListObject($list));
+        return $this->json(new ListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]

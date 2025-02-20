@@ -6,6 +6,7 @@ use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'projects')]
@@ -31,12 +32,12 @@ class Project
     /**
      * @var Collection<int, NewsletterList>
      */
-    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project_id', cascade: ['persist'])]
-    private Collection $newsletterLists;
+    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project', cascade: ['persist'])]
+    private Collection $lists;
 
     public function __construct()
     {
-        $this->newsletterLists = new ArrayCollection();
+        $this->lists = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -102,15 +103,15 @@ class Project
     /**
      * @return Collection<int, NewsletterList>
      */
-    public function getNewsletterLists(): Collection
+    public function getLists(): Collection
     {
-        return $this->newsletterLists;
+        return $this->lists;
     }
 
     public function addNewsletterList(NewsletterList $newsletterList): static
     {
-        if (!$this->newsletterLists->contains($newsletterList)) {
-            $this->newsletterLists->add($newsletterList);
+        if (!$this->lists->contains($newsletterList)) {
+            $this->lists->add($newsletterList);
             $newsletterList->setProject($this);
         }
 
@@ -119,7 +120,7 @@ class Project
 
     public function removeNewsletterList(NewsletterList $newsletterList): static
     {
-        if ($this->newsletterLists->removeElement($newsletterList)) {
+        if ($this->lists->removeElement($newsletterList)) {
             // set the owning side to null (unless already changed)
             if ($newsletterList->getProject() === $this) {
                 $newsletterList->setProject(null);

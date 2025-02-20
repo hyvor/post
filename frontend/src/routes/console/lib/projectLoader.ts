@@ -10,19 +10,20 @@ interface ProjectResponse {
 // to prevent multiple requests for the same subdomain
 const LOADER_PROMISES: Record<string, Promise<ProjectResponse>> = {};
 
-export function loadProject(subdomain: string) {
-	if (LOADER_PROMISES[subdomain]) {
-		return LOADER_PROMISES[subdomain];
+export function loadProject(projectId: string) {
+	if (LOADER_PROMISES[projectId]) {
+		return LOADER_PROMISES[projectId];
 	}
 
 	const promise = new Promise<ProjectResponse>((resolve, reject) => {
 		consoleApi
 			.get<ProjectResponse>({
-				endpoint: '/project',
-				subdomain
+				endpoint: 'init/project',
+				userApi: true,
+				projectId
 			})
 			.then((res) => {
-
+				console.log(res)
 				projectStore.set(res.project);
 
 				resolve(res);
@@ -31,11 +32,11 @@ export function loadProject(subdomain: string) {
 				reject(err);
 			})
 			.finally(() => {
-				delete LOADER_PROMISES[subdomain];
+				delete LOADER_PROMISES[projectId];
 			});
 	});
 
-	LOADER_PROMISES[subdomain] = promise;
+	LOADER_PROMISES[projectId] = promise;
 
 	return promise;
 }

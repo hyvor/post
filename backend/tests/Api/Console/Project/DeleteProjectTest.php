@@ -1,9 +1,10 @@
 <?php
 
-namespace Api\Console\Project;
+namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
 use App\Entity\Factory\ProjectFactory;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
@@ -11,6 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
 #[CoversClass(ProjectService::class)]
+#[CoversClass(Project::class)]
 class DeleteProjectTest extends WebTestCase
 {
 
@@ -40,12 +42,9 @@ class DeleteProjectTest extends WebTestCase
         $this->assertArrayHasKey('message', $data);
         $this->assertSame('Project deleted', $data['message']);
 
-        $find_project = $this->consoleApi(
-            $project_id,
-            'GET',
-            '/projects'
-        );
-        $this->assertEquals(404, $find_project->getStatusCode());
+        $repository = $this->em->getRepository(Project::class);
+        $find = $repository->find($project_id);
+        $this->assertNull($find);
     }
 
     public function testDeleteProjectNotFound(): void

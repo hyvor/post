@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Tests\Api\Console\NewsletterList;
+namespace App\Tests\Api\Console\List;
 
-use App\Api\Console\Controller\NewsletterListController;
+use App\Api\Console\Controller\ListController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(NewsletterListController::class)]
-#[CoversClass(NewsletterListController::class)]
-class GetNewsletterListTest extends WebTestCase
+#[CoversClass(ListController::class)]
+#[CoversClass(ListController::class)]
+class GetListTest extends WebTestCase
 {
 
     // TODO: tests for input validation

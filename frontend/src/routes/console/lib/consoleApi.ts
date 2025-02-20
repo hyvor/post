@@ -6,7 +6,7 @@ export interface ConsoleApiOptions {
     endpoint: string,
     data?: Record<string, any> | FormData,
     userApi?: boolean,
-    subdomain?: string,
+    projectId?: string,
     signal?: AbortSignal,
 }
 
@@ -23,7 +23,7 @@ function getConsoleApi() {
         userApi = false, 
         method, 
         data = {},
-        subdomain,
+        projectId,
         signal
     }: CallOptions) : Promise<T> {
 
@@ -34,12 +34,12 @@ function getConsoleApi() {
         if (userApi) {
             url = baseUrl + endpoint;
         } else {
-            const projectSubdomain = subdomain || get(projectStore).id;
+            const projectSubdomain = projectId || get(projectStore).id;
             url = baseUrl + projectSubdomain + endpoint;
         }
 
         const headers = {
-            'X-TEMP-SUBDOMAIN': get(tempSubdomainStore)
+            'X-Resource-Id': projectId
         } as Record<string, string>;
 
         if (!(data instanceof FormData)) {

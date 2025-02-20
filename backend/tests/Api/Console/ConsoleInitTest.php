@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console;
+namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Entity\Factory\ProjectFactory;
@@ -40,5 +40,30 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
         $this->assertEquals(10, count($data['projects']));
+    }
+
+    public function testInitProject(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $response = $this->consoleApi(
+            $project->getId(),
+            'GET',
+            '/init/project',
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('project', $data);
+        $this->assertIsArray($data['project']);
+        $this->assertEquals($project->getId(), $data['project']['id']);
     }
 }
