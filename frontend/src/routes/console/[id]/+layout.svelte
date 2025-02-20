@@ -1,7 +1,23 @@
 <script>
+	import { onMount } from "svelte";
 	import Nav from "./@components/Nav/Nav.svelte";
+	import { page } from '$app/state';
+	import { loadProject } from "../lib/projectLoader";
+	import { toast } from "@hyvor/design/components";
 
+	let isLoading = $state(true);
 
+	onMount(() => {
+		const projectId = page.params.id;
+
+		loadProject(projectId)
+			.then(() => {
+				isLoading = false;
+			})
+			.catch(() => {
+				toast.error('Unable to load project');
+			});
+	});
 </script>
 
 <div class="main-inner">
