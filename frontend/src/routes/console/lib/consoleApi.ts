@@ -39,7 +39,7 @@ function getConsoleApi() {
         }
 
         const headers = {
-            'X-TEMP-projectId': get(tempSubdomainStore)
+            'X-Resource-Id': projectId
         } as Record<string, string>;
 
         if (!(data instanceof FormData)) {
