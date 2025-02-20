@@ -50,7 +50,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             '/api/console' . $uri,
             server: [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X_RESOURCE_ID' => $projectId,
+                'HTTP_X_PROJECT_ID' => $projectId,
             ],
             content: (string) json_encode($data)
         );

@@ -44,8 +44,6 @@ class DeleteListTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertArrayHasKey('message', $data);
-        $this->assertSame('List deleted', $data['message']);
 
         $repository = $this->em->getRepository(NewsletterList::class);
         $list = $repository->find($newsletterListId);

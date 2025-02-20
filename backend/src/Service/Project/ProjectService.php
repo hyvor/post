@@ -10,7 +10,7 @@ class ProjectService
 {
 
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $em
     )
     {
     }
@@ -34,8 +34,8 @@ class ProjectService
                 ->setUpdatedAt(new \DateTimeImmutable())
         );
 
-        $this->entityManager->persist($project);
-        $this->entityManager->flush();
+        $this->em->persist($project);
+        $this->em->flush();
 
         return $project;
 
@@ -43,13 +43,13 @@ class ProjectService
 
     public function deleteProject(Project $project): void
     {
-        $this->entityManager->remove($project);
-        $this->entityManager->flush();
+        $this->em->remove($project);
+        $this->em->flush();
     }
 
     public function getProject(int $id): ?Project
     {
-        $project = $this->entityManager->getRepository(Project::class)->find($id);
+        $project = $this->em->getRepository(Project::class)->find($id);
         return $project; // Return null if project not found
     }
 
@@ -58,6 +58,6 @@ class ProjectService
      */
     public function getProjectsOfUser(int $userId): array
     {
-        return $this->entityManager->getRepository(Project::class)->findBy(['user_id' => $userId]);
+        return $this->em->getRepository(Project::class)->findBy(['user_id' => $userId]);
     }
 }

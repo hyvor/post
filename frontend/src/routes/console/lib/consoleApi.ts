@@ -38,7 +38,7 @@ function getConsoleApi() {
         }
 
         const headers = {
-            'X-Resource-Id': projectId
+            'X-Project-Id': projectId
         } as Record<string, string>;
 
         if (!(data instanceof FormData)) {
