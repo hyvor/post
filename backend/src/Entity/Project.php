@@ -15,23 +15,23 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['project:list', 'project:details'])]
+    #[Groups(['project:list'])]
     private int $id;
 
     #[ORM\Column]
-    #[Groups(['project:list', 'project:details'])]
+    #[Groups(['project:list'])]
     private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    #[Groups(['project:list', 'project:details'])]
+    #[Groups(['project:list'])]
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
-    #[Groups(['project:list', 'project:details'])]
+    #[Groups(['project:list'])]
     private ?int $user_id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['project:list', 'project:details'])]
+    #[Groups(['project:list'])]
     private ?string $name = null;
 
     /**

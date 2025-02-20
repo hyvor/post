@@ -18,12 +18,12 @@ export function loadProject(projectId: string) {
 	const promise = new Promise<ProjectResponse>((resolve, reject) => {
 		consoleApi
 			.get<ProjectResponse>({
-				endpoint: 'projects',
+				endpoint: 'init/project',
 				userApi: true,
 				projectId
 			})
 			.then((res) => {
-
+				console.log(res)
 				projectStore.set(res.project);
 
 				resolve(res);
