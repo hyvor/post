@@ -5,7 +5,6 @@
 	import { goto } from "$app/navigation";
 
 	 onMount(() => {
-		console.log('here')
         if ($projectListStore.length > 0) {
             goto(consoleUrl($projectListStore[0]!.id.toString()), {replaceState: true})
         } else {
