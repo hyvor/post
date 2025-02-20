@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Api\Console\NewsletterList;
+namespace App\Tests\Api\Console\List;
 
-use App\Api\Console\Controller\NewsletterListController;
+use App\Api\Console\Controller\ListController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
@@ -10,9 +10,9 @@ use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(NewsletterListController::class)]
+#[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
-class DeleteNewsletterListTest extends WebTestCase
+class DeleteListTest extends WebTestCase
 {
 
     // TODO: tests for input validation (when the project is not found)

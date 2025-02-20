@@ -4,7 +4,7 @@ namespace App\Api\Console\Object;
 
 use App\Entity\NewsletterList;
 
-class NewsletterListObject
+class ListObject
 {
 
     public int $id;
