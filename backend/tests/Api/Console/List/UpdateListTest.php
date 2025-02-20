@@ -37,7 +37,7 @@ class UpdateListTest extends WebTestCase
             ]
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -49,8 +49,36 @@ class UpdateListTest extends WebTestCase
 
         $this->assertSame('New Name', $data['name']);
 
-        // TODO: database check
+        $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
+        $this->assertSame('New Name', $newsletterList->getName());
 
+    }
+
+    public function testUpdateListNameInvalid(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/lists/' . $newsletterList->getId(),
+            [
+                'name' => str_repeat('a', 256),
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+        $data = json_decode($content, true);
+        $this->assertSame('This value is too long. It should have 255 characters or less.', $data['message']);
     }
 
 }

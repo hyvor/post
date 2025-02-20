@@ -30,7 +30,7 @@ class CreateProjectTest extends WebTestCase
             ]
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -39,8 +39,14 @@ class CreateProjectTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('id', $data);
+        $project_id = $data['id'];
         $this->assertIsInt($data['id']);
-        $this->assertSame('Valid Project Name', 'Valid Project Name'); // Ensure name is correct
+        $this->assertSame('Valid Project Name', 'Valid Project Name');
+
+        $repository = $this->em->getRepository(Project::class);
+        $find = $repository->find($project_id);
+        $this->assertNotNull($find);
+        $this->assertSame('Valid Project Name', $find->getName());
     }
 
     public function testCreateProjectInvalid(): void
@@ -54,7 +60,13 @@ class CreateProjectTest extends WebTestCase
             ]
         );
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+        $data = json_decode($content, true);
+        $this->assertSame('This value is too long. It should have 255 characters or less.', $data['message']);
+
     }
 
 }
