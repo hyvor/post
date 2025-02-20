@@ -1,5 +1,4 @@
 import { get } from "svelte/store";
-import { tempSubdomainStore } from "./temp";
 import { projectStore } from "./stores/projectStore";
 
 export interface ConsoleApiOptions {

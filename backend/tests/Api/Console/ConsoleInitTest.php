@@ -29,7 +29,7 @@ class ConsoleInitTest extends WebTestCase
             '/init'
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -39,7 +39,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
-        $this->assertEquals(10, count($data['projects']));
+        $this->assertSame(10, count($data['projects']));
     }
 
     public function testInitProject(): void
@@ -54,7 +54,7 @@ class ConsoleInitTest extends WebTestCase
             '/init/project',
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -64,6 +64,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
-        $this->assertEquals($project->getId(), $data['project']['id']);
+        $this->assertSame($project->getId(), $data['project']['id']);
     }
 }

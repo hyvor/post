@@ -36,7 +36,7 @@ class DeleteListTest extends WebTestCase
             '/lists/' . $newsletterList->getId()
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -64,7 +64,7 @@ class DeleteListTest extends WebTestCase
             '/lists/1'
         );
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertIsString($content);

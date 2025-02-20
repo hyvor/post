@@ -26,7 +26,7 @@ final class ProjectController extends AbstractController
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
-        $projects = $this->projectService->getProjects($user->id);
+        $projects = $this->projectService->getProjectsOfUser($user->id);
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
 
@@ -50,7 +50,7 @@ final class ProjectController extends AbstractController
     public function deleteProject(Project $project): JsonResponse
     {
         $this->projectService->deleteProject($project);
-        return $this->json(['message' => 'Project deleted']);
+        return $this->json([]);
     }
 
 }

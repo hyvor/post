@@ -47,9 +47,9 @@ class NewsletterListService
     /**
      * @return list<NewsletterList>
      */
-    public function getNewsletterLists()
+    public function getNewsletterLists(Project $project): array
     {
-        return $this->entityManager->getRepository(NewsletterList::class)->findAll();
+        return $this->entityManager->getRepository(NewsletterList::class)->findBy(['project' => $project]);
     }
 
     public function updateNewsletterList(NewsletterList $list, string $name): NewsletterList

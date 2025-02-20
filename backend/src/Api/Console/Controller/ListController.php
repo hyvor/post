@@ -23,9 +23,9 @@ final class ListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'GET')]
-    public function getNewsletterLists(): JsonResponse
+    public function getNewsletterLists(Project $project): JsonResponse
     {
-        $lists = $this->newsletterListService->getNewsletterLists();
+        $lists = $this->newsletterListService->getNewsletterLists($project);
         return $this->json(array_map(fn (NewsletterList $list) => new ListObject($list), $lists));
     }
 
@@ -62,6 +62,6 @@ final class ListController extends AbstractController
     public function deleteNewsletterList(NewsletterList $list): JsonResponse
     {
         $this->newsletterListService->deleteNewsletterList($list);
-        return $this->json(['message' => 'List deleted']);
+        return $this->json([]);
     }
 }
