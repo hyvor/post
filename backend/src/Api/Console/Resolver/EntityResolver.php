@@ -89,10 +89,6 @@ class EntityResolver implements ValueResolverInterface
         );
         $currentProject = (array) $this->projectResolver->resolve($request, $argumentMetadata);
 
-        if (count($currentProject) === 0) {
-            throw new \Exception('Project not found');
-        }
-
         if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
             throw new AccessDeniedHttpException('Entity does not belong to the project');
         }

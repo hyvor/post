@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console;
+namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Entity\Factory\ProjectFactory;

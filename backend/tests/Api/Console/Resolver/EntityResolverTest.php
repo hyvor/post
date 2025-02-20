@@ -6,7 +6,6 @@ use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\ProjectResolver;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
-use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Tests\Case\KernelTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
