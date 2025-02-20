@@ -49,42 +49,8 @@ class UpdateNewsletterListTest extends WebTestCase
 
         $this->assertSame('New Name', $data['name']);
 
-    }
+        // TODO: database check
 
-    public function testUpdateListProject(): void
-    {
-        $project1 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $project2 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project1));
-
-        $response = $this->consoleApi($project1,
-            'PATCH', '/lists/' . $newsletterList->getId(),
-            [
-                'project_id' => $project2->getId()
-            ]
-        );
-
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertSame($project2->getId(), $data['project_id']);
-
-        $list_find = $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
-        $this->assertSame($project2->getId(), $list_find->getProject()->getId());
     }
 
 }

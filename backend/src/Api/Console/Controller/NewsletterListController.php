@@ -2,12 +2,12 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\CreateNewsletterListInput;
-use App\Api\Console\Input\UpdateNewsletterListInput;
+use App\Api\Console\Input\List\CreateListInput;
+use App\Api\Console\Input\List\UpdateListInput;
+use App\Api\Console\Object\NewsletterListObject;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Api\Console\Object\NewsletterListObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -32,7 +32,7 @@ final class NewsletterListController extends AbstractController
     #[Route('/lists', methods: 'POST')]
     public function createNewsletterList(
         Project $project,
-        #[MapRequestPayload] CreateNewsletterListInput $input
+        #[MapRequestPayload] CreateListInput $input
     ): JsonResponse
     {
         $list = $this->newsletterListService->createNewsletterList($input->name, $project);
@@ -46,16 +46,15 @@ final class NewsletterListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
-    public function updateNewsletterList(NewsletterList $list, #[MapRequestPayload] UpdateNewsletterListInput $input): JsonResponse
+    public function updateNewsletterList(
+        NewsletterList $list,
+        #[MapRequestPayload] UpdateListInput $input
+    ): JsonResponse
     {
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
-            $input->project_id ?? $list->getProject()->getId()
         );
-        if (!$list) {
-            return $this->json(['message' => 'Error when updating list'], 500);
-        }
         return $this->json(new NewsletterListObject($list));
     }
 

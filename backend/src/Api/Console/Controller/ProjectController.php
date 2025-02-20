@@ -2,12 +2,11 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\CreateProjectInput;
+use App\Api\Console\Input\Project\CreateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use Hyvor\Internal\Auth\AuthUser;
-use Hyvor\Internal\Bundle\Security\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
