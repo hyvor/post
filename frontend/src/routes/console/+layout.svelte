@@ -22,7 +22,6 @@
 	let isLoading = $state(true);;
 
 	onMount(() => {
-		console.log("here")
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
@@ -98,36 +97,5 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-
-	.main-inner {
-		display: flex;
-		flex: 1;
-		width: 100%;
-		height: 100%;
-		min-height: 0;
-	}
-
-	.content {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		width: 100%;
-		height: 100%;
-		min-width: 0;
-	}
-
-	@media (max-width: 992px) {
-		main {
-			display: block;
-		}
-		.main-inner {
-			display: block;
-		}
-		.content {
-			padding-bottom: 150px;
-			height: initial;
-			min-height: calc(100vh - 50px);
-		}
 	}
 </style>
