@@ -6,7 +6,6 @@ use App\Entity\Project;
 use App\Tests\Trait\FactoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
-use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,6 +54,19 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             content: (string) json_encode($data)
         );
         return $this->client->getResponse();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getJson(Response $response): array
+    {
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+        $json = json_decode($content, true);
+        $this->assertIsArray($json);
+        return $json;
     }
 
 }

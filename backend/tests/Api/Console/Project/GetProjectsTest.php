@@ -28,13 +28,8 @@ class GetProjectsTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertEquals(0, count($data));
+        $data = $this->getJson($response);
+        $this->assertCount(0, $data);
     }
 
     public function testListProjectsNonEmpty(): void

@@ -16,13 +16,13 @@ class NewsletterListService
     }
 
     public function createNewsletterList(
+        Project $project,
         string $name,
-        Project $project
     ): NewsletterList
     {
         $list = new NewsletterList()
-            ->setName($name)
             ->setProject($project)
+            ->setName($name)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
