@@ -10,7 +10,7 @@ class NewsletterListService
 {
 
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $em
     )
     {
     }
@@ -26,21 +26,21 @@ class NewsletterListService
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
-        $this->entityManager->persist($list);
-        $this->entityManager->flush();
+        $this->em->persist($list);
+        $this->em->flush();
 
         return $list;
     }
 
     public function deleteNewsletterList(NewsletterList $list): void
     {
-        $this->entityManager->remove($list);
-        $this->entityManager->flush();
+        $this->em->remove($list);
+        $this->em->flush();
     }
 
     public function getNewsletterList(int $id): ?NewsletterList
     {
-        $list = $this->entityManager->getRepository(NewsletterList::class)->find($id);
+        $list = $this->em->getRepository(NewsletterList::class)->find($id);
         return $list;
     }
 
@@ -49,7 +49,7 @@ class NewsletterListService
      */
     public function getNewsletterLists(Project $project): array
     {
-        return $this->entityManager->getRepository(NewsletterList::class)->findBy(['project' => $project]);
+        return $this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]);
     }
 
     public function updateNewsletterList(NewsletterList $list, string $name): NewsletterList
@@ -58,8 +58,8 @@ class NewsletterListService
             ->setName($name)
             ->setUpdatedAt(new \DateTimeImmutable());
 
-        $this->entityManager->persist($list);
-        $this->entityManager->flush();
+        $this->em->persist($list);
+        $this->em->flush();
 
         return $list;
     }
