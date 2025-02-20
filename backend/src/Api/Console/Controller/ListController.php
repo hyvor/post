@@ -35,7 +35,7 @@ final class ListController extends AbstractController
         #[MapRequestPayload] CreateListInput $input
     ): JsonResponse
     {
-        $list = $this->newsletterListService->createNewsletterList($input->name, $project);
+        $list = $this->newsletterListService->createNewsletterList($project, $input->name);
         return $this->json(new ListObject($list));
     }
 

@@ -22,7 +22,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Resource-Id") === null')]
-    public function getProjects(): JsonResponse
+    public function getUserAllProjects(): JsonResponse
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
@@ -41,7 +41,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Resource-Id") !== null')]
-    public function getById(Project $project): JsonResponse
+    public function getProjectById(Project $project): JsonResponse
     {
         return $this->json(new ProjectObject($project));
     }
