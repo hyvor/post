@@ -10,7 +10,6 @@ use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class ConsoleController extends AbstractController
 {
@@ -22,24 +21,25 @@ final class ConsoleController extends AbstractController
     }
 
     #[Route('/init', methods: 'GET')]
-    public function initConsole(SerializerInterface $serializer): JsonResponse
+    public function initConsole(): JsonResponse
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
 
         $projects = $this->projectService->getProjects($user->id);
-        $json = $serializer->serialize(['projects' => $projects], 'json', ['groups' => 'project:list']);
+        $projects = array_map(fn(Project $project) => new ProjectObject($project), $projects);
 
-        return new JsonResponse($json, 200, [], true);
+        return new JsonResponse([
+            'projects' => $projects
+        ]);
     }
 
-    #[Route('/init/project',  methods: 'GET', condition: 'request.headers.get("X-Resource-Id") !== null')]
-    public function initProject(Project $project, SerializerInterface $serializer): JsonResponse
+    #[Route('/init/project',  methods: 'GET')]
+    public function initProject(Project $project): JsonResponse
     {
-        $project = $this->projectService->getProject($project->getId());
-        $json = $serializer->serialize(['project' => $project], 'json', ['groups' => ['project:list', 'project:details']]);
-project
-        return new JsonResponse($json, 200, [], true);
+        return new JsonResponse([
+            'project' => new ProjectObject($project),
+        ]);
     }
 
 }

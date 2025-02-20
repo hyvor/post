@@ -48,7 +48,7 @@ class ProjectResolver implements ValueResolverInterface
         $project = $this->projectRepository->find($projectId);
 
         if (!$project) {
-            return [];
+            throw new NotFoundHttpException('Project not found');
         }
 
         // TODO: enable this after auth fake
