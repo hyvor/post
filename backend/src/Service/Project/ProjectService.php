@@ -83,9 +83,9 @@ class ProjectService
             ->getSingleScalarResult();
 
         return [
+            new StatCategoryObject(0, 0),
+            new StatCategoryObject(0, 0),
             new StatCategoryObject($lists, $listsLast30d),
-            new StatCategoryObject(0, 0),
-            new StatCategoryObject(0, 0),
         ];
     }
 }

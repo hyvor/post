@@ -110,4 +110,40 @@ class ConsoleInitTest extends WebTestCase
         $this->assertSame(10, $subscibers['last_30d']);
 
     }
+
+    public function testInitProjectWithLists(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
+                ->setProject($project));
+
+        $project->addNewsletterList($newsletterList);
+
+        $response = $this->consoleApi(
+            $project->getId(),
+            'GET',
+            '/init/project',
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('lists', $data);
+        $this->assertIsArray($data['lists']);
+        $this->assertSame(1, count($data['lists']));
+        $list = $data['lists'][0];
+        $this->assertSame($newsletterList->getId(), $list['id']);
+        $this->assertSame($newsletterList->getName(), $list['name']);
+        $this->assertSame($project->getId(), $list['project_id']);
+    }
 }
