@@ -21,12 +21,12 @@ final class ProjectController extends AbstractController
     {
     }
 
-    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Resource-Id") === null')]
+    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
     public function getUserAllProjects(): JsonResponse
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
-        $projects = $this->projectService->getProjects($user->id);
+        $projects = $this->projectService->getProjectsOfUser($user->id);
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
 
@@ -40,7 +40,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Resource-Id") !== null')]
+    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
     public function getProjectById(Project $project): JsonResponse
     {
         return $this->json(new ProjectObject($project));
@@ -50,7 +50,7 @@ final class ProjectController extends AbstractController
     public function deleteProject(Project $project): JsonResponse
     {
         $this->projectService->deleteProject($project);
-        return $this->json(['message' => 'Project deleted']);
+        return $this->json([]);
     }
 
 }

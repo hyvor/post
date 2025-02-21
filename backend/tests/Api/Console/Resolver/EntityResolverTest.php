@@ -117,7 +117,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string) $newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Resource-Id', (string) $project->getId());
+        $request->headers->set('X-Project-Id', (string) $project->getId());
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
@@ -145,7 +145,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string) $newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Resource-Id', '12');
+        $request->headers->set('X-Project-Id', '12');
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
@@ -171,7 +171,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', '1');
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Resource-Id', (string) $project->getId());
+        $request->headers->set('X-Project-Id', (string) $project->getId());
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
@@ -201,7 +201,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string) $newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Resource-Id', (string) $project2->getId());
+        $request->headers->set('X-Project-Id', (string) $project2->getId());
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');

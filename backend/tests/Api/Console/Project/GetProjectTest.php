@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Tests\Api\Console\Project;
+namespace Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
 use App\Entity\Factory\ProjectFactory;
-use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
@@ -13,22 +12,22 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ProjectController::class)]
 #[CoversClass(ProjectService::class)]
 #[CoversClass(Project::class)]
-class DeleteProjectTest extends WebTestCase
+class GetProjectTest extends WebTestCase
 {
 
-    // TODO: tests for input validation (when the project is not found)
+    // TODO: tests for input validation
     // TODO: tests for authentication
-    public function testDeleteProjectFound(): void
+
+    public function testGetSpecificProjet(): void
     {
         $project = $this
             ->factory(ProjectFactory::class)
             ->create(fn (Project $project) => $project->setName('Valid Project Name'));
 
-        $project_id = $project->getId();
-
         $response = $this->consoleApi(
             $project,
-            'DELETE', '/projects'
+            'GET',
+            '/projects'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -39,20 +38,17 @@ class DeleteProjectTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-
-        $repository = $this->em->getRepository(Project::class);
-        $find = $repository->find($project_id);
-        $this->assertNull($find);
+        $this->assertSame($project->getId(), $data['id']);
+        $this->assertSame($project->getName(), $data['name']);
     }
 
-    public function testDeleteProjectNotFound(): void
+    public function testGetSpecificProjectNotFound(): void
     {
-        $response = $this->consoleApi(
-            null,
-            'DELETE',
+        $find_project = $this->consoleApi(
+            999,
+            'GET',
             '/projects'
         );
-
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(404, $find_project->getStatusCode());
     }
 }

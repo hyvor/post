@@ -33,7 +33,7 @@ class CreateListTest extends WebTestCase
         );
 
         $content = $response->getContent();
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
         $this->assertNotFalse($content);
         $this->assertJson($content);
 
@@ -61,7 +61,7 @@ class CreateListTest extends WebTestCase
             ]
         );
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
     }
 
 }

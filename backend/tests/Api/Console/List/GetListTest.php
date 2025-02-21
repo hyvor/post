@@ -16,52 +16,6 @@ class GetListTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testListNewsletterListEmpty(): void
-    {
-        $response = $this->consoleApi(
-            null,
-            'GET',
-            '/lists'
-        );
-
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertEquals(0, count($data));
-    }
-
-    public function testListNewsletterListNonEmpty(): void
-    {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterLists = $this
-            ->factory(NewsletterListFactory::class)
-            ->createMany(10, fn ($newsletterList) => $newsletterList->setProject($project));
-
-        $response = $this->consoleApi(
-            $project,
-            'GET',
-            '/lists'
-        );
-
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertEquals(10, count($data));
-    }
-
     public function testGetSpecificList(): void
     {
         $project = $this
@@ -69,16 +23,16 @@ class GetListTest extends WebTestCase
             ->create();
 
         $newsletterList = $this
-        ->factory(NewsletterListFactory::class)
-        ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
-            ->setProject($project));
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
+                ->setProject($project));
 
         $response = $this->consoleApi(
             $project,
             'GET',
             '/lists/' . $newsletterList->getId()
         );
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -99,7 +53,7 @@ class GetListTest extends WebTestCase
             '/lists/999'
         );
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);

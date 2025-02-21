@@ -1,5 +1,4 @@
 import { get } from "svelte/store";
-import { tempSubdomainStore } from "./temp";
 import { projectStore } from "./stores/projectStore";
 
 export interface ConsoleApiOptions {
@@ -39,7 +38,7 @@ function getConsoleApi() {
         }
 
         const headers = {
-            'X-Resource-Id': projectId
+            'X-Project-Id': projectId
         } as Record<string, string>;
 
         if (!(data instanceof FormData)) {

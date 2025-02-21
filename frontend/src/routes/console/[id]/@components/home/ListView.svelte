@@ -1,36 +1,10 @@
 <script lang="ts">
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
+	import { listStore } from '../../../lib/stores/projectStore';
 
 	let showCreateListModal = false;
-
-	// TODO: Remove fake data
-	const lists = [
-		{
-			id: 1,
-			name: 'Pytorch newsletter',
-			subscribers_count: {
-				total: 300,
-				last_30d: 100
-			}
-		},
-		{
-			id: 2,
-			name: 'My super newsletter',
-			subscribers_count: {
-				total: 200,
-				last_30d: 50
-			}
-		},
-		{
-			id: 3,
-			name: 'SaaS newsletter',
-			subscribers_count: {
-				total: 100,
-				last_30d: 20
-			}
-		}
-	];
+	const lists = $listStore;
 </script>
 
 <div id="list-view">
