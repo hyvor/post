@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
+use App\Api\Console\Object\ListObject;
 use App\Entity\Project;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
@@ -39,8 +40,10 @@ final class ConsoleController extends AbstractController
     public function initProject(Project $project): JsonResponse
     {
         $project_stats = $this->projectService->getProjectStats($project);
+        $lists = $project->getLists();
         return new JsonResponse([
             'project' => new ProjectObject($project),
+            'lists' => array_map(fn($list) => new ListObject($list), $lists->toArray()),
             'stats' => new StatsObject(
                 $project_stats[0],
                 $project_stats[1],

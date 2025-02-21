@@ -9,7 +9,6 @@ class ProjectObject
 
     public int $id;
     public int $created_at; // unix timestamp
-
     public string $name;
 
     public function __construct(Project $project)
