@@ -9,6 +9,8 @@ use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
@@ -20,6 +22,9 @@ class UpdateListTest extends WebTestCase
 
     public function testUpdateListName(): void
     {
+
+        Clock::set(new MockClock('2025-02-21'));
+
         $project = $this
             ->factory(ProjectFactory::class)
             ->create();
@@ -51,6 +56,7 @@ class UpdateListTest extends WebTestCase
 
         $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
         $this->assertSame('New Name', $newsletterList->getName());
+        $this->assertSame('2025-02-21 00:00:00', $newsletterList->getUpdatedAt()->format('Y-m-d H:i:s'));
 
     }
 

@@ -5,9 +5,12 @@ namespace App\Service\NewsletterList;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
 
 class NewsletterListService
 {
+
+    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em
@@ -56,7 +59,7 @@ class NewsletterListService
     {
         $list
             ->setName($name)
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setUpdatedAt($this->now());
 
         $this->em->persist($list);
         $this->em->flush();
