@@ -12,7 +12,7 @@ export function consoleUrl(path: string) {
 
 
 export function consoleUrlWithProject(path: string) {
-    const projectId = get(projectStore).id;;
+    const projectId = get(projectStore).id;
     path = path.replace(/^\//, '');
     return consoleUrl(`${projectId}/${path}`)
 }

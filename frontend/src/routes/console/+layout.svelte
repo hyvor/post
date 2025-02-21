@@ -7,7 +7,7 @@
 
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
-	import { projectListStore } from "./lib/stores/projectListStore";
+	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -28,7 +28,7 @@
 				endpoint: 'init',
 			})
 			.then((res) => {
-				projectListStore.set(res.projects);
+				userProjectsStore.set(res.projects);
 				isLoading = false;
 			})
 			.catch((err) => {

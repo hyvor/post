@@ -39,15 +39,15 @@ final class ConsoleController extends AbstractController
     #[Route('/init/project',  methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
-        $project_stats = $this->projectService->getProjectStats($project);
+        $projectStats = $this->projectService->getProjectStats($project);
         $lists = $project->getLists();
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists->toArray()),
             'stats' => new StatsObject(
-                $project_stats[0],
-                $project_stats[1],
-                $project_stats[2]
+                $projectStats[0],
+                $projectStats[1],
+                $projectStats[2]
             )
         ]);
     }

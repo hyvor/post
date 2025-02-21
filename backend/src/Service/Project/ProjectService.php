@@ -82,6 +82,7 @@ class ProjectService
             ->getQuery()
             ->getSingleScalarResult();
 
+        // TODO: return keyed values
         return [
             new StatCategoryObject(0, 0),
             new StatCategoryObject(0, 0),

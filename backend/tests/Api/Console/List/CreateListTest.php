@@ -4,6 +4,7 @@ namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
 use App\Entity\Factory\ProjectFactory;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,17 +33,16 @@ class CreateListTest extends WebTestCase
             ],
         );
 
-        $content = $response->getContent();
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
 
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertIsInt($data['id']);
-        $this->assertSame('Valid List Name', $data['name']);
-        $this->assertSame($project->getId(), $data['project_id']);
+        $json = $this->getJson($response);
+        $this->assertIsInt($json['id']);
+        $this->assertSame('Valid List Name', $json['name']);
+
+        $repository = $this->em->getRepository(NewsletterList::class);
+        $list = $repository->find($json['id']);
+        $this->assertInstanceOf(NewsletterList::class, $list);
+        $this->assertSame('Valid List Name', $list->getName());
     }
 
     public function testCreateProjectInvalid(): void

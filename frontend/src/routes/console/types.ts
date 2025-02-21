@@ -1,7 +1,6 @@
 export type Project = {
 	id: number,
 	created_at: number,
-	updated_at: number,
 	name: string,
 }
 
@@ -14,7 +13,5 @@ export interface ProjectStats {
 export type List = {
 	id: number,
 	created_at: number,
-	updated_at: number,
 	name: string,
-	project_id: number,
 }
