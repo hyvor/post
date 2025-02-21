@@ -16,6 +16,7 @@ class ProjectFactory extends FactoryAbstract
         $project->setCreatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
         $project->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
         $project->setUserId(1);
+        $project->setName($this->fake->name());
         return $project;
     }
 
