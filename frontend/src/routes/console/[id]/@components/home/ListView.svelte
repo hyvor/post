@@ -4,8 +4,6 @@
 	import { listStore } from '../../../lib/stores/projectStore';
 
 	let showCreateListModal = false;
-
-	// TODO: Remove fake data
 	const lists = $listStore;
 </script>
 
