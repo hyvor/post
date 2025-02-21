@@ -1,0 +1,3 @@
+backend/vendor
+frontend/.svelte-kit
+frontend/node_modules

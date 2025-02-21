@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { Button, Loader } from '@hyvor/design/components';
-	import type { Stats } from '../../../types';
+	import type { ProjectStats } from '../../../types';
 	import Stat from './Stat.svelte';
+	import { projectStatsStore } from '../../../lib/stores/projectStore';
 
-	// TODO: Remove fake data
-	let stats: Stats = {
-		subscribers: { total: 300, last_30d: 100 },
-		issues: { total: 50, last_30d: 5 },
-		lists: { total: 12, last_30d: 2 }
-	};
 	let loading = false;
 </script>
 
@@ -17,9 +12,9 @@
 		<Loader block padding={25} />
 	{:else}
 		<div class="stats">
-			<Stat title="Subscribers" counts={stats.subscribers} href={'/console/subscribers'} />
-			<Stat title="Issues" counts={stats.issues} href={'/console/issues'} />
-			<Stat title="Lists" counts={stats.lists} href={'/console/lists'} />
+			<Stat title="Subscribers" counts={$projectStatsStore.subscribers} href={'/console/subscribers'} />
+			<Stat title="Issues" counts={$projectStatsStore.issues} href={'/console/issues'} />
+			<Stat title="Lists" counts={$projectStatsStore.lists} href={'/console/lists'} />
 		</div>
 	{/if}
 </div>
