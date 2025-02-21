@@ -2,9 +2,6 @@
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
 	import { listStore } from '../../../lib/stores/projectStore';
-
-	let showCreateListModal = false;
-	const lists = $listStore;
 </script>
 
 <div id="list-view">
@@ -12,7 +9,7 @@
 		Lists
 		<CreateListButton />
 	</div>
-	{#each lists as list}
+	{#each $listStore as list}
 		<ListRow {list} />
 	{/each}
 </div>

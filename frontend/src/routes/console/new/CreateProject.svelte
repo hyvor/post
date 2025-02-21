@@ -10,7 +10,7 @@
 		toast
 	} from '@hyvor/design/components';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
-	import { addToProjectList, projectListStore } from '../lib/stores/projectListStore';
+	import { addUserProject, userProjectsStore } from '../lib/stores/userProjectsStore';
 	import { createProject } from '../lib/actions/projectActions';
 
 
@@ -22,7 +22,7 @@
 
 
 	function handleBack() {
-		if ($projectListStore.length > 0) {
+		if ($userProjectsStore.length > 0) {
 			goto('/console');
 		} else {
 			goto('/');
@@ -54,7 +54,7 @@
 			.then((res) => {
 				toast.success('Project created successfully');
                 
-				addToProjectList(res);
+				addUserProject(res);
 
 				goto('/console/' + res.id);
 			})

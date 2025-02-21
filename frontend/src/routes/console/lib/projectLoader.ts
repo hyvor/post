@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import type { List, Project, ProjectStats } from '../types';
 import consoleApi from '../lib/consoleApi';
-import { listStore, projectStatsStore, projectStore } from '../lib/stores/projectStore';
+import { listStore, projectStatsStore, projectStore } from './stores/projectStore';
 
 interface ProjectResponse {
 	project: Project;
@@ -21,8 +21,6 @@ export function loadProject(projectId: string) {
 		consoleApi
 			.get<ProjectResponse>({
 				endpoint: 'init/project',
-				userApi: true,
-				projectId
 			})
 			.then((res) => {
 				projectStore.set(res.project);
