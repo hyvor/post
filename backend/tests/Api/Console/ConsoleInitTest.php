@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
+use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
@@ -65,5 +66,48 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
         $this->assertSame($project->getId(), $data['project']['id']);
+    }
+
+    public function testInitProjectWithStats(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterLists = $this
+            ->factory(NewsletterListFactory::class)
+            ->createMany(
+                10,
+                fn ($newsletterList) => $newsletterList->setProject($project)
+            );
+
+        $response = $this->consoleApi(
+            $project->getId(),
+            'GET',
+            '/init/project',
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('stats', $data);
+        $this->assertIsArray($data['stats']);
+
+        $stats = $data['stats'];
+        $this->assertIsArray($stats['subscribers']);
+        $this->assertIsArray($stats['issues']);
+        $this->assertIsArray($stats['lists']);
+
+        $subscibers = $stats['subscribers'];
+        $this->assertArrayHasKey('total', $subscibers);
+        $this->assertArrayHasKey('last_30d', $subscibers);
+        $this->assertSame(10, $subscibers['total']);
+        $this->assertSame(10, $subscibers['last_30d']);
+
     }
 }

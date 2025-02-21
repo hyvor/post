@@ -3,6 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Object\ProjectObject;
+use App\Api\Console\Object\StatsObject;
 use App\Entity\Project;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
@@ -37,8 +38,14 @@ final class ConsoleController extends AbstractController
     #[Route('/init/project',  methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
+        $project_stats = $this->projectService->getProjectStats($project);
         return new JsonResponse([
             'project' => new ProjectObject($project),
+            'stats' => new StatsObject(
+                $project_stats[0],
+                $project_stats[1],
+                $project_stats[2]
+            )
         ]);
     }
 

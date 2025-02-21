@@ -13,8 +13,8 @@ class NewsletterListFactory extends FactoryAbstract
     public function define() : NewsletterList
     {
         $newsletterLIst = new NewsletterList();
-        $newsletterLIst->setCreatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
-        $newsletterLIst->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
+        $newsletterLIst->setCreatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeBetween('now', 'now')));
+        $newsletterLIst->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeBetween('now', 'now')));
         $newsletterLIst->setName($this->fake->name());
         return $newsletterLIst;
     }
