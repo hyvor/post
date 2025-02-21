@@ -26,8 +26,8 @@ final class Version20250209024452 extends AbstractMigration
         $this->addSql(<<<SQL
         CREATE TABLE issues (
             id BIGSERIAL PRIMARY KEY,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             uuid VARCHAR(255) UNIQUE NOT NULL,
             list_id BIGINT NOT NULL references lists(id),
             subject VARCHAR(255),
@@ -38,10 +38,10 @@ final class Version20250209024452 extends AbstractMigration
             status issues_status,
             html TEXT NULL,
             text TEXT NULL,
-            scheduled_at TIMESTAMP,
-            sending_at TIMESTAMP,
-            failed_at TIMESTAMP,
-            sent_at TIMESTAMP,
+            scheduled_at timestamptz,
+            sending_at timestamptz,
+            failed_at timestamptz,
+            sent_at timestamptz,
             error_private TEXT,
             batch_id VARCHAR(255) UNIQUE
         );

@@ -2,10 +2,11 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\CreateProjectInput;
+use App\Api\Console\Input\Project\CreateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -20,39 +21,36 @@ final class ProjectController extends AbstractController
     {
     }
 
-    #[Route('/projects', methods: 'GET')]
-    public function getProjects(): JsonResponse
+    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
+    public function getUserAllProjects(): JsonResponse
     {
-        $projects = $this->projectService->getProjects();
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+        $projects = $this->projectService->getProjectsOfUser($user->id);
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
 
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
-        $project = $this->projectService->createProject($input->name);
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+
+        $project = $this->projectService->createProject($user->id, $input->name);
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects/{id}')]
-    public function getById(int $id): JsonResponse
+    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
+    public function getProjectById(Project $project): JsonResponse
     {
-        $project = $this->projectService->getProject($id);
-        if (!$project) {
-            return $this->json(['message' => 'Project not found'], 404);
-        }
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects/{id}', methods: 'DELETE')]
-    public function deleteProject(int $id): JsonResponse
+    #[Route('/projects', methods: 'DELETE')]
+    public function deleteProject(Project $project): JsonResponse
     {
-        $project = $this->projectService->getProject($id);
-        if (!$project) {
-            return $this->json(['message' => 'Project not found'], 404);
-        }
         $this->projectService->deleteProject($project);
-        return $this->json(['message' => 'Project deleted']);
+        return $this->json([]);
     }
 
 }
