@@ -103,11 +103,11 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($stats['issues']);
         $this->assertIsArray($stats['lists']);
 
-        $subscibers = $stats['subscribers'];
-        $this->assertArrayHasKey('total', $subscibers);
-        $this->assertArrayHasKey('last_30d', $subscibers);
-        $this->assertSame(10, $subscibers['total']);
-        $this->assertSame(10, $subscibers['last_30d']);
+        $lists = $stats['lists'];
+        $this->assertArrayHasKey('total', $lists);
+        $this->assertArrayHasKey('last_30d', $lists);
+        $this->assertSame(10, $lists['total']);
+        $this->assertSame(10, $lists['last_30d']);
 
     }
 
