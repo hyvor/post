@@ -30,13 +30,13 @@ final class Version20250209024410 extends AbstractMigration
         $this->addSql(<<<SQL
         CREATE TABLE subscribers (
             id BIGSERIAL PRIMARY KEY,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             list_id BIGINT NOT NULL references lists(id),
             email VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_status DEFAULT 'pending',
-            subscribed_at TIMESTAMP,
-            unsubscribed_at TIMESTAMP,
+            subscribed_at timestamptz,
+            unsubscribed_at timestamptz,
             source subscriber_source DEFAULT 'form',
             source_id VARCHAR(255),
             subscribe_ip VARCHAR(255),

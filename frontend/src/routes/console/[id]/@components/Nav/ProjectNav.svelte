@@ -7,12 +7,7 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconGear from '@hyvor/icons/IconGear';
 	import NavItem from './NavItem.svelte';
-
-	// TODO: Remove fake project
-	const currentProject = {
-		id: 1,
-		name: 'My Project'
-	};
+	import { projectStore } from '../../../lib/stores/projectStore';
 
 	let width: number;
 </script>
@@ -23,11 +18,11 @@
 	<button class="current">
 		<div class="left">
 			<div class="name">
-				{currentProject.name}
+				{$projectStore.name}
 			</div>
 			<div class="id">
 				ID
-				<Tag size="x-small"><strong> {currentProject.id}</strong></Tag>
+				<Tag size="x-small"><strong> {$projectStore.id}</strong></Tag>
 			</div>
 		</div>
 		<IconChevronExpand />
@@ -35,8 +30,8 @@
 
 	<div class="nav-links">
 		<NavLink
-			href={'/console/' + currentProject.id.toString()}
-			active={$page.url.pathname === `/console/${currentProject.id}`}
+			href={'/console/' + $projectStore.id.toString()}
+			active={$page.url.pathname === `/console/${$projectStore.id}`}
 		>
 			<NavItem>
 				<IconHouse slot="icon" />
@@ -45,8 +40,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + currentProject.id.toString() + '/subscibers'}
-			active={$page.url.pathname === `/console/${currentProject.id}/subscibers`}
+			href={'/console/' + $projectStore.id.toString() + '/subscibers'}
+			active={$page.url.pathname === `/console/${$projectStore.id}/subscibers`}
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
@@ -55,8 +50,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + currentProject.id.toString() + '/issues'}
-			active={$page.url.pathname === `/console/${currentProject.id}/issues`}
+			href={'/console/' + $projectStore.id.toString() + '/issues'}
+			active={$page.url.pathname === `/console/${$projectStore.id}/issues`}
 		>
 			<NavItem>
 				<IconSend slot="icon" />
@@ -65,8 +60,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + currentProject.id.toString() + '/settings'}
-			active={$page.url.pathname === `/console/${currentProject.id}/settings`}
+			href={'/console/' + $projectStore.id.toString() + '/settings'}
+			active={$page.url.pathname === `/console/${$projectStore.id}/settings`}
 		>
 			<NavItem>
 				<IconGear slot="icon" />
