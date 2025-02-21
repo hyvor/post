@@ -26,8 +26,8 @@ class NewsletterListService
         $list = new NewsletterList()
             ->setProject($project)
             ->setName($name)
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now());
 
         $this->em->persist($list);
         $this->em->flush();
