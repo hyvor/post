@@ -40,7 +40,7 @@ class ProjectResolver implements ValueResolverInterface
         $controllerName = $argument->getControllerName();
         // TODO: validate controller name as in EntityResolver
 
-        $projectId = $request->headers->get('X-Resource-Id');
+        $projectId = $request->headers->get('X-Project-Id');
 
         if (!$projectId) {
             throw new BadRequestException('Missing X-Project-Id header');

@@ -1,10 +1,12 @@
 import { get } from 'svelte/store';
-import type { Project } from '../types';
+import type { List, Project, ProjectStats } from '../types';
 import consoleApi from '../lib/consoleApi';
-import { projectStore } from '../lib/stores/projectStore';
+import { listStore, projectStatsStore, projectStore } from '../lib/stores/projectStore';
 
 interface ProjectResponse {
 	project: Project;
+	stats: ProjectStats;
+	lists: List[];
 }
 
 // to prevent multiple requests for the same subdomain
@@ -23,8 +25,9 @@ export function loadProject(projectId: string) {
 				projectId
 			})
 			.then((res) => {
-				console.log(res)
 				projectStore.set(res.project);
+				projectStatsStore.set(res.stats);
+				listStore.set(res.lists);
 
 				resolve(res);
 			})

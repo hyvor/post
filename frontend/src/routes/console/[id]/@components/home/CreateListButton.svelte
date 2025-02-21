@@ -12,7 +12,7 @@
 		const toastId = toast.loading('Creating list...');
 		isCreatingList = true;
 
-		createList(listName, 1)
+		createList(listName)
 			.then((res) => {
 				toast.success('List created', { id: toastId });
 			})
@@ -61,9 +61,7 @@
 				bind:value={listName}
 			/>
 		</FormControl>
-		<FormControl>
-			<Label>Project</Label>
-		</FormControl>
+
 	</div>
 
 
