@@ -54,9 +54,6 @@ jobs:
       -   name: Build Docker image
           run: docker build -t backend-dev . --target backend-dev
 
-      -   name: Install dependencies
-          run: 
-
       -   name: Run Tests
           run: |
             docker run backend-dev composer require hyvor/internal:dev-symfony
