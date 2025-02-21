@@ -18,7 +18,6 @@ class NewsletterList
     private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'lists', cascade: ['persist'])]
-    #[Groups([])]
     private Project $project;
 
     #[ORM\Column(length: 255)]
