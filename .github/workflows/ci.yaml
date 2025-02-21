@@ -59,4 +59,4 @@ jobs:
             docker run \
             -e DB_HOST=postgres \
             --network ci \
-            backend-dev ./vendor/bin/phpunit --ci
+            backend-dev ./vendor/bin/phpunit
