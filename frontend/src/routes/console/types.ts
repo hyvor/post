@@ -6,7 +6,7 @@ export type Project = {
 	lists_count: { total: number; last_30d: number }*/
 }
 
-export interface Stats {
+export interface ProjectStats {
 	subscribers: { total: number; last_30d: number };
 	issues: { total: number; last_30d: number };
 	lists: { total: number; last_30d: number };
