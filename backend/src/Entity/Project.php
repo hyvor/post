@@ -28,7 +28,7 @@ class Project
     private ?int $user_id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     /**
      * @var Collection<int, NewsletterList>
@@ -89,7 +89,7 @@ class Project
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -114,18 +114,6 @@ class Project
         if (!$this->lists->contains($newsletterList)) {
             $this->lists->add($newsletterList);
             $newsletterList->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeList(NewsletterList $newsletterList): static
-    {
-        if ($this->lists->removeElement($newsletterList)) {
-            // set the owning side to null (unless already changed)
-            if ($newsletterList->getProject() === $this) {
-                $newsletterList->setProject(null);
-            }
         }
 
         return $this;
