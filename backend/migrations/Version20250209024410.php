@@ -19,13 +19,13 @@ final class Version20250209024410 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        /*$this->addSql(<<<SQL
             CREATE TYPE subscriber_status AS ENUM ('subscribed', 'unsubscribed', 'pending');
         SQL);
 
         $this->addSql(<<<SQL
             CREATE TYPE subscriber_source AS ENUM ('console', 'form', 'import', 'auto_subscribe');
-        SQL);
+        SQL);*/
 
         $this->addSql(<<<SQL
         CREATE TABLE subscribers (
