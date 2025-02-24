@@ -122,9 +122,7 @@ class ConsoleInitTest extends WebTestCase
         $newsletterList = $this
             ->factory(NewsletterListFactory::class)
             ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
-                ->setProject($project));
-
-        $project->addList($newsletterList);
+            ->setProject($project));
 
         $response = $this->consoleApi(
             $project->getId(),
