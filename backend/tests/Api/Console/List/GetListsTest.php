@@ -26,7 +26,9 @@ class GetListsTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->createMany(
                 10,
-                fn ($newsletterList) => $newsletterList->setProject($project)
+                function ($newsletterList) use ($project) {
+                    $newsletterList->setProject($project);
+                }
             );
 
         $response = $this->consoleApi(
@@ -60,14 +62,18 @@ class GetListsTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->createMany(
                 10,
-                fn ($newsletterList) => $newsletterList->setProject($project1)
+                function ($newsletterList) use ($project1) {
+                    $newsletterList->setProject($project1);
+                }
             );
 
         $newsletterLists2 = $this
             ->factory(NewsletterListFactory::class)
             ->createMany(
                 10,
-                fn ($newsletterList) => $newsletterList->setProject($project2)
+                function ($newsletterList) use ($project2) {
+                    $newsletterList->setProject($project2);
+                }
             );
 
         $response = $this->consoleApi(

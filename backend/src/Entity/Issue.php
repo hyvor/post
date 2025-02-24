@@ -12,7 +12,7 @@ class Issue
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -67,11 +67,18 @@ class Issue
     private ?string $error_private = null;
 
     #[ORM\Column(length:255, nullable: true)]
-    private ?string $batch_id = null;
+    private ?int $batch_id = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -182,12 +189,12 @@ class Issue
         return $this;
     }
 
-    public function getStatus(): ?\IssueStatus
+    public function getStatus(): ?IssueStatus
     {
         return $this->status;
     }
 
-    public function setStatus(?\IssueStatus $status): static
+    public function setStatus(?IssueStatus $status): static
     {
         $this->status = $status;
 
