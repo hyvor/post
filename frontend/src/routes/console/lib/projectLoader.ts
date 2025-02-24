@@ -13,7 +13,7 @@ interface ProjectResponse {
 const LOADER_PROMISES: Record<string, Promise<ProjectResponse>> = {};
 
 export function loadProject(projectId: string) {
-	if (LOADER_PROMISES[projectId]) {
+	if (LOADER_PROMISES[projectId] !== undefined) {
 		return LOADER_PROMISES[projectId];
 	}
 

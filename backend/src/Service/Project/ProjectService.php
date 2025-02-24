@@ -66,14 +66,14 @@ class ProjectService
      */
     public function getProjectStats(Project $project): array
     {
-        $lists = $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+        $lists = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
             ->setParameter('project', $project)
             ->getQuery()
             ->getSingleScalarResult();
 
-        $listsLast30d = $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+        $listsLast30d = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
             ->andWhere('l.created_at > :date')

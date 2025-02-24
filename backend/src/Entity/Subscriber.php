@@ -14,7 +14,7 @@ class Subscriber
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -50,9 +50,16 @@ class Subscriber
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
