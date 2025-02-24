@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SubscriberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\SubscriberStatus;
 use App\Enum\SubscriberSource;
@@ -28,10 +29,10 @@ class Subscriber
     private Project $project;
 
     /**
-     * @var ArrayCollection<int, NewsletterList>
+     * @var Collection<int, NewsletterList>
      */
     #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'])]
-    private ArrayCollection $lists;
+    private Collection $lists;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -56,6 +57,11 @@ class Subscriber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
+
+    public function __construct()
+    {
+        $this->lists = new ArrayCollection();
+    }
 
     public function getId(): int
     {
