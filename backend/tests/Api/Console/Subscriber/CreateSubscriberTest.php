@@ -36,9 +36,6 @@ class CreateSubscriberTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->create(fn ($newsletterList) => $newsletterList->setProject($project));
 
-        $project->addList($newsletterList1);
-        $project->addList($newsletterList2);
-
         $response = $this->consoleApi(
             $project,
             'POST',
@@ -48,7 +45,7 @@ class CreateSubscriberTest extends WebTestCase
                 'list_ids'=> [$newsletterList1->getId(), $newsletterList2->getId()]
             ]
         );
-        dd($response->getContent());
+
         $this->assertSame(200, $response->getStatusCode());
 
         $json = $this->getJson($response);
