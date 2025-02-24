@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SubscriberRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\SubscriberStatus;
 use App\Enum\SubscriberSource;
@@ -24,7 +25,13 @@ class Subscriber
 
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?NewsletterList $list_id = null;
+    private Project $project;
+
+    /**
+     * @var ArrayCollection<int, NewsletterList>
+     */
+    #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'])]
+    private ArrayCollection $lists;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -86,14 +93,14 @@ class Subscriber
         return $this;
     }
 
-    public function getListId(): ?NewsletterList
+    public function getProject(): Project
     {
-        return $this->list_id;
+        return $this->project;
     }
 
-    public function setListId(?NewsletterList $list_id): static
+    public function setProject(Project $project): static
     {
-        $this->list_id = $list_id;
+        $this->project = $project;
 
         return $this;
     }
@@ -191,6 +198,26 @@ class Subscriber
     {
         $this->unsubscribe_reason = $unsubscribe_reason;
 
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection<int, NewsletterList>
+     */
+    public function getLists(): ArrayCollection
+    {
+        return $this->lists;
+    }
+    public function addList(NewsletterList $list): self
+    {
+        if (!$this->lists->contains($list)) {
+            $this->lists[] = $list;
+        }
+        return $this;
+    }
+    public function removeList(NewsletterList $list): self
+    {
+        $this->lists->removeElement($list);
         return $this;
     }
 }
