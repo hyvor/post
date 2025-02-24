@@ -6,7 +6,6 @@ use App\Repository\ListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: ListRepository::class)]
 #[ORM\Table(name: 'lists')]
@@ -24,6 +23,8 @@ class NewsletterList
      * @var ArrayCollection<int, Subscriber>
      */
     #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'list_subscriber')]
+    #[ORM\JoinColumn(name: 'list_id')]
     private ArrayCollection $subscribers;
 
     #[ORM\Column(length: 255)]

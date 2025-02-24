@@ -32,10 +32,12 @@ class Subscriber
      * @var Collection<int, NewsletterList>
      */
     #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'list_subscriber')]
+    #[ORM\InverseJoinColumn(name: 'list_id')]
     private Collection $lists;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(nullable: true, enumType: SubscriberStatus::class)]
     private ?SubscriberStatus $status = null;
@@ -111,7 +113,7 @@ class Subscriber
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -208,9 +210,9 @@ class Subscriber
     }
 
     /**
-     * @return ArrayCollection<int, NewsletterList>
+     * @return Collection<int, NewsletterList>
      */
-    public function getLists(): ArrayCollection
+    public function getLists(): Collection
     {
         return $this->lists;
     }
