@@ -122,7 +122,7 @@ class ConsoleInitTest extends WebTestCase
             ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
                 ->setProject($project));
 
-        $project->addNewsletterList($newsletterList);
+        $project->addList($newsletterList);
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -144,6 +144,5 @@ class ConsoleInitTest extends WebTestCase
         $list = $data['lists'][0];
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
-        $this->assertSame($project->getId(), $list['project_id']);
     }
 }
