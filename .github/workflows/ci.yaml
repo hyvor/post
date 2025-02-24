@@ -59,4 +59,7 @@ jobs:
             docker run \
             -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
             --network ci \
-            backend-dev ./vendor/bin/phpunit
+            backend-dev sh -c "
+            php bin/console doctrine:migrations:migrate --no-interaction &&
+            ./vendor/bin/phpunit"
+      
