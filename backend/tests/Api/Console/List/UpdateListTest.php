@@ -84,6 +84,8 @@ class UpdateListTest extends WebTestCase
         $this->assertNotFalse($content);
         $this->assertJson($content);
         $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('message', $data);
         $this->assertSame('This value is too long. It should have 255 characters or less.', $data['message']);
     }
 

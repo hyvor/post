@@ -16,7 +16,8 @@ class ProjectResolver implements ValueResolverInterface
 
     public function __construct(
         private ProjectRepository $projectRepository,
-        private Security $security
+        // TODO: enable this after auth fake
+        //private Security $security
     )
     {
     }

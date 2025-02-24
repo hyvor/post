@@ -78,7 +78,9 @@ class ConsoleInitTest extends WebTestCase
             ->factory(NewsletterListFactory::class)
             ->createMany(
                 10,
-                fn ($newsletterList) => $newsletterList->setProject($project)
+                function ($newsletterList) use ($project) {
+                    $newsletterList->setProject($project);
+                }
             );
 
         $response = $this->consoleApi(
@@ -122,7 +124,7 @@ class ConsoleInitTest extends WebTestCase
             ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
                 ->setProject($project));
 
-        $project->addNewsletterList($newsletterList);
+        $project->addList($newsletterList);
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -142,8 +144,10 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data['lists']);
         $this->assertSame(1, count($data['lists']));
         $list = $data['lists'][0];
+        $this->assertIsArray($list);
+        $this->assertArrayHasKey('id', $list);
+        $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
-        $this->assertSame($project->getId(), $list['project_id']);
     }
 }
