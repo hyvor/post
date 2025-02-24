@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\IssueRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\IssueStatus;
 
