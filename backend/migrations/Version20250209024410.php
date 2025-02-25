@@ -34,7 +34,7 @@ final class Version20250209024410 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             email VARCHAR(255) NOT NULL UNIQUE,
-            status subscriber_status DEFAULT 'pending' NOT NULL,
+            status subscriber_status DEFAULT 'pending',
             subscribed_at timestamptz,
             unsubscribed_at timestamptz,
             source subscriber_source DEFAULT 'form',
