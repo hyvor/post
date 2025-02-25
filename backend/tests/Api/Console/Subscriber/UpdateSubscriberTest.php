@@ -6,7 +6,6 @@ use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\Factory\SubscriberFactory;
-use App\Entity\NewsletterList;
 use App\Entity\Subscriber;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
@@ -22,7 +21,7 @@ class UpdateSubscriberTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testUpdateListName(): void
+    public function testUpdateList(): void
     {
 
         Clock::set(new MockClock('2025-02-21'));
@@ -68,6 +67,7 @@ class UpdateSubscriberTest extends WebTestCase
         $this->assertCount(2, $subscriber->getLists());
         $this->assertContains($newsletterList1, $subscriber->getLists());
         $this->assertContains($newsletterList2, $subscriber->getLists());
+        $this->assertSame('2025-02-21 00:00:00', $subscriber->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 
     public function testUpdateSubscriberEmptyList(): void
@@ -154,4 +154,35 @@ class UpdateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
     }
 
+    public function testUpdateSubscriberInvalidListId(): void
+    {
+        $project1 = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $project2 = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project2));
+
+        $subscriber = $this
+            ->factory(SubscriberFactory::class)
+            ->create(fn ($subscriber) => $subscriber
+                ->setProject($project1)
+                ->addList($newsletterList));
+
+        $response = $this->consoleApi(
+            $project1,
+            'PATCH',
+            '/subscribers/' . $subscriber->getId(),
+            [
+                'list_ids' => [$newsletterList->getId()],
+            ]
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
 }

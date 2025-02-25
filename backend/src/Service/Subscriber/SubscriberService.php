@@ -41,6 +41,12 @@ class SubscriberService
         return $subscriber;
     }
 
+    public function deleteSubscriber(Subscriber $subscriber): void
+    {
+        $this->em->remove($subscriber);
+        $this->em->flush();
+    }
+
     /**
      * @return list<Subscriber>
      */

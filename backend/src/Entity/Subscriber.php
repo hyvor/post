@@ -19,10 +19,10 @@ class Subscriber
     private int $id;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private \DateTimeImmutable $updated_at;
 
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,7 +40,7 @@ class Subscriber
     private string $email;
 
     #[ORM\Column(nullable: true, enumType: SubscriberStatus::class)]
-    private ?SubscriberStatus $status = null;
+    private SubscriberStatus $status;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $subscribed_at = null;
@@ -77,7 +77,7 @@ class Subscriber
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -89,7 +89,7 @@ class Subscriber
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updated_at;
     }
@@ -125,12 +125,12 @@ class Subscriber
         return $this;
     }
 
-    public function getStatus(): ?SubscriberStatus
+    public function getStatus(): SubscriberStatus
     {
         return $this->status;
     }
 
-    public function setStatus(?SubscriberStatus $status): static
+    public function setStatus(SubscriberStatus $status): static
     {
         $this->status = $status;
 
