@@ -4,6 +4,7 @@ namespace App\Api\Console\Resolver;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Subscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ class EntityResolver implements ValueResolverInterface
 
     public const ENTITIES = [
         'lists' => NewsletterList::class,
-        //
+        'subscribers' => Subscriber::class,
     ];
 
     public function __construct(
