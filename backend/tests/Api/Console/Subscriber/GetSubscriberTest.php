@@ -6,10 +6,16 @@ use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\Factory\SubscriberFactory;
+use App\Entity\Subscriber;
+use App\Repository\SubscriberRepository;
+use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscriberService::class)]
+#[CoversClass(SubscriberRepository::class)]
+#[CoversClass(Subscriber::class)]
 class GetSubscriberTest extends WebTestCase
 {
 
