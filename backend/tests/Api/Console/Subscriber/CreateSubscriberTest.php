@@ -57,7 +57,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('test@email.com', $subscriber->getEmail());
     }
 
-    public function testCreateSubscriberInvalid(): void
+    public function testCreateSubscriberInvalidEmail(): void
     {
         $project = $this
             ->factory(ProjectFactory::class)
@@ -85,5 +85,30 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
     }
 
+    public function testCreateSubscriberInvalidList(): void
+    {
+        $project1 = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $project2 = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList1 = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project2));
+
+        $response = $this->consoleApi(
+            $project1,
+            'POST',
+            '/subscribers',
+            [
+                'list_ids'=> [$newsletterList1->getId()]
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+    }
 
 }
