@@ -71,11 +71,7 @@ class SubscriberService
         foreach ($subscriber->getLists() as $list) {
             $subscriber->removeList($list);
         }
-        foreach ($lists as $listId) {
-            $list = $this->em->getRepository(NewsletterList::class)->find($listId);
-            if ($list === null) {
-                throw new \InvalidArgumentException('Invalid list id');
-            }
+        foreach ($lists as $list) {
             $subscriber->addList($list);
         }
         $subscriber->setUpdatedAt($this->now());
