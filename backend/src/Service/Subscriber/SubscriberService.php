@@ -36,4 +36,12 @@ class SubscriberService
 
         return $subscriber;
     }
+
+    /**
+     * @return list<Subscriber>
+     */
+    public function getSubscribers(Project $project): array
+    {
+        return $this->em->getRepository(Subscriber::class)->findBy(['project' => $project]);
+    }
 }
