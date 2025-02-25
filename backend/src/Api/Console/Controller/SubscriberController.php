@@ -53,15 +53,32 @@ final class SubscriberController extends AbstractController
     #[Route('/subscribers/{id}', methods: 'PATCH')]
     public function updateSubscriber(
         Subscriber $subscriber,
+        Project $project,
         #[MapRequestPayload] UpdateSubscriberInput $input
     ): JsonResponse
     {
+        $projectLists = new ArrayCollection($this->listRepository->findBy(['project' => $project]));
+        $lists = [];
+        foreach ($input->list_ids as $listId) {
+            $list = $projectLists->filter(fn($list) => $list->getId() === $listId)->first();
+            if (!$list) {
+                return $this->json(['message' => 'Invalid list id'], 400);
+            }
+            $lists[] = $list;
+        }
         $subscriber = $this->subscriberService->updateSubscriber(
             $subscriber,
             $input->email ?? $subscriber->getEmail(),
-            $input->list_ids ?? $subscriber->getLists()->map(fn($list) => $list->getId())->toArray(),
+            $lists,
             $input->status ?? $subscriber->getStatus()->value ?? 'pending',
         );
         return $this->json(new SubscriberObject($subscriber));
+    }
+
+    #[Route('/subscribers/{id}', methods: 'DELETE')]
+    public function deleteSubscriber(Subscriber $subscriber): JsonResponse
+    {
+        $this->subscriberService->deleteSubscriber($subscriber);
+        return $this->json([]);
     }
 }
