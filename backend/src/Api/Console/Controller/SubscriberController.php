@@ -23,6 +23,13 @@ final class SubscriberController extends AbstractController
     {
     }
 
+    #[Route('/subscribers', methods: 'GET')]
+    public function getProjectSubscribers(Project $project): JsonResponse
+    {
+        $subscribers = $this->subscriberService->getSubscribers($project);
+        return $this->json(array_map(fn($subscriber) => new SubscriberObject($subscriber), $subscribers));
+    }
+
     #[Route('/subscribers', methods: ['POST'])]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {

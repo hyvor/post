@@ -2,21 +2,19 @@
 
 namespace Api\Console\Subscriber;
 
-use App\Api\Console\Controller\ProjectController;
+use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
-use App\Entity\NewsletterList;
-use App\Entity\Project;
 use App\Entity\Subscriber;
-use App\Repository\ProjectRepository;
-use App\Service\Project\ProjectService;
+use App\Repository\SubscriberRepository;
+use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ProjectController::class)]
-#[CoversClass(ProjectService::class)]
-#[CoversClass(ProjectRepository::class)]
-#[CoversClass(Project::class)]
+#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscriberService::class)]
+#[CoversClass(SubscriberRepository::class)]
+#[CoversClass(Subscriber::class)]
 class CreateSubscriberTest extends WebTestCase
 {
 
