@@ -5,10 +5,14 @@ namespace App\Service\Subscriber;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Enum\SubscriberStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
 
 class SubscriberService
 {
+
+    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em
@@ -43,5 +47,35 @@ class SubscriberService
     public function getSubscribers(Project $project): array
     {
         return $this->em->getRepository(Subscriber::class)->findBy(['project' => $project]);
+    }
+
+    /**
+     * @param array<NewsletterList> $lists
+     */
+    public function updateSubscriber(Subscriber $subscriber, string $email, array $lists, string $status): Subscriber
+    {
+        $subscriber->setEmail($email);
+        $status_enum = SubscriberStatus::tryFrom($status);
+        if ($status_enum === null) {
+            throw new \InvalidArgumentException('Invalid status');
+        }
+        $subscriber->setStatus($status_enum);
+
+        // Clear lists
+        foreach ($subscriber->getLists() as $list) {
+            $subscriber->removeList($list);
+        }
+        foreach ($lists as $listId) {
+            $list = $this->em->getRepository(NewsletterList::class)->find($listId);
+            if ($list === null) {
+                throw new \InvalidArgumentException('Invalid list id');
+            }
+            $subscriber->addList($list);
+        }
+        $subscriber->setUpdatedAt($this->now());
+        $this->em->persist($subscriber);
+        $this->em->flush();
+
+        return $subscriber;
     }
 }
