@@ -7,6 +7,7 @@ use App\Entity\Factory\NewsletterListFactory;
 use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Subscriber;
 use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
@@ -22,7 +23,7 @@ class CreateSubscriberTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testCreateProjectValid(): void
+    public function testCreateSubscriberValid(): void
     {
         $project = $this
             ->factory(ProjectFactory::class)
@@ -51,27 +52,40 @@ class CreateSubscriberTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertIsInt($json['id']);
         $this->assertSame('test@email.com', $json['email']);
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $subscriber = $repository->find($json['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriber);
+        $this->assertSame('test@email.com', $subscriber->getEmail());
     }
 
-    public function testCreateProjectInvalid(): void
+    public function testCreateSubscriberInvalid(): void
     {
-        $long_string = str_repeat('a', 256);
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList1 = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $newsletterList2 = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $not_email = str_repeat('a', 256);
         $response = $this->consoleApi(
-            null,
-            'POST', '/projects',
+            $project,
+            'POST',
+            '/subscribers',
             [
-                'name' => $long_string
+                'email' => $not_email,
+                'list_ids'=> [$newsletterList1->getId(), $newsletterList2->getId()]
             ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertArrayHasKey('message', $data);
-        $this->assertSame('This value is too long. It should have 255 characters or less.', $data['message']);
     }
+
 
 }
