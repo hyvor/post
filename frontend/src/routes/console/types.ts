@@ -15,3 +15,11 @@ export type List = {
 	created_at: number,
 	name: string,
 }
+
+export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
+export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
+
+export type Subscriber ={
+	id: number,
+	email: string,
+}
