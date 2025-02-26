@@ -20,12 +20,12 @@ class NewsletterList
     private Project $project;
 
     /**
-     * @var ArrayCollection<int, Subscriber>
+     * @var Collection<int, NewsletterList>
      */
     #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'list_subscriber')]
     #[ORM\JoinColumn(name: 'list_id')]
-    private ArrayCollection $subscribers;
+    private Collection $subscribers;
 
     #[ORM\Column(length: 255)]
     private string $name;
