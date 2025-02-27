@@ -6,6 +6,7 @@
     import IconPlus from '@hyvor/icons/IconPlus';
 	import SingleBox from '../@components/content/SingleBox.svelte';
 	import AddSubscribers from './AddSubscribers.svelte';
+	import SubscriberList from './SubscriberList.svelte';
 
 
     let status: NewsletterSubscriberStatus = 'subscribed';
@@ -54,6 +55,8 @@
             </ButtonGroup>
         </div>
     </div>
+
+    <SubscriberList {status} />
 
     {#if addingManually}
 	    <AddSubscribers bind:show={addingManually} />

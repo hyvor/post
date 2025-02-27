@@ -22,4 +22,8 @@ export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
 export type Subscriber ={
 	id: number,
 	email: string,
+	status: NewsletterSubscriberStatus,
+	source: NewsletterSubscriberSource,
+	subscribed_at: number,
+	unsubscribed_at: number | null,
 }
