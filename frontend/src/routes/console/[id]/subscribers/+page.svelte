@@ -5,7 +5,10 @@
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconPlus from '@hyvor/icons/IconPlus';
 	import SingleBox from '../@components/content/SingleBox.svelte';
+	import AddSubscribers from './AddSubscribers.svelte';
 
+
+    let status: NewsletterSubscriberStatus = 'subscribed';
     let showStatus = false;
 	let showSegment = false;
 
@@ -40,32 +43,31 @@
                 </ActionList>
             </Selector>
         </div>
-        <ButtonGroup>
-            <Button size="small" on:click={() => (importing = true)}>
-                <IconBoxArrowInDown slot="end" /> Import
-            </Button>
-            <Button size="small" on:click={() => (addingManually = true)}>
-                <IconPlus slot="end" /> Add Manually
-            </Button>
-        </ButtonGroup>
+        <div class="right">
+            <ButtonGroup>
+                <Button size="small" on:click={() => (importing = true)}>
+                    <IconBoxArrowInDown slot="end" /> Import
+                </Button>
+                <Button size="small" on:click={() => (addingManually = true)}>
+                    <IconPlus slot="end" /> Add Manually
+                </Button>
+            </ButtonGroup>
+        </div>
     </div>
+
+    {#if addingManually}
+	    <AddSubscribers bind:show={addingManually} />
+    {/if}
 </SingleBox>
 
 
 <style>
 	.content {
+        display: flex;
 		padding: 25px 35px;
 	}
 	.left {
 		flex: 1;
 	}
-
-	@media (max-width: 992px) {
-		.top {
-			flex-direction: column;
-		}
-		.left {
-			margin-bottom: 10px;
-		}
-	}
+    
 </style>
