@@ -16,8 +16,8 @@ class SubscriberObject
     {
         $this->id = $subscriber->getId();
         $this->email = $subscriber->getEmail();
-        $this->source = $subscriber->getSource()->name;
-        $this->status = $subscriber->getStatus()->name;
+        $this->source = $subscriber->getSource()->value;
+        $this->status = $subscriber->getStatus()->value;
     }
 
 }

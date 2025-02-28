@@ -77,6 +77,48 @@ class GetSubscribersTest extends WebTestCase
         $this->assertArrayHasKey('email', $subscriber);
     }
 
+
+    public function testListSubscribersPagination(): void
+    {
+        $project = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $newsletterList1 = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $newsletterList2 = $this
+            ->factory(NewsletterListFactory::class)
+            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+
+        $subscribers = $this
+            ->factory(SubscriberFactory::class)
+            ->createMany(
+                5,
+                function ($subscriber) use ($project, $newsletterList1, $newsletterList2) {
+                    $subscriber->setProject($project);
+                    $subscriber->addList($newsletterList1);
+                    $subscriber->addList($newsletterList2);
+                }
+            );
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/subscribers?limit=2&offset=1'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(2, $json);
+
+        $subscriber = $json[0];
+        $this->assertIsArray($subscriber);
+        $this->assertArrayHasKey('id', $subscriber);
+        $this->assertArrayHasKey('email', $subscriber);
+    }
+
     public function testListSubscribersEmpty(): void
     {
         $project = $this

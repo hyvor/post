@@ -7,15 +7,13 @@ use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Project;
 use App\Entity\Subscriber;
-use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 final class SubscriberController extends AbstractController
 {
@@ -28,10 +26,11 @@ final class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    public function getSubscribers(Project $project): JsonResponse
+    public function getSubscribers(Request $request, Project $project): JsonResponse
     {
-        // TODO: implement pagination (limit, offset)
-        $subscribers = $this->subscriberService->getSubscribers($project);
+        $limit = $request->query->getInt('limit', 50);
+        $offset = $request->query->getInt('offset', 0);
+        $subscribers = $this->subscriberService->getSubscribers($project, $limit, $offset);
         return $this->json($subscribers->map(fn($subscriber) => new SubscriberObject($subscriber)));
     }
 
@@ -43,7 +42,7 @@ final class SubscriberController extends AbstractController
             $project,
             $input->email,
             $lists,
-            $input->status ?? 'pending',
+            $input->status ?? 'subscribed',
             $input->source ?? 'console',
             $input->subscribe_ip,
             $input->subscribed_at,
