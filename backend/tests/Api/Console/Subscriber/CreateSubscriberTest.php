@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Subscriber;
+namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
@@ -55,6 +55,8 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('test@email.com', $subscriber->getEmail());
+
+        // TODO: test list associations
     }
 
     public function testCreateSubscriberInvalidEmail(): void
@@ -83,6 +85,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame('[email] This value is not a valid email address.', $this->getJson($response)['message']);
     }
 
     public function testCreateSubscriberInvalidList(): void
@@ -104,11 +107,13 @@ class CreateSubscriberTest extends WebTestCase
             'POST',
             '/subscribers',
             [
+                'email' => 'supun@hyvor.com',
                 'list_ids'=> [$newsletterList1->getId()]
             ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame('Invalid list id', $this->getJson($response)['message']);
     }
 
 }
