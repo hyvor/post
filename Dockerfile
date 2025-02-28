@@ -50,7 +50,7 @@ WORKDIR /app/backend
 # install php and dependencies
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions zip intl pdo_pgsql
+RUN install-php-extensions zip intl pdo_pgsql opcache
 
 
 ###################################################
