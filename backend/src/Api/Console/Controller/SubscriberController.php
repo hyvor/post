@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class SubscriberController extends AbstractController
@@ -26,25 +27,32 @@ final class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    public function getProjectSubscribers(Project $project): JsonResponse
+    public function getSubscribers(Project $project): JsonResponse
     {
+        // TODO: implement pagination (limit, offset)
         $subscribers = $this->subscriberService->getSubscribers($project);
-        return $this->json(array_map(fn($subscriber) => new SubscriberObject($subscriber), $subscribers));
+        return $this->json($subscribers->map(fn($subscriber) => new SubscriberObject($subscriber)));
     }
 
     #[Route('/subscribers', methods: ['POST'])]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {
         // Check list_ids are valid
-        $projectLists = new ArrayCollection($this->listRepository->findBy(['project' => $project]));
+        $projectLists = new ArrayCollection($this->listRepository->findBy(['project' => $project])); // 2000
         $lists = [];
         foreach ($input->list_ids as $listId) {
             $list = $projectLists->filter(fn($list) => $list->getId() === $listId)->first();
             if (!$list) {
-                return $this->json(['message' => 'Invalid list id'], 400);
+                throw new HttpException(422, 'Invalid list id: ' . $listId);
             }
             $lists[] = $list;
         }
+
+        /**
+         * isListsAvailable($project, $input->list_ids)
+         * SELECT id FROM lists WHERE project_id = ? AND id IN (?, ?, ?)
+         */
+
         $subscriber = $this->subscriberService->createSubscriber($project, $input->email, $lists);
 
         return $this->json(new SubscriberObject($subscriber));

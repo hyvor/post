@@ -57,7 +57,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getJson(Response $response): array
     {

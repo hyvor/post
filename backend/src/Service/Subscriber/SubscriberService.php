@@ -6,6 +6,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Enum\SubscriberStatus;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 
@@ -23,7 +24,14 @@ class SubscriberService
     /**
      * @param array<NewsletterList> $lists
      */
-    public function createSubscriber(Project $project, string $email, array $lists): Subscriber
+    public function createSubscriber(
+        Project $project,
+        string $email,
+        array $lists,
+        // todo: add status, source, subscribe_ip, etc.
+        // if status is subscribed, subscribed_at should be set to now
+        // if status is unsubscribed, unsubscribed_at should be set to now
+    ): Subscriber
     {
         $subscriber = new Subscriber()
             ->setProject($project)
@@ -48,11 +56,11 @@ class SubscriberService
     }
 
     /**
-     * @return list<Subscriber>
+     * @return ArrayCollection<int, Subscriber>
      */
-    public function getSubscribers(Project $project): array
+    public function getSubscribers(Project $project): ArrayCollection
     {
-        return $this->em->getRepository(Subscriber::class)->findBy(['project' => $project]);
+        return new ArrayCollection($this->em->getRepository(Subscriber::class)->findBy(['project' => $project]));
     }
 
     /**
