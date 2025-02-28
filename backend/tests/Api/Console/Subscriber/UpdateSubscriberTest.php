@@ -186,6 +186,6 @@ class UpdateSubscriberTest extends WebTestCase
             ]
         );
 
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
     }
 }
