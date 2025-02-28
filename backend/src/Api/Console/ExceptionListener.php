@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 #[AsEventListener(event: KernelEvents::EXCEPTION)]
 class ExceptionListener
@@ -40,6 +41,12 @@ class ExceptionListener
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
             $message = $exception->getMessage();
+
+            $previous = $exception->getPrevious();
+            if ($previous instanceof ValidationFailedException) {
+                $violations = $previous->getViolations();
+                $message = '[' . $violations->get(0)->getPropertyPath() . '] ' . $message;
+            }
         } else {
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
             $message = 'Internal Server Error';

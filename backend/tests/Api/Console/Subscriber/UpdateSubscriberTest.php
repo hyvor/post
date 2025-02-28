@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Subscriber;
+namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
@@ -186,6 +186,6 @@ class UpdateSubscriberTest extends WebTestCase
             ]
         );
 
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
     }
 }

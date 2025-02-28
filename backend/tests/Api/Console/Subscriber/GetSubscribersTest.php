@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Subscriber;
+namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Factory\NewsletterListFactory;
@@ -16,11 +16,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
-class GetSubscriberTest extends WebTestCase
+class GetSubscribersTest extends WebTestCase
 {
 
     // TODO: tests for input validation
     // TODO: tests for authentication
+    // TODO: tests for pagination
 
     public function testListSubscribersNonEmpty(): void
     {
@@ -39,11 +40,24 @@ class GetSubscriberTest extends WebTestCase
         $subscribers = $this
             ->factory(SubscriberFactory::class)
             ->createMany(
-                10,
+                5,
                 function ($subscriber) use ($project, $newsletterList1, $newsletterList2) {
                     $subscriber->setProject($project);
                     $subscriber->addList($newsletterList1);
                     $subscriber->addList($newsletterList2);
+                }
+            );
+
+        $projectOther = $this
+            ->factory(ProjectFactory::class)
+            ->create();
+
+        $this
+            ->factory(SubscriberFactory::class)
+            ->createMany(
+                2,
+                function ($subscriber) use ($projectOther) {
+                    $subscriber->setProject($projectOther);
                 }
             );
 
@@ -55,7 +69,12 @@ class GetSubscriberTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertCount(10, $json);
+        $this->assertCount(5, $json);
+
+        $subscriber = $json[0];
+        $this->assertIsArray($subscriber);
+        $this->assertArrayHasKey('id', $subscriber);
+        $this->assertArrayHasKey('email', $subscriber);
     }
 
     public function testListSubscribersEmpty(): void

@@ -8,11 +8,13 @@ use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Repository\ListRepository;
+use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class SubscriberController extends AbstractController
@@ -20,32 +22,33 @@ final class SubscriberController extends AbstractController
 
     public function __construct(
         private SubscriberService $subscriberService,
-        private ListRepository $listRepository,
+        private NewsletterListService $newsletterListService
     )
     {
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    public function getProjectSubscribers(Project $project): JsonResponse
+    public function getSubscribers(Project $project): JsonResponse
     {
+        // TODO: implement pagination (limit, offset)
         $subscribers = $this->subscriberService->getSubscribers($project);
-        return $this->json(array_map(fn($subscriber) => new SubscriberObject($subscriber), $subscribers));
+        return $this->json($subscribers->map(fn($subscriber) => new SubscriberObject($subscriber)));
     }
 
     #[Route('/subscribers', methods: ['POST'])]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {
-        // Check list_ids are valid
-        $projectLists = new ArrayCollection($this->listRepository->findBy(['project' => $project]));
-        $lists = [];
-        foreach ($input->list_ids as $listId) {
-            $list = $projectLists->filter(fn($list) => $list->getId() === $listId)->first();
-            if (!$list) {
-                return $this->json(['message' => 'Invalid list id'], 400);
-            }
-            $lists[] = $list;
-        }
-        $subscriber = $this->subscriberService->createSubscriber($project, $input->email, $lists);
+        $lists = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
+        $subscriber = $this->subscriberService->createSubscriber(
+            $project,
+            $input->email,
+            $lists,
+            $input->status ?? 'pending',
+            $input->source ?? 'console',
+            $input->subscribe_ip,
+            $input->subscribed_at,
+            $input->unsubscribed_at,
+        );
 
         return $this->json(new SubscriberObject($subscriber));
     }
@@ -57,15 +60,7 @@ final class SubscriberController extends AbstractController
         #[MapRequestPayload] UpdateSubscriberInput $input
     ): JsonResponse
     {
-        $projectLists = new ArrayCollection($this->listRepository->findBy(['project' => $project]));
-        $lists = [];
-        foreach ($input->list_ids as $listId) {
-            $list = $projectLists->filter(fn($list) => $list->getId() === $listId)->first();
-            if (!$list) {
-                return $this->json(['message' => 'Invalid list id'], 400);
-            }
-            $lists[] = $list;
-        }
+        $lists = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
         $subscriber = $this->subscriberService->updateSubscriber(
             $subscriber,
             $input->email ?? $subscriber->getEmail(),
