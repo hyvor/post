@@ -5,6 +5,7 @@ namespace App\Service\Subscriber;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Enum\SubscriberSource;
 use App\Enum\SubscriberStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,16 +29,48 @@ class SubscriberService
         Project $project,
         string $email,
         array $lists,
-        // todo: add status, source, subscribe_ip, etc.
-        // if status is subscribed, subscribed_at should be set to now
-        // if status is unsubscribed, unsubscribed_at should be set to now
+        string $status,
+        string $source,
+        ?string $subscribe_ip = null,
+        ?\DateTimeImmutable $subscribed_at = null,
+        ?\DateTimeImmutable $unsubscribed_at = null
     ): Subscriber
     {
+        $status_enum = SubscriberStatus::tryFrom($status);
+        if ($status_enum === null) {
+            throw new \InvalidArgumentException('Invalid status');
+        }
+
+        $source_enum = SubscriberSource::tryFrom($source);
+        if ($source_enum === null) {
+            throw new \InvalidArgumentException('Invalid source');
+        }
+
         $subscriber = new Subscriber()
             ->setProject($project)
             ->setEmail($email)
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setStatus($status_enum)
+            ->setSource($source_enum);
+
+        // if status is subscribed, subscribed_at should be set to now
+        // if status is unsubscribed, unsubscribed_at should be set to now
+        if ($status_enum === SubscriberStatus::SUBSCRIBED) {
+            $subscriber->setSubscribedAt($this->now());
+        } elseif ($status_enum === SubscriberStatus::UNSUBSCRIBED) {
+            $subscriber->setUnsubscribedAt($this->now());
+        }
+
+        if ($subscribed_at !== null) {
+            $subscriber->setSubscribedAt($subscribed_at);
+        }
+        if ($unsubscribed_at !== null) {
+            $subscriber->setUnsubscribedAt($unsubscribed_at);
+        }
+        if ($subscribe_ip !== null) {
+            $subscriber->setSubscribeIp($subscribe_ip);
+        }
 
         foreach ($lists as $list) {
             $subscriber->addList($list);

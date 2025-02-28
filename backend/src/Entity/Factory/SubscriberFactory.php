@@ -3,6 +3,8 @@
 namespace App\Entity\Factory;
 
 use App\Entity\Subscriber;
+use App\Enum\SubscriberSource;
+use App\Enum\SubscriberStatus;
 
 /**
  * @extends FactoryAbstract<Subscriber>
@@ -16,6 +18,8 @@ class SubscriberFactory extends FactoryAbstract
         $subscriber->setCreatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
         $subscriber->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->fake->dateTimeThisYear()));
         $subscriber->setEmail($this->fake->email());
+        $subscriber->setStatus(SubscriberStatus::SUBSCRIBED);
+        $subscriber->setSource(SubscriberSource::CONSOLE);
         return $subscriber;
     }
 

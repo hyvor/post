@@ -113,7 +113,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertSame('Invalid list id', $this->getJson($response)['message']);
+        $this->assertSame('Invalid list id: ' . $newsletterList1->getId(), $this->getJson($response)['message']);
     }
 
 }

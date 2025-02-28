@@ -49,7 +49,7 @@ class Subscriber
     private ?\DateTimeImmutable $unsubscribed_at = null;
 
     #[ORM\Column(enumType: SubscriberSource::class)]
-    private ?SubscriberSource $source = null;
+    private SubscriberSource $source;
 
     #[ORM\Column(nullable: true)]
     private ?int $source_id = null;
@@ -161,7 +161,7 @@ class Subscriber
         return $this;
     }
 
-    public function getSource(): ?SubscriberSource
+    public function getSource(): SubscriberSource
     {
         return $this->source;
     }
