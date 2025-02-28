@@ -9,11 +9,11 @@
 		toast
 	} from '@hyvor/design/components';
 	import { listStore } from '../../lib/stores/projectStore';
-	import { createEventDispatcher } from 'svelte';
 	import ListSelector from './ListSelector.svelte';
 	import { createSubscriber } from '../../lib/actions/subscriberActions';
 
 	export let show = false;
+	export let add: () => void;
 
 	let emailsString = '';
 	let selectedList = $listStore.map((list) => list.id);
@@ -22,7 +22,7 @@
 
 	let loading = false;
 
-	function add() {
+	function addSubscribers() {
 		const emails = emailsString
 			.split('\n')
 			.map((email) => email.trim())
@@ -46,6 +46,7 @@
 			createSubscriber(email, selectedList)
 				.then(() => {
 					show = false;
+					add();
 				})
 				.catch((error) => {
 					toast.error(`Failed to add subscriber ${error.message}.`);
@@ -69,7 +70,7 @@
 			text: 'Cancel'
 		}
 	}}
-	on:confirm={add}
+	on:confirm={addSubscribers}
 	{loading}
 >
 	<SplitControl label="Emails" caption="Add one email per line">

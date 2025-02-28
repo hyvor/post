@@ -9,6 +9,7 @@
 	import SubscriberList from './SubscriberList.svelte';
 
 
+    let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
     let showStatus = false;
 	let showSegment = false;
@@ -56,10 +57,10 @@
         </div>
     </div>
 
-    <SubscriberList {status} />
+    <SubscriberList {status} {key} />
 
     {#if addingManually}
-	    <AddSubscribers bind:show={addingManually} />
+	    <AddSubscribers bind:show={addingManually} add={() => key += 1}/>
     {/if}
 </SingleBox>
 
