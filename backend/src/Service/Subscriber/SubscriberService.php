@@ -91,9 +91,14 @@ class SubscriberService
     /**
      * @return ArrayCollection<int, Subscriber>
      */
-    public function getSubscribers(Project $project): ArrayCollection
+    public function getSubscribers(Project $project, ?int $limit, ?int $offset): ArrayCollection
     {
-        return new ArrayCollection($this->em->getRepository(Subscriber::class)->findBy(['project' => $project]));
+        return new ArrayCollection($this->em->getRepository(Subscriber::class)->findBy(
+            ['project' => $project],
+            null,
+            $limit,
+            $offset
+        ));
     }
 
     /**

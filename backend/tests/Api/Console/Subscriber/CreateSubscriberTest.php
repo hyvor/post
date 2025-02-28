@@ -55,8 +55,13 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('test@email.com', $subscriber->getEmail());
+        $this->assertSame('subscribed', $subscriber->getStatus()->value);
+        $this->assertSame('console', $subscriber->getSource()->value);
 
-        // TODO: test list associations
+        $subscriberLists = $subscriber->getLists();
+        $this->assertCount(2, $subscriberLists);
+        $this->assertSame($newsletterList1->getId(), $subscriberLists[0]->getId());
+        $this->assertSame($newsletterList2->getId(), $subscriberLists[1]->getId());
     }
 
     public function testCreateSubscriberInvalidEmail(): void
