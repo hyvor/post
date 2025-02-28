@@ -7,6 +7,7 @@
 	import { getSubscribers } from '../../lib/actions/subscriberActions';
 
 	export let status: NewsletterSubscriberStatus;
+	export let key: number; // just for forcing re-render
 
 	let loading = true;
 	let hasMore = true;
@@ -16,7 +17,6 @@
 	const SUBSCRIBERS_PER_PAGE = 25;
 
 	let subscribers: Subscriber[] = [];
-
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
@@ -44,7 +44,7 @@
 	}
 
 	$: {
-		status, load();
+		status, key, load();
 	}
 </script>
 
