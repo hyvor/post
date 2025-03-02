@@ -7,11 +7,14 @@ use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Enum\SubscriberSource;
+use App\Enum\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,16 +45,26 @@ final class SubscriberController extends AbstractController
     #[Route('/subscribers', methods: ['POST'])]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {
-        $lists = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
+
+        $missingListIds = $this
+            ->newsletterListService
+            ->isListsAvailable($project, $input->list_ids);
+
+        if ($missingListIds !== null) {
+            throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+        }
+
+        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
+
         $subscriber = $this->subscriberService->createSubscriber(
             $project,
             $input->email,
             $lists,
-            $input->status ?? 'subscribed',
-            $input->source ?? 'console',
+            $input->status ?? SubscriberStatus::SUBSCRIBED,
+            $input->source ?? SubscriberSource::CONSOLE,
             $input->subscribe_ip,
-            $input->subscribed_at,
-            $input->unsubscribed_at,
+            $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
+            $input->unsubscribed_at ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null,
         );
 
         return $this->json(new SubscriberObject($subscriber));

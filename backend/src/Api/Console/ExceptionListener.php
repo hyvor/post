@@ -37,30 +37,66 @@ class ExceptionListener
 
         $response = new JsonResponse();
 
+        $data = [
+            'message' => 'Internal Server Error. Our team has been notified.',
+            'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        ];
+
         if ($exception instanceof HttpExceptionInterface) {
-            $response->setStatusCode($exception->getStatusCode());
+
             $response->headers->replace($exception->getHeaders());
-            $message = $exception->getMessage();
+            $data['message'] = $exception->getMessage();
+            $data['status'] = $exception->getStatusCode();
 
             $previous = $exception->getPrevious();
             if ($previous instanceof ValidationFailedException) {
-                $violations = $previous->getViolations();
-                $message = '[' . $violations->get(0)->getPropertyPath() . '] ' . $message;
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $message = 'Internal Server Error';
 
-            if ($shouldThrow) {
-                return;
+                $violations = [];
+
+                foreach ($previous->getViolations() as $violation) {
+
+                    $violations[] = [
+                        'property' => $violation->getPropertyPath(),
+                        'message' => $this->hideEnum($violation->getMessage()),
+                    ];
+
+                }
+
+                $data['message'] = 'Validation failed with ' . count($violations) . ' violations(s)';
+                $data['status'] = Response::HTTP_UNPROCESSABLE_ENTITY;
+                $data['violations'] = $violations;
+
             }
         }
 
-        $response->setData([
-            'message' => $message,
-        ]);
+        if ($shouldThrow && $data['status'] === Response::HTTP_INTERNAL_SERVER_ERROR) {
+            return;
+        }
+
+        $response->setData($data);
+        $response->setStatusCode($data['status']);
 
         $event->setResponse($response);
+    }
+
+    private function hideEnum(string $message): string
+    {
+
+        // This value should be of type App\Enum\SubscriberStatus
+        // This value should be of type subscribed|unsubscribed|pending.
+        $message = preg_replace_callback(
+            '/App\\\\[A-Za-z0-9_\\\\]+/',
+            function ($matches) {
+                $class = $matches[0];
+                // it should definitely be an enum
+                assert(enum_exists($class));
+                $values = array_column($class::cases(), 'value');
+                return implode('|', $values);
+            },
+            $message
+        );
+
+        return (string) $message;
     }
 
 }
