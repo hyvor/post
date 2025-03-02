@@ -2,7 +2,6 @@
 
 namespace App\Tests\Case;
 
-use App\Tests\Trait\FactoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -11,8 +10,6 @@ class KernelTestCase extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 
     protected Container $container;
     protected EntityManagerInterface $em;
-
-    use FactoryTrait;
 
     protected function setUp(): void
     {

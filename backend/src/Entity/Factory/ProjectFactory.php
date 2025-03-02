@@ -6,6 +6,7 @@ use App\Entity\Project;
 
 /**
  * @extends FactoryAbstract<Project>
+ * @deprecated
  */
 class ProjectFactory extends FactoryAbstract
 {

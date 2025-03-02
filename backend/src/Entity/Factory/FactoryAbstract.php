@@ -7,6 +7,7 @@ use Faker\Factory;
 
 /**
  * @template T of object
+ * @deprecated
  */
 abstract class FactoryAbstract
 {

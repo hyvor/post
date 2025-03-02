@@ -3,8 +3,6 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Enum\SubscriberSource;
@@ -12,6 +10,8 @@ use App\Enum\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -26,17 +26,10 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberMinimal(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
-        $newsletterList1 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
-
-        $newsletterList2 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $list1 = NewsletterListFactory::createOne(['project' => $project]);
+        $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
             $project,
@@ -44,7 +37,7 @@ class CreateSubscriberTest extends WebTestCase
             '/subscribers',
             [
                 'email' => 'test@email.com',
-                'list_ids'=> [$newsletterList1->getId(), $newsletterList2->getId()]
+                'list_ids'=> [$list1->getId(), $list2->getId()]
             ]
         );
 
@@ -63,20 +56,14 @@ class CreateSubscriberTest extends WebTestCase
 
         $subscriberLists = $subscriber->getLists();
         $this->assertCount(2, $subscriberLists);
-        $this->assertSame($newsletterList1->getId(), $subscriberLists[0]?->getId());
-        $this->assertSame($newsletterList2->getId(), $subscriberLists[1]?->getId());
+        $this->assertSame($list1->getId(), $subscriberLists[0]?->getId());
+        $this->assertSame($list2->getId(), $subscriberLists[1]?->getId());
     }
 
     public function testCreateSubscriberWithAllInputs(): void
     {
-
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $list = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $project = ProjectFactory::createOne();
+        $list = NewsletterListFactory::createOne(['project' => $project]);
 
         $subscribedAt = new \DateTimeImmutable('2021-08-27 12:00:00');
         $unsubscribedAt = new \DateTimeImmutable('2021-08-29 12:00:00');
@@ -250,9 +237,7 @@ class CreateSubscriberTest extends WebTestCase
         array $violations
     ): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -269,17 +254,10 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberInvalidList(): void
     {
-        $project1 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
 
-        $project2 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList1 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project2));
+        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project2]);
 
         $response = $this->consoleApi(
             $project1,

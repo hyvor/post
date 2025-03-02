@@ -3,13 +3,13 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
-use App\Entity\Factory\SubscriberFactory;
 use App\Entity\Subscriber;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SubscriberController::class)]
@@ -23,41 +23,21 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersNonEmpty(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
-        $newsletterList1 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletterList2 = NewsletterListFactory::createOne(['project' => $project]);
 
-        $newsletterList2 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $subscribers = SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList1, $newsletterList2],
+        ]);
 
-        $subscribers = $this
-            ->factory(SubscriberFactory::class)
-            ->createMany(
-                5,
-                function ($subscriber) use ($project, $newsletterList1, $newsletterList2) {
-                    $subscriber->setProject($project);
-                    $subscriber->addList($newsletterList1);
-                    $subscriber->addList($newsletterList2);
-                }
-            );
-
-        $projectOther = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $this
-            ->factory(SubscriberFactory::class)
-            ->createMany(
-                2,
-                function ($subscriber) use ($projectOther) {
-                    $subscriber->setProject($projectOther);
-                }
-            );
+        $projectOther = ProjectFactory::createOne();
+        SubscriberFactory::createMany(2, [
+            'project' => $projectOther,
+            'lists' => [NewsletterListFactory::createOne(['project' => $project])],
+        ]);
 
         $response = $this->consoleApi(
             $project,
@@ -78,18 +58,8 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersPagination(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $subscribers = $this
-            ->factory(SubscriberFactory::class)
-            ->createMany(
-                5,
-                function ($subscriber) use ($project) {
-                    $subscriber->setProject($project);
-                }
-            );
+        $project = ProjectFactory::createOne();
+        SubscriberFactory::createMany(5, ['project' => $project,]);
 
         $response = $this->consoleApi(
             $project,
@@ -109,9 +79,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersEmpty(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,

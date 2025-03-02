@@ -209,6 +209,7 @@ class Subscriber
         return $this;
     }
 
+
     /**
      * @return Collection<int, NewsletterList>
      */

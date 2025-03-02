@@ -8,6 +8,7 @@ use App\Enum\SubscriberStatus;
 
 /**
  * @extends FactoryAbstract<Subscriber>
+ * @deprecated
  */
 class SubscriberFactory extends FactoryAbstract
 {
