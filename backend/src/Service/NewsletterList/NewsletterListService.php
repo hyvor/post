@@ -4,6 +4,7 @@ namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -70,9 +71,9 @@ class NewsletterListService
 
     /**
      * @param array<int> $listIds
-     * @return list<NewsletterList>
+     * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function isListsAvailable(Project $project, array $listIds): array
+    public function isListsAvailable(Project $project, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb
@@ -86,13 +87,20 @@ class NewsletterListService
         $result = $qb->getQuery()->getScalarResult();
 
         $existingIds = array_column($result, 'id');
-
         $missingIds = array_diff($listIds, $existingIds);
 
-        if (!empty($missingIds)) {
-            throw new HttpException(422, 'Invalid list id: ' . implode(', ', $missingIds));
-        }
+        return count($missingIds) === 0 ? null : $missingIds;
+    }
 
-        return $this->em->getRepository(NewsletterList::class)->findBy(['id' => $existingIds]);
+    /**
+     * Note that we should validate the lists are within the project (using isListsAvailable) before calling this method
+     * @param array<int> $listIds
+     * @return ArrayCollection<int, NewsletterList>
+     */
+    public function getListsByIds(array $listIds): ArrayCollection
+    {
+        return new ArrayCollection(
+            $this->em->getRepository(NewsletterList::class)->findBy(['id' => $listIds])
+        );
     }
 }

@@ -25,53 +25,44 @@ class SubscriberService
     }
 
     /**
-     * @param array<NewsletterList> $lists
+     * @param iterable<NewsletterList> $lists
      */
     public function createSubscriber(
         Project $project,
         string $email,
-        array $lists,
-        string $status,
-        string $source,
-        ?string $subscribe_ip = null,
-        ?\DateTimeImmutable $subscribed_at = null,
-        ?\DateTimeImmutable $unsubscribed_at = null
+        iterable $lists,
+        SubscriberStatus $status,
+        SubscriberSource $source,
+        ?string $subscribeIp = null,
+        ?\DateTimeImmutable $subscribedAt = null,
+        ?\DateTimeImmutable $unsubscribedAt = null
     ): Subscriber
     {
-        $status_enum = SubscriberStatus::tryFrom($status);
-        if ($status_enum === null) {
-            throw new \InvalidArgumentException('Invalid status');
-        }
-
-        $source_enum = SubscriberSource::tryFrom($source);
-        if ($source_enum === null) {
-            throw new \InvalidArgumentException('Invalid source');
-        }
 
         $subscriber = new Subscriber()
             ->setProject($project)
             ->setEmail($email)
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
-            ->setStatus($status_enum)
-            ->setSource($source_enum);
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now())
+            ->setStatus($status)
+            ->setSource($source);
 
         // if status is subscribed, subscribed_at should be set to now
         // if status is unsubscribed, unsubscribed_at should be set to now
-        if ($status_enum === SubscriberStatus::SUBSCRIBED) {
+        if ($status === SubscriberStatus::SUBSCRIBED) {
             $subscriber->setSubscribedAt($this->now());
-        } elseif ($status_enum === SubscriberStatus::UNSUBSCRIBED) {
+        } elseif ($status === SubscriberStatus::UNSUBSCRIBED) {
             $subscriber->setUnsubscribedAt($this->now());
         }
 
-        if ($subscribed_at !== null) {
-            $subscriber->setSubscribedAt($subscribed_at);
+        if ($subscribedAt !== null) {
+            $subscriber->setSubscribedAt($subscribedAt);
         }
-        if ($unsubscribed_at !== null) {
-            $subscriber->setUnsubscribedAt($unsubscribed_at);
+        if ($unsubscribedAt !== null) {
+            $subscriber->setUnsubscribedAt($unsubscribedAt);
         }
-        if ($subscribe_ip !== null) {
-            $subscriber->setSubscribeIp($subscribe_ip);
+        if ($subscribeIp !== null) {
+            $subscriber->setSubscribeIp($subscribeIp);
         }
 
         foreach ($lists as $list) {
