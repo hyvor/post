@@ -19,9 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class GetSubscribersTest extends WebTestCase
 {
 
-    // TODO: tests for input validation
     // TODO: tests for authentication
-    // TODO: tests for pagination
 
     public function testListSubscribersNonEmpty(): void
     {
@@ -84,22 +82,12 @@ class GetSubscribersTest extends WebTestCase
             ->factory(ProjectFactory::class)
             ->create();
 
-        $newsletterList1 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
-
-        $newsletterList2 = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
-
         $subscribers = $this
             ->factory(SubscriberFactory::class)
             ->createMany(
                 5,
-                function ($subscriber) use ($project, $newsletterList1, $newsletterList2) {
+                function ($subscriber) use ($project) {
                     $subscriber->setProject($project);
-                    $subscriber->addList($newsletterList1);
-                    $subscriber->addList($newsletterList2);
                 }
             );
 

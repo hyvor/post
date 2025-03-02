@@ -30,8 +30,13 @@ final class SubscriberController extends AbstractController
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
-        $subscribers = $this->subscriberService->getSubscribers($project, $limit, $offset);
-        return $this->json($subscribers->map(fn($subscriber) => new SubscriberObject($subscriber)));
+
+        $subscribers = $this
+            ->subscriberService
+            ->getSubscribers($project, $limit, $offset)
+            ->map(fn($subscriber) => new SubscriberObject($subscriber));
+
+        return $this->json($subscribers);
     }
 
     #[Route('/subscribers', methods: ['POST'])]
