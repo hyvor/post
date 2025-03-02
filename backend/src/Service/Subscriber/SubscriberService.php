@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Enum\SubscriberSource;
 use App\Enum\SubscriberStatus;
+use App\Repository\SubscriberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -17,7 +18,8 @@ class SubscriberService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private SubscriberRepository $subscriberRepository
     )
     {
     }
@@ -91,14 +93,19 @@ class SubscriberService
     /**
      * @return ArrayCollection<int, Subscriber>
      */
-    public function getSubscribers(Project $project, ?int $limit, ?int $offset): ArrayCollection
+    public function getSubscribers(
+        Project $project,
+        int $limit,
+        int $offset
+    ): ArrayCollection
     {
-        return new ArrayCollection($this->em->getRepository(Subscriber::class)->findBy(
-            ['project' => $project],
-            null,
-            $limit,
-            $offset
-        ));
+        return new ArrayCollection(
+            $this->subscriberRepository->findBy(
+                ['project' => $project],
+                limit: $limit,
+                offset: $offset
+            )
+        );
     }
 
     /**
