@@ -6,6 +6,7 @@ use App\Entity\NewsletterList;
 
 /**
  * @extends FactoryAbstract<NewsletterList>
+ * @deprecated
  */
 class NewsletterListFactory extends FactoryAbstract
 {

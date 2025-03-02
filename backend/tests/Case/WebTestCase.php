@@ -3,7 +3,6 @@
 namespace App\Tests\Case;
 
 use App\Entity\Project;
-use App\Tests\Trait\FactoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -12,8 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
-
-    use FactoryTrait;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;

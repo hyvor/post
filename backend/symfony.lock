@@ -182,5 +182,17 @@
         "files": [
             "config/packages/validator.yaml"
         ]
+    },
+    "zenstruck/foundry": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "56bc588a1b6d5d218319f70c64c2f0fbebe30ec7"
+        },
+        "files": [
+            "config/packages/zenstruck_foundry.yaml"
+        ]
     }
 }
