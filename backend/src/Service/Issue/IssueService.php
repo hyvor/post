@@ -56,6 +56,10 @@ class IssueService
             $issue->setFromName($updates->fromName);
         }
 
+        if ($updates->hasProperty('lists')) {
+            $issue->setLists($updates->lists);
+        }
+
         if ($updates->hasProperty('fromEmail')) {
             $issue->setFromEmail($updates->fromEmail);
         }

@@ -11,6 +11,10 @@ class UpdateIssueInput
 
     public string $subject;
     public string $from_name;
+    /**
+     * @var array<int>
+     */
+    public array $lists;
 
     #[Assert\Email]
     #[Assert\Length(max: 255)]
