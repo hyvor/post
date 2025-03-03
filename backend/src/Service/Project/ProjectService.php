@@ -28,14 +28,14 @@ class ProjectService
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
-        $project->addList(
-            new NewsletterList()
-                ->setName('Default List')
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setUpdatedAt(new \DateTimeImmutable())
-        );
+        $list = new NewsletterList()
+            ->setName('Default List')
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setProject($project);
 
         $this->em->persist($project);
+        $this->em->persist($list);
         $this->em->flush();
 
         return $project;

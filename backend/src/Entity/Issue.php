@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enum\IssueStatus;
 
 #[ORM\Entity(repositoryClass: IssueRepository::class)]
 #[ORM\Table(name: 'issues')]

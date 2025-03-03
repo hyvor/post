@@ -3,11 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Timestampable;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'projects')]
@@ -29,17 +25,6 @@ class Project
 
     #[ORM\Column(length: 255)]
     private string $name;
-
-    /**
-     * @var Collection<int, NewsletterList>
-     */
-    #[ORM\OneToMany(targetEntity: NewsletterList::class, mappedBy: 'project', cascade: ['persist'])]
-    private Collection $lists;
-
-    public function __construct()
-    {
-        $this->lists = new ArrayCollection();
-    }
 
     public function setId(int $id): static
     {
@@ -101,21 +86,4 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection<int, NewsletterList>
-     */
-    public function getLists(): Collection
-    {
-        return $this->lists;
-    }
-
-    public function addList(NewsletterList $newsletterList): static
-    {
-        if (!$this->lists->contains($newsletterList)) {
-            $this->lists->add($newsletterList);
-            $newsletterList->setProject($this);
-        }
-
-        return $this;
-    }
 }

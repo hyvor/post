@@ -3,17 +3,17 @@
 namespace App\Tests\Case;
 
 use App\Entity\Project;
-use App\Tests\Trait\FactoryTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
 
-    use FactoryTrait;
+    use Factories;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
@@ -57,7 +57,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getJson(Response $response): array
     {
@@ -67,6 +67,34 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $json = json_decode($content, true);
         $this->assertIsArray($json);
         return $json;
+    }
+
+    /**
+     * @param array<mixed>|Response $response
+     */
+    public function assertHasViolation(array|Response $response, string $property, string $message = ''): void
+    {
+
+        if ($response instanceof Response) {
+            $response = $this->getJson($response);
+        }
+
+        $this->assertArrayHasKey('violations', $response);
+        $this->assertIsArray($response['violations']);
+
+        $found = false;
+        foreach ($response['violations'] as $violation) {
+            $this->assertIsArray($violation);
+            if ($violation['property'] === $property) {
+                $found = true;
+                if ($message) {
+                    $this->assertStringContainsString($message, $violation['message']);
+                }
+            }
+        }
+
+        $this->assertTrue($found, 'Violation not found');
+
     }
 
 }

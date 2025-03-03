@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Tests\Api\Console\Subscriber;
+
+use App\Api\Console\Controller\SubscriberController;
+use App\Entity\Subscriber;
+use App\Repository\SubscriberRepository;
+use App\Service\Subscriber\SubscriberService;
+use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscriberService::class)]
+#[CoversClass(SubscriberRepository::class)]
+#[CoversClass(Subscriber::class)]
+class GetSubscribersTest extends WebTestCase
+{
+
+    // TODO: tests for authentication
+
+    public function testListSubscribersNonEmpty(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletterList2 = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscribers = SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList1, $newsletterList2],
+        ]);
+
+        $projectOther = ProjectFactory::createOne();
+        SubscriberFactory::createMany(2, [
+            'project' => $projectOther,
+            'lists' => [NewsletterListFactory::createOne(['project' => $project])],
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/subscribers'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(5, $json);
+
+        $subscriber = $json[0];
+        $this->assertIsArray($subscriber);
+        $this->assertArrayHasKey('id', $subscriber);
+        $this->assertArrayHasKey('email', $subscriber);
+    }
+
+
+    public function testListSubscribersPagination(): void
+    {
+        $project = ProjectFactory::createOne();
+        SubscriberFactory::createMany(5, ['project' => $project,]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/subscribers?limit=2&offset=1'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(2, $json);
+
+        $subscriber = $json[0];
+        $this->assertIsArray($subscriber);
+        $this->assertArrayHasKey('id', $subscriber);
+        $this->assertArrayHasKey('email', $subscriber);
+    }
+
+    public function testListSubscribersEmpty(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            '/subscribers'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(0, $json);
+    }
+}

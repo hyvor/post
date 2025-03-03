@@ -3,11 +3,10 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
-use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -20,9 +19,14 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitConsole(): void
     {
-        $projects = $this
-            ->factory(ProjectFactory::class)
-            ->createMany(10);
+        $projects = ProjectFactory::createMany(10, [
+            'user_id' => 1,
+        ]);
+
+        // other user
+        ProjectFactory::createMany(2, [
+            'user_id' => 2,
+        ]);
 
         $response = $this->consoleApi(
             null,
@@ -45,9 +49,7 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProject(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -70,18 +72,17 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProjectWithStats(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
+        NewsletterListFactory::createMany(10, [
+            'project' => $project,
+            'created_at' => new \DateTimeImmutable()
+        ]);
 
-        $newsletterLists = $this
-            ->factory(NewsletterListFactory::class)
-            ->createMany(
-                10,
-                function ($newsletterList) use ($project) {
-                    $newsletterList->setProject($project);
-                }
-            );
+        $otherProject = ProjectFactory::createOne();
+        NewsletterListFactory::createMany(5, [
+            'project' => $otherProject,
+            'created_at' => new \DateTimeImmutable()
+        ]);
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -115,16 +116,10 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProjectWithLists(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
-                ->setProject($project));
-
-        $project->addList($newsletterList);
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne([
+            'project' => $project,
+        ]);
 
         $response = $this->consoleApi(
             $project->getId(),
