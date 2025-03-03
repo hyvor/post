@@ -3,10 +3,10 @@
 namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
@@ -34,9 +34,7 @@ class GetProjectsTest extends WebTestCase
 
     public function testListProjectsNonEmpty(): void
     {
-        $projects = $this
-            ->factory(ProjectFactory::class)
-            ->createMany(10);
+        $projects = ProjectFactory::createMany(10, ['user_id' => 1]);
 
         $response = $this->consoleApi(
             null,

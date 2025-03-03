@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\SubscriberSource;
+use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enum\SubscriberStatus;
-use App\Enum\SubscriberSource;
 
 #[ORM\Entity(repositoryClass: SubscriberRepository::class)]
 #[ORM\Table(name: 'subscribers')]
@@ -17,20 +19,28 @@ class Subscriber
     private int $id;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private \DateTimeImmutable $updated_at;
 
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?NewsletterList $list_id = null;
+    private Project $project;
+
+    /**
+     * @var Collection<int, NewsletterList>
+     */
+    #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'list_subscriber')]
+    #[ORM\InverseJoinColumn(name: 'list_id')]
+    private Collection $lists;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(nullable: true, enumType: SubscriberStatus::class)]
-    private ?SubscriberStatus $status = null;
+    private SubscriberStatus $status;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $subscribed_at = null;
@@ -39,7 +49,7 @@ class Subscriber
     private ?\DateTimeImmutable $unsubscribed_at = null;
 
     #[ORM\Column(enumType: SubscriberSource::class)]
-    private ?SubscriberSource $source = null;
+    private SubscriberSource $source;
 
     #[ORM\Column(nullable: true)]
     private ?int $source_id = null;
@@ -49,6 +59,11 @@ class Subscriber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
+
+    public function __construct()
+    {
+        $this->lists = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -62,7 +77,7 @@ class Subscriber
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -74,7 +89,7 @@ class Subscriber
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updated_at;
     }
@@ -86,19 +101,19 @@ class Subscriber
         return $this;
     }
 
-    public function getListId(): ?NewsletterList
+    public function getProject(): Project
     {
-        return $this->list_id;
+        return $this->project;
     }
 
-    public function setListId(?NewsletterList $list_id): static
+    public function setProject(Project $project): static
     {
-        $this->list_id = $list_id;
+        $this->project = $project;
 
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -110,12 +125,12 @@ class Subscriber
         return $this;
     }
 
-    public function getStatus(): ?SubscriberStatus
+    public function getStatus(): SubscriberStatus
     {
         return $this->status;
     }
 
-    public function setStatus(?SubscriberStatus $status): static
+    public function setStatus(SubscriberStatus $status): static
     {
         $this->status = $status;
 
@@ -146,7 +161,7 @@ class Subscriber
         return $this;
     }
 
-    public function getSource(): ?SubscriberSource
+    public function getSource(): SubscriberSource
     {
         return $this->source;
     }
@@ -191,6 +206,27 @@ class Subscriber
     {
         $this->unsubscribe_reason = $unsubscribe_reason;
 
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, NewsletterList>
+     */
+    public function getLists(): Collection
+    {
+        return $this->lists;
+    }
+    public function addList(NewsletterList $list): self
+    {
+        if (!$this->lists->contains($list)) {
+            $this->lists[] = $list;
+        }
+        return $this;
+    }
+    public function removeList(NewsletterList $list): self
+    {
+        $this->lists->removeElement($list);
         return $this;
     }
 }

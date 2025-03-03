@@ -1,11 +1,11 @@
 <?php
 
-namespace Api\Console\List;
+namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -18,18 +18,8 @@ class GetListsTest extends WebTestCase
 
     public function testListNewsletterListNonEmpty(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterLists = $this
-            ->factory(NewsletterListFactory::class)
-            ->createMany(
-                10,
-                function ($newsletterList) use ($project) {
-                    $newsletterList->setProject($project);
-                }
-            );
+        $project = ProjectFactory::createOne();
+        $lists = NewsletterListFactory::createMany(10, ['project' => $project]);
 
         $response = $this->consoleApi(
             $project,
@@ -50,31 +40,11 @@ class GetListsTest extends WebTestCase
 
     public function testNewsletterListMultipleProject(): void
     {
-        $project1 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
 
-        $project2 = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterLists1 = $this
-            ->factory(NewsletterListFactory::class)
-            ->createMany(
-                10,
-                function ($newsletterList) use ($project1) {
-                    $newsletterList->setProject($project1);
-                }
-            );
-
-        $newsletterLists2 = $this
-            ->factory(NewsletterListFactory::class)
-            ->createMany(
-                10,
-                function ($newsletterList) use ($project2) {
-                    $newsletterList->setProject($project2);
-                }
-            );
+        $newsletterLists1 = NewsletterListFactory::createMany(10, ['project' => $project1]);
+        $newsletterLists2 = NewsletterListFactory::createMany(10, ['project' => $project2]);
 
         $response = $this->consoleApi(
             $project1,

@@ -6,7 +6,6 @@ use App\Repository\ListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: ListRepository::class)]
 #[ORM\Table(name: 'lists')]
@@ -20,6 +19,14 @@ class NewsletterList
     #[ORM\ManyToOne(inversedBy: 'lists', cascade: ['persist'])]
     private Project $project;
 
+    /**
+     * @var Collection<int, Subscriber>
+     */
+    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'list_subscriber')]
+    #[ORM\JoinColumn(name: 'list_id')]
+    private Collection $subscribers;
+
     #[ORM\Column(length: 255)]
     private string $name;
 
@@ -29,11 +36,6 @@ class NewsletterList
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    /**
-     * @var Collection<int, Subscriber>
-     */
-    #[ORM\OneToMany(targetEntity: Subscriber::class, mappedBy: 'list_id')]
-    private Collection $subscribers;
 
     /**
      * @var Collection<int, Issue>
@@ -43,7 +45,6 @@ class NewsletterList
 
     public function __construct()
     {
-        $this->subscribers = new ArrayCollection();
         $this->issues = new ArrayCollection();
     }
 
@@ -108,36 +109,6 @@ class NewsletterList
     }
 
     /**
-     * @return Collection<int, Subscriber>
-     */
-    public function getSubscribers(): Collection
-    {
-        return $this->subscribers;
-    }
-
-    public function addSubscriber(Subscriber $subscriber): static
-    {
-        if (!$this->subscribers->contains($subscriber)) {
-            $this->subscribers->add($subscriber);
-            $subscriber->setListId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubscriber(Subscriber $subscriber): static
-    {
-        if ($this->subscribers->removeElement($subscriber)) {
-            // set the owning side to null (unless already changed)
-            if ($subscriber->getListId() === $this) {
-                $subscriber->setListId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Issue>
      */
     public function getIssues(): Collection
@@ -164,6 +135,26 @@ class NewsletterList
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscriber>
+     */
+    public function getSubscribers(): Collection
+    {
+        return $this->subscribers;
+    }
+    public function addSubscriber(Subscriber $subscriber): self
+    {
+        if (!$this->subscribers->contains($subscriber)) {
+            $this->subscribers[] = $subscriber;
+        }
+        return $this;
+    }
+    public function removeSubscriber(Subscriber $subscriber): self
+    {
+        $this->subscribers->removeElement($subscriber);
         return $this;
     }
 }

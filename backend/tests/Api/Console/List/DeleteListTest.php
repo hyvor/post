@@ -3,11 +3,11 @@
 namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -20,13 +20,11 @@ class DeleteListTest extends WebTestCase
 
     public function testDeleteNewsletterListFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project));
+        $newsletterList = NewsletterListFactory::createOne([
+            'project' => $project
+        ]);
 
         $newsletterListId = $newsletterList->getId();
 
@@ -52,9 +50,7 @@ class DeleteListTest extends WebTestCase
 
     public function testDeleteNewsletterListNotFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,

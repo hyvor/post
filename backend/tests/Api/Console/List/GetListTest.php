@@ -3,9 +3,9 @@
 namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -18,14 +18,8 @@ class GetListTest extends WebTestCase
 
     public function testGetSpecificList(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')
-                ->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
             $project,

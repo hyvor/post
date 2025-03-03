@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectService;
@@ -32,20 +33,18 @@ class CreateProjectTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertArrayHasKey('id', $data);
-        $project_id = $data['id'];
-        $this->assertIsInt($data['id']);
+        $json = $this->getJson($response);
+        $projectId = $json['id'];
+        $this->assertIsInt($projectId);
 
         $repository = $this->em->getRepository(Project::class);
-        $find = $repository->find($project_id);
-        $this->assertNotNull($find);
-        $this->assertSame('Valid Project Name', $find->getName());
+        $project = $repository->find($projectId);
+        $this->assertNotNull($project);
+        $this->assertSame('Valid Project Name', $project->getName());
+
+        $listRepository = $this->em->getRepository(NewsletterList::class);
+        $lists = $listRepository->findBy(['project' => $project]);
+        $this->assertCount(1, $lists);
     }
 
     public function testCreateProjectInvalid(): void
@@ -66,7 +65,7 @@ class CreateProjectTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
-        $this->assertSame('This value is too long. It should have 255 characters or less.', $data['message']);
+        $this->assertHasViolation($data, 'name', 'This value is too long. It should have 255 characters or less.');
     }
 
 }

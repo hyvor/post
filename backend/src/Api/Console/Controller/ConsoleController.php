@@ -6,6 +6,7 @@ use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\ListObject;
 use App\Entity\Project;
+use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
 use Hyvor\Internal\Auth\AuthUser;
@@ -17,7 +18,8 @@ final class ConsoleController extends AbstractController
 {
 
     public function __construct(
-        private ProjectService $projectService
+        private ProjectService $projectService,
+        private ListRepository $listRepository,
     )
     {
     }
@@ -40,10 +42,10 @@ final class ConsoleController extends AbstractController
     public function initProject(Project $project): JsonResponse
     {
         $projectStats = $this->projectService->getProjectStats($project);
-        $lists = $project->getLists();
+        $lists = $this->listRepository->findBy(['project' => $project]);
         return new JsonResponse([
             'project' => new ProjectObject($project),
-            'lists' => array_map(fn($list) => new ListObject($list), $lists->toArray()),
+            'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'stats' => new StatsObject(
                 $projectStats[0],
                 $projectStats[1],
