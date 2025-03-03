@@ -203,6 +203,27 @@ class CreateIssueTest extends WebTestCase
                 ],
             ]
         );
+    }
 
+    public function testCreateIssueWithInvalidList(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project1]);
+
+        $response = $this->consoleApi(
+            $project2,
+            'POST',
+            '/issues',
+            [
+                'list_id' => $list->getId(),
+                'from_email' => 'thibault@hyvor.com',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('List with id ' . $list->getId() . ' not found', $json['message']);
     }
 }

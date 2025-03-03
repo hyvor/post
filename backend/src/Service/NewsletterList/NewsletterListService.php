@@ -43,9 +43,9 @@ class NewsletterListService
         $this->em->flush();
     }
 
-    public function getNewsletterList(int $id): ?NewsletterList
+    public function getNewsletterList(Project $project, int $id): ?NewsletterList
     {
-        $list = $this->em->getRepository(NewsletterList::class)->find($id);
+        $list = $this->em->getRepository(NewsletterList::class)->findOneBy(['project' => $project, 'id' => $id]);
         return $list;
     }
 

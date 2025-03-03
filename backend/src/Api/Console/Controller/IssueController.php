@@ -29,9 +29,8 @@ class IssueController extends AbstractController
     #[Route('/issues', methods: 'POST')]
     public function createIssue(#[MapRequestPayload] CreateIssueInput $input, Project $project): JsonResponse
     {
-        $list = $this->newsletterListService->getNewsletterList($input->list_id);
-
-        if ($list === null) {
+        $list = $this->newsletterListService->getNewsletterList($project, $input->list_id);
+        if (!$list) {
             throw new UnprocessableEntityHttpException("List with id {$input->list_id} not found");
         }
 
