@@ -21,36 +21,14 @@ class IssueController extends AbstractController
 
     public function __construct(
         private IssueService $issueService,
-        private NewsletterListService $newsletterListService,
     )
     {
     }
 
     #[Route('/issues', methods: 'POST')]
-    public function createIssue(#[MapRequestPayload] CreateIssueInput $input, Project $project): JsonResponse
+    public function createIssue(Project $project): JsonResponse
     {
-        $list = $this->newsletterListService->getNewsletterList($project, $input->list_id);
-        if (!$list) {
-            throw new UnprocessableEntityHttpException("List with id {$input->list_id} not found");
-        }
-
-        $issue = $this->issueService->createIssue(
-            $list,
-            $input->subject,
-            $input->from_name,
-            $input->from_email,
-            $input->reply_to_email,
-            $input->content,
-            $input->status ?? IssueStatus::DRAFT,
-            $input->html,
-            $input->text,
-            $input->error_private,
-            $input->batch_id,
-            $input->scheduled_at ? \DateTimeImmutable::createFromTimestamp($input->scheduled_at) : null,
-            $input->sending_at ? \DateTimeImmutable::createFromTimestamp($input->sending_at) : null,
-            $input->failed_at ? \DateTimeImmutable::createFromTimestamp($input->failed_at) : null,
-            $input->sent_at ? \DateTimeImmutable::createFromTimestamp($input->sent_at) : null
-        );
+        $issue = $this->issueService->createIssueDraft($project);
 
         return $this->json(new IssueObject($issue));
     }

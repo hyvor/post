@@ -37,17 +37,6 @@ class NewsletterList
     private \DateTimeImmutable $updated_at;
 
 
-    /**
-     * @var Collection<int, Issue>
-     */
-    #[ORM\OneToMany(targetEntity: Issue::class, mappedBy: 'list_id')]
-    private Collection $issues;
-
-    public function __construct()
-    {
-        $this->issues = new ArrayCollection();
-    }
-
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -104,24 +93,6 @@ class NewsletterList
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Issue>
-     */
-    public function getIssues(): Collection
-    {
-        return $this->issues;
-    }
-
-    public function addIssue(Issue $issue): static
-    {
-        if (!$this->issues->contains($issue)) {
-            $this->issues->add($issue);
-            $issue->setList($this);
-        }
 
         return $this;
     }

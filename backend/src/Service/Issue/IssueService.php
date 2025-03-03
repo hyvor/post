@@ -4,8 +4,10 @@ namespace App\Service\Issue;
 
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
+use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
+use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 
@@ -16,56 +18,26 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
+        private NewsletterListService $newsletterListService,
         //private IssueRepository $issueRepository
     )
     {
     }
 
-    public function createIssue(
-        NewsletterList $list,
-        ?string $subject,
-        ?string $fromName,
-        string $fromEmail,
-        ?string $replyToEmail,
-        ?string $content,
-        IssueStatus $status,
-        ?string $html,
-        ?string $text,
-        ?string $error_private,
-        ?int $batch_id,
-        ?\DateTimeImmutable $scheduledAt = null,
-        ?\DateTimeImmutable $sendingAt = null,
-        ?\DateTimeImmutable $failed_at = null,
-        ?\DateTimeImmutable $sent_at = null
+    public function createIssueDraft(
+        Project $project,
     ): Issue
     {
+        $lists = $this->newsletterListService->getNewsletterLists($project);
+        $list_ids = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
         $issue = new Issue()
-            ->setUuid(uniqid()) // Generate a unique identifier
-            ->setList($list)
-            ->setSubject($subject)
-            ->setFromName($fromName)
-            ->setFromEmail($fromEmail)
-            ->setReplyToEmail($replyToEmail)
-            ->setContent($content)
-            ->setStatus($status)
-            ->setHtml($html)
-            ->setText($text)
-            ->setErrorPrivate($error_private)
-            ->setBatchId($batch_id)
+            ->setProject($project)
+            ->setUuid(uniqid())
+            ->setStatus(IssueStatus::DRAFT)
+            ->setFromEmail('') // TODO: get from project
+            ->setLists($list_ids)
             ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setScheduledAt($scheduledAt)
-            ->setSendingAt($sendingAt)
-            ->setFailedAt($failed_at)
-            ->setSentAt($sent_at);
-
-        if ($status === IssueStatus::SENDING) {
-            $issue->setSendingAt($this->now());
-        } elseif ($status === IssueStatus::FAILED) {
-            $issue->setFailedAt($this->now());
-        } elseif ($status === IssueStatus::SENT) {
-            $issue->setSentAt($this->now());
-        }
+            ->setUpdatedAt($this->now());
 
         $this->em->persist($issue);
         $this->em->flush();
