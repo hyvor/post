@@ -4,13 +4,11 @@ namespace App\Tests\Api\Console\Resolver;
 
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\ProjectResolver;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
 use App\Tests\Case\KernelTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -103,13 +101,8 @@ class EntityResolverTest extends KernelTestCase
 
     public function testResolvesEntityForPath(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project, 'name' => 'Valid List Name']);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
@@ -131,13 +124,8 @@ class EntityResolverTest extends KernelTestCase
 
     public function testDoesNotResolveEntityForPathWhenProjectNotFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project, 'name' => 'Valid List Name']);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
@@ -157,13 +145,8 @@ class EntityResolverTest extends KernelTestCase
 
     public function testDoesNotResolveEntityForPathWhenEntityNotFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project, 'name' => 'Valid List Name']);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
@@ -183,17 +166,10 @@ class EntityResolverTest extends KernelTestCase
 
     public function testDoesNotResolveEntityForPathWhenDoesNotBelongToProject(): void
     {
-        $project1 = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
 
-        $project2 = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project1));
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project1]);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);

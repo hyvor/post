@@ -8,9 +8,12 @@ use Hyvor\Internal\Auth\AuthFake;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\Factories;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
+
+    use Factories;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;

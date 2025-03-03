@@ -3,13 +3,13 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
-use App\Entity\Factory\SubscriberFactory;
 use App\Entity\Subscriber;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SubscriberController::class)]
@@ -24,21 +24,15 @@ class DeleteSubscriberTest extends WebTestCase
 
     public function testDeleteSubscriberFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$newsletterList],
+        ]);
 
-        $subscriber = $this
-            ->factory(SubscriberFactory::class)
-            ->create(fn ($subscriber) => $subscriber
-                ->setProject($project)
-                ->addList($newsletterList));
-
-        $subscriber_id = $subscriber->getId();
+        $subscriberId = $subscriber->getId();
 
         $response = $this->consoleApi(
             $project,
@@ -49,15 +43,13 @@ class DeleteSubscriberTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
 
         $repository = $this->em->getRepository(Subscriber::class);
-        $subscriber = $repository->find($subscriber_id);
+        $subscriber = $repository->find($subscriberId);
         $this->assertNull($subscriber);
     }
 
     public function testDeleteSubscriberNotFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -66,5 +58,27 @@ class DeleteSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(404, $response->getStatusCode());
+    }
+
+    public function testCannotDeleteOtherProjectSubscriber(): void
+    {
+        $project = ProjectFactory::createOne();
+        $otherProject = ProjectFactory::createOne();
+
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$newsletterList],
+        ]);
+
+        $response = $this->consoleApi(
+            $otherProject,
+            'DELETE',
+            '/subscribers/' . $subscriber->getId()
+        );
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame('Entity does not belong to the project', $this->getJson($response)['message']);
     }
 }
