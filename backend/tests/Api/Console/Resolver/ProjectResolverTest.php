@@ -4,10 +4,9 @@ namespace App\Tests\Api\Console\Resolver;
 
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\ProjectResolver;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
-use App\Entity\Project;
 use App\Tests\Case\KernelTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -32,13 +31,8 @@ class ProjectResolverTest extends KernelTestCase
 
     public function testDoesNotResolveWhenMissingHeader(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setName('Valid List Name')->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);

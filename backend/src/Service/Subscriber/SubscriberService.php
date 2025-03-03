@@ -8,6 +8,7 @@ use App\Entity\Subscriber;
 use App\Enum\SubscriberSource;
 use App\Enum\SubscriberStatus;
 use App\Repository\SubscriberRepository;
+use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -99,26 +100,29 @@ class SubscriberService
         );
     }
 
-    /**
-     * @param array<NewsletterList> $lists
-     */
-    public function updateSubscriber(Subscriber $subscriber, string $email, array $lists, string $status): Subscriber
+    public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {
-        $subscriber->setEmail($email);
-        $status_enum = SubscriberStatus::tryFrom($status);
-        if ($status_enum === null) {
-            throw new \InvalidArgumentException('Invalid status');
-        }
-        $subscriber->setStatus($status_enum);
 
-        // Clear lists
-        foreach ($subscriber->getLists() as $list) {
-            $subscriber->removeList($list);
+        if ($updates->hasProperty('email')) {
+            $subscriber->setEmail($updates->email);
         }
-        foreach ($lists as $list) {
-            $subscriber->addList($list);
+
+        if ($updates->hasProperty('status')) {
+            $subscriber->setStatus($updates->status);
         }
+
+        if ($updates->hasProperty('lists')) {
+            // Clear & re-add lists
+            foreach ($subscriber->getLists() as $list) {
+                $subscriber->removeList($list);
+            }
+            foreach ($updates->lists as $list) {
+                $subscriber->addList($list);
+            }
+        }
+
         $subscriber->setUpdatedAt($this->now());
+
         $this->em->persist($subscriber);
         $this->em->flush();
 

@@ -10,6 +10,7 @@ use App\Entity\Subscriber;
 use App\Enum\SubscriberSource;
 use App\Enum\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -77,13 +78,28 @@ final class SubscriberController extends AbstractController
         #[MapRequestPayload] UpdateSubscriberInput $input
     ): JsonResponse
     {
-        $lists = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
-        $subscriber = $this->subscriberService->updateSubscriber(
-            $subscriber,
-            $input->email ?? $subscriber->getEmail(),
-            $lists,
-            $input->status ?? $subscriber->getStatus()->value ?? 'pending',
-        );
+
+        $updates = new UpdateSubscriberDto();
+
+        if ($input->hasProperty('email')) {
+            $updates->email = $input->email;
+        }
+
+        if ($input->hasProperty('list_ids')) {
+            $missingListIds = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
+
+            if ($missingListIds !== null) {
+                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
+
+            $updates->lists = $this->newsletterListService->getListsByIds($input->list_ids);
+        }
+
+        if ($input->hasProperty('status')) {
+            $updates->status = $input->status;
+        }
+
+        $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
         return $this->json(new SubscriberObject($subscriber));
     }
 
