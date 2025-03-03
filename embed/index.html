@@ -5,21 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hyvor Post Embed</title>
 
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=readex-pro:400,600" rel="stylesheet" />
+
     <style>
       body {
         margin: 0;
         padding: 0;
         background-color: #fafafa;
+        font-family: 'Readex Pro', sans-serif;
+        font-size: 18px;
       }
 
       #app {
         width: 100%;
         height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+        <hyvor-post-form></hyvor-post-form>
+    </div>
     <script type="module" src="/dev/dev.ts"></script>
   </body>
 </html>
