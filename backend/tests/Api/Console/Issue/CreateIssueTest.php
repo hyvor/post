@@ -127,7 +127,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame('2021-08-27 12:00:00', $issue->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
-    public function testCreateIssueWithStatus(string $status, string $dateField): void
+    public function createIssueWithStatus(string $status, string $dateField): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
@@ -171,7 +171,7 @@ class CreateIssueTest extends WebTestCase
     #[TestWith(['sent', 'sent_at'])]
     public function testCreateIssueWithVariousStatuses(string $status, string $dateField): void
     {
-        $this->testCreateIssueWithStatus($status, $dateField);
+        $this->createIssueWithStatus($status, $dateField);
     }
 
 
