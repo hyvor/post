@@ -175,6 +175,28 @@ class CreateIssueTest extends WebTestCase
     }
 
 
+    public function testCreateIssueWithInvalidList(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project1]);
+
+        $response = $this->consoleApi(
+            $project2,
+            'POST',
+            '/issues',
+            [
+                'list_id' => $list->getId(),
+                'from_email' => 'thibault@hyvor.com',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('List with id ' . $list->getId() . ' not found', $json['message']);
+    }
+
     /**
      * @param callable(Project): array<string, mixed> $input
      * @param array<mixed> $violations
@@ -255,25 +277,38 @@ class CreateIssueTest extends WebTestCase
         );
     }
 
-    public function testCreateIssueWithInvalidList(): void
+    public function testInputValidationOptionalValues(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
-
-        $list = NewsletterListFactory::createOne(['project' => $project1]);
-
-        $response = $this->consoleApi(
-            $project2,
-            'POST',
-            '/issues',
+        $this->validateInput(
+            fn (Project $project) => [
+                'status' => 'invalid-status',
+                'scheduled_at' => 'invalid-date',
+                'sending_at' => 'invalid-date',
+                'failed_at' => 'invalid-date',
+                'sent_at' => 'invalid-date',
+            ],
             [
-                'list_id' => $list->getId(),
-                'from_email' => 'thibault@hyvor.com',
+                [
+                    'property' => 'status',
+                    'message' => 'This value should be of type draft|scheduled|sending|failed|sent.',
+                ],
+                [
+                    'property' => 'scheduled_at',
+                    'message' => 'This value should be of type int|null.',
+                ],
+                [
+                    'property' => 'sending_at',
+                    'message' => 'This value should be of type int|null.',
+                ],
+                [
+                    'property' => 'failed_at',
+                    'message' => 'This value should be of type int|null.',
+                ],
+                [
+                    'property' => 'sent_at',
+                    'message' => 'This value should be of type int|null.',
+                ],
             ]
         );
-
-        $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
-        $this->assertSame('List with id ' . $list->getId() . ' not found', $json['message']);
     }
 }
