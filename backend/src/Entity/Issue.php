@@ -24,9 +24,9 @@ class Issue
     #[ORM\Column(length: 255)]
     private string $uuid;
 
-    #[ORM\ManyToOne(inversedBy: 'issues')]
+    #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
-    private NewsletterList $list;
+    private Project $project;
 
     #[ORM\Column(length: 255)]
     private ?string $subject = null;
@@ -70,6 +70,12 @@ class Issue
     #[ORM\Column(length:255, nullable: true)]
     private ?int $batch_id = null;
 
+    /**
+     * @var array<int>
+     */
+    #[ORM\Column(nullable: true)]
+    private ?array $lists = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -106,7 +112,7 @@ class Issue
         return $this;
     }
 
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }
@@ -118,14 +124,14 @@ class Issue
         return $this;
     }
 
-    public function getList(): NewsletterList
+    public function getProject(): Project
     {
-        return $this->list;
+        return $this->project;
     }
 
-    public function setList(NewsletterList $list): static
+    public function setProject(Project $project): static
     {
-        $this->list = $list;
+        $this->project = $project;
 
         return $this;
     }
@@ -294,6 +300,24 @@ class Issue
     public function setBatchId(?int $batch_id): static
     {
         $this->batch_id = $batch_id;
+
+        return $this;
+    }
+
+    /**
+     * @return ?array<int>
+     */
+    public function getLists(): ?array
+    {
+        return $this->lists;
+    }
+
+    /**
+     * @param ?array<int> $lists
+     */
+    public function setLists(?array $lists): static
+    {
+        $this->lists = $lists;
 
         return $this;
     }
