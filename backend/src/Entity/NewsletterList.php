@@ -120,19 +120,7 @@ class NewsletterList
     {
         if (!$this->issues->contains($issue)) {
             $this->issues->add($issue);
-            $issue->setListId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIssue(Issue $issue): static
-    {
-        if ($this->issues->removeElement($issue)) {
-            // set the owning side to null (unless already changed)
-            if ($issue->getListId() === $this) {
-                $issue->setListId(null);
-            }
+            $issue->setList($this);
         }
 
         return $this;
