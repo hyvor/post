@@ -5,7 +5,7 @@ namespace App\Tests\Api\Console\Subscriber;
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Project;
 use App\Entity\Subscriber;
-use App\Enum\SubscriberStatus;
+use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;

@@ -2,8 +2,8 @@
 
 namespace App\Api\Console\Input\Subscriber;
 
-use App\Enum\SubscriberSource;
-use App\Enum\SubscriberStatus;
+use App\Entity\Type\SubscriberSource;
+use App\Entity\Type\SubscriberStatus;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateSubscriberInput

@@ -3,8 +3,8 @@
 namespace App\Tests\Factory;
 
 use App\Entity\Subscriber;
-use App\Enum\SubscriberSource;
-use App\Enum\SubscriberStatus;
+use App\Entity\Type\SubscriberSource;
+use App\Entity\Type\SubscriberStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
