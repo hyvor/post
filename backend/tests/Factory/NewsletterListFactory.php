@@ -27,9 +27,9 @@ final class NewsletterListFactory extends PersistentProxyObjectFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @todo add your default values here
+     * @return array<mixed>
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),

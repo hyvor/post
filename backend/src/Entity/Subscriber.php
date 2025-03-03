@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\SubscriberSource;
+use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enum\SubscriberStatus;
-use App\Enum\SubscriberSource;
 
 #[ORM\Entity(repositoryClass: SubscriberRepository::class)]
 #[ORM\Table(name: 'subscribers')]

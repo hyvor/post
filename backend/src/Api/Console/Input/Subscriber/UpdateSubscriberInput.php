@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Input\Subscriber;
 
-use App\Enum\SubscriberStatus;
+use App\Entity\Type\SubscriberStatus;
 use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 

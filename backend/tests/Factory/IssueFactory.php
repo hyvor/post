@@ -3,7 +3,7 @@
 namespace App\Tests\Factory;
 
 use App\Entity\Issue;
-use App\Enum\IssueStatus;
+use App\Entity\Type\IssueStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -28,9 +28,9 @@ final class IssueFactory extends PersistentProxyObjectFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @todo add your default values here
+     * @return array<mixed>
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
             'batch_id' => self::faker()->randomNumber(),
