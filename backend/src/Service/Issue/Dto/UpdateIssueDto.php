@@ -11,6 +11,10 @@ class UpdateIssueDto
 
     public string $subject;
     public string $fromName;
+    /**
+     * @var array<int>
+     */
+    public array $lists;
 
     public string $fromEmail;
     public string $replyToEmail;
