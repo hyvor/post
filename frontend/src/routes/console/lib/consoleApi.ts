@@ -5,6 +5,7 @@ export interface ConsoleApiOptions {
     endpoint: string,
     data?: Record<string, any> | FormData,
     userApi?: boolean,
+    projectId?: string,
     signal?: AbortSignal,
 }
 
@@ -21,6 +22,7 @@ function getConsoleApi() {
         method,
         userApi = false,
         data = {},
+        projectId,
         signal
     }: CallOptions) : Promise<T> {
 
@@ -31,6 +33,9 @@ function getConsoleApi() {
         if (!userApi) {
             const project = get(projectStore);
             headers['X-Project-Id'] = project.id.toString();
+        }
+        else if (projectId) {
+            headers['X-Project-Id'] = projectId;
         }
 
         if (!(data instanceof FormData)) {

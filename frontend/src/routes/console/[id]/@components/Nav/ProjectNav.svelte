@@ -40,8 +40,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + $projectStore.id.toString() + '/subscibers'}
-			active={$page.url.pathname === `/console/${$projectStore.id}/subscibers`}
+			href={'/console/' + $projectStore.id.toString() + '/subscribers'}
+			active={$page.url.pathname === `/console/${$projectStore.id}/subscribers`}
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
