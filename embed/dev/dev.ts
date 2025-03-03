@@ -1,2 +1,1 @@
-import '../src/form/form';
-
+import "../src/form/form";
