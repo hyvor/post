@@ -47,10 +47,10 @@ class IssueController extends AbstractController
             $input->text,
             $input->error_private,
             $input->batch_id,
-            $input->scheduled_at,
-            $input->sending_at,
-            $input->failed_at,
-            $input->sent_at
+            $input->scheduled_at ? \DateTimeImmutable::createFromTimestamp($input->scheduled_at) : null,
+            $input->sending_at ? \DateTimeImmutable::createFromTimestamp($input->sending_at) : null,
+            $input->failed_at ? \DateTimeImmutable::createFromTimestamp($input->failed_at) : null,
+            $input->sent_at ? \DateTimeImmutable::createFromTimestamp($input->sent_at) : null
         );
 
         return $this->json(new IssueObject($issue));

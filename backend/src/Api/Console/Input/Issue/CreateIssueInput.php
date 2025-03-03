@@ -22,8 +22,8 @@ class CreateIssueInput
     public ?string $text = null;
     public ?string $error_private = null;
     public ?int $batch_id = null;
-    public ?\DateTimeImmutable $scheduled_at= null;
-    public ?\DateTimeImmutable $sending_at = null;
-    public ?\DateTimeImmutable $failed_at = null;
-    public ?\DateTimeImmutable $sent_at = null;
+    public ?int $scheduled_at= null;
+    public ?int $sending_at = null;
+    public ?int $failed_at = null;
+    public ?int $sent_at = null;
 }
