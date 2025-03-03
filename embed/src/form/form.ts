@@ -1,28 +1,26 @@
-import { mount } from 'svelte';
-import Form from './Form.svelte';
+import { mount } from "svelte";
+import Form from "./Form.svelte";
 
 class HyvorPostForm extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+    }
 
-	constructor() {
-		super();
-		this.attachShadow({ mode: 'open' });
-	}
+    connectedCallback() {
+        const projectId = this.getAttribute("project-id");
 
-	connectedCallback() {
-		
-        const projectId = this.getAttribute('project-id');
-
-		/* if (!websiteId) {
+        /* if (!websiteId) {
 			throw new Error('website-id is required for Hyvor post Newsletter widget.');
 		}
 
 		const translations = Translations.fromElement(this); */
 
         mount(Form, {
-            target: this.shadowRoot!
-        })
+            target: this.shadowRoot!,
+        });
 
-		/* this.component = new Newsletter({
+        /* this.component = new Newsletter({
 			target: this.shadowRoot!,
 			props: {
 				websiteId: Number(websiteId),
@@ -37,19 +35,19 @@ class HyvorPostForm extends HTMLElement {
 				shadowRoot: this.shadowRoot!
 			}
 		}); */
-	}
+    }
 
-	/* static get observedAttributes() {
+    /* static get observedAttributes() {
 		return ['colors'];
 	} */
 
-	attributeChangedCallback(name: string, oldVal: string, newVal: string) {
-		/* if (name === 'colors' && oldVal !== newVal) {
+    attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+        /* if (name === 'colors' && oldVal !== newVal) {
 			styles.setStyles(newVal as any);
 		} */
-	}
+    }
 }
 
-if (customElements.get('hyvor-post-form') === undefined) {
-	customElements.define('hyvor-post-form', HyvorPostForm);
+if (customElements.get("hyvor-post-form") === undefined) {
+    customElements.define("hyvor-post-form", HyvorPostForm);
 }
