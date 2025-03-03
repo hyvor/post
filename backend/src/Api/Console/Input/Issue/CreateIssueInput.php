@@ -14,7 +14,9 @@ class CreateIssueInput
     public ?string $from_name = null;
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Assert\Length(max: 255)]
     public string $from_email;
+    #[Assert\Email]
     public ?string $reply_to_email = null;
     public ?string $content = null;
     public ?IssueStatus $status = null;

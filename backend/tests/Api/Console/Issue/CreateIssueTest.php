@@ -4,6 +4,7 @@ namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Entity\Issue;
+use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
@@ -122,6 +123,86 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame('2021-08-27 12:00:00', $issue->getSendingAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-27 12:00:00', $issue->getFailedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-27 12:00:00', $issue->getSentAt()?->format('Y-m-d H:i:s'));
+    }
+
+    /**
+     * @param callable(Project): array<string, mixed> $input
+     * @param array<mixed> $violations
+     * @return void
+     */
+    private function validateInput(
+        callable $input,
+        array $violations
+    ): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/issues',
+            $input($project),
+        );
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame($violations, $json['violations']);
+        $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
+    }
+
+    public function testInputValidationEmptyFromEmailAndListIds(): void
+    {
+        $this->validateInput(
+            fn (Project $project) => [],
+            [
+                [
+                    'property' => 'list_id',
+                    'message' => 'This value should not be blank.',
+                ],
+                [
+                    'property' => 'from_email',
+                    'message' => 'This value should not be blank.',
+                ]
+            ]
+        );
+    }
+
+    public function testInputValidationInvalidEmail(): void
+    {
+        $this->validateInput(
+            fn (Project $project) => [
+                'from_email' => 'not-email',
+            ],
+            [
+                [
+                    'property' => 'list_id',
+                    'message' => 'This value should not be blank.',
+                ],
+                [
+                    'property' => 'from_email',
+                    'message' => 'This value is not a valid email address.',
+                ],
+            ]
+        );
+    }
+
+    public function testInputValidationEmailTooLong(): void
+    {
+
+        $this->validateInput(
+            fn (Project $project) => [
+                'from_email' => str_repeat('a', 256) . '@hyvor.com',
+            ],
+            [
+                [
+                    'property' => 'list_id',
+                    'message' => 'This value should not be blank.',
+                ],
+                [
+                    'property' => 'from_email',
+                    'message' => 'This value is too long. It should have 255 characters or less.',
+                ],
+            ]
+        );
 
     }
 }
