@@ -69,4 +69,32 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $json;
     }
 
+    /**
+     * @param array<mixed>|Response $response
+     */
+    public function assertHasViolation(array|Response $response, string $property, string $message = ''): void
+    {
+
+        if ($response instanceof Response) {
+            $response = $this->getJson($response);
+        }
+
+        $this->assertArrayHasKey('violations', $response);
+        $this->assertIsArray($response['violations']);
+
+        $found = false;
+        foreach ($response['violations'] as $violation) {
+            $this->assertIsArray($violation);
+            if ($violation['property'] === $property) {
+                $found = true;
+                if ($message) {
+                    $this->assertStringContainsString($message, $violation['message']);
+                }
+            }
+        }
+
+        $this->assertTrue($found, 'Violation not found');
+
+    }
+
 }

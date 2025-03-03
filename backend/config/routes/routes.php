@@ -9,9 +9,4 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/console')
         ->namePrefix('api_console_');
 
-    // test API
-    $routes->import('../../src/Api/Test', 'attribute')
-        ->prefix('/api/test')
-        ->namePrefix('api_test_');
-
 };
