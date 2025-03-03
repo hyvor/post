@@ -4,9 +4,12 @@ namespace App\Tests\Case;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Zenstruck\Foundry\Test\Factories;
 
 class KernelTestCase extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 {
+
+    use Factories;
 
     protected Container $container;
     protected EntityManagerInterface $em;

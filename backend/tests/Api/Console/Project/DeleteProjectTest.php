@@ -3,11 +3,10 @@
 namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
-use App\Entity\Factory\ProjectFactory;
-use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
@@ -20,9 +19,7 @@ class DeleteProjectTest extends WebTestCase
     // TODO: tests for authentication
     public function testDeleteProjectFound(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+        $project = ProjectFactory::createOne();
 
         $project_id = $project->getId();
 

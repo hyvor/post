@@ -1,12 +1,12 @@
 <?php
 
-namespace Api\Console\Project;
+namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
@@ -20,9 +20,7 @@ class GetProjectTest extends WebTestCase
 
     public function testGetSpecificProjet(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,

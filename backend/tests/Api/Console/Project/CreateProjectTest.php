@@ -65,7 +65,7 @@ class CreateProjectTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
-        $this->assertSame('[name] This value is too long. It should have 255 characters or less.', $data['message']);
+        $this->assertHasViolation($data, 'name', 'This value is too long. It should have 255 characters or less.');
     }
 
 }

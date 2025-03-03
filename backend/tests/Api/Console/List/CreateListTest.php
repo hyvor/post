@@ -3,10 +3,9 @@
 namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -20,9 +19,7 @@ class CreateListTest extends WebTestCase
 
     public function testCreateNewsLetterListValid(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+        $project = ProjectFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -47,9 +44,7 @@ class CreateListTest extends WebTestCase
 
     public function testCreateProjectInvalid(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create(fn (Project $project) => $project->setName('Valid Project Name'));
+        $project = ProjectFactory::createOne();
 
         $long_string = str_repeat('a', 256);
         $response = $this->consoleApi(

@@ -3,11 +3,11 @@
 namespace App\Tests\Api\Console\List;
 
 use App\Api\Console\Controller\ListController;
-use App\Entity\Factory\NewsletterListFactory;
-use App\Entity\Factory\ProjectFactory;
 use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
+use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -25,13 +25,8 @@ class UpdateListTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
             $project,
@@ -62,13 +57,8 @@ class UpdateListTest extends WebTestCase
 
     public function testUpdateListNameInvalid(): void
     {
-        $project = $this
-            ->factory(ProjectFactory::class)
-            ->create();
-
-        $newsletterList = $this
-            ->factory(NewsletterListFactory::class)
-            ->create(fn ($newsletterList) => $newsletterList->setProject($project));
+        $project = ProjectFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
             $project,
@@ -86,7 +76,8 @@ class UpdateListTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
-        $this->assertSame('[name] This value is too long. It should have 255 characters or less.', $data['message']);
+
+        $this->assertHasViolation($data, 'name', 'This value is too long. It should have 255 characters or less.');
     }
 
 }
