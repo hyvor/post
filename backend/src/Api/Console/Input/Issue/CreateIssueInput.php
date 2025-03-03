@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Api\Console\Input\Issue;
+
+use App\Entity\Type\IssueStatus;
+use Symfony\Component\Validator\Constraints as Assert;
+class CreateIssueInput
+{
+    #[Assert\NotBlank]
+    #[Assert\Type('int')]
+    public int $list_id;
+
+    public ?string $subject = null;
+    public ?string $from_name = null;
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public string $from_email;
+    public ?string $reply_to_email = null;
+    public ?string $content = null;
+    public ?IssueStatus $status = null;
+    public ?string $html = null;
+    public ?string $text = null;
+    public ?string $error_private = null;
+    public ?int $batch_id = null;
+    public ?\DateTimeImmutable $scheduled_at= null;
+    public ?\DateTimeImmutable $sending_at = null;
+    public ?\DateTimeImmutable $failed_at = null;
+    public ?\DateTimeImmutable $sent_at = null;
+}
