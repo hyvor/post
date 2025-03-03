@@ -13,6 +13,8 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]
@@ -23,7 +25,7 @@ class CreateIssueTest extends WebTestCase
 
     // TODO: tests for authentication
 
-    public function testCreateSubscriberMinimal(): void
+    public function testCreateIssueMinimal(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -53,7 +55,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame($list->getId(), $issue->getList()->getId());
     }
 
-    public function testCreateSusbscriberWithAllInputs(): void
+    public function testCreateIssueWithAllInputs(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -124,6 +126,54 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame('2021-08-27 12:00:00', $issue->getFailedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-27 12:00:00', $issue->getSentAt()?->format('Y-m-d H:i:s'));
     }
+
+    public function testCreateIssueWithStatus(string $status, string $dateField): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $expectedDate = new \DateTimeImmutable('2025-02-21');
+
+        $project = ProjectFactory::createOne();
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/issues',
+            [
+                'list_id' => $list->getId(),
+                'from_email' => 'thibault@hyvor.com',
+                'status' => $status,
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertIsInt($json['id']);
+        $this->assertSame('thibault@hyvor.com', $json['from_email']);
+        $this->assertSame($status, $json['status']);
+        $this->assertSame($expectedDate->getTimestamp(), $json[$dateField]);
+
+        $repository = $this->em->getRepository(Issue::class);
+        $issue = $repository->find($json['id']);
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
+        $this->assertSame(constant(IssueStatus::class . '::' . strtoupper($status)), $issue->getStatus());
+
+        // Convert date field to camelCase method
+        $getterMethod = 'get' . str_replace('_', '', ucwords($dateField, '_'));
+        $this->assertSame('2025-02-21 00:00:00', $issue->$getterMethod()?->format('Y-m-d H:i:s'));
+    }
+
+    #[TestWith(['sending', 'sending_at'])]
+    #[TestWith(['failed', 'failed_at'])]
+    #[TestWith(['sent', 'sent_at'])]
+    public function testCreateIssueWithVariousStatuses(string $status, string $dateField): void
+    {
+        $this->testCreateIssueWithStatus($status, $dateField);
+    }
+
 
     /**
      * @param callable(Project): array<string, mixed> $input
