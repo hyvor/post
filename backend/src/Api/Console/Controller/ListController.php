@@ -25,8 +25,11 @@ final class ListController extends AbstractController
     #[Route('/lists', methods: 'GET')]
     public function getNewsletterLists(Project $project): JsonResponse
     {
-        $lists = $this->newsletterListService->getNewsletterLists($project);
-        return $this->json(array_map(fn (NewsletterList $list) => new ListObject($list), $lists));
+        $lists = $this->newsletterListService
+            ->getNewsletterLists($project)
+            ->map(fn (NewsletterList $list) => new ListObject($list));
+
+        return $this->json($lists);
     }
 
     #[Route('/lists', methods: 'POST')]
