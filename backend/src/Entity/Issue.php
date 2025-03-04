@@ -67,9 +67,6 @@ class Issue
     #[ORM\Column(length: 255)]
     private ?string $error_private = null;
 
-    #[ORM\Column(length:255, nullable: true)]
-    private ?int $batch_id = null;
-
     /**
      * @var array<int>
      */
@@ -288,18 +285,6 @@ class Issue
     public function setErrorPrivate(?string $error_private): static
     {
         $this->error_private = $error_private;
-
-        return $this;
-    }
-
-    public function getBatchId(): ?int
-    {
-        return $this->batch_id;
-    }
-
-    public function setBatchId(?int $batch_id): static
-    {
-        $this->batch_id = $batch_id;
 
         return $this;
     }
