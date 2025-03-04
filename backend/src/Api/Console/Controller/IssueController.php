@@ -56,6 +56,7 @@ class IssueController extends AbstractController
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
             }
+            $updates->lists = $input->lists;
         }
 
         if ($input->hasProperty('from_email'))

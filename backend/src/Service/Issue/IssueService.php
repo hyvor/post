@@ -48,76 +48,25 @@ class IssueService
     public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
     {
 
-        // TODO: fix
-        if ($updates->hasProperty('subject')) {
+        if ($updates->hasProperty('subject'))
             $issue->setSubject($updates->subject);
-        }
 
-        if ($updates->hasProperty('fromName')) {
+        if ($updates->hasProperty('fromName'))
             $issue->setFromName($updates->fromName);
-        }
 
-        if ($updates->hasProperty('lists')) {
+        if ($updates->hasProperty('lists'))
             $issue->setLists($updates->lists);
-        }
 
-        if ($updates->hasProperty('fromEmail')) {
+        if ($updates->hasProperty('fromEmail'))
             $issue->setFromEmail($updates->fromEmail);
-        }
 
-        if ($updates->hasProperty('replyToEmail')) {
+        if ($updates->hasProperty('replyToEmail'))
             $issue->setReplyToEmail($updates->replyToEmail);
-        }
 
-        if ($updates->hasProperty('content')) {
+        if ($updates->hasProperty('content'))
             $issue->setContent($updates->content);
-        }
-
-        if ($updates->hasProperty('status')) {
-            $issue = $issue->setStatus($updates->status);
-            if ($updates->status === IssueStatus::SENDING) {
-                $issue->setSendingAt($this->now());
-            } elseif ($updates->status === IssueStatus::FAILED) {
-                $issue->setFailedAt($this->now());
-            } elseif ($updates->status === IssueStatus::SENT) {
-                $issue->setSentAt($this->now());
-            }
-        }
-
-        if ($updates->hasProperty('html')) {
-            $issue->setHtml($updates->html);
-        }
-
-        if ($updates->hasProperty('text')) {
-            $issue->setText($updates->text);
-        }
-
-        if ($updates->hasProperty('errorPrivate')) {
-            $issue->setErrorPrivate($updates->errorPrivate);
-        }
-
-        if ($updates->hasProperty('batchId')) {
-            $issue->setBatchId($updates->batchId);
-        }
-
-        if ($updates->hasProperty('scheduledAt')) {
-            $issue->setScheduledAt($updates->scheduledAt);
-        }
-
-        if ($updates->hasProperty('sendingAt')) {
-            $issue->setSendingAt($updates->sendingAt);
-        }
-
-        if ($updates->hasProperty('failedAt')) {
-            $issue->setFailedAt($updates->failedAt);
-        }
-
-        if ($updates->hasProperty('sentAt')) {
-            $issue->setSentAt($updates->sentAt);
-        }
 
         $issue->setUpdatedAt($this->now());
-
 
         $this->em->persist($issue);
         $this->em->flush();
