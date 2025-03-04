@@ -11,6 +11,7 @@ use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Uid\Uuid;
 
 class IssueService
 {
@@ -25,18 +26,16 @@ class IssueService
     {
     }
 
-    public function createIssueDraft(
-        Project $project,
-    ): Issue
+    public function createIssueDraft(Project $project): Issue
     {
         $lists = $this->newsletterListService->getNewsletterLists($project);
-        $list_ids = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
+        $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
         $issue = new Issue()
             ->setProject($project)
-            ->setUuid(uniqid())
+            ->setUuid(Uuid::v4())
             ->setStatus(IssueStatus::DRAFT)
             ->setFromEmail('') // TODO: get from project
-            ->setLists($list_ids)
+            ->setLists($listIds)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -48,6 +47,8 @@ class IssueService
 
     public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
     {
+
+        // TODO: fix
         if ($updates->hasProperty('subject')) {
             $issue->setSubject($updates->subject);
         }

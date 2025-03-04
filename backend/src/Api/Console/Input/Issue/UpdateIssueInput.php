@@ -9,26 +9,25 @@ class UpdateIssueInput
 {
     use OptionalPropertyTrait;
 
-    public string $subject;
-    public string $from_name;
+    public ?string $subject;
+    public ?string $from_name;
+
     /**
      * @var array<int>
      */
+    #[Assert\Count(min: 1, minMessage: "There should be at least one list.")]
+    #[Assert\All([
+        new Assert\NotBlank(),
+        new Assert\Type('int'),
+    ])]
     public array $lists;
 
     #[Assert\Email]
     #[Assert\Length(max: 255)]
     public string $from_email;
+
     #[Assert\Email]
-    public string $reply_to_email;
-    public string $content;
-    public IssueStatus $status;
-    public string $html;
-    public string $text;
-    public string $error_private;
-    public int $batch_id;
-    public int $scheduled_at;
-    public int $sending_at;
-    public int $failed_at;
-    public int $sent_at;
+    public ?string $reply_to_email;
+
+    public ?string $content;
 }

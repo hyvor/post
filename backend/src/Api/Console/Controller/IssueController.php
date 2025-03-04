@@ -44,13 +44,11 @@ class IssueController extends AbstractController
     {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject')) {
+        if ($input->hasProperty('subject'))
             $updates->subject = $input->subject;
-        }
 
-        if ($input->hasProperty('from_name')) {
+        if ($input->hasProperty('from_name'))
             $updates->fromName = $input->from_name;
-        }
 
         if ($input->hasProperty('lists')) {
             $missingListIds = $this->newsletterListService->isListsAvailable($project, $input->lists);
@@ -60,53 +58,14 @@ class IssueController extends AbstractController
             }
         }
 
-        if ($input->hasProperty('from_email')) {
+        if ($input->hasProperty('from_email'))
             $updates->fromEmail = $input->from_email;
-        }
 
-        if ($input->hasProperty('reply_to_email')) {
+        if ($input->hasProperty('reply_to_email'))
             $updates->replyToEmail = $input->reply_to_email;
-        }
 
-        if ($input->hasProperty('content')) {
+        if ($input->hasProperty('content'))
             $updates->content = $input->content;
-        }
-
-        if ($input->hasProperty('status')) {
-            $updates->status = $input->status;
-        }
-
-        if ($input->hasProperty('html')) {
-            $updates->html = $input->html;
-        }
-
-        if ($input->hasProperty('text')) {
-            $updates->text = $input->text;
-        }
-
-        if ($input->hasProperty('error_private')) {
-            $updates->errorPrivate = $input->error_private;
-        }
-
-        if ($input->hasProperty('batch_id')) {
-            $updates->batchId = $input->batch_id;
-        }
-
-        if ($input->hasProperty('scheduled_at')) {
-            $updates->scheduledAt = \DateTimeImmutable::createFromTimestamp($input->scheduled_at);
-        }
-
-        if ($input->hasProperty('sending_at')) {
-            $updates->sendingAt = \DateTimeImmutable::createFromTimestamp($input->sending_at);
-        }
-
-        if ($input->hasProperty('failed_at')) {
-            $updates->failedAt = \DateTimeImmutable::createFromTimestamp($input->failed_at);
-        }
-
-        if ($input->hasProperty('sent_at')) {
-            $updates->sentAt = \DateTimeImmutable::createFromTimestamp($input->sent_at);
-        }
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
 

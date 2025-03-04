@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
@@ -14,11 +15,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
-
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
+#[CoversClass(IssueObject::class)]
 class CreateIssueTest extends WebTestCase
 {
     public function testCreateIssueDraft(): void

@@ -28,12 +28,12 @@ final class Version20250209024452 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            uuid VARCHAR(255) UNIQUE NOT NULL,
+            uuid TEXT UNIQUE NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             subject VARCHAR(255),
             from_name VARCHAR(255),
-            from_email VARCHAR(255) NOT NULL,
-            reply_to_email VARCHAR(255),
+            from_email TEXT NOT NULL,
+            reply_to_email TEXT,
             content TEXT,
             status issues_status,
             lists jsonb,
@@ -43,8 +43,7 @@ final class Version20250209024452 extends AbstractMigration
             sending_at timestamptz,
             failed_at timestamptz,
             sent_at timestamptz,
-            error_private TEXT,
-            batch_id VARCHAR(255) UNIQUE
+            error_private TEXT
         );
         SQL);
     }
