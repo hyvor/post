@@ -50,6 +50,12 @@ class IssueController extends AbstractController
         return $this->json(new IssueObject($issue));
     }
 
+    #[Route('/issues/{id}', methods: 'GET')]
+    public function getById(Issue $issue): JsonResponse
+    {
+        return $this->json(new IssueObject($issue));
+    }
+
     #[Route('/issues/{id}', methods: 'PATCH')]
     public function updateIssue(
         Issue $issue,

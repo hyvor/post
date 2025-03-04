@@ -93,6 +93,28 @@ class UpdateIssueTest extends WebTestCase
         $this->assertSame('List with id ' . $list->getId() . ' not found', $json['message']);
     }
 
+
+    public function testUpdateIssueWrongProject(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $issue = IssueFactory::createOne(['project' => $project1]);
+
+        $response = $this->consoleApi(
+            $project2,
+            'PATCH',
+            '/issues/' . $issue->getId(),
+            [
+                'subject' => 'Test subject',
+            ]
+        );
+
+        $this->assertSame(403, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Entity does not belong to the project', $json['message']);
+    }
+
     /**
      * @param callable(Project): array<string, mixed> $input
      * @param array<mixed> $violations
