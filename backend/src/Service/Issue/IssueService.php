@@ -5,10 +5,12 @@ namespace App\Service\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Uid\Uuid;
@@ -20,8 +22,8 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
+        private IssueRepository $issueRepository,
         private NewsletterListService $newsletterListService,
-        //private IssueRepository $issueRepository
     )
     {
     }
@@ -72,5 +74,21 @@ class IssueService
         $this->em->flush();
 
         return $issue;
+    }
+
+    /**
+     * @return ArrayCollection<int, Issue>
+     */
+    public function getIssues(Project $project, int $limit, int $offset): ArrayCollection
+    {
+        return new ArrayCollection(
+            $this->issueRepository
+                ->findBy(
+                    ['project' => $project],
+                    null,
+                    $limit,
+                    $offset
+                )
+        );
     }
 }
