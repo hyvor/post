@@ -138,13 +138,14 @@ class UpdateIssueTest extends WebTestCase
 
         $list = NewsletterListFactory::createOne(['project' => $project1]);
 
+        $issue = IssueFactory::createOne(['project' => $project2]);
+
         $response = $this->consoleApi(
             $project2,
-            'POST',
-            '/issues',
+            'PATCH',
+            '/issues/' . $issue->getId(),
             [
-                'list_id' => $list->getId(),
-                'from_email' => 'thibault@hyvor.com',
+                'lists' => [$list->getId()],
             ]
         );
 
@@ -164,34 +165,18 @@ class UpdateIssueTest extends WebTestCase
     ): void
     {
         $project = ProjectFactory::createOne();
+        $issue = IssueFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
             $project,
-            'POST',
-            '/issues',
+            'PATCH',
+            '/issues/' . $issue->getId(),
             $input($project),
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertSame($violations, $json['violations']);
         $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
-    }
-
-    public function testInputValidationEmptyFromEmailAndListIds(): void
-    {
-        $this->validateInput(
-            fn (Project $project) => [],
-            [
-                [
-                    'property' => 'list_id',
-                    'message' => 'This value should not be blank.',
-                ],
-                [
-                    'property' => 'from_email',
-                    'message' => 'This value should not be blank.',
-                ]
-            ]
-        );
     }
 
     public function testInputValidationInvalidEmail(): void
@@ -202,10 +187,6 @@ class UpdateIssueTest extends WebTestCase
             ],
             [
                 [
-                    'property' => 'list_id',
-                    'message' => 'This value should not be blank.',
-                ],
-                [
                     'property' => 'from_email',
                     'message' => 'This value is not a valid email address.',
                 ],
@@ -215,16 +196,11 @@ class UpdateIssueTest extends WebTestCase
 
     public function testInputValidationEmailTooLong(): void
     {
-
         $this->validateInput(
             fn (Project $project) => [
                 'from_email' => str_repeat('a', 256) . '@hyvor.com',
             ],
             [
-                [
-                    'property' => 'list_id',
-                    'message' => 'This value should not be blank.',
-                ],
                 [
                     'property' => 'from_email',
                     'message' => 'This value is too long. It should have 255 characters or less.',
@@ -250,19 +226,19 @@ class UpdateIssueTest extends WebTestCase
                 ],
                 [
                     'property' => 'scheduled_at',
-                    'message' => 'This value should be of type int|null.',
+                    'message' => 'This value should be of type int.',
                 ],
                 [
                     'property' => 'sending_at',
-                    'message' => 'This value should be of type int|null.',
+                    'message' => 'This value should be of type int.',
                 ],
                 [
                     'property' => 'failed_at',
-                    'message' => 'This value should be of type int|null.',
+                    'message' => 'This value should be of type int.',
                 ],
                 [
                     'property' => 'sent_at',
-                    'message' => 'This value should be of type int|null.',
+                    'message' => 'This value should be of type int.',
                 ],
             ]
         );

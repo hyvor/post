@@ -91,7 +91,6 @@ class EntityResolver implements ValueResolverInterface
             controllerName: $controllerName
         );
         $currentProject = (array) $this->projectResolver->resolve($request, $argumentMetadata);
-
         if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
             throw new AccessDeniedHttpException('Entity does not belong to the project');
         }
