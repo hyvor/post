@@ -13,6 +13,7 @@ use App\Service\Issue\IssueService;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,6 +26,20 @@ class IssueController extends AbstractController
         private NewsletterListService $newsletterListService,
     )
     {
+    }
+
+    #[Route('/issues', methods: 'GET')]
+    public function getIssues(Request $request, Project $project): JsonResponse
+    {
+        $limit = $request->query->getInt('limit', 50);
+        $offset = $request->query->getInt('offset', 0);
+
+        $issues = $this
+            ->issueService
+            ->getIssues($project, $limit, $offset)
+            ->map(fn($subscriber) => new IssueObject($subscriber));
+
+        return $this->json($issues);
     }
 
     #[Route('/issues', methods: 'POST')]
