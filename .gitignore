@@ -1,2 +1,5 @@
 .idea
 tmp
+
+embed/.vite
+embed/node_modules

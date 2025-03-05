@@ -1,5 +1,5 @@
 <script>
-	import IconCheckCircleFill  from '@hyvor/icons/IconCheckCircleFill';
+	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
 </script>
 
 <div class="checks" {...$$restProps}>
@@ -28,7 +28,7 @@
 	}
 
 	.check :global(svg) {
-		color: var(--text-light);
+		color: var(--accent);
 	}
 
 	@media (max-width: 992px) {

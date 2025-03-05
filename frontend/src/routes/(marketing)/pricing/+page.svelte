@@ -1,9 +1,8 @@
 <script>
-	import TrialSignUp from "../@components/TrialSignUp.svelte";
-import FeatureSectionHead from "../@homepage/FeatureSectionHead.svelte";
-	import Faq from "./Faq.svelte";
-	import PricingPlans from "./PricingPlans.svelte";
-
+	import TrialSignUp from '../@components/TrialSignUp.svelte';
+	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
+	import Faq from './Faq.svelte';
+	import PricingPlans from './PricingPlans.svelte';
 </script>
 
 <svelte:head>
