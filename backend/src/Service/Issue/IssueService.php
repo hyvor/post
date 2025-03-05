@@ -91,4 +91,10 @@ class IssueService
                 )
         );
     }
+
+    public function deleteIssue(Issue $issue): void
+    {
+        $this->em->remove($issue);
+        $this->em->flush();
+    }
 }
