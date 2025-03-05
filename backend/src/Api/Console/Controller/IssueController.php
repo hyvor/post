@@ -93,4 +93,13 @@ class IssueController extends AbstractController
 
         return $this->json(new IssueObject($issueUpdated));
     }
+
+    #[Route ('/issues/{id}', methods: 'DELETE')]
+    public function deleteIssue(Issue $issue): JsonResponse
+    {
+        if ($issue->getStatus() != IssueStatus::DRAFT)
+            throw new UnprocessableEntityHttpException("Issue with id {$issue->getId()} is not a draft.");
+        $this->issueService->deleteIssue($issue);
+        return $this->json([]);
+    }
 }
