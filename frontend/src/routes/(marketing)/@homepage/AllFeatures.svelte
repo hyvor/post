@@ -22,19 +22,21 @@
 
 		{
 			title: 'Embeddable Newsletter Form',
-			description: "Embeddable, customizable newsletter form to collect emails from your users on your website.",
+			description:
+				'Embeddable, customizable newsletter form to collect emails from your users on your website.',
 			image: embedNewsletterImg
 		},
 
 		{
 			title: 'Multiple Segments',
-			description:"Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.",
+			description:
+				'Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.',
 			image: multipleSegmentsImg
 		},
 
 		{
 			title: 'Comprehensive Analytics',
-			description:"Send engaging newsletters to your subscribers. Track opens, clicks, and more.",
+			description: 'Send engaging newsletters to your subscribers. Track opens, clicks, and more.',
 			image: comprehensiveAnalyticsImg
 		},
 		{
@@ -44,11 +46,11 @@
 			image: customDomainImg
 		},
 
-        {
-            title: 'Customizable Templates',
-            description: 'Choose from a variety of templates and customize them to match your brand.',
-            image: customTemplatesImg
-        }
+		{
+			title: 'Customizable Templates',
+			description: 'Choose from a variety of templates and customize them to match your brand.',
+			image: customTemplatesImg
+		}
 	];
 </script>
 

@@ -1,6 +1,6 @@
 <script>
 	// import IconCopy, IconPencil, IconPersonAdd from '@hyvor/icons';
-    import IconCopy from '@hyvor/icons/IconCopy';
+	import IconCopy from '@hyvor/icons/IconCopy';
 	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconPersonAdd from '@hyvor/icons/IconPersonAdd';
 	import FeatureSectionHead from '../FeatureSectionHead.svelte';
@@ -42,7 +42,7 @@
 	.wrap {
 		margin: 80px 0;
 		padding: 60px 20px;
-		background-color: #bad4d6;
+		background-color: var(--accent-light);
 	}
 
 	.inner {

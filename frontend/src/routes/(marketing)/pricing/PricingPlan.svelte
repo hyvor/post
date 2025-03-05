@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { Button, Slider } from '@hyvor/design/components';
-    import  IconCheckCircle from '@hyvor/icons/IconCheckCircle';
+	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
 
-	export let yearly = false;
-	export let currency: string;
+	interface Props {
+		yearly?: boolean;
+		currency: string;
+	}
+
+	let { yearly = false, currency }: Props = $props();
 
 	const plans = {
 		// 1000: 4,
@@ -12,18 +16,19 @@
 		5_000_000: 30,
 		10_000_000: 50,
 		25_000_000: 90,
-        50_000_000: 150,
-        100_000_000: 250
+		50_000_000: 150,
+		100_000_000: 250
 	};
 
 	const currentPlans = plans;
-	let currentPlan = 100_000;
-	let sliderVal = 1;
+	let currentPlan = $state(100_000);
+	let sliderVal = $state(1);
 
-	$: currentPlanDisplay =
-		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}m` : `${currentPlan / 1_000}k`;
+	let currentPlanDisplay = $derived(
+		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}m` : `${currentPlan / 1_000}k`
+	);
 
-	$: currentPrice = (currentPlans as any)[currentPlan] * (yearly ? 10 : 1);
+	let currentPrice = $derived((currentPlans as any)[currentPlan] * (yearly ? 10 : 1));
 
 	function onSliderChange(event: any) {
 		sliderVal = event.detail;
@@ -33,17 +38,16 @@
 		currentPlan = parseInt(key);
 	}
 	function getFeatures() {
-        return [
-            'lorem ipsum',
-            'dolor sit amet',
-            'consectetur adipiscing elit',
-            'sed do eiusmod tempor',
-            'incididunt ut labore et dolore magna aliqua',
-            'ut enim ad minim veniam',
-            'quis nostrud exercitation ullamco laboris'
-        ];
-	
-    }
+		return [
+			'lorem ipsum',
+			'dolor sit amet',
+			'consectetur adipiscing elit',
+			'sed do eiusmod tempor',
+			'incididunt ut labore et dolore magna aliqua',
+			'ut enim ad minim veniam',
+			'quis nostrud exercitation ullamco laboris'
+		];
+	}
 
 	const features = getFeatures();
 	const url = '/console/billing';
@@ -51,9 +55,7 @@
 </script>
 
 <div class="wrap hds-box">
-	<div class="name">
-		Choose your plan
-	</div>
+	<div class="name">Choose your plan</div>
 
 	<div class="features">
 		{#each features as feature}
@@ -68,9 +70,7 @@
 
 	<div class="email-selector">
 		<div class="min-max">
-			<span class="min">
-					10k
-			</span>
+			<span class="min"> 10k </span>
 			<div>{currentPlanDisplay}</div>
 			<span class="max"> 1M </span>
 		</div>
@@ -80,21 +80,14 @@
 
 	<div class="price">
 		<div class="price-display">
-            <span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-                >/{yearly ? 'year' : 'month'}{#if currentPrice === 4}*{/if}</span
-            >
+			<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
+				>/{yearly ? 'year' : 'month'}{#if currentPrice === 4}*{/if}</span
+			>
 		</div>
 	</div>
 
 	<div class="button-wrap">
-		<Button
-			size="large"
-			{target}
-			as="a"
-			href={url}
-		>
-			Choose Plan
-		</Button>
+		<Button size="large" {target} as="a" href={url}>Choose Plan</Button>
 	</div>
 </div>
 
@@ -128,9 +121,8 @@
 	}
 
 	.features {
-        margin: 0 auto;
+		margin: 0 auto;
 		padding: 20px 30px;
-        
 	}
 	.feature {
 		display: flex;
