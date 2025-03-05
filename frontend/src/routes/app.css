@@ -1,5 +1,5 @@
 :root {
-	--accent: #5A8387;
-    --accent-light: #e5f1f2;
-    --accent-lightest: #FDFFFF;
+	--accent: #5A8387!important;
+    --accent-light: #e5f1f2!important;
+    --accent-lightest: #FDFFFF!important;
 }

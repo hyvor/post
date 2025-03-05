@@ -47,7 +47,6 @@
 			{#if loggedIn}
 				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
 			{:else}
-				<DarkToggle />
 				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
 			{/if}

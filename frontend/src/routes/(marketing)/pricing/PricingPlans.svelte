@@ -4,7 +4,6 @@
 
 	let currency = '€';
 	let yearly = false;
-
 </script>
 
 <div class="yearly-wrap hds-container">
@@ -19,8 +18,7 @@
 			on:click={() => (yearly = true)}
 			color="input"
 			size="small"
-			variant={!yearly ? 'invisible' : 'fill'}
-			>Yearly<span class="off">(2 months off)</span></Button
+			variant={!yearly ? 'invisible' : 'fill'}>Yearly<span class="off">(2 months off)</span></Button
 		>
 	</div>
 </div>
@@ -38,7 +36,8 @@
 		display: flex;
 		gap: 15px;
 		padding-top: 20px;
-        max-width: 40%;
+		width: 600px;
+		max-width: 100%;
 	}
 
 	.yearly-wrap {
