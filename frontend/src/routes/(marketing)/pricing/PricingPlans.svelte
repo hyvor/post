@@ -38,7 +38,7 @@
 		display: flex;
 		gap: 15px;
 		padding-top: 20px;
-        width: 60%;
+        max-width: 40%;
 	}
 
 	.yearly-wrap {

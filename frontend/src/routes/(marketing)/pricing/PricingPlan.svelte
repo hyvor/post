@@ -151,8 +151,6 @@
 	}
 	.email-selector {
 		padding: 20px 40px;
-        width: 60%;
-        margin: 0 auto;
 		.min-max {
 			display: flex;
 			align-items: flex-end;
