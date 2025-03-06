@@ -37,7 +37,7 @@ class IssueService
             ->setUuid(Uuid::v4())
             ->setStatus(IssueStatus::DRAFT)
             ->setFromEmail('') // TODO: get from project
-            ->setLists($listIds)
+            ->setListids($listIds)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -57,7 +57,7 @@ class IssueService
             $issue->setFromName($updates->fromName);
 
         if ($updates->hasProperty('lists'))
-            $issue->setLists($updates->lists);
+            $issue->setListids($updates->lists);
 
         if ($updates->hasProperty('fromEmail'))
             $issue->setFromEmail($updates->fromEmail);

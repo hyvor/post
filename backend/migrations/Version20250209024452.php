@@ -36,7 +36,7 @@ final class Version20250209024452 extends AbstractMigration
             reply_to_email TEXT,
             content TEXT,
             status issues_status,
-            lists jsonb,
+            list_ids jsonb,
             html TEXT,
             text TEXT,
             scheduled_at timestamptz,
