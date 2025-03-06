@@ -10,17 +10,17 @@ class IssueObject
     public int $id;
     public string $uuid;
 
-    public ?int $created_at;
+    public int $created_at;
     public ?string $subject;
     public ?string $from_name;
-    public ?string $from_email;
+    public string $from_email;
     public ?string $reply_to_email;
     public ?string $content;
-    public ?IssueStatus $status;
+    public IssueStatus $status;
     /**
      * @var array<int>
      */
-    public ?array $lists;
+    public array $lists;
     public ?int $scheduled_at;
     public ?int $sending_at;
     public ?int $sent_at;
