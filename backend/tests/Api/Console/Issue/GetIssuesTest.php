@@ -110,5 +110,26 @@ class GetIssuesTest extends WebTestCase
         $this->assertCount(0, $json);
     }
 
-    // TODO: add a test for project validation
+    public function testListIssuesProjectValidation(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $issues_project1 = IssueFactory::createMany(5, ['project' => $project1,]);
+        $issues_project2 = IssueFactory::createMany(5, ['project' => $project2,]);
+
+        $response = $this->consoleApi(
+            $project1,
+            'GET',
+            '/issues'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(5, $json);
+
+        $issue = $json[0];
+        $this->assertIsArray($issue);
+        $this->assertSame($issues_project1[0]->getId(), $issue['id']);
+    }
 }

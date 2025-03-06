@@ -70,8 +70,8 @@ class Issue
     /**
      * @var array<int>
      */
-    #[ORM\Column(nullable: true)]
-    private ?array $lists = null;
+    #[ORM\Column()]
+    private array $list_ids;
 
     public function getId(): int
     {
@@ -290,19 +290,19 @@ class Issue
     }
 
     /**
-     * @return ?array<int>
+     * @return array<int>
      */
-    public function getLists(): ?array
+    public function getListIds(): array
     {
-        return $this->lists;
+        return $this->list_ids;
     }
 
     /**
-     * @param ?array<int> $lists
+     * @param array<int> $list_ids
      */
-    public function setLists(?array $lists): static
+    public function setListIds(array $list_ids): static
     {
-        $this->lists = $lists;
+        $this->list_ids = $list_ids;
 
         return $this;
     }

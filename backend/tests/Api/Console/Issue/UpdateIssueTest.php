@@ -31,7 +31,7 @@ class UpdateIssueTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
-        $issue = IssueFactory::createOne(['project' => $project, 'lists' => [$list1]]);
+        $issue = IssueFactory::createOne(['project' => $project, 'list_ids' => [$list1->getId()]]);
 
         $response = $this->consoleApi(
             $project,
@@ -40,7 +40,7 @@ class UpdateIssueTest extends WebTestCase
             [
                 'subject' => 'Test subject',
                 'from_name' => 'Thibault',
-                'lists' => [$list1->getId(), $list2->getId()],
+                'list_ids' => [$list1->getId(), $list2->getId()],
                 'from_email' => 'thibault@hyvor.com',
                 'reply_to_email' => 'supun@hyvor.com',
                 'content' => 'Test content',
