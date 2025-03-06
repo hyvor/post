@@ -85,7 +85,7 @@ class IssueService
             $this->issueRepository
                 ->findBy(
                     ['project' => $project],
-                    null,
+                    ['id' => 'DESC'],
                     $limit,
                     $offset
                 )

@@ -13,9 +13,6 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestWith;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]

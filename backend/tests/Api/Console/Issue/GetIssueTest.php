@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Issue;
+namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
@@ -50,15 +50,18 @@ class GetIssueTest extends WebTestCase
     public function testGetSpecificIssueNotFound(): void
     {
         $response = $this->consoleApi(
-            null,
+            null, // TODO: this is wrong. We should always send a project. This error was not caught because of the lack of validation for the error message
             'GET',
             '/issues/999'
         );
 
         $this->assertSame(404, $response->getStatusCode());
+        // TODO: // always validate the error message
 
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $this->assertJson($content);
     }
+
+    // TODO: project validation
 }
