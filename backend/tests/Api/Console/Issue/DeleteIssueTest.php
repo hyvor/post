@@ -1,18 +1,15 @@
 <?php
 
-namespace Api\Console\Issue;
+namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Entity\Issue;
-use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -65,7 +62,7 @@ class DeleteIssueTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame("Issue with id {$issueId} is not a draft.", $json['message']);
+        $this->assertSame("Issue is not a draft.", $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issueId);
@@ -84,6 +81,9 @@ class DeleteIssueTest extends WebTestCase
         );
 
         $this->assertSame(404, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame("Entity not found", $json['message']);
+
     }
 
     public function testCannotDeleteOtherProjectIssues(): void

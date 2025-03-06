@@ -98,7 +98,7 @@ class IssueController extends AbstractController
     public function deleteIssue(Issue $issue): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT)
-            throw new UnprocessableEntityHttpException("Issue with id {$issue->getId()} is not a draft.");
+            throw new UnprocessableEntityHttpException("Issue is not a draft.");
         $this->issueService->deleteIssue($issue);
         return $this->json([]);
     }
