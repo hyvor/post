@@ -31,44 +31,44 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 
 	.above-fold {
 		padding-top: 75px;
 		display: flex;
+	}
 
-		.left {
+	.left {
 			width: 50%;
-		}
+	}
 
-		.right {
-			width: 50%;
-			padding-left: 25px;
-			
-		}
+	.right {
+		width: 50%;
+		padding-left: 25px;
+		
+	}
 
-		h1 {
-			margin: 0;
-			font-size: 40px;
-			margin-bottom: 10px;
-		}
+	h1 {
+		margin: 0;
+		font-size: 40px;
+		margin-bottom: 10px;
+	}
 
-		h2 {
-			font-weight: normal;
-			font-size: 20px;
-			margin: 0;
-			padding-top: 15px;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-            color: var(--text-light);
-		}
+	h2 {
+		font-weight: normal;
+		font-size: 20px;
+		margin: 0;
+		padding-top: 15px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		color: var(--text-light);
+	}
 
-		.buttons {
-			display: flex;
-			gap: 10px;
-			margin-top: 30px;
-		}
+	.buttons {
+		display: flex;
+		gap: 10px;
+		margin-top: 30px;
 	}
 
 	 .trial-checks {
@@ -80,39 +80,33 @@
 		.above-fold {
 			flex-direction: column;
 			text-align: center;
+		}
 
-			.left {
-				width: 100%;
-				padding-left: 0;
-				// center all
-				display: flex;
-				flex-direction: column;
-				align-items: center;
+		.left {
+			width: 100%;
+			padding-left: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
 
-				// margins for headings
-				h1 {
-					margin-top: 20px;
-				}
+		h1 {
+			margin-top: 20px;
+		}
 
-				h2 {
-					padding-top: 10px;
-				}
+		h2 {
+			padding-top: 10px;
+		}
 
-				h3 {
-					margin-top: 15px;
-				}
-			}
-
-			.right {
-				margin: auto;
-				margin-top: 30px;
-				padding-left: 0;
-				width: 500px;
-				max-width: 100%;
-			}
-			.buttons {
-				justify-content: center;
-			}
+		.right {
+			margin: auto;
+			margin-top: 30px;
+			padding-left: 0;
+			width: 500px;
+			max-width: 100%;
+		}
+		.buttons {
+			justify-content: center;
 		}
 
 		.trial-checks {

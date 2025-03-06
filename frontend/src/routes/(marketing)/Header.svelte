@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Header } from '@hyvor/design/marketing';
-	import logo from '../../lib/img/logo.png';
-	import { Button, DarkToggle } from '@hyvor/design/components';
+	import { Button } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -20,7 +19,7 @@
 	});
 </script>
 
-<Header {logo} subName="Post" darkToggle={false}>
+<Header logo='/img/logo.png' subName="Post" darkToggle={false} >
 	{#snippet center()}
 		<div class="center">
 			<Button

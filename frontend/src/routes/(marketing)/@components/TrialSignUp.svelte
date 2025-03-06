@@ -30,7 +30,7 @@
 	.wrap {
 		background-color: var(--accent-light);
 		padding: 80px 15px;
-		margin: 30px 0;
+		margin: 60px 0;
 	}
 
 	.inner {

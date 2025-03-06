@@ -22,9 +22,7 @@
 {/if}
 
 <style>
-
     .footer-wrap {
         margin-top: 100px;
     }
-
 </style>

@@ -28,7 +28,7 @@
 	<div class="description">{description}</div>
 </div>
 
-<style lang="scss">
+<style>
 	.step {
 		display: flex;
 		flex-direction: column;
@@ -60,7 +60,6 @@
 	.title {
 		font-size: 20px;
 		font-weight: 600;
-		// margin-top: 10px;
 	}
 	.description {
 		margin-top: 10px;
