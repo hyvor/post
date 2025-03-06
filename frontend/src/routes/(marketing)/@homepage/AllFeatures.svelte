@@ -1,55 +1,43 @@
 <script lang="ts">
-	// import customizeImg from '$lib/img/features/customizable.svg';
-	// import embedImg from '$lib/img/features/embed.svg';
-	// import moderationImg from '$lib/img/features/moderation.svg';
-	// import privacyImg from '$lib/img/features/privacy i.svg';
-	// import ssoImg from '$lib/img/features/sso.svg';
-	// import dataImg from '$lib/img/features/data ownership.svg';
-	import easyInstallImg from '$lib/img/easy-install.svg';
-	import embedNewsletterImg from '$lib/img/embed-newsletter-form.svg';
-	import multipleSegmentsImg from '$lib/img/multiple-segments.svg';
-	import comprehensiveAnalyticsImg from '$lib/img/comprehensive-analytics.svg';
-	import customDomainImg from '$lib/img/custom-domain.svg';
-	import customTemplatesImg from '$lib/img/custom-templates.svg';
 
 	const features = [
 		{
 			title: 'Easy Installation',
 			description:
 				'Seamlessly integrate embeds on any CMS or static site with our plugins or simple installation code.',
-			image: easyInstallImg
+			image: '/img/easy-install.svg'
 		},
 
 		{
 			title: 'Embeddable Newsletter Form',
 			description:
 				'Embeddable, customizable newsletter form to collect emails from your users on your website.',
-			image: embedNewsletterImg
+			image: '/img/embed-newsletter-form.svg'
 		},
 
 		{
 			title: 'Multiple Segments',
 			description:
 				'Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.',
-			image: multipleSegmentsImg
+			image: '/img/multiple-segments.svg'
 		},
 
 		{
 			title: 'Comprehensive Analytics',
 			description: 'Send engaging newsletters to your subscribers. Track opens, clicks, and more.',
-			image: comprehensiveAnalyticsImg
+			image: '/img/comprehensive-analytics.svg'
 		},
 		{
 			title: 'Custom Email Domain',
 			description:
 				'Boost credibility and brand recognition by sending newsletters from your own domain.',
-			image: customDomainImg
+			image: '/img/custom-domain.svg'
 		},
 
 		{
 			title: 'Customizable Templates',
 			description: 'Choose from a variety of templates and customize them to match your brand.',
-			image: customTemplatesImg
+			image: '/img/custom-templates.svg'
 		}
 	];
 </script>
@@ -68,8 +56,9 @@
 	{/each}
 </div>
 
-<style lang="scss">
+<style>
 	.feature-wrapper {
+		margin: 140px auto;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 		gap: 2.4rem;
@@ -87,21 +76,20 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
-		.title {
-			font-size: 1.2rem;
-			font-weight: 600;
-		}
-
-		.desc {
-			margin-top: 10px;
-			font-size: 1rem;
-			color: var(--text-light);
-			width: 100%;
-		}
 	}
 
-	// media queries
+	.title {
+		font-size: 1.2rem;
+		font-weight: 600;
+	}
+
+	.desc {
+		margin-top: 10px;
+		font-size: 1rem;
+		color: var(--text-light);
+		width: 100%;
+	}
+
 	@media (max-width: 992px) {
 		.feature-wrapper {
 			grid-template-columns: 1fr;

@@ -32,31 +32,6 @@
 					<a href="https://status.hyvor.com" target="_blank">System Status</a>
 				</FooterLinkList>
 			</div>
-
-			<!-- <div class="row">
-				<FooterLinkList title="Platforms">
-					<a href="/for/squarespace">Blog for Squarespace</a>
-					<a href="/for/wix">Blog for Wix</a>
-					<a href="/for/shopify">Blog for Shopify</a>
-					<a href="/for/wordpress">Blog for WordPress</a>
-					<a href="/for/webflow">Blog for Webflow</a>
-					<a href="/for/bubble">Blog for Bubble</a>
-				</FooterLinkList>
-				<FooterLinkList title="Alternatives">
-					<a href="https://hyvor.com/blog/wordpress-alternatives" target="_blank"
-						>WordPress Alternatives</a
-					>
-					<a href="https://hyvor.com/blog/ghost-alternatives" target="_blank">Ghost Alternatives</a>
-					<a href="https://hyvor.com/blog/medium-alternatives" target="_blank">Medium Alternatives</a>
-					<a href="https://hyvor.com/blog/blogger-alternatives" target="_blank"
-						>Blogger Alternatives</a
-					>
-				</FooterLinkList>
-				<FooterLinkList title="Use Cases">
-					<a href="/for/saas">For SaaS</a>
-					<a href="/for/ecommerce">For E-commerce</a>
-				</FooterLinkList>
-			</div> -->
 		</div>
 	{/snippet}
 </Footer>

@@ -11,13 +11,13 @@
 
 	const plans = {
 		// 1000: 4,
-		100_000: 7,
-		2_500_000: 15,
-		5_000_000: 30,
-		10_000_000: 50,
-		25_000_000: 90,
-		50_000_000: 150,
-		100_000_000: 250
+		10_000: 7,
+		25_000: 15,
+		50_000: 30,
+		100_000: 50,
+		250_000: 90,
+		500_000: 150,
+		1_000_000: 250
 	};
 
 	const currentPlans = plans;
@@ -129,10 +129,12 @@
 		align-items: center;
 		gap: 8px;
 		padding: 6px 0;
-		:global(svg) {
-			color: var(--green);
-		}
 	}
+
+	.feature :global(svg) {
+		color: var(--green);
+	}
+	
 	.feature-text {
 		flex: 1;
 	}
@@ -143,31 +145,32 @@
 	}
 	.email-selector {
 		padding: 20px 40px;
-		.min-max {
-			display: flex;
-			align-items: flex-end;
-			font-size: 12px;
-			color: var(--text-light);
-			margin-bottom: 10px;
-			div {
-				flex: 1;
-				text-align: center;
-				color: var(--text);
-				font-weight: 600;
-				font-size: 20px;
-			}
-			.min {
-				transform: translateX(-50%);
-			}
-			.max {
-				transform: translateX(50%);
-			}
-		}
-		.amount {
-			font-size: 14px;
-			text-align: center;
-			margin-top: 10px;
-		}
+	}
+	.email-selector .min-max {
+		display: flex;
+		align-items: flex-end;
+		font-size: 12px;
+		color: var(--text-light);
+		margin-bottom: 10px;
+	}
+
+	.email-selector .min-max div {
+		flex: 1;
+		text-align: center;
+		color: var(--text);
+		font-weight: 600;
+		font-size: 20px;
+	}
+	.email-selector .min-max .min {
+		transform: translateX(-50%);
+	}
+	.email-selector .min-max .max {
+		transform: translateX(50%);
+	}
+	.email-selector .amount {
+		font-size: 14px;
+		text-align: center;
+		margin-top: 10px;
 	}
 	.email-selector :global(.tip) {
 		display: none !important;
