@@ -50,5 +50,6 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
+        $this->assertSame($project->getId(), $issue->getProject()->getId());
     }
 }

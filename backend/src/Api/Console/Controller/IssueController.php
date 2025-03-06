@@ -74,9 +74,9 @@ class IssueController extends AbstractController
         if ($input->hasProperty('lists')) {
             $missingListIds = $this->newsletterListService->isListsAvailable($project, $input->lists);
 
-            if ($missingListIds !== null) {
+            if ($missingListIds !== null)
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-            }
+
             $updates->lists = $input->lists;
         }
 
