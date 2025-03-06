@@ -33,7 +33,6 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'batch_id' => self::faker()->randomNumber(),
             'content' => self::faker()->text(255),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'error_private' => self::faker()->text(255),
@@ -41,7 +40,6 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'from_email' => self::faker()->text(255),
             'from_name' => self::faker()->text(255),
             'html' => self::faker()->text(),
-            'list_id' => NewsletterListFactory::new(),
             'reply_to_email' => self::faker()->text(255),
             'scheduled_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'sending_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -51,6 +49,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'uuid' => self::faker()->text(255),
+            'list_ids' => []
         ];
     }
 
