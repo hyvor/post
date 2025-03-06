@@ -43,7 +43,7 @@ final class SubscriberController extends AbstractController
         return $this->json($subscribers);
     }
 
-    #[Route('/subscribers', methods: ['POST'])]
+    #[Route('/subscribers', methods: 'POST')]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {
 

@@ -50,11 +50,11 @@ class NewsletterListService
     }
 
     /**
-     * @return list<NewsletterList>
+     * @return ArrayCollection<int, NewsletterList>
      */
-    public function getNewsletterLists(Project $project): array
+    public function getNewsletterLists(Project $project): ArrayCollection
     {
-        return $this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]);
+        return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
     }
 
     public function updateNewsletterList(NewsletterList $list, string $name): NewsletterList

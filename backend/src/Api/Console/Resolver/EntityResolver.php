@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Resolver;
 
+use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
@@ -19,6 +20,7 @@ class EntityResolver implements ValueResolverInterface
     public const ENTITIES = [
         'lists' => NewsletterList::class,
         'subscribers' => Subscriber::class,
+        'issues' => Issue::class,
     ];
 
     public function __construct(
@@ -89,7 +91,6 @@ class EntityResolver implements ValueResolverInterface
             controllerName: $controllerName
         );
         $currentProject = (array) $this->projectResolver->resolve($request, $argumentMetadata);
-
         if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
             throw new AccessDeniedHttpException('Entity does not belong to the project');
         }
