@@ -89,7 +89,7 @@ class GetIssuesTest extends WebTestCase
         $this->assertArrayHasKey('sent_at', $issue);
     }
 
-    public function testListSubscribersEmpty(): void
+    public function testListIssuesEmpty(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -102,5 +102,28 @@ class GetIssuesTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertCount(0, $json);
+    }
+
+    public function testListIssuesProjectValidation(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $issues_project1 = IssueFactory::createMany(5, ['project' => $project1,]);
+        $issues_project2 = IssueFactory::createMany(5, ['project' => $project2,]);
+
+        $response = $this->consoleApi(
+            $project1,
+            'GET',
+            '/issues'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(5, $json);
+
+        $issue = $json[0];
+        $this->assertIsArray($issue);
+        $this->assertSame($issues_project1[0]->getId(), $issue['id']);
     }
 }

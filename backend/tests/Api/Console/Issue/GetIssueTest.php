@@ -41,7 +41,7 @@ class GetIssueTest extends WebTestCase
         $this->assertSame($issue->getReplyToEmail(), $json['reply_to_email']);
         $this->assertSame($issue->getContent(), $json['content']);
         $this->assertSame($issue->getStatus()->value, $json['status']);
-        $this->assertSame($issue->getLists(), $json['lists']);
+        $this->assertSame($issue->getListids(), $json['lists']);
         $this->assertSame($issue->getScheduledAt()?->getTimestamp(), $json['scheduled_at']);
         $this->assertSame($issue->getSendingAt()?->getTimestamp(), $json['sending_at']);
         $this->assertSame($issue->getSentAt()?->getTimestamp(), $json['sent_at']);
@@ -60,5 +60,23 @@ class GetIssueTest extends WebTestCase
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $this->assertJson($content);
+    }
+
+    public function testGetSpecificIssueProjectValidation(): void
+    {
+        $project1 = ProjectFactory::createOne();
+        $project2 = ProjectFactory::createOne();
+
+        $issue = IssueFactory::createOne(['project' => $project1]);
+
+        $response = $this->consoleApi(
+            $project2,
+            'GET',
+            "/issues/" . $issue->getId()
+        );
+
+        $this->assertSame(403, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame("Entity does not belong to the project", $json['message']);
     }
 }
