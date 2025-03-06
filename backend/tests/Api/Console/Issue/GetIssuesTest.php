@@ -115,8 +115,8 @@ class GetIssuesTest extends WebTestCase
         $project1 = ProjectFactory::createOne();
         $project2 = ProjectFactory::createOne();
 
-        $issues_project1 = IssueFactory::createMany(5, ['project' => $project1,]);
-        $issues_project2 = IssueFactory::createMany(5, ['project' => $project2,]);
+        $issuesProject1 = IssueFactory::createMany(5, ['project' => $project1,]);
+        $issuesProject2 = IssueFactory::createMany(5, ['project' => $project2,]);
 
         $response = $this->consoleApi(
             $project1,
@@ -130,6 +130,6 @@ class GetIssuesTest extends WebTestCase
 
         $issue = $json[0];
         $this->assertIsArray($issue);
-        $this->assertSame($issues_project1[0]->getId(), $issue['id']);
+        $this->assertSame($issuesProject1[count($issuesProject1) - 1]->getId(), $issue['id']);
     }
 }

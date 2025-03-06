@@ -80,8 +80,10 @@ class IssueController extends AbstractController
             $updates->lists = $input->lists;
         }
 
-        if ($input->hasProperty('from_email'))
+        if ($input->hasProperty('from_email')) {
+            // TODO: validate the from email once sending emails are set up
             $updates->fromEmail = $input->from_email;
+        }
 
         if ($input->hasProperty('reply_to_email'))
             $updates->replyToEmail = $input->reply_to_email;
