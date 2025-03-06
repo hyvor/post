@@ -49,7 +49,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'uuid' => self::faker()->text(255),
-            'lists' => []
+            'list_ids' => []
         ];
     }
 
