@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Issue;
+namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
@@ -9,9 +9,7 @@ use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Issue::class)]
@@ -29,6 +27,9 @@ class GetIssuesTest extends WebTestCase
         $project = ProjectFactory::createOne();
         $issues = IssueFactory::createMany(5, ['project' => $project,]);
 
+        $otherProject = ProjectFactory::createOne();
+        IssueFactory::createMany(1, ['project' => $otherProject]);
+
         $response = $this->consoleApi(
             $project,
             'GET',
@@ -39,9 +40,12 @@ class GetIssuesTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(5, $json);
 
+        $issueInDb = $issues[count($issues) - 1];
+
         $issue = $json[0];
         $this->assertIsArray($issue);
-        $this->assertArrayHasKey('id', $issue);
+        $this->assertSame($issue['id'], $issueInDb->getId());
+        // values are tested in GetIssueTest
         $this->assertArrayHasKey('uuid', $issue);
         $this->assertArrayHasKey('created_at', $issue);
         $this->assertArrayHasKey('subject', $issue);
@@ -60,7 +64,7 @@ class GetIssuesTest extends WebTestCase
     public function testListIssuesPagination(): void
     {
         $project = ProjectFactory::createOne();
-        IssueFactory::createMany(5, ['project' => $project,]);
+        $issues = IssueFactory::createMany(5, ['project' => $project,]);
 
         $response = $this->consoleApi(
             $project,
@@ -72,9 +76,11 @@ class GetIssuesTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(2, $json);
 
+        $issueInDb = $issues[3];
+
         $issue = $json[0];
         $this->assertIsArray($issue);
-        $this->assertArrayHasKey('id', $issue);
+        $this->assertSame($issue['id'], $issueInDb->getId());
         $this->assertArrayHasKey('uuid', $issue);
         $this->assertArrayHasKey('created_at', $issue);
         $this->assertArrayHasKey('subject', $issue);

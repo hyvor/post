@@ -2,9 +2,9 @@
 
 namespace App\Api\Console\Input\Issue;
 
-use App\Entity\Type\IssueStatus;
 use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+
 class UpdateIssueInput
 {
     use OptionalPropertyTrait;
