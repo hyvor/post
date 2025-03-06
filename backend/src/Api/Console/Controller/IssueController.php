@@ -5,11 +5,11 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
-use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
+use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +23,7 @@ class IssueController extends AbstractController
 
     public function __construct(
         private IssueService $issueService,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
     )
     {
@@ -102,6 +103,31 @@ class IssueController extends AbstractController
         if ($issue->getStatus() != IssueStatus::DRAFT)
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
         $this->issueService->deleteIssue($issue);
+        return $this->json([]);
+    }
+
+    #[Route ('/issues/{id}/send', methods: 'POST')]
+    public function sendIssue(Issue $issue): JsonResponse
+    {
+        if ($issue->getStatus() != IssueStatus::DRAFT)
+            throw new UnprocessableEntityHttpException("Issue is not a draft.");
+
+        if ($issue->getSubject() === null || trim($issue->getSubject()) === '')
+            throw new UnprocessableEntityHttpException("Subject cannot be empty.");
+
+        if ($issue->getListIds() === [])
+            throw new UnprocessableEntityHttpException("Issue must have at least one list.");
+
+        if ($issue->getContent() === null)
+            throw new UnprocessableEntityHttpException("Content cannot be empty.");
+
+        $fromEmail = $issue->getFromEmail();
+        // TODO: validate from email ?
+
+        if ($this->sendService->getSendableSubscribers($issue)->count() === 0)
+            throw new UnprocessableEntityHttpException("No subscribers to send to.");
+
+        //$this->issueService->sendIssue($issue);
         return $this->json([]);
     }
 }
