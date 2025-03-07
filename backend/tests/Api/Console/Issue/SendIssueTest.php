@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
 #[CoversClass(IssueObject::class)]
-#[CoverClass(SendService::class)]
+#[CoversClass(SendService::class)]
 class SendIssueTest extends WebTestCase
 {
     // Input validation tests
@@ -138,7 +138,9 @@ class SendIssueTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
-        $subscriber1 = SubscriberFactory::createOne(['project' => $project]);
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+        ]);
 
         $issue = IssueFactory::createOne([
             'project' => $project,

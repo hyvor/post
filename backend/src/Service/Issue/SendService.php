@@ -10,6 +10,9 @@ use App\Repository\SubscriberRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class SendService
 {
@@ -19,33 +22,47 @@ class SendService
     {
     }
 
-    /**
-     * @return ArrayCollection<int, Subscriber>
-     */
-    public function getSendableSubscribers(Issue $issue): ArrayCollection
+    private function getSendableSubscribersQuery(Issue $issue): QueryBuilder
     {
         $project = $issue->getProject();
+        $listIds = $issue->getListIds();
 
-        /** @var list<Subscriber> $subscribers */
-        $subscribers = $this->subscriberRepository
+        return $this->subscriberRepository
             ->createQueryBuilder('s')
+            ->leftJoin('s.lists', 'l')
             ->where('s.project = :project')
             ->andWhere('s.status = :status')
-            ->andWhere(function ($query) use ($issue) {
-                $listIds = $issue->getListIds();
-                foreach ($listIds as $listId) {
-                    $query
-                        ->orWhere('s.list_ids ? :listId')
-                        ->setParameter('listId', $listId);
-                }
-            })
+            ->andWhere('l.id IN (:listIds)')
             ->setParameter('project', $project)
             ->setParameter('status', SubscriberStatus::SUBSCRIBED->value)
-            ->getQuery()
-            ->getResult();
-        dd($subscribers);
-        return new ArrayCollection($subscribers);
+            ->setParameter('listIds', $listIds);
     }
 
-    public function getUnsubscribedUrl()
+    public function getSendableSubscribersCount(Issue $issue): int
+    {
+        return (int) $this->getSendableSubscribersQuery($issue)
+            ->select('COUNT(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function paginateSendableSubscribers(Issue $issue, int $size, callable $callback): void
+    {
+
+        $query = $this->getSendableSubscribersQuery($issue)
+            ->select('s')
+            ->orderBy('s.id', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults($size)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+
+        foreach ($paginator as $subscribers) {
+            $callback($subscribers);
+        }
+
+    }
+
+   //  public function getUnsubscribedUrl()
 }
