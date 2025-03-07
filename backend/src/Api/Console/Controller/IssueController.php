@@ -122,7 +122,7 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("Content cannot be empty.");
 
         $fromEmail = $issue->getFromEmail();
-        // TODO: validate from email ?
+        // TODO: validate from email
 
         if ($this->sendService->getSendableSubscribers($issue)->count() === 0)
             throw new UnprocessableEntityHttpException("No subscribers to send to.");

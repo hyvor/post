@@ -35,7 +35,7 @@ class SendService
                 $listIds = $issue->getListIds();
                 foreach ($listIds as $listId) {
                     $query
-                        ->orWhere('JSON_CONTAINS(s.lists, :listId)')
+                        ->orWhere('s.list_ids ? :listId')
                         ->setParameter('listId', $listId);
                 }
             })
@@ -46,4 +46,6 @@ class SendService
         dd($subscribers);
         return new ArrayCollection($subscribers);
     }
+
+    public function getUnsubscribedUrl()
 }
