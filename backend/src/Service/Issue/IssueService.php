@@ -68,6 +68,18 @@ class IssueService
         if ($updates->hasProperty('content'))
             $issue->setContent($updates->content);
 
+        if ($updates->hasProperty('status'))
+            $issue->setStatus($updates->status);
+
+        if ($updates->hasProperty('html'))
+            $issue->setHtml($updates->html);
+
+        if ($updates->hasProperty('text'))
+            $issue->setText($updates->text);
+
+        if ($updates->hasProperty('sending_at'))
+            $issue->setSendingAt($updates->sending_at);
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);

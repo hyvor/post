@@ -6,6 +6,7 @@ use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Message\SendEmailMessage;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class IssueController extends AbstractController
@@ -107,7 +109,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/send', methods: 'POST')]
-    public function sendIssue(Issue $issue): JsonResponse
+    public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT)
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -124,10 +126,19 @@ class IssueController extends AbstractController
         $fromEmail = $issue->getFromEmail();
         // TODO: validate from email
 
-        if ($this->sendService->getSendableSubscribers($issue)->count() === 0)
+        if ($this->sendService->getSendableSubscribersCount($issue) == 0)
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
 
-        //$this->issueService->sendIssue($issue);
-        return $this->json([]);
+
+        $updates = new UpdateIssueDto();
+        $updates->status = IssueStatus::SENDING;
+        $updates->sending_at = new \DateTimeImmutable();
+        $updates->html = $this->sendService->renderHtml($issue);
+        $updates->text = $this->sendService->renderText($issue);
+        $issue = $this->issueService->updateIssue($issue, $updates);
+
+        $bus->dispatch(new SendEmailMessage($issue));
+
+        return $this->json(new IssueObject($issue));
     }
 }
