@@ -45,10 +45,9 @@ class SendIssueTest extends WebTestCase
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
-
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('Issue is not a draft.', $json['Message']);
+        $this->assertSame('Issue is not a draft.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());
@@ -74,7 +73,7 @@ class SendIssueTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('Subject cannot be empty.', $json['Message']);
+        $this->assertSame('Subject cannot be empty.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());
@@ -100,7 +99,7 @@ class SendIssueTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('Issue must have at least one list.', $json['Message']);
+        $this->assertSame('Issue must have at least one list.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());
@@ -129,7 +128,7 @@ class SendIssueTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('Content cannot be empty.', $json['Message']);
+        $this->assertSame('Content cannot be empty.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());
@@ -163,7 +162,7 @@ class SendIssueTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('No subscribers to send to.', $json['Message']);
+        $this->assertSame('No subscribers to send to.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());
