@@ -79,7 +79,8 @@
         "symfony/css-selector": "7.2.*",
         "symfony/maker-bundle": "^1.62.1",
         "symfony/phpunit-bridge": "^7.2",
-        "zenstruck/foundry": "^2.3"
+        "zenstruck/foundry": "^2.3",
+        "zenstruck/messenger-test": "^1.11"
     },
     "repositories": {
         "local": {

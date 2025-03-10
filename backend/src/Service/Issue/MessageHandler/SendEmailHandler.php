@@ -1,10 +1,9 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\Service\Issue\MessageHandler;
 
-use App\Entity\Issue;
 use App\Entity\Subscriber;
-use App\Message\SendEmailMessage;
+use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\SendService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -24,6 +23,7 @@ class SendEmailHandler
 
     public function __invoke(SendEmailMessage $message): void
     {
+        dd('here');
         // TODO: Implement __invoke() method to send email
         $this->sendService->paginateSendableSubscribers(
             $message->getIssue(),
