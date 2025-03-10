@@ -19,7 +19,7 @@ class SendEmailHandler
 
     private function sendEmail(Subscriber $subscriber): void
     {
-        // TODO: send email
+        echo('Send email to ' . $subscriber->getEmail());
     }
 
     public function __invoke(SendEmailMessage $message): void
