@@ -67,7 +67,7 @@ class Send
     private ?\DateTimeImmutable $unsubscribe_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $bouced_at = null;
+    private ?\DateTimeImmutable $bounced_at = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $complained_at = null;
@@ -277,14 +277,14 @@ class Send
         return $this;
     }
 
-    public function getBoucedAt(): ?\DateTimeImmutable
+    public function getBouncedAt(): ?\DateTimeImmutable
     {
-        return $this->bouced_at;
+        return $this->bounced_at;
     }
 
-    public function setBoucedAt(?\DateTimeImmutable $bouced_at): static
+    public function setBouncedAt(?\DateTimeImmutable $bounced_at): static
     {
-        $this->bouced_at = $bouced_at;
+        $this->bounced_at = $bounced_at;
 
         return $this;
     }

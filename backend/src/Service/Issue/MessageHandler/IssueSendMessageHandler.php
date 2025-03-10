@@ -24,7 +24,6 @@ class IssueSendMessageHandler
 
     public function __invoke(IssueSendMessage $message): void
     {
-        // TODO: Implement __invoke() method to send email
         // TODO: implement delay
         $this->sendService->paginateSendableSubscribers(
             $message->getIssue(),
