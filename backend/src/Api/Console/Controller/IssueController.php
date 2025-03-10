@@ -137,6 +137,7 @@ class IssueController extends AbstractController
         $updates->text = $this->sendService->renderText($issue);
         $issue = $this->issueService->updateIssue($issue, $updates);
 
+        // TODO: this should be IssueSendMessage and IssueSendMessageHandler
         $bus->dispatch(new SendEmailMessage($issue));
 
         return $this->json(new IssueObject($issue));
