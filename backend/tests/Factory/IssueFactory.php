@@ -33,6 +33,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
+            'project' => ProjectFactory::new(),
             'content' => self::faker()->text(255),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'error_private' => self::faker()->text(255),

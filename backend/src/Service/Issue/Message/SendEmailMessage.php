@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Message;
+namespace App\Service\Issue\Message;
 
 use App\Entity\Issue;
 use Symfony\Component\Messenger\Attribute\AsMessage;

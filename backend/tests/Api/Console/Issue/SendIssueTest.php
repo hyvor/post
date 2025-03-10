@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Issue;
+namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
@@ -9,6 +9,7 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
+use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -208,6 +209,11 @@ class SendIssueTest extends WebTestCase
         $issue = $repository->find($issue->getId());
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
-        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()->format('Y-m-d'));
+        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
+
+        $this->transport()->queue()->assertCount(1);
+        $message = $this->transport()->queue()->first()->getMessage();
+        $this->assertInstanceOf(SendEmailMessage::class, $message);
+
     }
 }
