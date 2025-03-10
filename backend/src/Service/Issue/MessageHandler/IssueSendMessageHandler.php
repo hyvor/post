@@ -2,6 +2,7 @@
 
 namespace App\Service\Issue\MessageHandler;
 
+use App\Entity\Issue;
 use App\Entity\Subscriber;
 use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\SendService;
@@ -16,9 +17,9 @@ class IssueSendMessageHandler
     {
     }
 
-    private function sendEmail(Subscriber $subscriber): void
+    private function sendEmail(Issue $issue, Subscriber $subscriber): void
     {
-        echo('Send email to ' . $subscriber->getEmail());
+        $this->sendService->queueSend($issue, $subscriber);
     }
 
     public function __invoke(IssueSendMessage $message): void

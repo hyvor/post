@@ -60,7 +60,7 @@ class SendService
         $paginator = new Paginator($query);
 
         foreach ($paginator as $subscribers) {
-            $callback($subscribers);
+            $callback($issue, $subscribers);
         }
 
     }
