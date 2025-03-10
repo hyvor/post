@@ -3,12 +3,12 @@
 namespace App\Service\Issue\MessageHandler;
 
 use App\Entity\Subscriber;
-use App\Service\Issue\Message\SendEmailMessage;
+use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\SendService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class SendEmailHandler
+class IssueSendMessageHandler
 {
     public function __construct(
         private SendService $sendService,
@@ -21,7 +21,7 @@ class SendEmailHandler
         echo('Send email to ' . $subscriber->getEmail());
     }
 
-    public function __invoke(SendEmailMessage $message): void
+    public function __invoke(IssueSendMessage $message): void
     {
         // TODO: Implement __invoke() method to send email
         // TODO: implement delay

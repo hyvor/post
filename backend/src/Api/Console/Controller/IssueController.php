@@ -9,7 +9,7 @@ use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
-use App\Service\Issue\Message\SendEmailMessage;
+use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -138,7 +138,7 @@ class IssueController extends AbstractController
         $issue = $this->issueService->updateIssue($issue, $updates);
 
         // TODO: this should be IssueSendMessage and IssueSendMessageHandler
-        $bus->dispatch(new SendEmailMessage($issue));
+        $bus->dispatch(new IssueSendMessage($issue));
 
         return $this->json(new IssueObject($issue));
     }

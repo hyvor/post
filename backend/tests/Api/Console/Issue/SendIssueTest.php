@@ -9,7 +9,7 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
-use App\Service\Issue\Message\SendEmailMessage;
+use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -212,7 +212,7 @@ class SendIssueTest extends WebTestCase
 
         $this->transport()->queue()->assertCount(1);
         $message = $this->transport()->queue()->first()->getMessage();
-        $this->assertInstanceOf(SendEmailMessage::class, $message);
+        $this->assertInstanceOf(IssueSendMessage::class, $message);
 
     }
 }

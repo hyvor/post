@@ -2,13 +2,13 @@
 
 namespace App\Tests\MessageHandler\Issue;
 
-use App\Service\Issue\Message\SendEmailMessage;
-use App\Service\Issue\MessageHandler\SendEmailHandler;
+use App\Service\Issue\Message\IssueSendMessage;
+use App\Service\Issue\MessageHandler\IssueSendMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendEmailHandler::class)]
+#[CoversClass(IssueSendMessageHandler::class)]
 class SendEmailHandlerTest extends KernelTestCase
 {
 
@@ -16,7 +16,7 @@ class SendEmailHandlerTest extends KernelTestCase
     {
 
         $issue = IssueFactory::createOne();
-        $message = new SendEmailMessage($issue);
+        $message = new IssueSendMessage($issue);
         $this->getMessageBus()->dispatch($message);
 
         $this->transport()->process();
