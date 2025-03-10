@@ -23,7 +23,6 @@ class SendEmailHandler
 
     public function __invoke(SendEmailMessage $message): void
     {
-        dd('here');
         // TODO: Implement __invoke() method to send email
         // TODO: implement delay
         $this->sendService->paginateSendableSubscribers(
