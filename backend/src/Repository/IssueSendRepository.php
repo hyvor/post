@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\IssueSend;
+use App\Entity\Send;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<IssueSend>
+ * @extends ServiceEntityRepository<Send>
  */
 class IssueSendRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, IssueSend::class);
+        parent::__construct($registry, Send::class);
     }
 
     //    /**

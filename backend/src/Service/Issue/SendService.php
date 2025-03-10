@@ -2,6 +2,7 @@
 
 namespace App\Service\Issue;
 
+use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\IssueRepository;
@@ -62,6 +63,15 @@ class SendService
             $callback($subscribers);
         }
 
+    }
+
+    public function queueSend(Issue $issue, Subscriber $subscriber): Send
+    {
+        $send = new Send();
+        $send->setIssue($issue);
+        $send->setSubscriber($subscriber);
+
+        return $send;
     }
 
    //  public function getUnsubscribedUrl()

@@ -4,14 +4,12 @@ namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueSendRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IssueSendRepository::class)]
 #[ORM\Table(name: 'issue_sends')]
-class IssueSend
+class Send
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,13 +27,10 @@ class IssueSend
     #[ORM\JoinColumn(name: 'issue_id', referencedColumnName: 'id')]
     private Issue $issue;
 
-    /**
-     * @var Collection<int, Subscriber>
-     */
-    #[ORM\OneToMany(targetEntity: Subscriber::class, mappedBy: 'issueSend')]
+    #[ORM\OneToOne(inversedBy: 'issueSend')]
     #[ORM\JoinTable(name: 'subscribers')]
     #[ORM\JoinColumn(name: 'subscriber_id', referencedColumnName: 'id')]
-    private Collection $subscriber;
+    private Subscriber $subscriber;
 
 
     #[ORM\Column(enumType: IssueStatus::class)]
@@ -88,7 +83,6 @@ class IssueSend
 
     public function __construct()
     {
-        $this->subscriber = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,14 +133,17 @@ class IssueSend
         return $this;
     }
 
-    /**
-     * @return Collection<int, Subscriber>
-     */
-    public function getSubscriber(): Collection
+    public function getSubscriber(): Subscriber
     {
         return $this->subscriber;
     }
 
+    public function setSubscriber(Subscriber $subscriber): static
+    {
+        $this->subscriber = $subscriber;
+
+        return $this;
+    }
 
     public function getStatus(): IssueStatus
     {
