@@ -18,6 +18,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class SendService
 {
     public function __construct(
+        private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
     )
     {
@@ -49,7 +50,7 @@ class SendService
 
     public function paginateSendableSubscribers(Issue $issue, int $size, callable $callback): void
     {
-
+        //dd($issue);
         $query = $this->getSendableSubscribersQuery($issue)
             ->select('s')
             ->orderBy('s.id', 'ASC')
@@ -62,7 +63,6 @@ class SendService
         foreach ($paginator as $subscribers) {
             $callback($issue, $subscribers);
         }
-
     }
 
     public function queueSend(Issue $issue, Subscriber $subscriber): Send
@@ -71,6 +71,8 @@ class SendService
         $send->setIssue($issue);
         $send->setSubscriber($subscriber);
 
+        $this->em->persist($send);
+        $this->em->flush();
         return $send;
     }
 
