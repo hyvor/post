@@ -14,9 +14,14 @@ class UpdateIssueDto
     /**
      * @var array<int>
      */
-    public array $lists;
+    public ?array $lists;
 
-    public string $fromEmail;
+    public ?string $fromEmail;
     public ?string $replyToEmail;
     public ?string $content;
+
+    public ?IssueStatus $status;
+    public ?string $html;
+    public ?string $text;
+    public \DateTimeImmutable $sending_at;
 }

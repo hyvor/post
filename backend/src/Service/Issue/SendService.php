@@ -65,4 +65,25 @@ class SendService
     }
 
    //  public function getUnsubscribedUrl()
+    public function renderHtml(Issue $issue): string
+    {
+        // TODO: Create a proper IssueHTML class ?
+        return "
+            <html>
+                <head>
+                    <title>{$issue->getSubject()}</title>
+                </head>
+                <body>
+                    {$issue->getContent()}
+                </body>
+            </html>
+         ";
+    }
+
+    public function renderText(Issue $issue): string
+    {
+        return "
+            {$issue->getSubject()}
+            {$issue->getContent()}";
+    }
 }
