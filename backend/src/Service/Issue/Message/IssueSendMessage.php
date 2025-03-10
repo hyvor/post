@@ -6,7 +6,7 @@ use App\Entity\Issue;
 use Symfony\Component\Messenger\Attribute\AsMessage;
 
 #[AsMessage('async')]
-class SendEmailMessage
+class IssueSendMessage
 {
     public function __construct(
         private Issue $issue

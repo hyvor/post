@@ -43,7 +43,7 @@ class Issue
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
-    #[ORM\Column(nullable: true, enumType: IssueStatus::class)]
+    #[ORM\Column(enumType: IssueStatus::class)]
     private IssueStatus $status;
 
     #[ORM\Column(nullable: true)]
@@ -72,6 +72,7 @@ class Issue
      */
     #[ORM\Column()]
     private array $list_ids;
+
 
     public function getId(): int
     {
