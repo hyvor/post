@@ -3,11 +3,13 @@
 namespace App\Message;
 
 use App\Entity\Issue;
+use Symfony\Component\Messenger\Attribute\AsMessage;
 
+#[AsMessage('async')]
 class SendEmailMessage
 {
     public function __construct(
-        Issue $issue
+        private Issue $issue
     ) {
     }
 
