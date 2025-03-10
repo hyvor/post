@@ -11,9 +11,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class SendEmailHandler
 {
-    private SendService $sendService;
     public function __construct(
-        SendService $sendService,
+        private SendService $sendService,
     )
     {
     }
