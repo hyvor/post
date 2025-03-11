@@ -3,6 +3,7 @@
 namespace App\Tests\MessageHandler\Issue;
 
 use App\Entity\Send;
+use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\MessageHandler\IssueSendMessageHandler;
@@ -34,6 +35,7 @@ class SendEmailHandlerTest extends KernelTestCase
         $issue = IssueFactory::createOne([
             'project' => $project,
             'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
         ]);
 
         $message = new IssueSendMessage($issue);
