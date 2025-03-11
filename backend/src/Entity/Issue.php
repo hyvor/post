@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
-use Cassandra\Collection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IssueRepository::class)]
@@ -73,6 +73,12 @@ class Issue
      */
     #[ORM\Column()]
     private array $list_ids;
+
+    /**
+     * @var Collection<int, Send>
+     */
+    #[ORM\OneToMany(mappedBy: 'issue')]
+    private Collection $sends;
 
     public function getId(): int
     {
