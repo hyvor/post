@@ -51,5 +51,4 @@ class SendEmailHandlerTest extends KernelTestCase
         $this->assertSame($issue, $send->getIssue());
         $this->assertSame($subscribers[0], $send->getSubscriber());
     }
-
 }
