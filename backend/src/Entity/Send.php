@@ -22,16 +22,11 @@ class Send
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\OneToOne(inversedBy: 'issueSend')]
-    #[ORM\JoinTable(name: 'issues')]
-    #[ORM\JoinColumn(name: 'issue_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: Issue::class, inversedBy: 'issues')]
     private Issue $issue;
 
-    #[ORM\OneToOne(inversedBy: 'issueSend')]
-    #[ORM\JoinTable(name: 'subscribers')]
-    #[ORM\JoinColumn(name: 'subscriber_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: Subscriber::class, inversedBy: 'subscribers')]
     private Subscriber $subscriber;
-
 
     #[ORM\Column(enumType: IssueStatus::class)]
     private IssueStatus $status;
@@ -72,18 +67,14 @@ class Send
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $complained_at = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $open_count = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $click_count = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $hard_bounce = null;
-
-    public function __construct()
-    {
-    }
 
     public function getId(): ?int
     {

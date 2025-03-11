@@ -17,9 +17,10 @@ class IssueSendMessageHandler
     {
     }
 
-    private function sendEmail(Issue $issue, Subscriber $subscriber): void
+    public function sendEmail(Issue $issue, Subscriber $subscriber): void
     {
-        $this->sendService->queueSend($issue, $subscriber);
+        $send = $this->sendService->queueSend($issue, $subscriber);
+        // TODO: send SendJob message
     }
 
     public function __invoke(IssueSendMessage $message): void
@@ -28,7 +29,9 @@ class IssueSendMessageHandler
         $this->sendService->paginateSendableSubscribers(
             $message->getIssue(),
             1000,
-            [$this, 'sendEmail']
+            function (Issue $issue, Subscriber $subscriber) {
+                $this->sendEmail($issue, $subscriber);
+            }
         );
     }
 }

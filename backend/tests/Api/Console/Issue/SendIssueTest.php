@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\Issue;
 use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
+use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\IssueRepository;
@@ -143,10 +144,6 @@ class SendIssueTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
-        $subscriber1 = SubscriberFactory::createOne([
-            'project' => $project,
-        ]);
-
         $issue = IssueFactory::createOne([
             'project' => $project,
             'status' => IssueStatus::DRAFT,
@@ -213,6 +210,5 @@ class SendIssueTest extends WebTestCase
         $this->transport()->queue()->assertCount(1);
         $message = $this->transport()->queue()->first()->getMessage();
         $this->assertInstanceOf(IssueSendMessage::class, $message);
-
     }
 }
