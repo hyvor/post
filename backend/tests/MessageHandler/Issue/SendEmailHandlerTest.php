@@ -38,10 +38,10 @@ class SendEmailHandlerTest extends KernelTestCase
             'status' => IssueStatus::SENDING,
         ]);
 
-        $message = new IssueSendMessage($issue);
+        $message = new IssueSendMessage($issue->getId());
         $this->getMessageBus()->dispatch($message);
 
-        $this->transport()->process();
+        $this->transport()->throwExceptions()->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
         dd($sendRepository->findAll());

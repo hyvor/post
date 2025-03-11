@@ -60,11 +60,7 @@ class Subscriber
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
 
-    /**
-     * @var Collection<int, Send>
-     */
-    #[ORM\OneToMany(mappedBy: 'issue')]
-    private Collection $sends;
+
 
     public function __construct()
     {

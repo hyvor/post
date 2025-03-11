@@ -7,6 +7,7 @@ use App\Entity\Subscriber;
 use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\Message\SendJobMessage;
 use App\Service\Issue\SendService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -15,7 +16,8 @@ class IssueSendMessageHandler
 {
     public function __construct(
         private SendService $sendService,
-        private MessageBusInterface $bus
+        private MessageBusInterface $bus,
+        private EntityManagerInterface $em,
     )
     {
     }
@@ -29,9 +31,11 @@ class IssueSendMessageHandler
 
     public function __invoke(IssueSendMessage $message): void
     {
+        $issue = $this->em->find(Issue::class, $message->getIssueId());
+
         // TODO: implement delay
         $this->sendService->paginateSendableSubscribers(
-            $message->getIssue(),
+            $issue,
             1000,
             function (Issue $issue, Subscriber $subscriber) {
                 $this->sendEmail($issue, $subscriber);

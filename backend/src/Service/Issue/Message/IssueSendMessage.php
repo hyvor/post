@@ -2,19 +2,18 @@
 
 namespace App\Service\Issue\Message;
 
-use App\Entity\Issue;
 use Symfony\Component\Messenger\Attribute\AsMessage;
 
 #[AsMessage('async')]
-class IssueSendMessage
+readonly class IssueSendMessage
 {
     public function __construct(
-        private Issue $issue
+        private int $issueId
     ) {
     }
 
-    public function getIssue(): Issue
+    public function getIssueId(): int
     {
-        return $this->issue;
+        return $this->issueId;
     }
 }
