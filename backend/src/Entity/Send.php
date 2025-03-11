@@ -22,10 +22,13 @@ class Send
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\OneToOne(targetEntity: Issue::class, inversedBy: 'issues')]
+
+    #[ORM\ManyToOne(inversedBy: 'issue')]
+    #[ORM\JoinColumn(nullable: false)]
     private Issue $issue;
 
-    #[ORM\OneToOne(targetEntity: Subscriber::class, inversedBy: 'subscribers')]
+    #[ORM\ManyToOne(inversedBy: 'subscribers')]
+    #[ORM\JoinColumn(nullable: false)]
     private Subscriber $subscriber;
 
     #[ORM\Column(enumType: IssueStatus::class)]
