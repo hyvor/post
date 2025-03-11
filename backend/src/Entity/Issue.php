@@ -74,12 +74,6 @@ class Issue
     #[ORM\Column()]
     private array $list_ids;
 
-    /**
-     * @var Collection<int, Send>
-     */
-    #[ORM\OneToMany(mappedBy: 'issue')]
-    private Collection $sends;
-
     public function getId(): int
     {
         return $this->id;

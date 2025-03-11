@@ -75,12 +75,12 @@ class SendService
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
-        try {
-            $this->em->persist($send);
-            $this->em->flush();
-        } catch (\Exception $e) {
-            dd($e->getMessage()); // Or use log: error_log($e->getMessage());
-        }
+        $this->em->persist($send);
+        $this->em->flush();
+//        try {
+//        } catch (\Exception $e) {
+//            dd($e->getMessage()); // Or use log: error_log($e->getMessage());
+//        }
 
         return $send;
     }

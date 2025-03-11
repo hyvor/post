@@ -23,8 +23,8 @@ class Send
     private \DateTimeImmutable $updated_at;
 
 
-    #[ORM\ManyToOne(inversedBy: 'issue')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Issue::class)]
+    #[ORM\JoinColumn(name: 'issue_id')]
     private Issue $issue;
 
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
