@@ -14,9 +14,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Clock\ClockAwareTrait;
 
 class SendService
 {
+    use ClockAwareTrait;
+
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
@@ -50,7 +53,6 @@ class SendService
 
     public function paginateSendableSubscribers(Issue $issue, int $size, callable $callback): void
     {
-        //dd($issue);
         $query = $this->getSendableSubscribersQuery($issue)
             ->select('s')
             ->orderBy('s.id', 'ASC')
@@ -59,20 +61,23 @@ class SendService
             ->getQuery();
 
         $paginator = new Paginator($query);
-
-        foreach ($paginator as $subscribers) {
-            $callback($issue, $subscribers);
+        foreach ($paginator as $subscriber) {
+            $callback($issue, $subscriber);
         }
     }
 
     public function queueSend(Issue $issue, Subscriber $subscriber): Send
     {
-        $send = new Send();
-        $send->setIssue($issue);
-        $send->setSubscriber($subscriber);
+        $send = new Send()
+            ->setIssue($issue)
+            ->setSubscriber($subscriber)
+            ->setStatus($issue->getStatus())
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now());
 
         $this->em->persist($send);
         $this->em->flush();
+
         return $send;
     }
 

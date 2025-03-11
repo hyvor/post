@@ -53,6 +53,13 @@ class GetSubscribersTest extends WebTestCase
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $subscriberDb = $repository->find($subscriber['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriberDb);
+        $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
+        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
 
