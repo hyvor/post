@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, ActionList, ActionListItem } from '@hyvor/design/components';
+	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown } from '@hyvor/design/components';
 	import Selector from '../@components/content/Selector.svelte';
 	import type { NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
@@ -28,7 +28,8 @@
 <SingleBox>
     <div class="content">
         <div class="left">
-            <Selector name="Status" bind:show={showStatus} value={statusKey} width={200}>
+            <Dropdown bind:show={showStatus} width={350}>
+                <Button>test</Button>
                 <ActionList selection="single" selectionAlign="end">
                     <ActionListItem
                         on:click={() => selectStatus('subscribed')}
@@ -43,7 +44,7 @@
                         Unsubscribed
                     </ActionListItem>
                 </ActionList>
-            </Selector>
+            </Dropdown>
         </div>
         <div class="right">
             <ButtonGroup>
