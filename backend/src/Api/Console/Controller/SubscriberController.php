@@ -55,6 +55,11 @@ final class SubscriberController extends AbstractController
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
+        $subscriberDB = $this->subscriberService->getSubscriberByEmail($project, $input->email);
+        if ($subscriberDB !== null) {
+            throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
+        }
+
         $lists = $this->newsletterListService->getListsByIds($input->list_ids);
 
         $subscriber = $this->subscriberService->createSubscriber(
@@ -82,6 +87,11 @@ final class SubscriberController extends AbstractController
         $updates = new UpdateSubscriberDto();
 
         if ($input->hasProperty('email')) {
+            $subscriberDB = $this->subscriberService->getSubscriberByEmail($project, $input->email);
+            if ($subscriberDB !== null) {
+                throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
+            }
+
             $updates->email = $input->email;
         }
 

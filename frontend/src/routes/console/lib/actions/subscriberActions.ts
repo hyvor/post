@@ -31,3 +31,10 @@ export function deleteSubscriber(id: number) {
 		endpoint: `subscribers/${id}`
 	});
 }
+
+export function updateSubscriber(id: number, data: Partial<Subscriber>) {
+	return consoleApi.patch<Subscriber>({
+		endpoint: `subscribers/${id}`,
+		data
+	});
+}
