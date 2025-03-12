@@ -26,8 +26,9 @@
 	}
 </script>
 
-<Dropdown bind:show {width} {align}>
-	<Button color="input" size="small" on:click={handleTriggerClick} slot="trigger" {disabled}>
+<Dropdown bind:show width={width} align={align}>
+	{#snippet trigger()}
+	<Button size="small" variant="invisible" color="gray" on:click={handleTriggerClick}>
 		<span class="name" slot="start">{name}</span>
 
 		<span class="value">
@@ -54,8 +55,11 @@
 
 		<IconCaretDown slot="end" size={12} />
 	</Button>
+	{/snippet}
 
-	<slot slot="content" />
+	{#snippet content()}
+		<slot />
+	{/snippet}
 </Dropdown>
 
 <style>

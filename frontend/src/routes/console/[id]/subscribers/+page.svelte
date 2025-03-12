@@ -1,23 +1,31 @@
 <script lang="ts">
-	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown } from '@hyvor/design/components';
+	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text } from '@hyvor/design/components';
 	import Selector from '../@components/content/Selector.svelte';
-	import type { NewsletterSubscriberStatus } from '../../types';
+	import type { List, NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconPlus from '@hyvor/icons/IconPlus';
 	import SingleBox from '../@components/content/SingleBox.svelte';
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
+	import { listStore } from '../../lib/stores/projectStore';
 
 
     let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
     let showStatus = false;
-	let showSegment = false;
+	let showList = false;
+
+    let currentList: List | null = null;
 
     let addingManually = false;
 	let importing = false;
 
     $: statusKey = 'subscribed';
+
+    function selectList(list: List) {
+		showList = false;
+		currentList = list;
+	}
 
     function selectStatus(s: NewsletterSubscriberStatus) {
 		showStatus = false;
@@ -28,8 +36,7 @@
 <SingleBox>
     <div class="content">
         <div class="left">
-            <Dropdown bind:show={showStatus} width={350}>
-                <Button>test</Button>
+            <Selector name="Status" bind:show={showStatus} value={statusKey} width={200}>
                 <ActionList selection="single" selectionAlign="end">
                     <ActionListItem
                         on:click={() => selectStatus('subscribed')}
@@ -44,7 +51,7 @@
                         Unsubscribed
                     </ActionListItem>
                 </ActionList>
-            </Dropdown>
+            </Selector>
         </div>
         <div class="right">
             <ButtonGroup>
