@@ -23,6 +23,7 @@ export type Subscriber ={
 	id: number,
 	email: string,
 	status: NewsletterSubscriberStatus,
+	list_ids: number[],
 	source: NewsletterSubscriberSource,
 	subscribed_at: number,
 	unsubscribed_at: number | null,

@@ -13,7 +13,7 @@
     import IconTrash from '@hyvor/icons/IconTrash';
 	import RelativeTime from '../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
-
+	import { listStore } from '../../lib/stores/projectStore';
 
 	export let subscriber: Subscriber;
 
@@ -36,7 +36,11 @@
 		
 	}
 
-	$: segmentsText = "TOOD";
+	$: segmentsText = subscriber.list_ids
+		.map((s) => {
+			return $listStore.find((l) => l.id === s)?.name || 'Unknown';
+		})
+		.join(', ');
 </script>
 
 <div class="subscriber">
@@ -46,7 +50,7 @@
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					0 segments
+					{subscriber.list_ids.length} segments
 				</span>
 			</Tooltip>
 		</div>
