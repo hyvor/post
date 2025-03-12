@@ -6,7 +6,6 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\Message\SendJobMessage;
-use App\Service\Issue\MessageHandler\SendJobMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
