@@ -14,8 +14,10 @@
 	import RelativeTime from '../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
+	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 
 	export let subscriber: Subscriber;
+	export let refreshList: () => void;
 
 	let editing = false;
 
@@ -32,8 +34,18 @@
 		if (!confirmation) return;
 
 		confirmation.loading();
-
-		
+	
+		deleteSubscriber(subscriber.id)
+			.then(() => {
+				toast.success('Subscriber deleted successfully');
+				refreshList();
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			})
+			.finally(() => {
+				confirmation.close();
+			});
 	}
 
 	$: segmentsText = subscriber.list_ids
@@ -71,7 +83,7 @@
 
 	<div class="source-wrap">
 		<div>
-			{subscriber.source}
+			{subscriber.source.charAt(0).toUpperCase() + subscriber.source.slice(1)}
 		</div>
 		<div class="tag">
             Source

@@ -58,9 +58,8 @@
 	<div class="list">
 		{#each subscribers as subscriber (subscriber.id)}
 			<SubscriberRow
-				{subscriber}
-				on:delete={() => onDelete(subscriber.id)}
-				on:update={onUpdate}
+				subscriber={subscriber}
+				refreshList={() => key += 1}
 			/>
 		{/each}
 	</div>

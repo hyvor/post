@@ -25,3 +25,9 @@ export function getSubscribers(
 		}
 	});
 }
+
+export function deleteSubscriber(id: number) {
+	return consoleApi.delete<Subscriber>({
+		endpoint: `subscribers/${id}`
+	});
+}
