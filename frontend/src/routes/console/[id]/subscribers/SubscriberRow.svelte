@@ -15,6 +15,7 @@
 	import SubscriberStatus from './SubscriberStatus.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
+	import SubscriberEdit from './SubscriberEdit.svelte';
 
 	export let subscriber: Subscriber;
 	export let refreshList: () => void;
@@ -99,6 +100,14 @@
 		</IconButton>
 	</div>
 </div>
+
+{#if editing}
+	<SubscriberEdit 
+		{subscriber}
+		bind:show={editing}
+		refreshList={refreshList}
+	/>
+{/if}
 
 
 <style>

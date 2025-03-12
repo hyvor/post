@@ -128,4 +128,9 @@ class SubscriberService
 
         return $subscriber;
     }
+
+    public function getSubscriberByEmail(Project $project, string $email): ?Subscriber
+    {
+        return $this->subscriberRepository->findOneBy(['project' => $project, 'email' => $email]);
+    }
 }

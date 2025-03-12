@@ -58,7 +58,7 @@ function getConsoleApi() {
 
         if (!response.ok) {
             const e = await response.json();
-            const error = e && e.error ? e.error : 'Something went wrong';
+            const error = e && e.message ? e.message : 'Something went wrong';
             /* toast({type: 'error', message: error});
             throw error; */
 
