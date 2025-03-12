@@ -10,19 +10,19 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 class SendJobMessage
 {
     public function __construct(
-        private Issue $issue,
-        private Subscriber $subscriber
+        private int $issueId,
+        private int $sendId
     )
     {
     }
 
-    public function getIssue(): Issue
+    public function getIssueId(): int
     {
-        return $this->issue;
+        return $this->issueId;
     }
 
-    public function getSubscriber(): Subscriber
+    public function getSendId(): int
     {
-        return $this->subscriber;
+        return $this->sendId;
     }
 }
