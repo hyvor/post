@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
-use App\Repository\IssueSendRepository;
+use App\Repository\SendRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: IssueSendRepository::class)]
+#[ORM\Entity(repositoryClass: SendRepository::class)]
 #[ORM\Table(name: 'issue_sends')]
 class Send
 {
@@ -27,9 +27,12 @@ class Send
     #[ORM\JoinColumn(name: 'issue_id')]
     private Issue $issue;
 
-    #[ORM\ManyToOne(inversedBy: 'subscribers')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Subscriber::class)]
+    #[ORM\JoinColumn(name: 'subscriber_id')]
     private Subscriber $subscriber;
+
+    #[ORM\Column(length: 255)]
+    private string $email;
 
     #[ORM\Column(enumType: IssueStatus::class)]
     private IssueStatus $status;
@@ -38,7 +41,7 @@ class Send
     private ?string $error_private = null;
 
     #[ORM\Column]
-    private ?int $failed_tries = null;
+    private int $failed_tries = 0;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $sent_at = null;
@@ -71,15 +74,15 @@ class Send
     private ?\DateTimeImmutable $complained_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $open_count = null;
+    private int $open_count = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $click_count = null;
+    private int $click_count = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $hard_bounce = null;
+    private bool $hard_bounce = false;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -139,6 +142,18 @@ class Send
         return $this;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getStatus(): IssueStatus
     {
         return $this->status;
@@ -163,7 +178,7 @@ class Send
         return $this;
     }
 
-    public function getFailedTries(): ?int
+    public function getFailedTries(): int
     {
         return $this->failed_tries;
     }
@@ -295,7 +310,7 @@ class Send
         return $this;
     }
 
-    public function getOpenCount(): ?int
+    public function getOpenCount(): int
     {
         return $this->open_count;
     }
@@ -307,7 +322,7 @@ class Send
         return $this;
     }
 
-    public function getClickCount(): ?int
+    public function getClickCount(): int
     {
         return $this->click_count;
     }
@@ -319,7 +334,7 @@ class Send
         return $this;
     }
 
-    public function isHardBounce(): ?bool
+    public function isHardBounce(): bool
     {
         return $this->hard_bounce;
     }

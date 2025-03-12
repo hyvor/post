@@ -5,13 +5,9 @@ namespace App\Service\Issue;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
-use App\Repository\IssueRepository;
 use App\Entity\Issue;
 use App\Repository\SubscriberRepository;
-use App\Service\NewsletterList\NewsletterListService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -71,16 +67,13 @@ class SendService
         $send = new Send()
             ->setIssue($issue)
             ->setSubscriber($subscriber)
+            ->setEmail($subscriber->getEmail())
             ->setStatus($issue->getStatus())
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
         $this->em->persist($send);
         $this->em->flush();
-//        try {
-//        } catch (\Exception $e) {
-//            dd($e->getMessage()); // Or use log: error_log($e->getMessage());
-//        }
 
         return $send;
     }
@@ -107,4 +100,12 @@ class SendService
             {$issue->getSubject()}
             {$issue->getContent()}";
     }
+
+    public static function renderAndSend(Issue $issue, Send $send): void
+    {
+        $email = $send?->getEmail();
+
+        // TODO: send email
+    }
+
 }

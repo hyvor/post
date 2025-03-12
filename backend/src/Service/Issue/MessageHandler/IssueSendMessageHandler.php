@@ -26,12 +26,15 @@ class IssueSendMessageHandler
     {
         $send = $this->sendService->queueSend($issue, $subscriber);
         // TODO: send SendJob message
-        $this->bus->dispatch(new SendJobMessage($issue, $subscriber));
+        $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
     }
 
     public function __invoke(IssueSendMessage $message): void
     {
-        $issue = $this->em->find(Issue::class, $message->getIssueId());
+        $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
+        if (!$issue) {
+            return;
+        }
 
         // TODO: implement delay
         $this->sendService->paginateSendableSubscribers(

@@ -5,20 +5,21 @@ namespace App\Tests\MessageHandler\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Issue\Message\IssueSendMessage;
-use App\Service\Issue\MessageHandler\IssueSendMessageHandler;
+use App\Service\Issue\Message\SendJobMessage;
+use App\Service\Issue\MessageHandler\SendJobMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueSendMessageHandler::class)]
-class SendEmailHandlerTest extends KernelTestCase
+#[CoversClass(SendJobEmailHandlerTest::class)]
+class SendJobEmailHandlerTest extends KernelTestCase
 {
 
-    public function test_send_email(): void
+    public function test_send_job(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -38,20 +39,20 @@ class SendEmailHandlerTest extends KernelTestCase
             'status' => IssueStatus::SENDING,
         ]);
 
-        $message = new IssueSendMessage($issue->getId());
+        $send = SendFactory::createOne([
+            'issue' => $issue,
+            'subscriber' => $subscribers[0],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $message = new SendJobMessage($issue->getId(), $send->getId());
         $this->getMessageBus()->dispatch($message);
 
         $this->transport()->throwExceptions()->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
-        dd($sendRepository->findAll()[0]->getIssue());
-        $send = $sendRepository->findOneBy([
-            'issue' => $issue->getId(),
-            'subscriber' => $subscribers[0],
-        ]);
-        //$this->assertNotNull($send);
+        $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
-        $this->assertSame($issue, $send->getIssue());
-        $this->assertSame($subscribers[0], $send->getSubscriber());
+        $this->assertSame($send->getStatus(), IssueStatus::SENT);
     }
 }
