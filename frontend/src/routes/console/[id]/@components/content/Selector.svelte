@@ -20,8 +20,10 @@
 
 <Dropdown bind:show width={width} align={align}>
 	{#snippet trigger()}
-	<Button size="small" variant="invisible" color="gray" on:click={handleTriggerClick} {disabled}>
-		<span class="name" slot="start">{name}</span>
+	<Button size="small" color="input" on:click={handleTriggerClick} {disabled}>
+		<span class="name">
+			{name}
+		</span>
 
 		<span class="value">
 			{#if $$slots.value}
@@ -60,6 +62,9 @@
 	.value {
 		font-weight: normal;
 		font-size: 13px;
+	}
+	.name {
+		margin-right: 6px;
 	}
 	.icon-caret {
 		margin-left: 4px;

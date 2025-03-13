@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <SubscriberList {status} {key} />
+    <SubscriberList {status} {key} list_id={currentList?.id || null}/>
 
     {#if addingManually}
 	    <AddSubscribers bind:show={addingManually} add={() => key += 1}/>
@@ -101,7 +101,7 @@
 <style>
 	.content {
         display: flex;
-		padding: 25px 35px;
+		padding: 20px 25px;
 	}
 	.left {
 		flex: 1;
