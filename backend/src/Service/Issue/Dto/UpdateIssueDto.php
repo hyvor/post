@@ -25,8 +25,10 @@ class UpdateIssueDto
     public string $text;
     public \DateTimeImmutable $sending_at;
     public \DateTimeImmutable $sentAt;
+    public \DateTimeImmutable $failedAt;
     public int $totalSends;
     public int $sentSends;
 
-    public int $failedSend;
+    public int $failedSends;
+    public string $error_private;
 }

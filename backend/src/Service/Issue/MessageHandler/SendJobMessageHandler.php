@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\RedeliveryStamp;
 use function PHPUnit\Framework\assertInstanceOf;
@@ -22,8 +23,8 @@ class SendJobMessageHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private SendService $sendService,
         private IssueService $issueService,
+        private SendService $sendService,
         private MessageBusInterface $messageBus,
     )
     {
@@ -46,15 +47,6 @@ class SendJobMessageHandler
             $send->setSentAt(new \DateTimeImmutable());
             $this->em->flush();
 
-            // Update Issue record
-            $updates = new UpdateIssueDto();
-            $updates->sentSends = $issue->getSentSends() + 1;
-
-            if ($updates->sentSends === $issue->getTotalSends()) {
-                $updates->status = IssueStatus::SENT;
-                $updates->sentAt = new \DateTimeImmutable();
-            }
-            $this->issueService->updateIssue($issue, $updates);
         } catch (\Exception $e) {
             $attempts = $message->getAttempt();
 
@@ -65,7 +57,10 @@ class SendJobMessageHandler
                 $send->setFailedAt(new \DateTimeImmutable());
                 $this->em->flush();
 
-                throw new \Exception('Email sending failed after 3 attempts');
+                $update = new UpdateIssueDto();
+                $update->failedSends = $issue->getFailedSends() + 1;
+                $this->issueService->updateIssue($issue, $update);
+                throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
             }
             else
             {
