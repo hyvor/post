@@ -201,8 +201,8 @@ class SendIssueTest extends WebTestCase
         $this->assertSame('sending', $json['status']);
         $this->assertSame(new \DateTimeImmutable()->getTimestamp(), $json['sending_at']);
 
-        $repository = $this->em->getRepository(Issue::class);
-        $issue = $repository->find($issue->getId());
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issue = $issueRepository->find($issue->getId());
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
         $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
@@ -210,5 +210,18 @@ class SendIssueTest extends WebTestCase
         $this->transport()->queue()->assertCount(1);
         $message = $this->transport()->queue()->first()->getMessage();
         $this->assertInstanceOf(IssueSendMessage::class, $message);
+
+        $this->transport()->throwExceptions()->process();
+
+        $sendRepository = $this->em->getRepository(Send::class);
+        $send = $sendRepository->findOneBy([
+            'issue' => $issue->getId(),
+            'subscriber' => $subscriber->getId(),
+        ]);
+        $this->assertNotNull($send);
+        $issueDB = $issueRepository->find($send->getIssue()->getId());
+        $this->assertNotNull($issueDB);
+        $this->assertInstanceOf(Issue::class, $issueDB);
+        $this->assertSame($issueDB->getTotalSends(), 1);
     }
 }

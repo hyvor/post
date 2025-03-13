@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SendRepository::class)]
-#[ORM\Table(name: 'issue_sends')]
+#[ORM\Table(name: 'sends')]
 class Send
 {
     #[ORM\Id]
