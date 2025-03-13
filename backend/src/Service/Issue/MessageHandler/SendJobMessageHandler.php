@@ -12,6 +12,9 @@ use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\RedeliveryStamp;
 use function PHPUnit\Framework\assertInstanceOf;
 
 #[AsMessageHandler]
@@ -21,6 +24,7 @@ class SendJobMessageHandler
         private EntityManagerInterface $em,
         private SendService $sendService,
         private IssueService $issueService,
+        private MessageBusInterface $messageBus,
     )
     {
     }
@@ -34,21 +38,43 @@ class SendJobMessageHandler
         $send = $this->em->getRepository(Send::class)->find($message->getSendId());
         assert($send !== null);
 
-        $this->sendService->renderAndSend($issue, $send);
+        try {
+            $this->sendService->renderAndSend($issue, $send);
 
-        // Update Send record
-        $send->setStatus(IssueStatus::SENT);
-        $send->setSentAt(new \DateTimeImmutable());
-        $this->em->flush();
+            // Update Send record
+            $send->setStatus(IssueStatus::SENT);
+            $send->setSentAt(new \DateTimeImmutable());
+            $this->em->flush();
 
-        // Update Issue record
-        $updates = new UpdateIssueDto();
-        $updates->sentSends = $issue->getSentSends() + 1;
+            // Update Issue record
+            $updates = new UpdateIssueDto();
+            $updates->sentSends = $issue->getSentSends() + 1;
 
-        if ($updates->sentSends === $issue->getTotalSends()) {
-            $updates->status = IssueStatus::SENT;
-            $updates->sentAt = new \DateTimeImmutable();
+            if ($updates->sentSends === $issue->getTotalSends()) {
+                $updates->status = IssueStatus::SENT;
+                $updates->sentAt = new \DateTimeImmutable();
+            }
+            $this->issueService->updateIssue($issue, $updates);
+        } catch (\Exception $e) {
+            $attempts = $message->getAttempt();
+
+            if ($attempts > 3)
+            {
+                // Update Send record
+                $send->setStatus(IssueStatus::FAILED);
+                $send->setFailedAt(new \DateTimeImmutable());
+                $this->em->flush();
+
+                throw new \Exception('Email sending failed after 3 attempts');
+            }
+            else
+            {
+                // Re-queue the message
+                $redispatch = new SendJobMessage($message->getIssueId(), $message->getSendId());
+                $redispatch->setAttempt($attempts + 1);
+                $this->messageBus->dispatch($redispatch);
+            }
         }
-        $this->issueService->updateIssue($issue, $updates);
+
     }
 }

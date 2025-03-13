@@ -9,6 +9,8 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 #[AsMessage('async')]
 class SendJobMessage
 {
+    private int $attempt = 1;
+
     public function __construct(
         private int $issueId,
         private int $sendId
@@ -24,5 +26,15 @@ class SendJobMessage
     public function getSendId(): int
     {
         return $this->sendId;
+    }
+
+    public function getAttempt(): int
+    {
+        return $this->attempt;
+    }
+
+    public function setAttempt(int $attempt): void
+    {
+        $this->attempt = $attempt;
     }
 }
