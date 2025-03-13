@@ -21,7 +21,7 @@ final class Version20250310193454 extends AbstractMigration
     {
 
         $this->addSql(<<<SQL
-        CREATE TABLE issue_sends (
+        CREATE TABLE sends (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,

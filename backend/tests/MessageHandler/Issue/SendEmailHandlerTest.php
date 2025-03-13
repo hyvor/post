@@ -44,14 +44,14 @@ class SendEmailHandlerTest extends KernelTestCase
         $this->transport()->throwExceptions()->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
-        dd($sendRepository->findAll()[0]->getIssue());
+        // dd($sendRepository->findAll()[0]->getIssue());
         $send = $sendRepository->findOneBy([
             'issue' => $issue->getId(),
-            'subscriber' => $subscribers[0],
+            'subscriber' => $subscribers[0]->getId(),
         ]);
         //$this->assertNotNull($send);
         $this->assertInstanceOf(Send::class, $send);
-        $this->assertSame($issue, $send->getIssue());
-        $this->assertSame($subscribers[0], $send->getSubscriber());
+        $this->assertSame($issue->getId(), $send->getIssue()->getId());
+        $this->assertSame($subscribers[0]->getId(), $send->getSubscriber()->getId());
     }
 }

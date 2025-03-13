@@ -22,19 +22,14 @@ class IssueSendMessageHandler
     {
     }
 
-    public function sendEmail(Issue $issue, Subscriber $subscriber): void
-    {
-        $send = $this->sendService->queueSend($issue, $subscriber);
-        // TODO: send SendJob message
-        $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
-    }
-
     public function __invoke(IssueSendMessage $message): void
     {
         $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
         if (!$issue) {
             return;
         }
+
+        // TODO: add new row to issue_sends (count the total)
 
         // TODO: implement delay
         $this->sendService->paginateSendableSubscribers(
@@ -44,5 +39,12 @@ class IssueSendMessageHandler
                 $this->sendEmail($issue, $subscriber);
             }
         );
+    }
+
+    private function sendEmail(Issue $issue, Subscriber $subscriber): void
+    {
+        $send = $this->sendService->queueSend($issue, $subscriber);
+        // TODO: send SendJob message
+        $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
     }
 }
