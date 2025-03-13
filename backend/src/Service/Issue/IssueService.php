@@ -83,6 +83,15 @@ class IssueService
         if ($updates->hasProperty('totalSends'))
             $issue->setTotalSends($updates->totalSends);
 
+        if ($updates->hasProperty('sentSends'))
+            $issue->setSentSends($updates->sentSends);
+
+        if ($updates->hasProperty('failedSend'))
+            $issue->setFailedSends($updates->failedSend);
+
+        if ($updates->hasProperty('sentAt'))
+            $issue->setSentAt($updates->sentAt);
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);

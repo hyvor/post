@@ -36,12 +36,12 @@ class IssueSendMessageHandler
             $issue,
             1000,
             function (Issue $issue, Subscriber $subscriber) {
-                $this->sendEmail($issue, $subscriber);
+                $this->sendJob($issue, $subscriber);
             }
         );
     }
 
-    private function sendEmail(Issue $issue, Subscriber $subscriber): void
+    private function sendJob(Issue $issue, Subscriber $subscriber): void
     {
         $send = $this->sendService->queueSend($issue, $subscriber);
         // TODO: send SendJob message
