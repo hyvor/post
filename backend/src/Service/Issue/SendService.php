@@ -103,7 +103,7 @@ class SendService
 
     public static function renderAndSend(Issue $issue, Send $send): void
     {
-        $email = $send?->getEmail();
+        $email = $send->getEmail();
 
         // TODO: send email
     }

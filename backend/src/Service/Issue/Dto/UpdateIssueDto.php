@@ -24,5 +24,9 @@ class UpdateIssueDto
     public string $html;
     public string $text;
     public \DateTimeImmutable $sending_at;
+    public \DateTimeImmutable $sentAt;
     public int $totalSends;
+    public int $sentSends;
+
+    public int $failedSend;
 }
