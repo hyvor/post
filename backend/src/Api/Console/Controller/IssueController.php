@@ -136,11 +136,10 @@ class IssueController extends AbstractController
         $updates->sending_at = new \DateTimeImmutable();
         $updates->html = $this->sendService->renderHtml($issue);
         $updates->text = $this->sendService->renderText($issue);
-        // todo: update total_sends
+        $updates->totalSends = $subscribersCount;
         $issue = $this->issueService->updateIssue($issue, $updates);
 
-        // TODO: this should be IssueSendMessage and IssueSendMessageHandler
-        $bus->dispatch(new IssueSendMessage($issue));
+        $bus->dispatch(new IssueSendMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
     }
