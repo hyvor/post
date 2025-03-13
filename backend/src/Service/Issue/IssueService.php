@@ -86,11 +86,14 @@ class IssueService
         if ($updates->hasProperty('sentSends'))
             $issue->setSentSends($updates->sentSends);
 
-        if ($updates->hasProperty('failedSend'))
-            $issue->setFailedSends($updates->failedSend);
+        if ($updates->hasProperty('failedSends'))
+            $issue->setFailedSends($updates->failedSends);
 
         if ($updates->hasProperty('sentAt'))
             $issue->setSentAt($updates->sentAt);
+
+        if ($updates->hasProperty('failedAt'))
+            $issue->setFailedAt($updates->failedAt);
 
         $issue->setUpdatedAt($this->now());
 
