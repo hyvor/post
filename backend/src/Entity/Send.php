@@ -118,7 +118,7 @@ class Send
         return $this;
     }
 
-    public function getIssue(): ?Issue
+    public function getIssue(): Issue
     {
         return $this->issue;
     }

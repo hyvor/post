@@ -126,7 +126,8 @@ class IssueController extends AbstractController
         $fromEmail = $issue->getFromEmail();
         // TODO: validate from email
 
-        if ($this->sendService->getSendableSubscribersCount($issue) == 0)
+        $subscribersCount = $this->sendService->getSendableSubscribersCount($issue);
+        if ($subscribersCount == 0)
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
 
 
@@ -135,6 +136,7 @@ class IssueController extends AbstractController
         $updates->sending_at = new \DateTimeImmutable();
         $updates->html = $this->sendService->renderHtml($issue);
         $updates->text = $this->sendService->renderText($issue);
+        // todo: update total_sends
         $issue = $this->issueService->updateIssue($issue, $updates);
 
         // TODO: this should be IssueSendMessage and IssueSendMessageHandler

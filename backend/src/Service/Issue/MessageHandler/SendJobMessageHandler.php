@@ -10,6 +10,8 @@ use App\Service\Issue\SendService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+use function PHPUnit\Framework\assertInstanceOf;
+
 #[AsMessageHandler]
 class SendJobMessageHandler
 {
@@ -24,12 +26,10 @@ class SendJobMessageHandler
     {
         // TODO: handle exceptions
         $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
-        if (!$issue)
-            throw new \RuntimeException('Issue not found');
+        assert($issue !== null);
 
         $send = $this->em->getRepository(Send::class)->find($message->getSendId());
-        if (!$send)
-            throw new \RuntimeException('Send not found');
+        assert($send !== null);
 
         $this->sendService->renderAndSend($issue, $send);
 
