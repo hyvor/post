@@ -12,6 +12,8 @@
 
     let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
+    $: statusKey = status.charAt(0).toUpperCase() + status.slice(1);
+
     let showStatus = false;
 	let showList = false;
 
@@ -20,7 +22,6 @@
     let addingManually = false;
 	let importing = false;
 
-    $: statusKey = 'subscribed';
 
     function selectList(list: List) {
 		showList = false;
@@ -36,7 +37,12 @@
 <SingleBox>
     <div class="content">
         <div class="left">
-            <Selector name="Status" bind:show={showStatus} value={statusKey} width={200}>
+            <Selector 
+                name="Status"
+                bind:show={showStatus}
+                value={statusKey}
+                width={200}
+            >
                 <ActionList selection="single" selectionAlign="end">
                     <ActionListItem
                         on:click={() => selectStatus('subscribed')}
@@ -50,6 +56,25 @@
                     >
                         Unsubscribed
                     </ActionListItem>
+                </ActionList>
+            </Selector>
+            <Selector
+                name="List"
+                bind:show={showList}
+                value={currentList ? currentList.name : 'Any'}
+                width={200}
+                isSelected={!!currentList}
+                handleDeselectClick={() => (currentList = null)}
+            >
+                <ActionList>
+                    {#each $listStore as list}
+                        <ActionListItem
+                            on:click={() => selectList(list)}
+                            selected={list.id === list?.id}
+                        >
+                            {list.name}
+                        </ActionListItem>
+                    {/each}
                 </ActionList>
             </Selector>
         </div>
