@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Service\Issue;
+
+use App\Entity\NewsletterList;
+use App\Entity\Issue;
+use App\Entity\Project;
+use App\Entity\Subscriber;
+use App\Entity\Type\IssueStatus;
+use App\Repository\IssueRepository;
+use App\Service\Issue\Dto\UpdateIssueDto;
+use App\Service\NewsletterList\NewsletterListService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Uid\Uuid;
+
+class IssueService
+{
+
+    use ClockAwareTrait;
+
+    public function __construct(
+        private EntityManagerInterface $em,
+        private IssueRepository $issueRepository,
+        private NewsletterListService $newsletterListService,
+    )
+    {
+    }
+
+    public function createIssueDraft(Project $project): Issue
+    {
+        $lists = $this->newsletterListService->getNewsletterLists($project);
+        $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
+        $issue = new Issue()
+            ->setProject($project)
+            ->setUuid(Uuid::v4())
+            ->setStatus(IssueStatus::DRAFT)
+            ->setFromEmail('') // TODO: get from project
+            ->setListids($listIds)
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now());
+
+        $this->em->persist($issue);
+        $this->em->flush();
+
+        return $issue;
+    }
+
+    public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
+    {
+
+        if ($updates->hasProperty('subject'))
+            $issue->setSubject($updates->subject);
+
+        if ($updates->hasProperty('fromName'))
+            $issue->setFromName($updates->fromName);
+
+        if ($updates->hasProperty('lists'))
+            $issue->setListids($updates->lists);
+
+        if ($updates->hasProperty('fromEmail'))
+            $issue->setFromEmail($updates->fromEmail);
+
+        if ($updates->hasProperty('replyToEmail'))
+            $issue->setReplyToEmail($updates->replyToEmail);
+
+        if ($updates->hasProperty('content'))
+            $issue->setContent($updates->content);
+
+        $issue->setUpdatedAt($this->now());
+
+        $this->em->persist($issue);
+        $this->em->flush();
+
+        return $issue;
+    }
+
+    /**
+     * @return ArrayCollection<int, Issue>
+     */
+    public function getIssues(Project $project, int $limit, int $offset): ArrayCollection
+    {
+        return new ArrayCollection(
+            $this->issueRepository
+                ->findBy(
+                    ['project' => $project],
+                    ['id' => 'DESC'],
+                    $limit,
+                    $offset
+                )
+        );
+    }
+
+    public function deleteIssue(Issue $issue): void
+    {
+        $this->em->remove($issue);
+        $this->em->flush();
+    }
+}

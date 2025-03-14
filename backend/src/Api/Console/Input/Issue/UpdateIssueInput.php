@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Api\Console\Input\Issue;
+
+use App\Util\OptionalPropertyTrait;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class UpdateIssueInput
+{
+    use OptionalPropertyTrait;
+
+    public ?string $subject;
+    public ?string $from_name;
+
+    /**
+     * @var array<int>
+     */
+    #[Assert\Count(min: 1, minMessage: "There should be at least one list.")]
+    #[Assert\All([
+        new Assert\NotBlank(),
+        new Assert\Type('int'),
+    ])]
+    public array $lists;
+
+    #[Assert\Email]
+    #[Assert\Length(max: 255)]
+    public string $from_email;
+
+    #[Assert\Email]
+    public ?string $reply_to_email;
+
+    public ?string $content;
+}

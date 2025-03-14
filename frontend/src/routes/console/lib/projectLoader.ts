@@ -21,6 +21,8 @@ export function loadProject(projectId: string) {
 		consoleApi
 			.get<ProjectResponse>({
 				endpoint: 'init/project',
+				userApi: true,
+				projectId: projectId
 			})
 			.then((res) => {
 				projectStore.set(res.project);
