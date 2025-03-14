@@ -1,11 +1,33 @@
 <script lang="ts">
+    const lists = [
+        { id: 1, name: "PHP", description: "Get the latest PHP news" },
+        {
+            id: 2,
+            name: "Typescript",
+            description: "Get the latest Typescript news",
+        },
+    ];
 </script>
 
 <div class="form">
     <div class="title">Subscribe for updates</div>
 
+    <div class="lists">
+        {#each lists as list}
+            <div class="list">
+                <div class="name-description">
+                    <div class="name">{list.name}</div>
+                    <div class="description">{list.description}</div>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" />
+                </div>
+            </div>
+        {/each}
+    </div>
+
     <div class="input">
-        <input type="text" placeholder="Your Email" />
+        <input type="text" placeholder="Your Email" class="email-input" />
         <button> Subscribe </button>
     </div>
 </div>
@@ -27,7 +49,7 @@
     .input {
         position: relative;
     }
-    input {
+    .email-input {
         padding: 10px 25px;
         border: none;
         background-color: #fff;
@@ -51,5 +73,25 @@
         height: calc(100% - 6px);
         font-family: inherit;
         z-index: 1;
+    }
+
+    .lists {
+        margin-bottom: 1.2rem;
+    }
+
+    .list {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.8rem;
+    }
+
+    .name {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .description {
+        font-size: 14px;
+        color: #666;
     }
 </style>
