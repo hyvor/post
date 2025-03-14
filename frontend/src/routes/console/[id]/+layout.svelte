@@ -1,20 +1,25 @@
-<script>
+<script lang="ts">
 	import { onMount } from "svelte";
 	import Nav from "./@components/Nav/Nav.svelte";
 	import { page } from '$app/state';
 	import { loadProject } from "../lib/projectLoader";
 	import { Loader, toast } from "@hyvor/design/components";
 
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
+
 	let isLoading = $state(true);
 
 	onMount(() => {
 		const projectId = page.params.id;
-
 		loadProject(projectId)
 			.then(() => {
 				isLoading = false;
 			})
-			.catch(() => {
+			.catch((e) => {
 				toast.error('Unable to load project');
 			});
 	});
@@ -28,7 +33,7 @@
 	{:else}
 		<Nav />
 		<div class="content">
-			<slot />
+			{@render children?.()}
 		</div>
 	{/if}
 </div>
