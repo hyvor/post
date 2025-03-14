@@ -7,6 +7,7 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\Message\SendJobMessage;
+use App\Service\Issue\MessageHandler\SendJobMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
@@ -15,7 +16,7 @@ use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendJobEmailHandlerTest::class)]
+#[CoversClass(SendJobMessageHandler::class)]
 class SendJobEmailHandlerTest extends KernelTestCase
 {
 
@@ -58,6 +59,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
         $this->assertEmailCount(1);
 
         $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
     }
 
