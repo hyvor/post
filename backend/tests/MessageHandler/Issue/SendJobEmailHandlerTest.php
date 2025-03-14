@@ -53,5 +53,10 @@ class SendJobEmailHandlerTest extends KernelTestCase
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame($send->getStatus(), IssueStatus::SENT);
+
+        $this->assertEmailCount(1);
+
+        $email = $this->getMailerMessage();
+        $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
     }
 }

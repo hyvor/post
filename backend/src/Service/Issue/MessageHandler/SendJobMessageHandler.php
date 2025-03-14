@@ -6,6 +6,7 @@ use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
+use App\Service\Issue\EmailTransportService;
 use App\Service\Issue\Message\SendJobMessage;
 use App\Service\Issue\SendService;
 use App\Service\Issue\IssueService;
@@ -24,7 +25,7 @@ class SendJobMessageHandler
     public function __construct(
         private EntityManagerInterface $em,
         private IssueService $issueService,
-        private SendService $sendService,
+        private EmailTransportService $emailTransportService,
         private MessageBusInterface $messageBus,
     )
     {
@@ -40,12 +41,27 @@ class SendJobMessageHandler
         assert($send !== null);
 
         try {
-            $this->sendService->renderAndSend($issue, $send);
+
+            // $content = $templateService->renderIssue($issue, $send);
+
+            $this->emailTransportService->send(
+                'test@hyvor.com',
+                '<p>See Twig integration for better HTML integration!</p>'
+            );
 
             // Update Send record
             $send->setStatus(IssueStatus::SENT);
             $send->setSentAt(new \DateTimeImmutable());
             $this->em->flush();
+
+            // TODO: increment sentSends
+            // TODO: use DB query instead
+            $update = new UpdateIssueDto();
+            $update->sentSends = $issue->getSentSends() + 1;
+            $this->issueService->updateIssue($issue, $update);
+
+            // TODO: $issue must be updated
+            $this->checkCompletion($issue);
 
         } catch (\Exception $e) {
             $attempts = $message->getAttempt();
@@ -58,8 +74,13 @@ class SendJobMessageHandler
                 $this->em->flush();
 
                 $update = new UpdateIssueDto();
+                // TODO: use DB query instead
+                // UPDATE issue SET failed_sends = failed_sends + 1 WHERE id = :id
                 $update->failedSends = $issue->getFailedSends() + 1;
                 $this->issueService->updateIssue($issue, $update);
+
+                $this->checkCompletion($issue);
+
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
             }
             else
@@ -69,6 +90,28 @@ class SendJobMessageHandler
                 $redispatch->setAttempt($attempts + 1);
                 $this->messageBus->dispatch($redispatch);
             }
+        }
+
+    }
+
+    private function checkCompletion(Issue $issue): void
+    {
+
+        if ($issue->getSentSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
+
+            // all the emails are sent
+            // TODO: add tests
+            $updates = new UpdateIssueDto();
+            if ($issue->getFailedSends() > 0) {
+                $updates->status = IssueStatus::FAILED;
+                $updates->failedAt = new \DateTimeImmutable();
+            } else {
+                $updates->status = IssueStatus::SENT;
+                $updates->sentAt = new \DateTimeImmutable();
+            }
+
+            $this->issueService->updateIssue($issue, $updates);
+
         }
 
     }
