@@ -40,7 +40,7 @@ class SendJobMessageHandler
             // $content = $templateService->renderIssue($issue, $send);
 
             $this->emailTransportService->send(
-                'test@hyvor.com',
+                $send->getEmail(),
                 '<p>See Twig integration for better HTML integration!</p>'
             );
 
@@ -66,12 +66,16 @@ class SendJobMessageHandler
                 $send->setFailedAt(new \DateTimeImmutable());
                 $this->em->flush();
 
-                $this->em->createQuery('UPDATE App\Entity\Issue i SET i.failed_sends = i.failed_sends + 1 WHERE i.id = :id')
+                $this->em->createQueryBuilder()
+                    ->update(Issue::class, 'i')
+                    ->set('i.failed_sends', 'i.failed_sends + 1')
+                    ->where('i.id = :id')
                     ->setParameter('id', $issue->getId())
+                    ->getQuery()
                     ->execute();
 
                 $this->em->flush();
-
+                $this->em->refresh($issue);
                 $this->checkCompletion($issue);
 
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
