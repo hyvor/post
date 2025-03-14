@@ -2,6 +2,7 @@
 
 namespace App\Tests\MessageHandler\Issue;
 
+use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
@@ -58,5 +59,50 @@ class SendJobEmailHandlerTest extends KernelTestCase
 
         $email = $this->getMailerMessage();
         $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
+    }
+
+    public function test_send_job_with_exception(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne([
+            'project' => $project,
+        ]);
+
+        $subscriber = SubscriberFactory::createOne( [
+            'project' => $project,
+            'lists' => [$list],
+            'email' => 'test_failed@hyvor.com',
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $send = SendFactory::createOne([
+            'issue' => $issue,
+            'subscriber' => $subscriber,
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $message = new SendJobMessage($issue->getId(), $send->getId());
+        $this->getMessageBus()->dispatch($message);
+
+        $this->transport()->process();
+
+        $sendRepository = $this->em->getRepository(Send::class);
+        $send = $sendRepository->find($send->getId());
+        $this->assertInstanceOf(Send::class, $send);
+        $this->assertSame($send->getStatus(), IssueStatus::FAILED);
+
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issueDB = $issueRepository->find($issue->getId());
+        $this->assertSame($issueDB->getFailedSends(), 1);
+        $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
+
+        $this->assertEmailCount(0);
     }
 }

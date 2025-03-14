@@ -41,26 +41,11 @@ class IssueSendMessageHandler
                 $this->sendJob($issue, $subscriber);
             }
         );
-
-        // Check after all job has been executed
-        $updates = new UpdateIssueDto();
-        $updates->sentSends = $issue->getSentSends() + 1;
-
-        if ($updates->sentSends === $issue->getTotalSends()) {
-            $updates->status = IssueStatus::SENT;
-            $updates->sentAt = new \DateTimeImmutable();
-        }
-        else {
-            $updates->status = IssueStatus::FAILED;
-            $updates->failedAt = new \DateTimeImmutable();
-        }
-        $this->issueService->updateIssue($issue, $updates);
     }
 
     private function sendJob(Issue $issue, Subscriber $subscriber): void
     {
         $send = $this->sendService->queueSend($issue, $subscriber);
-        // TODO: send SendJob message
         $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
     }
 }
