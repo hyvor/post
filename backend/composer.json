@@ -13,6 +13,7 @@
         "doctrine/orm": "^3.3.2",
         "fakerphp/faker": "^1.24",
         "hyvor/internal": "dev-symfony",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/clock": "7.2.*",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
