@@ -68,10 +68,10 @@ class IssueController extends AbstractController
     {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject'))
+        if ($input->hasProperty('subject') && $input->subject !== null)
             $updates->subject = $input->subject;
 
-        if ($input->hasProperty('from_name'))
+        if ($input->hasProperty('from_name') && $input->from_name !== null)
             $updates->fromName = $input->from_name;
 
         if ($input->hasProperty('lists')) {
@@ -88,10 +88,10 @@ class IssueController extends AbstractController
             $updates->fromEmail = $input->from_email;
         }
 
-        if ($input->hasProperty('reply_to_email'))
+        if ($input->hasProperty('reply_to_email') && $input->reply_to_email !== null)
             $updates->replyToEmail = $input->reply_to_email;
 
-        if ($input->hasProperty('content'))
+        if ($input->hasProperty('content') && $input->content !== null)
             $updates->content = $input->content;
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);

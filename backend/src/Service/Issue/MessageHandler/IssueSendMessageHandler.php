@@ -19,7 +19,6 @@ class IssueSendMessageHandler
 {
     public function __construct(
         private SendService $sendService,
-        private IssueService $issueService,
         private MessageBusInterface $bus,
         private EntityManagerInterface $em,
     )

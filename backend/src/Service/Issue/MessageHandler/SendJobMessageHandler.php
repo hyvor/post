@@ -53,6 +53,7 @@ class SendJobMessageHandler
                 ->execute();
 
             $this->em->flush();
+            $this->em->refresh($issue);
 
             $this->checkCompletion($issue);
 
@@ -95,7 +96,6 @@ class SendJobMessageHandler
     {
         // Check if all sends are completed
         if ($issue->getSentSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
-            // TODO: add tests
             $updates = new UpdateIssueDto();
             if ($issue->getFailedSends() > 0) {
                 $updates->status = IssueStatus::FAILED;

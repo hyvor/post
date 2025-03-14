@@ -85,6 +85,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
         $send = SendFactory::createOne([
             'issue' => $issue,
             'subscriber' => $subscriber,
+            'email' => 'test_failed@hyvor.com',
             'status' => IssueStatus::SENDING,
         ]);
 
@@ -100,6 +101,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
+        $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getFailedSends(), 1);
         $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
 
