@@ -20,10 +20,9 @@ class EmailTransportService
     ): void
     {
         // For test purposes
-        if ($_ENV['APP_ENV'] === 'test' && $emailAddress !== 'test_failed@hyvor.com') {
+        if ($_ENV['APP_ENV'] === 'test' && $emailAddress == 'test_failed@hyvor.com') {
             throw new \Exception('Test exception');
         }
-
         $email = (new Email())
             ->from('hello@example.com')
             ->to($emailAddress)
