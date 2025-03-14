@@ -8,16 +8,11 @@ use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailTransportService;
 use App\Service\Issue\Message\SendJobMessage;
-use App\Service\Issue\SendService;
 use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\RedeliveryStamp;
-use function PHPUnit\Framework\assertInstanceOf;
 
 #[AsMessageHandler]
 class SendJobMessageHandler
@@ -52,15 +47,13 @@ class SendJobMessageHandler
             // Update Send record
             $send->setStatus(IssueStatus::SENT);
             $send->setSentAt(new \DateTimeImmutable());
+
+            $this->em->createQuery('UPDATE App\Entity\Issue i SET i.sent_sends = i.sent_sends + 1 WHERE i.id = :id')
+                ->setParameter('id', $issue->getId())
+                ->execute();
+
             $this->em->flush();
 
-            // TODO: increment sentSends
-            // TODO: use DB query instead
-            $update = new UpdateIssueDto();
-            $update->sentSends = $issue->getSentSends() + 1;
-            $this->issueService->updateIssue($issue, $update);
-
-            // TODO: $issue must be updated
             $this->checkCompletion($issue);
 
         } catch (\Exception $e) {
@@ -73,11 +66,11 @@ class SendJobMessageHandler
                 $send->setFailedAt(new \DateTimeImmutable());
                 $this->em->flush();
 
-                $update = new UpdateIssueDto();
-                // TODO: use DB query instead
-                // UPDATE issue SET failed_sends = failed_sends + 1 WHERE id = :id
-                $update->failedSends = $issue->getFailedSends() + 1;
-                $this->issueService->updateIssue($issue, $update);
+                $this->em->createQuery('UPDATE App\Entity\Issue i SET i.failed_sends = i.failed_sends + 1 WHERE i.id = :id')
+                    ->setParameter('id', $issue->getId())
+                    ->execute();
+
+                $this->em->flush();
 
                 $this->checkCompletion($issue);
 
@@ -96,10 +89,8 @@ class SendJobMessageHandler
 
     private function checkCompletion(Issue $issue): void
     {
-
+        // Check if all sends are completed
         if ($issue->getSentSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
-
-            // all the emails are sent
             // TODO: add tests
             $updates = new UpdateIssueDto();
             if ($issue->getFailedSends() > 0) {
@@ -111,7 +102,6 @@ class SendJobMessageHandler
             }
 
             $this->issueService->updateIssue($issue, $updates);
-
         }
 
     }
