@@ -2,6 +2,8 @@
 
 namespace App\Service\Template;
 
+use App\Entity\Issue;
+use App\Entity\Project;
 use Twig\Environment;
 
 class TemplateRenderer
@@ -13,8 +15,24 @@ class TemplateRenderer
     {
     }
 
+    public function renderFromIssue(Project $project, Issue $issue): string
+    {
 
-    public function render(): string
+        // https://post.hyvor.com/docs/email-templates
+        $data = [
+
+            'lang' => 'en',
+
+            'subjec'
+
+        ];
+
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function render(array $data): string
     {
 
         $template = $this->twig->createTemplate('Hello {{ name }}!');
