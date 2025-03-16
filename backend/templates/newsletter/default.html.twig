@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{{ subject }}</title>
 
     <style>
         * {
             box-sizing: border-box;
         }
     </style>
-
-    @yield('head')
 </head>
 
 <body style="
@@ -20,18 +18,18 @@
         padding: 20px;
         font-family: 'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         font-size: 16px;
-        background-color: {{$config['accent']}}05
+        background-color: {{ color_accent }}05
         ">
 <div class="box" style="
         width: 625px;
         max-width: 100%;
         margin: auto;
-        background-color: {{ $config['box_bg']  }};
-        color: {{ $config['box_text'] }};
-        border-radius: {{ $config['box_radius']  }};
-        box-shadow: {{ $config['box_shadow'] }};
-        border: {{ $config['box_border_size']  }} solid {{ $config['box_border_color'] }};
-        --accent: {{ $config['accent'] }};
+        background-color: {{ color_box_background  }};
+        color: {{ color_text }};
+        border-radius: {{ color_box_radius  }};
+        box-shadow: {{ color_box_shadow }};
+        border: {{ color_box_border }};
+        --accent: {{ color_accent }};
         ">
     <div style="
         padding: 30px 35px 10px;
@@ -39,53 +37,34 @@
         align-items: center;
         gap: 6px;
     ">
-        <a href="{{ $config['website'] }}" target="_blank"
+        <a href="{{ brand_url }}" target="_blank"
            style="
            display:inline-flex;
            align-items:center;
            text-decoration: none;
            color:inherit
        ">
-            <img src="{{ $config['logo'] }}" alt="Logo" style="max-height: 26px; width: auto;">
+            <img src="{{ logo }}" alt="{{ logo_alt }}" style="max-height: 26px; width: auto;">
             <span class="name" style="font-weight: 600; padding-left: 6px;">
-                {{ $config['name'] }}
+                {{ brand }}
             </span>
         </a>
     </div>
     <div class="mail-body" style="
         padding: 10px 35px 20px;
     ">
-        @yield('content')
+        {{ content | raw }}
     </div>
 </div>
 <div class="mail-footer" style="
-        padding: 25px 35px;
-        font-size: 14px;
-        text-align: center;
-    ">
+    padding: 25px 35px;
+    font-size: 14px;
+    text-align: center;
+">
+    {{ address }}
 
-    @if ($config['branding'])
-    <div style="margin-bottom:15px;">
-        <a href="https://talk.hyvor.com?source=mail-branding" target="_blank" style="
-            color: #88743c;
-            text-decoration: none;
-            display: inline-block;
-            padding: 6px 15px;
-            background-color: #fffaec;
-            border: 2px solid #fff1cb;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-        ">Powered by Hyvor Talk</a>
-    </div>
-    @endif
-
-    {{ $config['address'] }}
     <div style="margin-top:4px;">
-        @if (isset($unsubscribeUrl))
-        <a href="{{ $unsubscribeUrl }}" target="_blank" style="color: inherit;">Unsubscribe</a>
-        @endif
-        @yield('footer')
+        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
     </div>
 </div>
 </body>

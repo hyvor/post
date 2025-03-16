@@ -18,26 +18,37 @@ class TemplateRenderer
     public function renderFromIssue(Project $project, Issue $issue): string
     {
 
-        // https://post.hyvor.com/docs/email-templates
-        $data = [
+        // TODO:
+        $variables = new TemplateVariables(
+            lang: 'en',
+            subject: (string) $issue->getSubject(),
+            content: (string) $issue->getHtml(),
 
-            'lang' => 'en',
+            logo: '/img/logo.png',
+            logo_alt: 'Example Logo',
+            brand: 'Hyvor Post',
+            brand_url: 'https://post.hyvor.com',
 
-            'subjec'
+            address: '10 Rue de Penthiévre, 75008 Paris, France',
+            unsubscribe_url: 'https://example.com/unsubscribe',
+            unsubscribe_text: 'Unsubscribe',
 
-        ];
+            color_accent: '#007bff',
+            color_background: '#f8f9fa',
+            color_text: '#343a40',
+            color_box_background: '#ffffff',
+            color_box_radius: '5px',
+            color_box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+            color_box_border: '1px solid #e9ecef',
+        );
+
+        return $this->render($variables);
 
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    public function render(array $data): string
+    public function render(TemplateVariables $variables): string
     {
-
-        $template = $this->twig->createTemplate('Hello {{ name }}!');
-        return $template->render(['name' => 'Supun']);
-
+        return $this->twig->render('newsletter/default.html.twig', (array) $variables);
     }
 
 }
