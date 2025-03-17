@@ -224,4 +224,36 @@ class SendIssueTest extends WebTestCase
         $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getTotalSends(), 1);
     }
+
+    public function testSendIssueFail(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'test_failed@hyvor.com',
+            'lists' => [$list]
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+            'status' => IssueStatus::DRAFT,
+            'list_ids' => [$list->getId()],
+            'content' => "content"
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            "/issues/" . $issue->getId() . "/send"
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+
+    }
 }
