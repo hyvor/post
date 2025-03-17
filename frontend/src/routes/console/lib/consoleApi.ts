@@ -26,7 +26,16 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        const url = baseUrl + endpoint;
+        let url = baseUrl + endpoint;
+
+        if (method === 'get') {
+			url +=
+				'?' +
+				Object.entries(data)
+					.filter(([, val]) => val !== null && val !== undefined)
+					.map(([key, val]) => key + '=' + encodeURIComponent(val))
+					.join('&');
+		}
 
         const headers = {} as Record<string, string>;
 

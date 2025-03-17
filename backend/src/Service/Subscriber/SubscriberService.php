@@ -12,6 +12,7 @@ use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\Exception\InvalidArgumentException;
 
 class SubscriberService
 {
@@ -87,19 +88,36 @@ class SubscriberService
      */
     public function getSubscribers(
         Project $project,
+        string $status,
+        ?int $listId,
         int $limit,
         int $offset
     ): ArrayCollection
     {
+        // Check if status is a valid SubscriberStatus
+        $subscriberStatus = SubscriberStatus::tryFrom($status);
+
+        if ($subscriberStatus === null) {
+            throw new InvalidArgumentException("Invalid subscriber status: $status");
+        }
+
+        $criteria = [
+            'project' => $project,
+            'status' => $subscriberStatus->value,
+        ];
+
+        if ($listId !== null) {
+            $criteria['list'] = $listId;
+        }
+
         return new ArrayCollection(
             $this->subscriberRepository->findBy(
-                ['project' => $project],
+                $criteria,
                 limit: $limit,
                 offset: $offset
             )
         );
     }
-
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {
 
