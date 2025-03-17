@@ -4,6 +4,9 @@ namespace App\Service\Issue\MessageHandler;
 
 use App\Entity\Issue;
 use App\Entity\Subscriber;
+use App\Entity\Type\IssueStatus;
+use App\Service\Issue\Dto\UpdateIssueDto;
+use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\IssueSendMessage;
 use App\Service\Issue\Message\SendJobMessage;
 use App\Service\Issue\SendService;
@@ -22,13 +25,6 @@ class IssueSendMessageHandler
     {
     }
 
-    public function sendEmail(Issue $issue, Subscriber $subscriber): void
-    {
-        $send = $this->sendService->queueSend($issue, $subscriber);
-        // TODO: send SendJob message
-        $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
-    }
-
     public function __invoke(IssueSendMessage $message): void
     {
         $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
@@ -41,8 +37,14 @@ class IssueSendMessageHandler
             $issue,
             1000,
             function (Issue $issue, Subscriber $subscriber) {
-                $this->sendEmail($issue, $subscriber);
+                $this->sendJob($issue, $subscriber);
             }
         );
+    }
+
+    private function sendJob(Issue $issue, Subscriber $subscriber): void
+    {
+        $send = $this->sendService->queueSend($issue, $subscriber);
+        $this->bus->dispatch(new SendJobMessage($issue->getId(), $send->getId()));
     }
 }

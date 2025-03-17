@@ -41,9 +41,12 @@ final class Version20250209024452 extends AbstractMigration
             text TEXT,
             scheduled_at timestamptz,
             sending_at timestamptz,
+            error_private TEXT,
+            total_sends INT DEFAULT 0 NOT NULL,
+            sent_sends INT DEFAULT 0 NOT NULL,
+            failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
-            sent_at timestamptz,
-            error_private TEXT
+            sent_at timestamptz
         );
         SQL);
     }

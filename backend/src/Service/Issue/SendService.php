@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SendService
 {
@@ -99,13 +101,6 @@ class SendService
         return "
             {$issue->getSubject()}
             {$issue->getContent()}";
-    }
-
-    public static function renderAndSend(Issue $issue, Send $send): void
-    {
-        $email = $send?->getEmail();
-
-        // TODO: send email
     }
 
 }

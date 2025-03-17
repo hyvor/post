@@ -59,12 +59,6 @@ class Issue
     #[ORM\Column]
     private ?\DateTimeImmutable $sending_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $failed_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $sent_at = null;
-
     #[ORM\Column(length: 255)]
     private ?string $error_private = null;
 
@@ -73,6 +67,21 @@ class Issue
      */
     #[ORM\Column()]
     private array $list_ids;
+
+    #[ORM\Column]
+    private int $total_sends = 0;
+
+    #[ORM\Column]
+    private int $sent_sends = 0;
+
+    #[ORM\Column]
+    private int $failed_sends = 0;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $failed_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $sent_at = null;
 
     public function getId(): int
     {
@@ -254,30 +263,6 @@ class Issue
         return $this;
     }
 
-    public function getFailedAt(): ?\DateTimeImmutable
-    {
-        return $this->failed_at;
-    }
-
-    public function setFailedAt(?\DateTimeImmutable $failed_at): static
-    {
-        $this->failed_at = $failed_at;
-
-        return $this;
-    }
-
-    public function getSentAt(): ?\DateTimeImmutable
-    {
-        return $this->sent_at;
-    }
-
-    public function setSentAt(?\DateTimeImmutable $sent_at): static
-    {
-        $this->sent_at = $sent_at;
-
-        return $this;
-    }
-
     public function getErrorPrivate(): ?string
     {
         return $this->error_private;
@@ -304,6 +289,66 @@ class Issue
     public function setListIds(array $list_ids): static
     {
         $this->list_ids = $list_ids;
+
+        return $this;
+    }
+
+    public function getTotalSends(): int
+    {
+        return $this->total_sends;
+    }
+
+    public function setTotalSends(int $total_sends): static
+    {
+        $this->total_sends = $total_sends;
+
+        return $this;
+    }
+
+    public function getSentSends(): int
+    {
+        return $this->sent_sends;
+    }
+
+    public function setSentSends(int $sent_sends): static
+    {
+        $this->sent_sends = $sent_sends;
+
+        return $this;
+    }
+
+    public function getFailedSends(): int
+    {
+        return $this->failed_sends;
+    }
+
+    public function setFailedSends(int $failed_sends): static
+    {
+        $this->failed_sends = $failed_sends;
+
+        return $this;
+    }
+
+    public function getFailedAt(): ?\DateTimeImmutable
+    {
+        return $this->failed_at;
+    }
+
+    public function setFailedAt(?\DateTimeImmutable $failed_at): static
+    {
+        $this->failed_at = $failed_at;
+
+        return $this;
+    }
+
+    public function getSentAt(): ?\DateTimeImmutable
+    {
+        return $this->sent_at;
+    }
+
+    public function setSentAt(?\DateTimeImmutable $sent_at): static
+    {
+        $this->sent_at = $sent_at;
 
         return $this;
     }

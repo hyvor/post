@@ -57,10 +57,10 @@ class IssueService
             $issue->setFromName($updates->fromName);
 
         if ($updates->hasProperty('lists'))
-            $issue->setListids($updates->lists ?? []);
+            $issue->setListids($updates->lists);
 
         if ($updates->hasProperty('fromEmail'))
-            $issue->setFromEmail($updates->fromEmail ?? '');
+            $issue->setFromEmail($updates->fromEmail);
 
         if ($updates->hasProperty('replyToEmail'))
             $issue->setReplyToEmail($updates->replyToEmail);
@@ -69,7 +69,7 @@ class IssueService
             $issue->setContent($updates->content);
 
         if ($updates->hasProperty('status'))
-            $issue->setStatus($updates->status ?? IssueStatus::DRAFT);
+            $issue->setStatus($updates->status);
 
         if ($updates->hasProperty('html'))
             $issue->setHtml($updates->html);
@@ -79,6 +79,21 @@ class IssueService
 
         if ($updates->hasProperty('sending_at'))
             $issue->setSendingAt($updates->sending_at);
+
+        if ($updates->hasProperty('totalSends'))
+            $issue->setTotalSends($updates->totalSends);
+
+        if ($updates->hasProperty('sentSends'))
+            $issue->setSentSends($updates->sentSends);
+
+        if ($updates->hasProperty('failedSends'))
+            $issue->setFailedSends($updates->failedSends);
+
+        if ($updates->hasProperty('sentAt'))
+            $issue->setSentAt($updates->sentAt);
+
+        if ($updates->hasProperty('failedAt'))
+            $issue->setFailedAt($updates->failedAt);
 
         $issue->setUpdatedAt($this->now());
 

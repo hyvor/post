@@ -201,8 +201,8 @@ class SendIssueTest extends WebTestCase
         $this->assertSame('sending', $json['status']);
         $this->assertSame(new \DateTimeImmutable()->getTimestamp(), $json['sending_at']);
 
-        $repository = $this->em->getRepository(Issue::class);
-        $issue = $repository->find($issue->getId());
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issue = $issueRepository->find($issue->getId());
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
         $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
@@ -210,5 +210,50 @@ class SendIssueTest extends WebTestCase
         $this->transport()->queue()->assertCount(1);
         $message = $this->transport()->queue()->first()->getMessage();
         $this->assertInstanceOf(IssueSendMessage::class, $message);
+
+        $this->transport()->throwExceptions()->process();
+
+        $sendRepository = $this->em->getRepository(Send::class);
+        $send = $sendRepository->findOneBy([
+            'issue' => $issue->getId(),
+            'subscriber' => $subscriber->getId(),
+        ]);
+        $this->assertNotNull($send);
+        $issueDB = $issueRepository->find($send->getIssue()->getId());
+        $this->assertNotNull($issueDB);
+        $this->assertInstanceOf(Issue::class, $issueDB);
+        $this->assertSame($issueDB->getTotalSends(), 1);
+    }
+
+    public function testSendIssueFail(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'test_failed@hyvor.com',
+            'lists' => [$list]
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+            'status' => IssueStatus::DRAFT,
+            'list_ids' => [$list->getId()],
+            'content' => "content"
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            "/issues/" . $issue->getId() . "/send"
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+
     }
 }
