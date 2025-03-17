@@ -9,25 +9,26 @@ class UpdateIssueDto
 {
     use OptionalPropertyTrait;
 
-    public string $subject;
-    public string $fromName;
+    public ?string $subject;
+    public ?string $fromName;
     /**
      * @var array<int>
      */
     public array $lists;
 
     public string $fromEmail;
-    public string $replyToEmail;
-    public string $content;
+    public ?string $replyToEmail;
+    public ?string $content;
 
     public IssueStatus $status;
     public string $html;
     public string $text;
-    public \DateTimeImmutable $sending_at;
+    public \DateTimeImmutable $sendingAt;
     public \DateTimeImmutable $sentAt;
     public \DateTimeImmutable $failedAt;
+
     public int $totalSends;
-    public int $sentSends;
+    public int $okSends;
 
     public int $failedSends;
     public string $error_private;
