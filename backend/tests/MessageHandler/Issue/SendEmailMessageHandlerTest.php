@@ -5,6 +5,7 @@ namespace App\Tests\MessageHandler\Issue;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
@@ -15,6 +16,8 @@ use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(SendEmailMessageHandler::class)]
 class SendEmailMessageHandlerTest extends KernelTestCase
@@ -22,13 +25,16 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
     public function test_send_job(): void
     {
+
+        Clock::set(new MockClock('2025-02-21'));
+
         $project = ProjectFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
             'project' => $project,
         ]);
 
-        $subscribers = SubscriberFactory::createMany(5, [
+        $subscribers = SubscriberFactory::createMany(2, [
             'project' => $project,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
@@ -43,7 +49,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $send = SendFactory::createOne([
             'issue' => $issue,
             'subscriber' => $subscribers[0],
-            'status' => IssueStatus::SENDING,
         ]);
 
         $message = new SendEmailMessage($send->getId());
@@ -54,7 +59,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
-        $this->assertSame($send->getStatus(), IssueStatus::SENT);
+        $this->assertSame(SendStatus::SENT, $send->getStatus());
+        $this->assertSame('2025-02-21 00:00:00', $send->getSentAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(1);
 
@@ -62,6 +68,11 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
     }
+
+    // TODO: test that a new message is dispatched with increased attempt (tip: use process(1) to process only one message)
+    // TODO: check the checkCompletion method output
+    // TODO: Also make sure checkCompletion is not called when the issue is not completed
+    // TODO: wrap in a transaction
 
     public function test_send_job_with_exception(): void
     {
@@ -88,7 +99,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'issue' => $issue,
             'subscriber' => $subscriber,
             'email' => 'test_failed@hyvor.com',
-            'status' => IssueStatus::SENDING,
         ]);
 
         $message = new SendEmailMessage($send->getId());
@@ -100,7 +110,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
-        $this->assertSame($send->getStatus(), IssueStatus::FAILED);
+        $this->assertSame(SendStatus::FAILED, $send->getStatus());
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());

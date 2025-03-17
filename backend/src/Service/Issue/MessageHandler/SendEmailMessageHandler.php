@@ -5,11 +5,13 @@ namespace App\Service\Issue\MessageHandler;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailTransportService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -17,6 +19,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 #[AsMessageHandler]
 class SendEmailMessageHandler
 {
+
+    use ClockAwareTrait;
+
     public function __construct(
         private EntityManagerInterface $em,
         private IssueService $issueService,
@@ -29,11 +34,11 @@ class SendEmailMessageHandler
     public function __invoke(SendEmailMessage $message): void
     {
 
-        try {
+        $send = $this->em->getRepository(Send::class)->find($message->getSendId());
+        assert($send !== null);
+        $issue = $send->getIssue();
 
-            $send = $this->em->getRepository(Send::class)->find($message->getSendId());
-            assert($send !== null);
-            $issue = $send->getIssue();
+        try {
 
             // $content = $templateService->renderIssue($issue, $send);
 
@@ -42,26 +47,29 @@ class SendEmailMessageHandler
                 '<p>See Twig integration for better HTML integration!</p>'
             );
 
+            // TODO: wrap this in a transaction
             // Update Send record
-            $send->setStatus(IssueStatus::SENT);
-            $send->setSentAt(new \DateTimeImmutable());
+            $send->setStatus(SendStatus::SENT);
+            $send->setSentAt($this->now());
 
-            $this->em->createQuery('UPDATE App\Entity\Issue i SET i.sent_sends = i.sent_sends + 1 WHERE i.id = :id')
+            $this->em->createQuery('UPDATE App\Entity\Issue i SET i.ok_sends = i.ok_sends + 1 WHERE i.id = :id')
                 ->setParameter('id', $issue->getId())
                 ->execute();
 
             $this->em->flush();
-            $this->em->refresh($issue);
 
             $this->checkCompletion($issue);
 
         } catch (\Exception $e) {
+
             $attempts = $message->getAttempt();
 
             if ($attempts > 3)
             {
+                // TODO: wrap in transaction
+                // TODO: update error_private with the exception message
                 // Update Send record
-                $send->setStatus(IssueStatus::FAILED);
+                $send->setStatus(SendStatus::FAILED);
                 $send->setFailedAt(new \DateTimeImmutable());
                 $this->em->flush();
 
@@ -74,7 +82,6 @@ class SendEmailMessageHandler
                     ->execute();
 
                 $this->em->flush();
-                $this->em->refresh($issue);
                 $this->checkCompletion($issue);
 
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
@@ -92,8 +99,13 @@ class SendEmailMessageHandler
 
     }
 
+    /**
+     * After any send, the issue sending job might fully complete. We check if it's the case here.
+     */
     private function checkCompletion(Issue $issue): void
     {
+        $this->em->refresh($issue);
+
         // Check if all sends are completed
         if ($issue->getOkSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
             $updates = new UpdateIssueDto();

@@ -4,6 +4,7 @@ namespace App\Tests\Factory;
 
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -38,7 +39,7 @@ final class SendFactory extends PersistentProxyObjectFactory
             'issue' => IssueFactory::new(),
             'subscriber' => SubscriberFactory::new(),
             'email' => self::faker()->email(),
-            'status' => self::faker()->randomElement(IssueStatus::cases()),
+            'status' => SendStatus::PENDING,
             'error_private' => self::faker()->text(255),
             'failed_tries' => self::faker()->numberBetween(0, 10),
             'open_count' => self::faker()->numberBetween(0, 10),
