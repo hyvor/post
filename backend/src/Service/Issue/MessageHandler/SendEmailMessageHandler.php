@@ -7,7 +7,7 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailTransportService;
-use App\Service\Issue\Message\SendJobMessage;
+use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -15,7 +15,7 @@ use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsMessageHandler]
-class SendJobMessageHandler
+class SendEmailMessageHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
@@ -26,16 +26,14 @@ class SendJobMessageHandler
     {
     }
 
-    public function __invoke(SendJobMessage $message): void
+    public function __invoke(SendEmailMessage $message): void
     {
-        // TODO: handle exceptions
-        $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
-        assert($issue !== null);
-
-        $send = $this->em->getRepository(Send::class)->find($message->getSendId());
-        assert($send !== null);
 
         try {
+
+            $send = $this->em->getRepository(Send::class)->find($message->getSendId());
+            assert($send !== null);
+            $issue = $send->getIssue();
 
             // $content = $templateService->renderIssue($issue, $send);
 
@@ -84,8 +82,10 @@ class SendJobMessageHandler
             else
             {
                 // Re-queue the message
-                $redispatch = new SendJobMessage($message->getIssueId(), $message->getSendId());
-                $redispatch->setAttempt($attempts + 1);
+                $redispatch = new SendEmailMessage(
+                    $message->getSendId(),
+                    $attempts + 1
+                );
                 $this->messageBus->dispatch($redispatch);
             }
         }

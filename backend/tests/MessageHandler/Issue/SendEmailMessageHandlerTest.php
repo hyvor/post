@@ -6,8 +6,8 @@ use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Issue\Message\SendJobMessage;
-use App\Service\Issue\MessageHandler\SendJobMessageHandler;
+use App\Service\Issue\Message\SendEmailMessage;
+use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
@@ -16,8 +16,8 @@ use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendJobMessageHandler::class)]
-class SendJobEmailHandlerTest extends KernelTestCase
+#[CoversClass(SendEmailMessageHandler::class)]
+class SendEmailMessageHandlerTest extends KernelTestCase
 {
 
     public function test_send_job(): void
@@ -46,7 +46,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
             'status' => IssueStatus::SENDING,
         ]);
 
-        $message = new SendJobMessage($issue->getId(), $send->getId());
+        $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
 
         $this->transport()->throwExceptions()->process();
@@ -91,7 +91,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
             'status' => IssueStatus::SENDING,
         ]);
 
-        $message = new SendJobMessage($issue->getId(), $send->getId());
+        $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
 
         // Not throwing exceptions to test the failure
