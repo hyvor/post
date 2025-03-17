@@ -37,7 +37,7 @@ final class SendFactory extends PersistentProxyObjectFactory
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'issue' => IssueFactory::new(),
             'subscriber' => SubscriberFactory::new(),
-            'email' => self::faker()->text(255),
+            'email' => self::faker()->email(),
             'status' => self::faker()->randomElement(IssueStatus::cases()),
             'error_private' => self::faker()->text(255),
             'failed_tries' => self::faker()->numberBetween(0, 10),

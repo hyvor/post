@@ -68,10 +68,10 @@ class IssueController extends AbstractController
     {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject'))
+        if ($input->hasProperty('subject') && $input->subject !== null)
             $updates->subject = $input->subject;
 
-        if ($input->hasProperty('from_name'))
+        if ($input->hasProperty('from_name') && $input->from_name !== null)
             $updates->fromName = $input->from_name;
 
         if ($input->hasProperty('lists')) {
@@ -88,10 +88,10 @@ class IssueController extends AbstractController
             $updates->fromEmail = $input->from_email;
         }
 
-        if ($input->hasProperty('reply_to_email'))
+        if ($input->hasProperty('reply_to_email') && $input->reply_to_email !== null)
             $updates->replyToEmail = $input->reply_to_email;
 
-        if ($input->hasProperty('content'))
+        if ($input->hasProperty('content') && $input->content !== null)
             $updates->content = $input->content;
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
@@ -126,7 +126,8 @@ class IssueController extends AbstractController
         $fromEmail = $issue->getFromEmail();
         // TODO: validate from email
 
-        if ($this->sendService->getSendableSubscribersCount($issue) == 0)
+        $subscribersCount = $this->sendService->getSendableSubscribersCount($issue);
+        if ($subscribersCount == 0)
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
 
 
@@ -135,10 +136,10 @@ class IssueController extends AbstractController
         $updates->sending_at = new \DateTimeImmutable();
         $updates->html = $this->sendService->renderHtml($issue);
         $updates->text = $this->sendService->renderText($issue);
+        $updates->totalSends = $subscribersCount;
         $issue = $this->issueService->updateIssue($issue, $updates);
 
-        // TODO: this should be IssueSendMessage and IssueSendMessageHandler
-        $bus->dispatch(new IssueSendMessage($issue));
+        $bus->dispatch(new IssueSendMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
     }
