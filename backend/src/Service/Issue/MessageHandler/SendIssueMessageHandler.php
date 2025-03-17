@@ -55,7 +55,7 @@ class SendIssueMessageHandler
     ): void
     {
         $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
-        $delaySeconds = max(((int)floor($index / $maxPerSecond)) - 1, 0);
+        $delaySeconds = max(((int)floor($index + 1 / $maxPerSecond)) - 1, 0);
 
         $send = $this->sendService->createSend($issue, $subscriber);
         $this->bus->dispatch(
