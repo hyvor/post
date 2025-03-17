@@ -43,7 +43,7 @@ final class Version20250209024452 extends AbstractMigration
             sending_at timestamptz,
             error_private TEXT,
             total_sends INT DEFAULT 0 NOT NULL,
-            sent_sends INT DEFAULT 0 NOT NULL,
+            ok_sends INT DEFAULT 0 NOT NULL,
             failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
             sent_at timestamptz

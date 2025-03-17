@@ -72,7 +72,7 @@ class Issue
     private int $total_sends = 0;
 
     #[ORM\Column]
-    private int $sent_sends = 0;
+    private int $ok_sends = 0;
 
     #[ORM\Column]
     private int $failed_sends = 0;
@@ -305,14 +305,14 @@ class Issue
         return $this;
     }
 
-    public function getSentSends(): int
+    public function getOkSends(): int
     {
-        return $this->sent_sends;
+        return $this->ok_sends;
     }
 
-    public function setSentSends(int $sent_sends): static
+    public function setOkSends(int $ok_sends): static
     {
-        $this->sent_sends = $sent_sends;
+        $this->ok_sends = $ok_sends;
 
         return $this;
     }

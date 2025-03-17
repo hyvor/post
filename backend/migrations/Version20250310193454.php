@@ -14,7 +14,7 @@ final class Version20250310193454 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create issue_send table';
+        return 'Create sends table';
     }
 
     public function up(Schema $schema): void
@@ -50,6 +50,6 @@ final class Version20250310193454 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE issue_send');
+        $this->addSql('DROP TABLE sends');
     }
 }

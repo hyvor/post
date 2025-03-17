@@ -77,14 +77,14 @@ class IssueService
         if ($updates->hasProperty('text'))
             $issue->setText($updates->text);
 
-        if ($updates->hasProperty('sending_at'))
-            $issue->setSendingAt($updates->sending_at);
+        if ($updates->hasProperty('sendingAt'))
+            $issue->setSendingAt($updates->sendingAt);
 
         if ($updates->hasProperty('totalSends'))
             $issue->setTotalSends($updates->totalSends);
 
-        if ($updates->hasProperty('sentSends'))
-            $issue->setSentSends($updates->sentSends);
+        if ($updates->hasProperty('okSends'))
+            $issue->setOkSends($updates->okSends);
 
         if ($updates->hasProperty('failedSends'))
             $issue->setFailedSends($updates->failedSends);

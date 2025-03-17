@@ -95,7 +95,7 @@ class SendJobMessageHandler
     private function checkCompletion(Issue $issue): void
     {
         // Check if all sends are completed
-        if ($issue->getSentSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
+        if ($issue->getOkSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
             $updates = new UpdateIssueDto();
             if ($issue->getFailedSends() > 0) {
                 $updates->status = IssueStatus::FAILED;
