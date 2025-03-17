@@ -4,6 +4,7 @@ namespace App\Service\Issue;
 
 use App\Entity\Send;
 use App\Entity\Subscriber;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Issue;
 use App\Repository\SubscriberRepository;
@@ -70,7 +71,7 @@ class SendService
             ->setIssue($issue)
             ->setSubscriber($subscriber)
             ->setEmail($subscriber->getEmail())
-            ->setStatus($issue->getStatus())
+            ->setStatus(SendStatus::PENDING)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 

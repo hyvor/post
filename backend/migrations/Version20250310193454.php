@@ -21,6 +21,10 @@ final class Version20250310193454 extends AbstractMigration
     {
 
         $this->addSql(<<<SQL
+            CREATE TYPE send_status AS ENUM ('pending', 'sent', 'failed');
+        SQL);
+
+        $this->addSql(<<<SQL
         CREATE TABLE sends (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -28,7 +32,7 @@ final class Version20250310193454 extends AbstractMigration
             issue_id BIGINT NOT NULL references issues(id),
             subscriber_id BIGINT NOT NULL references subscribers(id),
             email TEXT NOT NULL,
-            status issues_status NOT NULL,
+            status send_status NOT NULL,
             error_private TEXT,
             failed_tries INT DEFAULT 0 NOT NULL,
             sent_at timestamptz,
