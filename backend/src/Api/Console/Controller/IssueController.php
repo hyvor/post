@@ -9,7 +9,7 @@ use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
-use App\Service\Issue\Message\IssueSendMessage;
+use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -139,7 +139,7 @@ class IssueController extends AbstractController
         $updates->totalSends = $subscribersCount;
         $issue = $this->issueService->updateIssue($issue, $updates);
 
-        $bus->dispatch(new IssueSendMessage($issue->getId()));
+        $bus->dispatch(new SendIssueMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
     }

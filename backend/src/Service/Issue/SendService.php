@@ -64,7 +64,7 @@ class SendService
         }
     }
 
-    public function queueSend(Issue $issue, Subscriber $subscriber): Send
+    public function createSend(Issue $issue, Subscriber $subscriber): Send
     {
         $send = new Send()
             ->setIssue($issue)
