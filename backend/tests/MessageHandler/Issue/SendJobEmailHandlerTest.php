@@ -94,6 +94,7 @@ class SendJobEmailHandlerTest extends KernelTestCase
         $message = new SendJobMessage($issue->getId(), $send->getId());
         $this->getMessageBus()->dispatch($message);
 
+        // Not throwing exceptions to test the failure
         $this->transport()->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
