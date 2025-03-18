@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Repository\SendRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,8 +35,8 @@ class Send
     #[ORM\Column(length: 255)]
     private string $email;
 
-    #[ORM\Column(enumType: IssueStatus::class)]
-    private IssueStatus $status;
+    #[ORM\Column(enumType: SendStatus::class)]
+    private SendStatus $status;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $error_private = null;
@@ -154,12 +155,12 @@ class Send
         return $this;
     }
 
-    public function getStatus(): IssueStatus
+    public function getStatus(): SendStatus
     {
         return $this->status;
     }
 
-    public function setStatus(IssueStatus $status): static
+    public function setStatus(SendStatus $status): static
     {
         $this->status = $status;
 

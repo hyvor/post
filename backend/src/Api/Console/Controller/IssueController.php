@@ -9,7 +9,7 @@ use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
-use App\Service\Issue\Message\IssueSendMessage;
+use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,10 +68,10 @@ class IssueController extends AbstractController
     {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject') && $input->subject !== null)
+        if ($input->hasProperty('subject'))
             $updates->subject = $input->subject;
 
-        if ($input->hasProperty('from_name') && $input->from_name !== null)
+        if ($input->hasProperty('from_name'))
             $updates->fromName = $input->from_name;
 
         if ($input->hasProperty('lists')) {
@@ -88,10 +88,10 @@ class IssueController extends AbstractController
             $updates->fromEmail = $input->from_email;
         }
 
-        if ($input->hasProperty('reply_to_email') && $input->reply_to_email !== null)
+        if ($input->hasProperty('reply_to_email'))
             $updates->replyToEmail = $input->reply_to_email;
 
-        if ($input->hasProperty('content') && $input->content !== null)
+        if ($input->hasProperty('content'))
             $updates->content = $input->content;
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
@@ -133,13 +133,13 @@ class IssueController extends AbstractController
 
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
-        $updates->sending_at = new \DateTimeImmutable();
+        $updates->sendingAt = new \DateTimeImmutable();
         $updates->html = $this->sendService->renderHtml($issue);
         $updates->text = $this->sendService->renderText($issue);
         $updates->totalSends = $subscribersCount;
         $issue = $this->issueService->updateIssue($issue, $updates);
 
-        $bus->dispatch(new IssueSendMessage($issue->getId()));
+        $bus->dispatch(new SendIssueMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
     }
