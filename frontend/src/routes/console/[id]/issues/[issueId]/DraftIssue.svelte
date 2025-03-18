@@ -17,6 +17,8 @@
 	import { debounce } from '../../../../../lib/helpers/debounce';
 	import { EMAIL_REGEX } from '../../../lib/regex';
 	import { consoleUrlWithProject } from '../../../lib/consoleUrl';
+	import IconSend from '@hyvor/icons/IconSend';
+	import Editor from '../Editor/Editor.svelte';
 
 	export let issue: Issue;
     export let send: (e: Issue) => void;
@@ -145,8 +147,8 @@
         */
 	}
 
-	function onContentDocUpdate(e: CustomEvent<string>) {
-		content = e.detail;
+	function onContentDocUpdate(e: string) {
+		content = e;
 		debouncedUpdate();
 	}
 
@@ -256,6 +258,12 @@
 	</div>
 </SplitControl>
 
+<SplitControl label="Content" column>
+	<Editor
+        content={content}
+        docupdate={onContentDocUpdate}
+    />
+</SplitControl>
 
 
 <SplitControl label="Send Test Email">
@@ -268,7 +276,7 @@
 <div class="send">
 	<div class="ready">Ready to send?</div>
 	<Button size="large" on:click={onSend}>
-		Send Now <IconSend slot="end" />
+		Send Now
 	</Button>
 </div>
 
