@@ -26,6 +26,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job(): void
     {
 
+        Clock::set(new MockClock('2025-02-21'));
+
         $project = ProjectFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
@@ -58,7 +60,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::SENT, $send->getStatus());
-        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d H:i:s'), $send->getSentAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-02-21 00:00:00', $send->getSentAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(1);
 
@@ -73,7 +75,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getOkSends(), 1);
         $this->assertSame($issueDB->getStatus(), IssueStatus::SENT);
-        $this->assertSame($issueDB->getSentAt()?->format('Y-m-d H:i:s'), $send->getSentAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d H:i:s'), $issueDB->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
     public function test_send_job_with_exception(): void
