@@ -26,8 +26,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job(): void
     {
 
-        Clock::set(new MockClock('2025-02-21'));
-
         $project = ProjectFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
@@ -60,17 +58,24 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::SENT, $send->getStatus());
-        $this->assertSame('2025-02-21 00:00:00', $send->getSentAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d H:i:s'), $send->getSentAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(1);
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
+
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issueDB = $issueRepository->find($issue->getId());
+
+        // Test checkCompletion method
+        $this->assertInstanceOf(Issue::class, $issueDB);
+        $this->assertSame($issueDB->getOkSends(), 1);
+        $this->assertSame($issueDB->getStatus(), IssueStatus::SENT);
+        $this->assertSame($issueDB->getSentAt()?->format('Y-m-d H:i:s'), $send->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
-    // TODO: check the checkCompletion method output
-    // TODO: Also make sure checkCompletion is not called when the issue is not completed
     public function test_send_job_with_exception(): void
     {
         $project = ProjectFactory::createOne();
@@ -111,9 +116,12 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
+
+        // Test checkCompletion method
         $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getFailedSends(), 1);
         $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
+        $this->assertSame($issueDB->getFailedAt()?->format('Y-m-d H:i:s'), $send->getFailedAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(0);
     }
@@ -159,5 +167,14 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $message = $this->transport()->queue()->first()->getMessage();
         $this->assertInstanceOf(SendEmailMessage::class, $message);
         $this->assertSame(2, $message->getAttempt());
+
+        // Test checkCompletion method
+
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issueDB = $issueRepository->find($issue->getId());
+
+        // Test checkCompletion method
+        $this->assertInstanceOf(Issue::class, $issueDB);
+        $this->assertSame($issueDB->getStatus(), IssueStatus::SENDING);
     }
 }
