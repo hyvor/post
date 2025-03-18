@@ -10,7 +10,7 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
-use App\Service\Issue\Message\IssueSendMessage;
+use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -209,7 +209,7 @@ class SendIssueTest extends WebTestCase
 
         $this->transport()->queue()->assertCount(1);
         $message = $this->transport()->queue()->first()->getMessage();
-        $this->assertInstanceOf(IssueSendMessage::class, $message);
+        $this->assertInstanceOf(SendIssueMessage::class, $message);
 
         $this->transport()->throwExceptions()->process();
 
@@ -253,7 +253,15 @@ class SendIssueTest extends WebTestCase
             "/issues/" . $issue->getId() . "/send"
         );
 
-        $this->assertSame(400, $response->getStatusCode());
+        $this->transport()->process();
 
+        // If fails happens in message sending, the controller do not throw an exception
+        $this->assertSame(200, $response->getStatusCode());
+
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issue = $issueRepository->find($issue->getId());
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame(IssueStatus::FAILED, $issue->getStatus());
+        $this->assertSame($issue->getFailedSends(), 1);
     }
 }

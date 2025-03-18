@@ -14,11 +14,15 @@ final class Version20250310193454 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create issue_send table';
+        return 'Create sends table';
     }
 
     public function up(Schema $schema): void
     {
+
+        $this->addSql(<<<SQL
+            CREATE TYPE send_status AS ENUM ('pending', 'sent', 'failed');
+        SQL);
 
         $this->addSql(<<<SQL
         CREATE TABLE sends (
@@ -28,7 +32,7 @@ final class Version20250310193454 extends AbstractMigration
             issue_id BIGINT NOT NULL references issues(id),
             subscriber_id BIGINT NOT NULL references subscribers(id),
             email TEXT NOT NULL,
-            status issues_status NOT NULL,
+            status send_status NOT NULL,
             error_private TEXT,
             failed_tries INT DEFAULT 0 NOT NULL,
             sent_at timestamptz,
@@ -50,6 +54,6 @@ final class Version20250310193454 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE issue_send');
+        $this->addSql('DROP TABLE sends');
     }
 }

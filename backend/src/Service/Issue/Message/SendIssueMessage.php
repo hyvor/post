@@ -5,7 +5,7 @@ namespace App\Service\Issue\Message;
 use Symfony\Component\Messenger\Attribute\AsMessage;
 
 #[AsMessage('async')]
-readonly class IssueSendMessage
+readonly class SendIssueMessage
 {
     public function __construct(
         private int $issueId

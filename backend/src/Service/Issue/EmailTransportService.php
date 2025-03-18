@@ -20,6 +20,7 @@ class EmailTransportService
     ): void
     {
         // For test purposes
+        // TODO: remove this
         if ($_ENV['APP_ENV'] === 'test' && $emailAddress == 'test_failed@hyvor.com') {
             throw new \Exception('Test exception');
         }
