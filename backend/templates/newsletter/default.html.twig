@@ -14,18 +14,20 @@
 </head>
 
 <body style="
-        margin: 0;
-        padding: 20px;
-        font-family: 'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-        font-size: 16px;
-        background-color: {{ color_accent }}05
-        ">
+    margin: 0;
+    padding: 20px;
+    font-family: {{ font_family }};
+    font-size: {{ font_size }};
+    font-weight: {{ font_weight }};
+    line-height: {{ font_line_height }};
+    background-color: {{ color_accent }}05
+">
 <div class="box" style="
         width: 625px;
         max-width: 100%;
         margin: auto;
+        color: {{ font_color_on_box }};
         background-color: {{ color_box_background  }};
-        color: {{ color_text }};
         border-radius: {{ color_box_radius  }};
         box-shadow: {{ color_box_shadow }};
         border: {{ color_box_border }};
@@ -60,10 +62,11 @@
     padding: 25px 35px;
     font-size: 14px;
     text-align: center;
+    color: {{ font_color_on_background }};
 ">
     {{ address }}
 
-    <div style="margin-top:4px;">
+    <div>
         <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
     </div>
 </div>

@@ -30,11 +30,19 @@ class TemplateVariables
         // colors in HEX format
         public string $color_accent,
         public string $color_background,
-        public string $color_text,
         public string $color_box_background,
         public string $color_box_radius,
         public string $color_box_shadow,
         public string $color_box_border,
+
+        // font
+        public string $font_family,
+        public string $font_size,
+        public string $font_weight,
+        public string $font_weight_heading,
+        public string $font_color_on_background,
+        public string $font_color_on_box,
+        public string $font_line_height,
     )
     {
     }
