@@ -69,7 +69,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
     }
 
-    // TODO: test that a new message is dispatched with increased attempt (tip: use process(1) to process only one message)
     // TODO: check the checkCompletion method output
     // TODO: Also make sure checkCompletion is not called when the issue is not completed
     public function test_send_job_with_exception(): void
@@ -117,5 +116,48 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
 
         $this->assertEmailCount(0);
+    }
+
+    public function test_send_job_increase_attempts(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne([
+            'project' => $project,
+        ]);
+
+        $subscriber = SubscriberFactory::createOne( [
+            'project' => $project,
+            'lists' => [$list],
+            'email' => 'test_failed@hyvor.com',
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $send = SendFactory::createOne([
+            'issue' => $issue,
+            'subscriber' => $subscriber,
+            'email' => 'test_failed@hyvor.com',
+        ]);
+
+        $message = new SendEmailMessage($send->getId());
+        $this->getMessageBus()->dispatch($message);
+
+        // Not throwing exceptions to test the failure
+        $this->transport()->process(1);
+
+        $sendRepository = $this->em->getRepository(Send::class);
+        $send = $sendRepository->find($send->getId());
+        $this->assertInstanceOf(Send::class, $send);
+        $this->assertSame(SendStatus::PENDING, $send->getStatus());
+
+        $message = $this->transport()->queue()->first()->getMessage();
+        $this->assertInstanceOf(SendEmailMessage::class, $message);
+        $this->assertSame(2, $message->getAttempt());
     }
 }
