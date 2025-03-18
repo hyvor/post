@@ -2,10 +2,12 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Object\IssueObject;
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\ListObject;
 use App\Entity\Project;
+use App\Repository\IssueRepository;
 use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
@@ -20,6 +22,7 @@ final class ConsoleController extends AbstractController
     public function __construct(
         private ProjectService $projectService,
         private ListRepository $listRepository,
+        private IssueRepository $issueRepository,
     )
     {
     }
@@ -43,9 +46,11 @@ final class ConsoleController extends AbstractController
     {
         $projectStats = $this->projectService->getProjectStats($project);
         $lists = $this->listRepository->findBy(['project' => $project]);
+        $issues = $this->issueRepository->findBy(['project' => $project]);
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
+            'issues' => array_map(fn($issue) => new IssueObject($issue), $issues),
             'stats' => new StatsObject(
                 $projectStats[0],
                 $projectStats[1],
