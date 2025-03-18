@@ -14,6 +14,7 @@ use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
+#[CoversClass(NewsletterList::class)]
 class UpdateListTest extends WebTestCase
 {
 

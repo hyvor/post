@@ -16,9 +16,11 @@
         "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/clock": "7.2.*",
         "symfony/console": "7.2.*",
+        "symfony/doctrine-messenger": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2.4.7",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/mailer": "7.2.*",
         "symfony/messenger": "7.2.*",
         "symfony/runtime": "7.2.*",
         "symfony/security-bundle": "7.2.*",
@@ -79,7 +81,8 @@
         "symfony/css-selector": "7.2.*",
         "symfony/maker-bundle": "^1.62.1",
         "symfony/phpunit-bridge": "^7.2",
-        "zenstruck/foundry": "^2.3"
+        "zenstruck/foundry": "^2.3",
+        "zenstruck/messenger-test": "^1.11"
     },
     "repositories": {
         "local": {
