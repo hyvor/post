@@ -27,7 +27,14 @@ class TemplateController extends AbstractController
         $variables = new TemplateVariables(
             lang: 'en',
             subject: 'Introducing Hyvor Post',
-            content: '<p>Hello, world!</p>',
+            content: <<<HTML
+<h1>
+    Introducing Hyvor Post
+</h1>
+<p>
+    We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
+</p>
+HTML,
 
             logo: '/img/logo.png',
             logo_alt: 'Hyvor Post Logo',
@@ -40,11 +47,18 @@ class TemplateController extends AbstractController
 
             color_accent: '#007bff',
             color_background: '#f8f9fa',
-            color_text: '#343a40',
             color_box_background: '#ffffff',
             color_box_radius: '5px',
             color_box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
             color_box_border: '1px solid #e9ecef',
+
+            font_family: "'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+            font_size: '16px',
+            font_weight: '400',
+            font_weight_heading: '700',
+            font_color_on_background: '#777',
+            font_color_on_box: '#343a40',
+            font_line_height: '1.8',
         );
 
         return new Response($this->renderer->render($variables));

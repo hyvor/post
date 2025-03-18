@@ -35,11 +35,12 @@ class TemplateRenderer
 
             color_accent: '#007bff',
             color_background: '#f8f9fa',
-            color_text: '#343a40',
             color_box_background: '#ffffff',
             color_box_radius: '5px',
             color_box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
             color_box_border: '1px solid #e9ecef',
+
+
         );
 
         return $this->render($variables);
