@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Subscriber;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
+#[CoversClass(SubscriberObject::class)]
 class GetSubscribersTest extends WebTestCase
 {
 

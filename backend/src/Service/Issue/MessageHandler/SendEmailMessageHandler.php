@@ -15,6 +15,7 @@ use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 class SendEmailMessageHandler
@@ -44,37 +45,33 @@ class SendEmailMessageHandler
 
             $this->emailTransportService->send(
                 $send->getEmail(),
+                (string) $issue->getSubject(),
                 '<p>See Twig integration for better HTML integration!</p>'
             );
 
-            // Transaction wrapper
-            $this->em->getConnection()->beginTransaction();
-            try {
+            $this->em->wrapInTransaction(function() use ($send, $issue) {
                 $send->setStatus(SendStatus::SENT);
                 $send->setSentAt($this->now());
+
                 $this->em->createQuery('UPDATE App\Entity\Issue i SET i.ok_sends = i.ok_sends + 1 WHERE i.id = :id')
                     ->setParameter('id', $issue->getId())
                     ->execute();
 
                 $this->em->flush();
-                $this->em->getConnection()->commit();
-            } catch (\Exception $e) {
-                $this->em->getConnection()->rollBack();
-                throw $e;
-            }
-            $this->checkCompletion($issue);
+                $this->checkCompletion($issue);
+            });
+
 
         } catch (\Exception $e) {
 
             $attempts = $message->getAttempt();
 
-            if ($attempts > 3)
+            if ($attempts >= 4)
             {
-                // Transaction wrapper
-                $this->em->getConnection()->beginTransaction();
-                try {
+
+                $this->em->wrapInTransaction(function() use ($send, $issue, $e) {
                     $send->setStatus(SendStatus::FAILED);
-                    $send->setFailedAt(new \DateTimeImmutable());
+                    $send->setFailedAt($this->now());
                     $send->setErrorPrivate($e->getMessage());
                     $this->em->flush();
 
@@ -87,24 +84,25 @@ class SendEmailMessageHandler
                         ->execute();
 
                     $this->em->flush();
-                    $this->em->getConnection()->commit();
-                } catch (\Exception $e) {
-                    $this->em->getConnection()->rollBack();
-                    throw $e;
-                }
-
-                $this->checkCompletion($issue);
+                    $this->checkCompletion($issue);
+                });
 
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
             }
             else
             {
-                // Re-queue the message
+                // Redispatch with exponential backoff
+                // 1m, 4m, 16m
+                $delaySeconds = pow(4, $attempts) * 15;
+
                 $redispatch = new SendEmailMessage(
                     $message->getSendId(),
                     $attempts + 1
                 );
-                $this->messageBus->dispatch($redispatch);
+                $this->messageBus->dispatch(
+                    $redispatch,
+                    [new DelayStamp($delaySeconds * 1000)]
+                );
             }
         }
 
@@ -122,10 +120,10 @@ class SendEmailMessageHandler
             $updates = new UpdateIssueDto();
             if ($issue->getFailedSends() > 0) {
                 $updates->status = IssueStatus::FAILED;
-                $updates->failedAt = new \DateTimeImmutable();
+                $updates->failedAt = $this->now();
             } else {
                 $updates->status = IssueStatus::SENT;
-                $updates->sentAt = new \DateTimeImmutable();
+                $updates->sentAt = $this->now();
             }
 
             $this->issueService->updateIssue($issue, $updates);
