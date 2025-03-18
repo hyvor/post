@@ -2,15 +2,15 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\Subscriber;
-use App\Entity\Type\SubscriberSource;
-use App\Entity\Type\SubscriberStatus;
+use App\Entity\Send;
+use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Subscriber>
+ * @extends PersistentProxyObjectFactory<Send>
  */
-final class SubscriberFactory extends PersistentProxyObjectFactory
+final class SendFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -23,7 +23,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Subscriber::class;
+        return Send::class;
     }
 
     /**
@@ -35,16 +35,16 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
     {
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'email' => self::faker()->email(),
-            'project' => ProjectFactory::new(),
-            'source' => self::faker()->randomElement(SubscriberSource::cases()),
-            'source_id' => self::faker()->randomNumber(),
-            'status' => self::faker()->randomElement(SubscriberStatus::cases()),
-            'subscribe_ip' => self::faker()->text(255),
-            'subscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'unsubscribe_reason' => self::faker()->text(255),
-            'unsubscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'issue' => IssueFactory::new(),
+            'subscriber' => SubscriberFactory::new(),
+            'email' => self::faker()->email(),
+            'status' => SendStatus::PENDING,
+            'error_private' => self::faker()->text(255),
+            'failed_tries' => self::faker()->numberBetween(0, 10),
+            'open_count' => self::faker()->numberBetween(0, 10),
+            'click_count' => self::faker()->numberBetween(0, 10),
+            'hard_bounce' => self::faker()->boolean(),
         ];
     }
 
@@ -54,7 +54,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Subscriber $subscriber): void {})
+            // ->afterInstantiate(function(Send $issue): void {})
         ;
     }
 }

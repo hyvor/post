@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Subscriber;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
+#[CoversClass(SubscriberObject::class)]
 class GetSubscribersTest extends WebTestCase
 {
 
@@ -53,6 +55,13 @@ class GetSubscribersTest extends WebTestCase
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $subscriberDb = $repository->find($subscriber['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriberDb);
+        $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
+        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
 

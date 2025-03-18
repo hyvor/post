@@ -19,4 +19,17 @@ class UpdateIssueDto
     public string $fromEmail;
     public ?string $replyToEmail;
     public ?string $content;
+
+    public IssueStatus $status;
+    public string $html;
+    public string $text;
+    public \DateTimeImmutable $sendingAt;
+    public \DateTimeImmutable $sentAt;
+    public \DateTimeImmutable $failedAt;
+
+    public int $totalSends;
+    public int $okSends;
+
+    public int $failedSends;
+    public string $error_private;
 }
