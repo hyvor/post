@@ -19,11 +19,28 @@ export type List = {
 export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
 export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
 
-export type Subscriber ={
+export type Subscriber = {
 	id: number,
 	email: string,
 	status: NewsletterSubscriberStatus,
 	source: NewsletterSubscriberSource,
 	subscribed_at: number,
 	unsubscribed_at: number | null,
+}
+
+export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'failed' | 'sent';
+
+export type Issue = {
+	id: number,
+	created_at: number,
+	subject: string | null,
+	from_name: string | null,
+	from_email: string,
+	reply_to_email: string | null,
+	content: string | null,
+	status: IssueStatus,
+	lists: number[],
+	scheduled_at: number | null,
+	sending_at: number | null,
+	sent_at: number | null,
 }

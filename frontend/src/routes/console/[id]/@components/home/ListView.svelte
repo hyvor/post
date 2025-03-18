@@ -2,6 +2,10 @@
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
 	import { listStore } from '../../../lib/stores/projectStore';
+
+	$: {
+		$listStore
+	}
 </script>
 
 <div id="list-view">
