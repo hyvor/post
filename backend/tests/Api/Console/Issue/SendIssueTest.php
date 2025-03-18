@@ -253,7 +253,15 @@ class SendIssueTest extends WebTestCase
             "/issues/" . $issue->getId() . "/send"
         );
 
-        $this->assertSame(400, $response->getStatusCode());
+        $this->transport()->process();
 
+        // If fails happens in message sending, the controller do not throw an exception
+        $this->assertSame(200, $response->getStatusCode());
+
+        $issueRepository = $this->em->getRepository(Issue::class);
+        $issue = $issueRepository->find($issue->getId());
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame(IssueStatus::FAILED, $issue->getStatus());
+        $this->assertSame($issue->getFailedSends(), 1);
     }
 }

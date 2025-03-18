@@ -47,17 +47,21 @@ class SendEmailMessageHandler
                 '<p>See Twig integration for better HTML integration!</p>'
             );
 
-            // TODO: wrap this in a transaction
-            // Update Send record
-            $send->setStatus(SendStatus::SENT);
-            $send->setSentAt($this->now());
+            // Transaction wrapper
+            $this->em->getConnection()->beginTransaction();
+            try {
+                $send->setStatus(SendStatus::SENT);
+                $send->setSentAt($this->now());
+                $this->em->createQuery('UPDATE App\Entity\Issue i SET i.ok_sends = i.ok_sends + 1 WHERE i.id = :id')
+                    ->setParameter('id', $issue->getId())
+                    ->execute();
 
-            $this->em->createQuery('UPDATE App\Entity\Issue i SET i.ok_sends = i.ok_sends + 1 WHERE i.id = :id')
-                ->setParameter('id', $issue->getId())
-                ->execute();
-
-            $this->em->flush();
-
+                $this->em->flush();
+                $this->em->getConnection()->commit();
+            } catch (\Exception $e) {
+                $this->em->getConnection()->rollBack();
+                throw $e;
+            }
             $this->checkCompletion($issue);
 
         } catch (\Exception $e) {
@@ -66,22 +70,29 @@ class SendEmailMessageHandler
 
             if ($attempts > 3)
             {
-                // TODO: wrap in transaction
-                // TODO: update error_private with the exception message
-                // Update Send record
-                $send->setStatus(SendStatus::FAILED);
-                $send->setFailedAt(new \DateTimeImmutable());
-                $this->em->flush();
+                // Transaction wrapper
+                $this->em->getConnection()->beginTransaction();
+                try {
+                    $send->setStatus(SendStatus::FAILED);
+                    $send->setFailedAt(new \DateTimeImmutable());
+                    $send->setErrorPrivate($e->getMessage());
+                    $this->em->flush();
 
-                $this->em->createQueryBuilder()
-                    ->update(Issue::class, 'i')
-                    ->set('i.failed_sends', 'i.failed_sends + 1')
-                    ->where('i.id = :id')
-                    ->setParameter('id', $issue->getId())
-                    ->getQuery()
-                    ->execute();
+                    $this->em->createQueryBuilder()
+                        ->update(Issue::class, 'i')
+                        ->set('i.failed_sends', 'i.failed_sends + 1')
+                        ->where('i.id = :id')
+                        ->setParameter('id', $issue->getId())
+                        ->getQuery()
+                        ->execute();
 
-                $this->em->flush();
+                    $this->em->flush();
+                    $this->em->getConnection()->commit();
+                } catch (\Exception $e) {
+                    $this->em->getConnection()->rollBack();
+                    throw $e;
+                }
+
                 $this->checkCompletion($issue);
 
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');

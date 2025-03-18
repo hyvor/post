@@ -72,8 +72,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     // TODO: test that a new message is dispatched with increased attempt (tip: use process(1) to process only one message)
     // TODO: check the checkCompletion method output
     // TODO: Also make sure checkCompletion is not called when the issue is not completed
-    // TODO: wrap in a transaction
-
     public function test_send_job_with_exception(): void
     {
         $project = ProjectFactory::createOne();
