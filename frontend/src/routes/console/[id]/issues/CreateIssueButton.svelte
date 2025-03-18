@@ -23,7 +23,7 @@
 		createIssueDraft()
 			.then((res) => {
 				issueStore.update((prev) => [res, ...prev]);
-				goto(consoleUrlWithProject(`/issue/${res.id}`));
+				goto(consoleUrlWithProject(`/issues/${res.id}`));
 			})
 			.catch((e) => {
 				toast.error(e.message);

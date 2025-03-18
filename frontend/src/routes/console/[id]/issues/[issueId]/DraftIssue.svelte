@@ -25,11 +25,11 @@
 
 	let scrollTopEl: HTMLDivElement;
 
-	let subject = issue.subject;
+	let subject = issue.subject || '';
 	let fromName = issue.from_name;
-	let replyToEmail = issue.reply_to_email;
+	let replyToEmail = issue.reply_to_email || '';
 	let selectedLists = issue.lists;
-	let content = issue.content;
+	let content = issue.content || '';
 
 	let subjectError = '';
 	let replyToEmailError = '';
