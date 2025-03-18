@@ -18,3 +18,25 @@ export function getIssue(id: number) {
         endpoint: 'issues/' + id
     });
 }
+
+type IssueUpdate = {
+	subject: string;
+	from_name: string;
+	from_email: string;
+	reply_to_email: string;
+	lists: number[];
+	content: string;
+};
+
+export function updateIssue(id: number, updates: IssueUpdate) {
+	return consoleApi.patch<Issue>({
+		endpoint: 'issues/' + id,
+		data: updates
+	});
+}
+
+export function sendIssue(id: number) {
+	return consoleApi.post<Issue>({
+		endpoint: `issues/${id}/send`
+	});
+}
