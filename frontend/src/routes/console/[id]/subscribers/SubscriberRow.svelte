@@ -13,9 +13,12 @@
     import IconTrash from '@hyvor/icons/IconTrash';
 	import RelativeTime from '../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
-
+	import { listStore } from '../../lib/stores/projectStore';
+	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
+	import SubscriberEdit from './SubscriberEdit.svelte';
 
 	export let subscriber: Subscriber;
+	export let refreshList: () => void;
 
 	let editing = false;
 
@@ -32,11 +35,25 @@
 		if (!confirmation) return;
 
 		confirmation.loading();
-
-		
+	
+		deleteSubscriber(subscriber.id)
+			.then(() => {
+				toast.success('Subscriber deleted successfully');
+				refreshList();
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			})
+			.finally(() => {
+				confirmation.close();
+			});
 	}
 
-	$: segmentsText = "TOOD";
+	$: segmentsText = subscriber.list_ids
+		.map((s) => {
+			return $listStore.find((l) => l.id === s)?.name || 'Unknown';
+		})
+		.join(', ');
 </script>
 
 <div class="subscriber">
@@ -46,7 +63,7 @@
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					0 segments
+					{subscriber.list_ids.length} segments
 				</span>
 			</Tooltip>
 		</div>
@@ -67,7 +84,7 @@
 
 	<div class="source-wrap">
 		<div>
-			{subscriber.source}
+			{subscriber.source.charAt(0).toUpperCase() + subscriber.source.slice(1)}
 		</div>
 		<div class="tag">
             Source
@@ -83,6 +100,14 @@
 		</IconButton>
 	</div>
 </div>
+
+{#if editing}
+	<SubscriberEdit 
+		{subscriber}
+		bind:show={editing}
+		refreshList={refreshList}
+	/>
+{/if}
 
 
 <style>

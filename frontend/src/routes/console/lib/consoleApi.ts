@@ -26,7 +26,16 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        const url = baseUrl + endpoint;
+        let url = baseUrl + endpoint;
+
+        if (method === 'get') {
+			url +=
+				'?' +
+				Object.entries(data)
+					.filter(([, val]) => val !== null && val !== undefined)
+					.map(([key, val]) => key + '=' + encodeURIComponent(val))
+					.join('&');
+		}
 
         const headers = {} as Record<string, string>;
 
@@ -58,7 +67,7 @@ function getConsoleApi() {
 
         if (!response.ok) {
             const e = await response.json();
-            const error = e && e.error ? e.error : 'Something went wrong';
+            const error = e && e.message ? e.message : 'Something went wrong';
             /* toast({type: 'error', message: error});
             throw error; */
 
