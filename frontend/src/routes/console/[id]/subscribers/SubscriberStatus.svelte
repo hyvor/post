@@ -13,5 +13,5 @@
 </script>
 
 <Tag {color}>
-	{status}
+	{status.charAt(0).toUpperCase() + status.slice(1)}
 </Tag>

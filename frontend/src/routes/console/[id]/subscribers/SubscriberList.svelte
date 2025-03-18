@@ -7,6 +7,7 @@
 	import { getSubscribers } from '../../lib/actions/subscriberActions';
 
 	export let status: NewsletterSubscriberStatus;
+	export let list_id: number | null;
 	export let key: number; // just for forcing re-render
 
 	let loading = true;
@@ -21,7 +22,7 @@
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
-		getSubscribers(status, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
+		getSubscribers(status, list_id, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
 			.then((data) => {
 				subscribers = more ? [...subscribers, ...data] : data;
 				hasMore = data.length === SUBSCRIBERS_PER_PAGE;
@@ -58,9 +59,8 @@
 	<div class="list">
 		{#each subscribers as subscriber (subscriber.id)}
 			<SubscriberRow
-				{subscriber}
-				on:delete={() => onDelete(subscriber.id)}
-				on:update={onUpdate}
+				subscriber={subscriber}
+				refreshList={() => key += 1}
 			/>
 		{/each}
 	</div>
