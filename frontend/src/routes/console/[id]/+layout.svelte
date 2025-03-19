@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import Nav from "./@components/Nav/Nav.svelte";
+	import { onMount } from 'svelte';
+	import Nav from './@components/Nav/Nav.svelte';
 	import { page } from '$app/state';
-	import { loadProject } from "../lib/projectLoader";
-	import { Loader, toast } from "@hyvor/design/components";
+	import { loadProject } from '../lib/projectLoader';
+	import { Loader, toast } from '@hyvor/design/components';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -39,7 +39,7 @@
 </div>
 
 <style>
-    .main-inner {
+	.main-inner {
 		display: flex;
 		flex: 1;
 		width: 100%;
@@ -50,6 +50,7 @@
 	.content {
 		display: flex;
 		flex-direction: column;
+		padding: 15px;
 		flex: 1;
 		width: 100%;
 		height: 100%;

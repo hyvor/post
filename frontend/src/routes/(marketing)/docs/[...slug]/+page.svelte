@@ -12,7 +12,7 @@
 
 <svelte:head>
 	<title>
-		{data.name} - Hyvor Blogs Docs
+		{data.name} - Hyvor Post Docs
 	</title>
 	<link rel="canonical" href="https://blogs.hyvor.com/docs{data.slug ? '/' + data.slug : ''}" />
 </svelte:head>
@@ -20,7 +20,7 @@
 <div class="docs-wrap">
 	<Docs>
 		{#snippet nav()}
-				<Nav >
+			<Nav>
 				{#each categories as category}
 					<NavCategory name={category.name}>
 						{#each category.pages as page}
@@ -33,12 +33,12 @@
 					</NavCategory>
 				{/each}
 			</Nav>
-			{/snippet}
+		{/snippet}
 		{#snippet content()}
-				<Content >
+			<Content>
 				<data.component />
 			</Content>
-			{/snippet}
+		{/snippet}
 	</Docs>
 </div>
 

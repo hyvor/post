@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { NavLink, Tag } from '@hyvor/design/components';
-	import { page } from '$app/stores';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
@@ -8,6 +7,7 @@
 	import IconGear from '@hyvor/icons/IconGear';
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../../lib/stores/projectStore';
+	import { page } from '$app/state';
 
 	let width: number;
 </script>
@@ -31,7 +31,7 @@
 	<div class="nav-links">
 		<NavLink
 			href={'/console/' + $projectStore.id.toString()}
-			active={$page.url.pathname === `/console/${$projectStore.id}`}
+			active={page.url.pathname === `/console/${$projectStore.id}`}
 		>
 			<NavItem>
 				<IconHouse slot="icon" />
@@ -41,7 +41,7 @@
 
 		<NavLink
 			href={'/console/' + $projectStore.id.toString() + '/subscribers'}
-			active={$page.url.pathname === `/console/${$projectStore.id}/subscribers`}
+			active={page.url.pathname === `/console/${$projectStore.id}/subscribers`}
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
@@ -51,7 +51,7 @@
 
 		<NavLink
 			href={'/console/' + $projectStore.id.toString() + '/issues'}
-			active={$page.url.pathname.includes(`/console/${$projectStore.id}/issues`)}
+			active={$page.url.pathname.startWith(`/console/${$projectStore.id}/issues`)}
 		>
 			<NavItem>
 				<IconSend slot="icon" />
@@ -61,7 +61,7 @@
 
 		<NavLink
 			href={'/console/' + $projectStore.id.toString() + '/settings'}
-			active={$page.url.pathname === `/console/${$projectStore.id}/settings`}
+			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/settings`)}
 		>
 			<NavItem>
 				<IconGear slot="icon" />
@@ -94,6 +94,9 @@
 		&:hover {
 			background-color: var(--hover);
 		}
+	}
+	.nav-links :global(a.active) {
+		background-color: var(--accent-light-mid);
 	}
 
 	@media (max-width: 992px) {
