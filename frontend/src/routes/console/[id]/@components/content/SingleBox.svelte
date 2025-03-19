@@ -7,7 +7,6 @@
 <style lang="scss">
 	.single-box {
 		height: 100%;
-		padding: 15px;
 		flex: 1;
 		display: flex;
 		flex-direction: column;
