@@ -47,8 +47,8 @@ final class Version20250209024410 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TYPE subscriber_status');
-        $this->addSql('DROP TYPE subscriber_source');
-        $this->addSql('DROP TABLE subscribers');
+        $this->addSql('DROP TABLE subscribers CASCADE');
+        $this->addSql('DROP TYPE subscriber_status CASCADE');
+        $this->addSql('DROP TYPE subscriber_source CASCADE');
     }
 }
