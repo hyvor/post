@@ -26,6 +26,9 @@ class Project
     #[ORM\Column(length: 255)]
     private string $name;
 
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
+    public ?Template $template = null;
+
     public function setId(int $id): static
     {
         $this->id = $id;
