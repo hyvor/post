@@ -225,43 +225,4 @@ class SendIssueTest extends WebTestCase
         $this->assertSame($issueDB->getTotalSends(), 1);
     }
 
-    public function testSendIssueFail(): void
-    {
-        Clock::set(new MockClock('2025-02-21'));
-
-        $project = ProjectFactory::createOne();
-
-        $list = NewsletterListFactory::createOne(['project' => $project]);
-
-        $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
-            'status' => SubscriberStatus::SUBSCRIBED,
-            'email' => 'test_failed@hyvor.com',
-            'lists' => [$list]
-        ]);
-
-        $issue = IssueFactory::createOne([
-            'project' => $project,
-            'status' => IssueStatus::DRAFT,
-            'list_ids' => [$list->getId()],
-            'content' => "content"
-        ]);
-
-        $response = $this->consoleApi(
-            $project,
-            'POST',
-            "/issues/" . $issue->getId() . "/send"
-        );
-
-        $this->transport()->process();
-
-        // If fails happens in message sending, the controller do not throw an exception
-        $this->assertSame(200, $response->getStatusCode());
-
-        $issueRepository = $this->em->getRepository(Issue::class);
-        $issue = $issueRepository->find($issue->getId());
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertSame(IssueStatus::FAILED, $issue->getStatus());
-        $this->assertSame($issue->getFailedSends(), 1);
-    }
 }

@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(ListController::class)]
-#[CoversClass(ListController::class)]
+#[CoversClass(NewsletterList::class)]
 class CreateListTest extends WebTestCase
 {
 

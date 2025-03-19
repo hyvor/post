@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
+#[CoversClass(NewsletterList::class)]
 class DeleteListTest extends WebTestCase
 {
 
