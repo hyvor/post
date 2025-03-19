@@ -3,7 +3,9 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Subscriber;
+use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
@@ -11,11 +13,13 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
+#[CoversClass(SubscriberObject::class)]
 class GetSubscribersTest extends WebTestCase
 {
 
@@ -53,6 +57,13 @@ class GetSubscribersTest extends WebTestCase
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $subscriberDb = $repository->find($subscriber['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriberDb);
+        $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
+        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
 
@@ -91,4 +102,51 @@ class GetSubscribersTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(0, $json);
     }
+
+    #[TestWith([SubscriberStatus::SUBSCRIBED, SubscriberStatus::UNSUBSCRIBED])]
+    #[TestWith([SubscriberStatus::UNSUBSCRIBED, SubscriberStatus::SUBSCRIBED])]
+    public function testListSubscribersByStatus(SubscriberStatus $status, SubscriberStatus $oppositeStatus): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscribers = SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList1],
+            'status' => $status,
+        ]);
+
+        // Opposite status subscribers
+        SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList1],
+            'status' => $oppositeStatus,
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?status={$status->value}"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(5, $json);
+
+        $subscriber = $json[0];
+        $this->assertIsArray($subscriber);
+        $this->assertArrayHasKey('id', $subscriber);
+        $this->assertArrayHasKey('email', $subscriber);
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $subscriberDb = $repository->find($subscriber['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriberDb);
+        $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
+        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
+    }
+
+
+
 }
