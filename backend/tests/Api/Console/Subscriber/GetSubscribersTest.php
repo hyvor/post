@@ -35,12 +35,14 @@ class GetSubscribersTest extends WebTestCase
         $subscribers = SubscriberFactory::createMany(5, [
             'project' => $project,
             'lists' => [$newsletterList1, $newsletterList2],
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $projectOther = ProjectFactory::createOne();
         SubscriberFactory::createMany(2, [
             'project' => $projectOther,
             'lists' => [NewsletterListFactory::createOne(['project' => $project])],
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $response = $this->consoleApi(
@@ -51,6 +53,7 @@ class GetSubscribersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
+
         $this->assertCount(5, $json);
 
         $subscriber = $json[0];
@@ -70,7 +73,10 @@ class GetSubscribersTest extends WebTestCase
     public function testListSubscribersPagination(): void
     {
         $project = ProjectFactory::createOne();
-        SubscriberFactory::createMany(5, ['project' => $project,]);
+        SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
 
         $response = $this->consoleApi(
             $project,

@@ -12,6 +12,7 @@ use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Template\TemplateRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ class IssueController extends AbstractController
         private IssueService $issueService,
         private SendService $sendService,
         private NewsletterListService $newsletterListService,
+        private TemplateRenderer $templateRenderer
     )
     {
     }
@@ -142,5 +144,12 @@ class IssueController extends AbstractController
         $bus->dispatch(new SendIssueMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
+    }
+
+    #[Route ('/issues/{id}/preview', methods: 'GET')]
+    public function previewIssue(Project $project, Issue $issue): JsonResponse
+    {
+        $preview = $this->templateRenderer->renderFromIssue($project, $issue);
+        return $this->json(['html' => $preview]);
     }
 }
