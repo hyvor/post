@@ -35,7 +35,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
     {
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'email' => self::faker()->text(255),
+            'email' => self::faker()->email(),
             'project' => ProjectFactory::new(),
             'source' => self::faker()->randomElement(SubscriberSource::cases()),
             'source_id' => self::faker()->randomNumber(),
