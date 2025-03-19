@@ -4,6 +4,8 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Entity\Type\IssueStatus;
+use App\Api\Console\Object\StatCategoryObject;
+use App\Api\Console\Object\StatsObject;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -14,6 +16,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
 #[CoversClass(ProjectService::class)]
+#[CoversClass(StatsObject::class)]
+#[CoversClass(StatCategoryObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 

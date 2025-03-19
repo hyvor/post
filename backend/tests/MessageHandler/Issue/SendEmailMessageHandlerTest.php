@@ -7,6 +7,7 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\Issue\EmailTransportService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
@@ -16,10 +17,13 @@ use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[CoversClass(SendEmailMessageHandler::class)]
+#[CoversClass(SendEmailMessage::class)]
 class SendEmailMessageHandlerTest extends KernelTestCase
 {
 
@@ -44,6 +48,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'project' => $project,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
+            'subject' => 'First Newsletter Issue!',
         ]);
 
         $send = SendFactory::createOne([
@@ -66,7 +71,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Time for Symfony Mailer!');
+        $this->assertEmailSubjectContains($email, 'First Newsletter Issue!');
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
@@ -75,11 +80,14 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getOkSends(), 1);
         $this->assertSame($issueDB->getStatus(), IssueStatus::SENT);
-        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d H:i:s'), $issueDB->getSentAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame("2025-02-21 00:00:00", $issueDB->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
     public function test_send_job_with_exception(): void
     {
+        Clock::set(new MockClock('2025-02-21'));
+
+
         $project = ProjectFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
@@ -107,6 +115,12 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
+
+        $emailTransportMock = $this->createMock(EmailTransportService::class);
+        $emailTransportMock->expects(self::exactly(4))
+            ->method('send')
+            ->willThrowException(new \Exception('Email sending failed'));
+        $this->container->set(EmailTransportService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
         $this->transport()->process();
@@ -115,6 +129,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::FAILED, $send->getStatus());
+        $this->assertSame('2025-02-21 00:00:00', $send->getFailedAt()?->format('Y-m-d H:i:s'));
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
@@ -123,12 +138,18 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Issue::class, $issueDB);
         $this->assertSame($issueDB->getFailedSends(), 1);
         $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
-        $this->assertSame($issueDB->getFailedAt()?->format('Y-m-d H:i:s'), $send->getFailedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame("2025-02-21 00:00:00", $issueDB->getFailedAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(0);
     }
 
-    public function test_send_job_increase_attempts(): void
+    #[TestWith([1, 60])]
+    #[TestWith([2, 60 * 4])]
+    #[TestWith([3, 60 * 16])]
+    public function test_send_job_increase_attempts(
+        int $attempt,
+        int $delaySeconds,
+    ): void
     {
         $project = ProjectFactory::createOne();
 
@@ -155,8 +176,14 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'email' => 'test_failed@hyvor.com',
         ]);
 
-        $message = new SendEmailMessage($send->getId());
+        $message = new SendEmailMessage($send->getId(), $attempt);
         $this->getMessageBus()->dispatch($message);
+
+        $emailTransportMock = $this->createMock(EmailTransportService::class);
+        $emailTransportMock->expects(self::once())
+            ->method('send')
+            ->willThrowException(new \Exception('Email sending failed'));
+        $this->container->set(EmailTransportService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
         $this->transport()->process(1);
@@ -166,9 +193,12 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::PENDING, $send->getStatus());
 
-        $message = $this->transport()->queue()->first()->getMessage();
+        $envelope = $this->transport()->queue()->first();
+        $delay = $envelope->last(DelayStamp::class)?->getDelay();
+        $this->assertSame($delaySeconds * 1000, $delay);
+        $message = $envelope->getMessage();
         $this->assertInstanceOf(SendEmailMessage::class, $message);
-        $this->assertSame(2, $message->getAttempt());
+        $this->assertSame($attempt + 1, $message->getAttempt());
 
         // Test checkCompletion method
 
@@ -177,6 +207,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         // Test checkCompletion method
         $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame($issueDB->getStatus(), IssueStatus::SENDING);
+        $this->assertSame(IssueStatus::SENDING, $issueDB->getStatus());
     }
 }

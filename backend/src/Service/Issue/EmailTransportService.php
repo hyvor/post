@@ -16,19 +16,15 @@ class EmailTransportService
 
     public function send(
         string $emailAddress,
+        string $subject,
         string $content,
     ): void
     {
-        // For test purposes
-        // TODO: remove this
-        if ($_ENV['APP_ENV'] === 'test' && $emailAddress == 'test_failed@hyvor.com') {
-            throw new \Exception('Test exception');
-        }
         $email = (new Email())
             ->from('hello@example.com')
             ->to($emailAddress)
             //->replyTo('fabien@example.com')
-            ->subject('Time for Symfony Mailer!')
+            ->subject($subject)
             ->text('Sending emails is fun again!')
             ->html($content);
 
