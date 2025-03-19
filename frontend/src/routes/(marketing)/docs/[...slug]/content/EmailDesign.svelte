@@ -2,7 +2,7 @@
 	import { CodeBlock } from '@hyvor/design/components';
 </script>
 
-<h1>Email Template</h1>
+<h1>Email Design</h1>
 
 <p>
 	When you send an issue to your subscribers, Hyvor Post "renders" the issue using a template. By
@@ -10,7 +10,7 @@
 	for your needs at <strong>Console &rarr; Settings &rarr; Email Template</strong>.
 </p>
 
-<h2 id="custom">Create your own template</h2>
+<h2 id="custom">Custom Templates</h2>
 
 <p>
 	For most users, the basic customization options provided in the settings are enough. However, if
@@ -59,6 +59,65 @@
         "color_box_radius": "5px",
         "color_box_shadow": "0 0 10px rgba(0, 0, 0, 0.1)",
         "color_box_border": "1px solid #e9ecef",
+
+        // lists of the current issue
+        "lists": [
+            {"id": 1, "name": "Physics"},
+            {"id": 2, "name": "Mathematics"}
+        ]
     }
+`}
+/>
+
+<h3 id="example">Example</h3>
+
+<p>Here is a very basic example of how to use these variables in a template:</p>
+
+<CodeBlock
+	code={`
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subject }}</title>
+</head>
+<body>
+    {{ content | raw }}
+</body>
+</html>
+`}
+/>
+
+<p>
+	Note that all variables are escapred by default. Hence, you need to use <code
+		>{`{{ content | raw }}`}</code
+	>
+	to render the content as HTML. See
+	<a href="https://twig.symfony.com/doc/3.x/templates.html" target="_blank"
+		>Twig for Template Designers</a
+	>
+	for more information.
+</p>
+
+<h3 id="list-based-customizations">List-based customizations</h3>
+
+<p>
+	Sometimes, you may want to customize the email template based on the lists of the current issue.
+	The <code>has_list()</code> function can be used for this purpose. In the following example, a quote
+	is added if the issue is sent to the "Physics" list.
+</p>
+
+<CodeBlock
+	code={`
+...
+<body>
+    {{ content | raw }}
+
+    {% if has_list('Physics') %}
+        <blockquote>
+            "Imagination is more important than knowledge."
+        </blockquote>
+    {% endif %}
+</body>
 `}
 />

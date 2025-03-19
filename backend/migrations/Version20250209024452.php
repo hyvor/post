@@ -50,7 +50,7 @@ final class Version20250209024452 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE issues');
-        $this->addSql('DROP TYPE issues_status');
+        $this->addSql('DROP TABLE issues CASCADE');
+        $this->addSql('DROP TYPE issues_status CASCADE');
     }
 }

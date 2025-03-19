@@ -1,4 +1,4 @@
-import EmailTemplates from './content/EmailTemplates.svelte';
+import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
 
@@ -18,9 +18,9 @@ export const categories: Category[] = [
 		name: 'Features',
 		pages: [
 			{
-				slug: 'email-templates',
-				name: 'Email Templates',
-				component: EmailTemplates
+				slug: 'design',
+				name: 'Email Design',
+				component: EmailDesign
 			}
 		]
 	},
