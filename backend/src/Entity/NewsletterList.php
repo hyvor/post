@@ -36,6 +36,11 @@ class NewsletterList
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
+    public function __construct()
+    {
+        $this->subscribers = new ArrayCollection();
+    }
+
 
     public function setId(int $id): static
     {

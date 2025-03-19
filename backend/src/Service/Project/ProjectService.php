@@ -3,8 +3,10 @@
 namespace App\Service\Project;
 
 use App\Api\Console\Object\StatCategoryObject;
+use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Subscriber;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService
@@ -82,10 +84,43 @@ class ProjectService
             ->getQuery()
             ->getSingleScalarResult();
 
+        $subscribers = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $subscribersLast30d = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+                ->select('count(s.id)')
+                ->where('s.project = :project')
+                ->andWhere('s.subscribed_at > :date')
+                ->setParameter('project', $project)
+                ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
+                ->getQuery()
+                ->getSingleScalarResult();
+
+        $issues = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        $issuesLast30d = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->andWhere('s.created_at > :date')
+            ->setParameter('project', $project)
+            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
+            ->getQuery()
+            ->getSingleScalarResult();
+
         // TODO: return keyed values
         return [
-            new StatCategoryObject(0, 0),
-            new StatCategoryObject(0, 0),
+            new StatCategoryObject($subscribers, $subscribersLast30d),
+            new StatCategoryObject($issues, $issuesLast30d),
             new StatCategoryObject($lists, $listsLast30d),
         ];
     }

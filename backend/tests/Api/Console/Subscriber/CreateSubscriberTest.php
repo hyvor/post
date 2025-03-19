@@ -12,6 +12,7 @@ use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -271,6 +272,32 @@ class CreateSubscriberTest extends WebTestCase
 
         $this->assertSame(422, $response->getStatusCode());
         $this->assertSame('List with id ' . $newsletterList1->getId() . ' not found', $this->getJson($response)['message']);
+    }
+
+    public function testCreateSubscriberDuplicateEmail(): void
+    {
+        $project = ProjectFactory::createOne();
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $subscriber = SubscriberFactory::createOne(
+            [
+                'project' => $project,
+                'email' => 'thibault@hyvor.com',
+                'lists' => [$list],
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'thibault@hyvor.com',
+                'list_ids'=> [$list->getId()],
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this ->assertSame('Subscriber with email ' . $subscriber->getEmail() . ' already exists', $this->getJson($response)['message']);
     }
 
 }
