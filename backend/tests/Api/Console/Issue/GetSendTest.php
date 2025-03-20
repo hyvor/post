@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(IssueController::class)]
 #[CoversClass(SendService::class)]
 #[CoversClass(SendObject::class)]
-class GetSendObjectTest extends WebTestCase
+class GetSendTest extends WebTestCase
 {
     public function test_get_sends_from_issue(): void
     {
