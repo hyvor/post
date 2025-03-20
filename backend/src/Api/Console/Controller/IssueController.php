@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
+use App\Api\Console\Object\SendObject;
 use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
@@ -180,5 +181,18 @@ class IssueController extends AbstractController
     {
         $progress = $this->sendService->getIssueProgress($issue);
         return $this->json($progress);
+    }
+
+    #[Route ('/issues/{id}/sends', methods: 'GET')]
+    public function getIssueSends(Request $request, Issue $issue): JsonResponse
+    {
+        $limit = $request->query->getInt('limit', 50);
+        $offset = $request->query->getInt('offset', 0);
+
+        $sends = $this
+            ->sendService
+            ->getSends($issue, $limit, $offset)
+            ->map(fn($send) => new SendObject($send));
+        return $this->json($sends);
     }
 }

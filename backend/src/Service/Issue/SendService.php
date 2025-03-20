@@ -7,7 +7,9 @@ use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Issue;
+use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -22,8 +24,25 @@ class SendService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
+        private SendRepository $sendRepository,
     )
     {
+    }
+
+    /**
+     * @return ArrayCollection<int, Send>
+     */
+    public function getSends(Issue $issue, int $limit, int $offset): ArrayCollection
+    {
+        return new ArrayCollection(
+            $this->sendRepository
+                ->findBy(
+                    ['issue' => $issue],
+                    ['id' => 'DESC'],
+                    $limit,
+                    $offset
+                )
+        );
     }
 
     private function getSendableSubscribersQuery(Issue $issue): QueryBuilder
@@ -106,8 +125,7 @@ class SendService
 
     public function getIssueProgress(Issue $issue): ?array
     {
-        $sendRepository = $this->em->getRepository(Send::class);
-        $issueSends = $sendRepository->findBy(['issue' => $issue]);
+        $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
 
         if (empty($issueSends)) {
             return null;
