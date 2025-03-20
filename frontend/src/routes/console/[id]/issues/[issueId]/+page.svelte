@@ -10,7 +10,7 @@
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteIssue, getIssue } from '../../../lib/actions/issueActions';
-	import DraftIssue from './DraftIssue.svelte';
+	import DraftIssue from './Draft/DraftIssue.svelte';
 
 	const id = Number(page.params.issueId);
 
