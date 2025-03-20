@@ -47,3 +47,24 @@ export type Issue = {
 	sending_at: number | null,
 	sent_at: number | null,
 }
+
+export interface IssueSend {
+	id: number;
+	created_at: number;
+	subscriber: Subscriber | null;
+	email: string;
+	status: 'pending' | 'sent' | 'failed';
+	sent_at: number | null;
+	failed_at: number | null;
+	delivered_at: number | null;
+	first_opened_at: number | null;
+	last_opened_at: number | null;
+	first_clicked_at: number | null;
+	last_clicked_at: number | null;
+	unsubscribed_at: number | null;
+	bounced_at: number | null;
+	hard_bounce: boolean;
+	complained_at: number | null;
+	open_count: number;
+	click_count: number;
+}

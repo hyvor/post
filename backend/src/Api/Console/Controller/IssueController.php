@@ -195,4 +195,15 @@ class IssueController extends AbstractController
             ->map(fn($send) => new SendObject($send));
         return $this->json($sends);
     }
+
+    #[Route ('/issues/{id}/report', methods: 'GET')]
+    public function getIssueReport(Issue $issue): JsonResponse
+    {
+        $counts = $this->issueService->getIssueCounts($issue);
+        return $this->json(
+            [
+                'counts' => $counts
+            ]
+        );
+    }
 }
