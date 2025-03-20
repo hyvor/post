@@ -46,3 +46,12 @@ export function previewIssue(id: number) {
 		endpoint: `issues/${id}/preview`
 	});
 }
+
+export function sendIssueTest(id: number, email: string) {
+	return consoleApi.post({
+		endpoint: `issues/${id}/test`,
+		data: {
+			email
+		}
+	});
+}
