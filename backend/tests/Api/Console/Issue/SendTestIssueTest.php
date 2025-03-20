@@ -28,7 +28,10 @@ class SendTestIssueTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            "/issues/" . $issue->getId() . "/test?email=thibault%40hyvor.com"
+            "/issues/" . $issue->getId() . "/test",
+            [
+                'email' => 'thibault@hyvor.com'
+            ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -52,11 +55,17 @@ class SendTestIssueTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            "/issues/" . $issue->getId() . "/test?email=thibault"
+            "/issues/" . $issue->getId() . "/test",
+            [
+                'email' => 'thibault'
+            ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('Invalid email address.', $json['message']);
+        $this->assertSame('Validation failed with 1 violations(s)', $json['message']);
+        $violations = $json['violations'];
+        $this->assertCount(1, $violations);
+        $this->assertSame('This value is not a valid email address.', $violations[0]['message']);
     }
 }

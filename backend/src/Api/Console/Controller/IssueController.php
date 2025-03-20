@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
@@ -149,16 +150,17 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/test', methods: 'POST')]
-    public function sendTest(Request $request, Project $project, Issue $issue): JsonResponse
+    public function sendTest(
+        Request $request,
+        Project $project,
+        Issue $issue,
+        #[MapRequestPayload] SendTestInput $input
+    ): JsonResponse
     {
-        $email = $request->query->getString('email');
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-            throw new UnprocessableEntityHttpException("Invalid email address.");
-
         // $content = $templateService->renderIssue($issue, $send);
 
         $this->emailTransportService->send(
-            $email,
+            $input->email,
             (string) $issue->getSubject(),
             '<p>See Twig integration for better HTML integration!</p>'
         );

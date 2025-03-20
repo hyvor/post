@@ -13,7 +13,7 @@
 	} from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
 	import { issueStore, listStore, projectStore } from '../../../../lib/stores/projectStore';
-	import { sendIssue, updateIssue } from '../../../../lib/actions/issueActions';
+	import { sendIssue, sendIssueTest, updateIssue } from '../../../../lib/actions/issueActions';
 	import { debounce } from '../../../../../../lib/helpers/debounce';
 	import { EMAIL_REGEX } from '../../../../lib/regex';
 	import Editor from '../../Editor/Editor.svelte';
@@ -135,15 +135,14 @@
 	function onTestSend() {
 		const toastId = toast.loading('Sending test email...');
 
-        //TODO: Implement sendIssueTest
-		/*sendIssueTest(issue.id, testEmail)
+		sendIssueTest(issue.id, testEmail)
 			.then((res) => {
 				toast.success('Test email sent successfully', { id: toastId });
 			})
 			.catch((e) => {
 				toast.error('Failed to send test email: ' + e.message, { id: toastId });
 			});
-        */
+        
 	}
 
 	function onContentDocUpdate(e: string) {
