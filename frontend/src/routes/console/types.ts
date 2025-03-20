@@ -35,6 +35,7 @@ export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'failed' | 'sent';
 
 export type Issue = {
 	id: number,
+	uuid: string,
 	created_at: number,
 	subject: string,
 	from_name: string,

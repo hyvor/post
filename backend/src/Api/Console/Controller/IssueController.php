@@ -193,6 +193,7 @@ class IssueController extends AbstractController
             ->sendService
             ->getSends($issue, $limit, $offset)
             ->map(fn($send) => new SendObject($send));
+
         return $this->json($sends);
     }
 

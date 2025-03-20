@@ -64,7 +64,7 @@ export function getIssueProgress(id: number) {
 
 export function getIssueSends(id: number, limit: number, offset: number) {
 	return consoleApi.get<IssueSend[]>({
-		endpoint: `issue/${id}/sends`,
+		endpoint: `issues/${id}/sends`,
 		data: {
 			limit,
 			offset
@@ -86,6 +86,6 @@ export interface IssueCounts {
 
 export function getIssueReport(id: number) {
 	return consoleApi.get<{ counts: IssueCounts }>({
-		endpoint: `/issues/${id}/report`
+		endpoint: `issues/${id}/report`
 	});
 }

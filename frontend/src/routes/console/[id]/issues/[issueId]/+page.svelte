@@ -12,6 +12,7 @@
 	import { deleteIssue, getIssue } from '../../../lib/actions/issueActions';
 	import DraftIssue from './draft/DraftIssue.svelte';
 	import IssueSending from './sending/IssueSending.svelte';
+	import SentIssue from './sent/SentIssue.svelte';
 
 	const id = Number(page.params.issueId);
 
@@ -104,6 +105,8 @@
 				<DraftIssue {issue} send={onSendingStart} />
 			{:else if issue.status === 'sending'}
 				<IssueSending {issue} complete={onSendingComplete} />
+			{:else if issue.status === 'sent' || issue.status === 'failed'}
+				<SentIssue {issue} />
 			{/if}
 		</div>
 	{/if}
