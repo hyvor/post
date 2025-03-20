@@ -1,4 +1,4 @@
-import type { Issue } from "../../types";
+import type { Issue, IssueSend } from "../../types";
 import consoleApi from "../consoleApi";
 
 export function createIssueDraft() {
@@ -59,5 +59,33 @@ export function sendIssueTest(id: number, email: string) {
 export function getIssueProgress(id: number) {
 	return consoleApi.get<{ total: number; pending: number; sent: number; progress: number }>({
 		endpoint: `issues/${id}/progress`
+	});
+}
+
+export function getIssueSends(id: number, limit: number, offset: number) {
+	return consoleApi.get<IssueSend[]>({
+		endpoint: `issue/${id}/sends`,
+		data: {
+			limit,
+			offset
+		}
+	});
+}
+
+export interface IssueCounts {
+	total: number;
+	sent: number;
+	failed: number;
+	pending: number;
+	opened: number;
+	clicked: number;
+	unsubscribed: number;
+	bounced: number;
+	complained: number;
+}
+
+export function getIssueReport(id: number) {
+	return consoleApi.get<{ counts: IssueCounts }>({
+		endpoint: `/issues/${id}/report`
 	});
 }
