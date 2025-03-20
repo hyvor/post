@@ -8,6 +8,7 @@ use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
+use App\Service\Issue\EmailTransportService;
 use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
@@ -28,7 +29,8 @@ class IssueController extends AbstractController
         private IssueService $issueService,
         private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private TemplateRenderer $templateRenderer
+        private TemplateRenderer $templateRenderer,
+        private EmailTransportService $emailTransportService
     )
     {
     }
@@ -144,6 +146,24 @@ class IssueController extends AbstractController
         $bus->dispatch(new SendIssueMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
+    }
+
+    #[Route ('/issues/{id}/test', methods: 'POST')]
+    public function sendTest(Request $request, Project $project, Issue $issue): JsonResponse
+    {
+        $email = $request->query->getString('email');
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            throw new UnprocessableEntityHttpException("Invalid email address.");
+
+        // $content = $templateService->renderIssue($issue, $send);
+
+        $this->emailTransportService->send(
+            $email,
+            (string) $issue->getSubject(),
+            '<p>See Twig integration for better HTML integration!</p>'
+        );
+
+        return $this->json([]);
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]

@@ -11,14 +11,13 @@
 		confirm,
 		toast
 	} from '@hyvor/design/components';
-	import type { Issue } from '../../../types';
-	import { issueStore, listStore, projectStore } from '../../../lib/stores/projectStore';
-	import { sendIssue, updateIssue } from '../../../lib/actions/issueActions';
-	import { debounce } from '../../../../../lib/helpers/debounce';
-	import { EMAIL_REGEX } from '../../../lib/regex';
-	import { consoleUrlWithProject } from '../../../lib/consoleUrl';
-	import IconSend from '@hyvor/icons/IconSend';
-	import Editor from '../Editor/Editor.svelte';
+	import type { Issue } from '../../../../types';
+	import { issueStore, listStore, projectStore } from '../../../../lib/stores/projectStore';
+	import { sendIssue, updateIssue } from '../../../../lib/actions/issueActions';
+	import { debounce } from '../../../../../../lib/helpers/debounce';
+	import { EMAIL_REGEX } from '../../../../lib/regex';
+	import Editor from '../../Editor/Editor.svelte';
+	import Preview from './Preview.svelte';
 
 	export let issue: Issue;
     export let send: (e: Issue) => void;
@@ -265,6 +264,7 @@
     />
 </SplitControl>
 
+<Preview id={issue.id} />
 
 <SplitControl label="Send Test Email">
 	<div class="send-test">

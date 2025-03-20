@@ -19,6 +19,7 @@
     import IconTypeH2 from '@hyvor/icons/IconTypeH2';
     import IconQuote from '@hyvor/icons/IconQuote';
 	import AddLink from './AddLink.svelte';
+	import { contentUpdateId } from '../[issueId]/issueStore';
 
 	export let content: string | null = null;
     export let docupdate: (doc: string) => void;
@@ -204,8 +205,7 @@
 				if (tr.docChanged) {
 					docupdate(JSON.stringify(tr.doc.toJSON()));
 
-                    // TODO: Do we need this ???
-					//contentUpdateId.update((id) => id + 1);
+					contentUpdateId.update((id) => id + 1);
 				}
 			}
 		});

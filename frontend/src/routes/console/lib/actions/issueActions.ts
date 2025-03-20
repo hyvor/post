@@ -40,3 +40,9 @@ export function sendIssue(id: number) {
 		endpoint: `issues/${id}/send`
 	});
 }
+
+export function previewIssue(id: number) {
+	return consoleApi.get<{ html: string }>({
+		endpoint: `issues/${id}/preview`
+	});
+}
