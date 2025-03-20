@@ -55,3 +55,9 @@ export function sendIssueTest(id: number, email: string) {
 		}
 	});
 }
+
+export function getIssueProgress(id: number) {
+	return consoleApi.get<{ total: number; pending: number; sent: number; progress: number }>({
+		endpoint: `issues/${id}/progress`
+	});
+}

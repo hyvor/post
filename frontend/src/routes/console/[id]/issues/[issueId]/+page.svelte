@@ -10,7 +10,8 @@
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteIssue, getIssue } from '../../../lib/actions/issueActions';
-	import DraftIssue from './Draft/DraftIssue.svelte';
+	import DraftIssue from './draft/DraftIssue.svelte';
+	import IssueSending from './sending/IssueSending.svelte';
 
 	const id = Number(page.params.issueId);
 
@@ -101,6 +102,8 @@
 		<div class="content">
 			{#if issue.status === 'draft'}
 				<DraftIssue {issue} send={onSendingStart} />
+			{:else if issue.status === 'sending'}
+				<IssueSending {issue} complete={onSendingComplete} />
 			{/if}
 		</div>
 	{/if}

@@ -2,10 +2,10 @@
 	import { onMount } from "svelte";
 	import type { Issue } from "../../../../types";
 	import IconSend from "@hyvor/icons/IconSend";
-
-
+	import { getIssueProgress } from "../../../../lib/actions/issueActions";
 
 	export let issue: Issue;
+    export let complete: () => void;
 
 	let progress = 2;
 	let currentSend = 0;
@@ -25,7 +25,7 @@
 
 				if (progress === 100) {
 					autoFetch = false;
-					dispatch('complete');
+					complete();
 				}
 			})
 			.catch((e) => {
