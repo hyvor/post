@@ -12,8 +12,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SendService
 {
@@ -102,6 +102,27 @@ class SendService
         return "
             {$issue->getSubject()}
             {$issue->getContent()}";
+    }
+
+    public function getIssueProgress(Issue $issue): ?array
+    {
+        $sendRepository = $this->em->getRepository(Send::class);
+        $issueSends = $sendRepository->findBy(['issue' => $issue]);
+
+        if (empty($issueSends)) {
+            return null;
+        }
+
+        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
+
+        return [
+            'total' => $issue->getTotalSends(),
+            'pending' => $pendingCount,
+            'sent' => $issue->getOkSends(),
+            'progress' => $issue->getTotalSends() > 0
+                ? round($issue->getOkSends() / $issue->getTotalSends()) * 100
+                : 0,
+        ];
     }
 
 }

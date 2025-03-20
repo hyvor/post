@@ -174,4 +174,11 @@ class IssueController extends AbstractController
         $preview = $this->templateRenderer->renderFromIssue($project, $issue);
         return $this->json(['html' => $preview]);
     }
+
+    #[Route ('/issues/{id}/progress', methods: 'GET')]
+    public function getIssueProgress(Project $project, Issue $issue): JsonResponse
+    {
+        $progress = $this->sendService->getIssueProgress($issue);
+        return $this->json($progress);
+    }
 }
