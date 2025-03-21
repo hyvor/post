@@ -123,6 +123,9 @@ class SendService
             {$issue->getContent()}";
     }
 
+    /**
+     * @return array<string, int>|null
+     */
     public function getIssueProgress(Issue $issue): ?array
     {
         $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
@@ -138,7 +141,7 @@ class SendService
             'pending' => $pendingCount,
             'sent' => $issue->getOkSends(),
             'progress' => $issue->getTotalSends() > 0
-                ? round($issue->getOkSends() / $issue->getTotalSends()) * 100
+                ? (int) round($issue->getOkSends() / $issue->getTotalSends()) * 100
                 : 0,
         ];
     }
