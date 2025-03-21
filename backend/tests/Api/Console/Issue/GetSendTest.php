@@ -51,4 +51,32 @@ class GetSendTest extends WebTestCase
         $this->assertSame($send->getId(), $json[0]['id']);
         $this->assertSame($send->getCreatedAt()->getTimestamp(), $json[0]['created_at']);
     }
+
+    public function test_get_sends_limit(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $issue = IssueFactory::createOne(
+            [
+                'project' => $project,
+            ]
+        );
+
+        SendFactory::createMany(
+            10,
+            [
+                'issue' => $issue,
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/issues/" . $issue->getId() . "/sends?limit=5"
+        );
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertSame(5, count($json));
+    }
 }
