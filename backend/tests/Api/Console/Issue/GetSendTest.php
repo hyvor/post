@@ -26,13 +26,9 @@ class GetSendTest extends WebTestCase
 
         $subscriber = SubscriberFactory::createOne([
             'project' => $project,
-            'lists' => [$list],
+            'lists' => [$list]
         ]);
 
-        $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
-            'list' => $list
-        ]);
         $issue = IssueFactory::createOne(
             [
                 'project' => $project,
