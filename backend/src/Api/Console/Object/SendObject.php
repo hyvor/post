@@ -41,7 +41,7 @@ class SendObject
         $this->created_at = $send->getCreatedAt()->getTimestamp();
 
         // TODO: need to fix circular reference
-        $this->subscriber = null;
+        $this->subscriber = $send->getSubscriber();
         $this->email = $send->getEmail();
 
         $this->status = $send->getStatus();

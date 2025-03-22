@@ -7,6 +7,7 @@ use App\Api\Console\Object\SendObject;
 use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -21,10 +22,17 @@ class GetSendTest extends WebTestCase
     {
         $project = ProjectFactory::createOne();
 
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
         $subscriber = SubscriberFactory::createOne([
             'project' => $project,
+            'lists' => [$list],
         ]);
 
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'list' => $list
+        ]);
         $issue = IssueFactory::createOne(
             [
                 'project' => $project,
