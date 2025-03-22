@@ -5,7 +5,6 @@ namespace App\Tests\Api\Console\Issue;
 use App\Api\Console\Controller\IssueController;
 use App\Entity\Send;
 use App\Entity\Type\SendStatus;
-use App\Service\Issue\Message\SendIssueMessage;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
