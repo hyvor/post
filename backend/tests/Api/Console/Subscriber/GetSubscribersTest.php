@@ -56,7 +56,7 @@ class GetSubscribersTest extends WebTestCase
 
         $this->assertCount(5, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[4];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
@@ -88,7 +88,7 @@ class GetSubscribersTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(2, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[1];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
@@ -140,7 +140,7 @@ class GetSubscribersTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(5, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[4];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);

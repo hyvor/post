@@ -114,7 +114,8 @@ class SubscriberService
             $this->subscriberRepository->findBy(
                 $criteria,
                 limit: $limit,
-                offset: $offset
+                offset: $offset,
+                orderBy: ['id' => 'DESC']
             )
         );
     }
