@@ -18,6 +18,7 @@
 	import { EMAIL_REGEX } from '../../../../lib/regex';
 	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
+	import IconSend from '@hyvor/icons/IconSend';
 
 	export let issue: Issue;
     export let send: (e: Issue) => void;
@@ -276,6 +277,9 @@
 	<div class="ready">Ready to send?</div>
 	<Button size="large" on:click={onSend}>
 		Send Now
+		{#snippet end()}
+			<IconSend />
+		{/snippet}
 	</Button>
 </div>
 

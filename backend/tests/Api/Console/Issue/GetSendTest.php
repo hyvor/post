@@ -83,4 +83,41 @@ class GetSendTest extends WebTestCase
 
         $this->assertSame(5, count($json));
     }
+
+    public function test_get_sends_email_search(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $issue = IssueFactory::createOne(
+            [
+                'project' => $project,
+            ]
+        );
+
+        $send1 = SendFactory::createOne(
+            [
+                'issue' => $issue,
+                'email' => 'thibault@hyvor.com'
+            ]
+        );
+
+        $send2 = SendFactory::createOne(
+            [
+                'issue' => $issue,
+                'email' => 'supun@hyvor.com'
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/issues/" . $issue->getId() . "/sends?search=thibault"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertSame(1, count($json));
+        $this->assertSame($send1->getId(), $json[0]['id']);
+    }
 }
