@@ -49,12 +49,14 @@ export type Issue = {
 	sent_at: number | null,
 }
 
+export type SendStatus = 'pending' | 'sent' | 'failed';
+
 export interface IssueSend {
 	id: number;
 	created_at: number;
 	subscriber: Subscriber | null;
 	email: string;
-	status: 'pending' | 'sent' | 'failed';
+	status: SendStatus;
 	sent_at: number | null;
 	failed_at: number | null;
 	delivered_at: number | null;

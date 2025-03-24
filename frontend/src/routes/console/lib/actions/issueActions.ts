@@ -62,12 +62,18 @@ export function getIssueProgress(id: number) {
 	});
 }
 
-export function getIssueSends(id: number, limit: number, offset: number) {
+export function getIssueSends(
+	id: number,
+	limit: number,
+	offset: number,
+	search: string
+) {
 	return consoleApi.get<IssueSend[]>({
 		endpoint: `issues/${id}/sends`,
 		data: {
 			limit,
-			offset
+			offset,
+			search
 		}
 	});
 }

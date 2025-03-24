@@ -32,17 +32,25 @@ class SendService
     /**
      * @return ArrayCollection<int, Send>
      */
-    public function getSends(Issue $issue, int $limit, int $offset): ArrayCollection
+    public function getSends(Issue $issue, int $limit, int $offset, ?string $search): ArrayCollection
     {
-        return new ArrayCollection(
-            $this->sendRepository
-                ->findBy(
-                    ['issue' => $issue],
-                    ['id' => 'DESC'],
-                    $limit,
-                    $offset
-                )
-        );
+        $qb = $this->sendRepository->createQueryBuilder('s');
+
+        $qb->where('s.issue = :issue')
+            ->setParameter('issue', $issue)
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if ($search !== null) {
+            $qb->andWhere('s.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        /** @var Send[] $results */
+        $results = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($results);
     }
 
     private function getSendableSubscribersQuery(Issue $issue): QueryBuilder
