@@ -68,6 +68,33 @@ class IssueService
         if ($updates->hasProperty('content'))
             $issue->setContent($updates->content);
 
+        if ($updates->hasProperty('status'))
+            $issue->setStatus($updates->status);
+
+        if ($updates->hasProperty('html'))
+            $issue->setHtml($updates->html);
+
+        if ($updates->hasProperty('text'))
+            $issue->setText($updates->text);
+
+        if ($updates->hasProperty('sendingAt'))
+            $issue->setSendingAt($updates->sendingAt);
+
+        if ($updates->hasProperty('totalSends'))
+            $issue->setTotalSends($updates->totalSends);
+
+        if ($updates->hasProperty('okSends'))
+            $issue->setOkSends($updates->okSends);
+
+        if ($updates->hasProperty('failedSends'))
+            $issue->setFailedSends($updates->failedSends);
+
+        if ($updates->hasProperty('sentAt'))
+            $issue->setSentAt($updates->sentAt);
+
+        if ($updates->hasProperty('failedAt'))
+            $issue->setFailedAt($updates->failedAt);
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);

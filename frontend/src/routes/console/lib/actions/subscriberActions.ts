@@ -13,6 +13,7 @@ export function createSubscriber(email: string, list_ids: number[]) {
 
 export function getSubscribers(
 	status: NewsletterSubscriberStatus,
+	list_id: number | null,
 	limit: number,
 	offset: number
 ) {
@@ -20,8 +21,22 @@ export function getSubscribers(
 		endpoint: 'subscribers',
 		data: {
 			status,
+			list_id,
 			limit,
 			offset
 		}
+	});
+}
+
+export function deleteSubscriber(id: number) {
+	return consoleApi.delete<Subscriber>({
+		endpoint: `subscribers/${id}`
+	});
+}
+
+export function updateSubscriber(id: number, data: Partial<Subscriber>) {
+	return consoleApi.patch<Subscriber>({
+		endpoint: `subscribers/${id}`,
+		data
 	});
 }

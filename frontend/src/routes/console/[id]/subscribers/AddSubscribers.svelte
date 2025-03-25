@@ -49,7 +49,8 @@
 					add();
 				})
 				.catch((error) => {
-					toast.error(`Failed to add subscriber ${error.message}.`);
+					console.log(error);
+					toast.error(`Failed to add subscriber: ${error.message}.`);
 				})
 				.finally(() => {
 					loading = false;
