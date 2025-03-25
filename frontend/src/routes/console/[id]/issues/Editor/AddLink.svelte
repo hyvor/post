@@ -6,7 +6,6 @@
     export let add: (url: string) => void;
 
 	let url = '';
-	let textInput: HTMLInputElement;
 
 	function confirm() {
 		add(url);
@@ -21,9 +20,6 @@
 		}
 	}
 
-	onMount(() => {
-		setTimeout(() => textInput.focus(), 0);
-	});
 </script>
 
 <Modal
@@ -43,7 +39,7 @@
 	<TextInput
 		bind:value={url}
 		on:keydown={handleKeydown}
-		bind:input={textInput}
+		
 		block
 		placeholder="https://example.org"
 	/>
