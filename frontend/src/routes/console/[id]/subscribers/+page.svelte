@@ -1,23 +1,32 @@
 <script lang="ts">
-	import { Button, ButtonGroup, ActionList, ActionListItem } from '@hyvor/design/components';
+	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text } from '@hyvor/design/components';
 	import Selector from '../@components/content/Selector.svelte';
-	import type { NewsletterSubscriberStatus } from '../../types';
+	import type { List, NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconPlus from '@hyvor/icons/IconPlus';
 	import SingleBox from '../@components/content/SingleBox.svelte';
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
+	import { listStore } from '../../lib/stores/projectStore';
 
 
     let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
+    $: statusKey = status.charAt(0).toUpperCase() + status.slice(1);
+
     let showStatus = false;
-	let showSegment = false;
+	let showList = false;
+
+    let currentList: List | null = null;
 
     let addingManually = false;
 	let importing = false;
 
-    $: statusKey = 'subscribed';
+
+    function selectList(list: List) {
+		showList = false;
+		currentList = list;
+	}
 
     function selectStatus(s: NewsletterSubscriberStatus) {
 		showStatus = false;
@@ -28,7 +37,12 @@
 <SingleBox>
     <div class="content">
         <div class="left">
-            <Selector name="Status" bind:show={showStatus} value={statusKey} width={200}>
+            <Selector 
+                name="Status"
+                bind:show={showStatus}
+                value={statusKey}
+                width={200}
+            >
                 <ActionList selection="single" selectionAlign="end">
                     <ActionListItem
                         on:click={() => selectStatus('subscribed')}
@@ -44,6 +58,25 @@
                     </ActionListItem>
                 </ActionList>
             </Selector>
+            <Selector
+                name="List"
+                bind:show={showList}
+                value={currentList ? currentList.name : 'Any'}
+                width={200}
+                isSelected={!!currentList}
+                handleDeselectClick={() => (currentList = null)}
+            >
+                <ActionList>
+                    {#each $listStore as list}
+                        <ActionListItem
+                            on:click={() => selectList(list)}
+                            selected={list.id === list?.id}
+                        >
+                            {list.name}
+                        </ActionListItem>
+                    {/each}
+                </ActionList>
+            </Selector>
         </div>
         <div class="right">
             <ButtonGroup>
@@ -57,7 +90,7 @@
         </div>
     </div>
 
-    <SubscriberList {status} {key} />
+    <SubscriberList {status} {key} list_id={currentList?.id || null}/>
 
     {#if addingManually}
 	    <AddSubscribers bind:show={addingManually} add={() => key += 1}/>
@@ -68,7 +101,7 @@
 <style>
 	.content {
         display: flex;
-		padding: 25px 35px;
+		padding: 20px 25px;
 	}
 	.left {
 		flex: 1;

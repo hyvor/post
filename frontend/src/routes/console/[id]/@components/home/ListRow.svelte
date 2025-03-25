@@ -11,8 +11,8 @@
 			title="Subscribers"
 			href={`/console/lists/${list.id}/subscribers`}
 			counts={{
-				total: 0,
-				last_30d: 0
+				total: list.subscribers_count,
+				last_30d: list.subscribers_count_last_30d,
 			}}
 		/>
 	</div>
