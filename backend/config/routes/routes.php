@@ -9,6 +9,11 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/console')
         ->namePrefix('api_console_');
 
+    // public API
+    $routes->import('../../src/Api/Public/Controller', 'attribute')
+        ->prefix('/api/public')
+        ->namePrefix('api_public_');
+
     $routes->import('../../src/Api/Local', 'attribute')
         ->prefix('/api/local')
         ->condition('env("APP_ENV") in ["dev", "test"]')
