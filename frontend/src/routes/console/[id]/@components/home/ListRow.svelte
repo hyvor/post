@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { projectStore } from '../../../lib/stores/projectStore';
 	import type { List } from '../../../types';
 
 	let { list }: { list: List } = $props();
 </script>
 
-<a class="list-item" href={`/console/lists/${list.id}`}>
+<a class="list-item" href={`/console/${$projectStore.id}/subscribers?list=${list.name}`}>
 	<div class="list-title">{list.name || '(Untitled)'}</div>
 	<div class="list-subscribers">
 		<div class="count">
