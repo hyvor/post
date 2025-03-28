@@ -1,20 +1,26 @@
 <script lang="ts">
-	import Stat from './Stat.svelte';
+	import type { List } from '../../../types';
 
-	export let list;
+	let { list }: { list: List } = $props();
 </script>
 
 <a class="list-item" href={`/console/lists/${list.id}`}>
 	<div class="list-title">{list.name || '(Untitled)'}</div>
 	<div class="list-subscribers">
-		<Stat
-			title="Subscribers"
-			href={`/console/lists/${list.id}/subscribers`}
-			counts={{
-				total: list.subscribers_count,
-				last_30d: list.subscribers_count_last_30d,
-			}}
-		/>
+		<div class="count">
+			{list.subscribers_count} Subscribers
+		</div>
+		<div
+			class="count-diff"
+			class:positive={list.subscribers_count_last_30d >= 0}
+			class:negative={list.subscribers_count_last_30d < 0}
+		>
+			{list.subscribers_count_last_30d >= 0
+				? '+'
+				: ''}{list.subscribers_count_last_30d.toLocaleString()}
+
+			<span class="last-30d-tag">30d</span>
+		</div>
 	</div>
 </a>
 
@@ -23,9 +29,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 20px;
-		padding-left: 50px;
-		padding-right: 50px;
+		padding: 10px;
+		padding-left: 15px;
+		padding-right: 15px;
 		border-left: 3px solid transparent;
 		position: relative;
 		border-radius: 20px;
@@ -40,5 +46,23 @@
 		width: 300px;
 		font-weight: 600;
 		word-break: break-all;
+	}
+
+	.count {
+		font-weight: 600;
+	}
+	.count-diff {
+		font-size: 14px;
+	}
+
+	.count-diff.positive {
+		color: var(--green);
+	}
+	.count-diff.negative {
+		color: var(--red);
+	}
+	.last-30d-tag {
+		font-size: 12px;
+		color: var(--text-light);
 	}
 </style>

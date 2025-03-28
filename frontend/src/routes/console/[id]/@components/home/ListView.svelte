@@ -4,7 +4,7 @@
 	import { listStore } from '../../../lib/stores/projectStore';
 
 	$: {
-		$listStore
+		$listStore;
 	}
 </script>
 
@@ -13,9 +13,11 @@
 		Lists
 		<CreateListButton />
 	</div>
-	{#each $listStore as list}
-		<ListRow {list} />
-	{/each}
+	<div class="rows">
+		{#each $listStore as list}
+			<ListRow {list} />
+		{/each}
+	</div>
 </div>
 
 <style>
@@ -24,9 +26,12 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 20px;
-		padding-left: 50px;
-		padding-right: 50px;
+		padding-left: 35px;
+		padding-right: 35px;
 		font-size: 1.5rem;
 		font-weight: 600;
+	}
+	.rows {
+		padding: 10px 35px;
 	}
 </style>
