@@ -14,6 +14,7 @@ export type List = {
 	id: number,
 	created_at: number,
 	name: string,
+	description: string | null,
 	subscribers_count: number,
 	subscribers_count_last_30d: number,
 }
