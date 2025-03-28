@@ -3,10 +3,24 @@
 	import type { List } from '../../../types';
 
 	let { list }: { list: List } = $props();
+
+	function truncateDescription(description: string | null): string {
+		if (!description)
+		 return '(No description)';
+		if (description.length > 50) {
+			return description.slice(0, 50) + '...';
+		}
+		return description;
+	}
 </script>
 
 <a class="list-item" href={`/console/${$projectStore.id}/subscribers?list=${list.name}`}>
-	<div class="list-title">{list.name || '(Untitled)'}</div>
+	<div class="list-title">
+		{list.name || '(Untitled)'}
+		<div class="list-description">
+			{truncateDescription(list.description)}
+		</div>
+	</div>
 	<div class="list-subscribers">
 		<div class="count">
 			{list.subscribers_count} Subscribers
@@ -47,6 +61,13 @@
 		width: 300px;
 		font-weight: 600;
 		word-break: break-all;
+	}
+
+	.list-description {
+		margin-top: 5px;
+		font-weight: 100;
+		font-size: 12px;
+		color: var(--text-light);
 	}
 
 	.count {

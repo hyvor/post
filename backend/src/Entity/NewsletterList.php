@@ -30,6 +30,9 @@ class NewsletterList
     #[ORM\Column(length: 255)]
     private string $name;
 
+    #[ORM\Column()]
+    private ?string $description;
+
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
 
@@ -74,6 +77,18 @@ class NewsletterList
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

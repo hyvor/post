@@ -23,11 +23,13 @@ class NewsletterListService
     public function createNewsletterList(
         Project $project,
         string $name,
+        ?string $description
     ): NewsletterList
     {
         $list = new NewsletterList()
             ->setProject($project)
             ->setName($name)
+            ->setDescription($description)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -57,10 +59,11 @@ class NewsletterListService
         return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
     }
 
-    public function updateNewsletterList(NewsletterList $list, string $name): NewsletterList
+    public function updateNewsletterList(NewsletterList $list, string $name, string $description): NewsletterList
     {
         $list
             ->setName($name)
+            ->setDescription($description)
             ->setUpdatedAt($this->now());
 
         $this->em->persist($list);

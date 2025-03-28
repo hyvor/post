@@ -5,14 +5,15 @@
     let modalOpen = false;
 	let showDropdown = false;
 	let isCreatingList = false;
-	let listName = '';
+	let listName: string = '';
+	let listDescription: string|null = null;
 
 	// TODO: Check list name availabilty of list name
 	function submitList() {
 		const toastId = toast.loading('Creating list...');
 		isCreatingList = true;
 
-		createList(listName)
+		createList(listName, listDescription)
 			.then((res) => {
 				toast.success('List created', { id: toastId });
 			})
@@ -54,11 +55,20 @@
 
 	<div class="modal-inner">
 		<FormControl>
-			<Label>Name</Label>
+			<Label>
+				Name
+			</Label>
 			<TextInput 
 				maxlength={255}
 				placeholder="Enter list name" 
 				bind:value={listName}
+			/>
+			<Label>
+				Description
+			</Label>
+			<TextInput 
+				placeholder="Enter list description" 
+				bind:value={listDescription}
 			/>
 		</FormControl>
 

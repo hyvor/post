@@ -305,6 +305,7 @@
 	.wrap {
 		width: 625px;
 		max-width: 100%;
+		height: 100%;
 		margin: 0 auto;
 		border: 1px solid var(--border);
 		border-radius: 20px;
@@ -379,7 +380,8 @@
 		}
 
 		:global(a) {
-			color: inherit;
+			text-decoration: underline;
+			color: #0000EE;
 		}
 
 		:global(img) {

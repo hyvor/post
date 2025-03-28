@@ -88,7 +88,9 @@
 						as="a"
 						href={consoleUrlWithProject('/issues')}
 					>
-						<IconCaretLeft slot="start" size={12} />
+						{#snippet start()}
+							<IconCaretLeft size={12} />
+						{/snippet}
 						All issues
 					</Button>
 				</div>
@@ -118,7 +120,6 @@
 <style>
 	.wrap {
 		flex: 1;
-		height: 100%;
 		padding: 30px 0;
 		display: flex;
 		flex-direction: column;
