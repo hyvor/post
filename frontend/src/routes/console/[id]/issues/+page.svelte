@@ -54,6 +54,7 @@
 	}
 	.issues {
 		margin-top: 15px;
+		padding: 20px;
 	}
 	.issues-title {
 		font-weight: 600;

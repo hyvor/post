@@ -8,7 +8,8 @@
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
-
+    import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
     let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
@@ -32,6 +33,17 @@
 		showStatus = false;
 		status = s;
 	}
+
+    onMount(() => {
+        const url = new URL(window.location.href);
+        const listName = url.searchParams.get('list');
+        if (listName) {
+            const list = $listStore.find((l) => l.name === listName);
+            if (list) {
+                currentList = list;
+            }
+        }
+    });
 
 </script>
 <SingleBox>
