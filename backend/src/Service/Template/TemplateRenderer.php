@@ -41,6 +41,13 @@ class TemplateRenderer
             color_box_border: '1px solid #e9ecef',
 
 
+            font_family: 'Arial, sans-serif',
+            font_size: '16px',
+            font_weight: 'normal',
+            font_weight_heading: 'bold',
+            font_color_on_background: '#007bff',
+            font_color_on_box: '#333333',
+            font_line_height: '1.5',
         );
 
         return $this->render($variables);
