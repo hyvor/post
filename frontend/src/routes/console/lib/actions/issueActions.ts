@@ -13,6 +13,16 @@ export function deleteIssue(id: number) {
 	});
 }
 
+export function getIssues(limit: number, offset: number) {
+	return consoleApi.get<Issue[]>({
+		endpoint: 'issues',
+		data: {
+			limit: limit,
+			offset: offset
+		}
+	});
+}
+
 export function getIssue(id: number) {
     return consoleApi.get<Issue>({
         endpoint: 'issues/' + id
