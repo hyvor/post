@@ -51,7 +51,7 @@
 
 		<NavLink
 			href={'/console/' + $projectStore.id.toString() + '/issues'}
-			active={page.url.pathname === `/console/${$projectStore.id}/issues`}
+			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/issues`)}
 		>
 			<NavItem>
 				<IconSend slot="icon" />

@@ -3,10 +3,12 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
+use App\Entity\Type\IssueStatus;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -163,5 +165,33 @@ class ConsoleInitTest extends WebTestCase
         $this->assertSame($newsletterList->getName(), $list['name']);
         $this->assertSame(10, $list['subscribers_count']);
         $this->assertSame(5, $list['subscribers_count_last_30d']);
+    }
+
+    public function test_init_project_with_issues(): void
+    {
+        $project = ProjectFactory::createOne();
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+            'status' => IssueStatus::DRAFT,
+            'content' => 'content'
+        ]);
+
+        $response = $this->consoleApi(
+            $project->getId(),
+            'GET',
+            '/init/project',
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertArrayHasKey('issues', $json);
+        $this->assertIsArray($json['issues']);
+        $this->assertSame(1, count($json['issues']));
+
+        $issueResponse = $json['issues'][0];
+        $this->assertIsArray($issueResponse);
+        $this->assertIsInt($issueResponse['id']);
+        $this->assertSame('draft', $issueResponse['status']);
     }
 }

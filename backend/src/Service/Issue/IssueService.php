@@ -5,9 +5,12 @@ namespace App\Service\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
+use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +26,7 @@ class IssueService
     public function __construct(
         private EntityManagerInterface $em,
         private IssueRepository $issueRepository,
+        private SendRepository $sendRepository,
         private NewsletterListService $newsletterListService,
     )
     {
@@ -123,5 +127,27 @@ class IssueService
     {
         $this->em->remove($issue);
         $this->em->flush();
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getIssueCounts(Issue $issue): array
+    {
+        $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
+        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
+
+        // TODO: Implement the rest of the counts
+        return [
+            'total' => $issue->getTotalSends(),
+            'sent' => $issue->getOkSends(),
+            'failed' => $issue->getFailedSends(),
+            'pending' => $pendingCount,
+            'opened' => 0,
+            'clicked' => 0,
+            'unsubscribed' => 0,
+            'bounced' => 0,
+            'complained' => 0,
+        ];
     }
 }

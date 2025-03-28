@@ -60,8 +60,6 @@ class Subscriber
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
 
-
-
     public function __construct()
     {
         $this->lists = new ArrayCollection();
