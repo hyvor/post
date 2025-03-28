@@ -8,7 +8,6 @@
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
-    import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
     let key = 1; // for re-rendering
@@ -67,6 +66,12 @@
                         selected={status === 'unsubscribed'}
                     >
                         Unsubscribed
+                    </ActionListItem>
+                    <ActionListItem
+                        on:click={() => selectStatus('pending')}
+                        selected={status === 'pending'}
+                    >
+                        pending
                     </ActionListItem>
                 </ActionList>
             </Selector>

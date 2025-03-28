@@ -50,7 +50,6 @@ final class ConsoleController extends AbstractController
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
-            'issues' => array_map(fn($issue) => new IssueObject($issue), $issues),
             'stats' => new StatsObject(
                 $projectStats[0],
                 $projectStats[1],
