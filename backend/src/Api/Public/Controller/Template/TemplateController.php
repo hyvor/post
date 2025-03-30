@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Public\Controller;
+namespace App\Api\Public\Controller\Template;
 
 use Symfony\Component\Routing\Attribute\Route;
 
