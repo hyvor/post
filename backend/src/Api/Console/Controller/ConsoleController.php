@@ -46,7 +46,6 @@ final class ConsoleController extends AbstractController
     {
         $projectStats = $this->projectService->getProjectStats($project);
         $lists = $this->listRepository->findBy(['project' => $project]);
-        $issues = $this->issueRepository->findBy(['project' => $project]);
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),

@@ -153,6 +153,34 @@ class GetSubscribersTest extends WebTestCase
         $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
+    public function test_list_subscribers_email_search(): void
+    {
+        $project = ProjectFactory::createOne();
 
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'email' => 'thibault@hyvor.com',
+        ]);
+
+        $subscriber2 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'email' => 'supun@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?email=thibault"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $this->assertSame($subscriber1->getId(), $json[0]['id']);
+    }
 
 }
