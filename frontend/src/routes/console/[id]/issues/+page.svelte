@@ -37,7 +37,7 @@
 
 </script>
 
-<SingleBox>
+<SingleBox style="overflow-auto">
     <div class="issues">
 		{#if loading}
 			<Loader full />
