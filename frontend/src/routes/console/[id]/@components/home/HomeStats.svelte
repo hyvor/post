@@ -14,7 +14,7 @@
 		<div class="stats">
 			<Stat title="Subscribers" counts={$projectStatsStore.subscribers} href={`/console/${$projectStore.id}/subscribers`} />
 			<Stat title="Issues" counts={$projectStatsStore.issues} href={`/console/${$projectStore.id}/issues`} />
-			<Stat title="Lists" counts={$projectStatsStore.lists} />
+			<Stat title="Lists" counts={$projectStatsStore.lists} href={`/console/${$projectStore.id}`}/>
 		</div>
 	{/if}
 </div>

@@ -22,3 +22,9 @@ export function updateList(id: number, name: string, description: string|null) {
         },
     });
 }
+
+export function deleteList(id: number) {
+    return consoleApi.delete({
+        endpoint: `lists/${id}`,
+    });
+}
