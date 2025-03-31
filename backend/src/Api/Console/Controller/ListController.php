@@ -61,7 +61,7 @@ final class ListController extends AbstractController
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
-            $input->description ?? $list->getDescription()
+                $input->description ?? $list->getDescription()
         );
         return $this->json(new ListObject($list));
     }

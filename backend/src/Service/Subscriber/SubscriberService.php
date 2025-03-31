@@ -90,6 +90,7 @@ class SubscriberService
         Project $project,
         string $status,
         ?int $listId,
+        ?string $search,
         int $limit,
         int $offset
     ): ArrayCollection
@@ -101,23 +102,31 @@ class SubscriberService
             throw new InvalidArgumentException("Invalid subscriber status: $status");
         }
 
-        $criteria = [
-            'project' => $project,
-            'status' => $subscriberStatus->value,
-        ];
+        $qb = $this->subscriberRepository->createQueryBuilder('s');
+
+        $qb->leftJoin('s.lists', 'l')
+            ->where('s.project = :project')
+            ->andWhere('s.status = :status')
+            ->setParameter('project', $project)
+            ->setParameter('status', $subscriberStatus->value)
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
 
         if ($listId !== null) {
-            $criteria['list'] = $listId;
+            $qb->andWhere('l.id = :listId')
+                ->setParameter('listId', $listId);
         }
 
-        return new ArrayCollection(
-            $this->subscriberRepository->findBy(
-                $criteria,
-                limit: $limit,
-                offset: $offset,
-                orderBy: ['id' => 'DESC']
-            )
-        );
+        if ($search !== null) {
+            $qb->andWhere('s.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        /** @var Subscriber[] $results */
+        $results = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($results);
     }
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {

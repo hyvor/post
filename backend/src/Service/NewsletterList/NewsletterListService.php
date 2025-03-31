@@ -59,7 +59,7 @@ class NewsletterListService
         return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
     }
 
-    public function updateNewsletterList(NewsletterList $list, string $name, string $description): NewsletterList
+    public function updateNewsletterList(NewsletterList $list, string $name, ?string $description): NewsletterList
     {
         $list
             ->setName($name)

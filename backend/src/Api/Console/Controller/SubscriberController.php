@@ -41,9 +41,21 @@ final class SubscriberController extends AbstractController
             $list_id = $request->query->getInt('list_id');
         }
 
+        $search = null;
+        if ($request->query->has('search')) {
+            $search = $request->query->getString('search');
+        }
+
         $subscribers = $this
             ->subscriberService
-            ->getSubscribers($project, $status, $list_id, $limit, $offset)
+            ->getSubscribers(
+                $project,
+                $status,
+                $list_id,
+                $search,
+                $limit,
+                $offset
+            )
             ->map(fn($subscriber) => new SubscriberObject($subscriber));
 
         return $this->json($subscribers);

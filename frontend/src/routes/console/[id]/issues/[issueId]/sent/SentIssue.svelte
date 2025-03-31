@@ -109,8 +109,6 @@
 	.stats {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		background-color: var(--accent-lightest);
-		background-color: var(--hover);
 		margin: 20px -40px;
 		padding: 15px 40px;
 	}

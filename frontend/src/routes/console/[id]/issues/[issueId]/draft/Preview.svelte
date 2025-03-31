@@ -35,9 +35,8 @@
 
 	function fetchPreview() {
 		previewIssue(id)
-			.then(async (res) => {
+			.then((res) => {
 				html = res.html;
-				await tick();
 				resizeIframe();
 			})
 			.catch((e) => {

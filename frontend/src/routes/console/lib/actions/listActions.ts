@@ -12,3 +12,13 @@ export function createList(name: string, description: string|null) {
         },
     });
 }
+
+export function updateList(id: number, name: string, description: string|null) {
+    return consoleApi.patch<List>({
+        endpoint: `lists/${id}`,
+        data: {
+            name,
+            description
+        },
+    });
+}
