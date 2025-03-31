@@ -8,6 +8,7 @@
 
 	export let status: NewsletterSubscriberStatus;
 	export let list_id: number | null;
+	export let search: string | null = null;
 	export let key: number; // just for forcing re-render
 
 	let loading = true;
@@ -22,7 +23,7 @@
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
-		getSubscribers(status, list_id, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
+		getSubscribers(status, list_id, search, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
 			.then((data) => {
 				subscribers = more ? [...subscribers, ...data] : data;
 				hasMore = data.length === SUBSCRIBERS_PER_PAGE;
@@ -36,16 +37,8 @@
 			});
 	}
 
-	function onDelete(id: number) {
-		subscribers = subscribers.filter((s) => s.id !== id);
-	}
-
-	function onUpdate(e: CustomEvent<Subscriber>) {
-		subscribers = subscribers.map((s) => (s.id === e.detail.id ? e.detail : s));
-	}
-
 	$: {
-		status, key, load();
+		status, key, search, list_id, load();
 	}
 </script>
 

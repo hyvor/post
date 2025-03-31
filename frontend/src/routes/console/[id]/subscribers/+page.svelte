@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text } from '@hyvor/design/components';
+	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text, TextInput } from '@hyvor/design/components';
 	import Selector from '../@components/content/Selector.svelte';
 	import type { List, NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
@@ -19,6 +19,8 @@
 
     let currentList: List | null = null;
 
+    let search = '';
+
     let addingManually = false;
 	let importing = false;
 
@@ -32,6 +34,8 @@
 		showStatus = false;
 		status = s;
 	}
+
+
 
     onMount(() => {
         const url = new URL(window.location.href);
@@ -94,6 +98,13 @@
                     {/each}
                 </ActionList>
             </Selector>
+        
+            <TextInput
+                bind:value={search}
+                placeholder="Search"
+                style="width:250px"
+                size="small"
+            />
         </div>
         <div class="right">
             <ButtonGroup>
@@ -107,7 +118,7 @@
         </div>
     </div>
 
-    <SubscriberList {status} {key} list_id={currentList?.id || null}/>
+    <SubscriberList {status} {key} list_id={currentList?.id || null} search={search === '' ? null : search}/>
 
     {#if addingManually}
 	    <AddSubscribers bind:show={addingManually} add={() => key += 1}/>
