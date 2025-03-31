@@ -11,8 +11,6 @@
     export let onEdit: (event: Event) => void;
     export let submitList: () => void;
 
-   
-
 </script>
 
 <IconButton color="input" size="small" on:click={(event: Event) => {

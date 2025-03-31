@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { IconButton, toast } from '@hyvor/design/components';
+	import { IconButton, toast, confirm } from '@hyvor/design/components';
 	import { listStore, projectStore } from '../../../lib/stores/projectStore';
 	import type { List } from '../../../types';
 	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import ListEditionModal from './ListEditionModal.svelte';
-	import { updateList } from '../../../lib/actions/listActions';
+	import { deleteList, updateList } from '../../../lib/actions/listActions';
 	import EditListButton from './EditListButton.svelte';
 
 	let { list }: { list: List } = $props();
@@ -30,10 +30,35 @@
 		modalOpen = true;
 	}
 
-	function onDelete(event: Event) {
+	async function onDelete(event: Event) {
 		event.stopPropagation();
 		event.preventDefault();
-		console.log('Delete list', list.name);
+		
+		const confirmation = await confirm({
+			title: 'Delete List',
+			content: 'Are you sure you want to delete this list?',
+			confirmText: 'Delete',
+			cancelText: 'Cancel',
+			danger: true
+		});
+
+		if (!confirmation) return;
+
+		confirmation.loading();
+
+		deleteList(list.id)
+			.then(() => {
+				toast.success('Subscriber deleted successfully');
+				listStore.update((lists) => {
+					return lists.filter((l) => l.id !== list.id);
+				});
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			})
+			.finally(() => {
+				confirmation.close();
+			});
 	}
 
 	function submitEdit() {
@@ -57,59 +82,71 @@
 
 </script>
 
-<a class="list-item" href={`/console/${$projectStore.id}/subscribers?list=${list.name}`}>
-	<div class="list-title">
-		{list.name || '(Untitled)'}
-		<div class="list-description">
-			{truncateDescription(list.description)}
+<div class="list-item">
+	<a class="list-content" href={`/console/${$projectStore.id}/subscribers?list=${list.name}`}>
+		<div class="list-title">
+			{list.name || '(Untitled)'}
+			<div class="list-description">
+				{truncateDescription(list.description)}
+			</div>
 		</div>
-	</div>
-	<div class="list-subscribers">
-		<div class="count">
-			{list.subscribers_count} Subscribers
-		</div>
-		<div
-			class="count-diff"
-			class:positive={list.subscribers_count_last_30d >= 0}
-			class:negative={list.subscribers_count_last_30d < 0}
-		>
-			{list.subscribers_count_last_30d >= 0
-				? '+'
-				: ''}{list.subscribers_count_last_30d.toLocaleString()}
+		<div class="list-subscribers">
+			<div class="count">
+				{list.subscribers_count} Subscribers
+			</div>
+			<div
+				class="count-diff"
+				class:positive={list.subscribers_count_last_30d >= 0}
+				class:negative={list.subscribers_count_last_30d < 0}
+			>
+				{list.subscribers_count_last_30d >= 0
+					? '+'
+					: ''}{list.subscribers_count_last_30d.toLocaleString()}
 
-			<span class="last-30d-tag">30d</span>
+				<span class="last-30d-tag">30d</span>
+			</div>
 		</div>
-	</div>
+	</a>
 	<div class="actions">
-		<div class="actions">
-			<EditListButton
-				bind:listName={listName}
-				bind:listDescription={listDescription}
-				onEdit={onEdit}
-				submitList={submitEdit}
-			/>
-			<IconButton color="red" variant="fill-light" size="small" on:click={onDelete}>
-				<IconTrash size={12} />
-			</IconButton>
-		</div>
+		<EditListButton
+			bind:listName={listName}
+			bind:listDescription={listDescription}
+			onEdit={onEdit}
+			submitList={submitEdit}
+		/>
+		<IconButton color="red" variant="fill-light" size="small" on:click={onDelete}>
+			<IconTrash size={12} />
+		</IconButton>
 	</div>
-</a>
+</div>
 
 <style>
 	.list-item {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+	}
+
+	.actions {
+		margin-left: 10px;
+	}
+
+	.list-content {
+		flex: 1;
 		padding: 10px;
 		padding-left: 15px;
 		padding-right: 15px;
 		border-left: 3px solid transparent;
 		position: relative;
 		border-radius: 20px;
-		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		text-decoration: none;
+		color: inherit;
 	}
 
-	.list-item:hover {
+	.list-content:hover {
 		background: var(--hover);
 	}
 

@@ -7,11 +7,10 @@
 
     export let submitModal: () => void;
 
-
 </script>
 
 <Modal
-	title="Create List"
+	title={listName === '' ? "Create List" : "Edit List"}
 	bind:show={modalOpen}
 	size="large"
 	footer={{
@@ -19,7 +18,7 @@
             text: 'Cancel',
         },
         confirm: {
-            text: 'Create',
+            text: listName === '' ? 'Create' : 'Edit',
         }
     }}
     on:cancel={() => {
