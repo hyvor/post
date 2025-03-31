@@ -13,7 +13,6 @@
 		--padding-x: 25px;
 	}
 	.inner {
-		height: 100%;
 		display: flex;
 		flex: 1;
 		flex-direction: column;

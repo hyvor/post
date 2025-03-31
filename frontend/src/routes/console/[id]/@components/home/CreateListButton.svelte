@@ -20,7 +20,6 @@
 			.catch(() => {
 				toast.error('Failed to create list', { id: toastId });
 			});
-
 	}
 
 </script>
