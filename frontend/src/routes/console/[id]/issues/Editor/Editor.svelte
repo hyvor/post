@@ -19,7 +19,9 @@
     import IconTypeH2 from '@hyvor/icons/IconTypeH2';
     import IconQuote from '@hyvor/icons/IconQuote';
 	import AddLink from './AddLink.svelte';
+	import AddButton from './AddButton.svelte';
 	import { contentUpdateId } from '../[issueId]/issueStore';
+	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 
 	export let content: string | null = null;
     export let docupdate: (doc: string) => void;
@@ -123,6 +125,67 @@
 		view.focus();
 	}
 
+
+	let addingButton = false;
+	let editingButton = false;
+	let editingButtonNode: any = null;
+
+	function onButtonToggle() {
+		const { state } = view;
+		const { from, to } = state.selection;
+		
+		// Check if we're clicking on an existing button
+		const node = state.doc.nodeAt(from);
+		if (node && node.type === newsletterSchema.nodes.button) {
+			editingButton = true;
+			editingButtonNode = node;
+		} else {
+			addingButton = true;
+		}
+	}
+
+	function onButtonAdd(text: string, href: string) {
+		const { state } = view;
+		const { from, to } = state.selection;
+		
+		// Create a button node with the provided attributes
+		const buttonNode = newsletterSchema.nodes.button.createAndFill({
+			href,
+			text
+		})!;
+		
+		// Replace the selected content with the button
+		const tr = state.tr.replaceWith(from, to, buttonNode);
+		view.dispatch(tr);
+		view.focus();
+	}
+
+	function onButtonEdit(text: string, href: string) {
+		const { state } = view;
+		
+		// Find the button node in the document
+		let buttonPos = -1;
+		state.doc.descendants((node, pos) => {
+			if (node.type === newsletterSchema.nodes.button && node === editingButtonNode) {
+				buttonPos = pos;
+			}
+		});
+		
+		if (buttonPos === -1) {
+			console.error('Could not find button node');
+			return;
+		}
+		
+		// Update the button node with new attributes
+		const tr = state.tr.setNodeMarkup(buttonPos, undefined, {
+			href,
+			text
+		});
+		
+		view.dispatch(tr);
+		view.focus();
+	}
+
 	function addHr() {
 		const { state } = view;
 		const { schema, selection } = state;
@@ -207,6 +270,19 @@
 
 					contentUpdateId.update((id) => id + 1);
 				}
+			},
+			handleClick: (view: EditorView, pos: number, event: MouseEvent) => {
+				// Get the node at the clicked position
+				const node = view.state.doc.nodeAt(pos);
+				
+				// If clicking on a button node, prevent default link behavior
+				if (node && node.type === newsletterSchema.nodes.button) {
+					event.preventDefault();
+					editingButton = true;
+					editingButtonNode = node;
+					return true;
+				}
+				return false;
 			}
 		});
 	});
@@ -265,7 +341,20 @@
 			</IconButton>
 		</div>
 		<div class="right">
-			<IconButton size="small" color="input" on:click={() => addHr()} title="Horizontal Rule">
+			<IconButton
+				size="small"
+				color="input"
+				on:click={() => onButtonToggle()}
+				title="Button"
+			>
+				<IconBoxArrowInDown size={14} />
+			</IconButton>
+			<IconButton 
+				size="small"
+				color="input"
+				on:click={() => addHr()}
+				title="Horizontal Rule"
+			>
 				<IconHr size={14} />
 			</IconButton>
 			<IconButton
@@ -299,6 +388,20 @@
 
 {#if addingLink}
 	<AddLink add={onLinkAdd} bind:show={addingLink} />
+{/if}
+
+{#if addingButton}
+	<AddButton add={onButtonAdd} bind:show={addingButton} />
+{/if}
+
+{#if editingButton}
+	<AddButton 
+		add={onButtonEdit} 
+		bind:show={editingButton} 
+		initialText={editingButtonNode?.attrs.text} 
+		initialHref={editingButtonNode?.attrs.href}
+		isEditing={true}
+	/>
 {/if}
 
 <style lang="scss">
@@ -420,6 +523,37 @@
 			margin: 30px auto;
 			max-width: 100%;
 			height: auto;
+		}
+
+		:global(.pm-button) {
+			display: inline-block;
+			background-color: var(--accent);
+			color: white;
+			padding: 8px 16px;
+			border-radius: 20px;
+			text-decoration: none;
+			text-align: center;
+			margin: 20px 0;
+			transition: opacity 0.2s;
+			cursor: pointer;
+			pointer-events: none;
+		}
+
+		:global(.pm-button:hover) {
+			opacity: 0.9;
+		}
+
+		:global(.pm-button:focus) {
+			outline: 2px solid var(--accent);
+			outline-offset: 2px;
+		}
+
+		:global(.pm-button-wrapper) {
+			pointer-events: auto;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			width: 100%;
 		}
 	}
 	.wrap :global(.ProseMirror :first-child) {
