@@ -358,6 +358,24 @@
 			font-size: 14px;
 		}
 
+		:global(:not(pre) > code) {
+			background: rgba(135, 131, 120, 0.15);
+			color: #eb5757;
+			border-radius: 3px;
+			font-size: 85%;
+			padding: 0.2em 0.4em;
+			font-family: monospace;
+		}
+
+		:global(blockquote) {
+			margin-top: 30px;
+			border-width: 0;
+			border-color: #000000;
+			border-style: solid;
+			border-left-width: 4px;
+			padding: 10px 15px;
+		}
+
 		:global(.heading-selectors-wrap) {
 			margin-bottom: 3px;
 			:global(button) {
