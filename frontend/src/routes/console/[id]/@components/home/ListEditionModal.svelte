@@ -18,7 +18,7 @@
             text: 'Cancel',
         },
         confirm: {
-            text: listName === '' ? 'Create' : 'Edit',
+            text: listName === '' ? 'Create' : 'Save',
         }
     }}
     on:cancel={() => {
