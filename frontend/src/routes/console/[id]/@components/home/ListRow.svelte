@@ -26,7 +26,6 @@
 	function onEdit(event: Event) {
 		event.stopPropagation();
 		event.preventDefault();
-		console.log('Opening modal...');
 		modalOpen = true;
 	}
 
@@ -109,8 +108,8 @@
 	</a>
 	<div class="actions">
 		<EditListButton
-			bind:listName={listName}
-			bind:listDescription={listDescription}
+			bind:listName
+			bind:listDescription
 			onEdit={onEdit}
 			submitList={submitEdit}
 		/>
