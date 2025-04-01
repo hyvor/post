@@ -286,7 +286,7 @@
 			</IconButton>
 		</div>
 	</div>
-	<div bind:this={el} />
+	<div bind:this={el} class="content" />
 </div>
 
 <input
@@ -310,8 +310,21 @@
 		border: 1px solid var(--border);
 		border-radius: 20px;
 		min-height: 400px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.content {
+		flex: 1;
+		padding: 10px;
 	}
 	.wrap :global(.ProseMirror) {
+		height: 100%;
+		
+		&:focus-visible {
+			outline: none;
+		}
+
 		:global(p) {
 			margin: 0 0 20px;
 		}
