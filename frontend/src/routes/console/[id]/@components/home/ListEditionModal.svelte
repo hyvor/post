@@ -16,7 +16,7 @@
 	footer={{
         cancel: {
             text: 'Cancel',
-        },
+        }, 
         confirm: {
             text: listName === '' ? 'Create' : 'Save',
         }

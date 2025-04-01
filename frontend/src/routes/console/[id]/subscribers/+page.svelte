@@ -35,8 +35,6 @@
 		status = s;
 	}
 
-
-
     onMount(() => {
         const url = new URL(window.location.href);
         const listName = url.searchParams.get('list');

@@ -4,6 +4,7 @@ namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Repository\IssueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -15,7 +16,8 @@ class NewsletterListService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private IssueRepository $issueRepository,
     )
     {
     }
@@ -41,6 +43,11 @@ class NewsletterListService
 
     public function deleteNewsletterList(NewsletterList $list): void
     {
+        $linked_issues = $this->issueRepository->findBy(['listids' => [$list->getId()]]);
+        if (count($linked_issues) > 0) {
+            throw new HttpException(400, "List is linked to issues");
+        }
+
         $this->em->remove($list);
         $this->em->flush();
     }

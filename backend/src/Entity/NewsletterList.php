@@ -22,7 +22,7 @@ class NewsletterList
     /**
      * @var Collection<int, Subscriber>
      */
-    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'list_subscriber')]
     #[ORM\JoinColumn(name: 'list_id')]
     private Collection $subscribers;
