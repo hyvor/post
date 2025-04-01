@@ -51,6 +51,7 @@ export type Issue = {
 }
 
 export type SendStatus = 'pending' | 'sent' | 'failed';
+export type SendType = 'all' | 'opened' | 'clicked' | 'unsubscribed' | 'bounced' | 'complained';
 
 export interface IssueSend {
 	id: number;

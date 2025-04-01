@@ -1,30 +1,30 @@
 <?php
 
-namespace App\Domain\Newsletter\Content;
+namespace App\Content;
 
-use App\Domain\Newsletter\Content\Marks\Code;
-use App\Domain\Newsletter\Content\Marks\Em;
-use App\Domain\Newsletter\Content\Marks\Link;
-use App\Domain\Newsletter\Content\Marks\Strike;
-use App\Domain\Newsletter\Content\Marks\Strong;
-use App\Domain\Newsletter\Content\Marks\Underline;
-use App\Domain\Newsletter\Content\Nodes\Blockquote;
-use App\Domain\Newsletter\Content\Nodes\Doc;
-use App\Domain\Newsletter\Content\Nodes\HardBreak;
-use App\Domain\Newsletter\Content\Nodes\Heading;
-use App\Domain\Newsletter\Content\Nodes\HorizontalRule;
-use App\Domain\Newsletter\Content\Nodes\Image;
-use App\Domain\Newsletter\Content\Nodes\Paragraph;
-use App\Domain\Newsletter\Content\Nodes\Text;
-use App\Models\NewsletterIssue;
+use App\Content\Marks\Code;
+use App\Content\Marks\Em;
+use App\Content\Marks\Link;
+use App\Content\Marks\Strike;
+use App\Content\Marks\Strong;
+use App\Content\Marks\Underline;
+use App\Content\Nodes\Blockquote;
+use App\Content\Nodes\Doc;
+use App\Content\Nodes\HardBreak;
+use App\Content\Nodes\Heading;
+use App\Content\Nodes\HorizontalRule;
+use App\Content\Nodes\Image;
+use App\Content\Nodes\Paragraph;
+use App\Content\Nodes\Text;
+use App\Entity\Issue;
 use Hyvor\Phrosemirror\Document\Document;
 use Hyvor\Phrosemirror\Types\Schema;
 
 class ContentService
 {
-    public static function htmlFromIssue(NewsletterIssue $issue): string
+    public static function htmlFromIssue(Issue $issue): string
     {
-        $content = $issue->content;
+        $content = $issue->getContent();
 
         if (!$content) {
             return '';
@@ -33,9 +33,9 @@ class ContentService
         return self::htmlFromJson($content);
     }
 
-    public static function textFromIssue(NewsletterIssue $issue): string
+    public static function textFromIssue(Issue $issue): string
     {
-        $content = $issue->content;
+        $content = $issue->getContent();
 
         if (!$content) {
             return '';

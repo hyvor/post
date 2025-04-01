@@ -1,4 +1,4 @@
-import type { Issue, IssueSend } from "../../types";
+import type { Issue, IssueSend, SendType } from "../../types";
 import consoleApi from "../consoleApi";
 
 export function createIssueDraft() {
@@ -76,14 +76,16 @@ export function getIssueSends(
 	id: number,
 	limit: number,
 	offset: number,
-	search: string
+	search: string | null,
+	type: SendType
 ) {
 	return consoleApi.get<IssueSend[]>({
 		endpoint: `issues/${id}/sends`,
 		data: {
 			limit,
 			offset,
-			search
+			search,
+			type
 		}
 	});
 }

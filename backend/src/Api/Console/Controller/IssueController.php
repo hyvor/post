@@ -194,9 +194,11 @@ class IssueController extends AbstractController
             $search = $request->query->getString('search');
         }
 
+        $sendType = $request->query->getString('type');
+
         $sends = $this
             ->sendService
-            ->getSends($issue, $limit, $offset, $search)
+            ->getSends($issue, $limit, $offset, $search, $sendType)
             ->map(fn($send) => new SendObject($send));
 
         return $this->json($sends);
