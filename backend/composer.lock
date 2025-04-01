@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0d7ec4e7d3ebf90a1bd695c890c4909",
+    "content-hash": "2d989711bc9640d9f004791336714ba4",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1803,6 +1803,53 @@
                 "source": "https://github.com/hyvor/internal/tree/symfony"
             },
             "time": "2025-02-18T02:39:08+00:00"
+        },
+        {
+            "name": "hyvor/phrosemirror",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyvor/phrosemirror.git",
+                "reference": "0f4769c1baf44050a063fa8ad98067b0f738920f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyvor/phrosemirror/zipball/0f4769c1baf44050a063fa8ad98067b0f738920f",
+                "reference": "0f4769c1baf44050a063fa8ad98067b0f738920f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "myclabs/deep-copy": "^1.11",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "pestphp/pest": "^2.0",
+                "phpstan/phpstan": "^1.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hyvor\\Phrosemirror\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Supun",
+                    "email": "supun@hyvor.com"
+                }
+            ],
+            "description": "Prosemirror in PHP",
+            "support": {
+                "issues": "https://github.com/hyvor/phrosemirror/issues",
+                "source": "https://github.com/hyvor/phrosemirror/tree/1.0.4"
+            },
+            "time": "2024-03-28T16:26:08+00:00"
         },
         {
             "name": "illuminate/collections",

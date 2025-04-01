@@ -162,22 +162,10 @@
 
 	function onButtonEdit(text: string, href: string) {
 		const { state } = view;
-		
-		// Find the button node in the document
-		let buttonPos = -1;
-		state.doc.descendants((node, pos) => {
-			if (node.type === newsletterSchema.nodes.button && node === editingButtonNode) {
-				buttonPos = pos;
-			}
-		});
-		
-		if (buttonPos === -1) {
-			console.error('Could not find button node');
-			return;
-		}
+		const { from, to } = state.selection;
 		
 		// Update the button node with new attributes
-		const tr = state.tr.setNodeMarkup(buttonPos, undefined, {
+		const tr = state.tr.setNodeMarkup(from, undefined, {
 			href,
 			text
 		});
@@ -551,9 +539,6 @@
 		:global(.pm-button-wrapper) {
 			pointer-events: auto;
 			cursor: pointer;
-			display: flex;
-			justify-content: center;
-			width: 100%;
 		}
 	}
 	.wrap :global(.ProseMirror :first-child) {

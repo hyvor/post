@@ -2,15 +2,13 @@
 	import { IconButton, toast, confirm } from '@hyvor/design/components';
 	import { listStore, projectStore } from '../../../lib/stores/projectStore';
 	import type { List } from '../../../types';
-	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import ListEditionModal from './ListEditionModal.svelte';
 	import { deleteList, updateList } from '../../../lib/actions/listActions';
 	import EditListButton from './EditListButton.svelte';
 
 	let { list }: { list: List } = $props();
-	let listName: string = list.name;
-	let listDescription: string | null = list.description;
+	let listName = $state(list.name);
+	let listDescription = $state(list.description);
 	let modalOpen = false;
 
 
@@ -27,6 +25,25 @@
 		event.stopPropagation();
 		event.preventDefault();
 		modalOpen = true;
+	}
+
+	async function submitEdit() {
+		const toastId = toast.loading('Updating list...');
+
+		updateList(list.id, listName, listDescription)
+			.then((res) => {
+				toast.success('List updated', { id: toastId });
+				listStore.update((lists) => {
+					const index = lists.findIndex((l) => l.id === list.id);
+					if (index !== -1) {
+						lists[index] = { ...lists[index], ...res };
+					}
+					return lists;
+				});
+			})
+			.catch(() => {
+				toast.error('Failed to update list', { id: toastId });
+			});
 	}
 
 	async function onDelete(event: Event) {
@@ -57,25 +74,6 @@
 			})
 			.finally(() => {
 				confirmation.close();
-			});
-	}
-
-	function submitEdit() {
-		const toastId = toast.loading('Updating list...');
-
-		updateList(list.id, listName, listDescription)
-			.then((res) => {
-				toast.success('List updated', { id: toastId });
-				listStore.update((lists) => {
-					const index = lists.findIndex((l) => l.id === list.id);
-					if (index !== -1) {
-						lists[index] = { ...lists[index], ...res };
-					}
-					return lists;
-				});
-			})
-			.catch(() => {
-				toast.error('Failed to update list', { id: toastId });
 			});
 	}
 
