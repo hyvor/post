@@ -43,11 +43,6 @@ class NewsletterListService
 
     public function deleteNewsletterList(NewsletterList $list): void
     {
-        $linked_issues = $this->issueRepository->findBy(['listids' => [$list->getId()]]);
-        if (count($linked_issues) > 0) {
-            throw new HttpException(400, "List is linked to issues");
-        }
-
         $this->em->remove($list);
         $this->em->flush();
     }

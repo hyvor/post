@@ -174,7 +174,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'GET',
-            "/subscribers?email=thibault"
+            "/subscribers?search=thibault"
         );
 
         $this->assertSame(200, $response->getStatusCode());

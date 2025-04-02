@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Issue, SendType } from '../../../../types';
+	import type { Issue } from '../../../../types';
 	import { getIssueReport, type IssueCounts } from '../../../../lib/actions/issueActions';
-	import { ActionList, ActionListItem, Callout, IconButton, Loader, TextInput, toast, Tooltip } from '@hyvor/design/components';
+	import { Callout, IconButton, Loader, TextInput, toast, Tooltip } from '@hyvor/design/components';
     import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
     import IconCopy from '@hyvor/icons/IconCopy';
     import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
@@ -10,7 +10,6 @@
 	import SentStat from './SentStat.svelte';
 	import FriendlyDate from '../../../@components/utils/FriendlyDate.svelte';
 	import { copyAndToast } from '$lib/helpers/copy';
-	import Selector from '../../../@components/content/Selector.svelte';
 
 	export let issue: Issue;
 
@@ -18,18 +17,8 @@
 	const webUrl = '' + '/api/newsletter/issue/' + issue.uuid;
 
 	let loading = true;
-	let showStatus = false;
 
-	let search = '';
-	let type: SendType = 'all';
-	$: typeKey = type.charAt(0).toUpperCase() + type.slice(1);
-	
 	let counts: IssueCounts;
-
-	function selectType(s: SendType) {
-		showStatus = false;
-		type = s;
-	}
 
 	onMount(() => {
 		getIssueReport(issue.id)
@@ -91,59 +80,7 @@
 				<SentStat title="Bounced" value={counts.bounced} total={counts.total} />
 				<SentStat title="Complaints" value={counts.complained} total={counts.total} />
 			</div>
-			<Selector 
-                name="Status"
-                bind:show={showStatus}
-                value={typeKey}
-                width={200}
-            >
-                <ActionList selection="single" selectionAlign="end">
-                    <ActionListItem
-						on:click={() => selectType('all')}
-						selected={type === 'all'}
-					>
-						All
-					</ActionListItem>
-					<ActionListItem
-                        on:click={() => selectType('opened')}
-                        selected={type === 'opened'}
-                    >
-                        Opened
-                    </ActionListItem>
-					<ActionListItem
-						on:click={() => selectType('clicked')}
-						selected={type === 'clicked'}
-					>
-						Clicked
-					</ActionListItem>
-					<ActionListItem
-						on:click={() => selectType('unsubscribed')}
-						selected={type === 'unsubscribed'}
-					>
-						Unsubscribed
-					</ActionListItem>
-					<ActionListItem
-						on:click={() => selectType('bounced')}
-						selected={type === 'bounced'}
-					>
-						Bounced
-					</ActionListItem>
-					<ActionListItem
-
-						on:click={() => selectType('complained')}
-						selected={type === 'complained'}
-					>
-						Complained
-					</ActionListItem>
-                </ActionList>
-            </Selector>
-			<TextInput
-				bind:value={search}
-				placeholder="Search"
-				style="width:250px"
-				size="small"
-			/>
-			<Sends {issue} search={search} sendType={type} />
+			<Sends {issue} />
 		{/if}
 	</div>
 </div>
