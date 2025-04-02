@@ -116,33 +116,35 @@
                 </ActionList>
             </Selector>
         
-            <TextInput
-				bind:value={searchVal}
-				placeholder={'Search...'}
-				style="width:250px"
-				on:keydown={searchActions.onKeydown}
-				on:blur={searchActions.onBlur}
-				size="small"
-			>
-				<svelte:fragment slot="end">
-					{#if searchVal.trim() !== ''}
-						<IconButton
-							variant="invisible"
-							color="gray"
-							size={16}
-							on:click={searchActions.onClear}
-						>
-							<IconX size={12} />
-						</IconButton>
-					{/if}
-				</svelte:fragment>
-			</TextInput>
-
-			{#if search !== searchVal}
-				<span class="press-enter">
-					⏎
-				</span>
-			{/if}
+            <div class="search-wrap">
+                <TextInput
+                    bind:value={searchVal}
+                    placeholder={'Search...'}
+                    style="width:250px"
+                    on:keydown={searchActions.onKeydown}
+                    on:blur={searchActions.onBlur}
+                    size="small"
+                >
+                    <svelte:fragment slot="end">
+                        {#if searchVal.trim() !== ''}
+                            <IconButton
+                                variant="invisible"
+                                color="gray"
+                                size={16}
+                                on:click={searchActions.onClear}
+                            >
+                                <IconX size={12} />
+                            </IconButton>
+                        {/if}
+                    </svelte:fragment>
+                </TextInput>
+    
+                {#if search !== searchVal}
+                    <span class="press-enter">
+                        ⏎
+                    </span>
+                {/if}
+            </div>
         </div>
         <div class="right">
             <ButtonGroup>
@@ -172,5 +174,15 @@
 	.left {
 		flex: 1;
 	}
-    
+    .search-wrap {
+        display: inline;
+		.press-enter {
+			color: var(--text-light);
+			font-size: 14px;
+			margin-left: 4px;
+		}
+		:global(input) {
+			font-size: 14px;
+		}
+	}
 </style>

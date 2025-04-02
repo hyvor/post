@@ -39,6 +39,9 @@ class NewsletterList
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
+    #[ORM\Column()]
+    private ?\DateTimeImmutable $deleted_at;
+
     public function __construct()
     {
         $this->subscribers = new ArrayCollection();
@@ -113,6 +116,18 @@ class NewsletterList
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
+    {
+        $this->deleted_at = $deleted_at;
 
         return $this;
     }

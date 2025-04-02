@@ -43,7 +43,8 @@ class NewsletterListService
 
     public function deleteNewsletterList(NewsletterList $list): void
     {
-        $this->em->remove($list);
+        $list->setDeletedAt($this->now());
+        $this->em->persist($list);
         $this->em->flush();
     }
 
@@ -58,7 +59,15 @@ class NewsletterListService
      */
     public function getNewsletterLists(Project $project): ArrayCollection
     {
-        return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
+        return new ArrayCollection(
+            $this->em->getRepository(NewsletterList::class)
+                ->findBy(
+                    [
+                        'project' => $project,
+                        'deleted_at' => null,
+                    ]
+                )
+        );
     }
 
     public function updateNewsletterList(NewsletterList $list, string $name, ?string $description): NewsletterList
