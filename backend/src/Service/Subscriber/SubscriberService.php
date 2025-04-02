@@ -115,6 +115,7 @@ class SubscriberService
 
         if ($listId !== null) {
             $qb->andWhere('l.id = :listId')
+                ->andWhere('l.deleted_at IS NULL')
                 ->setParameter('listId', $listId);
         }
 
