@@ -75,7 +75,6 @@
 	{#if loading}
 		<Loader full padding={100} />
 	{:else}
-	<div class="top">
 		<Selector 
 			name="Status"
 			bind:show={showStatus}
@@ -151,7 +150,6 @@
 				</span>
 			{/if}
 		</div>
-	</div>
 		{#if sends.length === 0}
 			No sends found
 		{:else}
@@ -169,15 +167,9 @@
 </div>
 
 <style lang="scss">
-	
-	.top {
-		display: flex;
-		align-items: center;
-		margin-bottom: 10px;
-	}
 
 	.search-wrap {
-		margin-left: 10px;
+		display: inline;
 		.press-enter {
 			color: var(--text-light);
 			font-size: 14px;

@@ -9,6 +9,8 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
@@ -21,6 +23,8 @@ class DeleteListTest extends WebTestCase
 
     public function testDeleteNewsletterListFound(): void
     {
+        Clock::set(new MockClock('2025-02-21'));
+
         $project = ProjectFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne([
@@ -46,7 +50,7 @@ class DeleteListTest extends WebTestCase
 
         $repository = $this->em->getRepository(NewsletterList::class);
         $list = $repository->find($newsletterListId);
-        $this->assertNull($list);
+        $this->assertSame('2025-02-21 00:00:00', $list->getDeletedAt()->format('Y-m-d H:i:s'));
     }
 
     public function testDeleteNewsletterListNotFound(): void
