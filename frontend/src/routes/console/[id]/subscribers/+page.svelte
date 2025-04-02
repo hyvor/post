@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text, TextInput } from '@hyvor/design/components';
+	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text, TextInput, IconButton } from '@hyvor/design/components';
 	import Selector from '../@components/content/Selector.svelte';
 	import type { List, NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
@@ -9,6 +9,7 @@
 	import SubscriberList from './SubscriberList.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
 	import { onMount } from 'svelte';
+	import IconX from '@hyvor/icons/IconX';
 
     let key = 1; // for re-rendering
     let status: NewsletterSubscriberStatus = 'subscribed';
@@ -19,7 +20,8 @@
 
     let currentList: List | null = null;
 
-    let search = '';
+    let searchVal: string = '';
+	let search: string = '';
 
     let addingManually = false;
 	let importing = false;
@@ -34,6 +36,23 @@
 		showStatus = false;
 		status = s;
 	}
+
+    const searchActions = {
+		onKeydown: (e: KeyboardEvent) => {
+			if (e.key === 'Enter') {
+				search = searchVal.trim();
+			}
+		},
+		onBlur: () => {
+			if (search !== searchVal) {
+				search = searchVal.trim();
+			}
+		},
+		onClear: () => {
+			searchVal = '';
+			search = '';
+		}
+	};
 
     onMount(() => {
         const url = new URL(window.location.href);
@@ -98,11 +117,32 @@
             </Selector>
         
             <TextInput
-                bind:value={search}
-                placeholder="Search"
-                style="width:250px"
-                size="small"
-            />
+				bind:value={searchVal}
+				placeholder={'Search...'}
+				style="width:250px"
+				on:keydown={searchActions.onKeydown}
+				on:blur={searchActions.onBlur}
+				size="small"
+			>
+				<svelte:fragment slot="end">
+					{#if searchVal.trim() !== ''}
+						<IconButton
+							variant="invisible"
+							color="gray"
+							size={16}
+							on:click={searchActions.onClear}
+						>
+							<IconX size={12} />
+						</IconButton>
+					{/if}
+				</svelte:fragment>
+			</TextInput>
+
+			{#if search !== searchVal}
+				<span class="press-enter">
+					⏎
+				</span>
+			{/if}
         </div>
         <div class="right">
             <ButtonGroup>
