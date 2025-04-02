@@ -35,11 +35,11 @@
 
 <Button on:click={create} {size}>
 	{text}
-	<svelte:fragment slot="action">
+	{#snippet action()}
 		{#if loading}
 			<Loader size={14} invert />
 		{:else}
             <svelte:component this={icon} size={14} />
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </Button>

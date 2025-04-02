@@ -98,7 +98,9 @@
 					{#if issue.status === 'draft'}
 						<Button variant="fill-light" color="red" on:click={onDelete}>
 							Delete
-							<IconTrash slot="end" size={12} />
+							{#snippet end()}
+								<IconTrash size={12} />
+							{/snippet}
 						</Button>
 					{/if}
 					<IssueStatusTag status={issue.status} size="large" />
@@ -120,7 +122,7 @@
 <style>
 	.wrap {
 		flex: 1;
-		padding: 30px 0;
+		padding: 30px 35px;
 		display: flex;
 		flex-direction: column;
 	}

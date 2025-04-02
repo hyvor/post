@@ -12,7 +12,7 @@ export function createSubscriber(email: string, list_ids: number[]) {
 }
 
 export function getSubscribers(
-	status: NewsletterSubscriberStatus,
+	status: NewsletterSubscriberStatus | null,
 	list_id: number | null,
 	search : string | null,
 	limit: number,

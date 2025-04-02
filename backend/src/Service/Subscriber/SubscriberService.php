@@ -88,30 +88,33 @@ class SubscriberService
      */
     public function getSubscribers(
         Project $project,
-        string $status,
+        ?string $status,
         ?int $listId,
         ?string $search,
         int $limit,
         int $offset
     ): ArrayCollection
     {
-        // Check if status is a valid SubscriberStatus
-        $subscriberStatus = SubscriberStatus::tryFrom($status);
-
-        if ($subscriberStatus === null) {
-            throw new InvalidArgumentException("Invalid subscriber status: $status");
-        }
 
         $qb = $this->subscriberRepository->createQueryBuilder('s');
 
         $qb->leftJoin('s.lists', 'l')
             ->where('s.project = :project')
-            ->andWhere('s.status = :status')
             ->setParameter('project', $project)
-            ->setParameter('status', $subscriberStatus->value)
             ->orderBy('s.id', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
+
+        if ($status !== null) {
+            // Check if status is a valid SubscriberStatus
+            $subscriberStatus = SubscriberStatus::tryFrom($status);
+
+            if ($subscriberStatus === null) {
+                throw new InvalidArgumentException("Invalid subscriber status: $status");
+            }
+            $qb->andWhere('s.status = :status')
+                ->setParameter('status', $subscriberStatus->value);
+        }
 
         if ($listId !== null) {
             $qb->andWhere('l.id = :listId')

@@ -12,8 +12,8 @@
 	import IconX from '@hyvor/icons/IconX';
 
     let key = 1; // for re-rendering
-    let status: NewsletterSubscriberStatus = 'subscribed';
-    $: statusKey = status.charAt(0).toUpperCase() + status.slice(1);
+    let status: NewsletterSubscriberStatus | null = null;
+    $: statusKey = status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All';
 
     let showStatus = false;
 	let showList = false;
@@ -32,7 +32,7 @@
 		currentList = list;
 	}
 
-    function selectStatus(s: NewsletterSubscriberStatus) {
+    function selectStatus(s: NewsletterSubscriberStatus | null) {
 		showStatus = false;
 		status = s;
 	}
@@ -56,9 +56,9 @@
 
     onMount(() => {
         const url = new URL(window.location.href);
-        const listName = url.searchParams.get('list');
-        if (listName) {
-            const list = $listStore.find((l) => l.name === listName);
+        const listId = Number(url.searchParams.get('list'));
+        if (listId) {
+            const list = $listStore.find((l) => l.id === listId);
             if (list) {
                 currentList = list;
             }
@@ -66,6 +66,7 @@
     });
 
 </script>
+
 <SingleBox>
     <div class="content">
         <div class="left">
@@ -76,6 +77,12 @@
                 width={200}
             >
                 <ActionList selection="single" selectionAlign="end">
+                    <ActionListItem
+                        on:click={() => selectStatus(null)}
+                        selected={status === null}
+                    >
+                        All
+                    </ActionListItem>
                     <ActionListItem
                         on:click={() => selectStatus('subscribed')}
                         selected={status === 'subscribed'}
@@ -92,7 +99,7 @@
                         on:click={() => selectStatus('pending')}
                         selected={status === 'pending'}
                     >
-                        pending
+                        Pending
                     </ActionListItem>
                 </ActionList>
             </Selector>
