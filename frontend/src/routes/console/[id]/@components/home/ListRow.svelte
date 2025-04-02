@@ -64,7 +64,7 @@
 
 		deleteList(list.id)
 			.then(() => {
-				toast.success('Subscriber deleted successfully');
+				toast.success('List deleted successfully');
 				listStore.update((lists) => {
 					return lists.filter((l) => l.id !== list.id);
 				});
@@ -80,7 +80,7 @@
 </script>
 
 <div class="list-item">
-	<a class="list-content" href={`/console/${$projectStore.id}/subscribers?list=${list.name}`}>
+	<a class="list-content" href={`/console/${$projectStore.id}/subscribers?list=${list.id}`}>
 		<div class="list-title">
 			{list.name || '(Untitled)'}
 			<div class="list-description">

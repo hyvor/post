@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { IconMessage, LoadButton, Loader } from '@hyvor/design/components';
 	import SubscriberRow from './SubscriberRow.svelte';
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import type { NewsletterSubscriberStatus, Subscriber } from '../../types';
 	import { getSubscribers } from '../../lib/actions/subscriberActions';
 
-	export let status: NewsletterSubscriberStatus;
+	export let status: NewsletterSubscriberStatus | null;
 	export let list_id: number | null;
 	export let search: string | null = null;
 	export let key: number; // just for forcing re-render

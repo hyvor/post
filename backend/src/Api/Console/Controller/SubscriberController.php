@@ -35,16 +35,17 @@ final class SubscriberController extends AbstractController
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
-        $status = $request->query->getString('status', SubscriberStatus::SUBSCRIBED->value);
+        $status = null;
+        if ($request->query->has('status'))
+            $status = $request->query->getString('status');
+
         $list_id = null;
-        if ($request->query->has('list_id')) {
+        if ($request->query->has('list_id'))
             $list_id = $request->query->getInt('list_id');
-        }
 
         $search = null;
-        if ($request->query->has('search')) {
+        if ($request->query->has('search'))
             $search = $request->query->getString('search');
-        }
 
         $subscribers = $this
             ->subscriberService

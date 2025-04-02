@@ -73,15 +73,16 @@
 	.send-row {
 		display: flex;
 		align-items: center;
-		padding: 10px 0;
+		padding: 10px 10px;
 		cursor: pointer;
 		width: 100%;
 		background: none;
 		border: none;
 		text-align: left;
+		margin-top: 10px;
 	}
 	.send-row:hover {
-		background-color: var(--accent-light);
+		background: var(--hover);
 		border-radius: 10px;
 	}
 	.time {

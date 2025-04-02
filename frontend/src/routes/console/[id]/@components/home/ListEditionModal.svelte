@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { FormControl, Label, Modal, TextInput } from "@hyvor/design/components";
+	import { FormControl, Label, Modal, SplitControl, TextInput } from "@hyvor/design/components";
+	import { onMount } from "svelte";
 
     export let modalOpen = false;
     export let listName: string = '';
@@ -7,12 +8,17 @@
 
     export let submitModal: () => void;
 
+	let nameInput: HTMLInputElement | null = null;
+
+	$: if (modalOpen && nameInput) {
+		nameInput.focus();
+	}
 </script>
 
 <Modal
 	title={listName === '' ? "Create List" : "Edit List"}
 	bind:show={modalOpen}
-	size="large"
+	size="medium"
 	footer={{
         cancel: {
             text: 'Cancel',
@@ -32,23 +38,32 @@
 
 	<div class="modal-inner">
 		<FormControl>
-			<Label>
-				Name
-			</Label>
-			<TextInput 
-				maxlength={255}
-				placeholder="Enter list name" 
-				bind:value={listName}
-			/>
-			<Label>
-				Description
-			</Label>
-			<TextInput 
-				placeholder="Enter list description" 
-				bind:value={listDescription}
-			/>
+			<SplitControl 
+				label="Name"
+				caption="The name of the list."
+			>
+				<TextInput 
+					maxlength={255}
+					placeholder="Enter list name" 
+					bind:value={listName}
+					bind:input={nameInput!}
+				/>
+			</SplitControl>
+			<SplitControl 
+				label="Description"
+				caption="The description of the list."
+			>
+				<TextInput 
+					placeholder="Enter list description" 
+					bind:value={listDescription}
+				/>
+			</SplitControl>
 		</FormControl>
 
 	</div>
 
 </Modal>
+
+<style>
+
+</style>

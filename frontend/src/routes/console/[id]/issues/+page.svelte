@@ -93,7 +93,7 @@
 	}
 	.issues {
 		margin-top: 15px;
-		padding: 20px;
+		padding: 30px; 
 	}
 	.issues-title {
 		font-weight: 600;
