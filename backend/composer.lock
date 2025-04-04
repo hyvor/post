@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2eff21c3f159317ee86c66209df5f165",
+    "content-hash": "35060e93c1922782fb4e4ef265c85bbd",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1803,6 +1803,53 @@
                 "source": "https://github.com/hyvor/internal/tree/symfony"
             },
             "time": "2025-02-18T02:39:08+00:00"
+        },
+        {
+            "name": "hyvor/phrosemirror",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyvor/phrosemirror.git",
+                "reference": "0f4769c1baf44050a063fa8ad98067b0f738920f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyvor/phrosemirror/zipball/0f4769c1baf44050a063fa8ad98067b0f738920f",
+                "reference": "0f4769c1baf44050a063fa8ad98067b0f738920f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "myclabs/deep-copy": "^1.11",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "pestphp/pest": "^2.0",
+                "phpstan/phpstan": "^1.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hyvor\\Phrosemirror\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Supun",
+                    "email": "supun@hyvor.com"
+                }
+            ],
+            "description": "Prosemirror in PHP",
+            "support": {
+                "issues": "https://github.com/hyvor/phrosemirror/issues",
+                "source": "https://github.com/hyvor/phrosemirror/tree/1.0.4"
+            },
+            "time": "2024-03-28T16:26:08+00:00"
         },
         {
             "name": "illuminate/collections",
@@ -6410,6 +6457,84 @@
                 }
             ],
             "time": "2025-01-29T07:40:13+00:00"
+        },
+        {
+            "name": "symfony/lock",
+            "version": "v7.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/lock.git",
+                "reference": "0436a01a5532c613d50cf56a50bc1756522c825e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/0436a01a5532c613d50cf56a50bc1756522c825e",
+                "reference": "0436a01a5532c613d50cf56a50bc1756522c825e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "psr/log": "^1|^2|^3"
+            },
+            "conflict": {
+                "doctrine/dbal": "<3.6",
+                "symfony/cache": "<6.4"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^3.6|^4",
+                "predis/predis": "^1.1|^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Lock\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jérémy Derussé",
+                    "email": "jeremy@derusse.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Creates and manages locks, a mechanism to provide exclusive access to a shared resource",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "cas",
+                "flock",
+                "locking",
+                "mutex",
+                "redlock",
+                "semaphore"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/lock/tree/v7.2.5"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-03-25T15:54:33+00:00"
         },
         {
             "name": "symfony/mailer",

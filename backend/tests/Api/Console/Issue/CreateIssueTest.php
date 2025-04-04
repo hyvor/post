@@ -36,7 +36,7 @@ class CreateIssueTest extends WebTestCase
             '/issues',
             []
         );
- 
+
         $this->assertSame(200, $response->getStatusCode());
 
         $json = $this->getJson($response);
