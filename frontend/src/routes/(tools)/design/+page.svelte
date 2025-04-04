@@ -1,7 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import CodemirrorEditor from '../../console/lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
-	import { getDefaultTemplate } from './lib/actions/templateActions';
+	import { getDefaultTemplate, previewTemplateFromVariable } from './lib/actions/templateActions';
+	import { IconButton } from '@hyvor/design/components';
+	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 
 	let template = '';
 	let variables = '';
@@ -11,7 +13,19 @@
 			.then((res) => {
 				if (res) {
 					template = res.template;
-					variables = res.variables;
+					variables = JSON.stringify(res.variables, null, 2);
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}
+
+	function fetchPreview() {
+		previewTemplateFromVariable(template, variables)
+			.then((res) => {
+				if (res) {
+					console.log(res);
 				}
 			})
 			.catch((err) => {
@@ -55,7 +69,16 @@
 	</div>
 
 	<div class="column">
-		<div class="column-title">Preview</div>
+		<div class="column-title">
+			Preview
+			<IconButton 
+				size="small"
+				color="input" 
+				on:click={fetchPreview}
+			>
+				<IconArrowClockwise size={12} />
+			</IconButton>
+		</div>
 		<div class="column-content user-interface-wrap">
 			<div class="hds-box"></div>
 		</div>

@@ -4,7 +4,7 @@ namespace App\Tests\Api\Public\Template;
 
 use App\Tests\Case\WebTestCase;
 
-class DefaultTemplate extends WebTestCase
+class DefaultTemplateTest extends WebTestCase
 {
 
     public function test_default_template(): void
