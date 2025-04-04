@@ -3,14 +3,12 @@
 namespace App\Api\Public\Controller\Template;
 
 use App\Api\Public\Input\TemplateRenderWithInput;
-use App\Service\Template\TemplateDefaults;
 use App\Service\Template\TemplateRenderer;
 use App\Service\Template\TemplateVariables;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-
 class TemplateController extends AbstractController
 {
     public function __construct(
@@ -23,10 +21,13 @@ class TemplateController extends AbstractController
     #[Route('/template/with', methods: 'POST')]
     public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-        $variables = new TemplateVariables();
 
+        $variables = new TemplateVariables();
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);
+
+        assert(is_array($variablesInput));
+
 
         foreach ($variablesInput as $key => $value) {
             if (property_exists($variables, $key)) {

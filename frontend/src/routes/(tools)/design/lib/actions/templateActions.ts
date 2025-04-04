@@ -7,3 +7,14 @@ export function getDefaultTemplate() {
         publicApi: true,
     });
 }
+
+export function previewTemplateFromVariable (template: string, variables: string) {
+    return consoleApi.post<string>({
+        endpoint: 'template/with',
+        publicApi: true,
+        data: {
+           template,
+            variables,
+        }
+    });
+}
