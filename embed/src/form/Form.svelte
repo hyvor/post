@@ -14,7 +14,7 @@
 
     <div class="lists">
         {#each lists as list}
-            <div class="list">
+            <label class="list">
                 <div class="name-description">
                     <div class="name">{list.name}</div>
                     <div class="description">{list.description}</div>
@@ -22,7 +22,7 @@
                 <div class="checkbox">
                     <input type="checkbox" />
                 </div>
-            </div>
+            </label>
         {/each}
     </div>
 
@@ -83,6 +83,7 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 0.8rem;
+        cursor: pointer;
     }
 
     .name {
