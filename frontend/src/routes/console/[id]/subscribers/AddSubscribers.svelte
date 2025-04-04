@@ -88,7 +88,7 @@
 other@example.org
 "				
 				bind:value={emailsString}
-				bind:textarea={input}
+				bind:textarea={input!}
 				state={emailsError ? 'error' : 'default'}
 			/>
 			{#if emailsError}
