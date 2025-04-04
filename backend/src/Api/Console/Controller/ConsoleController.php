@@ -22,7 +22,6 @@ final class ConsoleController extends AbstractController
     public function __construct(
         private ProjectService $projectService,
         private ListRepository $listRepository,
-        private IssueRepository $issueRepository,
     )
     {
     }

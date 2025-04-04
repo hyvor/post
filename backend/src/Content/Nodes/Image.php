@@ -14,7 +14,7 @@ class Image extends NodeType
     public function toHtml(Node $node, string $children): string
     {
 
-        $src = $node->attr('src');
+        $src = $node->attr('src' ?? '');
         $alt = $node->attr('alt');
 
         $attrs = <<<ATTR

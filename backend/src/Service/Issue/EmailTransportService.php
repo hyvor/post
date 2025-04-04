@@ -20,7 +20,7 @@ class EmailTransportService
         string $content,
     ): void
     {
-        $email = (new Email())
+        $email = new Email()
             ->from('hello@example.com')
             ->to($emailAddress)
             //->replyTo('fabien@example.com')

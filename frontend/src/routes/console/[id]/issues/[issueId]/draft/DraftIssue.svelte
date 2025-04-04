@@ -160,7 +160,7 @@
 	}
 </script>
 
-<div bind:this={scrollTopEl} />
+<div bind:this={scrollTopEl}></div>
 
 <SplitControl label="Subject">
 	<FormControl>

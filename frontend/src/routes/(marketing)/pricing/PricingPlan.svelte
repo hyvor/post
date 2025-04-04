@@ -176,7 +176,7 @@
 		display: none !important;
 	}
 
-	.wrap.enterprise .email-selector {
+	.email-selector {
 		display: none;
 	}
 </style>
