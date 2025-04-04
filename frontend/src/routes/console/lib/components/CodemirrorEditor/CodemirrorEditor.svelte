@@ -6,7 +6,7 @@
     export let value: string;
     export let ext: keyof typeof CODEMIRROR_MODES;
     export let id: string | number = '';
-    export let save: () => void = () => {};
+    //export let save: () => void = () => {};
     export let change: (val: string) => void = () => {};
 
     $: tabSize = ext === 'yaml' ? 2 : 4;
@@ -21,7 +21,7 @@
         editorDiv.innerHTML = "";
 
         function handleSave(cm: any) {
-            save()
+            //save()
             //dispatch('save', cm.doc.getValue());
         }
 
@@ -58,7 +58,6 @@
             const val = cm.doc.getValue();
             value = val;
             change(val)
-            //dispatch('change', val);
         })
 
     }

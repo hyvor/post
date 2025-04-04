@@ -42,7 +42,6 @@ class RateLimiterListener
             );
         }
 
-        dd($event->getRequest()->getPathInfo());
     }
 
 }
