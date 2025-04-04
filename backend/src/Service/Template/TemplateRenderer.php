@@ -33,7 +33,7 @@ class TemplateRenderer
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: 'Unsubscribe',
 
-            color_accent: '#007bff',
+            color_accent: TemplateDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
             color_background: '#f8f9fa',
             color_box_background: '#ffffff',
             color_box_radius: '5px',
