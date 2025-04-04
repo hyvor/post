@@ -2,7 +2,7 @@
 
 namespace App\Api\Public\Controller\Template;
 
-use App\Api\Public\Input\TemplateVariablesInput;
+use App\Api\Public\Input\TemplateRenderWithInput;
 use App\Service\Template\TemplateDefaults;
 use App\Service\Template\TemplateRenderer;
 use App\Service\Template\TemplateVariables;
@@ -21,35 +21,20 @@ class TemplateController extends AbstractController
 
 
     #[Route('/template/with', methods: 'POST')]
-    public function renderWith(#[MapRequestPayload] TemplateVariablesInput $input): JsonResponse
+    public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-        $templateVariable = new TemplateVariables(
-            lang: $input->lang,
-            subject: $input->subject,
-            content: $input->content,
-            logo: '',
-            logo_alt: '',
-            brand: '',
-            brand_url: '',
-            address: '',
-            unsubscribe_url: '',
-            unsubscribe_text: '',
-            color_accent: $input->colorAccent,
-            color_background: $input->colorBackground,
-            color_box_background: $input->colorBoxBackground,
-            color_box_radius: $input->colorBoxRadius,
-            color_box_shadow: $input->colorBoxShadow,
-            color_box_border: $input->colorBoxBorder,
-            font_family: $input->fontFamily,
-            font_size: $input->fontSize,
-            font_weight: $input->fontWeight,
-            font_weight_heading: $input->fontWeightHeading,
-            font_color_on_background: $input->fontColorOnBackground,
-            font_color_on_box: $input->fontColorOnBox,
-            font_line_height: $input->fontLineHeight
-        );
+        $variables = new TemplateVariables();
 
-        $html = $this->renderer->render($templateVariable);
+        $variablesInput = $input->variables;
+        $variablesInput = json_decode($variablesInput, true);
+
+        foreach ($variablesInput as $key => $value) {
+            if (property_exists($variables, $key)) {
+                $variables->$key = $value;
+            }
+        }
+
+        $html = $this->renderer->render($variables);
         return $this->json(['html' => $html]);
     }
 
@@ -58,26 +43,11 @@ class TemplateController extends AbstractController
     {
         $templatePath = $this->getParameter('kernel.project_dir') . '/templates/newsletter/default.html.twig';
         $rawTemplate = file_get_contents($templatePath);
-
-        $defaultsVariables = [
-            'color_accent' => TemplateDefaults::COLOR_ACCENT,
-            'color_background' => TemplateDefaults::COLOR_BACKGROUND,
-            'color_box_background' => TemplateDefaults::COLOR_BOX_BACKGROUND,
-            'color_box_radius' => TemplateDefaults::COLOR_BOX_RADIUS,
-            'color_box_shadow' => TemplateDefaults::COLOR_BOX_SHADOW,
-            'color_box_border' => TemplateDefaults::COLOR_BOX_BORDER,
-            'font_family' => TemplateDefaults::FONT_FAMILY,
-            'font_size' => TemplateDefaults::FONT_SIZE,
-            'font_weight' => TemplateDefaults::FONT_WEIGHT,
-            'font_weight_heading' => TemplateDefaults::FONT_WEIGHT_HEADING,
-            'font_color_on_background' => TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
-            'font_color_on_box' => TemplateDefaults::FONT_COLOR_ON_BOX,
-            'font_line_height' => TemplateDefaults::FONT_LINE_HEIGHT,
-        ];
+        $defaults = new TemplateVariables();
 
         return new JsonResponse([
             'template' => $rawTemplate,
-            'variables' => json_encode($defaultsVariables, JSON_PRETTY_PRINT),
+            'variables' => $defaults,
         ]);
     }
 }
