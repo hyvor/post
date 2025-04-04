@@ -5,6 +5,13 @@
 	export let show = false;
     export let add: (url: string) => void;
 
+	let input: HTMLInputElement | null = null;
+	onMount(() => {
+		if (input) {
+			input.focus();
+		}
+	});
+
 	let url = '';
 
 	function confirm() {
@@ -37,9 +44,9 @@
 	on:confirm={confirm}
 >
 	<TextInput
+		bind:input={input!}
 		bind:value={url}
 		on:keydown={handleKeydown}
-		
 		block
 		placeholder="https://example.org"
 	/>

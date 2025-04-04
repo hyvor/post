@@ -22,7 +22,7 @@ class NewsletterList
     /**
      * @var Collection<int, Subscriber>
      */
-    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'list_subscriber')]
     #[ORM\JoinColumn(name: 'list_id')]
     private Collection $subscribers;
@@ -30,11 +30,17 @@ class NewsletterList
     #[ORM\Column(length: 255)]
     private string $name;
 
+    #[ORM\Column()]
+    private ?string $description;
+
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
 
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
+
+    #[ORM\Column()]
+    private ?\DateTimeImmutable $deleted_at;
 
     public function __construct()
     {
@@ -78,6 +84,18 @@ class NewsletterList
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
@@ -98,6 +116,18 @@ class NewsletterList
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
+    {
+        $this->deleted_at = $deleted_at;
 
         return $this;
     }

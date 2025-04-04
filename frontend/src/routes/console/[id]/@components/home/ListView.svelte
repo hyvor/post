@@ -28,7 +28,6 @@
 		padding: 20px;
 		padding-left: 35px;
 		padding-right: 35px;
-		font-size: 1.5rem;
 		font-weight: 600;
 	}
 	.rows {

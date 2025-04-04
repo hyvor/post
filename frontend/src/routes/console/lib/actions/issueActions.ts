@@ -1,4 +1,4 @@
-import type { Issue, IssueSend } from "../../types";
+import type { Issue, IssueSend, SendType } from "../../types";
 import consoleApi from "../consoleApi";
 
 export function createIssueDraft() {
@@ -10,6 +10,16 @@ export function createIssueDraft() {
 export function deleteIssue(id: number) {
 	return consoleApi.delete({
 		endpoint: 'issues/' + id
+	});
+}
+
+export function getIssues(limit: number, offset: number) {
+	return consoleApi.get<Issue[]>({
+		endpoint: 'issues',
+		data: {
+			limit: limit,
+			offset: offset
+		}
 	});
 }
 
@@ -66,14 +76,16 @@ export function getIssueSends(
 	id: number,
 	limit: number,
 	offset: number,
-	search: string
+	search: string | null,
+	type: SendType
 ) {
 	return consoleApi.get<IssueSend[]>({
 		endpoint: `issues/${id}/sends`,
 		data: {
 			limit,
 			offset,
-			search
+			search,
+			type
 		}
 	});
 }

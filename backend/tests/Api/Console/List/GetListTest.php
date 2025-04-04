@@ -38,6 +38,7 @@ class GetListTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertSame($newsletterList->getId(), $data['id']);
         $this->assertSame($newsletterList->getName(), $data['name']);
+        $this->assertSame($newsletterList->getDescription(), $data['description']);
     }
 
     public function testGetSpecificListNotFound(): void

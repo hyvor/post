@@ -13,6 +13,7 @@
 	import DraftIssue from './draft/DraftIssue.svelte';
 	import IssueSending from './sending/IssueSending.svelte';
 	import SentIssue from './sent/SentIssue.svelte';
+	import SingleBox from '../../@components/content/SingleBox.svelte';
 
 	const id = Number(page.params.issueId);
 
@@ -72,51 +73,56 @@
 	});
 </script>
 
-<div class="wrap">
-	{#if loading}
-		<Loader full />
-	{:else if error}
-		<IconMessage error message={error} />
-	{:else}
-		<div class="top">
-			<div class="left">
-				<Button
-					size="small"
-					color="input"
-					as="a"
-					href={consoleUrlWithProject('/issues')}
-				>
-					<IconCaretLeft slot="start" size={12} />
-					All issues
-				</Button>
-			</div>
-			<div>
-				{#if issue.status === 'draft'}
-					<Button variant="fill-light" color="red" on:click={onDelete}>
-						Delete
-						<IconTrash slot="end" size={12} />
+<SingleBox>
+	<div class="wrap">
+		{#if loading}
+			<Loader full />
+		{:else if error}
+			<IconMessage error message={error} />
+		{:else}
+			<div class="top">
+				<div class="left">
+					<Button
+						size="small"
+						color="input"
+						as="a"
+						href={consoleUrlWithProject('/issues')}
+					>
+						{#snippet start()}
+							<IconCaretLeft size={12} />
+						{/snippet}
+						All issues
 					</Button>
-				{/if}
-				<IssueStatusTag status={issue.status} size="large" />
+				</div>
+				<div>
+					{#if issue.status === 'draft'}
+						<Button variant="fill-light" color="red" on:click={onDelete}>
+							Delete
+							{#snippet end()}
+								<IconTrash size={12} />
+							{/snippet}
+						</Button>
+					{/if}
+					<IssueStatusTag status={issue.status} size="large" />
+				</div>
 			</div>
-		</div>
-		<div class="content">
-			{#if issue.status === 'draft'}
-				<DraftIssue {issue} send={onSendingStart} />
-			{:else if issue.status === 'sending'}
-				<IssueSending {issue} complete={onSendingComplete} />
-			{:else if issue.status === 'sent' || issue.status === 'failed'}
-				<SentIssue {issue} />
-			{/if}
-		</div>
-	{/if}
-</div>
+			<div class="content">
+				{#if issue.status === 'draft'}
+					<DraftIssue {issue} send={onSendingStart} />
+				{:else if issue.status === 'sending'}
+					<IssueSending {issue} complete={onSendingComplete} />
+				{:else if issue.status === 'sent' || issue.status === 'failed'}
+					<SentIssue {issue} />
+				{/if}
+			</div>
+		{/if}
+	</div>
+</SingleBox>
 
 <style>
 	.wrap {
 		flex: 1;
-		height: 100%;
-		padding: 30px 0;
+		padding: 30px 35px;
 		display: flex;
 		flex-direction: column;
 	}

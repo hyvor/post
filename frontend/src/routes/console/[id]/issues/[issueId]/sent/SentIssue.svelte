@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { Issue } from '../../../../types';
 	import { getIssueReport, type IssueCounts } from '../../../../lib/actions/issueActions';
-	import { Callout, IconButton, Loader, toast, Tooltip } from '@hyvor/design/components';
+	import { Callout, IconButton, Loader, TextInput, toast, Tooltip } from '@hyvor/design/components';
     import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
     import IconCopy from '@hyvor/icons/IconCopy';
     import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
@@ -109,8 +109,6 @@
 	.stats {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		background-color: var(--accent-lightest);
-		background-color: var(--hover);
 		margin: 20px -40px;
 		padding: 15px 40px;
 	}

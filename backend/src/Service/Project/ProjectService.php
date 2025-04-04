@@ -78,6 +78,7 @@ class ProjectService
         $listsLast30d = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
+            ->andWhere('l.deleted_at IS NULL')
             ->andWhere('l.created_at > :date')
             ->setParameter('project', $project)
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))

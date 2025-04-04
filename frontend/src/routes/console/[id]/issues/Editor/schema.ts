@@ -120,7 +120,32 @@ export const nodes = {
         toDOM() {
             return brDOM;
         }
-    } as NodeSpec
+    } as NodeSpec, 
+
+    button: {
+        attrs: {
+            href: {},
+            text: {default: 'Click me'}
+        },
+        group: 'block',
+        draggable: true,
+        parseDOM: [
+            {
+                tag: 'div.pm-button-wrapper a[href]',
+                getAttrs(dom: HTMLElement) {
+                    return {
+                        href: dom.getAttribute('href'),
+                        text: dom.textContent || 'Click me'
+                    };
+                }
+            }
+        ],
+        toDOM(node) {
+            const { href, text } = node.attrs;
+            return ['div', { class: 'pm-button-wrapper' }, ['a', { href, class: 'pm-button', target: '_blank' }, text]];
+        }
+    } as NodeSpec,
+    
 };
 
 const emDOM: DOMOutputSpec = ['em', 0],

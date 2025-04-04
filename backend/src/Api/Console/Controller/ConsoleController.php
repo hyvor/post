@@ -45,12 +45,15 @@ final class ConsoleController extends AbstractController
     public function initProject(Project $project): JsonResponse
     {
         $projectStats = $this->projectService->getProjectStats($project);
-        $lists = $this->listRepository->findBy(['project' => $project]);
-        $issues = $this->issueRepository->findBy(['project' => $project]);
+        $lists = $this->listRepository->findBy(
+            [
+                'project' => $project,
+                'deleted_at' => null,
+            ]
+        );
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
-            'issues' => array_map(fn($issue) => new IssueObject($issue), $issues),
             'stats' => new StatsObject(
                 $projectStats[0],
                 $projectStats[1],
