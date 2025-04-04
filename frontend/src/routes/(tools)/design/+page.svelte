@@ -1,19 +1,37 @@
 <script>
+	import { onMount } from 'svelte';
 	import CodemirrorEditor from '../../console/lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
+	import { getDefaultTemplate } from './lib/actions/templateActions';
 
-	let config = 'name: my-theme';
-	let configDef = '';
+	let config = '';
+	let variables = '';
 
-	$: console.log(configDef);
+	function getDefault() {
+		getDefaultTemplate()
+			.then((res) => {
+				if (res) {
+					config = res.template;
+					//variables = res.variables;
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}
+
+	onMount(() => {
+		getDefault();
+	});
+
 </script>
 
 <div class="demo-view">
 	<div class="column">
-		<div class="column-title">config.yaml</div>
+		<div class="column-title">template.twig</div>
 		<div class="column-content">
 			<div class="hds-box">
 				<CodemirrorEditor
-					ext="yaml"
+					ext="twig"
 					bind:value={config}
 					on:change={(e) => (config = e.detail)}
 				/>
@@ -22,20 +40,20 @@
 	</div>
 
 	<div class="column">
-		<div class="column-title">config.def.yaml</div>
+		<div class="column-title">variables.json</div>
 		<div class="column-content">
 			<div class="hds-box">
 				<CodemirrorEditor
-					value={configDef}
-					ext="yaml"
-					on:change={(e) => (configDef = e.detail)}
+					value={variables}
+					ext="json"
+					on:change={(e) => (variables = e.detail)}
 				/>
 			</div>
 		</div>
 	</div>
 
 	<div class="column">
-		<div class="column-title">User Interface</div>
+		<div class="column-title">Preview</div>
 		<div class="column-content user-interface-wrap">
 			<div class="hds-box"></div>
 		</div>

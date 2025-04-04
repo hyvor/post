@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
     import './codemirror';
 	import { CODEMIRROR_MODES, importCodemirrorAll } from "./codemirror";
 

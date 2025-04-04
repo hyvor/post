@@ -28,13 +28,13 @@ class TemplateController extends AbstractController
             lang: 'en',
             subject: 'Introducing Hyvor Post',
             content: <<<HTML
-<h1>
-    Introducing Hyvor Post
-</h1>
-<p>
-    We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
-</p>
-HTML,
+                    <h1>
+                        Introducing Hyvor Post
+                    </h1>
+                    <p>
+                        We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
+                    </p>
+                    HTML,
 
             logo: '/img/logo.png',
             logo_alt: 'Hyvor Post Logo',

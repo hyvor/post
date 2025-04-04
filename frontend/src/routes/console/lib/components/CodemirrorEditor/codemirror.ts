@@ -47,6 +47,7 @@ export async function importCodemirrorAll() {
 export const CODEMIRROR_MODES = {
     scss: { name: 'twig', base: 'text/x-scss'},
     twig: { name: 'twig', base: 'text/html' },
+    json: { name: 'javascript', base: 'application/json' },
     js: 'text/javascript',
     yaml: 'text/x-yaml'
 }
