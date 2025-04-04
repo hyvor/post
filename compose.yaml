@@ -5,9 +5,14 @@ services:
       context: .
       target: frontend-dev
     volumes:
-      - ./frontend:/app/frontend
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/static:/app/frontend/static
+      - ./frontend/vite.config.ts:/app/frontend/vite.config.ts
+      - ./frontend/package.json:/app/frontend/package.json
+      - ./frontend/package-lock.json:/app/frontend/package-lock.json
+      - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
+      - ./frontend/svelte.config.js:/app/frontend/svelte.config.js
       - ./shared:/app/shared
-      - /app/frontend/node_modules
     labels:
       traefik.enable: true
       traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.dev`)
