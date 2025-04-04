@@ -3,17 +3,17 @@
 namespace App\Service\Template;
 class TemplateDefaults
 {
-    public const string lang = 'en';
-    public const string subject = 'Introducing Hyvor Post';
-    public const string content =
-        <<<HTML
-            <h1>
-                Introducing Hyvor Post
-            </h1>
-            <p>
-                We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
-            </p>
-        HTML;
+    public const string LANG = 'en';
+//    public const string subject = 'Introducing Hyvor Post';
+//    public const string content =
+//        <<<HTML
+//            <h1>
+//                Introducing Hyvor Post
+//            </h1>
+//            <p>
+//                We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
+//            </p>
+//        HTML;
     public const COLOR_ACCENT = '#007bff';
     public const COLOR_BACKGROUND = '#f8f9fa';
     public const COLOR_BOX_BACKGROUND = '#ffffff';

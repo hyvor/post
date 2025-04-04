@@ -8,41 +8,41 @@ class TemplateVariables
 
     public function __construct(
         // language code to be used in <html> tag
-        public string $lang,
+        public string $lang = TemplateDefaults::LANG,
 
         // subject of the email to be used in <title> tag
-        public string $subject,
+        public string $subject = '',
 
         // content in HTML format
-        public string $content,
+        public string $content = '',
 
         // header
-        public string $logo,
-        public string $logo_alt,
-        public string $brand,
-        public string $brand_url,
+        public string $logo = '',
+        public string $logo_alt = '',
+        public string $brand = '',
+        public string $brand_url = '',
 
         // footer
-        public string $address,
-        public string $unsubscribe_url,
-        public string $unsubscribe_text,
+        public string $address = '',
+        public string $unsubscribe_url = '',
+        public string $unsubscribe_text = '',
 
         // colors in HEX format
-        public string $color_accent,
-        public string $color_background,
-        public string $color_box_background,
-        public string $color_box_radius,
-        public string $color_box_shadow,
-        public string $color_box_border,
+        public string $color_accent = TemplateDefaults::COLOR_ACCENT,
+        public string $color_background = TemplateDefaults::COLOR_BACKGROUND,
+        public string $color_box_background = TemplateDefaults::COLOR_BACKGROUND,
+        public string $color_box_radius = TemplateDefaults::COLOR_BOX_RADIUS,
+        public string $color_box_shadow = TemplateDefaults::COLOR_BOX_SHADOW,
+        public string $color_box_border = TemplateDefaults::COLOR_BOX_BORDER,
 
         // font
-        public string $font_family,
-        public string $font_size,
-        public string $font_weight,
-        public string $font_weight_heading,
-        public string $font_color_on_background,
-        public string $font_color_on_box,
-        public string $font_line_height,
+        public string $font_family = TemplateDefaults::FONT_FAMILY,
+        public string $font_size = TemplateDefaults::FONT_SIZE,
+        public string $font_weight = TemplateDefaults::FONT_WEIGHT,
+        public string $font_weight_heading = TemplateDefaults::FONT_WEIGHT_HEADING,
+        public string $font_color_on_background = TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
+        public string $font_color_on_box = TemplateDefaults::FONT_COLOR_ON_BOX,
+        public string $font_line_height= TemplateDefaults::FONT_LINE_HEIGHT,
     )
     {
     }
