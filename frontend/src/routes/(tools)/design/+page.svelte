@@ -3,15 +3,15 @@
 	import CodemirrorEditor from '../../console/lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
 	import { getDefaultTemplate } from './lib/actions/templateActions';
 
-	let config = '';
+	let template = '';
 	let variables = '';
 
 	function getDefault() {
 		getDefaultTemplate()
 			.then((res) => {
 				if (res) {
-					config = res.template;
-					//variables = res.variables;
+					template = res.template;
+					variables = res.variables;
 				}
 			})
 			.catch((err) => {
@@ -32,8 +32,9 @@
 			<div class="hds-box">
 				<CodemirrorEditor
 					ext="twig"
-					bind:value={config}
-					on:change={(e) => (config = e.detail)}
+					bind:value={template}
+					change={(e) => (template = e)}
+					id={template}
 				/>
 			</div>
 		</div>
@@ -46,7 +47,8 @@
 				<CodemirrorEditor
 					value={variables}
 					ext="json"
-					on:change={(e) => (variables = e.detail)}
+					change={(e) => (variables = e)}
+					id={variables}
 				/>
 			</div>
 		</div>
