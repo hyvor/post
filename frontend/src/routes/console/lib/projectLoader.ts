@@ -7,7 +7,6 @@ interface ProjectResponse {
 	project: Project;
 	stats: ProjectStats;
 	lists: List[];
-	issues: Issue[];
 }
 
 // to prevent multiple requests for the same subdomain
@@ -29,7 +28,8 @@ export function loadProject(projectId: string) {
 				projectStore.set(res.project);
 				projectStatsStore.set(res.stats);
 				listStore.set(res.lists);
-				issueStore.set(res.issues);
+
+				issueStore.set([]); 
 
 				resolve(res);
 			})

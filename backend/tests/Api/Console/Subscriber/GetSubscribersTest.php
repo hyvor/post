@@ -153,6 +153,80 @@ class GetSubscribersTest extends WebTestCase
         $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
+    public function test_list_subscribers_email_search(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'thibault@hyvor.com',
+        ]);
+
+        $subscriber2 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'supun@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?search=thibault"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $this->assertSame($subscriber1->getId(), $json[0]['id']);
+    }
 
 
+    public function test_list_subscribers_list_search(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list1 = NewsletterListFactory::createOne(
+            [
+                'project' => $project,
+                'name' => 'list_1'
+            ]
+        );
+
+        $list2 = NewsletterListFactory::createOne(
+            [
+                'project' => $project,
+                'name' => 'list_2'
+            ]
+        );
+
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'thibault@hyvor.com',
+        ]);
+
+        $subscriber2 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list2],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'supun@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?list_id={$list1->getId()}"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $this->assertSame($subscriber1->getId(), $json[0]['id']);
+    }
 }

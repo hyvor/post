@@ -2,11 +2,26 @@
 	import { Tag } from '@hyvor/design/components';
 	import type { IssueSend } from '../../../../types';
 	import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
+	import SendDetailsModal from './SendDetailsModal.svelte';
 
 	export let send: IssueSend;
+
+	let showModal = false;
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			showModal = true;
+		}
+	}
 </script>
 
-<div class="send-row">
+<button 
+	type="button"
+	class="send-row"
+	on:click={() => showModal = true}
+	on:keydown={handleKeydown}
+>
 	<div class="email">
 		{send.email}
 	</div>
@@ -50,13 +65,25 @@
 			<Tag size="small" color="red">Failed</Tag>
 		{/if}
 	</div>
-</div>
+</button>
+
+<SendDetailsModal {send} bind:show={showModal} />
 
 <style>
 	.send-row {
 		display: flex;
 		align-items: center;
-		padding: 10px 0;
+		padding: 10px 10px;
+		cursor: pointer;
+		width: 100%;
+		background: none;
+		border: none;
+		text-align: left;
+		margin-top: 10px;
+	}
+	.send-row:hover {
+		background: var(--hover);
+		border-radius: 10px;
 	}
 	.time {
 		flex: 1;

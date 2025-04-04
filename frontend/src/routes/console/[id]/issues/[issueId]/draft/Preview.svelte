@@ -20,8 +20,8 @@
 
 	let html = '';
 	let iframe: HTMLIFrameElement;
-
 	let reloading = false;
+	let unsubscribe: () => void;
 
 	function resizeIframe() {
 		if (!iframe) return;
@@ -34,10 +34,12 @@
 	}
 
 	function fetchPreview() {
+		// Don't fetch preview if the component is destroyed or issue is deleted
+		if (!iframe) return;
+		
 		previewIssue(id)
-			.then(async (res) => {
+			.then((res) => {
 				html = res.html;
-				await tick();
 				resizeIframe();
 			})
 			.catch((e) => {
@@ -51,7 +53,7 @@
 	let contentUpdateTimeout: ReturnType<typeof setTimeout>;
 
 	function listenToUpdates() {
-		contentUpdateId.subscribe(() => {
+		unsubscribe = contentUpdateId.subscribe(() => {
 			if (contentUpdateTimeout) {
 				clearTimeout(contentUpdateTimeout);
 			}
@@ -69,6 +71,9 @@
 	onDestroy(() => {
 		if (contentUpdateTimeout) {
 			clearTimeout(contentUpdateTimeout);
+		}
+		if (unsubscribe) {
+			unsubscribe();
 		}
 	});
 </script>

@@ -45,6 +45,7 @@
 			}
 		}, 3000);
 	});
+
 </script>
 
 <div class="wrap">

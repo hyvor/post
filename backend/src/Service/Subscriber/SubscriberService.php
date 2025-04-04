@@ -88,36 +88,49 @@ class SubscriberService
      */
     public function getSubscribers(
         Project $project,
-        string $status,
+        ?string $status,
         ?int $listId,
+        ?string $search,
         int $limit,
         int $offset
     ): ArrayCollection
     {
-        // Check if status is a valid SubscriberStatus
-        $subscriberStatus = SubscriberStatus::tryFrom($status);
 
-        if ($subscriberStatus === null) {
-            throw new InvalidArgumentException("Invalid subscriber status: $status");
+        $qb = $this->subscriberRepository->createQueryBuilder('s');
+
+        $qb->leftJoin('s.lists', 'l')
+            ->where('s.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if ($status !== null) {
+            // Check if status is a valid SubscriberStatus
+            $subscriberStatus = SubscriberStatus::tryFrom($status);
+
+            if ($subscriberStatus === null) {
+                throw new InvalidArgumentException("Invalid subscriber status: $status");
+            }
+            $qb->andWhere('s.status = :status')
+                ->setParameter('status', $subscriberStatus->value);
         }
-
-        $criteria = [
-            'project' => $project,
-            'status' => $subscriberStatus->value,
-        ];
 
         if ($listId !== null) {
-            $criteria['list'] = $listId;
+            $qb->andWhere('l.id = :listId')
+                ->andWhere('l.deleted_at IS NULL')
+                ->setParameter('listId', $listId);
         }
 
-        return new ArrayCollection(
-            $this->subscriberRepository->findBy(
-                $criteria,
-                limit: $limit,
-                offset: $offset,
-                orderBy: ['id' => 'DESC']
-            )
-        );
+        if ($search !== null) {
+            $qb->andWhere('s.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        /** @var Subscriber[] $results */
+        $results = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($results);
     }
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {

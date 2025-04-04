@@ -9,4 +9,7 @@ class UpdateListInput
     #[Assert\Type('string')]
     #[Assert\Length(max: 255)]
     public ?string $name = null;
+
+    #[Assert\Type('string')]
+    public ?string $description = null;
 }

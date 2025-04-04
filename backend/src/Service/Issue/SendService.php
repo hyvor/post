@@ -32,7 +32,7 @@ class SendService
     /**
      * @return ArrayCollection<int, Send>
      */
-    public function getSends(Issue $issue, int $limit, int $offset, ?string $search): ArrayCollection
+    public function getSends(Issue $issue, int $limit, int $offset, ?string $search, ?string $sendType): ArrayCollection
     {
         $qb = $this->sendRepository->createQueryBuilder('s');
 
@@ -45,6 +45,23 @@ class SendService
         if ($search !== null) {
             $qb->andWhere('s.email LIKE :search')
                 ->setParameter('search', '%' . $search . '%');
+        }
+        if ($sendType !== null && $sendType != 'all') {
+            if ($sendType === 'opened') {
+                $qb->andWhere('s.first_open_at IS NOT NULL');
+            }
+            if ($sendType === 'clicked') {
+                $qb->andWhere('s.first_clicked_at IS NOT NULL');
+            }
+            if ($sendType === 'unsubscribed') {
+                $qb->andWhere('s.unsubscribe_at IS NOT NULL');
+            }
+            if ($sendType === 'bounced') {
+                $qb->andWhere('s.bounced_at IS NOT NULL');
+            }
+            if ($sendType === 'complained') {
+                $qb->andWhere('s.complained_at IS NOT NULL');
+            }
         }
 
         /** @var Send[] $results */
