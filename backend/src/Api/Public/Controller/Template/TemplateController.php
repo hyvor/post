@@ -28,7 +28,6 @@ class TemplateController extends AbstractController
 
         assert(is_array($variablesInput));
 
-
         foreach ($variablesInput as $key => $value) {
             if (property_exists($variables, $key)) {
                 $variables->$key = $value;

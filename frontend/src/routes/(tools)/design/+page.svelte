@@ -7,6 +7,7 @@
 
 	let template = '';
 	let variables = '';
+	let previewHtml = '';
 
 	function getDefault() {
 		getDefaultTemplate()
@@ -25,7 +26,7 @@
 		previewTemplateFromVariable(template, variables)
 			.then((res) => {
 				if (res) {
-					console.log(res);
+					previewHtml = res.html;
 				}
 			})
 			.catch((err) => {
@@ -48,7 +49,6 @@
 					ext="twig"
 					bind:value={template}
 					change={(e) => (template = e)}
-					id={template}
 				/>
 			</div>
 		</div>
@@ -62,7 +62,6 @@
 					value={variables}
 					ext="json"
 					change={(e) => (variables = e)}
-					id={variables}
 				/>
 			</div>
 		</div>
@@ -80,7 +79,7 @@
 			</IconButton>
 		</div>
 		<div class="column-content user-interface-wrap">
-			<div class="hds-box"></div>
+			{@html previewHtml}
 		</div>
 	</div>
 </div>
