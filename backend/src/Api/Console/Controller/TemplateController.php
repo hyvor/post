@@ -23,18 +23,21 @@ class TemplateController extends AbstractController
     #[Route('/templates', methods: 'GET')]
     public function getProjectTemplate(Project $project): JsonResponse
     {
+        // TODO: just return the templates
         return $this->json([
             'template' => '',
             'variables' => ''
         ]);
     }
 
+    // TODO: Handle update. Change URL to /templates/update
     #[Route('/templates', methods: 'POST')]
     public function createTemplate(
         Project $project,
         #[MapRequestPayload] CreateTemplateInput $input
     ): JsonResponse
     {
+        // TODO: check if template already exists
         $template = $this->templateService->createTemplate($project, $input->template);
         return $this->json(new TemplateObject($template));
     }

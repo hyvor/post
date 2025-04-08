@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Template;
+
 class TemplateDefaults
 {
     public const string LANG = 'en';
@@ -28,4 +29,12 @@ class TemplateDefaults
     public const FONT_COLOR_ON_BACKGROUND = '#007bff';
     public const FONT_COLOR_ON_BOX = '#333333';
     public const FONT_LINE_HEIGHT = '1.5';
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getAll(): array
+    {
+        // use reflection to get all public constants
+    }
 }
