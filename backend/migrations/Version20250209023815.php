@@ -22,6 +22,7 @@ final class Version20250209023815 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             user_id BIGINT NOT NULL,
+            variables JSONB,
             name VARCHAR(255) NOT NULL
         );
         SQL);

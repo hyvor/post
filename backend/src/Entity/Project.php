@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use App\Service\Template\TemplateVariables;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -29,10 +30,15 @@ class Project
     #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
     public ?Template $template = null;
 
+    /*
+    #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"template_variables"}'])]
+    private ?TemplateVariables $variables = null;
+    */
+
     public function setId(int $id): static
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -70,6 +76,11 @@ class Project
         return $this->user_id;
     }
 
+    public function getVariables(): TemplateVariables
+    {
+        return $this->variables;
+    }
+
     public function setUserId(int $user_id): static
     {
         $this->user_id = $user_id;
@@ -85,6 +96,13 @@ class Project
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function setVariables(TemplateVariables $variables): static
+    {
+        $this->variables = $variables;
 
         return $this;
     }
