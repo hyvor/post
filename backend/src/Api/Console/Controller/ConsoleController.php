@@ -37,7 +37,13 @@ final class ConsoleController extends AbstractController
         $projects = array_map(fn(Project $project) => new ProjectObject($project), $projects);
 
         return new JsonResponse([
-            'projects' => $projects
+            'projects' => $projects,
+            'config' => [
+                //
+                'template_defaults' => [
+                    // todo: GET values from TemplateDefaults
+                ]
+            ],
         ]);
     }
 

@@ -53,7 +53,7 @@ class CreateTemplateTest extends WebTestCase
 
         $repository = $this->em->getRepository(Template::class);
         $template = $repository->findOneBy([
-            'project' => $project,
+            'project' => $project->getId(),
         ]);
         $this->assertNotNull($template);
         $this->assertSame($template->getTemplate(), $json['template']);

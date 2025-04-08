@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
+use App\Repository\TemplateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Entity(repositoryClass: TemplateRepository::class)]
 #[ORM\Table(name: 'templates')]
 class Template
 {

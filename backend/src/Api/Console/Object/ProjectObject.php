@@ -11,6 +11,8 @@ class ProjectObject
     public int $created_at; // unix timestamp
     public string $name;
 
+    // TODO: add all meta fields here
+
     public function __construct(Project $project)
     {
         $this->id = $project->getId();
