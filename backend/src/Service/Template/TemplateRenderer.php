@@ -36,7 +36,6 @@ class TemplateRenderer
             color_accent: TemplateDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
             color_background: '#f8f9fa',
             color_box_background: '#ffffff',
-            color_box_radius: '5px',
             color_box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
             color_box_border: '1px solid #e9ecef',
 
@@ -48,6 +47,8 @@ class TemplateRenderer
             font_color_on_background: '#007bff',
             font_color_on_box: '#333333',
             font_line_height: '1.5',
+
+            box_radius: '5px',
         );
 
         return $this->render($variables);
