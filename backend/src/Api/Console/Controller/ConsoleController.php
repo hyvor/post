@@ -11,6 +11,7 @@ use App\Repository\IssueRepository;
 use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
+use App\Service\Template\TemplateDefaults;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,9 +40,8 @@ final class ConsoleController extends AbstractController
         return new JsonResponse([
             'projects' => $projects,
             'config' => [
-                //
                 'template_defaults' => [
-                    // todo: GET values from TemplateDefaults
+                    TemplateDefaults::getAll()
                 ]
             ],
         ]);
