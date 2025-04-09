@@ -31,10 +31,11 @@ class TemplateDefaults
     public const FONT_LINE_HEIGHT = '1.5';
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public static function getAll(): array
     {
-        // use reflection to get all public constants
+        $reflection = new \ReflectionClass(self::class);
+        return $reflection->getConstants();
     }
 }

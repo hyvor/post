@@ -6,7 +6,6 @@ use App\Api\Console\Input\Template\CreateTemplateInput;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Project;
 use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariables;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -26,7 +25,6 @@ class TemplateController extends AbstractController
         // TODO: just return the templates
         return $this->json([
             'template' => '',
-            'variables' => ''
         ]);
     }
 
