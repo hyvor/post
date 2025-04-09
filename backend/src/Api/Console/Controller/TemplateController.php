@@ -22,14 +22,23 @@ class TemplateController extends AbstractController
     #[Route('/templates', methods: 'GET')]
     public function getProjectTemplate(Project $project): JsonResponse
     {
-        // TODO: just return the templates
-        return $this->json([
-            'template' => '',
-        ]);
+        $template = $this->templateService->getTemplate($project);
+
+        if (!$template) {
+            // Load default template
+            $templatePath = $this->getParameter('kernel.project_dir') . '/templates/newsletter/default.html.twig';
+            $rawTemplate = file_get_contents($templatePath);
+            return $this->json([
+                'template' => $rawTemplate,
+                ]
+            );
+        }
+
+        return $this->json(new TemplateObject($template));
     }
 
     // TODO: Handle update. Change URL to /templates/update
-    #[Route('/templates', methods: 'POST')]
+    #[Route('/templates/update', methods: 'POST')]
     public function createTemplate(
         Project $project,
         #[MapRequestPayload] CreateTemplateInput $input

@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Entity\Meta;
+namespace App\Api\Console\Input\Project;
 
-class ProjectMeta
+class UpdateProjectMetaInput
 {
-
-    /**
-     * Template variables
-     */
     public ?string $templateColorAccent = null;
     public ?string $templateColorBackground = null;
     public ?string $templateColorBoxBackground = null;
@@ -22,8 +18,4 @@ class ProjectMeta
     public ?string $templateFontLineHeight = null;
     public ?string $templateBoxRadius = null;
     public ?string $templateLogo = null;
-
-
-    // TODO:
-
 }

@@ -16,11 +16,9 @@ class TemplateService
 
     public function getTemplate(Project $project): ?Template
     {
-        $template = $this->em->getRepository(Template::class)->findOneBy([
+        return $this->em->getRepository(Template::class)->findOneBy([
             'project' => $project,
         ]);
-
-        return $template;
     }
 
     public function createTemplate(Project $project, string $template): Template
