@@ -7,10 +7,13 @@ use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Service\Project\Dto\UpdateProjectMetaDto;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
 
 class ProjectService
 {
+    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em
@@ -124,5 +127,46 @@ class ProjectService
             new StatCategoryObject($issues, $issuesLast30d),
             new StatCategoryObject($lists, $listsLast30d),
         ];
+    }
+
+    public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
+    {
+        $currentMeta = $project->getMeta();
+        if ($updates->hasProperty('templateColorAccent'))
+            $currentMeta->templateColorAccent = $updates->templateColorAccent;
+        if ($updates->hasProperty('templateColorBackground'))
+            $currentMeta->templateColorBackground = $updates->templateColorBackground;
+        if ($updates->hasProperty('templateColorBoxBackground'))
+            $currentMeta->templateColorBoxBackground = $updates->templateColorBoxBackground;
+        if ($updates->hasProperty('templateColorBoxShadow'))
+            $currentMeta->templateColorBoxShadow = $updates->templateColorBoxShadow;
+        if ($updates->hasProperty('templateColorBoxBorder'))
+            $currentMeta->templateColorBoxBorder = $updates->templateColorBoxBorder;
+        if ($updates->hasProperty('templateFontFamily'))
+            $currentMeta->templateFontFamily = $updates->templateFontFamily;
+        if ($updates->hasProperty('templateFontSize'))
+            $currentMeta->templateFontSize = $updates->templateFontSize;
+        if ($updates->hasProperty('templateFontWeight'))
+            $currentMeta->templateFontWeight = $updates->templateFontWeight;
+        if ($updates->hasProperty('templateFontWeightHeading'))
+            $currentMeta->templateFontWeightHeading = $updates->templateFontWeightHeading;
+        if ($updates->hasProperty('templateFontColorOnBackground'))
+            $currentMeta->templateFontColorOnBackground = $updates->templateFontColorOnBackground;
+        if ($updates->hasProperty('templateFontColorOnBox'))
+            $currentMeta->templateFontColorOnBox = $updates->templateFontColorOnBox;
+        if ($updates->hasProperty('templateFontLineHeight'))
+            $currentMeta->templateFontLineHeight = $updates->templateFontLineHeight;
+        if ($updates->hasProperty('templateBoxRadius'))
+            $currentMeta->templateBoxRadius = $updates->templateBoxRadius;
+        if ($updates->hasProperty('templateLogo'))
+            $currentMeta->templateLogo = $updates->templateLogo;
+
+        $project->setMeta($currentMeta);
+        $project->setUpdatedAt($this->now());
+
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
     }
 }

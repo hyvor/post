@@ -24,7 +24,7 @@ class CreateTemplateTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/templates',
+            '/templates/update',
             [
                 'template' => '<!DOCTYPE html>
                     <html>

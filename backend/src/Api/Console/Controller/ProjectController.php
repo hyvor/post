@@ -3,8 +3,10 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Project\CreateProjectInput;
+use App\Api\Console\Input\Project\UpdateProjectMetaInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
+use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,4 +55,58 @@ final class ProjectController extends AbstractController
         return $this->json([]);
     }
 
+    #[Route('/projects/meta', methods: 'POST')]
+    public function updateProjectMeta(
+        Project $project,
+        #[MapRequestPayload] UpdateProjectMetaInput $input
+    ): JsonResponse
+    {
+        $updatesMeta = new UpdateProjectMetaDto();
+
+        if ($input->templateColorAccent)
+            $updatesMeta->templateColorAccent = $input->templateColorAccent;
+
+        if ($input->templateColorBackground)
+            $updatesMeta->templateColorBackground = $input->templateColorBackground;
+
+        if ($input->templateColorBoxBackground)
+            $updatesMeta->templateColorBoxBackground = $input->templateColorBoxBackground;
+
+        if ($input->templateColorBoxShadow)
+            $updatesMeta->templateColorBoxShadow = $input->templateColorBoxShadow;
+
+        if ($input->templateColorBoxBorder)
+            $updatesMeta->templateColorBoxBorder = $input->templateColorBoxBorder;
+
+        if ($input->templateFontFamily)
+            $updatesMeta->templateFontFamily = $input->templateFontFamily;
+
+        if ($input->templateFontSize)
+            $updatesMeta->templateFontSize = $input->templateFontSize;
+
+        if ($input->templateFontWeight)
+            $updatesMeta->templateFontWeight = $input->templateFontWeight;
+
+        if ($input->templateFontWeightHeading)
+            $updatesMeta->templateFontWeightHeading = $input->templateFontWeightHeading;
+
+        if ($input->templateFontColorOnBackground)
+            $updatesMeta->templateFontColorOnBackground = $input->templateFontColorOnBackground;
+
+        if ($input->templateFontColorOnBox)
+            $updatesMeta->templateFontColorOnBox = $input->templateFontColorOnBox;
+
+        if ($input->templateFontLineHeight)
+            $updatesMeta->templateFontLineHeight = $input->templateFontLineHeight;
+
+        if ($input->templateBoxRadius)
+            $updatesMeta->templateBoxRadius = $input->templateBoxRadius;
+
+        if ($input->templateLogo)
+            $updatesMeta->templateLogo = $input->templateLogo;
+
+        $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
+
+        return $this->json(new ProjectObject($project));
+    }
 }
