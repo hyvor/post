@@ -1,7 +1,57 @@
+export interface AppConfig {
+    template_defaults: {
+		LANG: string,
+		COLOR_ACCENT: string,
+		COLOR_BACKGROUND: string,
+		COLOR_BOX_BACKGROUND: string,
+		BOX_RADIUS: string,
+		COLOR_BOX_SHADOW: string,
+		COLOR_BOX_BORDER: string,
+		FONT_FAMILY: string,
+		FONT_SIZE: string,
+		FONT_WEIGHT: string,
+		FONT_WEIGHT_HEADING: string,
+		FONT_COLOR_ON_BACKGROUND: string,
+		FONT_COLOR_ON_BOX: string,
+		FONT_LINE_HEIGHT: string,
+	}
+}
+
+export type ProjectMeta = {
+	templateColorAccent: string | null,
+	templateColorBackground: string | null,
+	templateColorBoxBackground: string | null,
+	templateColorBoxShadow: string | null,
+	templateColorBoxBorder: string | null,
+	templateFontFamily: string | null,
+	templateFontSize: string | null,
+	templateFontWeight: string | null,
+	templateFontWeightHeading: string | null,
+	templateFontColorOnBackground: string | null,
+	templateFontColorOnBox: string | null,
+	templateFontLineHeight: string | null,
+	templateBoxRadius: string | null,
+}
+
 export type Project = {
 	id: number,
 	created_at: number,
 	name: string,
+	
+	// Meta data
+	templateColorAccent: string | null,
+	templateColorBackground: string | null,
+	templateColorBoxBackground: string | null,
+	templateColorBoxShadow: string | null,
+	templateColorBoxBorder: string | null,
+	templateFontFamily: string | null,
+	templateFontSize: string | null,
+	templateFontWeight: string | null,
+	templateFontWeightHeading: string | null,
+	templateFontColorOnBackground: string | null,
+	templateFontColorOnBox: string | null,
+	templateFontLineHeight: string | null,
+	templateBoxRadius: string | null,
 }
 
 export interface ProjectStats {

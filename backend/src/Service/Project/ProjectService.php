@@ -4,6 +4,7 @@ namespace App\Service\Project;
 
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
+use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
@@ -30,6 +31,7 @@ class ProjectService
         $project = new Project()
             ->setName($name)
             ->setUserId($userId)
+            ->setMeta(new ProjectMeta())
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 

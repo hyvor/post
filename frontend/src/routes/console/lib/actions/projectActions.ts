@@ -1,5 +1,5 @@
 import consoleApi from "../consoleApi";
-import type { Project } from "../../types";
+import type { Project, ProjectMeta } from "../../types";
 
 export function createProject(name: string) {
     return consoleApi.post<Project>({
@@ -8,5 +8,12 @@ export function createProject(name: string) {
         data: {
             name,
         }
+    });
+}
+
+export function updateProjectMeta(meta: ProjectMeta) {
+    return consoleApi.post<ProjectMeta>({
+        endpoint: 'projects/meta',
+        data: meta,
     });
 }

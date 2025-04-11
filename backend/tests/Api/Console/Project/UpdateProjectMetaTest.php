@@ -39,6 +39,8 @@ class UpdateProjectMetaTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
+        $this->assertSame('#ff0000', $json['templateColorAccent']);
+        $this->assertSame('10px', $json['templateBoxRadius']);
 
         $repository = $this->em->getRepository(Project::class);
         $project = $repository->find($json['id']);

@@ -40,9 +40,7 @@ final class ConsoleController extends AbstractController
         return new JsonResponse([
             'projects' => $projects,
             'config' => [
-                'template_defaults' => [
-                    TemplateDefaults::getAll()
-                ]
+                'template_defaults' => TemplateDefaults::getAll()
             ],
         ]);
     }
