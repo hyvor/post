@@ -73,7 +73,7 @@ class NewsletterListService
      * @param array<int> $listIds
      * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function isListsAvailable(Project $project, array $listIds): ?array
+    public function getMissingListIdsOfProject(Project $project, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb
