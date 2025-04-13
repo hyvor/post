@@ -50,9 +50,9 @@ class ProjectService
         $this->em->flush();
     }
 
-    public function getProject(Project $project): ?Project
+    public function getProjectById(int $id): ?Project
     {
-        return $project;
+        return $this->em->getRepository(Project::class)->find($id);
     }
 
     /**

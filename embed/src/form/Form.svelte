@@ -27,7 +27,12 @@
     </div>
 
     <div class="input">
-        <input type="text" placeholder="Your Email" class="email-input" />
+        <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            class="email-input"
+        />
         <button> Subscribe </button>
     </div>
 </div>

@@ -55,11 +55,14 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $this->client->getResponse();
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function publicApi(
         string $method,
         string $uri,
         array $data = [],
-    )
+    ) : Response
     {
         $this->client->request(
             $method,
