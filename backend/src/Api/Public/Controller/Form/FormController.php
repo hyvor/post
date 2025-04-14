@@ -2,9 +2,9 @@
 
 namespace App\Api\Public\Controller\Form;
 
-use App\Api\Console\Object\SubscriberObject;
 use App\Api\Public\Input\Form\FormInitInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
+use App\Api\Public\Object\Form\FormProjectObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -43,8 +43,10 @@ class FormController extends AbstractController
             throw new UnprocessableEntityHttpException('Project not found');
         }
 
+        //
+
         return new JsonResponse([
-            'project' => null, //
+            'project' => new FormProjectObject($project), //
             'is_subscribed' => false,
             'lists' => [],
         ]);
