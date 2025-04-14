@@ -8,6 +8,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class ProjectService
 {
@@ -25,6 +26,7 @@ class ProjectService
     {
 
         $project = new Project()
+            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setCreatedAt(new \DateTimeImmutable())
@@ -53,6 +55,11 @@ class ProjectService
     public function getProjectById(int $id): ?Project
     {
         return $this->em->getRepository(Project::class)->find($id);
+    }
+
+    public function getProjectByUuid(string $uuid): ?Project
+    {
+        return $this->em->getRepository(Project::class)->findOneBy(['uuid' => $uuid]);
     }
 
     /**

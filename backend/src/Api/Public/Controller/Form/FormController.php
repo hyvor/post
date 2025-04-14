@@ -3,7 +3,9 @@
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Console\Object\SubscriberObject;
+use App\Api\Public\Input\Form\FormInitInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
+use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
@@ -29,6 +31,24 @@ class FormController extends AbstractController
         private SubscriberService $subscriberService,
     )
     {
+    }
+
+    #[Route('/form/init', methods: 'POST')]
+    public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
+    {
+
+        $project = $this->projectService->getProjectByUuid($input->project_uuid);
+
+        if (!$project) {
+            throw new UnprocessableEntityHttpException('Project not found');
+        }
+
+        return new JsonResponse([
+            'project' => null, //
+            'is_subscribed' => false,
+            'lists' => [],
+        ]);
+
     }
 
     #[Route('/form/subscribe', methods: 'POST')]
@@ -85,7 +105,7 @@ class FormController extends AbstractController
 
         }
 
-        return new JsonResponse(new SubscriberObject($subscriber));
+        return new JsonResponse(new FormSubscriberObject($subscriber));
     }
 
 }
