@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Public\Object;
+namespace App\Api\Public\Object\Form;
 
 
 use App\Entity\Subscriber;
@@ -10,8 +10,8 @@ class FormSubscriberObject
 {
 
     public int $id;
-    // /** @var int[] */
-    // public array $segments;
+    /** @var int[] */
+    public array $list_ids;
     public string $email;
     public SubscriberStatus $status;
     public ?int $subscribed_at;
@@ -20,7 +20,7 @@ class FormSubscriberObject
     public function __construct(Subscriber $subscriber)
     {
         $this->id = $subscriber->getId();
-        // $this->segments = $subscriber->getLists();
+        $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
         $this->email = $subscriber->getEmail();
         $this->status = $subscriber->getStatus();
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();

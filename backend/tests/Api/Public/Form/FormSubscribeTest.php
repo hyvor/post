@@ -4,6 +4,8 @@ namespace App\Tests\Api\Public\Form;
 
 use App\Api\Console\Object\SubscriberObject;
 use App\Api\Public\Controller\Form\FormController;
+use App\Entity\Subscriber;
+use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
@@ -96,9 +98,15 @@ class FormSubscribeTest extends WebTestCase
             $list2->getId(),
         ], $json['list_ids']);
         $this->assertSame('subscribed', $json['status']);
-        $this->assertSame('form', $json['source']);
         $this->assertSame($date->getTimestamp(), $json['subscribed_at']);
         $this->assertSame(null, $json['unsubscribed_at']);
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
+        $this->assertNotNull($subscriber);
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
+        $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
+        $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
 
     }
 
@@ -138,6 +146,13 @@ class FormSubscribeTest extends WebTestCase
             $list2->getId(),
         ], $json['list_ids']);
         $this->assertSame('subscribed', $json['status']);
+
+        $subscriber->_refresh();
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame([
+            $list1->getId(),
+            $list2->getId(),
+        ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
 
     }
 
