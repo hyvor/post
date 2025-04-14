@@ -89,7 +89,7 @@ class NewsletterListService
         $existingIds = array_column($result, 'id');
         $missingIds = array_diff($listIds, $existingIds);
 
-        return count($missingIds) === 0 ? null : $missingIds;
+        return count($missingIds) === 0 ? null : array_values($missingIds);
     }
 
     /**

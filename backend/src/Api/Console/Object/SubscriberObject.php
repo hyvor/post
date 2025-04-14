@@ -25,7 +25,7 @@ class SubscriberObject
         $this->email = $subscriber->getEmail();
         $this->source = $subscriber->getSource()->value;
         $this->status = $subscriber->getStatus()->value;
-        $this->list_ids = $subscriber->getLists()->map(fn($list) => $list->getId())->toArray();
+        $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
         $this->subscribe_ip = $subscriber->getSubscribeIp();
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
         $this->unsubscribed_at = $subscriber->getUnsubscribedAt()?->getTimestamp();
