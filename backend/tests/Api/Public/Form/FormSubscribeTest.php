@@ -2,10 +2,23 @@
 
 namespace App\Tests\Api\Public\Form;
 
+use App\Api\Console\Object\SubscriberObject;
+use App\Api\Public\Controller\Form\FormController;
+use App\Entity\Type\SubscriberStatus;
+use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
+#[CoversClass(FormController::class)]
+#[CoversClass(SubscriberObject::class)]
+#[CoversClass(SubscriberService::class)]
+#[CoversClass(NewsletterListService::class)]
 class FormSubscribeTest extends WebTestCase
 {
 
@@ -33,8 +46,30 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame('Project not found', $json['message']);
     }
 
+    public function test_validates_list_ids(): void
+    {
+
+        $project = ProjectFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['project' => $project]);
+        $list2 = NewsletterListFactory::createOne(['project' => ProjectFactory::createOne()]);
+
+        $response = $this->publicApi('POST', '/form/subscribe', [
+            'project_id' => $project->getId(),
+            'email' => 'test@hyvor.com',
+            'list_ids' => [$list1->getId(), $list2->getId()],
+        ]);
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertSame("List with id {$list2->getId()} not found", $json['message']);
+    }
+
     public function test_subscribes_email(): void
     {
+
+        $date = new \DateTimeImmutable('2025-04-14 00:00:00');
+        Clock::set(new MockClock($date));
 
         $project = ProjectFactory::createOne();
 
@@ -52,6 +87,57 @@ class FormSubscribeTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200, $response);
 
+        $json = $this->getJson($response);
+
+        $this->assertIsInt($json['id']);
+        $this->assertSame('supun@hyvor.com', $json['email']);
+        $this->assertSame([
+            $list1->getId(),
+            $list2->getId(),
+        ], $json['list_ids']);
+        $this->assertSame('subscribed', $json['status']);
+        $this->assertSame('form', $json['source']);
+        $this->assertSame($date->getTimestamp(), $json['subscribed_at']);
+        $this->assertSame(null, $json['unsubscribed_at']);
+
+    }
+
+    public function test_updates_status_and_list_ids_on_duplicate(): void
+    {
+
+        $project = ProjectFactory::createOne();
+
+        $list1 = NewsletterListFactory::createOne(['project' => $project]);
+        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+
+        $email = 'supun@hyvor.com';
+        $subscriber = SubscriberFactory::createOne([
+            'project' => $project,
+            'email' => $email,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::UNSUBSCRIBED,
+        ]);
+
+        $response = $this->publicApi('POST', '/form/subscribe', [
+            'project_id' => $project->getId(),
+            'email' => $email,
+            'list_ids' => [
+                $list1->getId(),
+                $list2->getId(),
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(200, $response);
+        $json = $this->getJson($response);
+
+        $this->assertIsInt($json['id']);
+        $this->assertSame($subscriber->getId(), $json['id']);
+        $this->assertSame($email, $json['email']);
+        $this->assertSame([
+            $list1->getId(),
+            $list2->getId(),
+        ], $json['list_ids']);
+        $this->assertSame('subscribed', $json['status']);
 
     }
 
