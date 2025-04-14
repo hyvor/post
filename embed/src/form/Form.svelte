@@ -1,4 +1,15 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import Skeleton from "./Skeleton.svelte";
+    import { fade, scale, slide } from "svelte/transition";
+
+    interface Props {
+        projectUuid: string;
+    }
+
+    let props: Props = $props();
+    let loading = $state(true);
+
     const lists = [
         { id: 1, name: "PHP", description: "Get the latest PHP news" },
         {
@@ -7,35 +18,53 @@
             description: "Get the latest Typescript news",
         },
     ];
+
+    onMount(() => {
+        // Simulate an API call
+        setTimeout(() => {
+            loading = false;
+        }, 1000);
+    });
+
+    const fadeInTime = 600;
 </script>
 
-<div class="form">
-    <div class="title">Subscribe for updates</div>
+{#if loading}
+    <Skeleton />
+{:else}
+    <div class="form">
+        <div class="title" transition:fade={{ duration: fadeInTime }}>
+            Subscribe for updates
+        </div>
 
-    <div class="lists">
-        {#each lists as list}
-            <label class="list">
-                <div class="name-description">
-                    <div class="name">{list.name}</div>
-                    <div class="description">{list.description}</div>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" />
-                </div>
-            </label>
-        {/each}
-    </div>
+        <div
+            class="lists"
+            transition:slide={{ duration: 400, delay: fadeInTime }}
+        >
+            {#each lists as list}
+                <label class="list">
+                    <div class="name-description">
+                        <div class="name">{list.name}</div>
+                        <div class="description">{list.description}</div>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" />
+                    </div>
+                </label>
+            {/each}
+        </div>
 
-    <div class="input">
-        <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            class="email-input"
-        />
-        <button> Subscribe </button>
+        <div class="input" transition:fade={{ duration: fadeInTime }}>
+            <input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                class="email-input"
+            />
+            <button> Subscribe </button>
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
     .form {

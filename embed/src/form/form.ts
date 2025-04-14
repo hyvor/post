@@ -8,16 +8,17 @@ class HyvorPostForm extends HTMLElement {
     }
 
     connectedCallback() {
-        const projectId = this.getAttribute("project-id");
+        const projectUuid = this.getAttribute("project");
 
-        /* if (!websiteId) {
-			throw new Error('website-id is required for Hyvor post Newsletter widget.');
+		if (!projectUuid) {
+			throw new Error('project-uuid is required for Hyvor Post form.');
 		}
-
-		const translations = Translations.fromElement(this); */
 
         mount(Form, {
             target: this.shadowRoot!,
+			props: {
+				projectUuid,
+			}
         });
 
         /* this.component = new Newsletter({
