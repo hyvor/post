@@ -31,8 +31,6 @@ class TemplateVariables
         public string $color_accent = TemplateDefaults::COLOR_ACCENT,
         public string $color_background = TemplateDefaults::COLOR_BACKGROUND,
         public string $color_box_background = TemplateDefaults::COLOR_BACKGROUND,
-        public string $color_box_shadow = TemplateDefaults::COLOR_BOX_SHADOW,
-        public string $color_box_border = TemplateDefaults::COLOR_BOX_BORDER,
 
         // font
         public string $font_family = TemplateDefaults::FONT_FAMILY,
@@ -45,6 +43,8 @@ class TemplateVariables
 
         // Box radius
         public string $box_radius = TemplateDefaults::BOX_RADIUS,
+        public string $box_shadow = TemplateDefaults::BOX_SHADOW,
+        public string $box_border = TemplateDefaults::BOX_BORDER,
     )
     {
     }

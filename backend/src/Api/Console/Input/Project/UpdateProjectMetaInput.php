@@ -2,8 +2,12 @@
 
 namespace App\Api\Console\Input\Project;
 
+use App\Util\OptionalPropertyTrait;
+
 class UpdateProjectMetaInput
 {
+    use OptionalPropertyTrait;
+
     public ?string $templateColorAccent = null;
     public ?string $templateColorBackground = null;
     public ?string $templateColorBoxBackground = null;

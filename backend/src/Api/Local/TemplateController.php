@@ -49,8 +49,8 @@ class TemplateController extends AbstractController
             color_background: '#f8f9fa',
             color_box_background: '#ffffff',
             color_box_radius: '5px',
-            color_box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-            color_box_border: '1px solid #e9ecef',
+            box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+            box_border: '1px solid #e9ecef',
 
             font_family: "'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
             font_size: '16px',
