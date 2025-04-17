@@ -18,24 +18,9 @@ class HyvorPostForm extends HTMLElement {
             target: this.shadowRoot!,
 			props: {
 				projectUuid,
+                instance: this.getAttribute("instance") || "https://post.hyvor.com",
 			}
         });
-
-        /* this.component = new Newsletter({
-			target: this.shadowRoot!,
-			props: {
-				websiteId: Number(websiteId),
-				instance: this.getAttribute('instance'),
-				title: this.getAttribute('title'),
-				description: this.getAttribute('description'),
-				language: this.getAttribute('language'),
-				ssoUser: this.getAttribute('sso-user'),
-				ssoHash: this.getAttribute('sso-hash'),
-				colors: this.getAttribute('colors'),
-				translations: translations as any,
-				shadowRoot: this.shadowRoot!
-			}
-		}); */
     }
 
     /* static get observedAttributes() {

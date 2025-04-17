@@ -26,7 +26,7 @@ final class ListController extends AbstractController
     public function getNewsletterLists(Project $project): JsonResponse
     {
         $lists = $this->newsletterListService
-            ->getNewsletterLists($project)
+            ->getListsOfProject($project)
             ->map(fn (NewsletterList $list) => new ListObject($list));
 
         return $this->json($lists);

@@ -4,6 +4,7 @@ namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
+use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormProjectObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Entity\Type\SubscriberSource;
@@ -43,12 +44,26 @@ class FormController extends AbstractController
             throw new UnprocessableEntityHttpException('Project not found');
         }
 
-        //
+        $listIds = $input->list_ids;
+
+        if ($listIds !== null) {
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfProject(
+                $project,
+                $listIds
+            );
+            if ($missingListIds !== null) {
+                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
+
+            $lists = $this->newsletterListService->getListsByIds($listIds);
+        } else {
+            $lists = $this->newsletterListService->getListsOfProject($project);
+        }
 
         return new JsonResponse([
-            'project' => new FormProjectObject($project), //
+            'project' => new FormProjectObject($project),
             'is_subscribed' => false,
-            'lists' => [],
+            'lists' => $lists->map(fn ($list) => new FormListObject($list))->toArray(),
         ]);
 
     }
