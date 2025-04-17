@@ -4,9 +4,14 @@
 	import { projectStore } from "../../../lib/stores/projectStore";
 	import { updateProjectMeta } from "../../../lib/actions/projectActions";
 	import type { ProjectMeta, Project, AppConfig } from "../../../types";
+	import IconCaretDown from "@hyvor/icons/IconCaretDown";
 
 	let hasChanges = false;
 	let showFontSize = false;
+	let showFontFamily = false;
+	let showFontWeight = false;
+	let showFontWeightHeading = false;
+	let showBoxRadius = false;
 
 	// Create a reactive object with all template values
 	let templateValues: Record<keyof ProjectMeta, string> = {
@@ -79,6 +84,11 @@
 	}
 
 	const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'];
+	const fontWeights = ['light', 'normal', 'bold'];
+	const fontWeightHeadings = ['light', 'normal', 'bold'];
+	const boxRadius = ['0px', '4px', '8px', '12px', '16px'];
+	const lineHeights = ['1.2', '1.4', '1.6', '1.8', '2.0'];
+	const fontFamilies = ['Arial', 'Courier New', 'Georgia', 'Times New Roman', 'Verdana'];
 
 	function selectFontSize(size: string) {
 		handleChange('templateFontSize', size);
@@ -144,6 +154,7 @@
 				<Dropdown bind:show={showFontSize} width={200}>
 					{#snippet trigger()}
 						{templateValues.templateFontSize}
+						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
 						<ActionList selection="single" selectionAlign="end">
@@ -153,6 +164,87 @@
 									selected={templateValues.templateFontSize === size}
 								>
 									{size}
+								</ActionListItem>
+							{/each}
+						</ActionList>
+					{/snippet}
+				</Dropdown>
+			</SplitControl>
+			<SplitControl label="Font Family">
+				<Dropdown bind:show={showFontFamily} width={200}>
+					{#snippet trigger()}
+						{templateValues.templateFontFamily}
+						<IconCaretDown />
+					{/snippet}
+					{#snippet content()}
+						<ActionList selection="single" selectionAlign="end">
+							{#each fontFamilies as family}
+								<ActionListItem
+									on:click={() => handleChange('templateFontFamily', family)}
+									selected={templateValues.templateFontFamily === family}
+								>
+									{family}
+								</ActionListItem>
+							{/each}
+						</ActionList>
+					{/snippet}
+				</Dropdown>
+			</SplitControl>
+			<SplitControl label="Font Weight">
+				<Dropdown bind:show={showFontWeight} width={200}>
+					{#snippet trigger()}
+						{templateValues.templateFontWeight}
+						<IconCaretDown />
+					{/snippet}
+					{#snippet content()}
+						<ActionList selection="single" selectionAlign="end">
+							{#each fontWeights as weight}
+								<ActionListItem
+									on:click={() => handleChange('templateFontWeight', weight)}
+									selected={templateValues.templateFontWeight === weight}
+								>
+									{weight}
+								</ActionListItem>
+							{/each}
+						</ActionList>
+					{/snippet}
+				</Dropdown>
+			</SplitControl>
+
+			<SplitControl label="Font Weight Heading">
+				<Dropdown bind:show={showFontWeightHeading} width={200}>
+					{#snippet trigger()}
+						{templateValues.templateFontWeightHeading}
+						<IconCaretDown />
+					{/snippet}
+					{#snippet content()}
+						<ActionList selection="single" selectionAlign="end">
+							{#each fontWeightHeadings as weight}
+								<ActionListItem
+									on:click={() => handleChange('templateFontWeightHeading', weight)}
+									selected={templateValues.templateFontWeightHeading === weight}
+								>
+									{weight}
+								</ActionListItem>
+							{/each}
+						</ActionList>
+					{/snippet}
+				</Dropdown>
+			</SplitControl>
+			<SplitControl label="Box radius">
+				<Dropdown bind:show={showBoxRadius} width={200}>
+					{#snippet trigger()}
+						{templateValues.templateBoxRadius}
+						<IconCaretDown />
+					{/snippet}
+					{#snippet content()}
+						<ActionList selection="single" selectionAlign="end">
+							{#each boxRadius as radius}
+								<ActionListItem
+									on:click={() => handleChange('templateBoxRadius', radius)}
+									selected={templateValues.templateBoxRadius === radius}
+								>
+									{radius}
 								</ActionListItem>
 							{/each}
 						</ActionList>
