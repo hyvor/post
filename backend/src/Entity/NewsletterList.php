@@ -27,8 +27,11 @@ class NewsletterList
     #[ORM\JoinColumn(name: 'list_id')]
     private Collection $subscribers;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $name;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description;
 
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
@@ -74,6 +77,18 @@ class NewsletterList
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

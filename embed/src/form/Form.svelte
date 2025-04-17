@@ -1,14 +1,18 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import Skeleton from "./Skeleton.svelte";
-    import { fade, scale, slide } from "svelte/transition";
+    import { fade, slide } from "svelte/transition";
+    import type { List } from "./types";
+    import { apiFromInstance } from "./api";
 
     interface Props {
         projectUuid: string;
+        instance: string;
     }
 
-    let props: Props = $props();
+    let { projectUuid, instance }: Props = $props();
     let loading = $state(true);
+    // let lists: List[] = $state([]);
 
     const lists = [
         { id: 1, name: "PHP", description: "Get the latest PHP news" },
@@ -19,42 +23,63 @@
         },
     ];
 
+    const api = apiFromInstance(instance);
+
     onMount(() => {
-        // Simulate an API call
+        api("/init", {
+            project_uuid: projectUuid,
+        });
         setTimeout(() => {
             loading = false;
         }, 1000);
     });
 
-    const fadeInTime = 600;
+    /**
+     * Firstly loaded elements
+     * The heading and the input
+     * Fades in
+     */
+    const firstElementsAnimation = {
+        duration: 600,
+    };
+
+    /**
+     * Later loaded elements
+     * The lists and the footer
+     * Slides in
+     * The delay is set to the duration of the first elements animation
+     */
+    const laterElementsAnimation = {
+        duration: 400,
+        delay: firstElementsAnimation.duration,
+    };
 </script>
 
 {#if loading}
     <Skeleton />
 {:else}
     <div class="form">
-        <div class="title" transition:fade={{ duration: fadeInTime }}>
+        <div class="title" transition:fade={firstElementsAnimation}>
             Subscribe for updates
         </div>
 
-        <div
-            class="lists"
-            transition:slide={{ duration: 400, delay: fadeInTime }}
-        >
-            {#each lists as list}
-                <label class="list">
-                    <div class="name-description">
-                        <div class="name">{list.name}</div>
-                        <div class="description">{list.description}</div>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" />
-                    </div>
-                </label>
-            {/each}
-        </div>
+        {#if lists.length > 1}
+            <div class="lists" transition:slide={laterElementsAnimation}>
+                {#each lists as list}
+                    <label class="list">
+                        <div class="name-description">
+                            <div class="name">{list.name}</div>
+                            <div class="description">{list.description}</div>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" />
+                        </div>
+                    </label>
+                {/each}
+            </div>
+        {/if}
 
-        <div class="input" transition:fade={{ duration: fadeInTime }}>
+        <div class="input" transition:fade={firstElementsAnimation}>
             <input
                 type="email"
                 name="email"
@@ -62,6 +87,10 @@
                 class="email-input"
             />
             <button> Subscribe </button>
+        </div>
+
+        <div class="footer" transition:slide={laterElementsAnimation}>
+            By subscribing, you agree to our privacy policy.
         </div>
     </div>
 {/if}
@@ -126,6 +155,12 @@
     }
 
     .description {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .footer {
+        margin-top: 1rem;
         font-size: 14px;
         color: #666;
     }

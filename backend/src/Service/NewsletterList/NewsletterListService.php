@@ -43,16 +43,15 @@ class NewsletterListService
         $this->em->flush();
     }
 
-    public function getNewsletterList(int $id): ?NewsletterList
+    public function getListById(int $id): ?NewsletterList
     {
-        $list = $this->em->getRepository(NewsletterList::class)->find($id);
-        return $list;
+        return $this->em->getRepository(NewsletterList::class)->find($id);
     }
 
     /**
      * @return ArrayCollection<int, NewsletterList>
      */
-    public function getNewsletterLists(Project $project): ArrayCollection
+    public function getListsOfProject(Project $project): ArrayCollection
     {
         return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
     }
