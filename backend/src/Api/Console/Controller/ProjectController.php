@@ -55,13 +55,24 @@ final class ProjectController extends AbstractController
         return $this->json([]);
     }
 
-    #[Route('/projects/meta', methods: 'POST')]
-    public function updateProjectMeta(
+    #[Route('/projects', methods: 'PATCH')]
+    public function updateProject(
         Project $project,
+        // this should be UpdateProjectInput
         #[MapRequestPayload] UpdateProjectMetaInput $input
     ): JsonResponse
     {
         $updatesMeta = new UpdateProjectMetaDto();
+
+        /**
+         * TODO:
+         * $properties = $input->getSetProperties();
+         *
+         * foreach ($properties as $property) {
+         *    $cased = $this->snakeToCamelCase($property);
+         *    $updatesMeta->{$cased} = $input->{$property};
+         * }
+         */
 
         if ($input->templateColorAccent)
             $updatesMeta->templateColorAccent = $input->templateColorAccent;

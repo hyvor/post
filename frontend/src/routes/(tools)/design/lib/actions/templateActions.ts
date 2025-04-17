@@ -1,7 +1,6 @@
-import consoleApi from "../../../../console/lib/consoleApi";
 import type { TemplateResponse } from "../../types";
 
-export function getDefaultTemplate() {
+export function getDefaultTemplate() : Promise<TemplateResponse> {
     return fetch('api/public/template/default')
         .then((response) => {
             if (response.ok) {

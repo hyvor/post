@@ -6,22 +6,24 @@
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 	import EditContentModal from './EditContentModal.svelte';
 
-	let template = '';
-	let variables = '{}';
-	let previewHtml = '';
+	let defaultsLoaded = $state(false);
+	let template = $state('');
+	let variables = $state('{}');
+	let previewHtml = $state('');
 
-	let showEditContentModal = false;
+	let showEditContentModal = $state(false);
 
 	function getDefault() {
 		getDefaultTemplate()
 			.then((res) => {
-				if (res) {
-					template = res.template;
-					variables = JSON.stringify(res.variables, null, 2);
-				}
+				template = res.template;
+				variables = JSON.stringify(res.variables, null, 2);
 			})
 			.catch((err) => {
 				console.error(err);
+			})
+			.finally(() => {
+				defaultsLoaded = true;
 			});
 	}
 
@@ -61,7 +63,6 @@
 	onMount(() => {
 		getDefault();
 	});
-
 </script>
 
 <EditContentModal
@@ -75,11 +76,13 @@
 		<div class="column-title">template.twig</div>
 		<div class="column-content">
 			<div class="hds-box">
-				<CodemirrorEditor
-					ext="twig"
-					bind:value={template}
-					change={(e) => (template = e)}
-				/>
+				{#if defaultsLoaded}
+					<CodemirrorEditor
+						ext="twig"
+						bind:value={template}
+						change={(e) => (template = e)}
+					/>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -87,19 +90,18 @@
 	<div class="column">
 		<div class="column-title">
 			variables.json
-			<Button
-				on:click={() => showEditContentModal = true}
-			>
-				Edit content
-			</Button>
+			<Button on:click={() => (showEditContentModal = true)}>Edit content</Button>
 		</div>
 		<div class="column-content">
 			<div class="hds-box">
-				<CodemirrorEditor
-					value={variables}
-					ext="json"
-					change={(e) => (variables = e)}
-				/>
+				{#if defaultsLoaded}
+					<CodemirrorEditor
+						value={variables}
+						ext="json"
+						change={(e) => (variables = e)}
+						id={0}
+					/>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -107,15 +109,11 @@
 	<div class="column">
 		<div class="column-title">
 			Preview
-			<IconButton 
-				size="small"
-				color="input" 
-				on:click={fetchPreview}
-			>
+			<IconButton size="small" color="input" on:click={fetchPreview}>
 				<IconArrowClockwise size={12} />
 			</IconButton>
 		</div>
-		<div class="column-content user-interface-wrap">
+		<div class="column-content user-interface-wrap hds-box">
 			{@html previewHtml}
 		</div>
 	</div>
