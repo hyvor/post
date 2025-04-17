@@ -29,11 +29,11 @@ class UpdateProjectMetaTest extends WebTestCase
 
         $response = $this->consoleApi(
             $project,
-            'POST',
-            '/projects/meta',
+            'PATCH',
+            '/projects',
             [
-                'templateColorAccent' => '#ff0000',
-                'templateBoxRadius' => '10px',
+                'template_color_accent' => '#ff0000',
+                'template_box_radius' => '10px',
             ]
         );
 

@@ -8,6 +8,7 @@ use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
+use App\Util\StringUtil;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,58 +64,11 @@ final class ProjectController extends AbstractController
     ): JsonResponse
     {
         $updatesMeta = new UpdateProjectMetaDto();
-
-        /**
-         * TODO:
-         * $properties = $input->getSetProperties();
-         *
-         * foreach ($properties as $property) {
-         *    $cased = $this->snakeToCamelCase($property);
-         *    $updatesMeta->{$cased} = $input->{$property};
-         * }
-         */
-
-        if ($input->templateColorAccent)
-            $updatesMeta->templateColorAccent = $input->templateColorAccent;
-
-        if ($input->templateColorBackground)
-            $updatesMeta->templateColorBackground = $input->templateColorBackground;
-
-        if ($input->templateColorBoxBackground)
-            $updatesMeta->templateColorBoxBackground = $input->templateColorBoxBackground;
-
-        if ($input->templateColorBoxShadow)
-            $updatesMeta->templateColorBoxShadow = $input->templateColorBoxShadow;
-
-        if ($input->templateColorBoxBorder)
-            $updatesMeta->templateColorBoxBorder = $input->templateColorBoxBorder;
-
-        if ($input->templateFontFamily)
-            $updatesMeta->templateFontFamily = $input->templateFontFamily;
-
-        if ($input->templateFontSize)
-            $updatesMeta->templateFontSize = $input->templateFontSize;
-
-        if ($input->templateFontWeight)
-            $updatesMeta->templateFontWeight = $input->templateFontWeight;
-
-        if ($input->templateFontWeightHeading)
-            $updatesMeta->templateFontWeightHeading = $input->templateFontWeightHeading;
-
-        if ($input->templateFontColorOnBackground)
-            $updatesMeta->templateFontColorOnBackground = $input->templateFontColorOnBackground;
-
-        if ($input->templateFontColorOnBox)
-            $updatesMeta->templateFontColorOnBox = $input->templateFontColorOnBox;
-
-        if ($input->templateFontLineHeight)
-            $updatesMeta->templateFontLineHeight = $input->templateFontLineHeight;
-
-        if ($input->templateBoxRadius)
-            $updatesMeta->templateBoxRadius = $input->templateBoxRadius;
-
-        if ($input->templateLogo)
-            $updatesMeta->templateLogo = $input->templateLogo;
+        $properties = $input->getSetProperties();
+        foreach ($properties as $property) {
+            $cased = StringUtil::snakeToCamelCase($property);
+            $updatesMeta->{$cased} = $input->{$property};
+        }
 
         $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
 
