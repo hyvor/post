@@ -42,6 +42,7 @@
 	function getContentFromVariables(): string {
 		try {
 			const variablesObj = JSON.parse(variables);
+			console.log(variablesObj)
 			return variablesObj?.content || '';
 		} catch (err) {
 			return '';
