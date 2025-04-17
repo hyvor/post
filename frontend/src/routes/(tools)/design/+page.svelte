@@ -1,13 +1,16 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import CodemirrorEditor from '../../console/lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
 	import { getDefaultTemplate, previewTemplateFromVariable } from './lib/actions/templateActions';
-	import { IconButton } from '@hyvor/design/components';
+	import { Button, IconButton } from '@hyvor/design/components';
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
+	import EditContentModal from './EditContentModal.svelte';
 
 	let template = '';
-	let variables = '';
+	let variables = '{}';
 	let previewHtml = '';
+
+	let showEditContentModal = false;
 
 	function getDefault() {
 		getDefaultTemplate()
@@ -20,6 +23,27 @@
 			.catch((err) => {
 				console.error(err);
 			});
+	}
+
+	function handleContentUpdate(newContent: string) {
+		try {
+			const variablesObj = JSON.parse(variables);
+			variablesObj.content = newContent;
+			variables = JSON.stringify(variablesObj, null, 2);
+		} catch (err) {
+			console.error('Error updating variables:', err);
+			// Initialize with empty object if parsing fails
+			variables = JSON.stringify({ content: newContent }, null, 2);
+		}
+	}
+
+	function getContentFromVariables(): string {
+		try {
+			const variablesObj = JSON.parse(variables);
+			return variablesObj?.content || '';
+		} catch (err) {
+			return '';
+		}
 	}
 
 	function fetchPreview() {
@@ -40,6 +64,12 @@
 
 </script>
 
+<EditContentModal
+	bind:show={showEditContentModal}
+	content={getContentFromVariables()}
+	onContentUpdate={handleContentUpdate}
+/>
+
 <div class="demo-view">
 	<div class="column">
 		<div class="column-title">template.twig</div>
@@ -55,7 +85,14 @@
 	</div>
 
 	<div class="column">
-		<div class="column-title">variables.json</div>
+		<div class="column-title">
+			variables.json
+			<Button
+				on:click={() => showEditContentModal = true}
+			>
+				Edit content
+			</Button>
+		</div>
 		<div class="column-content">
 			<div class="hds-box">
 				<CodemirrorEditor
