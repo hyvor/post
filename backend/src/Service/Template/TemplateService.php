@@ -37,7 +37,7 @@ class TemplateService
 
     public function readDefaultTemplate(): string
     {
-        $templatePath = 'app/backend/templates/newsletter/default.html.twig';
+        $templatePath = '/app/backend/templates/newsletter/default.html.twig';
         return file_get_contents($templatePath);
     }
 }
