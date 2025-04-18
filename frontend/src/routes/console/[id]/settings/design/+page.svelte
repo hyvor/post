@@ -13,22 +13,26 @@
 	let showFontWeightHeading = false;
 	let showBoxRadius = false;
 
+	function getTemplateValues() {
+		return {
+			template_color_accent: $projectStore.template_color_accent ?? $appConfig.template_defaults.COLOR_ACCENT,
+			template_color_background: $projectStore.template_color_background ?? $appConfig.template_defaults.COLOR_BACKGROUND,
+			template_color_box_background: $projectStore.template_color_box_background ?? $appConfig.template_defaults.COLOR_BOX_BACKGROUND,
+			template_box_shadow: $projectStore.template_box_shadow ?? $appConfig.template_defaults.BOX_SHADOW,
+			template_box_border: $projectStore.template_box_border ?? $appConfig.template_defaults.BOX_BORDER,
+			template_font_size: $projectStore.template_font_size ?? $appConfig.template_defaults.FONT_SIZE,
+			template_font_family: $projectStore.template_font_family ?? $appConfig.template_defaults.FONT_FAMILY,
+			template_font_weight: $projectStore.template_font_weight ?? $appConfig.template_defaults.FONT_WEIGHT,
+			template_font_weight_heading: $projectStore.template_font_weight_heading ?? $appConfig.template_defaults.FONT_WEIGHT_HEADING,
+			template_font_color_on_background: $projectStore.template_font_color_on_background ?? $appConfig.template_defaults.FONT_COLOR_ON_BACKGROUND,
+			template_font_color_on_box: $projectStore.template_font_color_on_box ?? $appConfig.template_defaults.FONT_COLOR_ON_BOX,
+			template_font_line_height: $projectStore.template_font_line_height ?? $appConfig.template_defaults.FONT_LINE_HEIGHT,
+			template_box_radius: $projectStore.template_box_radius ?? $appConfig.template_defaults.BOX_RADIUS,
+		};
+	}
+
 	// Create a reactive object with all template values
-	let templateValues: Record<keyof ProjectMeta, string> = {
-		templateColorAccent: $projectStore.templateColorAccent ?? $appConfig.template_defaults.COLOR_ACCENT,
-		templateColorBackground: $projectStore.templateColorBackground ?? $appConfig.template_defaults.COLOR_BACKGROUND,
-		templateColorBoxBackground: $projectStore.templateColorBoxBackground ?? $appConfig.template_defaults.COLOR_BOX_BACKGROUND,
-		templateColorBoxShadow: $projectStore.templateColorBoxShadow ?? $appConfig.template_defaults.COLOR_BOX_SHADOW,
-		templateColorBoxBorder: $projectStore.templateColorBoxBorder ?? $appConfig.template_defaults.COLOR_BOX_BORDER,
-		templateFontSize: $projectStore.templateFontSize ?? $appConfig.template_defaults.FONT_SIZE,
-		templateFontFamily: $projectStore.templateFontFamily ?? $appConfig.template_defaults.FONT_FAMILY,
-		templateFontWeight: $projectStore.templateFontWeight ?? $appConfig.template_defaults.FONT_WEIGHT,
-		templateFontWeightHeading: $projectStore.templateFontWeightHeading ?? $appConfig.template_defaults.FONT_WEIGHT_HEADING,
-		templateFontColorOnBackground: $projectStore.templateFontColorOnBackground ?? $appConfig.template_defaults.FONT_COLOR_ON_BACKGROUND,
-		templateFontColorOnBox: $projectStore.templateFontColorOnBox ?? $appConfig.template_defaults.FONT_COLOR_ON_BOX,
-		templateFontLineHeight: $projectStore.templateFontLineHeight ?? $appConfig.template_defaults.FONT_LINE_HEIGHT,
-		templateBoxRadius: $projectStore.templateBoxRadius ?? $appConfig.template_defaults.BOX_RADIUS,
-	};
+	let templateValues: Record<keyof ProjectMeta, string> = getTemplateValues();
 
 	// Object used to track changes
 	let metaToSave: Partial<ProjectMeta> = {};
@@ -66,21 +70,7 @@
 		metaToSave = {};
 		hasChanges = false;
 		// Reset template values to their original state
-		templateValues = {
-			templateColorAccent: $projectStore.templateColorAccent ?? $appConfig.template_defaults.COLOR_ACCENT,
-			templateColorBackground: $projectStore.templateColorBackground ?? $appConfig.template_defaults.COLOR_BACKGROUND,
-			templateColorBoxBackground: $projectStore.templateColorBoxBackground ?? $appConfig.template_defaults.COLOR_BOX_BACKGROUND,
-			templateColorBoxShadow: $projectStore.templateColorBoxShadow ?? $appConfig.template_defaults.COLOR_BOX_SHADOW,
-			templateColorBoxBorder: $projectStore.templateColorBoxBorder ?? $appConfig.template_defaults.COLOR_BOX_BORDER,
-			templateFontSize: $projectStore.templateFontSize ?? $appConfig.template_defaults.FONT_SIZE,
-			templateFontFamily: $projectStore.templateFontFamily ?? $appConfig.template_defaults.FONT_FAMILY,
-			templateFontWeight: $projectStore.templateFontWeight ?? $appConfig.template_defaults.FONT_WEIGHT,
-			templateFontWeightHeading: $projectStore.templateFontWeightHeading ?? $appConfig.template_defaults.FONT_WEIGHT_HEADING,
-			templateFontColorOnBackground: $projectStore.templateFontColorOnBackground ?? $appConfig.template_defaults.FONT_COLOR_ON_BACKGROUND,
-			templateFontColorOnBox: $projectStore.templateFontColorOnBox ?? $appConfig.template_defaults.FONT_COLOR_ON_BOX,
-			templateFontLineHeight: $projectStore.templateFontLineHeight ?? $appConfig.template_defaults.FONT_LINE_HEIGHT,
-			templateBoxRadius: $projectStore.templateBoxRadius ?? $appConfig.template_defaults.BOX_RADIUS,
-		};
+		templateValues = getTemplateValues();
 	}
 
 	const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'];
@@ -91,7 +81,7 @@
 	const fontFamilies = ['Arial', 'Courier New', 'Georgia', 'Times New Roman', 'Verdana'];
 
 	function selectFontSize(size: string) {
-		handleChange('templateFontSize', size);
+		handleChange('template_font_size', size);
 		showFontSize = false;
 	}
 </script>
@@ -118,32 +108,32 @@
 		{#snippet nested()}
 			<SplitControl label="Accent">
 				<ColorPicker 
-					color={templateValues.templateColorAccent}
-					on:input={(e: CustomEvent<string>) => handleChange('templateColorAccent', e.detail)}
+					color={templateValues.template_color_accent}
+					on:input={(e: CustomEvent<string>) => handleChange('template_color_accent', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Background">
 				<ColorPicker 
-					color={templateValues.templateColorBackground}
-					on:input={(e: CustomEvent<string>) => handleChange('templateColorBackground', e.detail)}
+					color={templateValues.template_color_background}
+					on:input={(e: CustomEvent<string>) => handleChange('template_color_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box background">
 				<ColorPicker 
-					color={templateValues.templateColorBoxBackground}
-					on:input={(e: CustomEvent<string>) => handleChange('templateColorBoxBackground', e.detail)}
+					color={templateValues.template_color_box_background}
+					on:input={(e: CustomEvent<string>) => handleChange('template_color_box_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box shadow">
 				<ColorPicker 
-					color={templateValues.templateColorBoxShadow}
-					on:input={(e: CustomEvent<string>) => handleChange('templateColorBoxShadow', e.detail)}
+					color={templateValues.template_box_shadow}
+					on:input={(e: CustomEvent<string>) => handleChange('template_box_shadow', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box border">
 				<ColorPicker 
-					color={templateValues.templateColorBoxBorder}
-					on:input={(e: CustomEvent<string>) => handleChange('templateColorBoxBorder', e.detail)}
+					color={templateValues.template_box_border}
+					on:input={(e: CustomEvent<string>) => handleChange('template_box_border', e.detail)}
 				/>
 			</SplitControl>
 		{/snippet}
@@ -153,7 +143,7 @@
 			<SplitControl label="Font Size">
 				<Dropdown bind:show={showFontSize} width={200}>
 					{#snippet trigger()}
-						{templateValues.templateFontSize}
+						{templateValues.template_font_size}
 						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
@@ -161,7 +151,7 @@
 							{#each fontSizes as size}
 								<ActionListItem
 									on:click={() => selectFontSize(size)}
-									selected={templateValues.templateFontSize === size}
+									selected={templateValues.template_font_size === size}
 								>
 									{size}
 								</ActionListItem>
@@ -173,15 +163,15 @@
 			<SplitControl label="Font Family">
 				<Dropdown bind:show={showFontFamily} width={200}>
 					{#snippet trigger()}
-						{templateValues.templateFontFamily}
+						{templateValues.template_font_family}
 						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
 						<ActionList selection="single" selectionAlign="end">
 							{#each fontFamilies as family}
 								<ActionListItem
-									on:click={() => handleChange('templateFontFamily', family)}
-									selected={templateValues.templateFontFamily === family}
+									on:click={() => handleChange('template_font_family', family)}
+									selected={templateValues.template_font_family === family}
 								>
 									{family}
 								</ActionListItem>
@@ -193,15 +183,15 @@
 			<SplitControl label="Font Weight">
 				<Dropdown bind:show={showFontWeight} width={200}>
 					{#snippet trigger()}
-						{templateValues.templateFontWeight}
+						{templateValues.template_font_weight}
 						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
 						<ActionList selection="single" selectionAlign="end">
 							{#each fontWeights as weight}
 								<ActionListItem
-									on:click={() => handleChange('templateFontWeight', weight)}
-									selected={templateValues.templateFontWeight === weight}
+									on:click={() => handleChange('template_font_weight', weight)}
+									selected={templateValues.template_font_weight === weight}
 								>
 									{weight}
 								</ActionListItem>
@@ -214,15 +204,15 @@
 			<SplitControl label="Font Weight Heading">
 				<Dropdown bind:show={showFontWeightHeading} width={200}>
 					{#snippet trigger()}
-						{templateValues.templateFontWeightHeading}
+						{templateValues.template_font_weight_heading}
 						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
 						<ActionList selection="single" selectionAlign="end">
 							{#each fontWeightHeadings as weight}
 								<ActionListItem
-									on:click={() => handleChange('templateFontWeightHeading', weight)}
-									selected={templateValues.templateFontWeightHeading === weight}
+									on:click={() => handleChange('template_font_weight_heading', weight)}
+									selected={templateValues.template_font_weight_heading === weight}
 								>
 									{weight}
 								</ActionListItem>
@@ -234,15 +224,15 @@
 			<SplitControl label="Box radius">
 				<Dropdown bind:show={showBoxRadius} width={200}>
 					{#snippet trigger()}
-						{templateValues.templateBoxRadius}
+						{templateValues.template_box_radius}
 						<IconCaretDown />
 					{/snippet}
 					{#snippet content()}
 						<ActionList selection="single" selectionAlign="end">
 							{#each boxRadius as radius}
 								<ActionListItem
-									on:click={() => handleChange('templateBoxRadius', radius)}
-									selected={templateValues.templateBoxRadius === radius}
+									on:click={() => handleChange('template_box_radius', radius)}
+									selected={templateValues.template_box_radius === radius}
 								>
 									{radius}
 								</ActionListItem>

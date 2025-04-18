@@ -12,8 +12,8 @@ export function createProject(name: string) {
 }
 
 export function updateProjectMeta(meta: ProjectMeta) {
-    return consoleApi.post<ProjectMeta>({
-        endpoint: 'projects/meta',
+    return consoleApi.patch<ProjectMeta>({
+        endpoint: 'projects',
         data: meta,
     });
 }
