@@ -9,6 +9,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
+use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 
@@ -134,34 +135,26 @@ class ProjectService
     public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
     {
         $currentMeta = $project->getMeta();
-        if ($updates->hasProperty('templateColorAccent'))
-            $currentMeta->templateColorAccent = $updates->templateColorAccent;
-        if ($updates->hasProperty('templateColorBackground'))
-            $currentMeta->templateColorBackground = $updates->templateColorBackground;
-        if ($updates->hasProperty('templateColorBoxBackground'))
-            $currentMeta->templateColorBoxBackground = $updates->templateColorBoxBackground;
-        if ($updates->hasProperty('templateColorBoxShadow'))
-            $currentMeta->templateColorBoxShadow = $updates->templateColorBoxShadow;
-        if ($updates->hasProperty('templateColorBoxBorder'))
-            $currentMeta->templateColorBoxBorder = $updates->templateColorBoxBorder;
-        if ($updates->hasProperty('templateFontFamily'))
-            $currentMeta->templateFontFamily = $updates->templateFontFamily;
-        if ($updates->hasProperty('templateFontSize'))
-            $currentMeta->templateFontSize = $updates->templateFontSize;
-        if ($updates->hasProperty('templateFontWeight'))
-            $currentMeta->templateFontWeight = $updates->templateFontWeight;
-        if ($updates->hasProperty('templateFontWeightHeading'))
-            $currentMeta->templateFontWeightHeading = $updates->templateFontWeightHeading;
-        if ($updates->hasProperty('templateFontColorOnBackground'))
-            $currentMeta->templateFontColorOnBackground = $updates->templateFontColorOnBackground;
-        if ($updates->hasProperty('templateFontColorOnBox'))
-            $currentMeta->templateFontColorOnBox = $updates->templateFontColorOnBox;
-        if ($updates->hasProperty('templateFontLineHeight'))
-            $currentMeta->templateFontLineHeight = $updates->templateFontLineHeight;
-        if ($updates->hasProperty('templateBoxRadius'))
-            $currentMeta->templateBoxRadius = $updates->templateBoxRadius;
-        if ($updates->hasProperty('templateLogo'))
-            $currentMeta->templateLogo = $updates->templateLogo;
+        $properties = [
+            'templateColorAccent',
+            'templateColorBackground',
+            'templateColorBoxBackground',
+            'templateColorBoxShadow',
+            'templateColorBoxBorder',
+            'templateFontFamily',
+            'templateFontSize',
+            'templateFontWeight',
+            'templateFontWeightHeading',
+            'templateFontColorOnBackground',
+            'templateFontColorOnBox',
+            'templateFontLineHeight',
+            'templateBoxRadius',
+            'templateLogo',
+        ];
+
+        foreach ($properties as $property) {
+            ClassUpdater::updateIfExists($updates, $currentMeta, $property);
+        }
 
         $project->setMeta($currentMeta);
         $project->setUpdatedAt($this->now());

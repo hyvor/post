@@ -34,4 +34,10 @@ class TemplateService
 
         return $templateEntity;
     }
+
+    public function readDefaultTemplate(): string
+    {
+        $templatePath = 'app/backend/templates/newsletter/default.html.twig';
+        return file_get_contents($templatePath);
+    }
 }

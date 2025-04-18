@@ -8,20 +8,20 @@ class ProjectMeta
     /**
      * Template variables
      */
-    public ?string $templateColorAccent = null;
-    public ?string $templateColorBackground = null;
-    public ?string $templateColorBoxBackground = null;
-    public ?string $templateColorBoxShadow = null;
-    public ?string $templateColorBoxBorder = null;
-    public ?string $templateFontFamily = null;
-    public ?string $templateFontSize = null;
-    public ?string $templateFontWeight = null;
-    public ?string $templateFontWeightHeading = null;
-    public ?string $templateFontColorOnBackground = null;
-    public ?string $templateFontColorOnBox = null;
-    public ?string $templateFontLineHeight = null;
-    public ?string $templateBoxRadius = null;
-    public ?string $templateLogo = null;
+    public ?string $template_color_accent = null;
+    public ?string $template_color_background = null;
+    public ?string $template_color_box_background = null;
+    public ?string $template_color_box_shadow = null;
+    public ?string $template_color_box_border = null;
+    public ?string $template_font_family = null;
+    public ?string $template_font_size = null;
+    public ?string $template_font_weight = null;
+    public ?string $template_font_weight_heading = null;
+    public ?string $template_font_color_on_background = null;
+    public ?string $template_font_color_on_box = null;
+    public ?string $template_font_line_height = null;
+    public ?string $template_box_radius = null;
+    public ?string $template_logo = null;
 
 
     // TODO:

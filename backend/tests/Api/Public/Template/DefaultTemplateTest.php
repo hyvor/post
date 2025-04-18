@@ -11,5 +11,12 @@ class DefaultTemplateTest extends WebTestCase
     {
         $response = $this->publicApi('GET', '/template/default');
         $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertArrayHasKey('template', $json);
+        $this->assertArrayHasKey('variables', $json);
+
+        $variables = $json['variables'];
+        $this->assertSame("en", $variables['lang']);
     }
 }

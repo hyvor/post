@@ -39,7 +39,7 @@ class TemplateVariables
         public string $font_weight_heading = TemplateDefaults::FONT_WEIGHT_HEADING,
         public string $font_color_on_background = TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
         public string $font_color_on_box = TemplateDefaults::FONT_COLOR_ON_BOX,
-        public string $font_line_height= TemplateDefaults::FONT_LINE_HEIGHT,
+        public string $font_line_height = TemplateDefaults::FONT_LINE_HEIGHT,
 
         // Box radius
         public string $box_radius = TemplateDefaults::BOX_RADIUS,

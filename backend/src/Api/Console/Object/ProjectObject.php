@@ -12,40 +12,40 @@ class ProjectObject
     public string $name;
 
     // Meta fields flattened
-    public ?string $templateColorAccent = null;
-    public ?string $templateColorBackground = null;
-    public ?string $templateColorBoxBackground = null;
-    public ?string $templateColorBoxShadow = null;
-    public ?string $templateColorBoxBorder = null;
-    public ?string $templateFontFamily = null;
-    public ?string $templateFontSize = null;
-    public ?string $templateFontWeight = null;
-    public ?string $templateFontWeightHeading = null;
-    public ?string $templateFontColorOnBackground = null;
-    public ?string $templateFontColorOnBox = null;
-    public ?string $templateFontLineHeight = null;
-    public ?string $templateBoxRadius = null;
-    public ?string $templateLogo = null;
+    public ?string $template_color_accent = null;
+    public ?string $template_color_background = null;
+    public ?string $template_color_box_background = null;
+    public ?string $template_color_box_shadow = null;
+    public ?string $template_color_box_border = null;
+    public ?string $template_font_family = null;
+    public ?string $template_font_size = null;
+    public ?string $template_font_weight = null;
+    public ?string $template_font_weight_heading = null;
+    public ?string $template_font_color_on_background = null;
+    public ?string $template_font_color_on_box = null;
+    public ?string $template_font_line_height = null;
+    public ?string $template_box_radius = null;
+    public ?string $template_logo = null;
 
     public function __construct(Project $project)
     {
         $this->id = $project->getId();
         $this->created_at = $project->getCreatedAt()->getTimestamp();
         $this->name = $project->getName();
-        $this->templateColorAccent = $project->getMeta()->templateColorAccent;
-        $this->templateColorBackground = $project->getMeta()->templateColorBackground;
-        $this->templateColorBoxBackground = $project->getMeta()->templateColorBoxBackground;
-        $this->templateColorBoxShadow = $project->getMeta()->templateColorBoxShadow;
-        $this->templateColorBoxBorder = $project->getMeta()->templateColorBoxBorder;
-        $this->templateFontFamily = $project->getMeta()->templateFontFamily;
-        $this->templateFontSize = $project->getMeta()->templateFontSize;
-        $this->templateFontWeight = $project->getMeta()->templateFontWeight;
-        $this->templateFontWeightHeading = $project->getMeta()->templateFontWeightHeading;
-        $this->templateFontColorOnBackground = $project->getMeta()->templateFontColorOnBackground;
-        $this->templateFontColorOnBox = $project->getMeta()->templateFontColorOnBox;
-        $this->templateFontLineHeight = $project->getMeta()->templateFontLineHeight;
-        $this->templateBoxRadius = $project->getMeta()->templateBoxRadius;
-        $this->templateLogo = $project->getMeta()->templateLogo;
+        $this->template_color_accent = $project->getMeta()->template_color_accent;
+        $this->template_color_background = $project->getMeta()->template_color_background;
+        $this->template_color_box_background = $project->getMeta()->template_color_box_background;
+        $this->template_color_box_shadow = $project->getMeta()->template_color_box_shadow;
+        $this->template_color_box_border = $project->getMeta()->template_color_box_border;
+        $this->template_font_family = $project->getMeta()->template_font_family;
+        $this->template_font_size = $project->getMeta()->template_font_size;
+        $this->template_font_weight = $project->getMeta()->template_font_weight;
+        $this->template_font_weight_heading = $project->getMeta()->template_font_weight_heading;
+        $this->template_font_color_on_background = $project->getMeta()->template_font_color_on_background;
+        $this->template_font_color_on_box = $project->getMeta()->template_font_color_on_box;
+        $this->template_font_line_height = $project->getMeta()->template_font_line_height;
+        $this->template_box_radius = $project->getMeta()->template_box_radius;
+        $this->template_logo = $project->getMeta()->template_logo;
     }
 
 }
