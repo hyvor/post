@@ -9,6 +9,7 @@ use App\Content\Marks\Strike;
 use App\Content\Marks\Strong;
 use App\Content\Marks\Underline;
 use App\Content\Nodes\Blockquote;
+use App\Content\Nodes\Button;
 use App\Content\Nodes\Doc;
 use App\Content\Nodes\HardBreak;
 use App\Content\Nodes\Heading;
@@ -64,6 +65,7 @@ class ContentService
                 new Heading(),
                 new HorizontalRule(),
                 new Blockquote(),
+                new Button()
             ],
             [
                 new Em(),

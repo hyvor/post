@@ -2,7 +2,9 @@
 
 namespace App\Api\Public\Controller\Template;
 
+use App\Api\Public\Input\RetrieveContentHtmlInput;
 use App\Api\Public\Input\TemplateRenderWithInput;
+use App\Content\ContentService;
 use App\Service\Template\TemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;
@@ -15,7 +17,7 @@ class TemplateController extends AbstractController
 {
     public function __construct(
         private TemplateRenderer $renderer,
-        private TemplateService $templateService
+        private TemplateService $templateService,
     )
     {
     }
@@ -51,6 +53,15 @@ class TemplateController extends AbstractController
         return new JsonResponse([
             'template' => $rawTemplate,
             'variables' => $defaults,
+        ]);
+    }
+
+    #[Route('/template/content', methods: 'POST')]
+    public function retrieveContentHtml(#[MapRequestPayload] RetrieveContentHtmlInput $input): JsonResponse
+    {
+        $contentHtml = ContentService::htmlFromJson($input->content);
+        return new JsonResponse([
+            'html' => $contentHtml
         ]);
     }
 }

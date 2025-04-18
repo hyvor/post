@@ -33,3 +33,24 @@ export function previewTemplateFromVariable (template: string, variables: string
 
     )
 }
+
+export function retrieveContentHtml(content: string) {
+    return fetch('api/public/template/content', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                content
+            })
+        }
+    ).then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Failed to fetch content html');
+    }
+    )
+}

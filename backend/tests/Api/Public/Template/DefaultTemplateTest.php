@@ -2,8 +2,13 @@
 
 namespace App\Tests\Api\Public\Template;
 
+use App\Api\Public\Controller\Template\TemplateController;
+use App\Service\Template\TemplateService;
 use App\Tests\Case\WebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(TemplateController::class)]
+#[CoversClass(TemplateService::class)]
 class DefaultTemplateTest extends WebTestCase
 {
 

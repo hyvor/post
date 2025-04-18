@@ -85,14 +85,13 @@
 		font-family: 'source-code-pro', Menlo, 'Courier New', Consolas, monospace !important;
 		box-shadow: none !important;
 		border-radius: 20px;
-		background-color: var(--input) !important;
 		font-size: 14px;
 		line-height: 21px;
 		:global(.CodeMirror-line) {
 			padding-left: 15px !important;
 		}
 		:global(.CodeMirror-gutters) {
-			background-color: var(--input);
+			background-color: var(--hds-color-background);
 		}
 		:global(.CodeMirror-scroll) {
 			overflow-x: hidden !important;

@@ -11,6 +11,8 @@
 	let variables = $state('{}');
 	let previewHtml = $state('');
 
+	let variableEditorId = $state(0);
+
 	let showEditContentModal = $state(false);
 
 	function getDefault() {
@@ -27,22 +29,9 @@
 			});
 	}
 
-	function handleContentUpdate(newContent: string) {
-		try {
-			const variablesObj = JSON.parse(variables);
-			variablesObj.content = newContent;
-			variables = JSON.stringify(variablesObj, null, 2);
-		} catch (err) {
-			console.error('Error updating variables:', err);
-			// Initialize with empty object if parsing fails
-			variables = JSON.stringify({ content: newContent }, null, 2);
-		}
-	}
-
 	function getContentFromVariables(): string {
 		try {
 			const variablesObj = JSON.parse(variables);
-			console.log(variablesObj)
 			return variablesObj?.content || '';
 		} catch (err) {
 			return '';
@@ -61,6 +50,20 @@
 			});
 	}
 
+	function updateContent(newContent: string) {
+		try {
+			const variablesObj = JSON.parse(variables);
+			variablesObj.content = newContent;
+			variables = JSON.stringify(variablesObj, null, 2);
+			console.log(variables);
+			variableEditorId += 1;
+		} catch (err) {
+			console.error('Error updating variables:', err);
+			// Initialize with empty object if parsing fails
+			variables = JSON.stringify({ content: newContent }, null, 2);
+		}
+	}
+
 	onMount(() => {
 		getDefault();
 	});
@@ -69,7 +72,7 @@
 <EditContentModal
 	bind:show={showEditContentModal}
 	content={getContentFromVariables()}
-	onContentUpdate={handleContentUpdate}
+	updateContent={updateContent}
 />
 
 <div class="demo-view">
@@ -100,7 +103,7 @@
 						value={variables}
 						ext="json"
 						change={(e) => (variables = e)}
-						id={0}
+						id={variableEditorId}
 					/>
 				{/if}
 			</div>
@@ -147,10 +150,12 @@
 		.column-content {
 			flex: 1;
 			overflow: auto;
+			background-color: var(--hds-color-background);
 		}
 
 		.hds-box {
 			height: 100%;
+			background-color: var(--hds-color-background) !important;
 		}
 
 		.user-interface-wrap {
@@ -161,10 +166,10 @@
 		}
 
 		:global(.CodeMirror) {
-			background-color: transparent !important;
+			background-color: var(--hds-color-background) !important;
 			min-height: 100%;
 			:global(.CodeMirror-gutters) {
-				background-color: transparent !important;
+				background-color: var(--hds-color-background) !important;
 			}
 		}
 	}
