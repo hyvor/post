@@ -2,6 +2,7 @@
 
 namespace App\Service\Issue;
 
+use App\Entity\Project;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
@@ -9,6 +10,9 @@ use App\Entity\Type\SubscriberStatus;
 use App\Entity\Issue;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
+use App\Service\Issue\Dto\UpdateSendDto;
+use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\SubscriberService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -68,6 +72,11 @@ class SendService
         $results = $qb->getQuery()->getResult();
 
         return new ArrayCollection($results);
+    }
+
+    public function getSendById(int $id): ?Send
+    {
+        return $this->sendRepository->find($id);
     }
 
     private function getSendableSubscribersQuery(Issue $issue): QueryBuilder
@@ -171,4 +180,53 @@ class SendService
         ];
     }
 
+    public function updateSend(Send $send, UpdateSendDto $updates): Send
+    {
+
+        if ($updates->hasProperty('deliveredAt')) {
+            $send->setDeliveredAt($updates->deliveredAt);
+        }
+
+        if ($updates->hasProperty('firstClickAt')) {
+            $send->setFirstClickedAt($updates->firstClickAt);
+        }
+
+        if ($updates->hasProperty('bouncedAt')) {
+            $send->setBouncedAt($updates->bouncedAt);
+        }
+
+        if ($updates->hasProperty('complainedAt')) {
+            $send->setComplainedAt($updates->complainedAt);
+        }
+
+
+        if ($updates->hasProperty('firstOpenAt')) {
+            $send->setFirstOpenAt($updates->firstOpenAt);
+        }
+
+        if ($updates->hasProperty('lastClickAt')) {
+            $send->setLastClickedAt($updates->lastClickAt);
+        }
+
+        if ($updates->hasProperty('lastOpenedAt')) {
+            $send->setLastOpenedAt($updates->lastOpenedAt);
+        }
+
+        if ($updates->hasProperty('hardBounce')) {
+            $send->setHardBounce($updates->hardBounce);
+        }
+
+        if ($updates->hasProperty('clickCount')) {
+            $send->setClickCount($updates->clickCount);
+        }
+
+        if ($updates->hasProperty('openCount')) {
+            $send->setOpenCount($updates->openCount);
+        }
+
+        $this->em->persist($send);
+        $this->em->flush();
+
+        return $send;
+    }
 }
