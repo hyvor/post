@@ -5,6 +5,7 @@ export interface ConsoleApiOptions {
     endpoint: string,
     data?: Record<string, any> | FormData,
     userApi?: boolean,
+    publicApi?: boolean,
     projectId?: string,
     signal?: AbortSignal,
 }
@@ -15,7 +16,7 @@ interface CallOptions extends ConsoleApiOptions {
 
 function getConsoleApi() {
 
-    const baseUrl = "/api/console/";
+    const consoleBaseUrl = "/api/console/";
 
     async function call<T>({ 
         endpoint,
@@ -26,7 +27,7 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        let url = baseUrl + endpoint;
+        let url = consoleBaseUrl + endpoint;
 
         if (method === 'get') {
 			url +=
@@ -38,7 +39,7 @@ function getConsoleApi() {
 		}
 
         const headers = {} as Record<string, string>;
-
+        
         if (!userApi) {
             const project = get(projectStore);
             headers['X-Project-Id'] = project.id.toString();
@@ -50,6 +51,7 @@ function getConsoleApi() {
         if (!(data instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }   
+        
 
         const options = {
             cache: 'no-cache',

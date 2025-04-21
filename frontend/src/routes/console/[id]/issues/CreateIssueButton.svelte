@@ -4,12 +4,11 @@
 	import { issueStore } from '../../lib/stores/projectStore';
 	import { createIssueDraft } from '../../lib/actions/issueActions';
 	import { consoleUrlWithProject } from '../../lib/consoleUrl';
-    import type { Component } from 'svelte';
-
+	import type { Component } from 'svelte';
 
 	export let text: string;
 	export let size: 'small' | 'medium' | 'large' = 'medium';
-    export let icon: Component;
+	export let icon: Component;
 
 	function create() {
 		if (loading) return;
@@ -39,7 +38,7 @@
 		{#if loading}
 			<Loader size={14} invert />
 		{:else}
-            <svelte:component this={icon} size={14} />
+			<svelte:component this={icon} size={14} />
 		{/if}
 	{/snippet}
 </Button>

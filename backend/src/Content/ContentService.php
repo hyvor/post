@@ -9,6 +9,7 @@ use App\Content\Marks\Strike;
 use App\Content\Marks\Strong;
 use App\Content\Marks\Underline;
 use App\Content\Nodes\Blockquote;
+use App\Content\Nodes\Button;
 use App\Content\Nodes\Doc;
 use App\Content\Nodes\HardBreak;
 use App\Content\Nodes\Heading;
@@ -22,7 +23,8 @@ use Hyvor\Phrosemirror\Types\Schema;
 
 class ContentService
 {
-    public static function htmlFromIssue(Issue $issue): string
+
+    public function htmlFromIssue(Issue $issue): string
     {
         $content = $issue->getContent();
 
@@ -30,10 +32,10 @@ class ContentService
             return '';
         }
 
-        return self::htmlFromJson($content);
+        return $this->htmlFromJson($content);
     }
 
-    public static function textFromIssue(Issue $issue): string
+    public function textFromIssue(Issue $issue): string
     {
         $content = $issue->getContent();
 
@@ -41,17 +43,17 @@ class ContentService
             return '';
         }
 
-        $document = Document::fromJson(self::getSchema(), $content);
+        $document = Document::fromJson($this->getSchema(), $content);
         return $document->toText();
     }
 
-    public static function htmlFromJson(string $content): string
+    public function htmlFromJson(string $content): string
     {
-        $document = Document::fromJson(self::getSchema(), $content);
+        $document = Document::fromJson($this->getSchema(), $content);
         return $document->toHtml();
     }
 
-    public static function getSchema(): Schema
+    public function getSchema(): Schema
     {
 
         return new Schema(
@@ -64,6 +66,7 @@ class ContentService
                 new Heading(),
                 new HorizontalRule(),
                 new Blockquote(),
+                new Button()
             ],
             [
                 new Em(),

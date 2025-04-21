@@ -3,12 +3,13 @@
     import en from '../../../../shared/locale/en-US.json';
     import fr from '../../../../shared/locale/fr-FR.json';
 	import Nav from "./[id]/@components/Nav/Nav.svelte";
-	import type { Project } from "./types";
+	import type { AppConfig, Project } from "./types";
 
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
+	import { appConfig } from "./lib/stores/consoleStore";
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -16,6 +17,7 @@
 	let { children }: Props = $props();
 
 	interface InitResponse {
+		config: AppConfig
 		projects: Project[];
 	}
 
@@ -28,6 +30,8 @@
 				endpoint: 'init',
 			})
 			.then((res) => {
+				appConfig.set(res.config)
+
 				userProjectsStore.set(res.projects);
 				isLoading = false;
 			})

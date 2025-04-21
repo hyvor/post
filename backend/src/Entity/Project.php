@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Meta\ProjectMeta;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,10 +30,13 @@ class Project
     #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
     public ?Template $template = null;
 
+    #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
+    private ProjectMeta $meta;
+
     public function setId(int $id): static
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -68,6 +72,18 @@ class Project
     public function getUserId(): ?int
     {
         return $this->user_id;
+    }
+
+    public function setMeta(ProjectMeta $meta): static
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    public function getMeta(): ProjectMeta
+    {
+        return $this->meta;
     }
 
     public function setUserId(int $user_id): static

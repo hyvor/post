@@ -1,7 +1,57 @@
+export interface AppConfig {
+    template_defaults: {
+		LANG: string,
+		COLOR_ACCENT: string,
+		COLOR_BACKGROUND: string,
+		COLOR_BOX_BACKGROUND: string,
+		BOX_RADIUS: string,
+		BOX_SHADOW: string,
+		BOX_BORDER: string,
+		FONT_FAMILY: string,
+		FONT_SIZE: string,
+		FONT_WEIGHT: string,
+		FONT_WEIGHT_HEADING: string,
+		FONT_COLOR_ON_BACKGROUND: string,
+		FONT_COLOR_ON_BOX: string,
+		FONT_LINE_HEIGHT: string,
+	}
+}
+
+export type ProjectMeta = {
+	template_color_accent: string | null,
+	template_color_background: string | null,
+	template_color_box_background: string | null,
+	template_box_shadow: string | null,
+	template_box_border: string | null,
+	template_font_family: string | null,
+	template_font_size: string | null,
+	template_font_weight: string | null,
+	template_font_weight_heading: string | null,
+	template_font_color_on_background: string | null,
+	template_font_color_on_box: string | null,
+	template_font_line_height: string | null,
+	template_box_radius: string | null,
+}
+
 export type Project = {
 	id: number,
 	created_at: number,
 	name: string,
+	
+	// Meta data
+	template_color_accent: string | null,
+	template_color_background: string | null,
+	template_color_box_background: string | null,
+	template_box_shadow: string | null,
+	template_box_border: string | null,
+	template_font_family: string | null,
+	template_font_size: string | null,
+	template_font_weight: string | null,
+	template_font_weight_heading: string | null,
+	template_font_color_on_background: string | null,
+	template_font_color_on_box: string | null,
+	template_font_line_height: string | null,
+	template_box_radius: string | null,
 }
 
 export interface ProjectStats {
