@@ -23,7 +23,4 @@ class ProjectMeta
     public ?string $template_box_radius = null;
     public ?string $template_logo = null;
 
-
-    // TODO:
-
 }
