@@ -129,5 +129,7 @@ class TemplateWithTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $content = $this->getJson($response);
 
+        // TODO: add tests
+
     }
 }

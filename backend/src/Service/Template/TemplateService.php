@@ -5,11 +5,16 @@ namespace App\Service\Template;
 use App\Entity\Project;
 use App\Entity\Template;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TemplateService
 {
     public function __construct(
         private EntityManagerInterface $em,
+        private Filesystem $filesystem,
+        #[Autowire('%kernel.project_dir%')]
+        private string $projectDir,
     )
     {
     }
@@ -37,7 +42,7 @@ class TemplateService
 
     public function readDefaultTemplate(): string
     {
-        $templatePath = '/app/backend/templates/newsletter/default.html.twig';
-        return file_get_contents($templatePath);
+        $templatePath = $this->projectDir . '/templates/newsletter/default.html.twig';
+        return $this->filesystem->readFile($templatePath);
     }
 }

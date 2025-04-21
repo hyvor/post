@@ -21,7 +21,13 @@ class DefaultTemplateTest extends WebTestCase
         $this->assertArrayHasKey('template', $json);
         $this->assertArrayHasKey('variables', $json);
 
+        $template = $json['template'];
+        $this->assertIsString($template);
+        $this->assertStringContainsString('<html lang="{{ lang }}">', $template);
+
         $variables = $json['variables'];
+        $this->assertIsArray($variables);
+        $this->assertIsString($variables['lang']);
         $this->assertSame("en", $variables['lang']);
     }
 }

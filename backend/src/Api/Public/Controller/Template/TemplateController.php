@@ -13,11 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+
 class TemplateController extends AbstractController
 {
     public function __construct(
         private TemplateRenderer $renderer,
         private TemplateService $templateService,
+        private ContentService $contentService
     )
     {
     }
@@ -59,7 +61,7 @@ class TemplateController extends AbstractController
     #[Route('/template/content', methods: 'POST')]
     public function retrieveContentHtml(#[MapRequestPayload] RetrieveContentHtmlInput $input): JsonResponse
     {
-        $contentHtml = ContentService::htmlFromJson($input->content);
+        $contentHtml = $this->contentService->htmlFromJson($input->content);
         return new JsonResponse([
             'html' => $contentHtml
         ]);

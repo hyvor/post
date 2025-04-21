@@ -17,13 +17,14 @@ class TemplateGetHtmlContentTest extends WebTestCase
             'POST',
             '/template/content',
             [
-                'content' => '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"grdgg"}]}]}'
+                'content' => '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Hello World"}]}]}'
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertArrayHasKey('html', $json);
-        $this->assertStringContainsString('grdgg', $json['html']);
+        $this->assertIsString($json['html']);
+        $this->assertStringContainsString('Hello World', $json['html']);
     }
 }
