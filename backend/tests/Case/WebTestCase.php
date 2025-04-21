@@ -57,6 +57,23 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $this->client->getResponse();
     }
 
+    public function publicApi(
+        string $method,
+        string $uri,
+        array $data = [],
+    )
+    {
+        $this->client->request(
+            $method,
+            '/api/public' . $uri,
+            server: [
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            content: (string) json_encode($data)
+        );
+        return $this->client->getResponse();
+    }
+
     /**
      * @return array<mixed>
      */

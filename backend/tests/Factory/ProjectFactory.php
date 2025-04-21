@@ -2,6 +2,7 @@
 
 namespace App\Tests\Factory;
 
+use App\Entity\Meta\ProjectMeta;
 use App\Entity\Project;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -36,6 +37,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
             'name' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'user_id' => self::faker()->randomNumber(),
+            'meta' => new ProjectMeta()
         ];
     }
 

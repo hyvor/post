@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
+use App\Repository\TemplateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Entity(repositoryClass: TemplateRepository::class)]
 #[ORM\Table(name: 'templates')]
 class Template
 {
@@ -32,9 +32,11 @@ class Template
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -42,9 +44,11 @@ class Template
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): void
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
     }
 
     public function getUpdatedAt(): \DateTimeImmutable
@@ -52,9 +56,11 @@ class Template
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): void
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
     }
 
     public function getProject(): Project
@@ -62,9 +68,11 @@ class Template
         return $this->project;
     }
 
-    public function setProject(Project $project): void
+    public function setProject(Project $project): static
     {
         $this->project = $project;
+
+        return $this;
     }
 
     public function getTemplate(): string
@@ -72,9 +80,11 @@ class Template
         return $this->template;
     }
 
-    public function setTemplate(string $template): void
+    public function setTemplate(string $template): static
     {
         $this->template = $template;
+
+        return $this;
     }
 
 

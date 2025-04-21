@@ -11,6 +11,7 @@ use App\Repository\IssueRepository;
 use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
+use App\Service\Template\TemplateDefaults;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +23,6 @@ final class ConsoleController extends AbstractController
     public function __construct(
         private ProjectService $projectService,
         private ListRepository $listRepository,
-        private IssueRepository $issueRepository,
     )
     {
     }
@@ -37,7 +37,10 @@ final class ConsoleController extends AbstractController
         $projects = array_map(fn(Project $project) => new ProjectObject($project), $projects);
 
         return new JsonResponse([
-            'projects' => $projects
+            'projects' => $projects,
+            'config' => [
+                'template_defaults' => TemplateDefaults::getAll()
+            ],
         ]);
     }
 

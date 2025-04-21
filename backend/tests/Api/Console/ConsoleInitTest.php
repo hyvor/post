@@ -52,6 +52,10 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
         $this->assertSame(10, count($data['projects']));
+
+        $this->assertArrayHasKey('config', $data);
+        $config = $data['config'];
+        $this->assertArrayHasKey('template_defaults', $config);
     }
 
     public function testInitProject(): void
