@@ -11,7 +11,6 @@ class ProjectObject
     public int $created_at; // unix timestamp
     public string $name;
 
-    // Meta fields flattened
     public ?string $template_color_accent = null;
     public ?string $template_color_background = null;
     public ?string $template_color_box_background = null;
@@ -32,20 +31,22 @@ class ProjectObject
         $this->id = $project->getId();
         $this->created_at = $project->getCreatedAt()->getTimestamp();
         $this->name = $project->getName();
-        $this->template_color_accent = $project->getMeta()->template_color_accent;
-        $this->template_color_background = $project->getMeta()->template_color_background;
-        $this->template_color_box_background = $project->getMeta()->template_color_box_background;
-        $this->template_color_box_shadow = $project->getMeta()->template_color_box_shadow;
-        $this->template_color_box_border = $project->getMeta()->template_color_box_border;
-        $this->template_font_family = $project->getMeta()->template_font_family;
-        $this->template_font_size = $project->getMeta()->template_font_size;
-        $this->template_font_weight = $project->getMeta()->template_font_weight;
-        $this->template_font_weight_heading = $project->getMeta()->template_font_weight_heading;
-        $this->template_font_color_on_background = $project->getMeta()->template_font_color_on_background;
-        $this->template_font_color_on_box = $project->getMeta()->template_font_color_on_box;
-        $this->template_font_line_height = $project->getMeta()->template_font_line_height;
-        $this->template_box_radius = $project->getMeta()->template_box_radius;
-        $this->template_logo = $project->getMeta()->template_logo;
+
+        $meta = $project->getMeta();
+        $this->template_color_accent = $meta->template_color_accent;
+        $this->template_color_background = $meta->template_color_background;
+        $this->template_color_box_background = $meta->template_color_box_background;
+        $this->template_color_box_shadow = $meta->template_color_box_shadow;
+        $this->template_color_box_border = $meta->template_color_box_border;
+        $this->template_font_family = $meta->template_font_family;
+        $this->template_font_size = $meta->template_font_size;
+        $this->template_font_weight = $meta->template_font_weight;
+        $this->template_font_weight_heading = $meta->template_font_weight_heading;
+        $this->template_font_color_on_background = $meta->template_font_color_on_background;
+        $this->template_font_color_on_box = $meta->template_font_color_on_box;
+        $this->template_font_line_height = $meta->template_font_line_height;
+        $this->template_box_radius = $meta->template_box_radius;
+        $this->template_logo = $meta->template_logo;
     }
 
 }

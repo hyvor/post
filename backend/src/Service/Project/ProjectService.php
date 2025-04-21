@@ -12,6 +12,7 @@ use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\UnicodeString;
 
 class ProjectService
 {
@@ -134,26 +135,12 @@ class ProjectService
 
     public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
     {
-        $currentMeta = $project->getMeta();
-        $properties = [
-            'templateColorAccent',
-            'templateColorBackground',
-            'templateColorBoxBackground',
-            'templateColorBoxShadow',
-            'templateColorBoxBorder',
-            'templateFontFamily',
-            'templateFontSize',
-            'templateFontWeight',
-            'templateFontWeightHeading',
-            'templateFontColorOnBackground',
-            'templateFontColorOnBox',
-            'templateFontLineHeight',
-            'templateBoxRadius',
-            'templateLogo',
-        ];
 
-        foreach ($properties as $property) {
-            ClassUpdater::updateIfExists($updates, $currentMeta, $property);
+        $currentMeta = $project->getMeta();
+
+        foreach (get_object_vars($updates) as $property => $value) {
+            $cased = new UnicodeString($property)->snake();
+            $currentMeta->{$cased} = $value;
         }
 
         $project->setMeta($currentMeta);
