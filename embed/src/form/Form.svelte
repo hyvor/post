@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import Skeleton from "./Skeleton.svelte";
     import { fade, slide } from "svelte/transition";
-    import type { List } from "./types";
     import { apiFromInstance } from "./api";
 
     interface Props {
