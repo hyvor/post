@@ -269,6 +269,8 @@ class AwsWebhookTest extends WebTestCase
             'clickCount' => 0,
         ]);
 
+        $first_clicked_at = $send->getFirstClickedAt();
+
         $response = $this->callWebhook(
             message: [
                 'eventType' => 'Click',
@@ -290,13 +292,44 @@ class AwsWebhookTest extends WebTestCase
         $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
         $this->assertNotNull($send->getFirstClickedAt());
-        $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()->format('Y-m-d H:i:s'));
+        $this->assertSame($first_clicked_at->format('Y-m-d H:i:s'), $send->getFirstClickedAt()->format('Y-m-d H:i:s'));
         $this->assertSame(1, $send->getClickCount());
     }
 
     public function test_click_second(): void
     {
-        // TODO:
+        $project = ProjectFactory::createOne();
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+        ]);
+        $send = SendFactory::createOne([
+            'issue' => $issue,
+            'clickCount' => 0,
+            'first_clicked_at' => new \DateTimeImmutable('2021-02-16 21:41:19'),
+        ]);
+
+        $response = $this->callWebhook(
+            message: [
+                'eventType' => 'Click',
+                'mail' => [
+                    'headers' => [
+                        [
+                            'name' => 'X-Newsletter-Send-ID',
+                            'value' => (string)$send->getId(),
+                        ],
+                    ],
+                ],
+                'click' => [
+                    'timestamp' => '2021-02-16T21:42:19',
+                ]
+            ],
+        );
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
+        $this->assertNotNull($send);
+        $this->assertSame('2021-02-16 21:42:19', $send->getLastClickedAt()?->format('Y-m-d H:i:s'));
     }
 
     public function test_open_first(): void
@@ -337,7 +370,38 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_open_second(): void
     {
-        // TODO:
+        $project = ProjectFactory::createOne();
+        $issue = IssueFactory::createOne([
+            'project' => $project,
+        ]);
+        $send = SendFactory::createOne([
+            'issue' => $issue,
+            'open_count' => 0,
+            'first_open_at' => new \DateTimeImmutable('2021-02-16 21:41:19'),
+        ]);
+
+        $response = $this->callWebhook(
+            message: [
+                'eventType' => 'Open',
+                'mail' => [
+                    'headers' => [
+                        [
+                            'name' => 'X-Newsletter-Send-ID',
+                            'value' => (string)$send->getId(),
+                        ],
+                    ],
+                ],
+                'open' => [
+                    'timestamp' => '2021-02-16T21:42:19',
+                ]
+            ],
+        );
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
+        $this->assertNotNull($send);
+        $this->assertSame('2021-02-16 21:42:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
     }
 
     public function test_subscription(): void
