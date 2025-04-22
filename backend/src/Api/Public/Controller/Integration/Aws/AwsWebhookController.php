@@ -1,40 +1,51 @@
 <?php
 
-namespace App\Api\Public\Integrations\Aws;
+namespace App\Api\Public\Controller\Integration\Aws;
 
 
 use App\Api\Public\Input\AwsWebhookInput;
 use App\Entity\Project;
+use App\Service\Integration\Aws\SnsValidationService;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
 use App\Service\Subscriber\SubscriberService;
-use DateTime;
+use Aws\Sns\Message;
+use Aws\Sns\MessageValidator;
 use Hyvor\Internal\Http\Exceptions\HttpException;
-use Illuminate\Support\Facades\Http;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AwsWebhookController extends AbstractController
 {
     public function __construct(
         private SendService $sendService,
-        private SubscriberService $subscriberService
+        private SubscriberService $subscriberService,
+        private HttpClientInterface $httpClient,
+        private SnsValidationService $snsValidationService
     )
     {
     }
 
-    #[Route('/webhook', methods: 'POST')]
+    #[Route('/integration/aws/webhook', methods: 'POST')]
     public function handleWebhook(
-        Project $project,
+        Request $request,
         #[MapRequestPayload] AwsWebhookInput $input
     ): JsonResponse
     {
-        if (isset($input->Type) && $input->Type === 'SubscriptionConfirmation') {
+
+        if (!$this->snsValidationService->validate($request->getPayload()->all())) {
+            throw new UnauthorizedHttpException('Invalid SNS message');
+        }
+
+        if ($input->Type === 'SubscriptionConfirmation') {
             // Confirm the SNS subscription by sending a GET request to the SubscribeURL
-            Http::get($input->SubscribeURL);
+            $this->httpClient->request('GET', $input->SubscribeURL);
+            return new JsonResponse(['status' => 'OK']);
         }
 
         $message = json_decode($input->Message, true);
