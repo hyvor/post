@@ -4,18 +4,15 @@ namespace App\Api\Public\Controller\Integration\Aws;
 
 
 use App\Api\Public\Input\AwsWebhookInput;
-use App\Entity\Project;
 use App\Service\Integration\Aws\SnsValidationService;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
 use App\Service\Subscriber\SubscriberService;
-use Aws\Sns\Message;
-use Aws\Sns\MessageValidator;
-use Hyvor\Internal\Http\Exceptions\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -49,23 +46,23 @@ class AwsWebhookController extends AbstractController
 
         $message = json_decode($input->Message, true);
         if (!is_array($message)) {
-            throw new \HttpException('Invalid JSON structure');
+            throw new BadRequestHttpException('Invalid JSON structure');
         }
         $eventType = $message['eventType'] ?? null;
 
         if (!isset($eventType)) {
-            throw new HttpException('Invalid request: eventType is not a string');
+            throw new BadRequestHttpException('Invalid request: eventType is not a string');
         }
 
         $mail = $message['mail'] ?? null;
 
         if (!is_array($mail)) {
-            throw new HttpException('Invalid request: mail is not an array');
+            throw new BadRequestHttpException('Invalid request: mail is not an array');
         }
 
         $headers = $mail['headers'] ?? null;
         if (!is_array($headers)) {
-            throw new HttpException('Invalid request: headers is not an array');
+            throw new BadRequestHttpException('Invalid request: headers is not an array');
         }
 
         $sendId = null;

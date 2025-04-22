@@ -28,9 +28,14 @@ class AwsWebhookTest extends WebTestCase
     private function callWebhook(
         array $message = [],
         string $type = 'Notification',
-        array $additionalData = []
+        array $additionalData = [],
+        bool $mockSns = true,
     ): Response
     {
+
+        if ($mockSns) {
+            $this->mockSnsValidation();
+        }
 
         $data = [
             'Type' => $type,
@@ -55,13 +60,15 @@ class AwsWebhookTest extends WebTestCase
 
     }
 
-    public function test_sns_subscription_confirmation(): void
+    private function mockSnsValidation(): void
     {
-
         $snsValidationMock = $this->createMock(SnsValidationService::class);
         $snsValidationMock->method('validate')->willReturn(true);
         $this->container->set(SnsValidationService::class, $snsValidationMock);
+    }
 
+    public function test_sns_subscription_confirmation(): void
+    {
         $subscribeUrl = 'https://example.com/subscribe-url';
 
         $mockHttpClient = new MockHttpClient(new MockResponse());
@@ -73,17 +80,8 @@ class AwsWebhookTest extends WebTestCase
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public function test_sns_delivery_without_sendid(): void
+    public function test_delivery_without_sendid(): void
     {
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
-
         $response = $this->callWebhook(
             message: [
                 'eventType' => 'Delivery',
@@ -95,14 +93,11 @@ class AwsWebhookTest extends WebTestCase
                     ],
                 ],
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl,
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public function test_sns_delivery(): void
+    public function test_delivery(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
@@ -111,14 +106,6 @@ class AwsWebhookTest extends WebTestCase
         $send = SendFactory::createOne([
             'issue' => $issue,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -132,22 +119,18 @@ class AwsWebhookTest extends WebTestCase
                     ],
                 ],
                 'delivery' => [
-                    'timestamp' => '2021-02-16T21:41:19',
+                    'timestamp' => '2021-02-16T21:41:19.978Z',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertNotNull($send->getDeliveredAt());
-        $this->assertSame('2021-02-16 21:41:19', $send->getDeliveredAt()->format('Y-m-d H:i:s'));
+        $this->assertSame('2021-02-16 21:41:19', $send->getDeliveredAt()?->format('Y-m-d H:i:s'));
     }
 
-    public function test_sns_complaint(): void
+    public function test_complaint(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
@@ -160,14 +143,6 @@ class AwsWebhookTest extends WebTestCase
             'issue' => $issue,
             'subscriber' => $subscriber,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -184,25 +159,22 @@ class AwsWebhookTest extends WebTestCase
                     'timestamp' => '2021-02-16T21:41:19',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
         $this->assertNotNull($send->getComplainedAt());
         $this->assertSame('2021-02-16 21:41:19', $send->getComplainedAt()->format('Y-m-d H:i:s'));
-        $subscriberRepository = $this->em->getRepository(Subscriber::class);
-        $subscriber = $subscriberRepository->find($subscriber->getId());
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertNotNull($subscriber);
         $this->assertNotNull($subscriber->getUnsubscribedAt());
         $this->assertSame('2021-02-16 21:41:19', $subscriber->getUnsubscribedAt()->format('Y-m-d H:i:s'));
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
     }
 
-    public function test_sns_bounce(): void
+    public function test_soft_bounce(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
@@ -215,14 +187,6 @@ class AwsWebhookTest extends WebTestCase
             'issue' => $issue,
             'subscriber' => $subscriber,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -239,20 +203,16 @@ class AwsWebhookTest extends WebTestCase
                     'timestamp' => '2021-02-16T21:41:19',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertNotNull($send->getBouncedAt());
-        $this->assertSame('2021-02-16 21:41:19', $send->getBouncedAt()->format('Y-m-d H:i:s'));
+        $this->assertSame('2021-02-16 21:41:19', $send->getBouncedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame(false, $send->isHardBounce());
     }
 
-    public function test_sns_bounce_hard(): void
+    public function test_hard_bounce(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
@@ -265,14 +225,6 @@ class AwsWebhookTest extends WebTestCase
             'issue' => $issue,
             'subscriber' => $subscriber,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -291,46 +243,31 @@ class AwsWebhookTest extends WebTestCase
                     'bounceSubType' => 'General',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
         $this->assertNotNull($send->getBouncedAt());
         $this->assertSame('2021-02-16 21:41:19', $send->getBouncedAt()->format('Y-m-d H:i:s'));
         $this->assertSame(true, $send->isHardBounce());
-        $subscriberRepository = $this->em->getRepository(Subscriber::class);
-        $subscriber = $subscriberRepository->find($subscriber->getId());
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertNotNull($subscriber);
         $this->assertNotNull($subscriber->getUnsubscribedAt());
         $this->assertSame('Bounce: Permanent - General' ,$subscriber->getUnsubscribeReason());
     }
 
-    public function test_sns_click(): void
+    public function test_click_first(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
-        $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
-        ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
             'clickCount' => 0,
-            'subscriber' => $subscriber,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -347,40 +284,31 @@ class AwsWebhookTest extends WebTestCase
                     'timestamp' => '2021-02-16T21:41:19',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
         $this->assertNotNull($send->getFirstClickedAt());
         $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()->format('Y-m-d H:i:s'));
         $this->assertSame(1, $send->getClickCount());
     }
 
-    public function test_sns_open(): void
+    public function test_click_second(): void
+    {
+        // TODO:
+    }
+
+    public function test_open_first(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
-        $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
-        ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
-            'subscriber' => $subscriber,
+            'open_count' => 0,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -397,19 +325,22 @@ class AwsWebhookTest extends WebTestCase
                     'timestamp' => '2021-02-16T21:41:19',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $sendRepository = $this->em->getRepository(Send::class);
-        $send = $sendRepository->find($send->getId());
+
+        $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertNotNull($send->getLastOpenedAt());
-        $this->assertSame('2021-02-16 21:41:19', $send->getLastOpenedAt()->format('Y-m-d H:i:s'));
+        $this->assertSame('2021-02-16 21:41:19', $send->getFirstOpenAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('2021-02-16 21:41:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame(1, $send->getOpenCount());
     }
 
-    public function test_sns_subscription(): void
+    public function test_open_second(): void
+    {
+        // TODO:
+    }
+
+    public function test_subscription(): void
     {
         $project = ProjectFactory::createOne();
         $issue = IssueFactory::createOne([
@@ -422,14 +353,6 @@ class AwsWebhookTest extends WebTestCase
             'issue' => $issue,
             'subscriber' => $subscriber,
         ]);
-        $snsValidationMock = $this->createMock(SnsValidationService::class);
-        $snsValidationMock->method('validate')->willReturn(true);
-        $this->container->set(SnsValidationService::class, $snsValidationMock);
-
-        $subscribeUrl = 'https://example.com/subscribe-url';
-
-        $mockHttpClient = new MockHttpClient(new MockResponse());
-        $this->container->set(HttpClientInterface::class, $mockHttpClient);
 
         $response = $this->callWebhook(
             message: [
@@ -446,9 +369,6 @@ class AwsWebhookTest extends WebTestCase
                     'timestamp' => '2021-02-16T21:41:19',
                 ]
             ],
-            additionalData: [
-                'SubscribeURL' => $subscribeUrl
-            ]
         );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
