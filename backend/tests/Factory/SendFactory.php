@@ -45,6 +45,8 @@ final class SendFactory extends PersistentProxyObjectFactory
             'open_count' => self::faker()->numberBetween(0, 10),
             'click_count' => self::faker()->numberBetween(0, 10),
             'hard_bounce' => self::faker()->boolean(),
+            'first_clicked_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'first_open_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
 
