@@ -69,14 +69,12 @@ class AwsWebhookController extends AbstractController
         }
 
         $sendId = null;
-
         foreach ($headers as $header) {
             if (
                 is_array($header) &&
                 isset($header['name'], $header['value']) &&
-                is_string($header['name']) &&
                 is_string($header['value']) &&
-                strtolower($header['name']) === 'x-newsletter-send-id'
+                $header['name'] === 'X-Newsletter-Send-ID'
             ) {
                 $sendId = $header['value'];
                 break;
@@ -100,12 +98,12 @@ class AwsWebhookController extends AbstractController
             $updates->deliveredAt = new \DateTimeImmutable($message['delivery']['timestamp']);
             $jsonResponse = new JsonResponse(['status' => 'Delivery OK']);
         } elseif ($eventType === 'Complaint') {
-            $time = $message['complaint']['timestamp'];
-            $this->subscriberService->unsubscribeBySend($send, $project, at: $time);
-            $updates->complainedAt = new \DateTimeImmutable($time);
+            $time = new \DateTimeImmutable($message['complaint']['timestamp']);
+            $this->subscriberService->unsubscribeBySend($send, at: $time);
+            $updates->complainedAt = $time;
             $jsonResponse = new JsonResponse(['status' => 'Complaint OK']);
         } elseif ($eventType === 'Bounce') {
-            $time = $message['bounce']['timestamp'];
+            $time = new \DateTimeImmutable($message['bounce']['timestamp']);
             $bounceType = $message['bounce']['bounceType'];
             $bounceSubType = $message['bounce']['bounceSubType'];
             $isHardBounce = $bounceType === 'Permanent' || $bounceType === 'Undetermined';
@@ -113,9 +111,9 @@ class AwsWebhookController extends AbstractController
 
             if ($isHardBounce) {
                 // unsubscribe on hard bounces
-                $this->subscriberService->unsubscribeBySend($send, $project, at: $time, reason: $unsubscribeReason);
+                $this->subscriberService->unsubscribeBySend($send, at: $time, reason: $unsubscribeReason);
             }
-            $updates->bouncedAt = new \DateTimeImmutable($time);
+            $updates->bouncedAt = $time;
             $updates->hardBounce = $isHardBounce;
             $jsonResponse = new JsonResponse(['status' => 'Bounce OK']);
         } elseif ($eventType === 'Click') {

@@ -177,7 +177,6 @@ class SubscriberService
 
     public function unsubscribeBySend(
         Send $send,
-        Project $project,
         ?\DateTimeImmutable $at = null,
         ?string $reason = null
     ): void {
