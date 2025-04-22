@@ -14,6 +14,7 @@ class AwsWebhookTest extends WebTestCase
 
     /**
      * @param array<string, mixed> $message
+     * @param array<string, mixed> $additionalData
      */
     private function callWebhook(
         array $message = [],
@@ -60,6 +61,35 @@ class AwsWebhookTest extends WebTestCase
         $response = $this->callWebhook(type: 'SubscriptionConfirmation', additionalData: [
             'SubscribeURL' => $subscribeUrl,
         ]);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function test_sns_delivery_without_sendid(): void
+    {
+        $snsValidationMock = $this->createMock(SnsValidationService::class);
+        $snsValidationMock->method('validate')->willReturn(true);
+        $this->container->set(SnsValidationService::class, $snsValidationMock);
+
+        $subscribeUrl = 'https://example.com/subscribe-url';
+
+        $mockHttpClient = new MockHttpClient(new MockResponse());
+        $this->container->set(HttpClientInterface::class, $mockHttpClient);
+
+        $response = $this->callWebhook(
+            message: [
+                'eventType' => 'Delivery',
+                'mail' => [
+                    'headers' => [
+                        [
+                            'name' => 'X-Newsletter-Send-ID',
+                        ],
+                    ],
+                ],
+            ],
+            additionalData: [
+                'SubscribeURL' => $subscribeUrl,
+            ]
+        );
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 

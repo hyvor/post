@@ -37,7 +37,6 @@ class AwsWebhookController extends AbstractController
         #[MapRequestPayload] AwsWebhookInput $input
     ): JsonResponse
     {
-
         if (!$this->snsValidationService->validate($request->getPayload()->all())) {
             throw new UnauthorizedHttpException('Invalid SNS message');
         }
@@ -49,6 +48,9 @@ class AwsWebhookController extends AbstractController
         }
 
         $message = json_decode($input->Message, true);
+        if (!is_array($message)) {
+            throw new \HttpException('Invalid JSON structure');
+        }
         $eventType = $message['eventType'] ?? null;
 
         if (!isset($eventType)) {
@@ -62,7 +64,6 @@ class AwsWebhookController extends AbstractController
         }
 
         $headers = $mail['headers'] ?? null;
-
         if (!is_array($headers)) {
             throw new HttpException('Invalid request: headers is not an array');
         }
@@ -70,12 +71,17 @@ class AwsWebhookController extends AbstractController
         $sendId = null;
 
         foreach ($headers as $header) {
-            if (strtolower($header['name']) === 'x-newsletter-send-id') {
+            if (
+                is_array($header) &&
+                isset($header['name'], $header['value']) &&
+                is_string($header['name']) &&
+                is_string($header['value']) &&
+                strtolower($header['name']) === 'x-newsletter-send-id'
+            ) {
                 $sendId = $header['value'];
                 break;
             }
         }
-
         if (!isset($sendId)) {
             // testing email
             return new JsonResponse(['status' => 'ok']);
