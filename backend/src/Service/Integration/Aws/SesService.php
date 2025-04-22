@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Integrations\Aws;
+namespace App\Service\Integration\Aws;
 
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
@@ -19,6 +19,10 @@ class SesService
                 });
             }
         ]); // mockable
+
+
+        $validator = new MessageValidator();
+
         return $validator->isValid($message);
     }
 
