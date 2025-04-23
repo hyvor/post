@@ -115,14 +115,14 @@ class AwsWebhookController extends AbstractController
             $jsonResponse = new JsonResponse(['status' => 'Bounce OK']);
         } elseif ($eventType === 'Click') {
             $time = $message['click']['timestamp'];
-            $updates->firstClickAt = $send->getFirstClickedAt() ?? new \DateTimeImmutable($time);
-            $updates->lastClickAt = new \DateTimeImmutable($time);
+            $updates->firstClickedAt = $send->getFirstClickedAt() ?? new \DateTimeImmutable($time);
+            $updates->lastClickedAt = new \DateTimeImmutable($time);
             $updates->clickCount = $send->getClickCount() + 1;
 
             $jsonResponse = new JsonResponse(['status' => 'Click OK']);
         } elseif ($eventType === 'Open') {
             $time = $message['open']['timestamp'];
-            $updates->firstOpenAt = $send->getFirstOpenedAt() ?? new \DateTimeImmutable($time);
+            $updates->firstOpenedAt = $send->getFirstOpenedAt() ?? new \DateTimeImmutable($time);
             $updates->lastOpenedAt = new \DateTimeImmutable($time);
             $updates->openCount = $send->getOpenCount() + 1;
 

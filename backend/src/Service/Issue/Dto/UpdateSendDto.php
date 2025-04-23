@@ -13,12 +13,13 @@ class UpdateSendDto
     public ?\DateTimeImmutable $complainedAt;
 
     public ?\DateTimeImmutable $bouncedAt;
-    public ?\DateTimeImmutable $firstClickAt;
-    public ?\DateTimeImmutable $lastClickAt;
-    public ?\DateTimeImmutable $firstOpenAt;
+    public ?\DateTimeImmutable $firstClickedAt;
+    public ?\DateTimeImmutable $lastClickedAt;
+    public ?\DateTimeImmutable $firstOpenedAt;
     public ?\DateTimeImmutable $lastOpenedAt;
 
-    public ?bool $hardBounce;
-    public ?int $clickCount;
-    public ?int $openCount;
+    public bool $hardBounce;
+    public int $clickCount;
+    public int $openCount;
 }
+
