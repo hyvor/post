@@ -201,7 +201,7 @@ class SendService
 
 
         if ($updates->hasProperty('firstOpenAt')) {
-            $send->setFirstOpenAt($updates->firstOpenAt);
+            $send->setFirstOpenedAt($updates->firstOpenAt);
         }
 
         if ($updates->hasProperty('lastClickAt')) {

@@ -122,7 +122,7 @@ class AwsWebhookController extends AbstractController
             $jsonResponse = new JsonResponse(['status' => 'Click OK']);
         } elseif ($eventType === 'Open') {
             $time = $message['open']['timestamp'];
-            $updates->firstOpenAt = $send->getFirstOpenAt() ?? new \DateTimeImmutable($time);
+            $updates->firstOpenAt = $send->getFirstOpenedAt() ?? new \DateTimeImmutable($time);
             $updates->lastOpenedAt = new \DateTimeImmutable($time);
             $updates->openCount = $send->getOpenCount() + 1;
 
