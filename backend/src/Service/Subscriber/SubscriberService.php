@@ -4,6 +4,7 @@ namespace App\Service\Subscriber;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -153,6 +154,14 @@ class SubscriberService
             }
         }
 
+        if ($updates->hasProperty('unsubscribedAt')) {
+            $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
+        }
+
+        if ($updates->hasProperty('unsubscribedReason')) {
+            $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
+        }
+
         $subscriber->setUpdatedAt($this->now());
 
         $this->em->persist($subscriber);
@@ -164,5 +173,21 @@ class SubscriberService
     public function getSubscriberByEmail(Project $project, string $email): ?Subscriber
     {
         return $this->subscriberRepository->findOneBy(['project' => $project, 'email' => $email]);
+    }
+
+    public function unsubscribeBySend(
+        Send $send,
+        ?\DateTimeImmutable $at = null,
+        ?string $reason = null
+    ): void {
+        $subscriber = $send->getSubscriber();
+
+        $update = new UpdateSubscriberDto();
+
+        $update->status = SubscriberStatus::UNSUBSCRIBED;
+        $update->unsubscribedAt = $at ?? $this->now();
+        $update->unsubscribedReason = $reason;
+
+        $this->updateSubscriber($subscriber, $update);
     }
 }

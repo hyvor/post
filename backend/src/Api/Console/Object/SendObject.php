@@ -48,7 +48,7 @@ class SendObject
         $this->failed_at = $send->getFailedAt()?->getTimestamp();
         $this->delivered_at = $send->getDeliveredAt()?->getTimestamp();
 
-        $this->first_opened_at = $send->getFirstOpenAt()?->getTimestamp();
+        $this->first_opened_at = $send->getFirstOpenedAt()?->getTimestamp();
         $this->last_opened_at = $send->getLastOpenedAt()?->getTimestamp();
 
         $this->first_clicked_at = $send->getFirstClickedAt()?->getTimestamp();
