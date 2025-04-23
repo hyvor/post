@@ -28,6 +28,11 @@ class ProjectResolver implements ValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
 
+        $controllerName = $argument->getControllerName();
+        if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
+            return [];
+        }
+
         $argumentType = $argument->getType();
 
         if (
@@ -37,9 +42,6 @@ class ProjectResolver implements ValueResolverInterface
         {
             return [];
         }
-
-        $controllerName = $argument->getControllerName();
-        // TODO: validate controller name as in EntityResolver
 
         $projectId = $request->headers->get('X-Project-Id');
 

@@ -61,7 +61,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $method,
         string $uri,
         array $data = [],
-    )
+    ): Response
     {
         $this->client->request(
             $method,

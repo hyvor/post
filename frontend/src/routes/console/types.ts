@@ -36,23 +36,8 @@ export type ProjectMeta = {
 export type Project = {
 	id: number,
 	created_at: number,
-	name: string,
-	
-	// Meta data
-	template_color_accent: string | null,
-	template_color_background: string | null,
-	template_color_box_background: string | null,
-	template_box_shadow: string | null,
-	template_box_border: string | null,
-	template_font_family: string | null,
-	template_font_size: string | null,
-	template_font_weight: string | null,
-	template_font_weight_heading: string | null,
-	template_font_color_on_background: string | null,
-	template_font_color_on_box: string | null,
-	template_font_line_height: string | null,
-	template_box_radius: string | null,
-}
+	name: string
+} & ProjectMeta;
 
 export interface ProjectStats {
 	subscribers: { total: number; last_30d: number };
