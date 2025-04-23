@@ -2,7 +2,6 @@
 
 namespace App\Service\Issue;
 
-use App\Entity\Project;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
@@ -11,15 +10,11 @@ use App\Entity\Issue;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
 use App\Service\Issue\Dto\UpdateSendDto;
-use App\Service\Subscriber\Dto\UpdateSubscriberDto;
-use App\Service\Subscriber\SubscriberService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SendService
 {
@@ -188,7 +183,7 @@ class SendService
         }
 
         if ($updates->hasProperty('firstClickAt')) {
-            $send->setFirstClickedAt($updates->firstClickAt);
+            $send->setFirstClickedAt($updates->firstClickedAt);
         }
 
         if ($updates->hasProperty('bouncedAt')) {
@@ -200,12 +195,12 @@ class SendService
         }
 
 
-        if ($updates->hasProperty('firstOpenAt')) {
-            $send->setFirstOpenedAt($updates->firstOpenAt);
+        if ($updates->hasProperty('firstOpenedAt')) {
+            $send->setFirstOpenedAt($updates->firstOpenedAt);
         }
 
-        if ($updates->hasProperty('lastClickAt')) {
-            $send->setLastClickedAt($updates->lastClickAt);
+        if ($updates->hasProperty('lastClickedAt')) {
+            $send->setLastClickedAt($updates->lastClickedAt);
         }
 
         if ($updates->hasProperty('lastOpenedAt')) {
