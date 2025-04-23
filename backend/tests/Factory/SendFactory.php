@@ -40,13 +40,13 @@ final class SendFactory extends PersistentProxyObjectFactory
             'subscriber' => SubscriberFactory::new(),
             'email' => self::faker()->email(),
             'status' => SendStatus::PENDING,
-            'error_private' => self::faker()->text(255),
-            'failed_tries' => self::faker()->numberBetween(0, 10),
-            'open_count' => self::faker()->numberBetween(0, 10),
-            'click_count' => self::faker()->numberBetween(0, 10),
-            'hard_bounce' => self::faker()->boolean(),
-            'first_clicked_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'first_open_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'error_private' => null,
+            'failed_tries' => 0,
+            'open_count' => 0,
+            'click_count' => 0,
+            'hard_bounce' => false,
+            'first_clicked_at' => null,
+            'first_opened_at' => null,
         ];
     }
 

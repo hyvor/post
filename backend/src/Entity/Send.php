@@ -54,7 +54,7 @@ class Send
     private ?\DateTimeImmutable $delivered_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $first_open_at = null;
+    private ?\DateTimeImmutable $first_opened_at = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $last_opened_at = null;
@@ -227,14 +227,14 @@ class Send
         return $this;
     }
 
-    public function getFirstOpenAt(): ?\DateTimeImmutable
+    public function getFirstOpenedAt(): ?\DateTimeImmutable
     {
-        return $this->first_open_at;
+        return $this->first_opened_at;
     }
 
-    public function setFirstOpenAt(?\DateTimeImmutable $first_open_at): static
+    public function setFirstOpenedAt(?\DateTimeImmutable $first_opened_at): static
     {
-        $this->first_open_at = $first_open_at;
+        $this->first_opened_at = $first_opened_at;
 
         return $this;
     }

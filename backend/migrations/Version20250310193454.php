@@ -38,7 +38,7 @@ final class Version20250310193454 extends AbstractMigration
             sent_at timestamptz,
             failed_at timestamptz,
             delivered_at timestamptz,
-            first_open_at timestamptz,
+            first_opened_at timestamptz,
             last_opened_at timestamptz,
             first_clicked_at timestamptz,
             last_clicked_at timestamptz,
