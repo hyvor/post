@@ -91,6 +91,7 @@
 							block
 							bind:value={name}
 							on:input={handleNameInput}
+							on:keydown={(e) => e.key === 'Enter' && handleCreate()}
 							maxlength="255"
 							state={nameError ? 'error' : undefined}
 							autofocus

@@ -2,13 +2,16 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Object\IssueObject;
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\ListObject;
 use App\Entity\Project;
+use App\Repository\IssueRepository;
 use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
+use App\Service\Template\TemplateDefaults;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,7 +37,10 @@ final class ConsoleController extends AbstractController
         $projects = array_map(fn(Project $project) => new ProjectObject($project), $projects);
 
         return new JsonResponse([
-            'projects' => $projects
+            'projects' => $projects,
+            'config' => [
+                'template_defaults' => TemplateDefaults::getAll()
+            ],
         ]);
     }
 
@@ -42,7 +48,12 @@ final class ConsoleController extends AbstractController
     public function initProject(Project $project): JsonResponse
     {
         $projectStats = $this->projectService->getProjectStats($project);
-        $lists = $this->listRepository->findBy(['project' => $project]);
+        $lists = $this->listRepository->findBy(
+            [
+                'project' => $project,
+                'deleted_at' => null,
+            ]
+        );
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),

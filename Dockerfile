@@ -65,7 +65,8 @@ RUN composer install --no-interaction
 # set up code and install composer packages
 COPY backend /app/backend/
 COPY meta/image/dev/Caddyfile.dev /etc/caddy/Caddyfile
-CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
+COPY meta/image/dev/run.dev /app/run
+CMD ["sh", "/app/run"]
 
 ###################################################
 # FROM backend-base AS final

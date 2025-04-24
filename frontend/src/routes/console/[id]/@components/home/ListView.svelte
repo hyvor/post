@@ -2,6 +2,10 @@
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
 	import { listStore } from '../../../lib/stores/projectStore';
+
+	$: {
+		$listStore;
+	}
 </script>
 
 <div id="list-view">
@@ -9,9 +13,11 @@
 		Lists
 		<CreateListButton />
 	</div>
-	{#each $listStore as list}
-		<ListRow {list} />
-	{/each}
+	<div class="rows">
+		{#each $listStore as list}
+			<ListRow {list} />
+		{/each}
+	</div>
 </div>
 
 <style>
@@ -20,9 +26,11 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 20px;
-		padding-left: 50px;
-		padding-right: 50px;
-		font-size: 1.5rem;
+		padding-left: 35px;
+		padding-right: 35px;
 		font-weight: 600;
+	}
+	.rows {
+		padding: 10px 35px;
 	}
 </style>

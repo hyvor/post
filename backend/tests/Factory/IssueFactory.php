@@ -50,7 +50,10 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'uuid' => self::faker()->text(255),
-            'list_ids' => []
+            'list_ids' => [],
+            'total_sends' => 0,
+            'ok_sends' => 0,
+            'failed_sends' => 0,
         ];
     }
 

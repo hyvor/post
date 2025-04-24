@@ -20,6 +20,12 @@
 
 	let emailsError: null | string = null;
 
+	let input: HTMLTextAreaElement | null = null;
+
+	$: if (show && input) {
+		input.focus();
+	}
+
 	let loading = false;
 
 	function addSubscribers() {
@@ -80,8 +86,9 @@
 				rows={5}
 				placeholder="user@example.com
 other@example.org
-"
+"				
 				bind:value={emailsString}
+				bind:textarea={input!}
 				state={emailsError ? 'error' : 'default'}
 			/>
 			{#if emailsError}

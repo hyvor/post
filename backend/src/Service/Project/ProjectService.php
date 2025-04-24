@@ -4,14 +4,20 @@ namespace App\Service\Project;
 
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
+use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Service\Project\Dto\UpdateProjectMetaDto;
+use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\UnicodeString;
 
 class ProjectService
 {
+    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em
@@ -29,6 +35,7 @@ class ProjectService
             ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
+            ->setMeta(new ProjectMeta())
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -85,6 +92,7 @@ class ProjectService
         $listsLast30d = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
+            ->andWhere('l.deleted_at IS NULL')
             ->andWhere('l.created_at > :date')
             ->setParameter('project', $project)
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
@@ -130,5 +138,24 @@ class ProjectService
             new StatCategoryObject($issues, $issuesLast30d),
             new StatCategoryObject($lists, $listsLast30d),
         ];
+    }
+
+    public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
+    {
+
+        $currentMeta = $project->getMeta();
+
+        foreach (get_object_vars($updates) as $property => $value) {
+            $cased = new UnicodeString($property)->snake();
+            $currentMeta->{$cased} = $value;
+        }
+
+        $project->setMeta($currentMeta);
+        $project->setUpdatedAt($this->now());
+
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
     }
 }

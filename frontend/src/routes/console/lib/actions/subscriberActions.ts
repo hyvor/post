@@ -12,8 +12,9 @@ export function createSubscriber(email: string, list_ids: number[]) {
 }
 
 export function getSubscribers(
-	status: NewsletterSubscriberStatus,
+	status: NewsletterSubscriberStatus | null,
 	list_id: number | null,
+	search : string | null,
 	limit: number,
 	offset: number
 ) {
@@ -22,6 +23,7 @@ export function getSubscribers(
 		data: {
 			status,
 			list_id,
+			search,
 			limit,
 			offset
 		}
