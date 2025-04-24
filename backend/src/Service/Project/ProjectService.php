@@ -11,6 +11,7 @@ use App\Entity\Subscriber;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\String\UnicodeString;
 
@@ -31,6 +32,7 @@ class ProjectService
     {
 
         $project = new Project()
+            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
@@ -57,9 +59,14 @@ class ProjectService
         $this->em->flush();
     }
 
-    public function getProject(Project $project): ?Project
+    public function getProjectById(int $id): ?Project
     {
-        return $project;
+        return $this->em->getRepository(Project::class)->find($id);
+    }
+
+    public function getProjectByUuid(string $uuid): ?Project
+    {
+        return $this->em->getRepository(Project::class)->findOneBy(['uuid' => $uuid]);
     }
 
     /**

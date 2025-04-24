@@ -48,16 +48,15 @@ class NewsletterListService
         $this->em->flush();
     }
 
-    public function getNewsletterList(int $id): ?NewsletterList
+    public function getListById(int $id): ?NewsletterList
     {
-        $list = $this->em->getRepository(NewsletterList::class)->find($id);
-        return $list;
+        return $this->em->getRepository(NewsletterList::class)->find($id);
     }
 
     /**
      * @return ArrayCollection<int, NewsletterList>
      */
-    public function getNewsletterLists(Project $project): ArrayCollection
+    public function getListsOfProject(Project $project): ArrayCollection
     {
         return new ArrayCollection(
             $this->em->getRepository(NewsletterList::class)
@@ -87,7 +86,7 @@ class NewsletterListService
      * @param array<int> $listIds
      * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function isListsAvailable(Project $project, array $listIds): ?array
+    public function getMissingListIdsOfProject(Project $project, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb
@@ -103,7 +102,7 @@ class NewsletterListService
         $existingIds = array_column($result, 'id');
         $missingIds = array_diff($listIds, $existingIds);
 
-        return count($missingIds) === 0 ? null : $missingIds;
+        return count($missingIds) === 0 ? null : array_values($missingIds);
     }
 
     /**
