@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
@@ -16,17 +17,18 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
+    protected Container $container;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->client = static::createClient();
 
-        $container = static::getContainer();
-        AuthFake::enableForSymfony($container, ['id' => 1]);
+        $this->container = static::getContainer();
+        AuthFake::enableForSymfony($this->container, ['id' => 1]);
 
         /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->container->get(EntityManagerInterface::class);
         $this->em = $em;
     }
 
@@ -62,7 +64,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $method,
         string $uri,
         array $data = [],
-    ) : Response
+    ): Response
     {
         $this->client->request(
             $method,

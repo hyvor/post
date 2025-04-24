@@ -1,0 +1,3 @@
+dunglas_doctrine_json_odm:
+  type_map:
+    projects_meta: App\Entity\Meta\ProjectMeta

@@ -61,10 +61,7 @@
         "color_box_border": "1px solid #e9ecef",
 
         // lists of the current issue
-        "lists": [
-            {"id": 1, "name": "Physics"},
-            {"id": 2, "name": "Mathematics"}
-        ]
+        "lists": ["Physics", "Mathematics"}]
     }
 `}
 />

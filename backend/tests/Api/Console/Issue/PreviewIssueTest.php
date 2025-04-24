@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Tests\Api\Console\Issue;
+
+use App\Api\Console\Controller\IssueController;
+use App\Entity\Issue;
+use App\Service\Template\TemplateRenderer;
+use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\IssueFactory;
+use App\Tests\Factory\ProjectFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Issue::class)]
+#[CoversClass(IssueController::class)]
+#[CoversClass(TemplateRenderer::class)]
+class PreviewIssueTest extends WebTestCase
+{
+    public function testPreviewIssue(): void
+    {
+        $project = ProjectFactory::createOne();
+        $issue = IssueFactory::createOne(
+            [
+                'project' => $project,
+                'subject' => 'Test subject',
+                'content' => 'Test content',
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/issues/" . $issue->getId() . "/preview"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertArrayHasKey('html', $json);
+    }
+}

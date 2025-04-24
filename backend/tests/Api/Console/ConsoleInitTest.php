@@ -3,10 +3,12 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
+use App\Entity\Type\IssueStatus;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -50,6 +52,10 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
         $this->assertSame(10, count($data['projects']));
+
+        $this->assertArrayHasKey('config', $data);
+        $config = $data['config'];
+        $this->assertArrayHasKey('template_defaults', $config);
     }
 
     public function testInitProject(): void

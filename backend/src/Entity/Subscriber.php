@@ -31,7 +31,7 @@ class Subscriber
     /**
      * @var Collection<int, NewsletterList>
      */
-    #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: NewsletterList::class, inversedBy: 'subscribers', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'list_subscriber')]
     #[ORM\InverseJoinColumn(name: 'list_id')]
     private Collection $lists;
@@ -59,8 +59,6 @@ class Subscriber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
-
-
 
     public function __construct()
     {

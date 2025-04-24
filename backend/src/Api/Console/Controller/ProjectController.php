@@ -3,14 +3,17 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Project\CreateProjectInput;
+use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
+use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\UnicodeString;
 
 final class ProjectController extends AbstractController
 {
@@ -53,4 +56,23 @@ final class ProjectController extends AbstractController
         return $this->json([]);
     }
 
+    #[Route('/projects', methods: 'PATCH')]
+    public function updateProject(
+        Project $project,
+        #[MapRequestPayload] UpdateProjectInput $input
+    ): JsonResponse
+    {
+        // later we may need to add functions to update project non-meta properties
+
+        $updatesMeta = new UpdateProjectMetaDto();
+        $properties = $input->getSetProperties();
+        foreach ($properties as $property) {
+            $cased = new UnicodeString($property)->camel();
+            $updatesMeta->{$cased} = $input->{$property};
+        }
+
+        $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
+
+        return $this->json(new ProjectObject($project));
+    }
 }

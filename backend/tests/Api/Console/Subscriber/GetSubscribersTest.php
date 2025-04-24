@@ -35,12 +35,14 @@ class GetSubscribersTest extends WebTestCase
         $subscribers = SubscriberFactory::createMany(5, [
             'project' => $project,
             'lists' => [$newsletterList1, $newsletterList2],
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $projectOther = ProjectFactory::createOne();
         SubscriberFactory::createMany(2, [
             'project' => $projectOther,
             'lists' => [NewsletterListFactory::createOne(['project' => $project])],
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $response = $this->consoleApi(
@@ -51,9 +53,10 @@ class GetSubscribersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
+
         $this->assertCount(5, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[4];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
@@ -70,7 +73,10 @@ class GetSubscribersTest extends WebTestCase
     public function testListSubscribersPagination(): void
     {
         $project = ProjectFactory::createOne();
-        SubscriberFactory::createMany(5, ['project' => $project,]);
+        SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
 
         $response = $this->consoleApi(
             $project,
@@ -82,7 +88,7 @@ class GetSubscribersTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(2, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[1];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
@@ -134,7 +140,7 @@ class GetSubscribersTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertCount(5, $json);
 
-        $subscriber = $json[0];
+        $subscriber = $json[4];
         $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
@@ -147,6 +153,80 @@ class GetSubscribersTest extends WebTestCase
         $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
+    public function test_list_subscribers_email_search(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['project' => $project]);
+
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'thibault@hyvor.com',
+        ]);
+
+        $subscriber2 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'supun@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?search=thibault"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $this->assertSame($subscriber1->getId(), $json[0]['id']);
+    }
 
 
+    public function test_list_subscribers_list_search(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $list1 = NewsletterListFactory::createOne(
+            [
+                'project' => $project,
+                'name' => 'list_1'
+            ]
+        );
+
+        $list2 = NewsletterListFactory::createOne(
+            [
+                'project' => $project,
+                'name' => 'list_2'
+            ]
+        );
+
+        $subscriber1 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'thibault@hyvor.com',
+        ]);
+
+        $subscriber2 = SubscriberFactory::createOne([
+            'project' => $project,
+            'lists' => [$list2],
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'supun@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'GET',
+            "/subscribers?list_id={$list1->getId()}"
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $this->assertSame($subscriber1->getId(), $json[0]['id']);
+    }
 }
