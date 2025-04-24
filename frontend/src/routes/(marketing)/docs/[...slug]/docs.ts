@@ -1,6 +1,7 @@
 import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
+import SignupForm from './content/SignupForm.svelte';
 
 export const categories: Category[] = [
 	{
@@ -21,6 +22,11 @@ export const categories: Category[] = [
 				slug: 'design',
 				name: 'Email Design',
 				component: EmailDesign
+			},
+			{
+				slug: 'form',
+				name: 'Signup Form',
+				component: SignupForm
 			}
 		]
 	},

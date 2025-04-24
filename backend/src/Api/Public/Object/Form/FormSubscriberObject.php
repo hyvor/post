@@ -1,32 +1,28 @@
 <?php
 
-namespace App\Api\Console\Object;
+namespace App\Api\Public\Object\Form;
+
 
 use App\Entity\Subscriber;
+use App\Entity\Type\SubscriberStatus;
 
-class SubscriberObject
+class FormSubscriberObject
 {
 
     public int $id;
-    public string $email;
-    public string $source;
-    public string $status;
-    /**
-     * @var array<int>
-     */
+    /** @var int[] */
     public array $list_ids;
-    public ?string $subscribe_ip;
+    public string $email;
+    public SubscriberStatus $status;
     public ?int $subscribed_at;
     public ?int $unsubscribed_at;
 
     public function __construct(Subscriber $subscriber)
     {
         $this->id = $subscriber->getId();
-        $this->email = $subscriber->getEmail();
-        $this->source = $subscriber->getSource()->value;
-        $this->status = $subscriber->getStatus()->value;
         $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
-        $this->subscribe_ip = $subscriber->getSubscribeIp();
+        $this->email = $subscriber->getEmail();
+        $this->status = $subscriber->getStatus();
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
         $this->unsubscribed_at = $subscriber->getUnsubscribedAt()?->getTimestamp();
     }
