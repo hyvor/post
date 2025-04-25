@@ -39,6 +39,7 @@ class UpdateProjectTest extends WebTestCase
                 'template_color_accent' => '#ff0000',
                 'template_box_radius' => '10px',
                 'template_logo' => null,
+                'form_title' => 'Subscribe to newsletter'
             ]
         );
 
@@ -56,5 +57,8 @@ class UpdateProjectTest extends WebTestCase
         $projectMeta = $project->getMeta();
         $this->assertInstanceOf(ProjectMeta::class, $projectMeta);
         $this->assertSame('#ff0000', $projectMeta->template_color_accent);
+        $this->assertSame('10px', $projectMeta->template_box_radius);
+        $this->assertSame(null, $projectMeta->template_logo);
+        $this->assertSame('Subscribe to newsletter', $projectMeta->form_title);
     }
 }

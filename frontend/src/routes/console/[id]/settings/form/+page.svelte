@@ -4,6 +4,8 @@
 	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 	import SettingsBody from '../@components/SettingsBody.svelte';
 	import { getI18n } from '../../../lib/i18n';
+	import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
+	import { projectEditingStore } from '../../../lib/stores/projectStore';
 
 	const i18n = getI18n();
 </script>
@@ -24,29 +26,41 @@
 				label={i18n.t('console.settings.form.title')}
 				caption={i18n.t('console.settings.form.titleCaption')}
 			>
-				<TextInput block />
+				<TextInput block bind:value={$projectEditingStore.form_title} />
 			</SplitControl>
 
 			<SplitControl
 				label={i18n.t('console.settings.form.description')}
 				caption={i18n.t('console.settings.form.descriptionCaption')}
 			>
-				<TextInput block />
+				<TextInput block bind:value={$projectEditingStore.form_description} />
 			</SplitControl>
 
 			<SplitControl
 				label={i18n.t('console.settings.form.subscribeButtonText')}
 				caption={i18n.t('console.settings.form.subscribeButtonTextCaption')}
 			>
-				<TextInput block />
+				<TextInput
+					block
+					bind:value={$projectEditingStore.form_button_text}
+					placeholder="Subscribe"
+				/>
 			</SplitControl>
 
 			<SplitControl
 				label={i18n.t('console.settings.form.successMessage')}
 				caption={i18n.t('console.settings.form.successMessageCaption')}
 			>
-				<TextInput block />
+				<TextInput
+					block
+					bind:value={$projectEditingStore.form_success_message}
+					placeholder="Thank you for subscribing!"
+				/>
 			</SplitControl>
 		{/snippet}
 	</SplitControl>
 </SettingsBody>
+
+<ProjectSaveDiscard
+	keys={['form_title', 'form_description', 'form_button_text', 'form_success_message']}
+/>

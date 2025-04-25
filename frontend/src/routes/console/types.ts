@@ -31,6 +31,11 @@ export type ProjectMeta = {
 	template_font_color_on_box: string | null,
 	template_font_line_height: string | null,
 	template_box_radius: string | null,
+
+	form_title: string | null,
+	form_description: string | null,
+	form_button_text: string | null,
+	form_success_message: string | null,
 }
 
 export type Project = {
