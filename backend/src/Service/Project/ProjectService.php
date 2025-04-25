@@ -150,7 +150,7 @@ class ProjectService
             $currentMeta->{$cased} = $value;
         }
 
-        $project->setMeta($currentMeta);
+        $project->setMeta(clone $currentMeta);
         $project->setUpdatedAt($this->now());
 
         $this->em->persist($project);
