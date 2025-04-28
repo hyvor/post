@@ -25,6 +25,8 @@ class DomainObject
 
     public bool $requested_by_current_website;
 
+    public \DateTimeImmutable $updated_at;
+
     public function __construct(Domain $domain)
     {
         $this->id = $domain->getId();
@@ -33,5 +35,6 @@ class DomainObject
         $this->dkim_txt_name = DomainService::DKIM_SELECTOR . '._domainkey.' . $domain->getDomain();
         $this->dkim_txt_value = DomainService::getDkimTxtValue($domain->getDkimPublicKey());
         $this->verified_in_ses = $domain->isVerifiedInSes();
+        $this->updated_at = $domain->getUpdatedAt();
     }
 }

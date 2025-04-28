@@ -72,5 +72,55 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertIsArray($json['domain']);
+        $this->assertSame('hyvor.com', $json['domain']['domain']);
+        $this->assertTrue($json['domain']['verified_in_ses']);
+        $this->assertSame('2025-02-21T00:00:00+00:00', $json['domain']['updated_at']);
+    }
+
+    public function test_already_verified(): void
+    {
+        $this->mockCreateEmailIdentity();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $domain = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+                'verified_in_ses' => true,
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/domain/verify/' . $domain->getId(),
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Domain already verified', $json['message']);
+    }
+
+    public function test_domain_not_found(): void
+    {
+        $this->mockCreateEmailIdentity();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/domain/verify/99999',
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Domain not found', $json['message']);
     }
 }

@@ -8,6 +8,7 @@ use App\Api\Console\Object\DomainObject;
 use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -66,5 +67,54 @@ class CreateDomainTest extends WebTestCase
         $domainId = $json['id'];
         $this->assertIsInt($domainId);
         $this->assertSame('hyvor.com', $json['domain']);
+    }
+
+    public function test_create_domain_invalid(): void
+    {
+        $this->mockCreateEmailIdentity();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/domains',
+            [
+                'domain' => 'invalid-domain',
+            ]
+        );
+        $this->assertSame(422, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $violation = $json['violations'][0];
+        $this->assertSame('The domain must be a valid domain name.', $violation['message']);
+    }
+
+    public function test_create_domain_already_exists(): void
+    {
+        $this->mockCreateEmailIdentity();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+        $domain = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/domains',
+            [
+                'domain' => 'hyvor.com',
+            ]
+        );
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Domain already exists', $json['message']);
     }
 }
