@@ -27,6 +27,11 @@ class DomainService
         return $this->em->getRepository(Domain::class)->findOneBy(['domain' => $domain]);
     }
 
+    public function getDomainById(int $id): ?Domain
+    {
+        return $this->em->getRepository(Domain::class)->find($id);
+    }
+
     /**
      * This function formats the key to be used in AWS
      * as well as in DKIM DNS records.
