@@ -26,7 +26,7 @@ class DomainController extends AbstractController
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
-        
+
         $domains = $this->domainService->getDomainsByUserId($user->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
@@ -49,7 +49,7 @@ class DomainController extends AbstractController
         }
     }
 
-    #[Route('/domain/verify/{id}', methods: 'POST')]
+    #[Route('/domains/verify/{id}', methods: 'POST')]
     public function verifyDomain(int $id): JsonResponse
     {
         $domain = $this->domainService->getDomainById($id);

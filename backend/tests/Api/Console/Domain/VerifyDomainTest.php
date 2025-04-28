@@ -68,7 +68,7 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/domain/verify/' . $domain->getId(),
+            '/domains/verify/' . $domain->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -97,7 +97,7 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/domain/verify/' . $domain->getId(),
+            '/domains/verify/' . $domain->getId(),
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -116,7 +116,7 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/domain/verify/99999',
+            '/domains/verify/99999',
         );
 
         $this->assertSame(400, $response->getStatusCode());
