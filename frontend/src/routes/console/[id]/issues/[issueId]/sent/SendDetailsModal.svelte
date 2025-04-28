@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Modal, SplitControl } from '@hyvor/design/components';
 	import type { IssueSend } from '../../../../types';
-	import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
+	import RelativeTime from '../../../../@components/utils/RelativeTime.svelte';
 
 	export let send: IssueSend;
 	export let show: boolean;
 </script>
 
-<Modal 
-    bind:show 
+<Modal
+    bind:show
     title="Send Details"
     on:cancel={() => show = false}
 >
