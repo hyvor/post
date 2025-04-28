@@ -17,7 +17,6 @@ class NewsletterListService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository $issueRepository,
     )
     {
     }
