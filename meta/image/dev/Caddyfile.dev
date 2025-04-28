@@ -11,4 +11,8 @@
         try_files index.php
     }
 
+	log {
+        output file /var/log/caddy.log
+    }
+
 }

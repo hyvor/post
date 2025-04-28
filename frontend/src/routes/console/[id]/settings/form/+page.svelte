@@ -20,7 +20,10 @@
 </SettingsTop>
 
 <SettingsBody>
-	<SplitControl label={i18n.t('console.settings.form.texts')}>
+	<SplitControl
+		label={i18n.t('console.settings.form.texts')}
+		caption={i18n.t('console.settings.form.textsHtmlAllowed')}
+	>
 		{#snippet nested()}
 			<SplitControl
 				label={i18n.t('console.settings.form.title')}
@@ -37,6 +40,13 @@
 			</SplitControl>
 
 			<SplitControl
+				label={i18n.t('console.settings.form.footerText')}
+				caption={i18n.t('console.settings.form.footerTextCaption')}
+			>
+				<TextInput block bind:value={$projectEditingStore.form_footer_text} />
+			</SplitControl>
+
+			<SplitControl
 				label={i18n.t('console.settings.form.subscribeButtonText')}
 				caption={i18n.t('console.settings.form.subscribeButtonTextCaption')}
 			>
@@ -46,7 +56,6 @@
 					placeholder="Subscribe"
 				/>
 			</SplitControl>
-
 			<SplitControl
 				label={i18n.t('console.settings.form.successMessage')}
 				caption={i18n.t('console.settings.form.successMessageCaption')}
@@ -62,5 +71,11 @@
 </SettingsBody>
 
 <ProjectSaveDiscard
-	keys={['form_title', 'form_description', 'form_button_text', 'form_success_message']}
+	keys={[
+		'form_title',
+		'form_description',
+		'form_footer_text',
+		'form_button_text',
+		'form_success_message'
+	]}
 />

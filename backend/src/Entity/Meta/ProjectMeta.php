@@ -29,6 +29,7 @@ class ProjectMeta
      */
     public ?string $form_title = null;
     public ?string $form_description = null;
+    public ?string $form_footer_text = null;
     public ?string $form_button_text = null;
     public ?string $form_success_message = null;
 

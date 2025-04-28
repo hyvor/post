@@ -17,17 +17,6 @@ use Symfony\Component\Uid\Uuid;
 class FormInitTest extends WebTestCase
 {
 
-    public function test_adds_cors(): void
-    {
-
-        $response = $this->publicApi('OPTIONS', '/form/init', [
-            'project_uuid' => Uuid::v4(),
-        ]);
-
-        dd($response);
-
-    }
-
     public function test_error_when_project_by_uuid_not_found(): void
     {
 

@@ -34,6 +34,7 @@ export type ProjectMeta = {
 
 	form_title: string | null,
 	form_description: string | null,
+	form_footer_text: string | null,
 	form_button_text: string | null,
 	form_success_message: string | null,
 }

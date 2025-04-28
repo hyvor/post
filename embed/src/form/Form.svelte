@@ -27,10 +27,9 @@
     onMount(() => {
         api("/init", {
             project_uuid: projectUuid,
-        });
-        setTimeout(() => {
+        }).finally(() => {
             loading = false;
-        }, 1000);
+        });
     });
 
     /**
