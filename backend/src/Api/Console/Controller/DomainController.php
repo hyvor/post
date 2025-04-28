@@ -21,6 +21,16 @@ class DomainController extends AbstractController
     ) {
     }
 
+    #[Route('/domains', methods: 'GET')]
+    public function getDomains(): JsonResponse
+    {
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+        
+        $domains = $this->domainService->getDomainsByUserId($user->id);
+        return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
+    }
+
     #[Route('/domains', methods: 'POST')]
     public function createDomain(#[MapRequestPayload] CreateDomainInput $input): JsonResponse
     {

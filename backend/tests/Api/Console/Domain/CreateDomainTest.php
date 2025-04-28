@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\Domain;
 use App\Api\Console\Controller\DomainController;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
+use App\Entity\Domain;
 use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
@@ -67,6 +68,10 @@ class CreateDomainTest extends WebTestCase
         $domainId = $json['id'];
         $this->assertIsInt($domainId);
         $this->assertSame('hyvor.com', $json['domain']);
+
+        $domainRepository = $this->em->getRepository(Domain::class);
+        $domain = $domainRepository->find($domainId);
+        $this->assertNotNull($domain);
     }
 
     public function test_create_domain_invalid(): void
