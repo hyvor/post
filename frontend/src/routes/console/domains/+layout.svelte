@@ -1,41 +1,23 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Nav from '../@components/Nav/Nav.svelte';
 	import { page } from '$app/state';
 	import { loadProject } from '../lib/projectLoader';
 	import { Loader, toast } from '@hyvor/design/components';
+	import Nav from '../@components/Nav/Nav.svelte';
+    
 
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
 
 	let { children }: Props = $props();
-
-	let isLoading = $state(true);
-
-	onMount(() => {
-		const projectId = page.params.id;
-		loadProject(projectId)
-			.then(() => {
-				isLoading = false;
-			})
-			.catch((e) => {
-				toast.error('Unable to load project');
-			});
-	});
 </script>
 
 <div class="main-inner">
-	{#if isLoading}
-		<div class="full-loader">
-			<Loader size="large" />
-		</div>
-	{:else}
-		<Nav />
-		<div class="content">
-			{@render children?.()}
-		</div>
-	{/if}
+    <Nav />
+    <div class="content">
+        {@render children?.()}
+    </div>
 </div>
 
 <style>

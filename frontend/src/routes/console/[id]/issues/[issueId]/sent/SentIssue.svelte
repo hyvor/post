@@ -8,7 +8,7 @@
     import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 	import Sends from './Sends.svelte';
 	import SentStat from './SentStat.svelte';
-	import FriendlyDate from '../../../@components/utils/FriendlyDate.svelte';
+	import FriendlyDate from '../../../../@components/utils/FriendlyDate.svelte';
 	import { copyAndToast } from '$lib/helpers/copy';
 
 	export let issue: Issue;

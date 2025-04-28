@@ -6,7 +6,7 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconGear from '@hyvor/icons/IconGear';
 	import NavItem from './NavItem.svelte';
-	import { projectStore } from '../../../lib/stores/projectStore';
+	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
 
 	let width: number;

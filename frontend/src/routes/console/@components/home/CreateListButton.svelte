@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Button, FormControl, Label, Modal, TextInput, toast } from "@hyvor/design/components";
-	import { createList } from '../../../lib/actions/listActions'
+	import { createList } from '../../lib/actions/listActions'
 	import ListEditionModal from "./ListEditionModal.svelte";
-	import { listStore } from "../../../lib/stores/projectStore";
+	import { listStore } from "../../lib/stores/projectStore";
 
     let modalOpen: boolean = false;
 	let listName: string = '';
