@@ -40,17 +40,24 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domain/verify/{id}', methods: 'POST')]
-    public function verifyDomain(string $id): JsonResponse
+    public function verifyDomain(int $id): JsonResponse
     {
-        // todo: get domain from ID
+        $domain = $this->domainService->getDomainById($id);
+
+        if (!$domain) {
+            throw new BadRequestException('Domain not found');
+        }
 
         if ($domain->isVerifiedInSes()) {
             throw new UnprocessableEntityHttpException('Domain already verified');
         }
 
         try {
-            $this->domainService->verifyDomain($domain);
-            return $this->json(new DomainObject($domain));
+            $result = $this->domainService->verifyDomain($domain);
+            return $this->json([
+                'data' => $result,
+                'domain' => new DomainObject($domain),
+            ]);
         } catch (\Exception $e) {
             throw new BadRequestException('Failed to verify domain: ' . $e->getMessage());
         }
