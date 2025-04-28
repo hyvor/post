@@ -40,8 +40,10 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domain/verify/{id}', methods: 'POST')]
-    public function verifyDomain(Domain $domain): JsonResponse
+    public function verifyDomain(string $id): JsonResponse
     {
+        // todo: get domain from ID
+
         if ($domain->isVerifiedInSes()) {
             throw new UnprocessableEntityHttpException('Domain already verified');
         }
