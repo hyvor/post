@@ -5,9 +5,11 @@ namespace App\Service\Domain;
 use App\Entity\Domain;
 use App\Service\Integration\Aws\SesService;
 use App\Service\Integration\Aws\SnsValidationService;
+use App\Service\Issue\EmailTransportService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Twig\Environment;
 use function PHPUnit\Framework\assertIsArray;
 
 class DomainService
@@ -18,7 +20,9 @@ class DomainService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SesService $sesService
+        private SesService $sesService,
+        private EmailTransportService $emailTransportService,
+        private Environment $twig
     ) {
     }
 
@@ -137,6 +141,15 @@ class DomainService
         if ($verified) {
             $domain->setVerifiedInSes(true);
             $domain->setUpdatedAt($this->now());
+
+            // Send verification success email
+            $this->emailTransportService->send(
+                (string)   $domain->getUserId(), // Assuming this is the user's email
+                'Domain Verification Successful',
+                $this->renderTemplate('email/domain_verified.html.twig', [
+                    'domain' => $domain->getDomain()
+                ])
+            );
         }
 
         $this->em->persist($domain);
@@ -148,5 +161,10 @@ class DomainService
                 'error_type' => $info['ErrorType'] ?? ''
             ]
         ];
+    }
+
+    private function renderTemplate(string $template, array $variables): string
+    {
+        return $this->twig->render($template, $variables);
     }
 }
