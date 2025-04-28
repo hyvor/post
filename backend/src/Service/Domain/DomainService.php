@@ -33,6 +33,14 @@ class DomainService
     }
 
     /**
+     * @return Domain[]
+     */
+    public function getDomainsByUserId(int $userId): array
+    {
+        return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
+    }
+
+    /**
      * This function formats the key to be used in AWS
      * as well as in DKIM DNS records.
      */
