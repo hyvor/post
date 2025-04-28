@@ -3,6 +3,7 @@
         "settings": {
             "form": {
                 "texts": "Texts",
+                "textsHtmlAllowed": "HTML is allowed",
                 "title": "Title",
                 "titleCaption": "Shown above the form",
                 "description": "Description",

@@ -29,6 +29,7 @@ class UpdateProjectMetaDto
     // form
     public ?string $formTitle;
     public ?string $formDescription;
+    public ?string $formFooterText;
     public ?string $formButtonText;
     public ?string $formSuccessMessage;
 }

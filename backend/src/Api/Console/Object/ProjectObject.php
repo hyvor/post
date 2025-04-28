@@ -28,6 +28,7 @@ class ProjectObject
 
     public ?string $form_title;
     public ?string $form_description;
+    public ?string $form_footer_text;
     public ?string $form_button_text;
     public ?string $form_success_message;
 
@@ -55,6 +56,7 @@ class ProjectObject
 
         $this->form_title = $meta->form_title;
         $this->form_description = $meta->form_description;
+        $this->form_footer_text = $meta->form_footer_text;
         $this->form_button_text = $meta->form_button_text;
         $this->form_success_message = $meta->form_success_message;
     }
