@@ -6,9 +6,10 @@
 	import DomainList from "./DomainList.svelte";
 
 	let showCreateModal = false;
+	let domainList: DomainList;
 
 	function handleCreate() {
-		// The DomainList component will refresh automatically
+		domainList.refreshDomains();
 	}
 </script>
 
@@ -20,7 +21,7 @@
                 Create Domain
             </Button>
         </div>
-        <DomainList />
+        <DomainList bind:this={domainList} />
     </div>
 </SingleBox>
 
