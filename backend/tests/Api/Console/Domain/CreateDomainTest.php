@@ -1,14 +1,13 @@
 <?php
 
-namespace Api\Console\Domain;
+namespace App\Tests\Api\Console\Domain;
 
 use App\Api\Console\Controller\DomainController;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Service\Domain\DomainService;
-use App\Service\Integration\Aws\SnsValidationService;
+use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -23,16 +22,31 @@ class CreateDomainTest extends WebTestCase
 {
 
 
-    private function mockDomainCreation(): void
+    private function mockCreateEmailIdentity(): void
     {
-        $clientMock = $this->createMock(DomainService::class);
-        $clientMock->method('createAwsDomain')->willReturn(true);
-        $this->container->set(DomainService::class, $clientMock);
+        $sesV2ClientMock = $this->createMock(SesV2Client::class);
+        $sesV2ClientMock->method('__call')->with(
+            'createEmailIdentity',
+            $this->callback(function ($args) {
+
+                $input = $args[0];
+
+                $this->assertSame('hyvor.com', $input['EmailIdentity']);
+                $this->assertSame('hyvor-post', $input['DkimSigningAttributes']['DomainSigningSelector']);
+                $this->assertIsString($input['DkimSigningAttributes']['DomainSigningPrivateKey']);
+
+                return true;
+            })
+        );
+
+        $sesServiceMock = $this->createMock(SesService::class);
+        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
+        $this->container->set(SesService::class, $sesServiceMock);
     }
 
     public function test_create_domain(): void
     {
-        $this->mockDomainCreation();
+        $this->mockCreateEmailIdentity();
 
         Clock::set(new MockClock('2025-02-21'));
 

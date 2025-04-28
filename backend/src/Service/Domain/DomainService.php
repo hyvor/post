@@ -3,6 +3,7 @@
 namespace App\Service\Domain;
 
 use App\Entity\Domain;
+use App\Service\Integration\Aws\SesService;
 use App\Service\Integration\Aws\SnsValidationService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +18,7 @@ class DomainService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SnsValidationService $snsValidationService
+        private SesService $sesService
     ) {
     }
 
@@ -48,10 +49,10 @@ class DomainService
         return 'p=' . $publicKey;
     }
 
-    public function createAwsDomain(string $domain, string $privateKeyString): bool
+    private function createAwsDomain(string $domain, string $privateKeyString): bool
     {
         try {
-            $client = $this->snsValidationService->get_client();
+            $client = $this->sesService->getClient();
             $client->createEmailIdentity([
                 'EmailIdentity' => $domain,
                 'DkimSigningAttributes' => [
@@ -108,7 +109,7 @@ class DomainService
     public function verifyDomain(Domain $domain): array
     {
         try {
-            $client = $this->snsValidationService->get_client();
+            $client = $this->sesService->getClient();
             $result = $client->getEmailIdentity([
                 'EmailIdentity' => $domain->getDomain()
             ]);
