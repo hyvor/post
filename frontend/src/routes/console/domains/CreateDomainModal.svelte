@@ -8,6 +8,8 @@
 		toast
 	} from '@hyvor/design/components';
 	import { createDomain } from '../lib/actions/domainActions';
+	import DnsRecordsModal from './DnsRecordsModal.svelte';
+	import type { Domain } from '../types';
 
 	export let show = false;
 	export let onCreate: () => void;
@@ -15,6 +17,8 @@
 	let domain = '';
 	let domainError: string | null = null;
 	let loading = false;
+	let showDnsRecords = false;
+	let createdDomain: Domain | null = null;
 
 	function validateDomain(domain: string): boolean {
 		if (!domain) {
@@ -40,9 +44,11 @@
 
 		loading = true;
 		createDomain(domain)
-			.then(() => {
+			.then((newDomain) => {
 				toast.success('Domain created successfully');
 				show = false;
+				createdDomain = newDomain;
+				showDnsRecords = true;
 				onCreate();
 			})
 			.catch((error: any) => {
@@ -82,3 +88,7 @@
 		</SplitControl>
 	</FormControl>
 </Modal>
+
+{#if createdDomain}
+	<DnsRecordsModal domain={createdDomain} bind:show={showDnsRecords} />
+{/if}

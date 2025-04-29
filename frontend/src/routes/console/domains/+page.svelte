@@ -44,9 +44,4 @@
         align-items: center;
     }
 
-    h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 600;
-    }
 </style>
