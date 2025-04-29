@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Dev;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -22,6 +23,11 @@ class DevResetCommand extends Command
     )
     {
         parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this->addOption('seed', null, InputOption::VALUE_NONE, 'Seed the database after resetting it.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -58,6 +64,15 @@ class DevResetCommand extends Command
             ]),
             $output
         );
+
+        if ($input->getOption('seed')) {
+            $application->run(
+                new ArrayInput([
+                    'command' => 'app:dev:seed',
+                ]),
+                $output
+            );
+        }
 
         return Command::SUCCESS;
     }
