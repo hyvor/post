@@ -7,12 +7,18 @@
 	let domains: Domain[] = [];
 	let loading = false;
 	let checkInterval: number;
+	let currentInterval = 30 * 1000; // Start with 30 seconds
+	const MAX_INTERVAL = 3 * 60 * 1000; // Max 3 minutes
 
 	export function refreshDomains() {
 		loading = true;
 		getDomains()
 			.then((res) => {
 				domains = res;
+				// If all domains are verified, reset the interval
+				if (!res.some(domain => !domain.verified_in_ses)) {
+					currentInterval = 30 * 1000;
+				}
 			})
 			.catch((error: any) => {
 				console.error('Failed to load domains:', error);
@@ -26,13 +32,15 @@
 		// Check immediately
 		refreshDomains();
 
-		// Then check every 5 minutes to handle verification delays
+		// Then check with exponential backoff
 		checkInterval = window.setInterval(() => {
 			// Only refresh if there are unverified domains
 			if (domains.some(domain => !domain.verified_in_ses)) {
 				refreshDomains();
+				// Double the interval, but don't exceed max
+				currentInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
 			}
-		}, 5 * 60 * 1000); // 5 minutes
+		}, currentInterval);
 	}
 
 	onMount(() => {
