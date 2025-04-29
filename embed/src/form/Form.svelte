@@ -4,7 +4,6 @@
     import { fade, slide } from "svelte/transition";
     import { apiFromInstance } from "./api";
     import type { List, Project } from "./types";
-    import ListRow from "./ListRow.svelte";
 
     interface Props {
         projectUuid: string;
@@ -62,20 +61,38 @@
     <Skeleton />
 {:else}
     <div class="form">
-        {#if project.form.title}
-            <div class="title">
-                {project.form.title}
-            </div>
-        {/if}
+        <div
+            class="title"
+            transition:fade={firstElementsAnimation}
+            class:hidden={!project.form.title}
+        >
+            {@html project.form.title}
+        </div>
 
-        <div transition:slide={laterElementsAnimation}>
-            {#if lists.length > 1}
-                <div class="lists">
-                    {#each lists as list}
-                        <ListRow {list} />
-                    {/each}
-                </div>
-            {/if}
+        <div
+            class="description"
+            transition:fade={firstElementsAnimation}
+            class:hidden={!project.form.description}
+        >
+            {@html project.form.description}
+        </div>
+
+        <div
+            class="lists"
+            transition:slide={laterElementsAnimation}
+            class:hidden={lists.length === 0}
+        >
+            {#each lists as list (list.id)}
+                <label class="list">
+                    <div class="list-name-description">
+                        <div class="list-name">{list.name}</div>
+                        <div class="list-description">{list.description}</div>
+                    </div>
+                    <div class="list-checkbox">
+                        <input type="checkbox" />
+                    </div>
+                </label>
+            {/each}
         </div>
 
         <div class="input">
@@ -101,6 +118,12 @@
 {/if}
 
 <style>
+    .title.hidden,
+    .lists.hidden,
+    .description.hidden {
+        display: none;
+    }
+
     .form {
         width: 425px;
         margin: 0 auto;
@@ -113,11 +136,17 @@
         font-size: 20px;
         font-weight: 600;
         margin-bottom: 1rem;
-        animation: fade-in 0.6s ease-in-out;
     }
+
+    .description {
+        margin-top: -0.8rem;
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 1.2rem;
+    }
+
     .input {
         position: relative;
-        animation: fade-in 0.6s ease-in-out;
     }
     .email-input {
         padding: 10px 25px;
@@ -150,18 +179,25 @@
     }
 
     .footer {
-        margin-top: 1rem;
+        padding-top: 1rem;
         font-size: 14px;
         color: #666;
     }
 
-    /* fade in */
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
+    .list {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.8em;
+        cursor: pointer;
+    }
+
+    .list-name {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .list-description {
+        font-size: 14px;
+        color: #666;
     }
 </style>

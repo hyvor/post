@@ -22,7 +22,7 @@
     .list {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.8rem;
+        padding: 0.4em 0;
         cursor: pointer;
     }
 
