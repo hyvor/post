@@ -155,7 +155,7 @@ class DomainService
             /*$this->emailTransportService->send(
                 (string)   $domain->getUserId(), // Assuming this is the user's email
                 'Domain Verification Successful',
-                $this->renderTemplate('email/domain_verified.html.twig', [
+                $this->renderTemplate('/templates/email/domain_verified.html.twig', [
                     'domain' => $domain->getDomain()
                 ])
             );*/
