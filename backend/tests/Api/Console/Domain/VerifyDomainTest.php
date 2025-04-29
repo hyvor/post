@@ -17,7 +17,6 @@ use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(DomainController::class)]
 #[CoversClass(DomainService::class)]
-#[CoversClass(CreateDomainInput::class)]
 #[CoversClass(DomainObject::class)]
 class VerifyDomainTest extends WebTestCase
 {

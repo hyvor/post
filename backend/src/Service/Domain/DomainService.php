@@ -173,6 +173,12 @@ class DomainService
         ];
     }
 
+    public function deleteDomain(Domain $domain): void
+    {
+        $this->em->remove($domain);
+        $this->em->flush();
+    }
+
     private function renderTemplate(string $template, array $variables): string
     {
         return $this->twig->render($template, $variables);
