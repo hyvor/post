@@ -29,15 +29,12 @@
 	}
 
 	function startVerificationChecks() {
-		// Check immediately
 		refreshDomains();
 
-		// Then check with exponential backoff
 		checkInterval = window.setInterval(() => {
 			// Only refresh if there are unverified domains
 			if (domains.some(domain => !domain.verified_in_ses)) {
 				refreshDomains();
-				// Double the interval, but don't exceed max
 				currentInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
 			}
 		}, currentInterval);
