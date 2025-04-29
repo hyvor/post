@@ -1,7 +1,13 @@
 <script lang="ts">
-	import { FormControl, Modal, SplitControl, TextInput, Validation, toast } from '@hyvor/design/components';
+	import {
+		FormControl,
+		Modal,
+		SplitControl,
+		TextInput,
+		Validation,
+		toast
+	} from '@hyvor/design/components';
 	import { createDomain } from '../lib/actions/domainActions';
-
 
 	export let show = false;
 	export let onCreate: () => void;
@@ -63,18 +69,16 @@
 	{loading}
 >
 	<FormControl>
-		<SplitControl 
-			label="Domain"
-			caption="Enter the domain name you want to use for your newsletter"
-		>
+		<SplitControl label="Domain" caption="Enter the custom domain you want to add.">
 			<TextInput
 				placeholder="example.com"
 				bind:value={domain}
 				state={domainError ? 'error' : 'default'}
+				block
 			/>
 			{#if domainError}
 				<Validation type="error">{domainError}</Validation>
 			{/if}
 		</SplitControl>
 	</FormControl>
-</Modal> 
+</Modal>
