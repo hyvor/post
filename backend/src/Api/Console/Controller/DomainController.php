@@ -72,4 +72,21 @@ class DomainController extends AbstractController
             throw new BadRequestException('Failed to verify domain: ' . $e->getMessage());
         }
     }
+
+    #[Route('/domains/{id}', methods: 'DELETE')]
+    public function deleteDomain(int $id): JsonResponse
+    {
+        $domain = $this->domainService->getDomainById($id);
+
+        if (!$domain) {
+            throw new BadRequestException('Domain not found');
+        }
+
+        try {
+            $this->domainService->deleteDomain($domain);
+            return $this->json([]);
+        } catch (\Exception $e) {
+            throw new BadRequestException('Failed to delete domain: ' . $e->getMessage());
+        }
+    }
 }
