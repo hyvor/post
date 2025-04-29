@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { Modal, SplitControl } from '@hyvor/design/components';
+	import { Button, Modal, SplitControl, Table, TableRow } from '@hyvor/design/components';
 	import type { Domain } from '../types';
+	import { copyAndToast } from '$lib/helpers/copy';
 
 	export let domain: Domain;
 	export let show: boolean;
@@ -8,38 +9,45 @@
 
 <Modal
 	bind:show
+	size="large"
 	title="DNS Records"
 	on:cancel={() => show = false}
 >
-	<div class="modal-content">
-		<SplitControl label="DKIM Public Key">
-			<pre class="dns-record">{domain.dkim_public_key}</pre>
-		</SplitControl>
-		<SplitControl label="DKIM TXT Name">
-			<pre class="dns-record">{domain.dkim_txt_name}</pre>
-		</SplitControl>
-		<SplitControl label="DKIM TXT Value">
-			<pre class="dns-record">{domain.dkim_txt_value}</pre>
-		</SplitControl>
+	<div class="verify-note">
+		Add the following TXT record to your DNS settings, and click the button above to verify your
+		domain.
 	</div>
+
+	<Table columns="60px 1fr 2fr">
+		<TableRow head>
+			<div>Type</div>
+			<div>Name</div>
+			<div>Value</div>
+		</TableRow>
+		<TableRow>
+			<div>TXT</div>
+			<div>
+				{domain.dkim_txt_name} <br />
+				<Button
+					size="x-small"
+					color="input"
+					on:click={() => copyAndToast(domain.dkim_txt_name)}>COPY</Button
+				>
+			</div>
+			<div style="word-break:break-all">
+				{domain.dkim_txt_value} <br />
+				<Button
+					size="x-small"
+					color="input"
+					on:click={() => copyAndToast(domain.dkim_txt_value)}>COPY</Button
+				>
+			</div>
+		</TableRow>
+	</Table>
 </Modal>
 
 <style>
-	.modal-content {
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.dns-record {
-		background-color: var(--hds-color-background);
-		padding: 10px;
-		border-radius: var(--hds-border-radius);
-		white-space: pre-wrap;
-		word-break: break-all;
-		font-family: monospace;
-		font-size: 14px;
-		margin: 0;
+	.verify-note {
+		margin: 15px 0;
 	}
 </style> 

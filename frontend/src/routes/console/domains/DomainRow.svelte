@@ -1,39 +1,20 @@
 <script lang="ts">
-	import { IconButton, Tag, Tooltip, confirm, toast } from '@hyvor/design/components';
+	import { Button, Modal, SplitControl, Tag, confirm, toast } from '@hyvor/design/components';
 	import { deleteDomain, verifyDomain } from '../lib/actions/domainActions';
 	import type { Domain } from '../types';
-	import IconTrash from '@hyvor/icons/IconTrash';
-    import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
-    import IconDatabase from '@hyvor/icons/IconDatabase';
     import DnsRecordsModal from './DnsRecordsModal.svelte';
-    import { onMount, onDestroy } from 'svelte';
 
 	export let domain: Domain;
 	export let onDelete: () => void;
 
 	let loading = false;
 	let showDnsRecords = false;
-	let verificationInterval: number;
+	let showVerificationDebug = false;
+	let verificationDebug: null | Record<string, string> = null;
 
 	function getVerificationStatusColor(verified: boolean) {
 		return verified ? 'green' : 'red';
 	}
-
-	onMount(() => {
-		if (!domain.verified_in_ses) {
-			verificationInterval = window.setInterval(() => {
-				if (!loading) {
-					handleVerify();
-				}
-			}, 5 * 60 * 1000); // 5 minutes
-		}
-	});
-
-	onDestroy(() => {
-		if (verificationInterval) {
-			clearInterval(verificationInterval);
-		}
-	});
 
 	async function handleDelete() {
 		const confirmation = await confirm({
@@ -66,8 +47,12 @@
 	function handleVerify() {
 		loading = true;
 		verifyDomain(domain.id)
-			.then(() => {
+			.then((res) => {
 				toast.success('Domain verification started');
+				domain = res.domain;
+				if (res.data.verified === false) {
+					verificationDebug = res.data.debug;
+				}
 			})
 			.catch((error: any) => {
 				toast.error(error?.message || 'Failed to verify domain');
@@ -82,64 +67,67 @@
 	<div class="domain-info">
 		<div class="domain-name">{domain.domain}</div>
 		<div class="domain-status">
-			<Tag size="small" color={getVerificationStatusColor(domain.verified_in_ses)}>
+			<Tag 
+				size="small" 
+				color={getVerificationStatusColor(domain.verified_in_ses)}
+				on:click={() => showVerificationDebug = true}
+				interactive={true}
+			>
 				{domain.verified_in_ses ? 'Verified' : 'Not Verified'}
 			</Tag>
 		</div>
-		{#if !domain.verified_in_ses}
-			<div class="dns-records">
-				<div class="dns-record">
-					<div class="label">DKIM Public Key:</div>
-					<pre>{domain.dkim_public_key}</pre>
-				</div>
-				<div class="dns-record">
-					<div class="label">DKIM TXT Name:</div>
-					<pre>{domain.dkim_txt_name}</pre>
-				</div>
-				<div class="dns-record">
-					<div class="label">DKIM TXT Value:</div>
-					<pre>{domain.dkim_txt_value}</pre>
-				</div>
-			</div>
-		{/if}
 	</div>
 	<div class="domain-actions">
-		{#if domain.verified_in_ses}
-			<Tooltip text="View DNS Records">
-				<IconButton
-					size="small"
-					color="input"
-					on:click={() => showDnsRecords = true}
-					{loading}
-				>
-					<IconDatabase size={12} />
-				</IconButton>
-			</Tooltip>
-		{/if}
+		<Button
+			size="small"
+			color="input"
+			on:click={() => showDnsRecords = true}
+			{loading}
+		>
+			View DNS Records
+		</Button>
 		{#if !domain.verified_in_ses}
-			<Tooltip text="Verify Domain">
-				<IconButton
-					size="small"
-					color="input"
-					on:click={handleVerify}
-					{loading}
-				>
-					<IconArrowClockwise size={12} />
-				</IconButton>
-			</Tooltip>
-		{/if}
-		<Tooltip text="Delete Domain">
-			<IconButton
+			<Button
 				size="small"
 				color="input"
-				on:click={handleDelete}
+				on:click={handleVerify}
 				{loading}
 			>
-				<IconTrash size={12} />
-			</IconButton>
-		</Tooltip>
+				Verify Domain
+			</Button>
+		{/if}
+		<Button
+			size="small"
+			color="red"
+			variant="fill-light"
+			on:click={handleDelete}
+			{loading}
+		>
+			Delete Domain
+		</Button>
 	</div>
 </div>
+
+{#if showVerificationDebug}
+	<Modal
+		title="Verification Status"
+		footer={{ confirm: false, cancel: { text: 'Close' } }}
+		on:cancel={() => (showVerificationDebug = false)}
+		show={true}
+	>
+		<p>
+			Domain verification for <strong>{domain.domain}</strong> is {domain.verified_in_ses ? 'verified' : 'not verified'}.
+			{#if !domain.verified_in_ses}
+				Please note that it may take up to 72 hours for the changes to take effect.
+			{/if}
+		</p>
+		{#if verificationDebug}
+			<SplitControl label="Debug Information" column>
+				<pre>{JSON.stringify(verificationDebug, null, 2)}</pre>
+			</SplitControl>
+		{/if}
+	</Modal>
+{/if}
 
 <DnsRecordsModal {domain} bind:show={showDnsRecords} />
 
@@ -170,34 +158,5 @@
 	.domain-actions {
 		display: flex;
 		gap: 5px;
-	}
-
-	.dns-records {
-		margin-top: 10px;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.dns-record {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-
-	.dns-record .label {
-		font-size: 12px;
-		color: var(--hds-color-text-light);
-	}
-
-	.dns-record pre {
-		background-color: var(--hds-color-background);
-		padding: 8px;
-		border-radius: var(--hds-border-radius);
-		white-space: pre-wrap;
-		word-break: break-all;
-		font-family: monospace;
-		font-size: 12px;
-		margin: 0;
 	}
 </style> 

@@ -26,7 +26,7 @@
 		// Check immediately
 		refreshDomains();
 
-		// Then check every 5 minutes
+		// Then check every 5 minutes to handle verification delays
 		checkInterval = window.setInterval(() => {
 			// Only refresh if there are unverified domains
 			if (domains.some(domain => !domain.verified_in_ses)) {
