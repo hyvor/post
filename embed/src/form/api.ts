@@ -1,7 +1,7 @@
 
 export function apiFromInstance(instance: string) {
 
-    return async function (path: string, params: Record<string, any> = {}) {
+    return async function <T>(path: string, params: Record<string, any> = {}): Promise<T> {
 
         path = path.replace(/^\//, "");
         

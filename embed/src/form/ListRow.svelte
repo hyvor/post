@@ -1,0 +1,38 @@
+<script lang="ts">
+    import type { List } from "./types";
+
+    interface Props {
+        list: List;
+    }
+
+    let { list }: Props = $props();
+</script>
+
+<label class="list">
+    <div class="name-description">
+        <div class="name">{list.name}</div>
+        <div class="description">{list.description}</div>
+    </div>
+    <div class="checkbox">
+        <input type="checkbox" />
+    </div>
+</label>
+
+<style>
+    .list {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.8rem;
+        cursor: pointer;
+    }
+
+    .name {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .description {
+        font-size: 14px;
+        color: #666;
+    }
+</style>

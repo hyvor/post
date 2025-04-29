@@ -3,6 +3,8 @@
     import Skeleton from "./Skeleton.svelte";
     import { fade, slide } from "svelte/transition";
     import { apiFromInstance } from "./api";
+    import type { List, Project } from "./types";
+    import ListRow from "./ListRow.svelte";
 
     interface Props {
         projectUuid: string;
@@ -11,25 +13,28 @@
 
     let { projectUuid, instance }: Props = $props();
     let loading = $state(true);
-    // let lists: List[] = $state([]);
 
-    const lists = [
-        { id: 1, name: "PHP", description: "Get the latest PHP news" },
-        {
-            id: 2,
-            name: "Typescript",
-            description: "Get the latest Typescript news",
-        },
-    ];
+    let project: Project = $state({} as Project);
+    let lists: List[] = $state([]);
 
     const api = apiFromInstance(instance);
 
+    interface InitResponse {
+        project: Project;
+        lists: List[];
+    }
+
     onMount(() => {
-        api("/init", {
+        api<InitResponse>("/init", {
             project_uuid: projectUuid,
-        }).finally(() => {
-            loading = false;
-        });
+        })
+            .then((response) => {
+                project = response.project;
+                lists = response.lists;
+            })
+            .finally(() => {
+                loading = false;
+            });
     });
 
     /**
@@ -57,38 +62,40 @@
     <Skeleton />
 {:else}
     <div class="form">
-        <div class="title" transition:fade={firstElementsAnimation}>
-            Subscribe for updates
-        </div>
-
-        {#if lists.length > 1}
-            <div class="lists" transition:slide={laterElementsAnimation}>
-                {#each lists as list}
-                    <label class="list">
-                        <div class="name-description">
-                            <div class="name">{list.name}</div>
-                            <div class="description">{list.description}</div>
-                        </div>
-                        <div class="checkbox">
-                            <input type="checkbox" />
-                        </div>
-                    </label>
-                {/each}
+        {#if project.form.title}
+            <div class="title">
+                {project.form.title}
             </div>
         {/if}
 
-        <div class="input" transition:fade={firstElementsAnimation}>
+        <div transition:slide={laterElementsAnimation}>
+            {#if lists.length > 1}
+                <div class="lists">
+                    {#each lists as list}
+                        <ListRow {list} />
+                    {/each}
+                </div>
+            {/if}
+        </div>
+
+        <div class="input">
             <input
                 type="email"
                 name="email"
                 placeholder="Your Email"
                 class="email-input"
             />
-            <button> Subscribe </button>
+            <button>
+                {project.form.button_text || "Subscribe"}
+            </button>
         </div>
 
-        <div class="footer" transition:slide={laterElementsAnimation}>
-            By subscribing, you agree to our privacy policy.
+        <div transition:slide={laterElementsAnimation}>
+            {#if project.form.footer_text}
+                <div class="footer">
+                    {@html project.form.footer_text}
+                </div>
+            {/if}
         </div>
     </div>
 {/if}
@@ -106,9 +113,11 @@
         font-size: 20px;
         font-weight: 600;
         margin-bottom: 1rem;
+        animation: fade-in 0.6s ease-in-out;
     }
     .input {
         position: relative;
+        animation: fade-in 0.6s ease-in-out;
     }
     .email-input {
         padding: 10px 25px;
@@ -140,26 +149,19 @@
         margin-bottom: 1.2rem;
     }
 
-    .list {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.8rem;
-        cursor: pointer;
-    }
-
-    .name {
-        font-size: 16px;
-        font-weight: 600;
-    }
-
-    .description {
-        font-size: 14px;
-        color: #666;
-    }
-
     .footer {
         margin-top: 1rem;
         font-size: 14px;
         color: #666;
+    }
+
+    /* fade in */
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
     }
 </style>
