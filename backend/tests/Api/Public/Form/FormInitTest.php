@@ -4,7 +4,7 @@ namespace App\Tests\Api\Public\Form;
 
 use App\Api\Public\Controller\Form\FormController;
 use App\Api\Public\Object\Form\FormListObject;
-use App\Api\Public\Object\Form\FormProjectObject;
+use App\Api\Public\Object\Form\Project\FormProjectObject;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
