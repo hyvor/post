@@ -8,6 +8,7 @@ use App\Service\Issue\EmailTransportService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 
 class DomainService
@@ -20,7 +21,9 @@ class DomainService
         private EntityManagerInterface $em,
         private SesService $sesService,
         private EmailTransportService $emailTransportService,
-        private Environment $twig
+        private Environment $twig,
+        #[Autowire('%kernel.project_dir%')]
+        private string $projectDir,
     ) {
     }
 
@@ -121,7 +124,7 @@ class DomainService
     /**
      * @return array{verified: bool, debug: null | array{last_checked_at: string, error_type: string}}
      */
-    public function verifyDomain(Domain $domain): array
+    public function verifyDomain(Domain $domain, string $userEmail): array
     {
         try {
             $client = $this->sesService->getClient();
@@ -151,14 +154,14 @@ class DomainService
             $domain->setVerifiedInSes(true);
             $domain->setUpdatedAt($this->now());
 
+            // TODO: Use template in the future
+            $templatePath = $this->projectDir . '/templates/email/domain_verified.twig';
             // Send verification success email
-            /*$this->emailTransportService->send(
-                (string)   $domain->getUserId(), // Assuming this is the user's email
+            $this->emailTransportService->send(
+                $userEmail,
                 'Domain Verification Successful',
-                $this->renderTemplate('/templates/email/domain_verified.html.twig', [
-                    'domain' => $domain->getDomain()
-                ])
-            );*/
+                "Domain verification was successful for {$domain->getDomain()}",
+            );
         }
 
         $this->em->persist($domain);

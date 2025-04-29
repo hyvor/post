@@ -69,6 +69,7 @@ class VerifyDomainTest extends WebTestCase
             'POST',
             '/domains/verify/' . $domain->getId(),
         );
+        dd($response);
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
