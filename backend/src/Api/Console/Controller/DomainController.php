@@ -6,7 +6,9 @@ use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
 use App\Service\Domain\CreateDomainException;
+use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
+use App\Service\Domain\VerifyDomainException;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -69,15 +71,14 @@ class DomainController extends AbstractController
         }
 
         try {
-            $user = $this->getUser();
-            assert($user instanceof AuthUser);
+            $user = $this->getHyvorUser();
             $result = $this->domainService->verifyDomain($domain, $user->email);
             return $this->json([
                 'data' => $result,
                 'domain' => new DomainObject($domain),
             ]);
-        } catch (\Exception $e) {
-            throw new BadRequestException('Failed to verify domain: ' . $e->getMessage());
+        } catch (VerifyDomainException) {
+            throw new BadRequestException('Failed to verify domain. Contact support for more details');
         }
     }
 
@@ -93,7 +94,7 @@ class DomainController extends AbstractController
         try {
             $this->domainService->deleteDomain($domain);
             return $this->json([]);
-        } catch (\Exception $e) {
+        } catch (DeleteDomainException $e) {
             throw new BadRequestException('Failed to delete domain: ' . $e->getMessage());
         }
     }

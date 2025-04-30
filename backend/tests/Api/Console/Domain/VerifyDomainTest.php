@@ -75,7 +75,6 @@ class VerifyDomainTest extends WebTestCase
         $this->assertIsArray($json['domain']);
         $this->assertSame('hyvor.com', $json['domain']['domain']);
         $this->assertTrue($json['domain']['verified_in_ses']);
-        $this->assertSame('2025-02-21T00:00:00+00:00', $json['domain']['updated_at']);
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);

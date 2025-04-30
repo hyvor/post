@@ -194,7 +194,6 @@ class SendService
             $send->setComplainedAt($updates->complainedAt);
         }
 
-
         if ($updates->hasProperty('firstOpenedAt')) {
             $send->setFirstOpenedAt($updates->firstOpenedAt);
         }
