@@ -10,7 +10,7 @@ class DomainObject
     public int $id;
     public int $created_at;
     public string $domain;
-    public ?string $dkim_public_key;
+    public string $dkim_public_key;
     public string $dkim_txt_name;
     public string $dkim_txt_value;
 
