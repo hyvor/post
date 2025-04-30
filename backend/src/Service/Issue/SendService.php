@@ -182,7 +182,7 @@ class SendService
             $send->setDeliveredAt($updates->deliveredAt);
         }
 
-        if ($updates->hasProperty('firstClickAt')) {
+        if ($updates->hasProperty('firstClickedAt')) {
             $send->setFirstClickedAt($updates->firstClickedAt);
         }
 
