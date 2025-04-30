@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Switch from "./Switch.svelte";
     import type { List } from "./types";
 
     interface Props {
@@ -14,7 +15,7 @@
         <div class="description">{list.description}</div>
     </div>
     <div class="checkbox">
-        <input type="checkbox" />
+        <Switch checked={true} />
     </div>
 </label>
 

@@ -32,5 +32,11 @@ class ProjectMeta
     public ?string $form_footer_text = null;
     public ?string $form_button_text = null;
     public ?string $form_success_message = null;
+    public ?string $form_color_text = null; // null = inherit
+    public ?string $form_color_text_light = null;
+    public ?string $form_color_accent = null;
+    public ?string $form_color_accent_text = null;
+    public ?string $form_color_input = null;
+    public ?string $form_color_input_text = null;
 
 }
