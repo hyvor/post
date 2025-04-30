@@ -69,7 +69,6 @@ class VerifyDomainTest extends WebTestCase
             'POST',
             '/domains/verify/' . $domain->getId(),
         );
-        dd($response);
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
@@ -77,6 +76,10 @@ class VerifyDomainTest extends WebTestCase
         $this->assertSame('hyvor.com', $json['domain']['domain']);
         $this->assertTrue($json['domain']['verified_in_ses']);
         $this->assertSame('2025-02-21T00:00:00+00:00', $json['domain']['updated_at']);
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, 'Domain Verification Successful');
     }
 
     public function test_already_verified(): void
