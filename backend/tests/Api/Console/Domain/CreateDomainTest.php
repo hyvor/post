@@ -14,6 +14,7 @@ use App\Tests\Factory\ProjectFactory;
 use Aws\Command;
 use Aws\Exception\AwsException;
 use Aws\SesV2\SesV2Client;
+use Doctrine\Common\Collections\ArrayCollection;
 use Monolog\Handler\TestHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -159,5 +160,13 @@ class CreateDomainTest extends WebTestCase
         $json = $this->getJson($response);
         $this->assertSame('Failed to create domain. Contact support for more details', $json['message']);
 
+        // logging
+        $testLogger = $this->getTestLogger();
+        $this->assertTrue($testLogger->hasCriticalThatContains('Failed to create email domain in AWS SES'));
+        $record = new ArrayCollection($testLogger->getRecords())
+            ->findFirst(fn ($index, $record) => $record->message === 'Failed to create email domain in AWS SES');
+        $this->assertNotNull($record);
+        $this->assertSame('hyvor.com', $record->context['domain']);
+        $this->assertInstanceOf(AwsException::class, $record->context['error']);
     }
 }
