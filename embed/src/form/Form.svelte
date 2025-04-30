@@ -4,6 +4,7 @@
     import { fade, slide } from "svelte/transition";
     import { apiFromInstance } from "./api";
     import type { List, Project } from "./types";
+    import Switch from "./Switch.svelte";
 
     interface Props {
         projectUuid: string;
@@ -88,9 +89,7 @@
                         <div class="list-name">{list.name}</div>
                         <div class="list-description">{list.description}</div>
                     </div>
-                    <div class="list-checkbox">
-                        <input type="checkbox" />
-                    </div>
+                    <Switch checked={true} />
                 </label>
             {/each}
         </div>
@@ -118,20 +117,25 @@
 {/if}
 
 <style>
+    .form {
+        width: 425px;
+        margin: 0 auto;
+        max-width: 100%;
+
+        --hp-accent: #000;
+        --hp-accent-light: #dedede;
+        --hp-accent-text: #fff;
+    }
+    .form :global(*) {
+        box-sizing: border-box;
+    }
+
     .title.hidden,
     .lists.hidden,
     .description.hidden {
         display: none;
     }
 
-    .form {
-        width: 425px;
-        margin: 0 auto;
-        max-width: 100%;
-    }
-    .form :global(*) {
-        box-sizing: border-box;
-    }
     .title {
         font-size: 20px;
         font-weight: 600;
