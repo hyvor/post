@@ -14,9 +14,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\UnicodeString;
+use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
 final class ProjectController extends AbstractController
 {
+    use HasHyvorUser;
 
     public function __construct(
         private ProjectService $projectService
@@ -27,8 +29,7 @@ final class ProjectController extends AbstractController
     #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
     public function getUserAllProjects(): JsonResponse
     {
-        $user = $this->getUser();
-        assert($user instanceof AuthUser);
+        $user = $this->getHyvorUser();
         $projects = $this->projectService->getProjectsOfUser($user->id);
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }

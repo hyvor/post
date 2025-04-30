@@ -25,10 +25,10 @@ class Domain
     private string $domain;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $dkim_public_key = null;
+    private string $dkim_public_key;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $dkim_private_key = null;
+    private string $dkim_private_key;
 
     #[ORM\Column]
     private int $user_id;
@@ -48,7 +48,7 @@ class Domain
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -84,7 +84,7 @@ class Domain
         return $this;
     }
 
-    public function getDkimPublicKey(): ?string
+    public function getDkimPublicKey(): string
     {
         return $this->dkim_public_key;
     }
@@ -96,7 +96,7 @@ class Domain
         return $this;
     }
 
-    public function getDkimPrivateKey(): ?string
+    public function getDkimPrivateKey(): string
     {
         return $this->dkim_private_key;
     }

@@ -7,6 +7,7 @@ use App\Service\Integration\Aws\SesService;
 use App\Service\Issue\EmailTransportService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
@@ -24,6 +25,7 @@ class DomainService
         private Environment $twig,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -67,7 +69,10 @@ class DomainService
         return 'p=' . $publicKey;
     }
 
-    private function createAwsDomain(string $domain, string $privateKeyString): bool
+    /**
+     * @throws CreateDomainException
+     */
+    private function createAwsDomain(string $domain, string $privateKeyString): void
     {
         try {
             $client = $this->sesService->getClient();
@@ -79,29 +84,31 @@ class DomainService
                 ]
             ]);
         } catch (AwsException $e) {
-            throw new \Exception('Failed to create email domain: ' . $e->getAwsErrorMessage());
+            $this->logger->critical('Failed to create email domain', [
+                'domain' => $domain,
+                'error' => $e->getAwsErrorMessage(),
+                'code' => $e->getAwsErrorCode(),
+            ]);
+
+            throw new CreateDomainException(previous: $e);
         }
-        return true;
     }
 
+    /**
+     * @throws CreateDomainException
+     */
     public function createDomain(string $domain, int $userId): Domain
     {
         $privateKey = openssl_pkey_new([
             'private_key_bits' => 2048,
             'private_key_type' => OPENSSL_KEYTYPE_RSA
         ]);
-
-        if ($privateKey === false) {
-            throw new \Exception('Failed to generate private key');
-        }
+        assert($privateKey !== false);
 
         openssl_pkey_export($privateKey, $privateKeyString);
 
         $details = openssl_pkey_get_details($privateKey);
-
-        if ($details === false) {
-            throw new \Exception('Failed to get private key details');
-        }
+        assert($details !== false);
 
         $publicKey = $details['key'];
 
