@@ -35,6 +35,7 @@ class GetDomainsTest extends WebTestCase
     public function testListDomainsNonEmpty(): void
     {
         $domains = DomainFactory::createMany(5, ['user_id' => 1]);
+        DomainFactory::createMany(1, ['user_id' => 2]);
 
         $response = $this->consoleApi(
             null,

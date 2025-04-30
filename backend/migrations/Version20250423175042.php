@@ -24,9 +24,9 @@ final class Version20250423175042 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            domain TEXT NOT NULL,
-            dkim_public_key TEXT,
-            dkim_private_key TEXT,
+            domain TEXT NOT NULL UNIQUE,
+            dkim_public_key TEXT NOT NULL,
+            dkim_private_key TEXT NOT NULL,
             user_id BIGINT NOT NULL,
             verified_in_ses BOOLEAN DEFAULT FALSE
         );

@@ -8,6 +8,7 @@ use App\Service\Domain\DomainService;
 class DomainObject
 {
     public int $id;
+    public int $created_at;
     public string $domain;
     public ?string $dkim_public_key;
     public string $dkim_txt_name;
@@ -25,16 +26,14 @@ class DomainObject
 
     public bool $requested_by_current_website;
 
-    public \DateTimeImmutable $updated_at;
-
     public function __construct(Domain $domain)
     {
         $this->id = $domain->getId();
+        $this->created_at = $domain->getCreatedAt()->getTimestamp();
         $this->domain = $domain->getDomain();
         $this->dkim_public_key = $domain->getDkimPublicKey();
         $this->dkim_txt_name = DomainService::DKIM_SELECTOR . '._domainkey.' . $domain->getDomain();
         $this->dkim_txt_value = DomainService::getDkimTxtValue($domain->getDkimPublicKey());
         $this->verified_in_ses = $domain->isVerifiedInSes();
-        $this->updated_at = $domain->getUpdatedAt();
     }
 }

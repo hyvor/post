@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
+use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DomainService;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +14,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
 class DomainController extends AbstractController
 {
+
+    use HasHyvorUser;
+
     public function __construct(
         private DomainService $domainService
     ) {
@@ -24,9 +29,7 @@ class DomainController extends AbstractController
     #[Route('/domains', methods: 'GET')]
     public function getDomains(): JsonResponse
     {
-        $user = $this->getUser();
-        assert($user instanceof AuthUser);
-
+        $user = $this->getHyvorUser();
         $domains = $this->domainService->getDomainsByUserId($user->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
@@ -34,18 +37,21 @@ class DomainController extends AbstractController
     #[Route('/domains', methods: 'POST')]
     public function createDomain(#[MapRequestPayload] CreateDomainInput $input): JsonResponse
     {
+        $user = $this->getHyvorUser();
         $domainInDb = $this->domainService->getDomainByDomainName($input->domain);
+
         if ($domainInDb) {
-            throw new BadRequestException('Domain already exists');
+            throw new BadRequestException($domainInDb->getUserId() === $user->id ?
+                'This domain is already registered' :
+                'This domain is already registered by another user'
+            );
         }
 
         try {
-            $user = $this->getUser();
-            assert($user instanceof AuthUser);
             $domain = $this->domainService->createDomain($input->domain, $user->id);
             return $this->json(new DomainObject($domain));
-        } catch (\Exception $e) {
-            throw new BadRequestException('Failed to create domain: ' . $e->getMessage());
+        } catch (CreateDomainException) {
+            throw new BadRequestException('Failed to create domain. Contact support for more details');
         }
     }
 
