@@ -3,7 +3,7 @@
 namespace App\Service\Domain;
 
 use App\Entity\Domain;
-use App\Service\Integration\Aws\SesService;
+use App\Service\Integration\Aws\AwsDomainService;
 use App\Service\Issue\EmailTransportService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,13 +16,10 @@ class DomainService
 {
     use ClockAwareTrait;
 
-    public const DKIM_SELECTOR = 'hyvor-post';
-
     public function __construct(
         private EntityManagerInterface $em,
-        private SesService $sesService,
         private EmailTransportService $emailTransportService,
-        private Environment $twig,
+        private AwsDomainService $awsDomainService,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
         private LoggerInterface $logger
@@ -47,50 +44,10 @@ class DomainService
         return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
     }
 
-    /**
-     * This function formats the key to be used in AWS
-     * as well as in DKIM DNS records.
-     */
-    private static function cleanKey(string $key): string
-    {
-        return str_replace([
-            '-----BEGIN PUBLIC KEY-----',
-            '-----END PUBLIC KEY-----',
-            '-----BEGIN PRIVATE KEY-----',
-            '-----END PRIVATE KEY-----',
-            "\n",
-            "\r"
-        ], '', $key);
-    }
-
     public static function getDkimTxtValue(string $publicKey): string
     {
-        $publicKey = self::cleanKey($publicKey);
+        $publicKey = AwsDomainService::cleanKey($publicKey);
         return 'p=' . $publicKey;
-    }
-
-    /**
-     * @throws CreateDomainException
-     */
-    private function createAwsDomain(string $domain, string $privateKeyString): void
-    {
-        try {
-            $client = $this->sesService->getClient();
-            $client->createEmailIdentity([
-                'EmailIdentity' => $domain,
-                'DkimSigningAttributes' => [
-                    'DomainSigningSelector' => self::DKIM_SELECTOR,
-                    'DomainSigningPrivateKey' => self::cleanKey($privateKeyString)
-                ]
-            ]);
-        } catch (AwsException $e) {
-            $this->logger->critical('Failed to create email domain in AWS SES', [
-                'domain' => $domain,
-                'error' => $e,
-            ]);
-
-            throw new CreateDomainException(previous: $e);
-        }
     }
 
     /**
@@ -111,16 +68,23 @@ class DomainService
 
         $publicKey = $details['key'];
 
-        $this->createAwsDomain($domain, $privateKeyString);
+        try {
+            $this->awsDomainService->createAwsDomain($domain, $privateKeyString);
+        } catch (AwsException $e) {
+            $this->logger->critical('Failed to create email domain in AWS SES', [
+                'domain' => $domain,
+                'error' => $e,
+            ]);
+            throw new CreateDomainException(previous: $e);
+        }
 
         $domainEntity = new Domain();
         $domainEntity->setDomain($domain);
         $domainEntity->setUserId($userId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
-        $domainEntity->setDkimPublicKey(self::cleanKey($publicKey));
-        $domainEntity->setDkimPrivateKey(self::cleanKey($privateKeyString));
-
+        $domainEntity->setDkimPublicKey(AwsDomainService::cleanKey($publicKey));
+        $domainEntity->setDkimPrivateKey(AwsDomainService::cleanKey($privateKeyString));
         $this->em->persist($domainEntity);
         $this->em->flush();
 
@@ -129,28 +93,18 @@ class DomainService
 
     /**
      * @return array{verified: bool, debug: null | array{last_checked_at: string, error_type: string}}
+     * @throws VerifyDomainException
      */
     public function verifyDomain(Domain $domain, string $userEmail): array
     {
         try {
-            $client = $this->sesService->getClient();
-
-            /**
-             * @var array{
-             *     VerifiedForSendingStatus: bool,
-             *     VerificationInfo: array{
-             *      VerificationStatus: string,
-             *      VerificationToken: string,
-             *      LastCheckedTimestamp: string | null,
-             *      ErrorType: string | null,
-             *    }
-             * } $result
-             */
-            $result = $client->getEmailIdentity([
-                'EmailIdentity' => $domain->getDomain()
-            ]);
+            $result = $this->awsDomainService->verifyAwsDomain($domain->getDomain());
         } catch (AwsException $e) {
-            throw new \Exception('Failed to verify email domain: ' . $e->getAwsErrorMessage());
+            $this->logger->critical('Failed to create email domain in AWS SES', [
+                'domain' => $domain,
+                'error' => $e,
+            ]);
+            throw new VerifyDomainException(previous: $e);
         }
 
         $verified = $result['VerifiedForSendingStatus'];
@@ -182,14 +136,26 @@ class DomainService
         ];
     }
 
+    /**
+     * @throws DeleteDomainException
+     */
     public function deleteDomain(Domain $domain): void
     {
-        $this->em->remove($domain);
-        $this->em->flush();
-    }
-
-    private function renderTemplate(string $template, array $variables): string
-    {
-        return $this->twig->render($template, $variables);
+        try {
+            $this->awsDomainService->deleteAwsDomain($domain->getDomain());
+        } catch (AwsException $e) {
+            $this->logger->critical('Failed to delete email domain in AWS SES', [
+                'domain' => $domain,
+                'error' => $e,
+            ]);
+            throw new DeleteDomainException(previous: $e);
+        }
+        try {
+            $this->em->remove($domain);
+            $this->em->flush();
+        }
+        catch (\Exception $e) {
+            throw new DeleteDomainException(previous: $e);
+        }
     }
 }
