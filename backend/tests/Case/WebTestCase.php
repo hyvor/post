@@ -5,6 +5,7 @@ namespace App\Tests\Case;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DependencyInjection\Container;
@@ -57,6 +58,9 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $this->client->getResponse();
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function publicApi(
         string $method,
         string $uri,
@@ -113,6 +117,13 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $this->assertTrue($found, 'Violation not found');
 
+    }
+
+    public function getTestLogger(): TestHandler
+    {
+        $logger = $this->container->get('monolog.handler.test');
+        $this->assertInstanceOf(TestHandler::class, $logger);
+        return $logger;
     }
 
 

@@ -84,10 +84,9 @@ class DomainService
                 ]
             ]);
         } catch (AwsException $e) {
-            $this->logger->critical('Failed to create email domain', [
+            $this->logger->critical('Failed to create email domain in AWS SES', [
                 'domain' => $domain,
-                'error' => $e->getAwsErrorMessage(),
-                'code' => $e->getAwsErrorCode(),
+                'error' => $e,
             ]);
 
             throw new CreateDomainException(previous: $e);
