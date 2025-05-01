@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Domain;
+namespace App\Tests\Api\Console\Domain;
 
 use App\Api\Console\Controller\DomainController;
 use App\Api\Console\Input\Domain\CreateDomainInput;
@@ -57,12 +57,7 @@ class DeleteDomainTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
+        $this->getJson($response);
 
         $repository = $this->em->getRepository(Domain::class);
         $find = $repository->find($domain_id);
@@ -80,5 +75,14 @@ class DeleteDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertSame('Domain not found', $json['message']);
+    }
+
+    public function test_user_can_only_delete_their_domains(): void
+    {
+        // TODO:
+        $this->markTestSkipped();
     }
 }
