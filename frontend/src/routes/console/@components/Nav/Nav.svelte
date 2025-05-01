@@ -1,6 +1,9 @@
 <script>
+	import { onMount } from 'svelte';
+	import { projectStore } from '../../lib/stores/projectStore';
 	import AccountNav from './AccountNav.svelte';
 	import ProjectNav from './ProjectNav.svelte';
+
 </script>
 
 <div id="nav">

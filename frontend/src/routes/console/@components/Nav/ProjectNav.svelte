@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { NavLink, Tag } from '@hyvor/design/components';
+	import { NavLink, Tag, toast } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
@@ -8,8 +8,21 @@
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+	import { loadProject } from '../../lib/projectLoader';
+	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
 
 	let width: number;
+
+	onMount(() => {
+		if ($projectStore === undefined) {
+			loadProject($userProjectsStore[0].id.toString())
+			.catch((e) => {
+				toast.error('Unable to load project');
+			});
+		}
+
+	});
 </script>
 
 <svelte:window bind:innerWidth={width} />

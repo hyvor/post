@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Button, Modal, SplitControl, Tag, confirm, toast } from '@hyvor/design/components';
+	import { Button, IconButton, Modal, SplitControl, Tag, Tooltip, confirm, toast } from '@hyvor/design/components';
 	import { deleteDomain, verifyDomain } from '../lib/actions/domainActions';
 	import type { Domain } from '../types';
     import DnsRecordsModal from './DnsRecordsModal.svelte';
+	import IconTrash from '@hyvor/icons/IconTrash';
 
 	export let domain: Domain;
 	export let onDelete: () => void;
@@ -96,15 +97,18 @@
 				Verify Domain
 			</Button>
 		{/if}
-		<Button
+		<Tooltip
+			text="Delete Domain"
+		>
+			<IconButton
 			size="small"
 			color="red"
 			variant="fill-light"
 			on:click={handleDelete}
-			{loading}
 		>
-			Delete Domain
-		</Button>
+				<IconTrash />
+			</IconButton>
+		</Tooltip>
 	</div>
 </div>
 
