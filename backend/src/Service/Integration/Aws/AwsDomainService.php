@@ -2,8 +2,20 @@
 
 namespace App\Service\Integration\Aws;
 
+use App\Service\Domain\DomainService;
 use Aws\Exception\AwsException;
 
+/**
+ * @phpstan-type VerifyAwsDomainResult array{
+ *      VerifiedForSendingStatus: bool,
+ *      VerificationInfo: array{
+ *       VerificationStatus: string,
+ *       VerificationToken: string,
+ *       LastCheckedTimestamp: string | null,
+ *       ErrorType: string | null,
+ *     }
+ * }
+ */
 class AwsDomainService
 {
     public function __construct(
@@ -12,56 +24,37 @@ class AwsDomainService
     {
     }
 
-    public const DKIM_SELECTOR = 'hyvor-post';
-
-    /**
-     * This function formats the key to be used in AWS
-     * as well as in DKIM DNS records.
-     */
-    public static function cleanKey(string $key): string
-    {
-        return str_replace([
-            '-----BEGIN PUBLIC KEY-----',
-            '-----END PUBLIC KEY-----',
-            '-----BEGIN PRIVATE KEY-----',
-            '-----END PRIVATE KEY-----',
-            "\n",
-            "\r"
-        ], '', $key);
-    }
-
     /**
      * @throws AwsException
      */
-    public function createAwsDomain(string $domain, string $privateKeyString): void
+    public function createAwsDomain(
+        string $domain,
+        string $privateKey,
+        string $dkimSelector
+    ): void
     {
         $client = $this->sesService->getClient();
         $client->createEmailIdentity([
             'EmailIdentity' => $domain,
             'DkimSigningAttributes' => [
-                'DomainSigningSelector' => self::DKIM_SELECTOR,
-                'DomainSigningPrivateKey' => self::cleanKey($privateKeyString)
+                'DomainSigningSelector' => $dkimSelector,
+                'DomainSigningPrivateKey' => $privateKey
             ]
         ]);
     }
 
     /**
-     * @return array{
-     *     VerifiedForSendingStatus: bool,
-     *     VerificationInfo: array{
-     *      VerificationStatus: string,
-     *      VerificationToken: string,
-     *      LastCheckedTimestamp: string | null,
-     *      ErrorType: string | null,
-     *    }
-     * } $result
+     * @return VerifyAwsDomainResult $result
      */
     public function verifyAwsDomain(string $domain): array
     {
         $client = $this->sesService->getClient();
+
+        /** @var VerifyAwsDomainResult $result */
         $result = $client->getEmailIdentity([
             'EmailIdentity' => $domain,
-        ]);
+        ])->toArray();
+
         return $result;
     }
 

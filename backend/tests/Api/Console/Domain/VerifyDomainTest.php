@@ -1,15 +1,15 @@
 <?php
 
-namespace Api\Console\Domain;
+namespace App\Tests\Api\Console\Domain;
 
 use App\Api\Console\Controller\DomainController;
-use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
+use Aws\Result;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -35,13 +35,13 @@ class VerifyDomainTest extends WebTestCase
             })
         )
             ->willReturn(
-                [
+                new Result([
                     'VerifiedForSendingStatus' => true,
                     'VerificationInfo' => [
                         'LastCheckedTimestamp' => '2025-02-21T00:00:00Z',
                         'error_type' => 'None',
                     ]
-                ]
+                ])
             )
         ;
 
@@ -124,5 +124,10 @@ class VerifyDomainTest extends WebTestCase
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertSame('Domain not found', $json['message']);
+    }
+
+    public function test_user_can_only_verify_their_domain(): void
+    {
+        // TODO :
     }
 }
