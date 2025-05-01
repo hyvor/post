@@ -16,6 +16,8 @@ class DomainService
 {
     use ClockAwareTrait;
 
+    public const DKIM_SELECTOR = 'hyvor-post';
+
     public function __construct(
         private EntityManagerInterface $em,
         private EmailTransportService $emailTransportService,
@@ -46,8 +48,24 @@ class DomainService
 
     public static function getDkimTxtValue(string $publicKey): string
     {
-        $publicKey = AwsDomainService::cleanKey($publicKey);
+        $publicKey = self::cleanKey($publicKey);
         return 'p=' . $publicKey;
+    }
+
+    /**
+     * This function formats the key to be used in AWS
+     * as well as in DKIM DNS records.
+     */
+    public static function cleanKey(string $key): string
+    {
+        return str_replace([
+            '-----BEGIN PUBLIC KEY-----',
+            '-----END PUBLIC KEY-----',
+            '-----BEGIN PRIVATE KEY-----',
+            '-----END PRIVATE KEY-----',
+            "\n",
+            "\r"
+        ], '', $key);
     }
 
     /**
@@ -69,7 +87,11 @@ class DomainService
         $publicKey = $details['key'];
 
         try {
-            $this->awsDomainService->createAwsDomain($domain, $privateKeyString);
+            $this->awsDomainService->createAwsDomain(
+                $domain,
+                self::cleanKey($privateKeyString),
+                self::DKIM_SELECTOR
+            );
         } catch (AwsException $e) {
             $this->logger->critical('Failed to create email domain in AWS SES', [
                 'domain' => $domain,
@@ -83,8 +105,8 @@ class DomainService
         $domainEntity->setUserId($userId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
-        $domainEntity->setDkimPublicKey(AwsDomainService::cleanKey($publicKey));
-        $domainEntity->setDkimPrivateKey(AwsDomainService::cleanKey($privateKeyString));
+        $domainEntity->setDkimPublicKey(self::cleanKey($publicKey));
+        $domainEntity->setDkimPrivateKey(self::cleanKey($privateKeyString));
         $this->em->persist($domainEntity);
         $this->em->flush();
 
@@ -111,6 +133,7 @@ class DomainService
         $info = $result['VerificationInfo'];
 
         if ($verified) {
+            // use a separate method with DTO
             $domain->setVerifiedInSes(true);
             $domain->setUpdatedAt($this->now());
 

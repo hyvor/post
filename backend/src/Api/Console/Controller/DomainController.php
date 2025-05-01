@@ -9,7 +9,6 @@ use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\VerifyDomainException;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,6 +56,7 @@ class DomainController extends AbstractController
         }
     }
 
+    // TODO: /domains/{id}/verify
     #[Route('/domains/verify/{id}', methods: 'POST')]
     public function verifyDomain(int $id): JsonResponse
     {
@@ -65,6 +65,8 @@ class DomainController extends AbstractController
         if (!$domain) {
             throw new BadRequestException('Domain not found');
         }
+
+        // TODO: check if the user is the owner of the domain
 
         if ($domain->isVerifiedInSes()) {
             throw new UnprocessableEntityHttpException('Domain already verified');
