@@ -11,9 +11,9 @@ use App\Entity\Subscriber;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\String\UnicodeString;
+use Symfony\Component\Uid\Uuid;
 
 class ProjectService
 {
