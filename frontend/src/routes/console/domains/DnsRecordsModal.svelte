@@ -11,6 +11,12 @@
 	bind:show
 	size="large"
 	title="DNS Records"
+	footer={{
+        cancel: {
+            text: 'Close',
+        }, 
+		confirm: false
+    }}
 	on:cancel={() => show = false}
 >
 	<div class="verify-note">

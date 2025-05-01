@@ -3,15 +3,18 @@
 	import DomainRow from './DomainRow.svelte';
 	import { getDomains } from '../lib/actions/domainActions';
 	import type { Domain } from '../types';
+	import { IconMessage } from '@hyvor/design/components';
 
 	let domains: Domain[] = [];
 	let loading = false;
+	let isInitialLoad = true;
 	let checkInterval: number;
 	let currentInterval = 30 * 1000; // Start with 30 seconds
 	const MAX_INTERVAL = 3 * 60 * 1000; // Max 3 minutes
 
-	export function refreshDomains() {
-		loading = true;
+	export function refreshDomains(refresh = false) {
+		if (!refresh && isInitialLoad)
+			loading = true;
 		getDomains()
 			.then((res) => {
 				domains = res;
@@ -25,6 +28,7 @@
 			})
 			.finally(() => {
 				loading = false;
+				isInitialLoad = false;
 			});
 	}
 
@@ -55,7 +59,7 @@
 	{#if loading}
 		<div class="loading">Loading domains...</div>
 	{:else if domains.length === 0}
-		<div class="empty">No domains found</div>
+		<IconMessage empty message={"No domain"}/>
 	{:else}
 		{#each domains as domain (domain.id)}
 			<DomainRow {domain} onDelete={refreshDomains} />
