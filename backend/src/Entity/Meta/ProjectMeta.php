@@ -3,6 +3,8 @@
 namespace App\Entity\Meta;
 
 // all variables must have a default value
+use App\Entity\Type\ProjectFormDefaultColorPalette;
+
 class ProjectMeta
 {
 
@@ -32,11 +34,25 @@ class ProjectMeta
     public ?string $form_footer_text = null;
     public ?string $form_button_text = null;
     public ?string $form_success_message = null;
-    public ?string $form_color_text = null; // null = inherit
-    public ?string $form_color_text_light = null;
-    public ?string $form_color_accent = null;
-    public ?string $form_color_accent_text = null;
-    public ?string $form_color_input = null;
-    public ?string $form_color_input_text = null;
+
+    public ?int $width = 425; // null = 100%
+    public ?string $form_custom_css = null;
+
+    public ?string $form_color_light_text = null; // null = inherit
+    public ?string $form_color_light_text_light = null;
+    public ?string $form_color_light_accent = null;
+    public ?string $form_color_light_accent_text = null;
+    public ?string $form_color_light_input = null;
+    public ?string $form_color_light_input_text = null;
+
+    public ?string $form_color_dark_text = null; // null = inherit
+    public ?string $form_color_dark_text_light = null;
+    public ?string $form_color_dark_accent = null;
+    public ?string $form_color_dark_accent_text = null;
+    public ?string $form_color_dark_input = null;
+
+    public int $form_input_border_radius = 20;
+    public int $form_input_box_shadow = 8;
+    public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
 
 }
