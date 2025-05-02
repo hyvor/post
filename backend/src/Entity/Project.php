@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -32,6 +34,17 @@ class Project
 
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'project_id')]
+    private Collection $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function setId(int $id): static
     {
@@ -103,6 +116,14 @@ class Project
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
     }
 
 }
