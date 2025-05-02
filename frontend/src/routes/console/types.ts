@@ -119,3 +119,11 @@ export type Domain = {
 	verified_in_ses: boolean,
 	requested_by_current_website: boolean,
 }
+
+type VerifyDomainResponse = {
+    domain: Domain;
+    data: {
+        verified: boolean;
+        debug: Record<string, string>;
+    };
+};

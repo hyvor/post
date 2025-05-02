@@ -3,6 +3,8 @@
 	import { projectStore } from '../../lib/stores/projectStore';
 	import AccountNav from './AccountNav.svelte';
 	import ProjectNav from './ProjectNav.svelte';
+	import { loadProject } from '../../lib/projectLoader';
+	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
 
 </script>
 
@@ -11,9 +13,11 @@
 		<div class="account-nav">
 			<AccountNav />
 		</div>
-		<div class="nav">
-			<ProjectNav />
-		</div>
+		{#if $projectStore}
+			<div class="project-nav">
+				<ProjectNav />
+			</div>
+		{/if}
 	</div>
 </div>
 

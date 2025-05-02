@@ -13,16 +13,7 @@
 	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
 
 	let width: number;
-
-	onMount(() => {
-		if ($projectStore === undefined) {
-			loadProject($userProjectsStore[0].id.toString())
-			.catch((e) => {
-				toast.error('Unable to load project');
-			});
-		}
-
-	});
+	
 </script>
 
 <svelte:window bind:innerWidth={width} />

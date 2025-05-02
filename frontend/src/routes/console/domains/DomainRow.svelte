@@ -49,10 +49,14 @@
 		loading = true;
 		verifyDomain(domain.id)
 			.then((res) => {
-				toast.success('Domain verification started');
 				domain = res.domain;
 				if (res.data.verified === false) {
 					verificationDebug = res.data.debug;
+					showVerificationDebug = true;
+				}
+				else {
+					toast.success('Verification Successful');
+					domain.verified_in_ses = true;
 				}
 			})
 			.catch((error: any) => {

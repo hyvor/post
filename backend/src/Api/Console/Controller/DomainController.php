@@ -66,14 +66,16 @@ class DomainController extends AbstractController
             throw new BadRequestException('Domain not found');
         }
 
-        // TODO: check if the user is the owner of the domain
+        $user = $this->getHyvorUser();
+        if ($domain->getUserId() !== $user->id) {
+            throw new BadRequestException('You are not the owner of this domain');
+        }
 
         if ($domain->isVerifiedInSes()) {
             throw new UnprocessableEntityHttpException('Domain already verified');
         }
 
         try {
-            $user = $this->getHyvorUser();
             $result = $this->domainService->verifyDomain($domain, $user->email);
             return $this->json([
                 'data' => $result,
@@ -91,6 +93,11 @@ class DomainController extends AbstractController
 
         if (!$domain) {
             throw new BadRequestException('Domain not found');
+        }
+
+        $user = $this->getHyvorUser();
+        if ($domain->getUserId() !== $user->id) {
+            throw new BadRequestException('You are not the owner of this domain');
         }
 
         try {
