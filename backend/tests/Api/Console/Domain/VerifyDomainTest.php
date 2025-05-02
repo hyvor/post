@@ -61,6 +61,7 @@ class VerifyDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
+                'user_id' => 1,
             ]
         );
 
@@ -93,6 +94,7 @@ class VerifyDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'verified_in_ses' => true,
+                'user_id' => 1,
             ]
         );
 
@@ -128,6 +130,27 @@ class VerifyDomainTest extends WebTestCase
 
     public function test_user_can_only_verify_their_domain(): void
     {
-        // TODO :
+        $this->mockCreateEmailIdentity();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $domain = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+                'user_id' => 2,
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/domains/verify/' . $domain->getId(),
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('You are not the owner of this domain', $json['message']);
     }
 }
