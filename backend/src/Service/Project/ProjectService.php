@@ -53,6 +53,7 @@ class ProjectService
 
         $this->em->persist($project);
         $this->em->persist($list);
+        $this->em->persist($user);
         $this->em->flush();
 
         return $project;

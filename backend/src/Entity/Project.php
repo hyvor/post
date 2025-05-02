@@ -132,7 +132,6 @@ class Project
             $this->users->add($user);
             $user->setProjectId($this);
         }
-
         return $this;
     }
 
