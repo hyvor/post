@@ -1,10 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { projectStore } from '../../lib/stores/projectStore';
 	import AccountNav from './AccountNav.svelte';
 	import ProjectNav from './ProjectNav.svelte';
-	import { loadProject } from '../../lib/projectLoader';
-	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
 
 </script>
 
@@ -13,11 +10,9 @@
 		<div class="account-nav">
 			<AccountNav />
 		</div>
-		{#if $projectStore}
-			<div class="project-nav">
-				<ProjectNav />
-			</div>
-		{/if}
+		<div class="project-nav">
+			<ProjectNav />
+		</div>
 	</div>
 </div>
 

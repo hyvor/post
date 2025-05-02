@@ -10,6 +10,7 @@
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
 	import { appConfig } from "./lib/stores/consoleStore";
+	import { projectStore } from "./lib/stores/projectStore";
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -33,6 +34,7 @@
 				appConfig.set(res.config)
 
 				userProjectsStore.set(res.projects);
+				projectStore.set(res.projects[0]); // Set the first project as the active project
 				isLoading = false;
 			})
 			.catch((err) => {
