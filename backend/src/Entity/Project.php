@@ -126,4 +126,14 @@ class Project
         return $this->users;
     }
 
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setProjectId($this);
+        }
+
+        return $this;
+    }
+
 }

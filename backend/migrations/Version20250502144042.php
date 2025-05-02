@@ -26,6 +26,8 @@ final class Version20250502144042 extends AbstractMigration
         $this->addSql(<<<SQL
         CREATE TABLE users (
             id BIGSERIAL PRIMARY KEY,
+            created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL UNIQUE,
             role role_enum NOT NULL

@@ -8,6 +8,8 @@ use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Entity\Type\UserRole;
+use App\Entity\User;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,13 +31,19 @@ class ProjectService
         string $name,
     ): Project
     {
+        $user = new User()
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setHyvorUserId($userId)
+            ->setRole(UserRole::OWNER);
 
         $project = new Project()
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->addUser($user);
 
         $list = new NewsletterList()
             ->setName('Default List')
