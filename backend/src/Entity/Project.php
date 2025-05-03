@@ -41,9 +41,16 @@ class Project
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'project_id')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, UserInvites>
+     */
+    #[ORM\OneToMany(targetEntity: UserInvites::class, mappedBy: 'project')]
+    private Collection $userInvites;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->userInvites = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -132,6 +139,36 @@ class Project
             $this->users->add($user);
             $user->setProjectId($this);
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserInvites>
+     */
+    public function getUserInvites(): Collection
+    {
+        return $this->userInvites;
+    }
+
+    public function addUserInvite(UserInvites $userInvite): static
+    {
+        if (!$this->userInvites->contains($userInvite)) {
+            $this->userInvites->add($userInvite);
+            $userInvite->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserInvite(UserInvites $userInvite): static
+    {
+        if ($this->userInvites->removeElement($userInvite)) {
+            // set the owning side to null (unless already changed)
+            if ($userInvite->getProject() === $this) {
+                $userInvite->setProject(null);
+            }
+        }
+
         return $this;
     }
 
