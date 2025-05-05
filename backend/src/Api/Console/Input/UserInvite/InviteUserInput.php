@@ -16,14 +16,4 @@ class InviteUserInput
 
     #[Assert\NotBlank]
     public UserRole $role;
-
-    #[Assert\Callback]
-    public function validateUsernameOrEmail(ExecutionContextInterface $context): void
-    {
-        if ($this->username === null && $this->email === null) {
-            $context->buildViolation('Either username or email must be provided.')
-                ->atPath('username')
-                ->addViolation();
-        }
-    }
 }

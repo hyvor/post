@@ -30,7 +30,7 @@ class UserInvites
     private string $code;
 
     #[ORM\Column]
-    private \DateTimeImmutable $expired_at;
+    private \DateTimeImmutable $expires_at;
 
     public function getId(): ?int
     {
@@ -104,14 +104,14 @@ class UserInvites
         return $this;
     }
 
-    public function getExpiredAt(): \DateTimeImmutable
+    public function getExpiresAt(): \DateTimeImmutable
     {
-        return $this->expired_at;
+        return $this->expires_at;
     }
 
-    public function setExpiredAt(\DateTimeImmutable $expired_at): static
+    public function setExpiresAt(\DateTimeImmutable $expired_at): static
     {
-        $this->expired_at = $expired_at;
+        $this->expires_at = $expired_at;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
+	import IconPersonFillGear from '@hyvor/icons/IconPersonFillGear';
 	import { projectStore } from '../../lib/stores/projectStore';
 
 	interface Props {
@@ -18,6 +19,13 @@
 		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
 			{#snippet start()}
 				<IconBrush />
+			{/snippet}
+			Email Design
+		</NavLink>
+
+		<NavLink href="{prefix}/invites" active={page.url.pathname === prefix + '/invites'}>
+			{#snippet start()}
+				<IconPersonFillGear />
 			{/snippet}
 			Email Design
 		</NavLink>

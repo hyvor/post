@@ -32,7 +32,7 @@ class User
     #[ORM\Column(nullable: false, enumType: UserRole::class)]
     private UserRole $role;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -80,7 +80,7 @@ class User
         return $this;
     }
 
-    public function getHyvorUserId(): ?int
+    public function getHyvorUserId(): int
     {
         return $this->hyvor_user_id;
     }
