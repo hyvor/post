@@ -68,12 +68,12 @@ class User
         return $this;
     }
 
-    public function getProjectId(): Project
+    public function getProject(): Project
     {
         return $this->project;
     }
 
-    public function setProjectId(Project $project): static
+    public function setProject(Project $project): static
     {
         $this->project = $project;
 

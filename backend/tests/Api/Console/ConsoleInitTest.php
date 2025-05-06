@@ -6,12 +6,14 @@ use App\Api\Console\Controller\ConsoleController;
 use App\Entity\Type\IssueStatus;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
+use App\Entity\Type\UserRole;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
+use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -35,6 +37,14 @@ class ConsoleInitTest extends WebTestCase
             'user_id' => 2,
         ]);
 
+        $projectAdmin = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $projectAdmin,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::ADMIN
+        ]);
+
         $response = $this->consoleApi(
             null,
             'GET',
@@ -49,9 +59,13 @@ class ConsoleInitTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertArrayHasKey('projects', $data);
-        $this->assertIsArray($data['projects']);
-        $this->assertSame(10, count($data['projects']));
+        $this->assertArrayHasKey('projects_owner', $data);
+        $this->assertIsArray($data['projects_owner']);
+        $this->assertSame(10, count($data['projects_owner']));
+
+        $this->assertArrayHasKey('projects_admin', $data);
+        $this->assertIsArray($data['projects_admin']);
+        $this->assertSame(1, count($data['projects_admin']));
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];

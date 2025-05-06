@@ -30,7 +30,9 @@ final class ProjectController extends AbstractController
     public function getUserAllProjects(): JsonResponse
     {
         $user = $this->getHyvorUser();
-        $projects = $this->projectService->getProjectsOfUser($user->id);
+        $projectsOwner = $this->projectService->getProjectsOfUserOwner($user->id);
+        $projectAdmin = $this->projectService->getProjectsOfUserAdmin($user->id);
+        $projects = array_merge($projectsOwner, $projectAdmin);
         return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
     }
 

@@ -33,11 +33,15 @@ final class ConsoleController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof AuthUser);
 
-        $projects = $this->projectService->getProjectsOfUser($user->id);
-        $projects = array_map(fn(Project $project) => new ProjectObject($project), $projects);
+        $projectOwner = $this->projectService->getProjectsOfUserOwner($user->id);
+        $projectOwner = array_map(fn(Project $project) => new ProjectObject($project), $projectOwner);
+
+        $projectAdmin = $this->projectService->getProjectsOfUserAdmin($user->id);
+        $projectAdmin = array_map(fn(Project $project) => new ProjectObject($project), $projectAdmin);
 
         return new JsonResponse([
-            'projects' => $projects,
+            'projects_owner' => $projectOwner,
+            'projects_admin' => $projectAdmin,
             'config' => [
                 'template_defaults' => TemplateDefaults::getAll()
             ],

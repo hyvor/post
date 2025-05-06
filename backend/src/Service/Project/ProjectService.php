@@ -2,6 +2,7 @@
 
 namespace App\Service\Project;
 
+use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\ProjectMeta;
@@ -31,19 +32,19 @@ class ProjectService
         string $name,
     ): Project
     {
-        $user = new User()
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
-            ->setHyvorUserId($userId)
-            ->setRole(UserRole::OWNER);
-
         $project = new Project()
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
             ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable());
+
+        $user = new User()
+            ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
-            ->addUser($user);
+            ->setHyvorUserId($userId)
+            ->setProject($project)
+            ->setRole(UserRole::OWNER);
 
         $list = new NewsletterList()
             ->setName('Default List')
@@ -51,9 +52,9 @@ class ProjectService
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setProject($project);
 
+        $this->em->persist($user);
         $this->em->persist($project);
         $this->em->persist($list);
-        $this->em->persist($user);
         $this->em->flush();
 
         return $project;
@@ -74,9 +75,19 @@ class ProjectService
     /**
      * @return list<Project>
      */
-    public function getProjectsOfUser(int $userId): array
+    public function getProjectsOfUserOwner(int $userId): array
     {
         return $this->em->getRepository(Project::class)->findBy(['user_id' => $userId]);
+    }
+
+    /**
+     * @return list<Project>
+     */
+    public function getProjectsOfUserAdmin(int $userId): array
+    {
+        return array_map(fn($pu) => $pu->getProject(), $this->em->getRepository(User::class)->findBy([
+            'hyvor_user_id' => $userId, 'role' => UserRole::ADMIN,
+        ]));
     }
 
     /**
