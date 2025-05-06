@@ -8,18 +8,20 @@
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
-	import { onMount } from 'svelte';
-	import { loadProject } from '../../lib/projectLoader';
-	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
+	import { selectingProject } from '../../lib/stores/consoleStore';
 
 	let width: number;
+
+	function triggerProjectSelector() {
+		selectingProject.set(true);
+	}
 	
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 <div class="wrap hds-box">
-	<button class="current">
+	<button class="current" on:click={triggerProjectSelector}>
 		<div class="left">
 			<div class="name">
 				{$projectStore.name}
