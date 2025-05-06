@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { userProjectAdminStore, userProjectsOwnerStore } from "../../lib/stores/userProjectsStore";
 	import ProjectRow from "./ProjectRow.svelte";
-    
+
 	export let own = false;
 
     const projects = own ? $userProjectsOwnerStore : $userProjectAdminStore;
@@ -29,6 +29,7 @@
 		{#each projects as project}
 			<ProjectRow
                 project={project}
+                own={own}
             />   
 		{/each}
 	</div>

@@ -3,6 +3,7 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
 
 class ProjectObject
 {
@@ -25,6 +26,7 @@ class ProjectObject
     public ?string $template_font_line_height = null;
     public ?string $template_box_radius = null;
     public ?string $template_logo = null;
+    public UserRole $userRole;
 
     public function __construct(Project $project)
     {

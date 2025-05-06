@@ -137,7 +137,7 @@ class Project
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setProjectId($this);
+            $user->setProject($this);
         }
         return $this;
     }
@@ -149,27 +149,4 @@ class Project
     {
         return $this->userInvites;
     }
-
-    public function addUserInvite(UserInvites $userInvite): static
-    {
-        if (!$this->userInvites->contains($userInvite)) {
-            $this->userInvites->add($userInvite);
-            $userInvite->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserInvite(UserInvites $userInvite): static
-    {
-        if ($this->userInvites->removeElement($userInvite)) {
-            // set the owning side to null (unless already changed)
-            if ($userInvite->getProject() === $this) {
-                $userInvite->setProject(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

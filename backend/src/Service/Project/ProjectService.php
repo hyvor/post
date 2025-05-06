@@ -46,6 +46,8 @@ class ProjectService
             ->setProject($project)
             ->setRole(UserRole::OWNER);
 
+        $project->addUser($user);
+
         $list = new NewsletterList()
             ->setName('Default List')
             ->setCreatedAt(new \DateTimeImmutable())

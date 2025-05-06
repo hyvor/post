@@ -2,11 +2,17 @@
 	import { goto } from '$app/navigation';
 	import { Tag } from '@hyvor/design/components';
 	import type { Project } from '../../types';
+	import { projectStore } from '../../lib/stores/projectStore';
+	import { loadProject } from '../../lib/projectLoader';
+	import RoleTag from './RoleTag.svelte';
 
 	export let project: Project;
+    export let own: boolean;
 
 	function onClick() {
-		console.log('Project clicked', project);
+		projectStore.set(project);
+        goto(`/console/${project.id}`);
+		loadProject(String(project.id));
 	}
 </script>
 
@@ -26,12 +32,18 @@
 		</div>
 	</div>
 
+    <div class="role">
+		<RoleTag role={own ? 'owner' : 'admin'} />
+	</div>
+
 	<div class="right">&rarr;</div>
+
 </div>
 
 <style lang="scss">
 	.wrap {
 		padding: 15px 25px;
+        background-color: var(--accent-light-mid);
 		cursor: pointer;
 		border-radius: var(--box-radius);
 		display: flex;
@@ -40,6 +52,9 @@
 		overflow: hidden;
 		margin-bottom: 10px;
 	}
+    .wrap:hover {
+        background-color: var(--accent-light);
+    }
 	.name-id {
 		flex: 2;
 	}

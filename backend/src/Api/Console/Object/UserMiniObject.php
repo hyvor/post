@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Object;
 
+use App\Entity\Type\UserRole;
 use Hyvor\Internal\Auth\AuthUser;
 
 class UserMiniObject
