@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Resolver;
 
+use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
@@ -21,6 +22,7 @@ class EntityResolver implements ValueResolverInterface
         'lists' => NewsletterList::class,
         'subscribers' => Subscriber::class,
         'issues' => Issue::class,
+        'domain' => Domain::class,
     ];
 
     public function __construct(

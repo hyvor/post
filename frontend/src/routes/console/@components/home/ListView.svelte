@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
-	import { listStore } from '../../../lib/stores/projectStore';
+	import { listStore } from '../../lib/stores/projectStore';
 
 	$: {
 		$listStore;
