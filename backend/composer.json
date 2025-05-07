@@ -17,6 +17,7 @@
         "dunglas/doctrine-json-odm": "^1.4.2",
         "fakerphp/faker": "^1.24.1",
         "hyvor/internal": "dev-symfony",
+        "nelmio/cors-bundle": "^2.5",
         "hyvor/phrosemirror": "^1.0.5",
         "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/clock": "7.2.*",

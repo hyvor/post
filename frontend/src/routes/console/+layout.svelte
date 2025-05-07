@@ -11,6 +11,7 @@
 	import { page } from "$app/stores";
 	import { appConfig } from "./lib/stores/consoleStore";
 	import { projectStore } from "./lib/stores/projectStore";
+  
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -22,13 +23,13 @@
 		projects: Project[];
 	}
 
-	let isLoading = $state(true);;
+	let isLoading = $state(true);
 
 	onMount(() => {
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
-				endpoint: 'init',
+				endpoint: 'init'
 			})
 			.then((res) => {
 				appConfig.set(res.config)
@@ -40,13 +41,13 @@
 			.catch((err) => {
 				if (err.code === 401) {
 					const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
-					location.href = `/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
+					location.href =
+						`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
 				} else {
 					toast.error(err.message);
 				}
 			});
-	})
-
+	});
 </script>
 
 <svelte:head>
@@ -73,20 +74,16 @@
 		}
 	]}
 >
-
-<main>
-	{#if isLoading}
-		<div class="full-loader">
-			<Loader size="large">
-
-			</Loader>
-		</div>
-	{:else}
-		<HyvorBar product='blogs'/>
-		{@render children?.()}
-	{/if}
-</main>
-
+	<main>
+		{#if isLoading}
+			<div class="full-loader">
+				<Loader size="large"></Loader>
+			</div>
+		{:else}
+			<HyvorBar product="blogs" />
+			{@render children?.()}
+		{/if}
+	</main>
 </InternationalizationProvider>
 
 <style>

@@ -68,7 +68,7 @@ final class SubscriberController extends AbstractController
 
         $missingListIds = $this
             ->newsletterListService
-            ->isListsAvailable($project, $input->list_ids);
+            ->getMissingListIdsOfProject($project, $input->list_ids);
 
         if ($missingListIds !== null) {
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
@@ -115,7 +115,7 @@ final class SubscriberController extends AbstractController
         }
 
         if ($input->hasProperty('list_ids')) {
-            $missingListIds = $this->newsletterListService->isListsAvailable($project, $input->list_ids);
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfProject($project, $input->list_ids);
 
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");

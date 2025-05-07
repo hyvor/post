@@ -8,33 +8,19 @@ class HyvorPostForm extends HTMLElement {
     }
 
     connectedCallback() {
-        const projectId = this.getAttribute("project-id");
+        const projectUuid = this.getAttribute("project");
 
-        /* if (!websiteId) {
-			throw new Error('website-id is required for Hyvor post Newsletter widget.');
+		if (!projectUuid) {
+			throw new Error('project-uuid is required for Hyvor Post form.');
 		}
-
-		const translations = Translations.fromElement(this); */
 
         mount(Form, {
             target: this.shadowRoot!,
-        });
-
-        /* this.component = new Newsletter({
-			target: this.shadowRoot!,
 			props: {
-				websiteId: Number(websiteId),
-				instance: this.getAttribute('instance'),
-				title: this.getAttribute('title'),
-				description: this.getAttribute('description'),
-				language: this.getAttribute('language'),
-				ssoUser: this.getAttribute('sso-user'),
-				ssoHash: this.getAttribute('sso-hash'),
-				colors: this.getAttribute('colors'),
-				translations: translations as any,
-				shadowRoot: this.shadowRoot!
+				projectUuid,
+                instance: this.getAttribute("instance") || "https://post.hyvor.com",
 			}
-		}); */
+        });
     }
 
     /* static get observedAttributes() {
