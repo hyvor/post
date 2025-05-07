@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { userProjectAdminStore, userProjectsOwnerStore } from "../../lib/stores/userProjectsStore";
+	import { userProjectsStore } from "../../lib/stores/userProjectsStore";
 	import ProjectRow from "./ProjectRow.svelte";
 
 	export let own = false;
 
-    const projects = own ? $userProjectsOwnerStore : $userProjectAdminStore;
+    const projects = own ? 
+					$userProjectsStore.filter(p => p.current_user.role == 'owner') :
+					$userProjectsStore.filter(p => p.current_user.role != 'owner');
 	
 </script>
 
@@ -29,7 +31,6 @@
 		{#each projects as project}
 			<ProjectRow
                 project={project}
-                own={own}
             />   
 		{/each}
 	</div>

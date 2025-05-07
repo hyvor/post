@@ -33,10 +33,25 @@ export type ProjectMeta = {
 	template_box_radius: string | null,
 }
 
+export type UserMini = {
+	name: string,
+	username: string | null,
+	picture: string | null,
+}
+
+export type UserRole = 'owner' | 'admin';
+
+export type User = {
+	role: UserRole,
+	created_at: number,
+	user: UserMini,
+}
+
 export type Project = {
 	id: number,
 	created_at: number,
-	name: string
+	name: string,
+	current_user: User
 } & ProjectMeta;
 
 export interface ProjectStats {

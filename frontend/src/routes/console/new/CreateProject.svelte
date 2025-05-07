@@ -10,7 +10,7 @@
 		toast
 	} from '@hyvor/design/components';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
-	import { addUserProject, userProjectAdminStore, userProjectsOwnerStore } from '../lib/stores/userProjectsStore';
+	import { addUserProject, userProjectsStore } from '../lib/stores/userProjectsStore';
 	import { createProject } from '../lib/actions/projectActions';
 
 
@@ -22,7 +22,7 @@
 
 
 	function handleBack() {
-		if ($userProjectsOwnerStore.length > 0 && $userProjectAdminStore.length > 0) {
+		if ($userProjectsStore.length > 0) {
 			goto('/console');
 		} else {
 			goto('/');

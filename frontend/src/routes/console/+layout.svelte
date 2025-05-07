@@ -7,10 +7,10 @@
 
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
-	import { userProjectAdminStore, userProjectsOwnerStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
 	import { appConfig } from "./lib/stores/consoleStore";
 	import { projectStore } from "./lib/stores/projectStore";
+	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -19,8 +19,7 @@
 
 	interface InitResponse {
 		config: AppConfig
-		projects_owner: Project[];
-		projects_admin: Project[];
+		projects: Project[]
 	}
 
 	let isLoading = $state(true);;
@@ -34,9 +33,8 @@
 			.then((res) => {
 				appConfig.set(res.config)
 
-				userProjectsOwnerStore.set(res.projects_owner);
-				userProjectAdminStore.set(res.projects_admin);
-				projectStore.set(res.projects_owner[0]); // Set the first project as the active project
+				userProjectsStore.set(res.projects);
+				projectStore.set(res.projects[0]); // Set the first project as the active project
 				isLoading = false;
 			})
 			.catch((err) => {

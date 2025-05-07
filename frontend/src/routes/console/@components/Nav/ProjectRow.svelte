@@ -7,7 +7,6 @@
 	import RoleTag from './RoleTag.svelte';
 
 	export let project: Project;
-    export let own: boolean;
 
 	function onClick() {
 		projectStore.set(project);
@@ -33,7 +32,7 @@
 	</div>
 
     <div class="role">
-		<RoleTag role={own ? 'owner' : 'admin'} />
+		<RoleTag role={project.current_user.role} />
 	</div>
 
 	<div class="right">&rarr;</div>
