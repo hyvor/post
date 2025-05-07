@@ -5,6 +5,7 @@
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { loadProject } from '../../lib/projectLoader';
 	import RoleTag from './RoleTag.svelte';
+	import { selectingProject } from '../../lib/stores/consoleStore';
 
 	export let project: Project;
 
@@ -12,6 +13,7 @@
 		projectStore.set(project);
         goto(`/console/${project.id}`);
 		loadProject(String(project.id));
+		selectingProject.set(false);
 	}
 </script>
 

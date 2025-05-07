@@ -23,11 +23,11 @@
 			Email Design
 		</NavLink>
 
-		<NavLink href="{prefix}/invites" active={page.url.pathname === prefix + '/invites'}>
+		<NavLink href="{prefix}/admin" active={page.url.pathname === prefix + '/admin'}>
 			{#snippet start()}
 				<IconPersonFillGear />
 			{/snippet}
-			Email Design
+			Admin
 		</NavLink>
 
 		<div class="section-div"></div>
