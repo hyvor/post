@@ -50,6 +50,7 @@ class ProjectMeta
     public ?string $form_color_dark_accent = null;
     public ?string $form_color_dark_accent_text = null;
     public ?string $form_color_dark_input = null;
+    public ?string $form_color_dark_input_text = null;
 
     public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;

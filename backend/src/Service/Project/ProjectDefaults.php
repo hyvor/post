@@ -11,10 +11,10 @@ class ProjectDefaults
     public const FORM_COLOR_TEXT = 'inherit';
     // depends on --hp-color-text
     public const FORM_COLOR_TEXT_LIGHT = 'color-mix(in srgb, var(--hp-color-text) 60%, transparent)';
-    public const FORM_COLOR_ACCENT = '#000';
-    public const FORM_COLOR_ACCENT_TEXT = '#fff';
-    public const FORM_COLOR_INPUT = '#fff';
-    public const FORM_COLOR_INPUT_TEXT = 'inherit';
+    public const FORM_COLOR_LIGHT_ACCENT = '#000';
+    public const FORM_COLOR_LIGHT_ACCENT_TEXT = '#fff';
+    public const FORM_COLOR_LIGHT_INPUT = '#fff';
+    public const FORM_COLOR_LIGHT_INPUT_TEXT = 'inherit';
 
     /**
      * @return array<string, mixed>
