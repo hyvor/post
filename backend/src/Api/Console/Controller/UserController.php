@@ -86,7 +86,7 @@ class UserController extends AbstractController
 
         $invite = $this->userInviteService->createInvite($project, $hyvorUser->id);
 
-        $this->userInviteService->sendEmail($project, $hyvorUser);
+        $this->userInviteService->sendEmail($project, $hyvorUser, $invite);
 
         return $this->json(
             new UserInviteObject($invite, $hyvorUser),

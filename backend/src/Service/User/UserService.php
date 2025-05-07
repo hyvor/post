@@ -5,7 +5,7 @@ namespace App\Service\User;
 use App\Entity\Project;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
-use App\Entity\UserInvites;
+use App\Entity\UserInvite;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -45,5 +45,20 @@ class UserService
         if (!$user)
             return false;
         return true;
+    }
+
+    public function createUser(Project $project, int $hyvorUserId): User
+    {
+        $user = new User();
+        $user->setCreatedAt(new \DateTimeImmutable());
+        $user->setUpdatedAt(new \DateTimeImmutable());
+        $user->setProject($project);
+        $user->setHyvorUserId($hyvorUserId);
+        $user->setRole(UserRole::ADMIN); // Hardcoded for now
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return $user;
     }
 }

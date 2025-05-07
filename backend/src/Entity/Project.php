@@ -42,9 +42,9 @@ class Project
     private Collection $users;
 
     /**
-     * @var Collection<int, UserInvites>
+     * @var Collection<int, UserInvite>
      */
-    #[ORM\OneToMany(targetEntity: UserInvites::class, mappedBy: 'project')]
+    #[ORM\OneToMany(targetEntity: UserInvite::class, mappedBy: 'project')]
     private Collection $userInvites;
 
     public function __construct()
@@ -143,7 +143,7 @@ class Project
     }
 
     /**
-     * @return Collection<int, UserInvites>
+     * @return Collection<int, UserInvite>
      */
     public function getUserInvites(): Collection
     {

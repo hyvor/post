@@ -6,7 +6,8 @@ use App\Repository\UserInvitesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserInvitesRepository::class)]
-class UserInvites
+#[ORM\Table(name: 'user_invites')]
+class UserInvite
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

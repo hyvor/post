@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\UserInvites;
+use App\Entity\UserInvite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<UserInvites>
+ * @extends ServiceEntityRepository<UserInvite>
  */
 class UserInvitesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, UserInvites::class);
+        parent::__construct($registry, UserInvite::class);
     }
 
     //    /**

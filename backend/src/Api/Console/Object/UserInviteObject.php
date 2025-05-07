@@ -3,7 +3,7 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Type\UserRole;
-use App\Entity\UserInvites;
+use App\Entity\UserInvite;
 use Hyvor\Internal\Auth\AuthUser;
 
 class UserInviteObject
@@ -14,7 +14,7 @@ class UserInviteObject
     public int $expires_at;
 
     public function __construct(
-        UserInvites $userInvite, AuthUser $hyvorUser
+        UserInvite $userInvite, AuthUser $hyvorUser
     ) {
         $this->created_at = $userInvite->getCreatedAt()->getTimestamp();
         $this->role = UserRole::ADMIN; // Hardcoded for now

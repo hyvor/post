@@ -3,7 +3,7 @@
 namespace App\Service\UserInvite;
 
 use App\Entity\Project;
-use App\Entity\UserInvites;
+use App\Entity\UserInvite;
 use App\Service\Issue\EmailTransportService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,11 +22,11 @@ class UserInviteService
     }
 
     /**
-     * @return ArrayCollection<int, UserInvites>
+     * @return ArrayCollection<int, UserInvite>
      */
     public function getProjectInvites(Project $project): ArrayCollection
     {
-        $userInvites = $this->em->getRepository(UserInvites::class)->findBy([
+        $userInvites = $this->em->getRepository(UserInvite::class)->findBy([
             'project' => $project,
         ]);
 
@@ -36,9 +36,9 @@ class UserInviteService
         return new ArrayCollection($userInvites);
     }
 
-    public function createInvite(Project $project, int $hyvorUserId): UserInvites
+    public function createInvite(Project $project, int $hyvorUserId): UserInvite
     {
-        $userInvite = new UserInvites();
+        $userInvite = new UserInvite();
         $userInvite->setCreatedAt(new \DateTimeImmutable());
         $userInvite->setUpdatedAt(new \DateTimeImmutable());
         $userInvite->setProject($project);
@@ -52,24 +52,41 @@ class UserInviteService
         return $userInvite;
     }
 
-    public function sendEmail(Project $projet, AuthUser $hyvorUser): void
+    public function sendEmail(Project $projet, AuthUser $hyvorUser, UserInvite $userInvites): void
     {
         // cannot use emailtransportService (it is for newsletter sending)
         $this->emailTransportService->send(
             $hyvorUser->email,
             'You have been invited to join a project',
-            ""
+            "
+            <p>Hi {$hyvorUser->name},</p>
+            <p>You have been invited to join the project {$projet->getName()}.</p>
+            <p>Click this link: <a>https://post.hyvor.dev/api/public/invite{code}</a></p>
+            "
         );
     }
 
     public function isInvited(int $hyvorUserId): bool
     {
-        $userInvite = $this->em->getRepository(UserInvites::class)->findBy([
+        $userInvite = $this->em->getRepository(UserInvite::class)->findBy([
             'hyvor_user_id' => $hyvorUserId,
         ]);
 
         if (!$userInvite)
             return false;
         return true;
+    }
+
+    public function getInviteFromCode(string $code): ?UserInvite
+    {
+        return $this->em->getRepository(UserInvite::class)->findOneBy([
+            'code' => $code,
+        ]);
+    }
+
+    public function deleteInvite(UserInvite $userInvite): void
+    {
+        $this->em->remove($userInvite);
+        $this->em->flush();
     }
 }
