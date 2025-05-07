@@ -54,6 +54,7 @@ class UserInviteService
 
     public function sendEmail(Project $projet, AuthUser $hyvorUser): void
     {
+        // cannot use emailtransportService (it is for newsletter sending)
         $this->emailTransportService->send(
             $hyvorUser->email,
             'You have been invited to join a project',

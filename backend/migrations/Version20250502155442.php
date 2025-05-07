@@ -27,7 +27,7 @@ final class Version20250502155442 extends AbstractMigration
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL UNIQUE,
             code VARCHAR(255) NOT NULL UNIQUE,
-            expired_at timestamptz NOT NULL
+            expires_at timestamptz NOT NULL
         );
         SQL);
     }

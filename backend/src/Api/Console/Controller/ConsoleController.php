@@ -12,6 +12,7 @@ use App\Repository\ListRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
 use App\Service\Template\TemplateDefaults;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -4,7 +4,6 @@ namespace App\Api\Console\Input\UserInvite;
 
 use App\Entity\Type\UserRole;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class InviteUserInput
 {
@@ -14,6 +13,6 @@ class InviteUserInput
     #[Assert\Email]
     public ?string $email = null;
 
-    #[Assert\NotBlank]
-    public UserRole $role;
+//    #[Assert\NotBlank]
+//    public UserRole $role;
 }
