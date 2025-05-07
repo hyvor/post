@@ -1,6 +1,8 @@
 <script>
+	import { onMount } from 'svelte';
 	import AccountNav from './AccountNav.svelte';
 	import ProjectNav from './ProjectNav.svelte';
+
 </script>
 
 <div id="nav">
@@ -8,7 +10,7 @@
 		<div class="account-nav">
 			<AccountNav />
 		</div>
-		<div class="nav">
+		<div class="project-nav">
 			<ProjectNav />
 		</div>
 	</div>

@@ -2,7 +2,7 @@
     import {HyvorBar, InternationalizationProvider, Loader, toast} from "@hyvor/design/components";
     import en from '../../../../shared/locale/en-US.json';
     import fr from '../../../../shared/locale/fr-FR.json';
-	import Nav from "./[id]/@components/Nav/Nav.svelte";
+	import Nav from "./@components/Nav/Nav.svelte";
 	import type { AppConfig, Project } from "./types";
 
 	import { onMount } from "svelte";
@@ -10,6 +10,7 @@
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
 	import { appConfig } from "./lib/stores/consoleStore";
+	import { projectStore } from "./lib/stores/projectStore";
   
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -34,6 +35,7 @@
 				appConfig.set(res.config)
 
 				userProjectsStore.set(res.projects);
+				projectStore.set(res.projects[0]); // Set the first project as the active project
 				isLoading = false;
 			})
 			.catch((err) => {
