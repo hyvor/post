@@ -2,6 +2,7 @@
 	import { NavLink } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import IconCoin from '@hyvor/icons/IconCoin';
+	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import NavItem from './NavItem.svelte';
 </script>
 
@@ -13,6 +14,12 @@
 				<span slot="text">Billing</span>
 			</NavItem>
 		</NavLink>
+		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
+			<NavItem>
+				<IconDatabase slot="icon" />
+				<span slot="text">Domains</span>
+			</NavItem>
+		</NavLink>
 	</div>
 </div>
 
@@ -22,20 +29,24 @@
 		overflow: hidden;
 	}
 
+	.nav-links :global(a.active) {
+		background-color: var(--accent-light-mid);
+	}
+
 	@media (max-width: 992px) {
 		.wrap {
+			width: 100%;
+			z-index: 100;
 			border-radius: 0 !important;
-			display: flex;
-			flex-direction: row-reverse;
+			padding-top: 5px;
 			padding-bottom: 0;
-			padding-top: 0;
 		}
-
 		.nav-links {
 			display: flex;
-			flex: 1;
-			:global(a .middle),
-			:global(a .end) {
+			border-top: 1px solid var(--border);
+			overflow-x: auto;
+
+			:global(a .middle) {
 				display: none;
 			}
 			:global(a .start) {
@@ -43,11 +54,25 @@
 			}
 			:global(a) {
 				border-left: none !important;
-				border-bottom: 3px solid transparent;
+				border-top: 3px solid transparent;
+				flex: 1;
+				justify-content: center;
 			}
 			:global(a.active) {
-				border-bottom-color: var(--accent);
+				border-top-color: var(--accent);
 			}
+			:global(.line) {
+				display: none !important;
+			}
+		}
+		.current {
+			margin: 0px auto;
+			margin-bottom: 5px;
+		}
+		.current .left {
+			display: flex;
+			gap: 10px;
+			align-items: center;
 		}
 	}
 </style>

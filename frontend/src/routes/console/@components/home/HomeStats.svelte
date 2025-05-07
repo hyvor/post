@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Button, Loader } from '@hyvor/design/components';
-	import type { ProjectStats } from '../../../types';
+	import type { ProjectStats } from '../../types';
 	import Stat from './Stat.svelte';
-	import { projectStatsStore, projectStore } from '../../../lib/stores/projectStore';
+	import { projectStatsStore, projectStore } from '../../lib/stores/projectStore';
 
 	let loading = false;
 </script>

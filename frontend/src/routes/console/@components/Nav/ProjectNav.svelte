@@ -1,15 +1,19 @@
 <script lang="ts">
-	import { NavLink, Tag } from '@hyvor/design/components';
+	import { NavLink, Tag, toast } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconGear from '@hyvor/icons/IconGear';
 	import NavItem from './NavItem.svelte';
-	import { projectStore } from '../../../lib/stores/projectStore';
+	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+	import { loadProject } from '../../lib/projectLoader';
+	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
 
 	let width: number;
+	
 </script>
 
 <svelte:window bind:innerWidth={width} />

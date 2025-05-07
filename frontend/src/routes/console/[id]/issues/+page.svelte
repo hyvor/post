@@ -3,7 +3,7 @@
     import IconPlus from "@hyvor/icons/IconPlus";
 	import { issueStore } from "../../lib/stores/projectStore";
 	import CreateIssueButton from "./CreateIssueButton.svelte";
-	import SingleBox from "../@components/content/SingleBox.svelte";
+	import SingleBox from "../../@components/content/SingleBox.svelte";
 	import IssueRow from "./IssueRow.svelte";
 	import { onMount } from "svelte";
 	import { getIssues } from "../../lib/actions/issueActions";
@@ -45,10 +45,10 @@
 			{#if $issueStore.length}
 				<div class="issues-title">
 					Sent Issues
-					<CreateIssueButton 
+					<CreateIssueButton
 						text="New"
 						icon={IconPlus}
-						size="small" 
+						size="small"
 					/>
 				</div>
 				{#each $issueStore as issue}
@@ -93,7 +93,7 @@
 	}
 	.issues {
 		margin-top: 15px;
-		padding: 30px; 
+		padding: 30px;
 	}
 	.issues-title {
 		font-weight: 600;

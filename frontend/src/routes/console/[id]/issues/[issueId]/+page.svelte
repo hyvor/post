@@ -13,7 +13,7 @@
 	import DraftIssue from './draft/DraftIssue.svelte';
 	import IssueSending from './sending/IssueSending.svelte';
 	import SentIssue from './sent/SentIssue.svelte';
-	import SingleBox from '../../@components/content/SingleBox.svelte';
+	import SingleBox from '../../../@components/content/SingleBox.svelte';
 
 	const id = Number(page.params.issueId);
 
