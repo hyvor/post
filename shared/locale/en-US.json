@@ -13,7 +13,8 @@
                 "subscribeButtonText": "Subscribe Button Text",
                 "subscribeButtonTextCaption": "Text shown on the subscribe button",
                 "successMessage": "Success Message",
-                "successMessageCaption": "Message shown after successful subscription"
+                "successMessageCaption": "Message shown after successful subscription",
+                "customCss": "Custom CSS"
             }
         }
     }

@@ -22,7 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '../src/DependencyInjection/',
             '../src/Entity/',
             '../src/Kernel.php',
-            '../src/Command/',
         ]);
 
     // ================ CONSOLE API =================

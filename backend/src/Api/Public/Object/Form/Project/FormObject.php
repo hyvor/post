@@ -7,6 +7,8 @@ use App\Entity\Meta\ProjectMeta;
 class FormObject
 {
 
+    public ?int $width;
+    public ?string $custom_css;
 
     public ?string $title;
     public ?string $description;
@@ -17,6 +19,8 @@ class FormObject
     public function __construct(ProjectMeta $meta)
     {
 
+        $this->width = $meta->form_width;
+        $this->custom_css = $meta->form_custom_css;
         $this->title = $meta->form_title;
         $this->description = $meta->form_description;
         $this->footer_text = $meta->form_footer_text;
