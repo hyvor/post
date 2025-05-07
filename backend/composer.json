@@ -9,11 +9,11 @@
         "ext-iconv": "*",
         "ext-openssl": "*",
         "aws/aws-php-sns-message-validator": "^1.10",
-        "aws/aws-sdk-php": "^3.342",
+        "aws/aws-sdk-php": "^3.343.5",
         "doctrine/dbal": "^3.9.4",
         "doctrine/doctrine-bundle": "^2.14.0",
-        "doctrine/doctrine-migrations-bundle": "^3.4.1",
-        "doctrine/orm": "^3.3.2",
+        "doctrine/doctrine-migrations-bundle": "^3.4.2",
+        "doctrine/orm": "^3.3.3",
         "dunglas/doctrine-json-odm": "^1.4.2",
         "fakerphp/faker": "^1.24.1",
         "hyvor/internal": "dev-symfony",
@@ -86,13 +86,13 @@
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.3",
-        "phpstan/phpstan": "^2.1.12",
-        "phpunit/phpunit": "^11.5.17",
+        "phpstan/phpstan": "^2.1.14",
+        "phpunit/phpunit": "^11.5.19",
         "symfony/browser-kit": "7.2.*",
         "symfony/css-selector": "7.2.*",
-        "symfony/maker-bundle": "^1.62.1",
-        "symfony/phpunit-bridge": "^7.2",
-        "zenstruck/foundry": "^2.4.2",
+        "symfony/maker-bundle": "^1.63.0",
+        "symfony/phpunit-bridge": "^7.2.6",
+        "zenstruck/foundry": "^2.4.3",
         "zenstruck/messenger-test": "^1.11"
     }
 }
