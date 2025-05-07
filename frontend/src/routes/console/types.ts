@@ -141,3 +141,22 @@ export interface IssueSend {
 	open_count: number;
 	click_count: number;
 }
+
+export type Domain = {
+	id: number,
+	domain: string,
+	dkim_public_key: string,
+	dkim_txt_name: string,
+	dkim_txt_value: string,
+	verified: boolean,
+	verified_in_ses: boolean,
+	requested_by_current_website: boolean,
+}
+
+type VerifyDomainResponse = {
+    domain: Domain;
+    data: {
+        verified: boolean;
+        debug: Record<string, string>;
+    };
+};

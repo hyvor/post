@@ -4,17 +4,17 @@
 	import type { Issue, IssueSend, SendType } from '../../../../types';
 	import { getIssueSends } from '../../../../lib/actions/issueActions';
 	import SendsRow from './SendsRow.svelte';
-	import Selector from '../../../@components/content/Selector.svelte';
+	import Selector from '../../../../@components/content/Selector.svelte';
 	import IconX from '@hyvor/icons/IconX';
 
 	export let issue: Issue;
-	
+
 	let searchVal: string = '';
 	let search: string = '';
 
 	let type: SendType = 'all';
 	$: typeKey = type.charAt(0).toUpperCase() + type.slice(1);
-	
+
 	let loading = true;
 	let loadingMore = false;
 	let showStatus = false;
@@ -75,7 +75,7 @@
 	{#if loading}
 		<Loader full padding={100} />
 	{:else}
-		<Selector 
+		<Selector
 			name="Status"
 			bind:show={showStatus}
 			value={typeKey}

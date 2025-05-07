@@ -11,7 +11,7 @@
 	import type { Subscriber } from '../../types';
 	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import RelativeTime from '../@components/utils/RelativeTime.svelte';
+	import RelativeTime from '../../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';

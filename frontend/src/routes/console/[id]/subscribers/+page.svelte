@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Button, ButtonGroup, ActionList, ActionListItem, Dropdown, Text, TextInput, IconButton } from '@hyvor/design/components';
-	import Selector from '../@components/content/Selector.svelte';
+	import Selector from '../../@components/content/Selector.svelte';
 	import type { List, NewsletterSubscriberStatus } from '../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconPlus from '@hyvor/icons/IconPlus';
-	import SingleBox from '../@components/content/SingleBox.svelte';
+	import SingleBox from '../../@components/content/SingleBox.svelte';
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
 	import { listStore } from '../../lib/stores/projectStore';
@@ -70,7 +70,7 @@
 <SingleBox>
     <div class="content">
         <div class="left">
-            <Selector 
+            <Selector
                 name="Status"
                 bind:show={showStatus}
                 value={statusKey}
@@ -122,7 +122,7 @@
                     {/each}
                 </ActionList>
             </Selector>
-        
+
             <div class="search-wrap">
                 <TextInput
                     bind:value={searchVal}
@@ -145,7 +145,7 @@
                         {/if}
                     </svelte:fragment>
                 </TextInput>
-    
+
                 {#if search !== searchVal}
                     <span class="press-enter">
                         ⏎

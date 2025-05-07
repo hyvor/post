@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { IconButton, toast, confirm } from '@hyvor/design/components';
-	import { listStore, projectStore } from '../../../lib/stores/projectStore';
-	import type { List } from '../../../types';
+	import { listStore, projectStore } from '../../lib/stores/projectStore';
+	import type { List } from '../../types';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import { deleteList, updateList } from '../../../lib/actions/listActions';
+	import { deleteList, updateList } from '../../lib/actions/listActions';
 	import EditListButton from './EditListButton.svelte';
 
 	let { list }: { list: List } = $props();
@@ -49,7 +49,7 @@
 	async function onDelete(event: Event) {
 		event.stopPropagation();
 		event.preventDefault();
-		
+
 		const confirmation = await confirm({
 			title: 'Delete List',
 			content: 'Are you sure you want to delete this list?',
