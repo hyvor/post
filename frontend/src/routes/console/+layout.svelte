@@ -9,7 +9,7 @@
 	import consoleApi from "./lib/consoleApi";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import { page } from "$app/stores";
-	import { appConfig } from "./lib/stores/consoleStore";
+	import { setAppConfig } from './lib/stores/consoleStore';
 	import { projectStore } from "./lib/stores/projectStore";
   
 	interface Props {
@@ -19,7 +19,7 @@
 	let { children }: Props = $props();
 
 	interface InitResponse {
-		config: AppConfig
+		config: AppConfig;
 		projects: Project[];
 	}
 
@@ -32,7 +32,7 @@
 				endpoint: 'init'
 			})
 			.then((res) => {
-				appConfig.set(res.config)
+				setAppConfig(res.config);
 
 				userProjectsStore.set(res.projects);
 				projectStore.set(res.projects[0]); // Set the first project as the active project
