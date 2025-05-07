@@ -14,6 +14,15 @@ export interface AppConfig {
 		FONT_COLOR_ON_BACKGROUND: string,
 		FONT_COLOR_ON_BOX: string,
 		FONT_LINE_HEIGHT: string,
+	},
+
+	project_defaults: {
+		FORM_COLOR_TEXT: string,
+		FORM_COLOR_TEXT_LIGHT: string,
+		FORM_COLOR_LIGHT_ACCENT: string,
+		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
+		FORM_COLOR_LIGHT_INPUT: string,
+		FORM_COLOR_LIGHT_INPUT_TEXT: string,
 	}
 }
 
@@ -40,6 +49,21 @@ export type ProjectMeta = {
 	form_footer_text: string | null,
 	form_button_text: string | null,
 	form_success_message: string | null,
+
+	form_color_light_text: string | null,
+	form_color_light_text_light: string | null,
+	form_color_light_accent: string | null,
+	form_color_light_accent_text: string | null,
+	form_color_light_input: string | null,
+	form_color_light_input_text: string | null,
+
+	form_color_dark_text: string | null,
+	form_color_dark_text_light: string | null,
+	form_color_dark_accent: string | null,
+	form_color_dark_accent_text: string | null,
+	form_color_dark_input: string | null,
+	form_color_dark_input_text: string | null,
+
 }
 
 export type Project = {

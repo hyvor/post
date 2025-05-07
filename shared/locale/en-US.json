@@ -14,7 +14,21 @@
                 "subscribeButtonTextCaption": "Text shown on the subscribe button",
                 "successMessage": "Success Message",
                 "successMessageCaption": "Message shown after successful subscription",
-                "customCss": "Custom CSS"
+                "customCss": "Custom CSS",
+                "colors": "Colors",
+                "paletteLight": "Light Palette",
+                "paletteDark": "Dark Palette",
+                "textColor": "Text Color",
+                "textColorCaption": "Used for most texts in the form",
+                "textColorInherit": "Inherit from your website",
+                "textColorCustom": "Custom color",
+                "textLightColor": "Light Text Color",
+                "accentColor": "Accent",
+                "accentColorCaption": "Used for buttons and links",
+                "colorBackground": "Background",
+                "colorText": "Text",
+                "inputColor": "Input",
+                "inputColorCaption": "Used for email input"
             }
         }
     }

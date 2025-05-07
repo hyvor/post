@@ -1,10 +1,19 @@
-<script>
-	import { SplitControl, Textarea, TextInput } from '@hyvor/design/components';
+<script lang="ts">
+	import {
+		SplitControl,
+		TabNav,
+		TabNavItem,
+		Textarea,
+		TextInput
+	} from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
 	import { projectEditingStore } from '../../../lib/stores/projectStore';
 	import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
+	import FormColors from './FormColors.svelte';
 
 	const i18n = getI18n();
+
+	let palette: 'light' | 'dark' = $state('light');
 </script>
 
 <SplitControl
@@ -56,6 +65,17 @@
 	{/snippet}
 </SplitControl>
 
+<SplitControl label={i18n.t('console.settings.form.colors')}>
+	{#snippet nested()}
+		<TabNav active={palette}>
+			<TabNavItem name="light">{i18n.t('console.settings.form.paletteLight')}</TabNavItem>
+			<TabNavItem name="dark">{i18n.t('console.settings.form.paletteDark')}</TabNavItem>
+		</TabNav>
+
+		<FormColors {palette} />
+	{/snippet}
+</SplitControl>
+
 <SplitControl label={i18n.t('console.settings.form.customCss')} column>
 	<Textarea bind:value={$projectEditingStore.form_custom_css} block />
 </SplitControl>
@@ -67,6 +87,20 @@
 		'form_footer_text',
 		'form_button_text',
 		'form_success_message',
-		'form_custom_css'
+		'form_custom_css',
+
+		'form_color_light_text',
+		'form_color_light_text_light',
+		'form_color_light_accent',
+		'form_color_light_accent_text',
+		'form_color_light_input',
+		'form_color_light_input_text',
+
+		'form_color_dark_text',
+		'form_color_dark_text_light',
+		'form_color_dark_accent',
+		'form_color_dark_accent_text',
+		'form_color_dark_input',
+		'form_color_dark_input_text'
 	]}
 />

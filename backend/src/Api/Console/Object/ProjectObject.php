@@ -26,13 +26,28 @@ class ProjectObject
     public ?string $template_box_radius;
     public ?string $template_logo;
 
-    public ?int $form_width; // null = 100%
-    public ?string $form_custom_css;
     public ?string $form_title;
     public ?string $form_description;
     public ?string $form_footer_text;
     public ?string $form_button_text;
     public ?string $form_success_message;
+
+    public ?int $form_width; // null = 100%
+    public ?string $form_custom_css;
+
+    public ?string $form_color_light_text; // null = inherit
+    public ?string $form_color_light_text_light;
+    public ?string $form_color_light_accent;
+    public ?string $form_color_light_accent_text;
+    public ?string $form_color_light_input;
+    public ?string $form_color_light_input_text;
+
+    public ?string $form_color_dark_text; // null = inherit
+    public ?string $form_color_dark_text_light;
+    public ?string $form_color_dark_accent;
+    public ?string $form_color_dark_accent_text;
+    public ?string $form_color_dark_input;
+    public ?string $form_color_dark_input_text;
 
     public function __construct(Project $project)
     {
@@ -63,6 +78,21 @@ class ProjectObject
         $this->form_footer_text = $meta->form_footer_text;
         $this->form_button_text = $meta->form_button_text;
         $this->form_success_message = $meta->form_success_message;
+
+        $this->form_color_light_text = $meta->form_color_light_text;
+        $this->form_color_light_text_light = $meta->form_color_light_text_light;
+        $this->form_color_light_accent = $meta->form_color_light_accent;
+        $this->form_color_light_accent_text = $meta->form_color_light_accent_text;
+        $this->form_color_light_input = $meta->form_color_light_input;
+        $this->form_color_light_input_text = $meta->form_color_light_input_text;
+
+        $this->form_color_dark_text = $meta->form_color_dark_text;
+        $this->form_color_dark_text_light = $meta->form_color_dark_text_light;
+        $this->form_color_dark_accent = $meta->form_color_dark_accent;
+        $this->form_color_dark_accent_text = $meta->form_color_dark_accent_text;
+        $this->form_color_dark_input = $meta->form_color_dark_input;
+        $this->form_color_dark_input_text = $meta->form_color_dark_input_text;
+
     }
 
 }
