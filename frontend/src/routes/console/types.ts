@@ -32,6 +32,9 @@ export type ProjectMeta = {
 	template_font_line_height: string | null,
 	template_box_radius: string | null,
 
+	form_width: number | null,
+	form_custom_css: string | null,
+
 	form_title: string | null,
 	form_description: string | null,
 	form_footer_text: string | null,

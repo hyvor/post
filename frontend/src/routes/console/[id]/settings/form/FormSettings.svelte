@@ -1,5 +1,5 @@
 <script>
-	import { SplitControl, TextInput } from '@hyvor/design/components';
+	import { SplitControl, Textarea, TextInput } from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
 	import { projectEditingStore } from '../../../lib/stores/projectStore';
 	import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
@@ -56,12 +56,17 @@
 	{/snippet}
 </SplitControl>
 
+<SplitControl label={i18n.t('console.settings.form.customCss')} column>
+	<Textarea bind:value={$projectEditingStore.form_custom_css} block />
+</SplitControl>
+
 <ProjectSaveDiscard
 	keys={[
 		'form_title',
 		'form_description',
 		'form_footer_text',
 		'form_button_text',
-		'form_success_message'
+		'form_success_message',
+		'form_custom_css'
 	]}
 />

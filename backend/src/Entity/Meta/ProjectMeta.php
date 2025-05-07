@@ -35,7 +35,7 @@ class ProjectMeta
     public ?string $form_button_text = null;
     public ?string $form_success_message = null;
 
-    public ?int $width = 425; // null = 100%
+    public ?int $form_width = 425; // null = 100%
     public ?string $form_custom_css = null;
 
     public ?string $form_color_light_text = null; // null = inherit
@@ -51,8 +51,8 @@ class ProjectMeta
     public ?string $form_color_dark_accent_text = null;
     public ?string $form_color_dark_input = null;
 
+    public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;
     public int $form_input_box_shadow = 8;
-    public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
 
 }

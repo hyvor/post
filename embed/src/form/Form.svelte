@@ -9,9 +9,10 @@
     interface Props {
         projectUuid: string;
         instance: string;
+        shadowRoot: ShadowRoot;
     }
 
-    let { projectUuid, instance }: Props = $props();
+    let { projectUuid, instance, shadowRoot }: Props = $props();
     let loading = $state(true);
 
     let project: Project = $state({} as Project);
@@ -31,11 +32,21 @@
             .then((response) => {
                 project = response.project;
                 lists = response.lists;
+
+                setCustomCss();
             })
             .finally(() => {
                 loading = false;
             });
     });
+
+    function setCustomCss() {
+        if (project.form.custom_css) {
+            const style = document.createElement("style");
+            style.textContent = project.form.custom_css;
+            shadowRoot.appendChild(style);
+        }
+    }
 
     /**
      * Firstly loaded elements
@@ -115,93 +126,3 @@
         </div>
     </div>
 {/if}
-
-<style>
-    .form {
-        width: 425px;
-        margin: 0 auto;
-        max-width: 100%;
-
-        --hp-accent: #000;
-        --hp-accent-light: #dedede;
-        --hp-accent-text: #fff;
-    }
-    .form :global(*) {
-        box-sizing: border-box;
-    }
-
-    .title.hidden,
-    .lists.hidden,
-    .description.hidden {
-        display: none;
-    }
-
-    .title {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .description {
-        margin-top: -0.8rem;
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 1.2rem;
-    }
-
-    .input {
-        position: relative;
-    }
-    .email-input {
-        padding: 10px 25px;
-        border: none;
-        background-color: #fff;
-        border-radius: 20px;
-        box-shadow: 0 0 8px #0000001c;
-        border-radius: 20px;
-        width: 100%;
-        font-family: inherit;
-    }
-    button {
-        position: absolute;
-        right: 3px;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 0 25px;
-        background-color: #000;
-        color: #fff;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        height: calc(100% - 6px);
-        font-family: inherit;
-        z-index: 1;
-    }
-
-    .lists {
-        margin-bottom: 1.2rem;
-    }
-
-    .footer {
-        padding-top: 1rem;
-        font-size: 14px;
-        color: #666;
-    }
-
-    .list {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.8em;
-        cursor: pointer;
-    }
-
-    .list-name {
-        font-size: 16px;
-        font-weight: 600;
-    }
-
-    .list-description {
-        font-size: 14px;
-        color: #666;
-    }
-</style>

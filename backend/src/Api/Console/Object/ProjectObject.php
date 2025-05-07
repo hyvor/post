@@ -26,6 +26,8 @@ class ProjectObject
     public ?string $template_box_radius;
     public ?string $template_logo;
 
+    public ?int $form_width; // null = 100%
+    public ?string $form_custom_css;
     public ?string $form_title;
     public ?string $form_description;
     public ?string $form_footer_text;
@@ -54,6 +56,8 @@ class ProjectObject
         $this->template_box_radius = $meta->template_box_radius;
         $this->template_logo = $meta->template_logo;
 
+        $this->form_width = $meta->form_width;
+        $this->form_custom_css = $meta->form_custom_css;
         $this->form_title = $meta->form_title;
         $this->form_description = $meta->form_description;
         $this->form_footer_text = $meta->form_footer_text;
