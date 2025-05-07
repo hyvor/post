@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use function PHPUnit\Framework\assertIsString;
 
 class UserController extends AbstractController
 {
@@ -71,7 +70,6 @@ class UserController extends AbstractController
         if ($input->email !== null) {
             $hyvorUser = $this->auth->fromEmail($input->email);
         } else {
-            assertIsString($input->username);
             $hyvorUser = $this->auth->fromUsername($input->username);
         }
 
