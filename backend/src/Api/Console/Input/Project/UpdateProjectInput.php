@@ -2,26 +2,20 @@
 
 namespace App\Api\Console\Input\Project;
 
+use App\Api\Console\Object\ProjectObject;
 use App\Util\OptionalPropertyTrait;
 
-class UpdateProjectInput
+class UpdateProjectInput extends ProjectObject
 {
     use OptionalPropertyTrait;
 
-    public ?string $template_color_accent;
-    public ?string $template_color_background;
-    public ?string $template_color_box_background;
-    public ?string $template_color_box_shadow;
-    public ?string $template_color_box_border;
-    public ?string $template_font_family;
-    public ?string $template_font_size;
-    public ?string $template_font_weight;
-    public ?string $template_font_weight_heading;
-    public ?string $template_font_color_on_background;
-    public ?string $template_font_color_on_box;
-    public ?string $template_font_line_height;
-    public ?string $template_box_radius;
-    public ?string $template_logo;
+    public const UNUPDATABLE_PROPERTIES = [
+        'id',
+        'created_at',
+    ];
+
+    public function __construct()
+    {}
 
     /**
      * @return array<string>
@@ -30,7 +24,7 @@ class UpdateProjectInput
     {
         $properties = [];
         foreach (get_object_vars($this) as $property => $value) {
-            if ($this->hasProperty($property)) {
+            if ($this->hasProperty($property) && !in_array($property, self::UNUPDATABLE_PROPERTIES)) {
                 $properties[] = $property;
             }
         }

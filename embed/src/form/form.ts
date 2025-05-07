@@ -1,5 +1,6 @@
 import { mount } from "svelte";
 import Form from "./Form.svelte";
+import formCss from './form.css?inline'
 
 class HyvorPostForm extends HTMLElement {
     constructor() {
@@ -19,8 +20,13 @@ class HyvorPostForm extends HTMLElement {
 			props: {
 				projectUuid,
                 instance: this.getAttribute("instance") || "https://post.hyvor.com",
+                shadowRoot: this.shadowRoot!,
 			}
         });
+
+        const style = document.createElement("style");
+        style.textContent = formCss;
+        this.shadowRoot!.appendChild(style);
     }
 
     /* static get observedAttributes() {

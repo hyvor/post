@@ -1,7 +1,6 @@
-import { get } from 'svelte/store';
-import type { Issue, List, Project, ProjectStats } from '../types';
+import type { List, Project, ProjectStats } from '../types';
 import consoleApi from '../lib/consoleApi';
-import { issueStore, listStore, projectStatsStore, projectStore } from './stores/projectStore';
+import { issueStore, listStore, projectStatsStore, setProjectStore } from './stores/projectStore';
 
 interface ProjectResponse {
 	project: Project;
@@ -25,7 +24,8 @@ export function loadProject(projectId: string) {
 				projectId: projectId
 			})
 			.then((res) => {
-				projectStore.set(res.project);
+				
+				setProjectStore(res.project);
 				projectStatsStore.set(res.stats);
 				listStore.set(res.lists);
 
