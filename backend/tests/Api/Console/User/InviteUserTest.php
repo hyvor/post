@@ -2,6 +2,7 @@
 
 namespace App\Tests\Api\Console\User;
 
+use App\Entity\UserInvite;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use Hyvor\Internal\Auth\AuthFake;
@@ -67,6 +68,15 @@ class InviteUserTest extends WebTestCase
         $this->assertIsArray($user);
         $this->assertSame('supun@hyvor.com', $user['email']);
         $this->assertSame('Supun Wimalasena', $user['name']);
+
+        $userInviteRepository = $this->em->getRepository(UserInvite::class);
+        $userInvite = $userInviteRepository->findOneBy([
+            'hyvor_user_id' => 15,
+        ]);
+        $this->assertNotNull($userInvite);
+        $this->assertSame($project->getId(), $userInvite->getProject()->getId());
+        $this->assertSame(15, $userInvite->getHyvorUserId());
+        $this->assertSame($userInvite->getExpiresAt()->format('Y-m-d H:i:s'), $userInvite->getCreatedAt()->add(new \DateInterval('P1D'))->format('Y-m-d H:i:s'));
     }
 
     public function test_invite_user_by_email_with_wrong_email(): void

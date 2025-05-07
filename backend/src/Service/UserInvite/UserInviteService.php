@@ -44,7 +44,7 @@ class UserInviteService
         $userInvite->setProject($project);
         $userInvite->setHyvorUserId($hyvorUserId);
         $userInvite->setCode(bin2hex(random_bytes(16)));
-        $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P7D')));
+        $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P1D')));
 
         $this->em->persist($userInvite);
         $this->em->flush();
@@ -87,6 +87,15 @@ class UserInviteService
     public function deleteInvite(UserInvite $userInvite): void
     {
         $this->em->remove($userInvite);
+        $this->em->flush();
+    }
+
+    public function extendInvite(int $userId): void
+    {
+        $userInvite = $this->em->getRepository(UserInvite::class)->findOneBy(['hyvor_user_id' => $userId]);
+        if (!$userInvite)
+            throw new \RuntimeException("User invite not found");
+        $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P24H')));
         $this->em->flush();
     }
 }
