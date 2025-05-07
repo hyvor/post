@@ -26,8 +26,8 @@ final class Version20250209024328 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP,
             deleted_at timestamptz,
             project_id BIGINT NOT NULL references projects(id),
-            name VARCHAR(255) NOT NULL,
-            description TEXT
+            name TEXT NOT NULL,
+            description TEXT DEFAULT NULL
         );
         SQL);
     }

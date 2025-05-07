@@ -34,7 +34,7 @@ class IssueService
 
     public function createIssueDraft(Project $project): Issue
     {
-        $lists = $this->newsletterListService->getNewsletterLists($project);
+        $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
         $issue = new Issue()
             ->setProject($project)

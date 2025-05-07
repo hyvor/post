@@ -15,6 +15,9 @@ class Project
     #[ORM\Column]
     private int $id;
 
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private string $uuid;
+
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
 
@@ -43,6 +46,18 @@ class Project
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setUuid(string $uuid): static
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

@@ -1,3 +1,20 @@
 {
+    "console": {
+        "settings": {
+            "form": {
+                "texts": "Texts",
+                "title": "Title",
+                "titleCaption": "Shown above the form",
+                "description": "Description",
+                "descriptionCaption": "Shown below the title",
+                "footerText": "Footer text",
+                "footerTextCaption": "Shown below the form",
+                "subscribeButtonText": "Subscribe Button Text",
+                "subscribeButtonTextCaption": "Text shown on the subscribe button",
+                "successMessage": "Success Message",
+                "successMessageCaption": "Message shown after successful subscription"
+            }
+        }
+    }
     
 }
