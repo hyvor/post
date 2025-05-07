@@ -32,8 +32,17 @@ class ConsoleInitTest extends WebTestCase
             'user_id' => 1,
         ]);
 
+        foreach ($projects as $project) {
+            UserFactory::createOne([
+                'project' => $project,
+                'hyvor_user_id' => 1,
+                'role' => UserRole::OWNER
+            ]);
+        }
+
+
         // other user
-        ProjectFactory::createMany(2, [
+        ProjectFactory::createMany(1, [
             'user_id' => 2,
         ]);
 
@@ -59,13 +68,9 @@ class ConsoleInitTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertArrayHasKey('projects_owner', $data);
-        $this->assertIsArray($data['projects_owner']);
-        $this->assertSame(10, count($data['projects_owner']));
-
-        $this->assertArrayHasKey('projects_admin', $data);
-        $this->assertIsArray($data['projects_admin']);
-        $this->assertSame(1, count($data['projects_admin']));
+        $this->assertArrayHasKey('projects', $data);
+        $this->assertIsArray($data['projects']);
+        $this->assertSame(11, count($data['projects']));
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
@@ -75,6 +80,12 @@ class ConsoleInitTest extends WebTestCase
     public function testInitProject(): void
     {
         $project = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -98,6 +109,13 @@ class ConsoleInitTest extends WebTestCase
     public function testInitProjectWithStats(): void
     {
         $project = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
+
         NewsletterListFactory::createMany(10, [
             'project' => $project,
             'created_at' => new \DateTimeImmutable()
@@ -142,6 +160,13 @@ class ConsoleInitTest extends WebTestCase
     public function testInitProjectWithLists(): void
     {
         $project = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
+
         $newsletterList = NewsletterListFactory::createOne([
             'project' => $project,
         ]);

@@ -8,6 +8,8 @@ use App\Entity\Project;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\UserFactory;
+use App\Entity\Type\UserRole;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
@@ -37,6 +39,13 @@ class GetProjectsTest extends WebTestCase
     public function testListProjectsNonEmpty(): void
     {
         $projects = ProjectFactory::createMany(10, ['user_id' => 1]);
+        foreach ($projects as $project) {
+            $user = UserFactory::createOne([
+                'project' => $project,
+                'hyvor_user_id' => 1,
+                'role' => UserRole::OWNER
+            ]);
+        }
 
         $response = $this->consoleApi(
             null,

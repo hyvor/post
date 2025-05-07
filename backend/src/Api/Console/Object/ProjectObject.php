@@ -3,7 +3,8 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Project;
-use App\Entity\Type\UserRole;
+use App\Entity\User;
+use Hyvor\Internal\Auth\AuthUser;
 
 class ProjectObject
 {
@@ -11,6 +12,7 @@ class ProjectObject
     public int $id;
     public int $created_at; // unix timestamp
     public string $name;
+    public UserObject $current_user; // Current user in the project
 
     public ?string $template_color_accent = null;
     public ?string $template_color_background = null;
@@ -26,13 +28,13 @@ class ProjectObject
     public ?string $template_font_line_height = null;
     public ?string $template_box_radius = null;
     public ?string $template_logo = null;
-    public UserRole $userRole;
 
-    public function __construct(Project $project)
+    public function __construct(Project $project, User $projectUser, AuthUser $authUser)
     {
         $this->id = $project->getId();
         $this->created_at = $project->getCreatedAt()->getTimestamp();
         $this->name = $project->getName();
+        $this->current_user = new UserObject($projectUser, $authUser);
 
         $meta = $project->getMeta();
         $this->template_color_accent = $meta->template_color_accent;

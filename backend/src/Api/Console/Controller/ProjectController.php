@@ -30,26 +30,31 @@ final class ProjectController extends AbstractController
     public function getUserAllProjects(): JsonResponse
     {
         $user = $this->getHyvorUser();
-        $projectsOwner = $this->projectService->getProjectsOfUserOwner($user->id);
-        $projectAdmin = $this->projectService->getProjectsOfUserAdmin($user->id);
-        $projects = array_merge($projectsOwner, $projectAdmin);
-        return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
+        $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
+        $projects = array_map(
+            fn(array $pair) => new ProjectObject($pair['project'], $pair['user'], $user),
+            $projectsUsers
+        );
+        return $this->json($projects);
     }
 
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
-        $user = $this->getUser();
-        assert($user instanceof AuthUser);
+        $user = $this->getHyvorUser();
 
         $project = $this->projectService->createProject($user->id, $input->name);
-        return $this->json(new ProjectObject($project));
+        $projectUser = $this->projectService->getProjectUser($project, $user->id);
+        return $this->json(new ProjectObject($project, $projectUser, $user));
     }
 
     #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
     public function getProjectById(Project $project): JsonResponse
     {
-        return $this->json(new ProjectObject($project));
+        $user = $this->getHyvorUser();
+
+        $projectUser = $this->projectService->getProjectUser($project, $user->id);
+        return $this->json(new ProjectObject($project, $projectUser, $user));
     }
 
     #[Route('/projects', methods: 'DELETE')]
@@ -65,6 +70,7 @@ final class ProjectController extends AbstractController
         #[MapRequestPayload] UpdateProjectInput $input
     ): JsonResponse
     {
+        $user = $this->getHyvorUser();
         // later we may need to add functions to update project non-meta properties
 
         $updatesMeta = new UpdateProjectMetaDto();
@@ -75,7 +81,8 @@ final class ProjectController extends AbstractController
         }
 
         $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
+        $projectUser = $this->projectService->getProjectUser($project, $user->id);
 
-        return $this->json(new ProjectObject($project));
+        return $this->json(new ProjectObject($project, $projectUser, $user));
     }
 }

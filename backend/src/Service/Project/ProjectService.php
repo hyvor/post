@@ -65,6 +65,12 @@ class ProjectService
 
     public function deleteProject(Project $project): void
     {
+        // Delete project users
+        $projectUsers = $this->em->getRepository(User::class)->findBy(['project' => $project]);
+        foreach ($projectUsers as $projectUser) {
+            $this->em->remove($projectUser);
+        }
+
         $this->em->remove($project);
         $this->em->flush();
     }
@@ -75,21 +81,34 @@ class ProjectService
     }
 
     /**
-     * @return list<Project>
+     * @return array<array{project: Project, user: User}>
      */
-    public function getProjectsOfUserOwner(int $userId): array
+    public function getProjectsOfUser(int $userId): array
     {
-        return $this->em->getRepository(Project::class)->findBy(['user_id' => $userId]);
+        $projectUsers = $this->em->getRepository(User::class)->findBy(['hyvor_user_id' => $userId]);
+        $projects = [];
+        foreach ($projectUsers as $projectUser) {
+            $projects[] = [
+                'project' => $projectUser->getProject(),
+                'user' => $projectUser,
+            ];
+        }
+        return $projects;
     }
 
-    /**
-     * @return list<Project>
-     */
-    public function getProjectsOfUserAdmin(int $userId): array
+    public function getProjectUser(Project $project, int $userId): User
     {
-        return array_map(fn($pu) => $pu->getProject(), $this->em->getRepository(User::class)->findBy([
-            'hyvor_user_id' => $userId, 'role' => UserRole::ADMIN,
-        ]));
+
+        $projectUser = $this->em->getRepository(User::class)->findOneBy([
+            'project' => $project,
+            'hyvor_user_id' => $userId,
+        ]);
+
+        if ($projectUser === null) {
+            throw new \RuntimeException('Project user not found');
+        }
+
+        return $projectUser;
     }
 
     /**

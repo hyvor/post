@@ -4,9 +4,11 @@ namespace App\Tests\Api\Console\Project;
 
 use App\Api\Console\Controller\ProjectController;
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ProjectController::class)]
@@ -20,6 +22,11 @@ class DeleteProjectTest extends WebTestCase
     public function testDeleteProjectFound(): void
     {
         $project = ProjectFactory::createOne();
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
 
         $project_id = $project->getId();
 

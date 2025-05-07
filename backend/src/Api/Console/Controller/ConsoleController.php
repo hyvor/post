@@ -33,15 +33,14 @@ final class ConsoleController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof AuthUser);
 
-        $projectOwner = $this->projectService->getProjectsOfUserOwner($user->id);
-        $projectOwner = array_map(fn(Project $project) => new ProjectObject($project), $projectOwner);
-
-        $projectAdmin = $this->projectService->getProjectsOfUserAdmin($user->id);
-        $projectAdmin = array_map(fn(Project $project) => new ProjectObject($project), $projectAdmin);
+        $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
+        $projects = array_map(
+            fn(array $pair) => new ProjectObject($pair['project'], $pair['user'], $user),
+            $projectsUsers
+        );
 
         return new JsonResponse([
-            'projects_owner' => $projectOwner,
-            'projects_admin' => $projectAdmin,
+            'projects' => $projects,
             'config' => [
                 'template_defaults' => TemplateDefaults::getAll()
             ],
@@ -51,6 +50,9 @@ final class ConsoleController extends AbstractController
     #[Route('/init/project',  methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
+        $user = $this->getUser();
+        assert($user instanceof AuthUser);
+
         $projectStats = $this->projectService->getProjectStats($project);
         $lists = $this->listRepository->findBy(
             [
@@ -58,8 +60,10 @@ final class ConsoleController extends AbstractController
                 'deleted_at' => null,
             ]
         );
+        $projectUser = $this->projectService->getProjectUser($project, $user->id);
+
         return new JsonResponse([
-            'project' => new ProjectObject($project),
+            'project' => new ProjectObject($project, $projectUser, $user),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'stats' => new StatsObject(
                 $projectStats[0],
