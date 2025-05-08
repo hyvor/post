@@ -42,6 +42,7 @@ export type UserMini = {
 export type UserRole = 'owner' | 'admin';
 
 export type User = {
+	id: number,
 	role: UserRole,
 	created_at: number,
 	user: UserMini,

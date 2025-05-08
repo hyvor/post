@@ -15,22 +15,35 @@
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
 	import { projectStore } from '../../../lib/stores/projectStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
+	import { deleteUser } from '../../../lib/actions/userActions';
 
+	export let refreshUserDelete: (u: User) => void;
 	export let user: User;
 
 	async function handleRemove() {
-		const confirmed = await confirm({
+		const confirmation = await confirm({
 			title: "Remove Admin",
 			content: "Are you sure you want to remove this admin?",
 			confirmText: "Yes",
 			cancelText: "Cancel",
 			danger: true
 		});
-		if (confirmed) {
-			confirmed.loading("Removing...");
-		}
+		if (!confirmation) return;
+
+		confirmation.loading();
+
+		deleteUser(user.id)
+			.then(() => {
+				toast.success('Subscriber deleted successfully');
+				refreshUserDelete(user);
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			})
+			.finally(() => {
+				confirmation.close();
+			});
 	}
-	console.log($projectStore)
 </script>
 
 <TableRow>
@@ -49,7 +62,7 @@
 					<RoleTag size="x-small" role={user.role} />
 				</div>
 				{#if user.role == 'owner' && $projectStore.user_role != 'owner'}
-					<IconButton size={27}>
+					<IconButton size={27} on:click={handleRemove}>
 						<IconTrash size={13} />
 					</IconButton>
 				{/if}

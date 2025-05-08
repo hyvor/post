@@ -31,3 +31,9 @@ export function deleteInvite(id: number) {
         endpoint: `invites/${id}`
     });
 }
+
+export function deleteUser(id: number) {
+    return consoleApi.delete({
+        endpoint: `users/${id}`
+    });
+}

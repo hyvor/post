@@ -64,7 +64,10 @@
 	<div class="moderators">
 		<SplitControl label="Admins" column>
 			{#each users as user}
-				<AdminRow user={user} />
+				<AdminRow 
+					user={user}
+					refreshUserDelete={(u: User) => (users = users.filter((e) => e.id !== u.id))}
+				/>
 			{/each}
 		</SplitControl>
 
