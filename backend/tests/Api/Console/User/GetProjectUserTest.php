@@ -2,12 +2,21 @@
 
 namespace Api\Console\User;
 
+use App\Api\Console\Controller\UserController;
+use App\Api\Console\Object\UserObject;
+use App\Service\User\UserService;
+use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\UserFactory;
 use App\Entity\Type\UserRole;
 use Hyvor\Internal\Auth\AuthFake;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(UserController::class)]
+#[CoversClass(UserService::class)]
+#[CoversClass(UserInviteService::class)]
+#[CoversClass(UserObject::class)]
 class GetProjectUserTest extends WebTestCase
 {
     public function test_get_project_users(): void

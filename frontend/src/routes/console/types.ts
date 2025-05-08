@@ -36,7 +36,7 @@ export type ProjectMeta = {
 export type UserMini = {
 	name: string,
 	username: string | null,
-	picture: string | null,
+	picture_url: string | null,
 }
 
 export type UserRole = 'owner' | 'admin';
@@ -45,6 +45,13 @@ export type User = {
 	role: UserRole,
 	created_at: number,
 	user: UserMini,
+}
+
+export type Invite = {
+	created_at: number,
+	role: UserRole,
+	user: UserMini,
+	expires_at: number,
 }
 
 export type ProjectList = {

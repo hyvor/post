@@ -11,12 +11,13 @@
 
 	} from '@hyvor/design/components';
 	import { toast } from '@hyvor/design/components';
+	import { inviteUser } from '../../../lib/actions/userActions';
+	import type { Invite } from '../../../types';
 	
 	export let show: boolean;
+	export let refreshInvite: (i: Invite) => void
 
-	let loading = false;
 	let usernameOrEmail = '';
-	let role: 'admin';
 	let isInviting = false;
 
 	async function handleInvite() {
@@ -28,11 +29,14 @@
 		const inviteData = {
 			username: isEmail ? undefined : usernameOrEmail,
 			email: isEmail ? usernameOrEmail : undefined,
-			role : role,
+			role : 'admin', // Hardcoded for now
 		};
 
 		try {
 			isInviting = true;
+			const invite = await inviteUser(inviteData);
+			refreshInvite(invite);
+			toast.success('Invitation sent');
 		
 		} catch (e: any) {
 			toast.error(e.message);
@@ -55,6 +59,7 @@
             text: 'Invite',
         }
     }}
+	on:confirm={handleInvite}
 >
 	<Callout type="info">
 		<div slot="title">HYVOR account required</div>

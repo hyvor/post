@@ -35,8 +35,10 @@
 				appConfig.set(res.config)
 
 				userProjectsStore.set(res.projects);
-				const { role, ...project } = res.projects[0];
-				projectStore.set(project); // Set the first project as the active project
+				if (res.projects.length != 0) {
+					const { role, ...project } = res.projects[0];
+					projectStore.set(project); // Set the first project as the active project
+				}
 				isLoading = false;
 			})
 			.catch((err) => {

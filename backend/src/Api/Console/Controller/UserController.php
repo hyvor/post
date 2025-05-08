@@ -7,6 +7,7 @@ use App\Api\Console\Object\UserInviteObject;
 use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Project;
+use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -92,5 +93,12 @@ class UserController extends AbstractController
         return $this->json(
             new UserInviteObject($invite, $hyvorUser),
         );
+    }
+
+    #[Route('/users/invites/{id}', methods: 'DELETE')]
+    public function deleteInvite(Project $project, UserInvite $userInvite): JsonResponse
+    {
+        $this->userInviteService->deleteInvite($userInvite);
+        return $this->json([]);
     }
 }

@@ -2,13 +2,22 @@
 
 namespace App\Tests\Api\Console\User;
 
+use App\Api\Console\Controller\UserController;
+use App\Api\Console\Object\UserObject;
 use App\Entity\UserInvite;
+use App\Service\User\UserService;
+use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use Illuminate\Support\Facades\Date;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 
+#[CoversClass(UserController::class)]
+#[CoversClass(UserService::class)]
+#[CoversClass(UserInviteService::class)]
+#[CoversClass(UserObject::class)]
 class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void
