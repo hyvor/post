@@ -34,7 +34,7 @@
 	</div>
 
     <div class="role">
-		<RoleTag role={project.role} />
+		<RoleTag role={project.user_role} />
 	</div>
 
 	<div class="right">&rarr;</div>
@@ -78,6 +78,7 @@
 	.id-tag {
 		font-size: 12px;
 		color: var(--text-light);
+		margin-right: 5px;
 	}
 	.role {
 		margin-right: 15px;

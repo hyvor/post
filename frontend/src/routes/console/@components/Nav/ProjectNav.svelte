@@ -26,10 +26,6 @@
 			<div class="name">
 				{$projectStore.name}
 			</div>
-			<div class="id">
-				ID
-				<Tag size="x-small"><strong> {$projectStore.id}</strong></Tag>
-			</div>
 		</div>
 		<IconChevronExpand />
 	</button>
