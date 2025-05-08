@@ -6,6 +6,7 @@ use App\Entity\UserInvite;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use Hyvor\Internal\Auth\AuthFake;
+use Illuminate\Support\Facades\Date;
 
 
 class InviteUserTest extends WebTestCase
@@ -76,7 +77,7 @@ class InviteUserTest extends WebTestCase
         $this->assertNotNull($userInvite);
         $this->assertSame($project->getId(), $userInvite->getProject()->getId());
         $this->assertSame(15, $userInvite->getHyvorUserId());
-        $this->assertSame($userInvite->getExpiresAt()->format('Y-m-d H:i:s'), $userInvite->getCreatedAt()->add(new \DateInterval('P1D'))->format('Y-m-d H:i:s'));
+        $this->assertSame(new \DateTimeImmutable()->add(new \DateInterval('P1D'))->format('Y-m-d H:i:s'), $userInvite->getExpiresAt()->format('Y-m-d H:i:s'));
     }
 
     public function test_invite_user_by_email_with_wrong_email(): void

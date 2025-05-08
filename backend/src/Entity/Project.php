@@ -35,23 +35,6 @@ class Project
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'project_id')]
-    private Collection $users;
-
-    /**
-     * @var Collection<int, UserInvite>
-     */
-    #[ORM\OneToMany(targetEntity: UserInvite::class, mappedBy: 'project')]
-    private Collection $userInvites;
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->userInvites = new ArrayCollection();
-    }
 
     public function setId(int $id): static
     {
@@ -123,30 +106,5 @@ class Project
         $this->name = $name;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setProject($this);
-        }
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserInvite>
-     */
-    public function getUserInvites(): Collection
-    {
-        return $this->userInvites;
     }
 }
