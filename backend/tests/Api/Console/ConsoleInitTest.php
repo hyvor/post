@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
+use App\Api\Console\Object\ProjectListObject;
 use App\Entity\Type\IssueStatus;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ProjectService::class)]
 #[CoversClass(StatsObject::class)]
 #[CoversClass(StatCategoryObject::class)]
+#[CoversClass(ProjectListObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 
@@ -104,6 +106,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
         $this->assertSame($project->getId(), $data['project']['id']);
+        $this->assertSame(UserRole::OWNER->value, $data['project']['user_role']);
     }
 
     public function testInitProjectWithStats(): void

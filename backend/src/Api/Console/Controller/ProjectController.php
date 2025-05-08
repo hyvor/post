@@ -44,17 +44,13 @@ final class ProjectController extends AbstractController
         $user = $this->getHyvorUser();
 
         $project = $this->projectService->createProject($user->id, $input->name);
-        $projectUser = $this->projectService->getProjectUser($project, $user->id);
-        return $this->json(new ProjectObject($project, $projectUser, $user));
+        return $this->json(new ProjectObject($project));
     }
 
     #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
     public function getProjectById(Project $project): JsonResponse
     {
-        $user = $this->getHyvorUser();
-
-        $projectUser = $this->projectService->getProjectUser($project, $user->id);
-        return $this->json(new ProjectObject($project, $projectUser, $user));
+        return $this->json(new ProjectObject($project));
     }
 
     #[Route('/projects', methods: 'DELETE')]
@@ -70,7 +66,6 @@ final class ProjectController extends AbstractController
         #[MapRequestPayload] UpdateProjectInput $input
     ): JsonResponse
     {
-        $user = $this->getHyvorUser();
         // later we may need to add functions to update project non-meta properties
 
         $updatesMeta = new UpdateProjectMetaDto();
@@ -81,8 +76,7 @@ final class ProjectController extends AbstractController
         }
 
         $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
-        $projectUser = $this->projectService->getProjectUser($project, $user->id);
 
-        return $this->json(new ProjectObject($project, $projectUser, $user));
+        return $this->json(new ProjectObject($project));
     }
 }

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Tag } from '@hyvor/design/components';
-	import type { Project } from '../../types';
+	import type { ProjectList } from '../../types';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { loadProject } from '../../lib/projectLoader';
 	import RoleTag from './RoleTag.svelte';
 	import { selectingProject } from '../../lib/stores/consoleStore';
 
-	export let project: Project;
+	export let project: ProjectList;
 
 	function onClick() {
 		projectStore.set(project);
@@ -34,7 +34,7 @@
 	</div>
 
     <div class="role">
-		<RoleTag role={project.current_user.role} />
+		<RoleTag role={project.role} />
 	</div>
 
 	<div class="right">&rarr;</div>

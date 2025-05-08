@@ -5,8 +5,8 @@
 	export let own = false;
 
     const projects = own ? 
-					$userProjectsStore.filter(p => p.current_user.role == 'owner') :
-					$userProjectsStore.filter(p => p.current_user.role != 'owner');
+					$userProjectsStore.filter(p => p.role == 'owner') :
+					$userProjectsStore.filter(p => p.role != 'owner');
 	
 </script>
 

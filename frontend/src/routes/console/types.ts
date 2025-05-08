@@ -47,11 +47,17 @@ export type User = {
 	user: UserMini,
 }
 
+export type ProjectList = {
+	id: number,
+	created_at: number,
+	name: string,
+	role: UserRole,
+} & ProjectMeta;
+
 export type Project = {
 	id: number,
 	created_at: number,
 	name: string,
-	current_user: User
 } & ProjectMeta;
 
 export interface ProjectStats {

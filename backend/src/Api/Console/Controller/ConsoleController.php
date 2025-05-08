@@ -3,6 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Object\IssueObject;
+use App\Api\Console\Object\ProjectListObject;
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\ListObject;
@@ -36,7 +37,7 @@ final class ConsoleController extends AbstractController
 
         $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
         $projects = array_map(
-            fn(array $pair) => new ProjectObject($pair['project'], $pair['user'], $user),
+            fn(array $pair) => new ProjectListObject($pair['project'], $pair['user']->getRole()),
             $projectsUsers
         );
 
@@ -64,7 +65,7 @@ final class ConsoleController extends AbstractController
         $projectUser = $this->projectService->getProjectUser($project, $user->id);
 
         return new JsonResponse([
-            'project' => new ProjectObject($project, $projectUser, $user),
+            'project' => new ProjectListObject($project, $projectUser->getRole()),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'stats' => new StatsObject(
                 $projectStats[0],

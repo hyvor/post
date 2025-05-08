@@ -11,6 +11,7 @@
 	import { appConfig } from "./lib/stores/consoleStore";
 	import { projectStore } from "./lib/stores/projectStore";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
+	import ProjectList from "./@components/Nav/ProjectList.svelte";
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -19,7 +20,7 @@
 
 	interface InitResponse {
 		config: AppConfig
-		projects: Project[]
+		projects: ProjectList[]
 	}
 
 	let isLoading = $state(true);;
@@ -34,7 +35,8 @@
 				appConfig.set(res.config)
 
 				userProjectsStore.set(res.projects);
-				projectStore.set(res.projects[0]); // Set the first project as the active project
+				const { role, ...project } = res.projects[0];
+				projectStore.set(project); // Set the first project as the active project
 				isLoading = false;
 			})
 			.catch((err) => {
