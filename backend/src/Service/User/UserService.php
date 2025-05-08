@@ -21,11 +21,10 @@ class UserService
     /**
      * @return ArrayCollection<int, User>
      */
-    public function getProjectAdmin(Project $project): ArrayCollection
+    public function getProjectUsers(Project $project): ArrayCollection
     {
         $users = $this->em->getRepository(User::class)->findBy([
             'project' => $project,
-            'role' => UserRole::ADMIN->value
         ]);
 
         if (!$users)

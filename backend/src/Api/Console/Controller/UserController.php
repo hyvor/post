@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\UserInvite\InviteUserInput;
 use App\Api\Console\Object\UserInviteObject;
 use App\Api\Console\Object\UserMiniObject;
+use App\Api\Console\Object\UserObject;
 use App\Entity\Project;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
@@ -32,16 +33,16 @@ class UserController extends AbstractController
     #[Route('/users', methods: 'GET')]
     public function getUsers(Project $project): JsonResponse
     {
-        $admins = $this->userService->getProjectAdmin($project)
+        $users = $this->userService->getProjectUsers($project)
             ->map(function ($user) {
                 $hyvorUser = $this->auth->fromId($user->getHyvorUserId());
                 if ($hyvorUser === null) {
                     throw new \RuntimeException("AuthUser not found for invite");
                 }
-                return new UserMiniObject($hyvorUser);
+                return new UserObject($user, $hyvorUser);
             });
 
-        return $this->json($admins);
+        return $this->json($users);
     }
 
     #[Route('/users/invites', methods: 'GET')]

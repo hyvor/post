@@ -4,6 +4,7 @@
 	import TopBar from '../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
 	import AdminInvitationModal from './AdminInvitationModal.svelte';
+	import Admins from './Admins.svelte';
 
 
 	let inviterOpen = false;
@@ -12,7 +13,7 @@
 
 <TopBar>
 	<Button on:click={() => (inviterOpen = true)}>
-		Add Moderator 
+		Add Admin 
         {#snippet end()}
             <IconPlus />
         {/snippet}
@@ -26,4 +27,4 @@
 	{/if}
 </TopBar>
 
-
+<Admins />
