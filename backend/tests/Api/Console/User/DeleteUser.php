@@ -4,12 +4,13 @@ namespace Api\Console\User;
 
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
-use App\Entity\UserInvite;
+use App\Entity\User;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\UserInviteFactory;
+use App\Tests\Factory\UserFactory;
+
 use Hyvor\Internal\Auth\AuthFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -17,9 +18,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserService::class)]
 #[CoversClass(UserInviteService::class)]
 #[CoversClass(UserObject::class)]
-class DeleteUserInviteTest extends WebTestCase
+class DeleteUser extends WebTestCase
 {
-    public function test_delete_user_invite(): void
+    public function test_delete_user(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -29,26 +30,26 @@ class DeleteUserInviteTest extends WebTestCase
             'name' => 'Supun Wimalasena',
         ]);
 
-        $invite = UserInviteFactory::createOne([
+        $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
             'project' => $project,
         ]);
 
-        $inviteId = $invite->getId();
+        $userId = $user->getId();
 
         $response = $this->consoleApi(
             $project,
             'DELETE',
-            '/invites/' . $invite->getId()
+            '/users/' . $user->getId()
         );
 
         $this->assertResponseStatusCodeSame(200);
 
-        $invite = $this->em->getRepository(UserInvite::class)->find($inviteId);
-        $this->assertNull($invite);
+        $user = $this->em->getRepository(User::class)->find($userId);
+        $this->assertNull($user);
     }
 
-    public function test_delete_user_invite_not_found(): void
+    public function test_delete_user_not_found(): void
     {
         $project = ProjectFactory::createOne();
 
@@ -58,17 +59,17 @@ class DeleteUserInviteTest extends WebTestCase
             'name' => 'Supun Wimalasena',
         ]);
 
-        $invite = UserInviteFactory::createOne([
+        $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
             'project' => $project,
         ]);
 
-        $inviteId = $invite->getId();
+        $userId = $user->getId();
 
         $response = $this->consoleApi(
             $project,
             'DELETE',
-            '/invites/' . ($inviteId + 1)
+            '/users/' . ($user->getId() + 1)
         );
 
         $this->assertResponseStatusCodeSame(404);

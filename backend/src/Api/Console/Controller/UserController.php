@@ -7,6 +7,7 @@ use App\Api\Console\Object\UserInviteObject;
 use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Project;
+use App\Entity\User;
 use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
@@ -46,7 +47,14 @@ class UserController extends AbstractController
         return $this->json($users);
     }
 
-    #[Route('/users/invites', methods: 'GET')]
+    #[Route('users/{id}', methods: 'DELETE')]
+    public function deleteUser(Project $project, User $user): JsonResponse
+    {
+        $this->userService->deleteUser($project, $user);
+        return $this->json([]);
+    }
+
+    #[Route('/invites', methods: 'GET')]
     public function getInvites(Project $project): JsonResponse
     {
         $invites = $this->userInviteService->getProjectInvites($project)
@@ -62,7 +70,7 @@ class UserController extends AbstractController
         return $this->json($invites);
     }
 
-    #[Route('/users/invites', methods: 'POST')]
+    #[Route('/invites', methods: 'POST')]
     public function invite(Project $project, #[MapRequestPayload] InviteUserInput $input): JsonResponse
     {
         if (!$input->email && !$input->username) {
@@ -93,7 +101,7 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route('/users/invites/{id}', methods: 'DELETE')]
+    #[Route('/invites/{id}', methods: 'DELETE')]
     public function deleteInvite(Project $project, UserInvite $userInvite): JsonResponse
     {
         $this->userInviteService->deleteInvite($userInvite);

@@ -60,4 +60,10 @@ class UserService
 
         return $user;
     }
+
+    public function deleteUser(Project $project, User $user): void
+    {
+        $this->em->remove($user);
+        $this->em->flush();
+    }
 }

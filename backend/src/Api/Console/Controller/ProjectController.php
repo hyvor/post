@@ -32,7 +32,7 @@ final class ProjectController extends AbstractController
         $user = $this->getHyvorUser();
         $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
         $projects = array_map(
-            fn(array $pair) => new ProjectObject($pair['project'], $pair['user'], $user),
+            fn(array $pair) => new ProjectObject($pair['project']),
             $projectsUsers
         );
         return $this->json($projects);

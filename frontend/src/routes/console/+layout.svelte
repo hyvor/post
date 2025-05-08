@@ -36,8 +36,7 @@
 
 				userProjectsStore.set(res.projects);
 				if (res.projects.length != 0) {
-					const { role, ...project } = res.projects[0];
-					projectStore.set(project); // Set the first project as the active project
+					projectStore.set(res.projects[0]); // Set the first project as the active project
 				}
 				isLoading = false;
 			})

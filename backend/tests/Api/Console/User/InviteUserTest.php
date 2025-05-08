@@ -37,7 +37,7 @@ class InviteUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/users/invites',
+            '/invites',
             [
                 'username' => 'supun',
             ]
@@ -68,7 +68,7 @@ class InviteUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/users/invites',
+            '/invites',
             [
                 'email' => 'supun@hyvor.com',
             ]
@@ -99,7 +99,7 @@ class InviteUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/users/invites',
+            '/invites',
             [
                 'email' => 'supun@hyvor.com',
             ]
@@ -117,7 +117,7 @@ class InviteUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/users/invites',
+            '/invites',
             [
                 'username' => 'supun',
             ]
@@ -150,7 +150,7 @@ class InviteUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/users/invites',
+            '/invites',
             [
                 'email' => 'supun@hyvor.com',
             ]

@@ -62,7 +62,7 @@
 	<Loader full />
 {:else}
 	<div class="moderators">
-		<SplitControl label="Moderators" column>
+		<SplitControl label="Admins" column>
 			{#each users as user}
 				<AdminRow user={user} />
 			{/each}

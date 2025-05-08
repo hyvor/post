@@ -37,7 +37,7 @@ class GetInvitesUserTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'GET',
-            '/users/invites'
+            '/invites'
         );
 
         $this->assertResponseStatusCodeSame(200);

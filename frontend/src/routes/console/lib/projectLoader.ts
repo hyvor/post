@@ -1,10 +1,10 @@
 import { get } from 'svelte/store';
-import type { Issue, List, Project, ProjectStats } from '../types';
+import type { Issue, List, Project, ProjectList, ProjectStats } from '../types';
 import consoleApi from '../lib/consoleApi';
 import { issueStore, listStore, projectStatsStore, projectStore } from './stores/projectStore';
 
 interface ProjectResponse {
-	project: Project;
+	project: ProjectList;
 	stats: ProjectStats;
 	lists: List[];
 }

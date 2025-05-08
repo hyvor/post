@@ -13,12 +13,10 @@
 	import type { User } from '../../../types';
 	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
-
+	import { projectStore } from '../../../lib/stores/projectStore';
+	import IconTrash from '@hyvor/icons/IconTrash';
 
 	export let user: User;
-
-	$: isCurrentUserOwner = user.role === 'owner';
-	$: isCurrentUserAdmin = user.role === 'admin';
 
 	async function handleRemove() {
 		const confirmed = await confirm({
@@ -32,6 +30,7 @@
 			confirmed.loading("Removing...");
 		}
 	}
+	console.log($projectStore)
 </script>
 
 <TableRow>
@@ -46,7 +45,14 @@
 					{/if}
 				</div>
 
-				<div class="badge"><RoleTag size="x-small" role={user.role}></RoleTag></div>
+				<div class="badge">
+					<RoleTag size="x-small" role={user.role} />
+				</div>
+				{#if user.role == 'owner' && $projectStore.user_role != 'owner'}
+					<IconButton size={27}>
+						<IconTrash size={13} />
+					</IconButton>
+				{/if}
 			</div>
 		</div>
 	</div>

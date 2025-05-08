@@ -10,7 +10,7 @@ export function getProjectUsers() {
 
 export function getProjectInvites() {
     return consoleApi.get<Invite[]>({
-        endpoint: 'users/invites'
+        endpoint: 'invites'
     });
 }
 
@@ -21,13 +21,13 @@ interface InviteUserInput {
 }
 export function inviteUser(data: InviteUserInput) {
 	return consoleApi.post<Invite>({
-		endpoint: 'users/invites',
+		endpoint: 'invites',
 		data
 	});
 }
 
 export function deleteInvite(id: number) {
     return consoleApi.delete({
-        endpoint: `users/invites/${id}`
+        endpoint: `invites/${id}`
     });
 }

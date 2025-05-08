@@ -59,7 +59,7 @@ export type ProjectList = {
 	id: number,
 	created_at: number,
 	name: string,
-	role: UserRole,
+	user_role: UserRole,
 } & ProjectMeta;
 
 export type Project = {

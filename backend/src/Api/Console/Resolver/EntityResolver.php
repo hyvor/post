@@ -25,7 +25,8 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'issues' => Issue::class,
         'domain' => Domain::class,
-        'users' => UserInvite::class,
+        'users' => User::class,
+        'invites' => UserInvite::class,
     ];
 
     public function __construct(
