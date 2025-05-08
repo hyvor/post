@@ -82,11 +82,9 @@ class UserController extends AbstractController
             throw new BadRequestHttpException("User is already an admin");
 
         if ($this->userInviteService->isInvited($hyvorUser->id))
-        {
-            $this->userInviteService->extendInvite($hyvorUser->id);
-        }
-
-        $invite = $this->userInviteService->createInvite($project, $hyvorUser->id);
+            $invite = $this->userInviteService->extendInvite($hyvorUser->id);
+        else
+            $invite = $this->userInviteService->createInvite($project, $hyvorUser->id);
 
         $this->userInviteService->sendEmail($project, $hyvorUser, $invite);
 

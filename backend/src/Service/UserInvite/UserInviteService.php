@@ -90,12 +90,13 @@ class UserInviteService
         $this->em->flush();
     }
 
-    public function extendInvite(int $userId): void
+    public function extendInvite(int $userId): UserInvite
     {
         $userInvite = $this->em->getRepository(UserInvite::class)->findOneBy(['hyvor_user_id' => $userId]);
         if (!$userInvite)
             throw new \RuntimeException("User invite not found");
-        $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P24H')));
+        $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P1D')));
         $this->em->flush();
+        return $userInvite;
     }
 }

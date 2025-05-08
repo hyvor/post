@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { Button, Tag } from '@hyvor/design/components';
 	import { IconButton } from '@hyvor/design/components';
-	import { toast } from '@hyvor/design/components';
+	import { toast, confirm } from '@hyvor/design/components';
 	import type { Invite } from '../../../types';
 	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
+	import { deleteInvite, inviteUser } from '../../../lib/actions/userActions';
 
 	export let invite: Invite;
+    export let refreshInviteDelete: (i: Invite) => void;
 
 	let lastResentTime = 0;
 
-	function handleResend() {
+	async function handleResend() {
 		if (lastResentTime) {
 			const timeSinceLastResend = Date.now() - lastResentTime;
 			if (timeSinceLastResend < 1000 * 60) {
@@ -21,14 +23,40 @@
 		}
 		lastResentTime = Date.now();
 
-		resendModInvite(invite.id);
+        const inviteData = {
+			username: invite.user.username!,
+			role : 'admin', // Hardcoded for now
+		};
 
-		toast.success('Invitation resent');
+		try {
+			const invite = await inviteUser(inviteData);
+            toast.success('Invitation resent');
+		} catch (e: any) {
+			toast.error(e.message);
+		}
 	}
 
-	function handleDelete() {
-		deleteModInvite(invite.id);
-		dispatch('delete');
+	async function handleDelete() {
+		const confirmation = await confirm({
+			title: 'Delete invite',
+			content: 'Are you sure you want to delete this invite?',
+			confirmText: 'Delete',
+			cancelText: 'Cancel',
+			danger: true
+		});
+
+        if (confirmation) {
+            const toastId = toast.loading('Deleting invite...');
+
+            deleteInvite(invite.id)
+                .then(() => {
+                    refreshInviteDelete(invite);
+                    toast.success('Invite deleted', { id: toastId });
+                })
+                .catch(() => {
+                    toast.error('Failed to delete invite', { id: toastId });
+                });
+        }
 	}
 </script>
 

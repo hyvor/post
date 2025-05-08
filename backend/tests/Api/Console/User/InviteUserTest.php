@@ -4,11 +4,14 @@ namespace App\Tests\Api\Console\User;
 
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
+use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\UserFactory;
+use App\Tests\Factory\UserInviteFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use Illuminate\Support\Facades\Date;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -123,5 +126,40 @@ class InviteUserTest extends WebTestCase
         $this->assertResponseStatusCodeSame(400);
         $json = $this->getJson($response);
         $this->assertSame('User does not exists', $json['message']);
+    }
+
+    public function test_invite_existing_user(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        AuthFake::databaseAdd([
+            'id' => 15,
+            'username' => 'supun',
+            'name' => 'Supun Wimalasena',
+            'email' => 'supun@hyvor.com'
+        ]);
+
+        $expirationDate = new \DateTimeImmutable();
+
+        UserInviteFactory::createOne([
+            'hyvor_user_id' => 15,
+            'project' => $project,
+            'expires_at' => $expirationDate,
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/users/invites',
+            [
+                'email' => 'supun@hyvor.com',
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $json = $this->getJson($response);
+        $this->assertSame('admin', $json['role']);
+        $this->assertSame($expirationDate->add(new \DateInterval('P1D'))->getTimestamp(), $json['expires_at']);
+
     }
 }

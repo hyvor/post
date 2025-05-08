@@ -69,9 +69,16 @@
 		</SplitControl>
 
 		<SplitControl label="Invites" column>
-			{#each invites as invite}
-				<InviteRow invite={invite} />
-			{/each}
+			{#if !invites.length}
+				<div class="empty">No invites</div>
+			{:else}
+				{#each invites as invite}
+					<InviteRow 
+						invite={invite} 
+						refreshInviteDelete={(i: Invite) => (invites = invites.filter((e) => e.id !== i.id))}
+					/>
+				{/each}
+			{/if}
 		</SplitControl>
 
 	</div>
@@ -80,5 +87,9 @@
 <style lang="scss">
 	.moderators {
 		padding: 15px 30px;
+	}
+
+	.empty {
+		color: var(--text-light);
 	}
 </style>

@@ -48,6 +48,7 @@ export type User = {
 }
 
 export type Invite = {
+	id: number,
 	created_at: number,
 	role: UserRole,
 	user: UserMini,

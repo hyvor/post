@@ -8,6 +8,7 @@ use Hyvor\Internal\Auth\AuthUser;
 
 class UserInviteObject
 {
+    public int $id;
     public int $created_at;
     public UserRole $role;
     public UserMiniObject $user;
@@ -16,6 +17,7 @@ class UserInviteObject
     public function __construct(
         UserInvite $userInvite, AuthUser $hyvorUser
     ) {
+        $this->id = $userInvite->getId();
         $this->created_at = $userInvite->getCreatedAt()->getTimestamp();
         $this->role = UserRole::ADMIN; // Hardcoded for now
         $this->user = new UserMiniObject($hyvorUser);
