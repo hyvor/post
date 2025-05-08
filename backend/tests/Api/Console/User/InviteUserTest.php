@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserService::class)]
 #[CoversClass(UserInviteService::class)]
 #[CoversClass(UserObject::class)]
+#[CoversClass(UserInvite::class)]
 class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void

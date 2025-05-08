@@ -34,7 +34,7 @@
 
 		deleteUser(user.id)
 			.then(() => {
-				toast.success('Subscriber deleted successfully');
+				toast.success('User deleted successfully');
 				refreshUserDelete(user);
 			})
 			.catch((err) => {
@@ -47,39 +47,47 @@
 </script>
 
 <TableRow>
-	<div>
-		<div class="profile">
-			<ProfilePicture size={25} user={user.user} />
-			<div class="name-badge">
-				<div class="name">
-					{user.user.name}
-					{#if user.user.username}
-						<span class="username">@{user.user.username}</span>
-					{/if}
-				</div>
 
-				<div class="badge">
-					<RoleTag size="x-small" role={user.role} />
-				</div>
-				{#if user.role == 'owner' && $projectStore.user_role != 'owner'}
-					<IconButton size={27} on:click={handleRemove}>
-						<IconTrash size={13} />
-					</IconButton>
+	<div class="profile">
+		<ProfilePicture size={25} user={user.user} />
+		<div class="name-badge">
+			<div class="name">
+				{user.user.name}
+				{#if user.user.username}
+					<span class="username">@{user.user.username}</span>
 				{/if}
 			</div>
+
+			<div class="badge">
+				<RoleTag size="x-small" role={user.role} />
+			</div>
+		</div>
+		<div class="buttons">
+			{#if user.role == 'owner' && $projectStore.user_role != 'owner'}
+				<IconButton size={27} on:click={handleRemove}>
+					<IconTrash size={13} />
+				</IconButton>
+			{/if}
 		</div>
 	</div>
+	
 
 </TableRow>
 
 <style>
 	.profile {
 		display: flex;
+		flex: 1;
 		align-items: center;
 	}
 
 	.name-badge {
 		margin-left: 6px;
+	}
+	.buttons {
+		display: flex;
+		gap: 10px;
+		align-items: center;
 	}
 
 	.username {

@@ -4,6 +4,7 @@ namespace Api\Console\User;
 
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
+use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserService::class)]
 #[CoversClass(UserInviteService::class)]
 #[CoversClass(UserObject::class)]
+#[CoversClass(UserInvite::class)]
 class GetInvitesUserTest extends WebTestCase
 {
     public function test_get_project_invites(): void
