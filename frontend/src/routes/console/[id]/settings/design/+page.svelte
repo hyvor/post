@@ -11,11 +11,11 @@
 		Slider,
 		TextInput
 	} from '@hyvor/design/components';
-	import { appConfig } from '../../../lib/stores/consoleStore';
 	import { projectStore } from '../../../lib/stores/projectStore';
 	import { updateProject } from '../../../lib/actions/projectActions';
 	import type { ProjectMeta, Project, AppConfig } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
+	import { getAppConfig } from '../../../lib/stores/consoleStore';
 
 	let hasChanges = false;
 	let showFontFamily = false;
@@ -24,40 +24,34 @@
 	let showBoxRadius = false;
 	let showFontSize = false;
 
+	const templateDefaults = getAppConfig().template_defaults;
+
 	function getTemplateValues() {
 		return {
 			template_color_accent:
-				$projectStore.template_color_accent ?? $appConfig.template_defaults.COLOR_ACCENT,
+				$projectStore.template_color_accent ?? templateDefaults.COLOR_ACCENT,
 			template_color_background:
-				$projectStore.template_color_background ??
-				$appConfig.template_defaults.COLOR_BACKGROUND,
+				$projectStore.template_color_background ?? templateDefaults.COLOR_BACKGROUND,
 			template_color_box_background:
 				$projectStore.template_color_box_background ??
-				$appConfig.template_defaults.COLOR_BOX_BACKGROUND,
-			template_box_shadow:
-				$projectStore.template_box_shadow ?? $appConfig.template_defaults.BOX_SHADOW,
-			template_box_border:
-				$projectStore.template_box_border ?? $appConfig.template_defaults.BOX_BORDER,
-			template_font_size:
-				$projectStore.template_font_size ?? $appConfig.template_defaults.FONT_SIZE,
+				templateDefaults.COLOR_BOX_BACKGROUND,
+			template_box_shadow: $projectStore.template_box_shadow ?? templateDefaults.BOX_SHADOW,
+			template_box_border: $projectStore.template_box_border ?? templateDefaults.BOX_BORDER,
+			template_font_size: $projectStore.template_font_size ?? templateDefaults.FONT_SIZE,
 			template_font_family:
-				$projectStore.template_font_family ?? $appConfig.template_defaults.FONT_FAMILY,
+				$projectStore.template_font_family ?? templateDefaults.FONT_FAMILY,
 			template_font_weight:
-				$projectStore.template_font_weight ?? $appConfig.template_defaults.FONT_WEIGHT,
+				$projectStore.template_font_weight ?? templateDefaults.FONT_WEIGHT,
 			template_font_weight_heading:
-				$projectStore.template_font_weight_heading ??
-				$appConfig.template_defaults.FONT_WEIGHT_HEADING,
+				$projectStore.template_font_weight_heading ?? templateDefaults.FONT_WEIGHT_HEADING,
 			template_font_color_on_background:
 				$projectStore.template_font_color_on_background ??
-				$appConfig.template_defaults.FONT_COLOR_ON_BACKGROUND,
+				templateDefaults.FONT_COLOR_ON_BACKGROUND,
 			template_font_color_on_box:
-				$projectStore.template_font_color_on_box ??
-				$appConfig.template_defaults.FONT_COLOR_ON_BOX,
+				$projectStore.template_font_color_on_box ?? templateDefaults.FONT_COLOR_ON_BOX,
 			template_font_line_height:
-				$projectStore.template_font_line_height ??
-				$appConfig.template_defaults.FONT_LINE_HEIGHT,
-			template_box_radius:
-				$projectStore.template_box_radius ?? $appConfig.template_defaults.BOX_RADIUS
+				$projectStore.template_font_line_height ?? templateDefaults.FONT_LINE_HEIGHT,
+			template_box_radius: $projectStore.template_box_radius ?? templateDefaults.BOX_RADIUS
 		};
 	}
 
