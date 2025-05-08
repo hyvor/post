@@ -2,11 +2,11 @@
 
 namespace App\Service\Issue;
 
+use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Entity\Issue;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
 use App\Service\Issue\Dto\UpdateSendDto;

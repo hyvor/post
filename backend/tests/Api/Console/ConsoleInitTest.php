@@ -4,13 +4,11 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\ProjectListObject;
-use App\Entity\Type\IssueStatus;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
 use App\Entity\Type\UserRole;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -42,14 +40,21 @@ class ConsoleInitTest extends WebTestCase
             ]);
         }
 
+        $doctrine = $this->container->get('doctrine');
+        assert($doctrine instanceof \Doctrine\Bundle\DoctrineBundle\Registry);
+        $doctrine->getManager()->clear();
+
 
         // other user
         ProjectFactory::createMany(1, [
             'user_id' => 2,
         ]);
 
-        $projectAdmin = ProjectFactory::createOne();
+        $projectAdmin = ProjectFactory::createOne([
+            'user_id' => 1
+        ]);
 
+        // admin
         $user = UserFactory::createOne([
             'project' => $projectAdmin,
             'hyvor_user_id' => 1,
@@ -106,7 +111,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
         $this->assertSame($project->getId(), $data['project']['id']);
-        $this->assertSame(UserRole::OWNER->value, $data['project']['user_role']);
     }
 
     public function testInitProjectWithStats(): void

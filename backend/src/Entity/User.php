@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,8 +21,7 @@ class User
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'hyvor_user_id')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Project::class)]
     private Project $project;
 
     #[ORM\Column]

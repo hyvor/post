@@ -81,14 +81,26 @@ class ProjectService
     /**
      * @return array<array{project: Project, user: User}>
      */
-    public function getProjectsOfUser(int $userId): array
+    public function getProjectsOfUser(int $hyvorUserId): array
     {
-        $projectUsers = $this->em->getRepository(User::class)->findBy(['hyvor_user_id' => $userId]);
+
+        $query = <<<DQL
+        SELECT u, p
+        FROM App\Entity\User u
+        JOIN u.project p
+        WHERE u.hyvor_user_id = :hyvor_user_id
+        DQL;
+
+        $query = $this->em->createQuery($query);
+        $query->setParameter('hyvor_user_id', $hyvorUserId);
+        /** @var User[] $users */
+        $users = $query->getResult();
+
         $projects = [];
-        foreach ($projectUsers as $projectUser) {
+        foreach ($users as $user) {
             $projects[] = [
-                'project' => $projectUser->getProject(),
-                'user' => $projectUser,
+                'project' => $user->getProject(),
+                'user' => $user,
             ];
         }
         return $projects;

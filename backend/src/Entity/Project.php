@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -29,12 +27,8 @@ class Project
     #[ORM\Column(length: 255)]
     private string $name;
 
-    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
-    public ?Template $template = null;
-
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;
-
 
     public function setId(int $id): static
     {

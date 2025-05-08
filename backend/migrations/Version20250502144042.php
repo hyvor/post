@@ -7,9 +7,6 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20250502144042 extends AbstractMigration
 {
     public function getDescription(): string
@@ -20,7 +17,7 @@ final class Version20250502144042 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(<<<SQL
-            CREATE TYPE role_enum AS ENUM ('owner', 'admin');
+            CREATE TYPE user_role_enum AS ENUM ('owner', 'admin');
         SQL);
 
         $this->addSql(<<<SQL
@@ -30,7 +27,7 @@ final class Version20250502144042 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL,
-            role role_enum NOT NULL
+            role user_role_enum NOT NULL
         );
         SQL);
     }

@@ -2,25 +2,24 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Object\IssueObject;
+use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\ProjectListObject;
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
-use App\Api\Console\Object\ListObject;
 use App\Entity\Project;
-use App\Repository\IssueRepository;
 use App\Repository\ListRepository;
-use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Project\ProjectService;
 use App\Service\Template\TemplateDefaults;
-use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ConsoleController extends AbstractController
 {
+
+    use HasHyvorUser;
 
     public function __construct(
         private ProjectService $projectService,
@@ -37,7 +36,7 @@ final class ConsoleController extends AbstractController
 
         $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
         $projects = array_map(
-            fn(array $pair) => new ProjectListObject($pair['project'], $pair['user']->getRole()),
+            fn(array $pair) => new ProjectListObject($pair['project'], $pair['user']),
             $projectsUsers
         );
 
@@ -52,8 +51,7 @@ final class ConsoleController extends AbstractController
     #[Route('/init/project',  methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
-        $user = $this->getUser();
-        assert($user instanceof AuthUser);
+        $user = $this->getHyvorUser();
 
         $projectStats = $this->projectService->getProjectStats($project);
         $lists = $this->listRepository->findBy(
@@ -62,10 +60,9 @@ final class ConsoleController extends AbstractController
                 'deleted_at' => null,
             ]
         );
-        $projectUser = $this->projectService->getProjectUser($project, $user->id);
 
         return new JsonResponse([
-            'project' => new ProjectListObject($project, $projectUser->getRole()),
+            'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'stats' => new StatsObject(
                 $projectStats[0],
