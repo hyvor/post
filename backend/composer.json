@@ -17,8 +17,8 @@
         "dunglas/doctrine-json-odm": "^1.4.2",
         "fakerphp/faker": "^1.24.1",
         "hyvor/internal": "dev-symfony",
-        "nelmio/cors-bundle": "^2.5",
         "hyvor/phrosemirror": "^1.0.5",
+        "nelmio/cors-bundle": "^2.5",
         "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/clock": "7.2.*",
         "symfony/console": "7.2.*",
@@ -37,6 +37,7 @@
         "symfony/string": "7.2.*",
         "symfony/twig-bundle": "7.2.*",
         "symfony/uid": "7.2.*",
+        "symfony/ux-twig-component": "^2.24",
         "symfony/validator": "7.2.*",
         "symfony/yaml": "7.2.*"
     },
