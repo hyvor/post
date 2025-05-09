@@ -1,0 +1,28 @@
+{%  extends '@Internal/mail/mail.html.twig' %}
+
+{% block title %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block heading %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        {{ strings.greeting }}
+    </p>
+
+    <p>
+        {{ strings.text }}
+    </p>
+
+    <twig:mail:button href="https://post.hyvor.com">
+        {{ strings.buttonText }}
+    </twig:mail:button>
+
+    <p>
+        {{ strings.footerText }}
+    </p>
+{% endblock %}
