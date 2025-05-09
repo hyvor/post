@@ -41,7 +41,7 @@
             "subject": "You have been invited to join {projectName}",
             "text": "You have been invited to join {projectName} as a {role}. Please click the button below to accept the invitation.",
             "buttonText": "Accept Invitation",
-            "footer": "Once you join, you will be able to access the Hyvor Talk Console for moderation. Use your HYVOR account () to log in.\n        If you have any questions or need assistance, feel free to reach out to us."
+            "footerText": "Once you join, you will be able to access the Hyvor Post Console for this project using your HYVOR account."
         }
     }
 }

@@ -1,19 +1,28 @@
 {%  extends '@Internal/mail/mail.html.twig' %}
 
 {% block title %}
-    You've got an invitation to join TestProject at Hyvor Post.
+    {{ strings.subject }}
 {% endblock %}
 
 {% block heading %}
-    You've got an invitation to join TestProject at Hyvor Post
+    {{ strings.subject }}
 {% endblock %}
 
 {% block content %}
+
     <p>
-        Please click the button below to accept the invite and join TestProject at Hyvor Post.
+        {{ strings.greeting }}
+    </p>
+
+    <p>
+        {{ strings.text }}
     </p>
 
     <twig:mail:button href="https://post.hyvor.com">
-        Accept Invite
+        {{ strings.buttonText }}
     </twig:mail:button>
+
+    <p>
+        {{ strings.footerText }}
+    </p>
 {% endblock %}
