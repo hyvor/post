@@ -121,16 +121,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.343.5",
+            "version": "3.343.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "69b4b232072c4eb01f6701ba3f137728dc8c7aa8"
+                "reference": "3746aca8cbed5f46beba850e0a480ef58e71b197"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/69b4b232072c4eb01f6701ba3f137728dc8c7aa8",
-                "reference": "69b4b232072c4eb01f6701ba3f137728dc8c7aa8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3746aca8cbed5f46beba850e0a480ef58e71b197",
+                "reference": "3746aca8cbed5f46beba850e0a480ef58e71b197",
                 "shasum": ""
             },
             "require": {
@@ -212,9 +212,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.5"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.6"
             },
-            "time": "2025-05-06T18:08:44+00:00"
+            "time": "2025-05-07T18:10:08+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -2150,16 +2150,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "abccbba3aef0fb9460105496e18c36b28dfe10b2"
+                "reference": "97fadea4c64c9bf1e23519a26faaf3ac999e1cfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/abccbba3aef0fb9460105496e18c36b28dfe10b2",
-                "reference": "abccbba3aef0fb9460105496e18c36b28dfe10b2",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/97fadea4c64c9bf1e23519a26faaf3ac999e1cfb",
+                "reference": "97fadea4c64c9bf1e23519a26faaf3ac999e1cfb",
                 "shasum": ""
             },
             "require": {
@@ -2203,11 +2203,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-04-29T20:14:54+00:00"
+            "time": "2025-05-02T14:54:36+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -2253,7 +2253,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -2301,7 +2301,7 @@
         },
         {
             "name": "illuminate/encryption",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/encryption.git",
@@ -2352,16 +2352,16 @@
         },
         {
             "name": "illuminate/log",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/log.git",
-                "reference": "72fa5b40ec716addd371a6b12460a140ee81fc90"
+                "reference": "c5048f8a291e50ce0a5bdc3140485c6b4bb72fd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/log/zipball/72fa5b40ec716addd371a6b12460a140ee81fc90",
-                "reference": "72fa5b40ec716addd371a6b12460a140ee81fc90",
+                "url": "https://api.github.com/repos/illuminate/log/zipball/c5048f8a291e50ce0a5bdc3140485c6b4bb72fd4",
+                "reference": "c5048f8a291e50ce0a5bdc3140485c6b4bb72fd4",
                 "shasum": ""
             },
             "require": {
@@ -2401,11 +2401,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-03-27T19:06:10+00:00"
+            "time": "2025-05-05T22:26:20+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -2451,16 +2451,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.12.0",
+            "version": "v12.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "586b1ccf141724d7cd87ee759e6e8baae9c6d507"
+                "reference": "c2e145ffd418ac20960054cf746f762211e6dfe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/586b1ccf141724d7cd87ee759e6e8baae9c6d507",
-                "reference": "586b1ccf141724d7cd87ee759e6e8baae9c6d507",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/c2e145ffd418ac20960054cf746f762211e6dfe3",
+                "reference": "c2e145ffd418ac20960054cf746f762211e6dfe3",
                 "shasum": ""
             },
             "require": {
@@ -2485,7 +2485,7 @@
             "suggest": {
                 "illuminate/filesystem": "Required to use the Composer class (^12.0).",
                 "laravel/serializable-closure": "Required to use the once function (^1.3|^2.0).",
-                "league/commonmark": "Required to use Str::markdown() and Stringable::markdown() (^2.6).",
+                "league/commonmark": "Required to use Str::markdown() and Stringable::markdown() (^2.7).",
                 "league/uri": "Required to use the Uri class (^7.5.1).",
                 "ramsey/uuid": "Required to use Str::uuid() (^4.7).",
                 "symfony/process": "Required to use the Composer class (^7.2).",
@@ -2524,7 +2524,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-04-30T14:33:58+00:00"
+            "time": "2025-05-06T20:32:43+00:00"
         },
         {
             "name": "monolog/monolog",
