@@ -1,7 +1,19 @@
-{% block content %}
-    <h1>Domain Verified Successfully</h1>
+{%  extends '@Internal/mail/mail.html.twig' %}
 
-    <p>Your domain <strong>{{ domain }}</strong> has been successfully verified and is now ready to use for sending emails.</p>
+{% block title %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block heading %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        {{ strings.greeting }}
+    </p>
+
+    <p>Your domain <strong>{{ strings.domain }}</strong> has been successfully verified and is now ready to use for sending emails.</p>
 
     <p>You can now use this domain to send emails from your newsletter platform.</p>
 

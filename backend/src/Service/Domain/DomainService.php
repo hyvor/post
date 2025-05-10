@@ -5,8 +5,11 @@ namespace App\Service\Domain;
 use App\Entity\Domain;
 use App\Service\Integration\Aws\AwsDomainService;
 use App\Service\Issue\EmailTransportService;
+use App\Service\UserInvite\EmailNotificationService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Internationalization\StringsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -20,11 +23,13 @@ class DomainService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private EmailTransportService $emailTransportService,
+        private EmailNotificationService $emailNotificationService,
         private AwsDomainService $awsDomainService,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private readonly Environment $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
     ) {
     }
 
@@ -117,7 +122,7 @@ class DomainService
      * @return array{verified: bool, debug: null | array{last_checked_at: string, error_type: string}}
      * @throws VerifyDomainException
      */
-    public function verifyDomain(Domain $domain, string $userEmail): array
+    public function verifyDomain(Domain $domain, AuthUser $hyvorUser): array
     {
         try {
             $result = $this->awsDomainService->verifyAwsDomain($domain->getDomain());
@@ -137,13 +142,22 @@ class DomainService
             $domain->setVerifiedInSes(true);
             $domain->setUpdatedAt($this->now());
 
-            // TODO: Use template in the future
-            $templatePath = $this->projectDir . '/templates/email/domain_verified.twig';
-            // Send verification success email
-            $this->emailTransportService->send(
-                $userEmail,
-                'Domain Verification Successful',
-                "Domain verification was successful for {$domain->getDomain()}",
+
+            $strings = $this->stringsFactory->create();
+
+            $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
+                'component' => 'post',
+                'strings' => [
+                    'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
+                    'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
+                    'domain' => $domain->getDomain(),
+                ]]
+            );
+
+            $this->emailNotificationService->send(
+                $hyvorUser->email,
+                $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
+                $mail,
             );
         }
 

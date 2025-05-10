@@ -53,8 +53,6 @@ final class ConsoleController extends AbstractController
     #[Route('/init/project',  methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
-        $user = $this->getHyvorUser();
-
         $projectStats = $this->projectService->getProjectStats($project);
         $lists = $this->listRepository->findBy(
             [

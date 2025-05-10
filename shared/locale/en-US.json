@@ -42,6 +42,10 @@
             "text": "You have been invited to join {projectName} as a {role}. Please click the button below to accept the invitation.",
             "buttonText": "Accept Invitation",
             "footerText": "Once you join, you will be able to access the Hyvor Post Console for this project using your HYVOR account."
+        },
+        "domainVerification": {
+            "subject": "Your domain {domain} is verified",
+            "text": "Your domain {domain} is verified. You can now use it with your Hyvor Post projects."
         }
     }
 }

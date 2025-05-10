@@ -8,7 +8,9 @@ use App\Service\Issue\EmailTransportService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Twig\Environment;
 
 class UserInviteService
 {
@@ -16,7 +18,9 @@ class UserInviteService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private EmailTransportService $emailTransportService
+        private EmailNotificationService $emailNotificationService,
+        private readonly Environment $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
     )
     {
     }
@@ -52,17 +56,26 @@ class UserInviteService
         return $userInvite;
     }
 
-    public function sendEmail(Project $projet, AuthUser $hyvorUser, UserInvite $userInvites): void
+    public function sendEmail(Project $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
     {
-        // cannot use emailtransportService (it is for newsletter sending)
-        $this->emailTransportService->send(
+        $strings = $this->stringsFactory->create();
+
+        $mail = $this->mailTemplate->render('mail/user_invite.html.twig', [
+            'component' => 'post',
+            'strings' => [
+                'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
+                'subject' => $strings->get('mail.userInvite.subject', ['projectName' => $userInvite->getProject()->getName()]),
+                'text' => $strings->get('mail.userInvite.text', ['projectName' => $userInvite->getProject()->getName(), 'role' => 'admin']),
+                'buttonText' => $strings->get('mail.userInvite.buttonText'),
+                'footerText' => $strings->get('mail.userInvite.footerText'),
+                'buttonUrl' => 'https://post.hyvor.dev/public/invite/verify?code=' . $userInvite->getCode(),
+            ]]
+        );
+
+        $this->emailNotificationService->send(
             $hyvorUser->email,
-            'You have been invited to join a project',
-            "
-            <p>Hi {$hyvorUser->name},</p>
-            <p>You have been invited to join the project {$projet->getName()}.</p>
-            <p>Click this link: <a>https://post.hyvor.dev/api/public/invite{code}</a></p>
-            "
+            $strings->get('mail.userInvite.subject', ['projectName' => $userInvite->getProject()->getName()]),
+            $mail,
         );
     }
 

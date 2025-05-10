@@ -79,7 +79,7 @@ class VerifyDomainTest extends WebTestCase
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Domain Verification Successful');
+        $this->assertEmailSubjectContains($email, 'Your domain hyvor.com is verified');
     }
 
     public function test_already_verified(): void
