@@ -45,6 +45,7 @@ class DeleteDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
+                'user_id' => 1,
             ]
         );
 
@@ -82,7 +83,25 @@ class DeleteDomainTest extends WebTestCase
 
     public function test_user_can_only_delete_their_domains(): void
     {
-        // TODO:
-        $this->markTestSkipped();
+        $this->mockDeleteDomainEntity();
+        $project = ProjectFactory::createOne();
+
+        $domain = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+                'user_id' => 2,
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'DELETE',
+            '/domains/' . $domain->getId(),
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertSame('You are not the owner of this domain', $json['message']);
     }
 }

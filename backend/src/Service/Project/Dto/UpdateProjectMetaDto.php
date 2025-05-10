@@ -4,6 +4,9 @@ namespace App\Service\Project\Dto;
 
 use App\Util\OptionalPropertyTrait;
 
+/**
+ * compared to ProjectMeta, this is camelCase and does not have default values
+ */
 class UpdateProjectMetaDto
 {
     use OptionalPropertyTrait;
@@ -22,4 +25,11 @@ class UpdateProjectMetaDto
     public ?string $templateFontLineHeight;
     public ?string $templateBoxRadius;
     public ?string $templateLogo;
+
+    // form
+    public ?string $formTitle;
+    public ?string $formDescription;
+    public ?string $formFooterText;
+    public ?string $formButtonText;
+    public ?string $formSuccessMessage;
 }

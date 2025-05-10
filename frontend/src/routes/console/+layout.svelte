@@ -8,10 +8,11 @@
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
 	import { page } from "$app/stores";
-	import { appConfig } from "./lib/stores/consoleStore";
+	import { setAppConfig } from './lib/stores/consoleStore';
 	import { projectStore } from "./lib/stores/projectStore";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import ProjectList from "./@components/Nav/ProjectList.svelte";
+
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -23,16 +24,16 @@
 		projects: ProjectList[]
 	}
 
-	let isLoading = $state(true);;
+	let isLoading = $state(true);
 
 	onMount(() => {
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
-				endpoint: 'init',
+				endpoint: 'init'
 			})
 			.then((res) => {
-				appConfig.set(res.config)
+				setAppConfig(res.config);
 
 				userProjectsStore.set(res.projects);
 				if (res.projects.length != 0) {
@@ -43,13 +44,13 @@
 			.catch((err) => {
 				if (err.code === 401) {
 					const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
-					location.href = `/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
+					location.href =
+						`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
 				} else {
 					toast.error(err.message);
 				}
 			});
-	})
-
+	});
 </script>
 
 <svelte:head>
@@ -76,20 +77,16 @@
 		}
 	]}
 >
-
-<main>
-	{#if isLoading}
-		<div class="full-loader">
-			<Loader size="large">
-
-			</Loader>
-		</div>
-	{:else}
-		<HyvorBar product='blogs'/>
-		{@render children?.()}
-	{/if}
-</main>
-
+	<main>
+		{#if isLoading}
+			<div class="full-loader">
+				<Loader size="large"></Loader>
+			</div>
+		{:else}
+			<HyvorBar product="blogs" />
+			{@render children?.()}
+		{/if}
+	</main>
 </InternationalizationProvider>
 
 <style>

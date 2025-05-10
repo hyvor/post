@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Api;
+
+use Hyvor\Internal\Bundle\Exception\AbstractApiExceptionListener;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+#[AsEventListener(event: KernelEvents::EXCEPTION)]
+class ExceptionListener extends AbstractApiExceptionListener
+{
+    public function prefix(): string
+    {
+        return '/api';
+    }
+}

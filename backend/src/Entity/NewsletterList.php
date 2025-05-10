@@ -27,10 +27,10 @@ class NewsletterList
     #[ORM\JoinColumn(name: 'list_id')]
     private Collection $subscribers;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $name;
 
-    #[ORM\Column()]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description;
 
     #[ORM\Column]

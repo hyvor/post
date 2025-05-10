@@ -2,6 +2,9 @@
 
 namespace App\Service\Template;
 
+/**
+ * @deprecated move this to ProjectDefaults
+ */
 class TemplateDefaults
 {
     public const string LANG = 'en';

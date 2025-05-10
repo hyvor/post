@@ -4,6 +4,7 @@
 	import IconBrush from '@hyvor/icons/IconBrush';
 	import IconPersonFillGear from '@hyvor/icons/IconPersonFillGear';
 	import { projectStore } from '../../lib/stores/projectStore';
+	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -28,6 +29,13 @@
 				<IconPersonFillGear />
 			{/snippet}
 			Admin
+		</NavLink>
+  
+		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
+			{#snippet start()}
+				<IconEnvelopeAt />
+			{/snippet}
+			Signup Form
 		</NavLink>
 
 		<div class="section-div"></div>

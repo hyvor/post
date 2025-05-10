@@ -34,6 +34,7 @@ services:
     volumes:
       - ./backend:/app/backend
       - ../internal:/app/backend/vendor/hyvor/internal:ro
+      - ./shared:/app/shared
     labels:
       traefik.enable: true
       # backend
