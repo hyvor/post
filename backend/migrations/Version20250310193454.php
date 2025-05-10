@@ -29,6 +29,7 @@ final class Version20250310193454 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            project_id BIGINT NOT NULL references projects(id),
             issue_id BIGINT NOT NULL references issues(id),
             subscriber_id BIGINT NOT NULL references subscribers(id),
             email TEXT NOT NULL,

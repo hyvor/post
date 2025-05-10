@@ -16,14 +16,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
-final class ProjectController extends AbstractController
+class ProjectController extends AbstractController
 {
     use HasHyvorUser;
 
     public function __construct(
         private ProjectService $projectService
-    )
-    {
+    ) {
     }
 
     #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
@@ -31,7 +30,7 @@ final class ProjectController extends AbstractController
     {
         $user = $this->getHyvorUser();
         $projects = $this->projectService->getProjectsOfUser($user->id);
-        return $this->json(array_map(fn (Project $project) => new ProjectObject($project), $projects));
+        return $this->json(array_map(fn(Project $project) => new ProjectObject($project), $projects));
     }
 
     #[Route('/projects', methods: 'POST')]
@@ -44,7 +43,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
+    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
     public function getProjectById(Project $project): JsonResponse
     {
         return $this->json(new ProjectObject($project));
@@ -61,8 +60,7 @@ final class ProjectController extends AbstractController
     public function updateProject(
         Project $project,
         #[MapRequestPayload] UpdateProjectInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         // later we may need to add functions to update project non-meta properties
 
         $updatesMeta = new UpdateProjectMetaDto();

@@ -1,5 +1,10 @@
 {
     "console": {
+        "billing": {
+            "usage": {
+                "title": "Usage"
+            }
+        },
         "settings": {
             "form": {
                 "texts": "Texts",

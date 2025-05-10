@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
@@ -11,18 +12,19 @@ use App\Service\Project\ProjectDefaults;
 use App\Service\Project\ProjectService;
 use App\Service\Template\TemplateDefaults;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ConsoleController extends AbstractController
+class ConsoleController extends AbstractController
 {
 
     public function __construct(
         private ProjectService $projectService,
         private ListRepository $listRepository,
-    )
-    {
+        private InternalConfig $internalConfig
+    ) {
     }
 
     #[Route('/init', methods: 'GET')]
@@ -37,13 +39,16 @@ final class ConsoleController extends AbstractController
         return new JsonResponse([
             'projects' => $projects,
             'config' => [
+                'hyvor' => [
+                    'instance' => $this->internalConfig->getInstance(),
+                ],
                 'template_defaults' => TemplateDefaults::getAll(),
                 'project_defaults' => ProjectDefaults::getAll(),
             ],
         ]);
     }
 
-    #[Route('/init/project',  methods: 'GET')]
+    #[Route('/init/project', methods: 'GET')]
     public function initProject(Project $project): JsonResponse
     {
         $projectStats = $this->projectService->getProjectStats($project);
