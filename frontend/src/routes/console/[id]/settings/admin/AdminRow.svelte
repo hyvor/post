@@ -13,7 +13,7 @@
 	import type { User } from '../../../types';
 	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
-	import { projectStore } from '../../../lib/stores/projectStore';
+	import { projectRoleStore, projectStore } from '../../../lib/stores/projectStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteUser } from '../../../lib/actions/userActions';
 
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 		<div class="buttons">
-			{#if user.role == 'owner' && $projectStore.user_role != 'owner'}
+			{#if user.role != 'owner' && $projectRoleStore == 'owner'}
 				<IconButton size={27} on:click={handleRemove}>
 					<IconTrash size={13} />
 				</IconButton>

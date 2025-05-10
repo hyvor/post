@@ -9,7 +9,7 @@
 	import consoleApi from "./lib/consoleApi";
 	import { page } from "$app/stores";
 	import { setAppConfig } from './lib/stores/consoleStore';
-	import { projectStore } from "./lib/stores/projectStore";
+	import { projectRoleStore, projectStore } from "./lib/stores/projectStore";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import ProjectList from "./@components/Nav/ProjectList.svelte";
 
@@ -38,6 +38,7 @@
 				userProjectsStore.set(res.projects);
 				if (res.projects.length != 0) {
 					projectStore.set(res.projects[0]); // Set the first project as the active project
+					projectRoleStore.set(res.projects[0].role);
 				}
 				isLoading = false;
 			})

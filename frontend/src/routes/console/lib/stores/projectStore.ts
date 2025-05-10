@@ -1,10 +1,9 @@
 import { writable } from "svelte/store";
-import { type ProjectStats, type Project, type List, type Issue, type ProjectList } from "../../types";
-
-// export const projectListsStore = writable<ProjectList[]>();
+import { type ProjectStats, type Project, type List, type Issue, type ProjectList, type UserRole } from "../../types";
 
 export const projectStore = writable<Project>();
 export const projectEditingStore = writable<Project>();
+export const projectRoleStore = writable<UserRole>();
 
 export const projectStatsStore = writable<ProjectStats>();
 export const listStore = writable<List[]>([]);

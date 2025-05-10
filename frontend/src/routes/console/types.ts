@@ -90,11 +90,9 @@ export type Invite = {
 }
 
 export type ProjectList = {
-	id: number,
-	created_at: number,
-	name: string,
-	user_role: UserRole,
-} & ProjectMeta;
+	role: UserRole,
+	project: Project,
+}
 
 export type Project = {
 	id: number,
