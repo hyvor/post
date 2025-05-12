@@ -18,6 +18,7 @@
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
 	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
 	import SettingsTop from '../@components/SettingsTop.svelte';
+	import EditTemplateModal from './EditTemplateModal.svelte';
 
 	let hasChanges = false;
 	let showFontFamily = false;
@@ -25,6 +26,7 @@
 	let showFontWeightHeading = false;
 	let showBoxRadius = false;
 	let showFontSize = false;
+	let showEditTemplateModal = false;
 
 	const templateDefaults = getAppConfig().template_defaults;
 
@@ -155,7 +157,7 @@
 </script>
 
 <SettingsTop>
-	<Button>
+	<Button on:click={() => showEditTemplateModal = true}>
 		Edit Template
 	</Button>
 </SettingsTop>
@@ -287,8 +289,10 @@
 
 
 {#if hasChanges}
-<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
+	<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
 {/if}
+
+<EditTemplateModal bind:show={showEditTemplateModal}/>
 
 <style lang="scss">
 .wrap {

@@ -91,4 +91,24 @@ class UpdateTemplateTest extends WebTestCase
                         </body>
                     </html>', $json['template']);
     }
+
+    public function test_update_template_invalid(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $template = TemplateFactory::createOne([
+            'project' => $project
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/templates/update'
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertSame("Template should not be null", $json['message']);
+    }
 }

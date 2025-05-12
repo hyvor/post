@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Service\Template\Dto\UpdateTemplateDto;
 use App\Service\Template\TemplateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -47,6 +48,9 @@ class TemplateController extends AbstractController
         if ($template)
         {
             $updates = new UpdateTemplateDto();
+            if (!$input->hasProperty('template')) {
+                throw new BadRequestException('Template should not be null');
+            }
             $updates->template = $input->template;
             $template = $this->templateService->updateTemplate($template, $updates);
         }

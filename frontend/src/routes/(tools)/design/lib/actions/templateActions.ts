@@ -1,3 +1,4 @@
+import consoleApi from "../../../../console/lib/consoleApi";
 import type { TemplateResponse } from "../../types";
 
 export function getDefaultTemplate() : Promise<TemplateResponse> {
@@ -53,4 +54,10 @@ export function retrieveContentHtml(content: string) {
         throw new Error('Failed to fetch content html');
     }
     )
+}
+
+export function getTemplate() {
+    return consoleApi.get<string>({
+        endpoint: 'templates'
+    });
 }
