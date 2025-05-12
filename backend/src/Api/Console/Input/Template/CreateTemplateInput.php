@@ -6,6 +6,5 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateTemplateInput
 {
-    #[Assert\NotBlank]
-    public string $template;
+    public ?string $template;
 }

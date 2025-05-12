@@ -16,6 +16,7 @@
 	import type { ProjectMeta, Project, AppConfig } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
 
 	let hasChanges = false;
 	let showFontFamily = false;
@@ -67,17 +68,16 @@
 		hasChanges = true;
 	}
 
-	function saveChanges() {
-		updateProject(metaToSave as ProjectMeta)
-			.then((updatedProject: ProjectMeta) => {
-				projectStore.set(updatedProject as Project);
-				metaToSave = {};
-				hasChanges = false;
-				toast.success('Changes saved successfully!');
-			})
-			.catch((error) => {
-				toast.error('Failed to save changes: ' + error.message);
-			});
+	async function saveChanges() {
+		try {
+			const updatedProject: ProjectMeta = await updateProject(metaToSave as ProjectMeta);
+			projectStore.set(updatedProject as Project);
+			metaToSave = {};
+			hasChanges = false;
+			toast.success('Changes saved successfully!');
+		} catch (error: any) {
+			toast.error('Failed to save changes: ' + error.message);
+		}
 	}
 
 	async function discardChanges() {
@@ -155,12 +155,10 @@
 
 <div class="wrap">
 	<div class="actions">
-		<Button color="accent" on:click={saveChanges} disabled={!hasChanges}>Save Changes</Button>
-		<Button variant="outline" on:click={discardChanges} disabled={!hasChanges}>
-			Discard Changes
+		<Button>
+			Edit Template
 		</Button>
 	</div>
-
 	<SplitControl label="Colors">
 		{#snippet nested()}
 			<SplitControl label="Accent">
@@ -285,6 +283,11 @@
 		{/snippet}
 	</SplitControl>
 </div>
+
+
+{#if hasChanges}
+	<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
+{/if}
 
 <style lang="scss">
 	.wrap {

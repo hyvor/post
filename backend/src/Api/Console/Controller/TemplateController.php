@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Template\CreateTemplateInput;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Project;
+use App\Service\Template\Dto\UpdateTemplateDto;
 use App\Service\Template\TemplateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,8 +45,17 @@ class TemplateController extends AbstractController
         #[MapRequestPayload] CreateTemplateInput $input
     ): JsonResponse
     {
-        // TODO: check if template already exists
-        $template = $this->templateService->createTemplate($project, $input->template);
+        $template = $this->templateService->getTemplate($project);
+
+        if ($template)
+        {
+            $updates = new UpdateTemplateDto();
+            $updates->template = $input->template;
+            $template = $this->templateService->updateTemplate($template, $updates);
+        }
+        else {
+            $template = $this->templateService->createTemplate($project);
+        }
         return $this->json(new TemplateObject($template));
     }
 }
