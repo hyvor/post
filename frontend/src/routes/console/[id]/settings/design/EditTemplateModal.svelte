@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { IconButton, Modal } from "@hyvor/design/components";
-	import { getTemplate, previewTemplateFromVariable } from "../../../../(tools)/design/lib/actions/templateActions";
+	import { getTemplate, previewTemplate, previewTemplateFromVariable, updateTemplate } from "../../../../(tools)/design/lib/actions/templateActions";
 	import CodemirrorEditor from "../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte";
 	import { onMount } from "svelte";
 	import IconArrowClockwise from "@hyvor/icons/IconArrowClockwise";
@@ -25,7 +25,7 @@
     }
 
     function fetchPreview() {
-		previewTemplateFromVariable(template, variables)
+		previewTemplate(template)
 			.then((res) => {
 				if (res) {
 					previewHtml = res.html;
@@ -36,47 +36,76 @@
 			});
 	}
 
+    function saveTemplate() {
+        updateTemplate(template)
+            .then((res) => {
+                if (res) {
+                    template = res.template;
+                    show = false;
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    }
+
     onMount(() => {
         fetchTemplate();
+        fetchPreview();
     });
+
+    $: if (show) {
+        fetchTemplate();
+        fetchPreview();
+    }
 </script>
 
-<Modal
-    bind:show={show}
-    title="Edit template"
-    size="large"
-    role="dialog"
->
-
-    <div class="content">
-        {#if templateLoaded}
-            <div class="column">
-                <div class="column-title">
-                    template.twig
-                </div>
-                <CodemirrorEditor
-                    ext="twig"
-                    bind:value={template}
-                    change={(e) => (template = e)}
-                />
-            </div>
-        {/if}
-            <div class="preview">
+<div class="modal-wrap">
+    <Modal
+        bind:show={show}
+        title="Edit template"
+        size="large"
+        role="dialog"
+        footer={{
+            cancel: {
+                text: 'Cancel',
+            }, 
+            confirm: {
+                text: 'Save'
+            }
+        }}
+        on:cancel={() => show = false}
+        on:confirm={() => saveTemplate()}
+    >
+        <div class="content">
+            {#if templateLoaded}
                 <div class="column">
                     <div class="column-title">
-                        Preview
-                        <IconButton size="small" color="input" on:click={fetchPreview}>
-                            <IconArrowClockwise size={12} />
-                        </IconButton>
+                        template.twig
                     </div>
-                    <div class="column-content user-interface-wrap hds-box">
-                        {@html previewHtml}
-                    </div>
+                    <CodemirrorEditor
+                        ext="twig"
+                        bind:value={template}
+                        change={(e) => (template = e)}
+                    />
+                </div>
+            {/if}
+                <div class="preview">
+                    <div class="column">
+                        <div class="column-title">
+                            Preview
+                            <IconButton size="small" color="input" on:click={fetchPreview}>
+                                <IconArrowClockwise size={12} />
+                            </IconButton>
+                        </div>
+                        <div class="column-content user-interface-wrap hds-box">
+                            {@html previewHtml}
+                        </div>
+                </div>
             </div>
         </div>
-    </div>
-
-</Modal>
+    </Modal>
+</div>
 
 <style lang="scss">
     .modal-wrap :global(.inner[role='dialog']) {

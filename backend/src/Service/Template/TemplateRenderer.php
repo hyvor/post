@@ -59,4 +59,9 @@ class TemplateRenderer
         return $this->twig->render('newsletter/default.html.twig', (array) $variables);
     }
 
+    public function renderAll(string $template, TemplateVariables $variables): string
+    {
+        $template = $this->twig->createTemplate($template);
+        return $template->render((array) $variables);
+    }
 }

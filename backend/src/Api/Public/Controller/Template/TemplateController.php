@@ -28,7 +28,6 @@ class TemplateController extends AbstractController
     #[Route('/template/with', methods: 'POST')]
     public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-
         $variables = new TemplateVariables();
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);

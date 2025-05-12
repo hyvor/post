@@ -61,3 +61,21 @@ export function getTemplate() {
         endpoint: 'templates'
     });
 }
+
+export function previewTemplate(template: string) {
+    return consoleApi.post<string>({
+        endpoint: 'templates/render',
+        data: {
+            template
+        }
+    });
+}
+
+export function updateTemplate(template: string) {
+    return consoleApi.post<string>({
+        endpoint: 'templates/update',
+        data: {
+            template
+        }
+    });
+}
