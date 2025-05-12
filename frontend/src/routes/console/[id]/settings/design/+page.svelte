@@ -17,6 +17,7 @@
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
 	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
+	import SettingsTop from '../@components/SettingsTop.svelte';
 
 	let hasChanges = false;
 	let showFontFamily = false;
@@ -153,12 +154,12 @@
 	}
 </script>
 
+<SettingsTop>
+	<Button>
+		Edit Template
+	</Button>
+</SettingsTop>
 <div class="wrap">
-	<div class="actions">
-		<Button>
-			Edit Template
-		</Button>
-	</div>
 	<SplitControl label="Colors">
 		{#snippet nested()}
 			<SplitControl label="Accent">
@@ -286,43 +287,43 @@
 
 
 {#if hasChanges}
-	<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
+<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
 {/if}
 
 <style lang="scss">
-	.wrap {
-		padding: 25px 30px 60px;
-		overflow: auto;
-		flex: 1;
-	}
+.wrap {
+	padding: 25px 30px 60px;
+	overflow: auto;
+	flex: 1;
+}
 
-	.actions {
-		display: flex;
-		gap: 10px;
-		margin-bottom: 20px;
-	}
+.actions {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
+}
 
-	.font-size-value {
-		margin-top: 8px;
-		font-size: 14px;
-		color: var(--text-secondary);
-	}
+.font-size-value {
+	margin-top: 8px;
+	font-size: 14px;
+	color: var(--text-secondary);
+}
 
-	.box-border-controls {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
+.box-border-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
 
-	.border-color-control {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-	}
+.border-color-control {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
 
-	.label {
-		font-size: 14px;
-		color: var(--text-secondary);
-		min-width: 80px;
-	}
+.label {
+	font-size: 14px;
+	color: var(--text-secondary);
+	min-width: 80px;
+}
 </style>

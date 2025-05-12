@@ -27,12 +27,9 @@ class TemplateController extends AbstractController
 
         if (!$template) {
             // Load default template
-            $templatePath = $this->getParameter('kernel.project_dir') . '/templates/newsletter/default.html.twig';
-            $rawTemplate = file_get_contents($templatePath);
             return $this->json([
-                'template' => $rawTemplate,
-                ]
-            );
+                'template' => $this->templateService->readDefaultTemplate()
+            ]);
         }
 
         return $this->json(new TemplateObject($template));
