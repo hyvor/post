@@ -55,7 +55,7 @@ class ConsoleInitTest extends WebTestCase
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
-        $this->assertArrayHasKey('template_defaults', $config);
+        $this->assertArrayHasKey('project_defaults', $config);
     }
 
     public function testInitProject(): void

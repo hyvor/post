@@ -4,6 +4,7 @@ namespace App\Service\Template;
 
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Service\Project\ProjectDefaults;
 use Twig\Environment;
 
 class TemplateRenderer
@@ -33,7 +34,7 @@ class TemplateRenderer
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: 'Unsubscribe',
 
-            color_accent: TemplateDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
+            color_accent: ProjectDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
             color_background: '#f8f9fa',
             color_box_background: '#ffffff',
 
