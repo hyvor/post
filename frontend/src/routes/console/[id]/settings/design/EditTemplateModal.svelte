@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { IconButton, Modal, toast } from "@hyvor/design/components";
-	import { getTemplate, previewTemplate, previewTemplateFromVariable, updateTemplate } from "../../../../(tools)/design/lib/actions/templateActions";
+	import { Button, IconButton, Modal, toast, confirm } from "@hyvor/design/components";
+	import { getTemplate, previewTemplate, updateTemplate } from "../../../../(tools)/design/lib/actions/templateActions";
 	import CodemirrorEditor from "../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte";
 	import { onMount, onDestroy } from "svelte";
 	import IconArrowClockwise from "@hyvor/icons/IconArrowClockwise";
@@ -44,7 +44,32 @@
                 if (res) {
                     template = res.template;
                     show = false;
-                    toast.success('Template successfully updated')
+                    toast.success('Template successfully updated');
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    async function restoreDefaultTemplate() {
+        const confirmation = await confirm({
+			title: 'Restore default template',
+			content: 'Are you sure you want to restore the default template',
+			confirmText: 'Restore',
+			cancelText: 'Cancel',
+			danger: true
+		});
+
+		if (!confirmation) return;
+
+		confirmation.loading();
+
+        updateTemplate(null)
+            .then((res) => {
+                if (res) {
+                    template = res.template;
+                    toast.success('Template successfully restored to default')
                 }
             })
             .catch((err) => {
@@ -58,12 +83,9 @@
             clearTimeout(typingTimeout);
         }
 
-        if (previewInterval) {
-            clearInterval(previewInterval);
-            previewInterval = null;
-        }
         typingTimeout = setTimeout(() => {
-            startPreviewInterval();
+            fetchPreview(); // Fetch preview immediately after typing stops
+            startPreviewInterval(); // Restart the interval for continuous updates
         }, 1000);
     }
 
@@ -134,6 +156,9 @@
                             <IconButton size="small" color="input" on:click={fetchPreview}>
                                 <IconArrowClockwise size={12} />
                             </IconButton>
+                            <Button on:click={restoreDefaultTemplate}>
+                                Restore default
+                            </Button>
                         </div>
                         <div class="column-content user-interface-wrap hds-box">
                             {@html previewHtml}

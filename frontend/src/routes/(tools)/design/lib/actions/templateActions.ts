@@ -80,7 +80,7 @@ export function previewTemplate(template: string) {
     });
 }
 
-export function updateTemplate(template: string) {
+export function updateTemplate(template: string | null) {
     return consoleApi.post<TemplateResponse>({
         endpoint: 'templates/update',
         data: {
