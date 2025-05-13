@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { IconButton, Modal } from "@hyvor/design/components";
+	import { IconButton, Modal, toast } from "@hyvor/design/components";
 	import { getTemplate, previewTemplate, previewTemplateFromVariable, updateTemplate } from "../../../../(tools)/design/lib/actions/templateActions";
 	import CodemirrorEditor from "../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte";
 	import { onMount, onDestroy } from "svelte";
@@ -30,7 +30,7 @@
         previewTemplate(template)
             .then((res) => {
                 if (res) {
-                    previewHtml = res.html; // Accessing the `html` property from the custom type
+                    previewHtml = res.html;
                 }
             })
             .catch((err) => {
@@ -42,8 +42,9 @@
         updateTemplate(template)
             .then((res) => {
                 if (res) {
-                    template = res.template; // Accessing the `template` property from the custom type
+                    template = res.template;
                     show = false;
+                    toast.success('Template successfully updated')
                 }
             })
             .catch((err) => {
