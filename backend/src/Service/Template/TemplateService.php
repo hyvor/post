@@ -16,8 +16,7 @@ class TemplateService
         private Filesystem $filesystem,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
-    )
-    {
+    ) {
     }
 
     public function getTemplate(Project $project): ?Template
@@ -27,12 +26,11 @@ class TemplateService
         ]);
     }
 
-    public function createTemplate(Project $project): Template
+    public function createTemplate(Project $project, string $template): Template
     {
-        $defaultTemplate = $this->readDefaultTemplate();
         $templateEntity = new Template()
             ->setProject($project)
-            ->setTemplate($defaultTemplate)
+            ->setTemplate($template)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -50,8 +48,9 @@ class TemplateService
 
     public function updateTemplate(Template $template, UpdateTemplateDto $updates): Template
     {
-        if ($updates->hasProperty('template'))
+        if ($updates->hasProperty('template')) {
             $template->setTemplate($updates->template);
+        }
 
         $template->setUpdatedAt(new \DateTimeImmutable());
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\Template;
+namespace App\Tests\Api\Console\Template;
 
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
@@ -25,4 +25,6 @@ class RenderTemplateTest extends WebTestCase
 
         $this->assertSame('Test', $json['html']);
     }
+
+    // TODO: add tests for TemplateVariables
 }

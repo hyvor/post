@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\Template\CreateTemplateInput;
+use App\Api\Console\Input\Template\UpdateTemplateInput;
 use App\Api\Console\Input\Template\RenderTemplateInput;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Project;
@@ -21,8 +21,7 @@ class TemplateController extends AbstractController
     public function __construct(
         private TemplateService $templateService,
         private TemplateRenderer $templateRenderer
-    )
-    {
+    ) {
     }
 
     #[Route('/templates', methods: 'GET')]
@@ -40,26 +39,21 @@ class TemplateController extends AbstractController
         return $this->json(new TemplateObject($template));
     }
 
-    // TODO: Handle update. Change URL to /templates/update
     #[Route('/templates/update', methods: 'POST')]
-    public function createTemplate(
+    public function updateTemplate(
         Project $project,
-        #[MapRequestPayload] CreateTemplateInput $input
-    ): JsonResponse
-    {
+        #[MapRequestPayload] UpdateTemplateInput $input
+    ): JsonResponse {
+        $templateString = $input->template ?? $this->templateService->readDefaultTemplate();
+
         $template = $this->templateService->getTemplate($project);
 
-        if ($template)
-        {
+        if ($template) {
             $updates = new UpdateTemplateDto();
-            if (!$input->hasProperty('template')) {
-                throw new BadRequestException('Template should not be null');
-            }
-            $updates->template = $input->template;
+            $updates->template = $templateString;
             $template = $this->templateService->updateTemplate($template, $updates);
-        }
-        else {
-            $template = $this->templateService->createTemplate($project);
+        } else {
+            $template = $this->templateService->createTemplate($project, $templateString);
         }
         return $this->json(new TemplateObject($template));
     }
@@ -68,10 +62,11 @@ class TemplateController extends AbstractController
     public function renderTemplate(
         Project $project,
         #[MapRequestPayload] RenderTemplateInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $variables = new TemplateVariables();
         $meta = $project->getMeta();
+        // TODO: just hardcode template variables from meta
+        // TODO: set subject and content to a default value.
         foreach (get_object_vars($meta) as $key => $value) {
             if (property_exists($variables, $key)) {
                 $variables->$key = $value;
