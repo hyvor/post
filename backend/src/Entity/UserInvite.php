@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\UserRole;
 use App\Repository\UserInvitesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +33,9 @@ class UserInvite
 
     #[ORM\Column]
     private \DateTimeImmutable $expires_at;
+
+    #[ORM\Column(nullable: false, enumType: UserRole::class)]
+    private UserRole $role;
 
     public function getId(): ?int
     {
@@ -113,6 +117,20 @@ class UserInvite
     public function setExpiresAt(\DateTimeImmutable $expired_at): static
     {
         $this->expires_at = $expired_at;
+
+        return $this;
+    }
+
+
+
+    public function getRole(): UserRole
+    {
+        return $this->role;
+    }
+
+    public function setRole(UserRole $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }

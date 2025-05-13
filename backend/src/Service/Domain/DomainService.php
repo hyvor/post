@@ -146,12 +146,14 @@ class DomainService
             $strings = $this->stringsFactory->create();
 
             $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
-                'component' => 'post',
-                'strings' => [
-                    'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
-                    'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
-                    'domain' => $domain->getDomain(),
-                ]]
+                    'component' => 'post',
+                    'strings' => [
+                        'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
+                        'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
+                        ),
+                        'domain' => $domain->getDomain(),
+                    ]
+                ]
             );
 
             $this->emailNotificationService->send(
@@ -190,8 +192,7 @@ class DomainService
         try {
             $this->em->remove($domain);
             $this->em->flush();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new DeleteDomainException(previous: $e);
         }
     }

@@ -7,6 +7,7 @@ use App\Api\Console\Object\UserInviteObject;
 use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Entity\UserInvite;
 use App\Service\User\UserService;
@@ -92,7 +93,7 @@ class UserController extends AbstractController
         if ($this->userInviteService->isInvited($hyvorUser->id))
             $invite = $this->userInviteService->extendInvite($hyvorUser->id);
         else
-            $invite = $this->userInviteService->createInvite($project, $hyvorUser->id);
+            $invite = $this->userInviteService->createInvite($project, $hyvorUser->id, UserRole::ADMIN);
 
         $this->userInviteService->sendEmail($project, $hyvorUser, $invite);
 

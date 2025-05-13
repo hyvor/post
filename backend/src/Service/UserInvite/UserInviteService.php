@@ -3,8 +3,8 @@
 namespace App\Service\UserInvite;
 
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
-use App\Service\Issue\EmailTransportService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -21,8 +21,7 @@ class UserInviteService
         private EmailNotificationService $emailNotificationService,
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
-    )
-    {
+    ) {
     }
 
     /**
@@ -34,14 +33,18 @@ class UserInviteService
             'project' => $project,
         ]);
 
-        if (!$userInvites)
+        if (!$userInvites) {
             return new ArrayCollection();
+        }
 
         return new ArrayCollection($userInvites);
     }
 
-    public function createInvite(Project $project, int $hyvorUserId): UserInvite
-    {
+    public function createInvite(
+        Project $project,
+        int $hyvorUserId,
+        UserRole $role,
+    ): UserInvite {
         $userInvite = new UserInvite();
         $userInvite->setCreatedAt(new \DateTimeImmutable());
         $userInvite->setUpdatedAt(new \DateTimeImmutable());
@@ -49,6 +52,7 @@ class UserInviteService
         $userInvite->setHyvorUserId($hyvorUserId);
         $userInvite->setCode(bin2hex(random_bytes(16)));
         $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P1D')));
+        $userInvite->setRole($role);
 
         $this->em->persist($userInvite);
         $this->em->flush();
@@ -62,15 +66,22 @@ class UserInviteService
 
         $mail = $this->mailTemplate->render('mail/user_invite.html.twig', [
             'component' => 'post',
+            // TODO: URL
+            'buttonUrl' => 'https://post.hyvor.dev/public/invite/verify?code=' . $userInvite->getCode(),
             'strings' => [
                 'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
-                'subject' => $strings->get('mail.userInvite.subject', ['projectName' => $userInvite->getProject()->getName()]),
-                'text' => $strings->get('mail.userInvite.text', ['projectName' => $userInvite->getProject()->getName(), 'role' => 'admin']),
+                'subject' => $strings->get(
+                    'mail.userInvite.subject',
+                    ['projectName' => $userInvite->getProject()->getName()]
+                ),
+                'text' => $strings->get(
+                    'mail.userInvite.text',
+                    ['projectName' => $userInvite->getProject()->getName(), 'role' => 'admin']
+                ),
                 'buttonText' => $strings->get('mail.userInvite.buttonText'),
                 'footerText' => $strings->get('mail.userInvite.footerText'),
-                'buttonUrl' => 'https://post.hyvor.dev/public/invite/verify?code=' . $userInvite->getCode(),
-            ]]
-        );
+            ]
+        ]);
 
         $this->emailNotificationService->send(
             $hyvorUser->email,
@@ -85,8 +96,9 @@ class UserInviteService
             'hyvor_user_id' => $hyvorUserId,
         ]);
 
-        if (!$userInvite)
+        if (!$userInvite) {
             return false;
+        }
         return true;
     }
 
@@ -106,8 +118,9 @@ class UserInviteService
     public function extendInvite(int $userId): UserInvite
     {
         $userInvite = $this->em->getRepository(UserInvite::class)->findOneBy(['hyvor_user_id' => $userId]);
-        if (!$userInvite)
+        if (!$userInvite) {
             throw new \RuntimeException("User invite not found");
+        }
         $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P1D')));
         $this->em->flush();
         return $userInvite;

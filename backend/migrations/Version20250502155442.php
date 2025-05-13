@@ -24,14 +24,14 @@ final class Version20250502155442 extends AbstractMigration
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL UNIQUE,
             code VARCHAR(255) NOT NULL UNIQUE,
-            expires_at timestamptz NOT NULL
+            expires_at timestamptz NOT NULL,
+            role user_role NOT NULL
         );
         SQL);
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE users');
+        $this->addSql('DROP TABLE user_invites');
     }
 }

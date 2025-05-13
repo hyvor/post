@@ -22,11 +22,10 @@ final class ProjectController extends AbstractController
 
     public function __construct(
         private ProjectService $projectService
-    )
-    {
+    ) {
     }
 
-    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
+    /*#[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
     public function getUserAllProjects(): JsonResponse
     {
         $user = $this->getHyvorUser();
@@ -36,7 +35,7 @@ final class ProjectController extends AbstractController
             $projectsUsers
         );
         return $this->json($projects);
-    }
+    }*/
 
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
@@ -47,7 +46,7 @@ final class ProjectController extends AbstractController
         return $this->json(new ProjectObject($project));
     }
 
-    #[Route('/projects',  methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
+    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
     public function getProjectById(Project $project): JsonResponse
     {
         return $this->json(new ProjectObject($project));
@@ -64,8 +63,7 @@ final class ProjectController extends AbstractController
     public function updateProject(
         Project $project,
         #[MapRequestPayload] UpdateProjectInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         // later we may need to add functions to update project non-meta properties
 
         $updatesMeta = new UpdateProjectMetaDto();

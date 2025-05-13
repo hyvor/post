@@ -1,4 +1,4 @@
-{%  extends '@Internal/mail/mail.html.twig' %}
+{% extends '@Internal/mail/mail.html.twig' %}
 
 {% block title %}
     {{ strings.subject }}
@@ -18,7 +18,7 @@
         {{ strings.text }}
     </p>
 
-    <twig:mail:button href="{{ strings.buttonUrl }}">
+    <twig:mail:button href="{{ buttonUrl }}">
         {{ strings.buttonText }}
     </twig:mail:button>
 
