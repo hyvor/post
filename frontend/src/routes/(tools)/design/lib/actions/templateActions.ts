@@ -1,5 +1,14 @@
 import consoleApi from "../../../../console/lib/consoleApi";
-import type { TemplateResponse } from "../../types";
+
+// Define a custom type for the template response
+interface TemplateResponse {
+    template: string;
+}
+
+// Define a custom type for the preview response
+interface PreviewResponse {
+    html: string;
+}
 
 export function getDefaultTemplate() : Promise<TemplateResponse> {
     return fetch('api/public/template/default')
@@ -57,13 +66,13 @@ export function retrieveContentHtml(content: string) {
 }
 
 export function getTemplate() {
-    return consoleApi.get<string>({
+    return consoleApi.get<TemplateResponse>({
         endpoint: 'templates'
     });
 }
 
 export function previewTemplate(template: string) {
-    return consoleApi.post<string>({
+    return consoleApi.post<PreviewResponse>({
         endpoint: 'templates/render',
         data: {
             template
@@ -72,7 +81,7 @@ export function previewTemplate(template: string) {
 }
 
 export function updateTemplate(template: string) {
-    return consoleApi.post<string>({
+    return consoleApi.post<TemplateResponse>({
         endpoint: 'templates/update',
         data: {
             template

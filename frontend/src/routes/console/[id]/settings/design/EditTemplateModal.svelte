@@ -2,7 +2,7 @@
 	import { IconButton, Modal } from "@hyvor/design/components";
 	import { getTemplate, previewTemplate, previewTemplateFromVariable, updateTemplate } from "../../../../(tools)/design/lib/actions/templateActions";
 	import CodemirrorEditor from "../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte";
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import IconArrowClockwise from "@hyvor/icons/IconArrowClockwise";
 
     export let show: boolean;
@@ -10,43 +10,68 @@
     let previewHtml: string;
     let templateLoaded = false;
     let template = '';
+    let typingTimeout: number | null | undefined = null;
+    let previewInterval: number | null | undefined =  null;
 
     function fetchTemplate() {
         getTemplate()
-			.then((res) => {
-				template = res.template;
-			})
-			.catch((err) => {
-				console.error(err);
-			})
-			.finally(() => {
-				templateLoaded = true;
-			});
+            .then((res) => {
+                template = res.template; // Accessing the `template` property from the custom type
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => {
+                templateLoaded = true;
+            });
     }
 
     function fetchPreview() {
-		previewTemplate(template)
-			.then((res) => {
-				if (res) {
-					previewHtml = res.html;
-				}
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+        previewTemplate(template)
+            .then((res) => {
+                if (res) {
+                    previewHtml = res.html; // Accessing the `html` property from the custom type
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
 
     function saveTemplate() {
         updateTemplate(template)
             .then((res) => {
                 if (res) {
-                    template = res.template;
+                    template = res.template; // Accessing the `template` property from the custom type
                     show = false;
                 }
             })
             .catch((err) => {
                 console.error(err);
-            })
+            });
+    }
+
+    function handleTemplateChange(value: string) {
+        template = value;
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+
+        if (previewInterval) {
+            clearInterval(previewInterval);
+            previewInterval = null;
+        }
+        typingTimeout = setTimeout(() => {
+            startPreviewInterval();
+        }, 1000);
+    }
+
+    function startPreviewInterval() {
+        if (!previewInterval) {
+            previewInterval = setInterval(() => {
+                fetchPreview();
+            }, 3000);
+        }
     }
 
     onMount(() => {
@@ -57,7 +82,18 @@
     $: if (show) {
         fetchTemplate();
         fetchPreview();
+    } else {
+        if (previewInterval) {
+            clearInterval(previewInterval);
+            previewInterval = null;
+        }
     }
+
+    onDestroy(() => {
+        if (previewInterval) {
+            clearInterval(previewInterval);
+        }
+    });
 </script>
 
 <div class="modal-wrap">
@@ -86,7 +122,7 @@
                     <CodemirrorEditor
                         ext="twig"
                         bind:value={template}
-                        change={(e) => (template = e)}
+                        change={(e) => (handleTemplateChange(e))}
                     />
                 </div>
             {/if}
@@ -124,14 +160,6 @@
 		display: flex;
 		flex-direction: row;
 		height: 100%;
-	}
-
-	.settings {
-		width: 50%;
-		height: 100%;
-		border-right: 1px solid var(--border);
-		overflow: auto;
-		padding-right: 20px;
 	}
 
 	.preview {
