@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Content\Marks;
+namespace App\Service\Content\Marks;
 
 use Hyvor\Phrosemirror\Document\Mark;
 use Hyvor\Phrosemirror\Types\MarkType;
 
-class Em extends MarkType
+class Strong extends MarkType
 {
-    public string $name = 'em';
+    public string $name = 'strong';
 
     public function toHtml(Mark $mark, string $children): string
     {
-        return "<em>$children</em>";
+        return "<strong>$children</strong>";
     }
 
 }

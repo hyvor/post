@@ -4,7 +4,7 @@ namespace App\Api\Public\Controller\Template;
 
 use App\Api\Public\Input\RetrieveContentHtmlInput;
 use App\Api\Public\Input\TemplateRenderWithInput;
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Service\Template\TemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;

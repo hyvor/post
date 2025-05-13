@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Content;
+namespace App\Service\Content;
 
-use App\Content\Marks\Code;
-use App\Content\Marks\Em;
-use App\Content\Marks\Link;
-use App\Content\Marks\Strike;
-use App\Content\Marks\Strong;
-use App\Content\Marks\Underline;
-use App\Content\Nodes\Blockquote;
-use App\Content\Nodes\Button;
-use App\Content\Nodes\Doc;
-use App\Content\Nodes\HardBreak;
-use App\Content\Nodes\Heading;
-use App\Content\Nodes\HorizontalRule;
-use App\Content\Nodes\Image;
-use App\Content\Nodes\Paragraph;
-use App\Content\Nodes\Text;
 use App\Entity\Issue;
+use App\Service\Content\Marks\Code;
+use App\Service\Content\Marks\Em;
+use App\Service\Content\Marks\Link;
+use App\Service\Content\Marks\Strike;
+use App\Service\Content\Marks\Strong;
+use App\Service\Content\Marks\Underline;
+use App\Service\Content\Nodes\Blockquote;
+use App\Service\Content\Nodes\Button;
+use App\Service\Content\Nodes\Doc;
+use App\Service\Content\Nodes\HardBreak;
+use App\Service\Content\Nodes\Heading;
+use App\Service\Content\Nodes\HorizontalRule;
+use App\Service\Content\Nodes\Image;
+use App\Service\Content\Nodes\Paragraph;
+use App\Service\Content\Nodes\Text;
 use Hyvor\Phrosemirror\Document\Document;
 use Hyvor\Phrosemirror\Types\Schema;
 

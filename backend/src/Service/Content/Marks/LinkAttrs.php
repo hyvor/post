@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Content\Marks;
+namespace App\Service\Content\Marks;
 
 use Hyvor\Phrosemirror\Types\AttrsType;
 

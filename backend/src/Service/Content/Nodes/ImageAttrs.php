@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Content\Nodes;
+namespace App\Service\Content\Nodes;
 
 use Hyvor\Phrosemirror\Types\AttrsType;
 

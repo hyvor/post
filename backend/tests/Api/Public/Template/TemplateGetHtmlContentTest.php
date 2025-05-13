@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Public\Template;
 
 use App\Api\Public\Controller\Template\TemplateController;
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
