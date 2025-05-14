@@ -2,6 +2,7 @@
 
 namespace App\Service\Content\Nodes;
 
+use Hyvor\Phrosemirror\Converters\HtmlParser\ParserRule;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Types\NodeType;
 
@@ -17,4 +18,10 @@ class Paragraph extends NodeType
         return "<p style=\"$style\">$children</p>";
     }
 
+    public function fromHtml(): array
+    {
+        return [
+            new ParserRule(tag: 'p')
+        ];
+    }
 }
