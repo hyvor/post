@@ -25,8 +25,8 @@ class TextTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
-        $this->assertStringContainsString($content, $html);
+        $html = new ContentService()->htmlFromJson($json);
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;">Just text</p>', $html);
     }
 
     public function test_html_to_json(): void

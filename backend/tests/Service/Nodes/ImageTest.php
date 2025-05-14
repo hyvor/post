@@ -24,10 +24,15 @@ class ImageTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
-        $this->assertStringContainsString('<img', $html);
-        $this->assertStringContainsString($src, $html);
-        $this->assertStringContainsString($alt, $html);
+        $html = new ContentService()->htmlFromJson($json);
+        $this->assertSame('<img     src="https://example.com/image.png"
+    alt="Alt text"
+    style="
+        display: block;
+        margin: 30px auto;
+        max-width: 100%;
+        height: auto;
+    " />', trim($html));
     }
 
     public function test_html_to_json(): void

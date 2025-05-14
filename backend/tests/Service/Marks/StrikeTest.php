@@ -28,9 +28,8 @@ class StrikeTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
-        $this->assertStringContainsString('<s>', $html);
-        $this->assertStringContainsString($content, $html);
+        $html = new ContentService()->htmlFromJson($json);
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><s>Strikethrough</s></p>', $html);
     }
 
     public function test_html_to_json(): void

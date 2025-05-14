@@ -30,9 +30,8 @@ class ButtonTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
-        $this->assertStringContainsString('<button>', $html);
-        $this->assertStringContainsString($text, $html);
+        $html = new ContentService()->htmlFromJson($json);
+        $this->assertSame('<button><p style="margin: 0 0 20px;line-height:26px;">Click me</p></button>', $html);
     }
 
     public function test_html_to_json(): void

@@ -31,9 +31,7 @@ class HardBreakTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
-        $this->assertStringContainsString('Line 1', $html);
-        $this->assertStringContainsString('<br />', $html);
-        $this->assertStringContainsString('Line 2', $html);
+        $html = new ContentService()->htmlFromJson($json);
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;">Line 1<br />Line 2</p>', $html);
     }
 }
