@@ -26,7 +26,7 @@ class TemplateRenderer
         $variables = new TemplateVariables(
             lang: 'en',
             subject: (string) $issue->getSubject(),
-            content: $this->contentService->htmlFromJson($issue->getContent()),
+            content: $this->contentService->htmlFromJson($issue->getContent() ?? ''),
 
             logo: $meta->template_logo ?? '',
             logo_alt: $meta->template_logo_alt ?? '',
