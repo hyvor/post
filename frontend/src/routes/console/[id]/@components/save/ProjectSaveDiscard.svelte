@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toast } from '@hyvor/design/components';
 	import { updateProject } from '../../../lib/actions/projectActions';
 	import {
 		projectEditingStore,
@@ -33,7 +34,7 @@
 				{} as any
 			)
 		);
-
+		toast.success('Project updated')
 		updateProjectStore(project);
 
 		onsave?.();

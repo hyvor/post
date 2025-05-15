@@ -7,15 +7,18 @@ import { projectEditingStore, projectStore, updateProjectStore } from '../../../
 import { goto } from '$app/navigation';
 import { get } from 'svelte/store';
 import { deleteProject } from '../../../lib/actions/projectActions';
+import { getI18n } from '../../../lib/i18n';
+
+const I18n = getI18n();
 
 let deleting = false;
 
 async function onDelete() {
     const confirmation = await confirm({
-        title: 'Delete Project',
-        content: 'Are you sure you want to delete this project? This action cannot be undone.',
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+        title: I18n.t('console.settings.project.deleteTitle'),
+        content: I18n.t('console.settings.project.deleteContent'),
+        confirmText: I18n.t('console.settings.project.delete'),
+        cancelText: I18n.t('console.settings.project.cancel'),
         danger: true
     });
     if (!confirmation) return;
@@ -23,11 +26,11 @@ async function onDelete() {
     deleting = true;
     deleteProject(get(projectStore))
         .then(() => {
-            toast.success('Project deleted');
+            toast.success(I18n.t('console.settings.project.deleted'));
             goto('/');
         })
         .catch(() => {
-            toast.error('Failed to delete project');
+            toast.error(I18n.t('console.settings.project.deleteFailed'));
         })
         .finally(() => {
             deleting = false;
@@ -38,20 +41,20 @@ async function onDelete() {
 
 <SettingsBody>
     <div class="project-settings-wrap">
-        <SplitControl label="Project Name">
+        <SplitControl label={I18n.t('console.settings.project.name')}>
             <TextInput block bind:value={$projectEditingStore.name} />
         </SplitControl>
         <ProjectSaveDiscard keys={["name"]} />
 
-        <SplitControl label="Project UUID">
+        <SplitControl label={I18n.t('console.settings.project.uuid')}>
             <div class="project-uuid-row">
                 <TextInput block readonly bind:value={$projectStore.uuid} />
             </div>
         </SplitControl>
 
-        <SplitControl label="Danger Zone">
+        <SplitControl label={I18n.t('console.settings.project.dangerZone')}>
             <Button color="red" on:click={onDelete} loading={deleting}>
-                Delete Project
+                {I18n.t('console.settings.project.delete')}
             </Button>
         </SplitControl>
     </div>
