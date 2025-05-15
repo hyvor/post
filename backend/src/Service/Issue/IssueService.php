@@ -2,6 +2,7 @@
 
 namespace App\Service\Issue;
 
+use App\Content\ContentService;
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
@@ -27,7 +28,7 @@ class IssueService
         private EntityManagerInterface $em,
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
-        private SendService $sendService,
+        private ContentService $contentService,
         private NewsletterListService $newsletterListService,
     )
     {
@@ -73,7 +74,7 @@ class IssueService
         if ($updates->hasProperty('content'))
         {
             $issue->setContent($updates->content);
-            $issue->setHtml($this->sendService->renderHtml($issue));
+            $issue->setHtml($this->contentService->htmlFromJson($updates->content));
         }
 
         if ($updates->hasProperty('status'))
