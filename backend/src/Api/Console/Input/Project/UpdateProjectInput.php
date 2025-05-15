@@ -9,6 +9,8 @@ class UpdateProjectInput extends ProjectObject
 {
     use OptionalPropertyTrait;
 
+    public string $name;
+
     public const UNUPDATABLE_PROPERTIES = [
         'id',
         'created_at',
