@@ -2,6 +2,7 @@
 
 namespace App\Service\Template;
 
+use App\Content\ContentService;
 use App\Entity\Issue;
 use App\Entity\Project;
 use Twig\Environment;
@@ -10,7 +11,9 @@ class TemplateRenderer
 {
 
     public function __construct(
-        private Environment $twig
+        private Environment $twig,
+        private ContentService $contentService,
+        private TemplateService $templateService,
     )
     {
     }
@@ -23,7 +26,7 @@ class TemplateRenderer
         $variables = new TemplateVariables(
             lang: 'en',
             subject: (string) $issue->getSubject(),
-            content: (string) $issue->getHtml(),
+            content: $this->contentService->htmlFromJson($issue->getContent()),
 
             logo: $meta->template_logo ?? '',
             logo_alt: $meta->template_logo_alt ?? '',
@@ -51,13 +54,16 @@ class TemplateRenderer
             box_border: $meta->box_border ?? TemplateDefaults::BOX_BORDER,
         );
 
-        return $this->render($variables);
-
+        $template = $this->templateService->getTemplate($issue->getProject());
+        if (!$template)
+            return $this->render($this->templateService->readDefaultTemplate(), $variables);
+        return $this->render($template->getTemplate(), $variables);
     }
 
-    public function render(TemplateVariables $variables): string
+    public function render(string $template, TemplateVariables $variables): string
     {
-        return $this->twig->render('newsletter/default.html.twig', (array) $variables);
+        $template = $this->twig->createTemplate($template);
+        return $template->render((array) $variables);
     }
 
 }

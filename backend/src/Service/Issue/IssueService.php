@@ -72,10 +72,10 @@ class IssueService
             $issue->setReplyToEmail($updates->replyToEmail);
 
         if ($updates->hasProperty('content'))
-        {
             $issue->setContent($updates->content);
-            $issue->setHtml($this->contentService->htmlFromJson($updates->content));
-        }
+
+        if ($updates->hasProperty('html'))
+            $issue->setContent($updates->html);
 
         if ($updates->hasProperty('status'))
             $issue->setStatus($updates->status);
