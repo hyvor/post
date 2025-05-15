@@ -11,7 +11,7 @@ FORM
     --hp-accent-light: #dedede;
     --hp-accent-text: #fff;
 }
-    
+
 .form * {
     box-sizing: border-box;
 }
@@ -37,31 +37,45 @@ FORM
 
 .form .input {
     position: relative;
-}
-.form .email-input {
-    padding: 10px 25px;
-    border: none;
     background-color: #fff;
-    border-radius: 20px;
     box-shadow: 0 0 8px #0000001c;
     border-radius: 20px;
-    width: 100%;
-    font-family: inherit;
+    display: flex;
+    padding: 3px;
 }
+
+.form .input.focused {
+    outline: 2px solid var(--hp-accent);
+}
+
+.form .email-input {
+    padding: 6px 20px;
+    border: none;
+    flex: 1;
+    font-family: inherit;
+    background-color: transparent;
+}
+
+.form .email-input:focus {
+    outline: none;
+}
+
 .form button {
-    position: absolute;
-    right: 3px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 0 25px;
     background-color: #000;
     color: #fff;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    height: calc(100% - 6px);
     font-family: inherit;
-    z-index: 1;
+    padding: 0 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form button:disabled {
+    background-color: #dedede;
+    cursor: not-allowed;
 }
 
 .form .lists {

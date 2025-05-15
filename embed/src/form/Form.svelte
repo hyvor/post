@@ -14,6 +14,8 @@
 
     let { projectUuid, instance, shadowRoot }: Props = $props();
     let loading = $state(true);
+    let focused = $state(false);
+    let subscribing = $state(false);
 
     let project: Project = $state({} as Project);
     let lists: List[] = $state([]);
@@ -39,6 +41,14 @@
                 loading = false;
             });
     });
+
+    function onSubscribe() {
+        subscribing = true;
+
+        setTimeout(() => {
+            subscribing = false;
+        }, 2000);
+    }
 
     function setCustomCss() {
         if (project.form.custom_css) {
@@ -105,14 +115,16 @@
             {/each}
         </div>
 
-        <div class="input">
+        <div class="input" class:focused={focused}>
             <input
                 type="email"
                 name="email"
                 placeholder="Your Email"
                 class="email-input"
+                onfocus={() => (focused = true)}
+                onblur={() => (focused = false)}
             />
-            <button>
+            <button onclick={onSubscribe} disabled={subscribing}>
                 {project.form.button_text || "Subscribe"}
             </button>
         </div>
