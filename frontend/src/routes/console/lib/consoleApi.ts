@@ -27,7 +27,7 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        let url = consoleBaseUrl + endpoint;
+        let url = consoleBaseUrl + endpoint.replace(/^\//, '');
 
         if (method === 'get') {
 			url +=
