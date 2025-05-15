@@ -8,7 +8,6 @@ use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -16,26 +15,15 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
-final class ProjectController extends AbstractController
+class ProjectController extends AbstractController
 {
     use HasHyvorUser;
 
     public function __construct(
         private ProjectService $projectService
-    ) {
-    }
-
-    /*#[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
-    public function getUserAllProjects(): JsonResponse
+    )
     {
-        $user = $this->getHyvorUser();
-        $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
-        $projects = array_map(
-            fn(array $pair) => new ProjectObject($pair['project']),
-            $projectsUsers
-        );
-        return $this->json($projects);
-    }*/
+    }
 
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse

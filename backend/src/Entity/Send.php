@@ -22,13 +22,13 @@ class Send
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
+    #[ORM\ManyToOne(targetEntity: Project::class)]
+    private Project $project;
 
     #[ORM\ManyToOne(targetEntity: Issue::class)]
-    #[ORM\JoinColumn(name: 'issue_id')]
     private Issue $issue;
 
     #[ORM\ManyToOne(targetEntity: Subscriber::class)]
-    #[ORM\JoinColumn(name: 'subscriber_id')]
     private Subscriber $subscriber;
 
     #[ORM\Column(length: 255)]
@@ -114,6 +114,18 @@ class Send
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

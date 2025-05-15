@@ -1,14 +1,19 @@
 <script lang="ts">
-    import {HyvorBar, InternationalizationProvider, Loader, toast} from "@hyvor/design/components";
-    import en from '../../../../shared/locale/en-US.json';
-    import fr from '../../../../shared/locale/fr-FR.json';
-	import Nav from "./@components/Nav/Nav.svelte";
-	import type { AppConfig, Project } from "./types";
+	import {
+		HyvorBar,
+		InternationalizationProvider,
+		Loader,
+		toast
+	} from '@hyvor/design/components';
+	import en from '../../../../shared/locale/en-US.json';
+	import fr from '../../../../shared/locale/fr-FR.json';
+	import Nav from './@components/Nav/Nav.svelte';
+	import type { AppConfig, Project } from './types';
 
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
 	import { page } from "$app/stores";
-	import { setAppConfig } from './lib/stores/consoleStore';
+	import { setAppConfig, getAppConfig } from './lib/stores/consoleStore';
 	import { projectRoleStore, projectStore } from "./lib/stores/projectStore";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 	import ProjectList from "./@components/Nav/ProjectList.svelte";
@@ -84,7 +89,7 @@
 				<Loader size="large"></Loader>
 			</div>
 		{:else}
-			<HyvorBar product="blogs" />
+			<HyvorBar product="post" instance={getAppConfig().hyvor.instance} />
 			{@render children?.()}
 		{/if}
 	</main>
