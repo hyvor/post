@@ -18,6 +18,8 @@ use App\Service\Content\Nodes\HorizontalRule;
 use App\Service\Content\Nodes\Image;
 use App\Service\Content\Nodes\Paragraph;
 use App\Service\Content\Nodes\Text;
+use Hyvor\Phrosemirror\Document\Node;
+use Hyvor\Phrosemirror\Converters\HtmlParser\HtmlParser;
 use Hyvor\Phrosemirror\Document\Document;
 use Hyvor\Phrosemirror\Types\Schema;
 
@@ -51,6 +53,21 @@ class ContentService
     {
         $document = Document::fromJson($this->getSchema(), $content);
         return $document->toHtml();
+    }
+
+    public function getJsonFromHtml(string $html, bool $sanitize = true) : string
+    {
+        return $this->getDocumentFromHtml($html, $sanitize)->toJson();
+    }
+
+    public function getDocumentFromHtml(
+        string $html,
+        bool $sanitize = true
+    ) : Node
+    {
+        $schema = $this->getSchema();
+        $parser = HtmlParser::fromSchema($schema);
+        return $parser->parse($html, sanitize: $sanitize);
     }
 
     public function getSchema(): Schema

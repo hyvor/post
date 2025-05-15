@@ -2,8 +2,10 @@
 
 namespace App\Service\Content\Nodes;
 
+use Hyvor\Phrosemirror\Converters\HtmlParser\ParserRule;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Types\NodeType;
+use DOMElement;
 
 class Heading extends NodeType
 {
@@ -32,6 +34,21 @@ class Heading extends NodeType
         $style = "margin: 0 0 $bottomMargin; font-size: $fontSize; font-weight: bold;";
 
         return "<h$level style=\"$style\">$children</h$level>";
+    }
+
+    public function fromHtml(): array
+    {
+        return array_map(function (int $level) {
+            return new ParserRule(
+                tag: "h{$level}",
+                getAttrs: function (DOMElement $node) use ($level) {
+                    return HeadingAttrs::fromArray([
+                        'level' => $level,
+                        'id' => $node->getAttribute('id'),
+                    ]);
+                },
+            );
+        }, self::ALLOWED_LEVELS);
     }
 
 }

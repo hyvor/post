@@ -1,5 +1,12 @@
 export interface AppConfig {
-    template_defaults: {
+	project_defaults: {
+		FORM_COLOR_TEXT: string,
+		FORM_COLOR_TEXT_LIGHT: string,
+		FORM_COLOR_LIGHT_ACCENT: string,
+		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
+		FORM_COLOR_LIGHT_INPUT: string,
+		FORM_COLOR_LIGHT_INPUT_TEXT: string,
+
 		LANG: string,
 		COLOR_ACCENT: string,
 		COLOR_BACKGROUND: string,
@@ -14,15 +21,6 @@ export interface AppConfig {
 		FONT_COLOR_ON_BACKGROUND: string,
 		FONT_COLOR_ON_BOX: string,
 		FONT_LINE_HEIGHT: string,
-	},
-
-	project_defaults: {
-		FORM_COLOR_TEXT: string,
-		FORM_COLOR_TEXT_LIGHT: string,
-		FORM_COLOR_LIGHT_ACCENT: string,
-		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
-		FORM_COLOR_LIGHT_INPUT: string,
-		FORM_COLOR_LIGHT_INPUT_TEXT: string,
 	}
 }
 

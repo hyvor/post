@@ -39,7 +39,8 @@
         "symfony/uid": "7.2.*",
         "symfony/ux-twig-component": "^2.24",
         "symfony/validator": "7.2.*",
-        "symfony/yaml": "7.2.*"
+        "symfony/yaml": "7.2.*",
+        "ext-dom": "*"
     },
     "config": {
         "allow-plugins": {

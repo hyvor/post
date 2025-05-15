@@ -2,8 +2,10 @@
 
 namespace App\Service\Content\Nodes;
 
+use Hyvor\Phrosemirror\Converters\HtmlParser\ParserRule;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Types\NodeType;
+use DOMElement;
 
 class Image extends NodeType
 {
@@ -29,6 +31,33 @@ class Image extends NodeType
         ATTR;
 
         return "<img $attrs />";
+    }
+
+    public function fromHtml(): array
+    {
+        return [
+            new ParserRule(
+                tag: 'img',
+                getAttrs: function (DOMElement $node) {
+                    $src = $node->getAttribute('src');
+                    if (!$src) return false;
+
+                    $data = [
+                        'src' => $src
+                    ];
+
+                    $alt = $node->getAttribute('alt');
+                    $width = $node->getAttribute('width');
+                    $height = $node->getAttribute('height');
+
+                    if ($alt) $data['alt'] = $alt;
+                    if ($width) $data['width'] = $width;
+                    if ($height) $data['height'] = $height;
+
+                    return ImageAttrs::fromArray($data);
+                },
+            )
+        ];
     }
 
 }

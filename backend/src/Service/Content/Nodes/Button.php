@@ -2,6 +2,7 @@
 
 namespace App\Service\Content\Nodes;
 
+use Hyvor\Phrosemirror\Converters\HtmlParser\ParserRule;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Types\NodeType;
 
@@ -15,5 +16,12 @@ class Button extends NodeType
     {
         // TODO: Add Styling
         return "<button>$children</button>";
+    }
+
+    public function fromHtml(): array
+    {
+        return [
+            new ParserRule(tag: 'button')
+        ];
     }
 }
