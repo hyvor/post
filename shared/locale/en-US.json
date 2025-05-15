@@ -35,6 +35,17 @@
                 "colorText": "Text",
                 "inputColor": "Input",
                 "inputColorCaption": "Used for email input"
+            },
+            "project": {
+                "name": "Project Name",
+                "uuid": "Project UUID",
+                "dangerZone": "Danger Zone",
+                "delete": "Delete Project",
+                "deleteTitle": "Delete Project",
+                "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
+                "cancel": "Cancel",
+                "deleted": "Project deleted",
+                "deleteFailed": "Failed to delete project"
             }
         }
     },
