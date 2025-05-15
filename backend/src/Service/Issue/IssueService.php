@@ -27,6 +27,7 @@ class IssueService
         private EntityManagerInterface $em,
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
     )
     {
@@ -70,13 +71,13 @@ class IssueService
             $issue->setReplyToEmail($updates->replyToEmail);
 
         if ($updates->hasProperty('content'))
+        {
             $issue->setContent($updates->content);
+            $issue->setHtml($this->sendService->renderHtml($issue));
+        }
 
         if ($updates->hasProperty('status'))
             $issue->setStatus($updates->status);
-
-        if ($updates->hasProperty('html'))
-            $issue->setHtml($updates->html);
 
         if ($updates->hasProperty('text'))
             $issue->setText($updates->text);

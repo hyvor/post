@@ -1,9 +1,8 @@
 <script lang="ts">
 import { TextInput, SplitControl, Button, toast, confirm } from '@hyvor/design/components';
-import SettingsTop from '../@components/SettingsTop.svelte';
 import SettingsBody from '../@components/SettingsBody.svelte';
 import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
-import { projectEditingStore, projectStore, updateProjectStore } from '../../../lib/stores/projectStore';
+import { projectEditingStore, projectStore } from '../../../lib/stores/projectStore';
 import { goto } from '$app/navigation';
 import { get } from 'svelte/store';
 import { deleteProject } from '../../../lib/actions/projectActions';
