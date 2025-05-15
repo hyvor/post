@@ -51,6 +51,25 @@ services:
       test: ls
       disable: true
 
+  hyvor-post-embed:
+    container_name: hyvor-post-embed
+    build:
+      context: .
+      target: embed-dev
+    volumes:
+      - ./embed:/app/embed
+    labels:
+      traefik.enable: true
+      # embed
+      traefik.http.routers.hyvor-post-embed.rule: Host(`hyvorpost.localhost`)
+      traefik.http.routers.hyvor-post-embed.entrypoints: http
+      traefik.http.routers.hyvor-post-embed.service: hyvor-post-embed
+      # service
+      traefik.http.services.hyvor-post-embed.loadbalancer.server.port: 80
+    networks:
+      - hyvor-network
+    profiles: [dev]
+
 networks:
   hyvor-network:
     external: true
