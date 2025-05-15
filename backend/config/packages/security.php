@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Config\SecurityConfig;
 
 return static function (ContainerBuilder $container, SecurityConfig $security): void {
-
     $security
         ->firewall('hyvor_auth')
         ->stateless(true)
@@ -16,7 +15,5 @@ return static function (ContainerBuilder $container, SecurityConfig $security): 
     $security
         ->accessControl()
         ->path('^/api/console')
-        ->roles(UserRole::USER);
-
-
+        ->roles(UserRole::HYVOR_USER);
 };

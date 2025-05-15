@@ -2,7 +2,8 @@
     "console": {
         "billing": {
             "usage": {
-                "title": "Usage"
+                "title": "Usage",
+                "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
             }
         },
         "settings": {
