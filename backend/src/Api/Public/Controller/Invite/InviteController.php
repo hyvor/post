@@ -4,6 +4,8 @@ namespace App\Api\Public\Controller\Invite;
 
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
+use Hyvor\Internal\Auth\Auth;
+use Hyvor\Internal\Auth\AuthInterface;
 use Illuminate\Support\Js;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -20,24 +22,30 @@ class InviteController extends AbstractController
 
     public function __construct(
         private UserService $userService,
-        private UserInviteService $userInviteService
+        private UserInviteService $userInviteService,
+        private AuthInterface $auth
     ) {
     }
 
     #[Route('/invite/verify', methods: 'GET')]
     public function verifyInvite(Request $request): RedirectResponse
     {
+        $user = $this->auth->check((string)$request->cookies->get(Auth::HYVOR_SESSION_COOKIE_NAME));
+
         $code = $request->query->getString('code');
         $invite = $this->userInviteService->getInviteFromCode($code);
-        if (!$invite)
+        if (!$invite) {
             throw new NotFoundHttpException("No invitation found");
+        }
 
-        if ($invite->getExpiresAt() < new \DateTime())
+        if ($invite->getExpiresAt() < new \DateTime()) {
             throw new BadRequestHttpException("Invitation expired");
+        }
 
         $project = $invite->getProject();
-        if ($this->userService->isAdmin($project, $invite->getHyvorUserId()))
+        if ($this->userService->isAdmin($project, $invite->getHyvorUserId())) {
             throw new BadRequestHttpException("You are already an admin of this project");
+        }
 
         $this->userService->createUser($project, $invite->getHyvorUserId());
 

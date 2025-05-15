@@ -16,20 +16,24 @@ final class Version20250502144042 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
-            CREATE TYPE user_role_enum AS ENUM ('owner', 'admin');
-        SQL);
+        $this->addSql(
+            <<<SQL
+            CREATE TYPE user_role AS ENUM ('owner', 'admin');
+        SQL
+        );
 
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE users (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL,
-            role user_role_enum NOT NULL
+            role user_role NOT NULL
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void
