@@ -17,6 +17,7 @@ class TemplateRenderer
 
     public function renderFromIssue(Project $project, Issue $issue): string
     {
+        $meta = $project->getMeta();
 
         // TODO:
         $variables = new TemplateVariables(
@@ -24,30 +25,30 @@ class TemplateRenderer
             subject: (string) $issue->getSubject(),
             content: (string) $issue->getHtml(),
 
-            logo: '/img/logo.png',
-            logo_alt: 'Example Logo',
-            brand: 'Hyvor Post',
-            brand_url: 'https://post.hyvor.com',
+            logo: $meta->template_logo ?? '',
+            logo_alt: $meta->template_logo_alt ?? '',
+            brand: $meta->brand ?? '',
+            brand_url: $meta->brand_url ?? '',
 
-            address: '10 Rue de Penthiévre, 75008 Paris, France',
+            address: $meta->address ?? '',
             unsubscribe_url: 'https://example.com/unsubscribe',
-            unsubscribe_text: 'Unsubscribe',
+            unsubscribe_text: $meta->unsubscribe_text ?? '',
 
             color_accent: TemplateDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
-            color_background: '#f8f9fa',
-            color_box_background: '#ffffff',
+            color_background: $meta->color_background ?? TemplateDefaults::COLOR_BACKGROUND,
+            color_box_background: $meta->color_box_background ?? TemplateDefaults::COLOR_BACKGROUND,
 
-            font_family: 'Arial, sans-serif',
-            font_size: '16px',
-            font_weight: 'normal',
-            font_weight_heading: 'bold',
-            font_color_on_background: '#007bff',
-            font_color_on_box: '#333333',
-            font_line_height: '1.5',
+            font_family: $meta->font_family ?? TemplateDefaults::FONT_FAMILY,
+            font_size: $meta->font_size ?? TemplateDefaults::FONT_SIZE,
+            font_weight: $meta->font_weight ?? TemplateDefaults::FONT_WEIGHT,
+            font_weight_heading: $meta->font_weight ?? TemplateDefaults::FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->font_color_on_background ?? TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->font_color_on_box ?? TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
+            font_line_height: $meta->font_line_height ?? TemplateDefaults::FONT_LINE_HEIGHT,
 
-            box_radius: '5px',
-            box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-            box_border: '1px solid #e9ecef',
+            box_radius: $meta->box_radius ?? TemplateDefaults::BOX_RADIUS,
+            box_shadow: $meta->box_shadow ?? TemplateDefaults::BOX_SHADOW,
+            box_border: $meta->box_border ?? TemplateDefaults::BOX_BORDER,
         );
 
         return $this->render($variables);
