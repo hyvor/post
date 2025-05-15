@@ -8,16 +8,16 @@
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'}>
-			<NavItem>
-				<IconCoin slot="icon" />
-				<span slot="text">Billing</span>
-			</NavItem>
-		</NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
 			<NavItem>
 				<IconDatabase slot="icon" />
 				<span slot="text">Domains</span>
+			</NavItem>
+		</NavLink>
+		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'}>
+			<NavItem>
+				<IconCoin slot="icon" />
+				<span slot="text">Billing</span>
 			</NavItem>
 		</NavLink>
 	</div>

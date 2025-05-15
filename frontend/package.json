@@ -35,6 +35,8 @@
 	"dependencies": {
 		"@hyvor/design": "^1.0.9",
 		"@hyvor/icons": "^1.1.0",
+		"chart.js": "^4.4.9",
+		"chartjs-plugin-annotation": "^3.1.0",
 		"codemirror": "^5.65.19",
 		"dayjs": "^1.11.13",
 		"prosemirror-codemark": "^0.4.2",

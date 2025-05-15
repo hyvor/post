@@ -19,14 +19,13 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class SubscriberController extends AbstractController
+class SubscriberController extends AbstractController
 {
 
     public function __construct(
         private SubscriberService $subscriberService,
         private NewsletterListService $newsletterListService
-    )
-    {
+    ) {
     }
 
     #[Route('/subscribers', methods: 'GET')]
@@ -36,16 +35,19 @@ final class SubscriberController extends AbstractController
         $offset = $request->query->getInt('offset', 0);
 
         $status = null;
-        if ($request->query->has('status'))
+        if ($request->query->has('status')) {
             $status = $request->query->getString('status');
+        }
 
         $list_id = null;
-        if ($request->query->has('list_id'))
+        if ($request->query->has('list_id')) {
             $list_id = $request->query->getInt('list_id');
+        }
 
         $search = null;
-        if ($request->query->has('search'))
+        if ($request->query->has('search')) {
             $search = $request->query->getString('search');
+        }
 
         $subscribers = $this
             ->subscriberService
@@ -65,7 +67,6 @@ final class SubscriberController extends AbstractController
     #[Route('/subscribers', methods: 'POST')]
     public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
     {
-
         $missingListIds = $this
             ->newsletterListService
             ->getMissingListIdsOfProject($project, $input->list_ids);
@@ -100,9 +101,7 @@ final class SubscriberController extends AbstractController
         Subscriber $subscriber,
         Project $project,
         #[MapRequestPayload] UpdateSubscriberInput $input
-    ): JsonResponse
-    {
-
+    ): JsonResponse {
         $updates = new UpdateSubscriberDto();
 
         if ($input->hasProperty('email')) {

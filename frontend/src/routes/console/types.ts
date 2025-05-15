@@ -1,4 +1,9 @@
 export interface AppConfig {
+
+	hyvor: {
+		instance: string;
+	},
+
     template_defaults: {
 		LANG: string,
 		COLOR_ACCENT: string,
