@@ -6,6 +6,7 @@ use App\Api\Console\Input\Project\CreateProjectInput;
 use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Api\Console\Object\ProjectObject;
 use App\Entity\Project;
+use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
 use Hyvor\Internal\Auth\AuthUser;
@@ -61,7 +62,10 @@ class ProjectController extends AbstractController
         Project $project,
         #[MapRequestPayload] UpdateProjectInput $input
     ): JsonResponse {
-        // later we may need to add functions to update project non-meta properties
+        $updates = new UpdateProjectDto();
+        if ($input->hasProperty('name'))
+            $updates->name = $input->name;
+        $project = $this->projectService->updateProject($project, $updates);
 
         $updatesMeta = new UpdateProjectMetaDto();
         $properties = $input->getSetProperties();
