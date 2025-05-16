@@ -22,7 +22,7 @@
 			</div>
 			<div class="description">
 				{#if own}
-                You are the owner of these projects. Your subscription applies to all of them.                
+                	You are the owner of these projects. Your subscription applies to all of them.                
 				{:else}
                     You are admin on these websites. Your subscription does not apply to them.
 				{/if}
@@ -30,7 +30,7 @@
 		</div>
 		{#each projects as project}
 			<ProjectRow
-                project={project}
+                projectList={project}
             />   
 		{/each}
 	</div>

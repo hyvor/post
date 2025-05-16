@@ -7,12 +7,12 @@
 	import RoleTag from './RoleTag.svelte';
 	import { selectingProject } from '../../lib/stores/consoleStore';
 
-	export let project: ProjectList;
+	export let projectList: ProjectList;
 
 	function onClick() {
-		projectStore.set(project);
-        goto(`/console/${project.id}`);
-		loadProject(String(project.id));
+		projectStore.set(projectList.project);
+        goto(`/console/${projectList.project.id}`);
+		loadProject(String(projectList.project.id));
 		selectingProject.set(false);
 	}
 </script>
@@ -25,16 +25,16 @@
 	tabindex="0"
 >
 	<div class="name-id">
-		<div class="name">{project.name}</div>
+		<div class="name">{projectList.project.name}</div>
 		<div class="id">
 			<span class="id-tag">ID: </span><Tag size="x-small"
-				><strong>{project.id}</strong></Tag
+				><strong>{projectList.project.id}</strong></Tag
 			>
 		</div>
 	</div>
 
     <div class="role">
-		<RoleTag role={project.user_role} />
+		<RoleTag role={projectList.role} />
 	</div>
 
 	<div class="right">&rarr;</div>

@@ -2,9 +2,9 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
-	import IconPersonFillGear from '@hyvor/icons/IconPersonFillGear';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
+	import IconPeople from '@hyvor/icons/IconPeople';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -24,11 +24,11 @@
 			Email Design
 		</NavLink>
 
-		<NavLink href="{prefix}/admin" active={page.url.pathname === prefix + '/admin'}>
+		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
 			{#snippet start()}
-				<IconPersonFillGear />
+				<IconPeople />
 			{/snippet}
-			Admin
+			Users
 		</NavLink>
   
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>

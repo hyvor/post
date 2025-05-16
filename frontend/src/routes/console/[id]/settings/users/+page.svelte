@@ -2,12 +2,12 @@
 	import { Button, Loader, SplitControl } from '@hyvor/design/components';
 	import TopBar from '../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import AdminInvitationModal from './AdminInvitationModal.svelte';
 	import { getProjectInvites, getProjectUsers } from '../../../lib/actions/userActions';
 	import { onMount } from 'svelte';
 	import type { Invite, User } from '../../../types';
 	import InviteRow from './InviteRow.svelte';
-	import AdminRow from './AdminRow.svelte';
+	import UserRow from './UserRow.svelte';
+	import UserInvitationModal from './UserInvitationModal.svelte';
 
     let loading = true;
     let users: User[] = [];
@@ -44,14 +44,14 @@
 
 <TopBar>
 	<Button on:click={() => (inviterOpen = true)}>
-		Add Admin 
+		Add User 
         {#snippet end()}
             <IconPlus />
         {/snippet}
 	</Button>
 
 	{#if inviterOpen}
-		<AdminInvitationModal
+		<UserInvitationModal
             bind:show={inviterOpen}
 			refreshInvite={(i: Invite) => (invites = [i, ...invites])}
         />
@@ -62,27 +62,24 @@
 	<Loader full />
 {:else}
 	<div class="moderators">
-		<SplitControl label="Admins" column>
+		<SplitControl label="Users" column>
 			{#each users as user}
-				<AdminRow 
+				<UserRow 
 					user={user}
 					refreshUserDelete={(u: User) => (users = users.filter((e) => e.id !== u.id))}
 				/>
 			{/each}
 		</SplitControl>
-
-		<SplitControl label="Invites" column>
-			{#if !invites.length}
-				<div class="empty">No invites</div>
-			{:else}
+		{#if invites.length > 0}
+			<SplitControl label="Invites" column>
 				{#each invites as invite}
 					<InviteRow 
 						invite={invite} 
 						refreshInviteDelete={(i: Invite) => (invites = invites.filter((e) => e.id !== i.id))}
 					/>
 				{/each}
-			{/if}
-		</SplitControl>
+			</SplitControl>
+		{/if}
 
 	</div>
 {/if}
