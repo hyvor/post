@@ -10,23 +10,28 @@ use Twig\Environment;
 class TemplateRenderer
 {
 
+    const DEFAULT_CONTENT = <<<JSON
+{
+    "type": "doc"
+}
+JSON;
+
+
     public function __construct(
         private Environment $twig,
         private ContentService $contentService,
         private TemplateService $templateService,
-    )
-    {
+    ) {
     }
 
     public function renderFromIssue(Project $project, Issue $issue): string
     {
         $meta = $project->getMeta();
 
-        // TODO:
         $variables = new TemplateVariables(
             lang: 'en',
-            subject: (string) $issue->getSubject(),
-            content: $this->contentService->htmlFromJson($issue->getContent() ?? ''),
+            subject: (string)$issue->getSubject(),
+            content: $this->contentService->htmlFromJson($issue->getContent() ?? self::DEFAULT_CONTENT),
 
             logo: $meta->template_logo ?? '',
             logo_alt: $meta->template_logo_alt ?? '',
@@ -37,7 +42,8 @@ class TemplateRenderer
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: $meta->unsubscribe_text ?? '',
 
-            color_accent: TemplateDefaults::COLOR_ACCENT, // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
+            color_accent: TemplateDefaults::COLOR_ACCENT,
+            // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
             color_background: $meta->color_background ?? TemplateDefaults::COLOR_BACKGROUND,
             color_box_background: $meta->color_box_background ?? TemplateDefaults::COLOR_BACKGROUND,
 
@@ -54,16 +60,14 @@ class TemplateRenderer
             box_border: $meta->box_border ?? TemplateDefaults::BOX_BORDER,
         );
 
-        $template = $this->templateService->getTemplate($issue->getProject());
-        if (!$template)
-            return $this->render($this->templateService->readDefaultTemplate(), $variables);
-        return $this->render($template->getTemplate(), $variables);
+        $template = $this->templateService->getTemplateStringFromProject($issue->getProject());
+        return $this->render($template, $variables);
     }
 
     public function render(string $template, TemplateVariables $variables): string
     {
         $template = $this->twig->createTemplate($template);
-        return $template->render((array) $variables);
+        return $template->render((array)$variables);
     }
 
 }
