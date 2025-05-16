@@ -1,80 +1,90 @@
 <script lang="ts">
-import { TextInput, SplitControl, Button, toast, confirm } from '@hyvor/design/components';
-import SettingsBody from '../@components/SettingsBody.svelte';
-import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
-import { projectEditingStore, projectStore } from '../../../lib/stores/projectStore';
-import { goto } from '$app/navigation';
-import { get } from 'svelte/store';
-import { deleteProject } from '../../../lib/actions/projectActions';
-import { getI18n } from '../../../lib/i18n';
+	import { TextInput, SplitControl, Button, toast, confirm } from '@hyvor/design/components';
+	import SettingsBody from '../@components/SettingsBody.svelte';
+	import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
+	import { projectEditingStore, projectStore } from '../../../lib/stores/projectStore';
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
+	import { deleteProject } from '../../../lib/actions/projectActions';
+	import { getI18n } from '../../../lib/i18n';
+	import Divider from '../../../../../design/dist/components/Divider/Divider.svelte';
 
-const I18n = getI18n();
+	const I18n = getI18n();
 
-let deleting = false;
+	let deleting = false;
 
-async function onDelete() {
-    const confirmation = await confirm({
-        title: I18n.t('console.settings.project.deleteTitle'),
-        content: I18n.t('console.settings.project.deleteContent'),
-        confirmText: I18n.t('console.settings.project.delete'),
-        cancelText: I18n.t('console.settings.project.cancel'),
-        danger: true
-    });
-    if (!confirmation) return;
-    confirmation.loading();
-    deleting = true;
-    deleteProject(get(projectStore))
-        .then(() => {
-            toast.success(I18n.t('console.settings.project.deleted'));
-            goto('/');
-        })
-        .catch(() => {
-            toast.error(I18n.t('console.settings.project.deleteFailed'));
-        })
-        .finally(() => {
-            deleting = false;
-            confirmation.close();
-        });
-}
+	async function onDelete() {
+		const confirmation = await confirm({
+			title: I18n.t('console.settings.project.delete'),
+			content: I18n.t('console.settings.project.deleteContent'),
+			confirmText: I18n.t('console.settings.project.delete'),
+			cancelText: I18n.t('console.common.cancel'),
+			danger: true
+		});
+
+		if (!confirmation) return;
+		confirmation.loading();
+		deleting = true;
+
+		deleteProject(get(projectStore))
+			.then(() => {
+				toast.success(I18n.t('console.settings.project.deleted'));
+				goto('/');
+			})
+			.catch((e) => {
+				toast.error(e.message);
+			})
+			.finally(() => {
+				deleting = false;
+				confirmation.close();
+			});
+	}
+
+	function copyUuid() {
+		const uuid = $projectStore.uuid;
+		navigator.clipboard.writeText(uuid).then(() => {
+			toast.success(
+				I18n.t('console.common.copied', {
+					value: I18n.t('console.settings.project.uuid')
+				})
+			);
+		});
+	}
 </script>
 
 <SettingsBody>
-    <div class="project-settings-wrap">
-        <SplitControl label={I18n.t('console.settings.project.name')}>
-            <TextInput block bind:value={$projectEditingStore.name} />
-        </SplitControl>
-        <ProjectSaveDiscard keys={["name"]} />
+	<SplitControl label={I18n.t('console.settings.project.name')}>
+		<TextInput block bind:value={$projectEditingStore.name} />
+	</SplitControl>
 
-        <SplitControl label={I18n.t('console.settings.project.uuid')}>
-            <div class="project-uuid-row">
-                <TextInput block readonly bind:value={$projectStore.uuid} />
-            </div>
-        </SplitControl>
+	<SplitControl
+		label={I18n.t('console.settings.project.uuid')}
+		caption={I18n.t('console.settings.project.uuidCaption')}
+	>
+		<div class="project-uuid-row">
+			<TextInput block readonly bind:value={$projectStore.uuid} />
+		</div>
+		<Button size="small" color="input" on:click={copyUuid}>
+			{I18n.t('console.common.copy')}
+		</Button>
+	</SplitControl>
 
-        <SplitControl label={I18n.t('console.settings.project.dangerZone')}>
-            <Button color="red" on:click={onDelete} loading={deleting}>
-                {I18n.t('console.settings.project.delete')}
-            </Button>
-        </SplitControl>
-    </div>
+	<SplitControl label={I18n.t('console.settings.project.delete')}>
+		<Button color="red" on:click={onDelete} loading={deleting}>
+			{I18n.t('console.settings.project.delete')}
+		</Button>
+	</SplitControl>
 </SettingsBody>
 
+<ProjectSaveDiscard keys={['name']} />
+
 <style>
-    .project-settings-wrap {
-        max-width: 500px;
-        margin-left: 0;
-        margin-right: auto;
-        text-align: left;
-    }
-    .project-uuid-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .project-uuid {
-        font-size: 15px;
-        background: var(--accent-lightest);
-        padding: 2px 8px;
-        border-radius: 4px;
-    }
+	.project-uuid-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.project-uuid-row {
+		margin-bottom: 6px;
+	}
 </style>
