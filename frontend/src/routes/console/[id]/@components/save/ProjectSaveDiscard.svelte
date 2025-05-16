@@ -34,7 +34,7 @@
 				{} as any
 			)
 		);
-		toast.success('Project updated')
+		
 		updateProjectStore(project);
 
 		onsave?.();
