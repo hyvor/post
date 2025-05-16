@@ -18,7 +18,7 @@ async function onDelete() {
         title: I18n.t('console.settings.project.deleteTitle'),
         content: I18n.t('console.settings.project.deleteContent'),
         confirmText: I18n.t('console.settings.project.delete'),
-        cancelText: I18n.t('console.settings.project.cancel'),
+        cancelText: I18n.t('console.common.cancel'),
         danger: true
     });
     if (!confirmation) return;

@@ -6,6 +6,9 @@
                 "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
             }
         },
+        "common": {
+            "cancel": "Cancel"
+        },
         "settings": {
             "form": {
                 "texts": "Texts",
@@ -43,7 +46,6 @@
                 "delete": "Delete Project",
                 "deleteTitle": "Delete Project",
                 "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
-                "cancel": "Cancel",
                 "deleted": "Project deleted",
                 "deleteFailed": "Failed to delete project"
             }
