@@ -15,8 +15,7 @@ class TemplateService
         private Filesystem $filesystem,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
-    )
-    {
+    ) {
     }
 
     public function getTemplate(Project $project): ?Template
@@ -38,6 +37,17 @@ class TemplateService
         $this->em->flush();
 
         return $templateEntity;
+    }
+
+    public function getTemplateStringFromProject(Project $project): string
+    {
+        $template = $this->getTemplate($project);
+
+        if ($template) {
+            return $template->getTemplate();
+        }
+
+        return $this->readDefaultTemplate();
     }
 
     public function readDefaultTemplate(): string
