@@ -3,14 +3,21 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
+use App\Entity\Type\IssueStatus;
+use App\Api\Console\Object\StatCategoryObject;
+use App\Api\Console\Object\StatsObject;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
 #[CoversClass(ProjectService::class)]
+#[CoversClass(StatsObject::class)]
+#[CoversClass(StatCategoryObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 
@@ -45,6 +52,10 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
         $this->assertSame(10, count($data['projects']));
+
+        $this->assertArrayHasKey('config', $data);
+        $config = $data['config'];
+        $this->assertArrayHasKey('template_defaults', $config);
     }
 
     public function testInitProject(): void
@@ -121,6 +132,18 @@ class ConsoleInitTest extends WebTestCase
             'project' => $project,
         ]);
 
+        $subscribersOld = SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList],
+            'created_at' => new \DateTimeImmutable('2021-01-01'),
+        ]);
+
+        $subscribersNew = SubscriberFactory::createMany(5, [
+            'project' => $project,
+            'lists' => [$newsletterList],
+            'created_at' => new \DateTimeImmutable(),
+        ]);
+
         $response = $this->consoleApi(
             $project->getId(),
             'GET',
@@ -144,5 +167,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
+        $this->assertSame(10, $list['subscribers_count']);
+        $this->assertSame(5, $list['subscribers_count_last_30d']);
     }
 }

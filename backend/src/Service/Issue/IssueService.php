@@ -5,9 +5,12 @@ namespace App\Service\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
+use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +26,7 @@ class IssueService
     public function __construct(
         private EntityManagerInterface $em,
         private IssueRepository $issueRepository,
+        private SendRepository $sendRepository,
         private NewsletterListService $newsletterListService,
     )
     {
@@ -30,7 +34,7 @@ class IssueService
 
     public function createIssueDraft(Project $project): Issue
     {
-        $lists = $this->newsletterListService->getNewsletterLists($project);
+        $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
         $issue = new Issue()
             ->setProject($project)
@@ -68,6 +72,33 @@ class IssueService
         if ($updates->hasProperty('content'))
             $issue->setContent($updates->content);
 
+        if ($updates->hasProperty('status'))
+            $issue->setStatus($updates->status);
+
+        if ($updates->hasProperty('html'))
+            $issue->setHtml($updates->html);
+
+        if ($updates->hasProperty('text'))
+            $issue->setText($updates->text);
+
+        if ($updates->hasProperty('sendingAt'))
+            $issue->setSendingAt($updates->sendingAt);
+
+        if ($updates->hasProperty('totalSends'))
+            $issue->setTotalSends($updates->totalSends);
+
+        if ($updates->hasProperty('okSends'))
+            $issue->setOkSends($updates->okSends);
+
+        if ($updates->hasProperty('failedSends'))
+            $issue->setFailedSends($updates->failedSends);
+
+        if ($updates->hasProperty('sentAt'))
+            $issue->setSentAt($updates->sentAt);
+
+        if ($updates->hasProperty('failedAt'))
+            $issue->setFailedAt($updates->failedAt);
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);
@@ -96,5 +127,27 @@ class IssueService
     {
         $this->em->remove($issue);
         $this->em->flush();
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getIssueCounts(Issue $issue): array
+    {
+        $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
+        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
+
+        // TODO: Implement the rest of the counts
+        return [
+            'total' => $issue->getTotalSends(),
+            'sent' => $issue->getOkSends(),
+            'failed' => $issue->getFailedSends(),
+            'pending' => $pendingCount,
+            'opened' => 0,
+            'clicked' => 0,
+            'unsubscribed' => 0,
+            'bounced' => 0,
+            'complained' => 0,
+        ];
     }
 }

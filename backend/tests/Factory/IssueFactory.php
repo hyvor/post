@@ -33,14 +33,15 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
+            'project' => ProjectFactory::new(),
             'content' => self::faker()->text(255),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'error_private' => self::faker()->text(255),
             'failed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'from_email' => self::faker()->text(255),
+            'from_email' => self::faker()->email(),
             'from_name' => self::faker()->text(255),
             'html' => self::faker()->text(),
-            'reply_to_email' => self::faker()->text(255),
+            'reply_to_email' => self::faker()->email(),
             'scheduled_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'sending_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'sent_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -49,7 +50,10 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'uuid' => self::faker()->text(255),
-            'list_ids' => []
+            'list_ids' => [],
+            'total_sends' => 0,
+            'ok_sends' => 0,
+            'failed_sends' => 0,
         ];
     }
 

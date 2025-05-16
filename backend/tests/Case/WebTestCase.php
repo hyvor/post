@@ -5,29 +5,31 @@ namespace App\Tests\Case;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Response;
-use Zenstruck\Foundry\Test\Factories;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
 
-    use Factories;
+    use AllTestCaseTrait;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
+    protected Container $container;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->client = static::createClient();
 
-        $container = static::getContainer();
-        AuthFake::enableForSymfony($container, ['id' => 1]);
+        $this->container = static::getContainer();
+        AuthFake::enableForSymfony($this->container, ['id' => 1]);
 
         /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->container->get(EntityManagerInterface::class);
         $this->em = $em;
     }
 
@@ -57,7 +59,36 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     }
 
     /**
-     * @return array<mixed>
+     * @param array<string, mixed> $data
+     * @param array<string, string> $headers
+     */
+    public function publicApi(
+        string $method,
+        string $uri,
+        array $data = [],
+        array $headers = [],
+    ): Response
+    {
+
+        $server = [
+            'CONTENT_TYPE' => 'application/json',
+        ];
+
+        foreach ($headers as $key => $value) {
+            $server['HTTP_' . strtoupper(str_replace('-', '_', $key))] = $value;
+        }
+
+        $this->client->request(
+            $method,
+            '/api/public' . $uri,
+            server: $server,
+            content: (string) json_encode($data)
+        );
+        return $this->client->getResponse();
+    }
+
+    /**
+     * @return array<string, mixed>
      */
     public function getJson(Response $response): array
     {
@@ -96,5 +127,14 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertTrue($found, 'Violation not found');
 
     }
+
+    public function getTestLogger(): TestHandler
+    {
+        $logger = $this->container->get('monolog.handler.test');
+        $this->assertInstanceOf(TestHandler::class, $logger);
+        return $logger;
+    }
+
+
 
 }

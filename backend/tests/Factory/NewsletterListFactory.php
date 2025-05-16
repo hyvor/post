@@ -34,7 +34,9 @@ final class NewsletterListFactory extends PersistentProxyObjectFactory
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'name' => self::faker()->text(255),
+            'description' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'subscribers' => [],
         ];
     }
 

@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(ListController::class)]
-#[CoversClass(ListController::class)]
+#[CoversClass(NewsletterList::class)]
 class CreateListTest extends WebTestCase
 {
 
@@ -26,7 +26,8 @@ class CreateListTest extends WebTestCase
             'POST',
             '/lists',
             [
-                'name' => 'Valid List Name'
+                'name' => 'Valid List Name',
+                'description' => 'Valid List Description',
             ],
         );
 
@@ -40,6 +41,7 @@ class CreateListTest extends WebTestCase
         $list = $repository->find($json['id']);
         $this->assertInstanceOf(NewsletterList::class, $list);
         $this->assertSame('Valid List Name', $list->getName());
+        $this->assertSame('Valid List Description', $list->getDescription());
     }
 
     public function testCreateProjectInvalid(): void

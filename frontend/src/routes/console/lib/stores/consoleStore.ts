@@ -1,0 +1,11 @@
+import type { AppConfig } from "../../types";
+
+let appConfig = {} as AppConfig;
+
+export function setAppConfig(config: AppConfig) {
+    appConfig = config;
+}
+
+export function getAppConfig() {
+    return appConfig;
+}

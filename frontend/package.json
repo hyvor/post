@@ -21,6 +21,7 @@
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@types/codemirror": "^5.60.15",
 		"eslint": "^9.20.1",
 		"globals": "^15.15.0",
 		"prettier": "^3.4.2",
@@ -33,6 +34,18 @@
 	},
 	"dependencies": {
 		"@hyvor/design": "^1.0.9",
-		"@hyvor/icons": "^1.1.0"
+		"@hyvor/icons": "^1.1.0",
+		"chart.js": "^4.4.9",
+		"chartjs-plugin-annotation": "^3.1.0",
+		"codemirror": "^5.65.19",
+		"dayjs": "^1.11.13",
+		"prosemirror-codemark": "^0.4.2",
+		"prosemirror-commands": "^1.7.0",
+		"prosemirror-example-setup": "^1.2.3",
+		"prosemirror-history": "^1.4.1",
+		"prosemirror-inputrules": "^1.5.0",
+		"prosemirror-keymap": "^1.2.2",
+		"prosemirror-model": "^1.25.0",
+		"prosemirror-view": "^1.38.1"
 	}
 }

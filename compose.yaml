@@ -4,21 +4,15 @@ services:
     build:
       context: .
       target: frontend-dev
-    develop:
-      watch:
-        - path: frontend/src
-          action: sync
-          target: /app/frontend/src
-        - path: frontend/static
-          action: sync
-          target: /app/frontend/static
-        - path: shared
-          action: sync
-          target: /app/shared
-        - path: frontend/package.json
-          action: rebuild
-        - path: frontend/package-lock.json
-          action: rebuild
+    volumes:
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/static:/app/frontend/static
+      - ./frontend/vite.config.ts:/app/frontend/vite.config.ts
+      - ./frontend/package.json:/app/frontend/package.json
+      - ./frontend/package-lock.json:/app/frontend/package-lock.json
+      - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
+      - ./frontend/svelte.config.js:/app/frontend/svelte.config.js
+      - ./shared:/app/shared
     labels:
       traefik.enable: true
       traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.dev`)
@@ -37,16 +31,10 @@ services:
     build:
       context: .
       target: backend-dev
-    develop:
-      watch:
-        - path: backend
-          action: sync
-          target: /app/backend
-        - path: shared
-          action: sync
-          target: /app/shared
-        - path: backend/composer.lock
-          action: rebuild
+    volumes:
+      - ./backend:/app/backend
+      - ../internal:/app/backend/vendor/hyvor/internal:ro
+      - ./shared:/app/shared
     labels:
       traefik.enable: true
       # backend
@@ -59,6 +47,9 @@ services:
     networks:
       - hyvor-network
     profiles: [dev]
+    healthcheck:
+      test: ls
+      disable: true
 
 networks:
   hyvor-network:

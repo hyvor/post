@@ -13,21 +13,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ListController extends AbstractController
+class ListController extends AbstractController
 {
 
     public function __construct(
         private NewsletterListService $newsletterListService
-    )
-    {
+    ) {
     }
 
     #[Route('/lists', methods: 'GET')]
     public function getNewsletterLists(Project $project): JsonResponse
     {
         $lists = $this->newsletterListService
-            ->getNewsletterLists($project)
-            ->map(fn (NewsletterList $list) => new ListObject($list));
+            ->getListsOfProject($project)
+            ->map(fn(NewsletterList $list) => new ListObject($list));
 
         return $this->json($lists);
     }
@@ -36,9 +35,12 @@ final class ListController extends AbstractController
     public function createNewsletterList(
         Project $project,
         #[MapRequestPayload] CreateListInput $input
-    ): JsonResponse
-    {
-        $list = $this->newsletterListService->createNewsletterList($project, $input->name);
+    ): JsonResponse {
+        $list = $this->newsletterListService->createNewsletterList(
+            $project,
+            $input->name,
+            $input->description
+        );
         return $this->json(new ListObject($list));
     }
 
@@ -52,11 +54,11 @@ final class ListController extends AbstractController
     public function updateNewsletterList(
         NewsletterList $list,
         #[MapRequestPayload] UpdateListInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
+            $input->description ?? $list->getDescription()
         );
         return $this->json(new ListObject($list));
     }

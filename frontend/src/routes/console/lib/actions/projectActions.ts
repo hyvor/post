@@ -10,3 +10,18 @@ export function createProject(name: string) {
         }
     });
 }
+
+export function updateProject(
+    project: Omit<Project, 'id' | 'created_at'>
+) {
+    return consoleApi.patch<Project>({
+        endpoint: 'projects',
+        data: project,
+    });
+}
+
+export function deleteProject(project: Project) {
+    return consoleApi.delete<Project>({
+        endpoint: 'projects'
+    });
+}

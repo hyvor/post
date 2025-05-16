@@ -6,17 +6,15 @@
 	import StartStep from "./@homepage/startstep/StartStep.svelte";
 
 	let showDropdown = false;
-	
 </script>
 
 <svelte:head>
-    <title>Hyvor Post</title>
-    <meta name="description" content="Add description here">
-	<link rel="canonical" href="https://post.hyvor.com">
+	<title>Hyvor Post</title>
+	<meta name="description" content="Simple Newsletter Platform" />
+	<link rel="canonical" href="https://post.hyvor.com" />
 </svelte:head>
 
 <AboveFold />
 <StartStep />
 <AllFeatures />
 <TrialSignUp />
-

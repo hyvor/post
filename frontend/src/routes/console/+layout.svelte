@@ -1,14 +1,22 @@
 <script lang="ts">
-    import {HyvorBar, InternationalizationProvider, Loader, toast} from "@hyvor/design/components";
-    import en from '../../../../shared/locale/en-US.json';
-    import fr from '../../../../shared/locale/fr-FR.json';
-	import Nav from "./[id]/@components/Nav/Nav.svelte";
-	import type { Project } from "./types";
+	import {
+		HyvorBar,
+		InternationalizationProvider,
+		Loader,
+		toast
+	} from '@hyvor/design/components';
+	import en from '../../../../shared/locale/en-US.json';
+	import fr from '../../../../shared/locale/fr-FR.json';
+	import Nav from './@components/Nav/Nav.svelte';
+	import type { AppConfig, Project } from './types';
 
-	import { onMount } from "svelte";
-	import consoleApi from "./lib/consoleApi";
-	import { userProjectsStore } from "./lib/stores/userProjectsStore";
-	import { page } from "$app/stores";
+	import { onMount } from 'svelte';
+	import consoleApi from './lib/consoleApi';
+	import { userProjectsStore } from './lib/stores/userProjectsStore';
+	import { page } from '$app/stores';
+	import { getAppConfig, setAppConfig } from './lib/stores/consoleStore';
+	import { projectStore } from './lib/stores/projectStore';
+
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -16,31 +24,35 @@
 	let { children }: Props = $props();
 
 	interface InitResponse {
+		config: AppConfig;
 		projects: Project[];
 	}
 
-	let isLoading = $state(true);;
+	let isLoading = $state(true);
 
 	onMount(() => {
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
-				endpoint: 'init',
+				endpoint: 'init'
 			})
 			.then((res) => {
+				setAppConfig(res.config);
+
 				userProjectsStore.set(res.projects);
+				projectStore.set(res.projects[0]); // Set the first project as the active project
 				isLoading = false;
 			})
 			.catch((err) => {
 				if (err.code === 401) {
 					const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
-					location.href = `/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
+					location.href =
+						`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
 				} else {
 					toast.error(err.message);
 				}
 			});
-	})
-
+	});
 </script>
 
 <svelte:head>
@@ -67,20 +79,16 @@
 		}
 	]}
 >
-
-<main>
-	{#if isLoading}
-		<div class="full-loader">
-			<Loader size="large">
-
-			</Loader>
-		</div>
-	{:else}
-		<HyvorBar product='blogs'/>
-		{@render children?.()}
-	{/if}
-</main>
-
+	<main>
+		{#if isLoading}
+			<div class="full-loader">
+				<Loader size="large"></Loader>
+			</div>
+		{:else}
+			<HyvorBar product="post" instance={getAppConfig().hyvor.instance} />
+			{@render children?.()}
+		{/if}
+	</main>
 </InternationalizationProvider>
 
 <style>

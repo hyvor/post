@@ -20,6 +20,12 @@
 
 	let emailsError: null | string = null;
 
+	let input: HTMLTextAreaElement | null = null;
+
+	$: if (show && input) {
+		input.focus();
+	}
+
 	let loading = false;
 
 	function addSubscribers() {
@@ -49,7 +55,8 @@
 					add();
 				})
 				.catch((error) => {
-					toast.error(`Failed to add subscriber ${error.message}.`);
+					console.log(error);
+					toast.error(`Failed to add subscriber: ${error.message}.`);
 				})
 				.finally(() => {
 					loading = false;
@@ -79,8 +86,9 @@
 				rows={5}
 				placeholder="user@example.com
 other@example.org
-"
+"				
 				bind:value={emailsString}
+				bind:textarea={input!}
 				state={emailsError ? 'error' : 'default'}
 			/>
 			{#if emailsError}
