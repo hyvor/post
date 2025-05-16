@@ -2,7 +2,7 @@
 
 namespace App\Service\Template;
 
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Entity\Issue;
 use App\Entity\Project;
 use App\Service\Project\ProjectDefaults;
@@ -74,6 +74,6 @@ JSON;
     public function renderAll(string $template, TemplateVariables $variables): string
     {
         $template = $this->twig->createTemplate($template);
-        return $template->render((array) $variables);
+        return $template->render((array)$variables);
     }
 }

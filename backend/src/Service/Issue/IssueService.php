@@ -2,12 +2,10 @@
 
 namespace App\Service\Issue;
 
-use App\Content\ContentService;
 use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Send;
-use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
@@ -28,10 +26,8 @@ class IssueService
         private EntityManagerInterface $em,
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
-        private ContentService $contentService,
         private NewsletterListService $newsletterListService,
-    )
-    {
+    ) {
     }
 
     public function createIssueDraft(Project $project): Issue
@@ -55,51 +51,65 @@ class IssueService
 
     public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
     {
-
-        if ($updates->hasProperty('subject'))
+        if ($updates->hasProperty('subject')) {
             $issue->setSubject($updates->subject);
+        }
 
-        if ($updates->hasProperty('fromName'))
+        if ($updates->hasProperty('fromName')) {
             $issue->setFromName($updates->fromName);
+        }
 
-        if ($updates->hasProperty('lists'))
+        if ($updates->hasProperty('lists')) {
             $issue->setListids($updates->lists);
+        }
 
-        if ($updates->hasProperty('fromEmail'))
+        if ($updates->hasProperty('fromEmail')) {
             $issue->setFromEmail($updates->fromEmail);
+        }
 
-        if ($updates->hasProperty('replyToEmail'))
+        if ($updates->hasProperty('replyToEmail')) {
             $issue->setReplyToEmail($updates->replyToEmail);
+        }
 
-        if ($updates->hasProperty('content'))
+        if ($updates->hasProperty('content')) {
             $issue->setContent($updates->content);
+        }
 
-        if ($updates->hasProperty('html'))
+        if ($updates->hasProperty('html')) {
             $issue->setContent($updates->html);
+        }
 
-        if ($updates->hasProperty('status'))
+        if ($updates->hasProperty('status')) {
             $issue->setStatus($updates->status);
+        }
 
-        if ($updates->hasProperty('text'))
+        if ($updates->hasProperty('text')) {
             $issue->setText($updates->text);
+        }
 
-        if ($updates->hasProperty('sendingAt'))
+        if ($updates->hasProperty('sendingAt')) {
             $issue->setSendingAt($updates->sendingAt);
+        }
 
-        if ($updates->hasProperty('totalSends'))
+        if ($updates->hasProperty('totalSends')) {
             $issue->setTotalSends($updates->totalSends);
+        }
 
-        if ($updates->hasProperty('okSends'))
+        if ($updates->hasProperty('okSends')) {
             $issue->setOkSends($updates->okSends);
+        }
 
-        if ($updates->hasProperty('failedSends'))
+        if ($updates->hasProperty('failedSends')) {
             $issue->setFailedSends($updates->failedSends);
+        }
 
-        if ($updates->hasProperty('sentAt'))
+        if ($updates->hasProperty('sentAt')) {
             $issue->setSentAt($updates->sentAt);
+        }
 
-        if ($updates->hasProperty('failedAt'))
+        if ($updates->hasProperty('failedAt')) {
             $issue->setFailedAt($updates->failedAt);
+        }
 
         $issue->setUpdatedAt($this->now());
 

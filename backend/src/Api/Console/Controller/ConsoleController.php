@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
@@ -41,7 +42,7 @@ class ConsoleController extends AbstractController
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
                 ],
-                'template_defaults' => TemplateDefaults::getAll(),
+                // 'template_defaults' => TemplateDefaults::getAll(),
                 'project_defaults' => ProjectDefaults::getAll(),
             ],
         ]);
