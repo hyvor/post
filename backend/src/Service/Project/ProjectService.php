@@ -2,13 +2,24 @@
 
 namespace App\Service\Project;
 
+use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Api\Console\Object\StatCategoryObject;
+use App\Entity\Issue;
+use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Subscriber;
+use App\Service\Project\Dto\UpdateProjectDto;
+use App\Service\Project\Dto\UpdateProjectMetaDto;
+use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\UnicodeString;
+use Symfony\Component\Uid\Uuid;
 
 class ProjectService
 {
+    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em
@@ -23,8 +34,10 @@ class ProjectService
     {
 
         $project = new Project()
+            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
+            ->setMeta(new ProjectMeta())
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -48,9 +61,14 @@ class ProjectService
         $this->em->flush();
     }
 
-    public function getProject(Project $project): ?Project
+    public function getProjectById(int $id): ?Project
     {
-        return $project;
+        return $this->em->getRepository(Project::class)->find($id);
+    }
+
+    public function getProjectByUuid(string $uuid): ?Project
+    {
+        return $this->em->getRepository(Project::class)->findOneBy(['uuid' => $uuid]);
     }
 
     /**
@@ -76,7 +94,41 @@ class ProjectService
         $listsLast30d = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
+            ->andWhere('l.deleted_at IS NULL')
             ->andWhere('l.created_at > :date')
+            ->setParameter('project', $project)
+            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $subscribers = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $subscribersLast30d = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+                ->select('count(s.id)')
+                ->where('s.project = :project')
+                ->andWhere('s.subscribed_at > :date')
+                ->setParameter('project', $project)
+                ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
+                ->getQuery()
+                ->getSingleScalarResult();
+
+        $issues = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        $issuesLast30d = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->andWhere('s.created_at > :date')
             ->setParameter('project', $project)
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
@@ -84,9 +136,40 @@ class ProjectService
 
         // TODO: return keyed values
         return [
-            new StatCategoryObject(0, 0),
-            new StatCategoryObject(0, 0),
+            new StatCategoryObject($subscribers, $subscribersLast30d),
+            new StatCategoryObject($issues, $issuesLast30d),
             new StatCategoryObject($lists, $listsLast30d),
         ];
+    }
+
+    public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
+    {
+
+        $currentMeta = $project->getMeta();
+
+        foreach (get_object_vars($updates) as $property => $value) {
+            $cased = new UnicodeString($property)->snake();
+            $currentMeta->{$cased} = $value;
+        }
+
+        $project->setMeta(clone $currentMeta);
+        $project->setUpdatedAt($this->now());
+
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
+    }
+
+    public function updateProject(Project $project, UpdateProjectDto $updates): Project
+    {
+        if ($updates->hasProperty('name'))
+            $project->setName($updates->name);
+
+        $project->setUpdatedAt($this->now());
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
     }
 }

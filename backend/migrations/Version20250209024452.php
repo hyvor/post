@@ -29,7 +29,7 @@ final class Version20250209024452 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             uuid TEXT UNIQUE NOT NULL,
-            project_id BIGINT NOT NULL references projects(id),
+            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
             subject VARCHAR(255),
             from_name VARCHAR(255),
             from_email TEXT NOT NULL,
@@ -41,16 +41,19 @@ final class Version20250209024452 extends AbstractMigration
             text TEXT,
             scheduled_at timestamptz,
             sending_at timestamptz,
+            error_private TEXT,
+            total_sends INT DEFAULT 0 NOT NULL,
+            ok_sends INT DEFAULT 0 NOT NULL,
+            failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
-            sent_at timestamptz,
-            error_private TEXT
+            sent_at timestamptz
         );
         SQL);
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE issues');
-        $this->addSql('DROP TYPE issues_status');
+        $this->addSql('DROP TABLE issues CASCADE');
+        $this->addSql('DROP TYPE issues_status CASCADE');
     }
 }

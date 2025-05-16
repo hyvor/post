@@ -182,4 +182,23 @@ class UpdateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($subscriber->getId());
         $this->assertSame('ishini@hyvor.com', $subscriber?->getEmail());
     }
+
+    public function testUpdateSubscriberWithTakenEmail(): void
+    {
+        $project = ProjectFactory::createOne();
+        $subscriber1 = SubscriberFactory::createOne(['project' => $project, 'email' => 'thibault@hyvor.com']);
+        $subscriber2 = SubscriberFactory::createOne(['project' => $project, 'email' => 'supun@hyvor.com']);
+
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/subscribers/' . $subscriber1->getId(),
+            [
+                'email' => 'supun@hyvor.com',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame('Subscriber with email ' . $subscriber2->getEmail() . ' already exists', $this->getJson($response)['message']);
+    }
 }

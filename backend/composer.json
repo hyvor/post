@@ -7,22 +7,37 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-openssl": "*",
+        "aws/aws-php-sns-message-validator": "^1.10",
+        "aws/aws-sdk-php": "^3.343.5",
         "doctrine/dbal": "^3.9.4",
-        "doctrine/doctrine-bundle": "^2.13.2",
-        "doctrine/doctrine-migrations-bundle": "^3.4.1",
-        "doctrine/orm": "^3.3.2",
-        "fakerphp/faker": "^1.24",
+        "doctrine/doctrine-bundle": "^2.14.0",
+        "doctrine/doctrine-migrations-bundle": "^3.4.2",
+        "doctrine/orm": "^3.3.3",
+        "dunglas/doctrine-json-odm": "^1.4.2",
+        "fakerphp/faker": "^1.24.1",
         "hyvor/internal": "dev-symfony",
+        "hyvor/phrosemirror": "^1.0.5",
+        "nelmio/cors-bundle": "^2.5",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/clock": "7.2.*",
         "symfony/console": "7.2.*",
+        "symfony/doctrine-messenger": "7.2.*",
         "symfony/dotenv": "7.2.*",
-        "symfony/flex": "^2.4.7",
+        "symfony/flex": "^2.5.0",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/lock": "7.2.*",
+        "symfony/mailer": "7.2.*",
         "symfony/messenger": "7.2.*",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/rate-limiter": "7.2.*",
         "symfony/runtime": "7.2.*",
         "symfony/security-bundle": "7.2.*",
         "symfony/serializer": "7.2.*",
+        "symfony/string": "7.2.*",
+        "symfony/twig-bundle": "7.2.*",
         "symfony/uid": "7.2.*",
+        "symfony/ux-twig-component": "^2.24",
         "symfony/validator": "7.2.*",
         "symfony/yaml": "7.2.*"
     },
@@ -71,22 +86,14 @@
         }
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^8.2",
-        "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.5",
+        "dama/doctrine-test-bundle": "^8.3",
+        "phpstan/phpstan": "^2.1.14",
+        "phpunit/phpunit": "^11.5.19",
         "symfony/browser-kit": "7.2.*",
         "symfony/css-selector": "7.2.*",
-        "symfony/maker-bundle": "^1.62.1",
-        "symfony/phpunit-bridge": "^7.2",
-        "zenstruck/foundry": "^2.3"
-    },
-    "repositories": {
-        "local": {
-            "type": "path",
-            "url": "./packages/*",
-            "options": {
-                "symlink": true
-            }
-        }
+        "symfony/maker-bundle": "^1.63.0",
+        "symfony/phpunit-bridge": "^7.2.6",
+        "zenstruck/foundry": "^2.4.3",
+        "zenstruck/messenger-test": "^1.11"
     }
 }

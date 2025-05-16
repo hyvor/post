@@ -4,6 +4,7 @@ namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Repository\IssueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -15,7 +16,7 @@ class NewsletterListService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
     )
     {
     }
@@ -23,11 +24,13 @@ class NewsletterListService
     public function createNewsletterList(
         Project $project,
         string $name,
+        ?string $description
     ): NewsletterList
     {
         $list = new NewsletterList()
             ->setProject($project)
             ->setName($name)
+            ->setDescription($description)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -39,28 +42,37 @@ class NewsletterListService
 
     public function deleteNewsletterList(NewsletterList $list): void
     {
-        $this->em->remove($list);
+        $list->setDeletedAt($this->now());
+        $this->em->persist($list);
         $this->em->flush();
     }
 
-    public function getNewsletterList(int $id): ?NewsletterList
+    public function getListById(int $id): ?NewsletterList
     {
-        $list = $this->em->getRepository(NewsletterList::class)->find($id);
-        return $list;
+        return $this->em->getRepository(NewsletterList::class)->find($id);
     }
 
     /**
      * @return ArrayCollection<int, NewsletterList>
      */
-    public function getNewsletterLists(Project $project): ArrayCollection
+    public function getListsOfProject(Project $project): ArrayCollection
     {
-        return new ArrayCollection($this->em->getRepository(NewsletterList::class)->findBy(['project' => $project]));
+        return new ArrayCollection(
+            $this->em->getRepository(NewsletterList::class)
+                ->findBy(
+                    [
+                        'project' => $project,
+                        'deleted_at' => null,
+                    ]
+                )
+        );
     }
 
-    public function updateNewsletterList(NewsletterList $list, string $name): NewsletterList
+    public function updateNewsletterList(NewsletterList $list, string $name, ?string $description): NewsletterList
     {
         $list
             ->setName($name)
+            ->setDescription($description)
             ->setUpdatedAt($this->now());
 
         $this->em->persist($list);
@@ -73,7 +85,7 @@ class NewsletterListService
      * @param array<int> $listIds
      * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function isListsAvailable(Project $project, array $listIds): ?array
+    public function getMissingListIdsOfProject(Project $project, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb
@@ -89,7 +101,7 @@ class NewsletterListService
         $existingIds = array_column($result, 'id');
         $missingIds = array_diff($listIds, $existingIds);
 
-        return count($missingIds) === 0 ? null : $missingIds;
+        return count($missingIds) === 0 ? null : array_values($missingIds);
     }
 
     /**

@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Tests\Factory;
+
+use App\Entity\Send;
+use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
+use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+
+/**
+ * @extends PersistentProxyObjectFactory<Send>
+ */
+final class SendFactory extends PersistentProxyObjectFactory
+{
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
+     *
+     * @todo inject services if required
+     */
+    public function __construct()
+    {
+    }
+
+    public static function class(): string
+    {
+        return Send::class;
+    }
+
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     *
+     * @return array<mixed>
+     */
+    protected function defaults(): array
+    {
+        return [
+            'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'project' => ProjectFactory::new(),
+            'issue' => IssueFactory::new(),
+            'subscriber' => SubscriberFactory::new(),
+            'email' => self::faker()->email(),
+            'status' => SendStatus::PENDING,
+            'error_private' => null,
+            'failed_tries' => 0,
+            'open_count' => 0,
+            'click_count' => 0,
+            'hard_bounce' => false,
+            'first_clicked_at' => null,
+            'first_opened_at' => null,
+        ];
+    }
+
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     */
+    protected function initialize(): static
+    {
+        return $this
+            // ->afterInstantiate(function(Send $issue): void {})
+        ;
+    }
+}

@@ -5,6 +5,7 @@ export interface ConsoleApiOptions {
     endpoint: string,
     data?: Record<string, any> | FormData,
     userApi?: boolean,
+    publicApi?: boolean,
     projectId?: string,
     signal?: AbortSignal,
 }
@@ -15,7 +16,7 @@ interface CallOptions extends ConsoleApiOptions {
 
 function getConsoleApi() {
 
-    const baseUrl = "/api/console/";
+    const consoleBaseUrl = "/api/console/";
 
     async function call<T>({ 
         endpoint,
@@ -26,10 +27,19 @@ function getConsoleApi() {
         signal
     }: CallOptions) : Promise<T> {
 
-        const url = baseUrl + endpoint;
+        let url = consoleBaseUrl + endpoint.replace(/^\//, '');
+
+        if (method === 'get') {
+			url +=
+				'?' +
+				Object.entries(data)
+					.filter(([, val]) => val !== null && val !== undefined)
+					.map(([key, val]) => key + '=' + encodeURIComponent(val))
+					.join('&');
+		}
 
         const headers = {} as Record<string, string>;
-
+        
         if (!userApi) {
             const project = get(projectStore);
             headers['X-Project-Id'] = project.id.toString();
@@ -41,6 +51,7 @@ function getConsoleApi() {
         if (!(data instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }   
+        
 
         const options = {
             cache: 'no-cache',
@@ -58,7 +69,7 @@ function getConsoleApi() {
 
         if (!response.ok) {
             const e = await response.json();
-            const error = e && e.error ? e.error : 'Something went wrong';
+            const error = e && e.message ? e.message : 'Something went wrong';
             /* toast({type: 'error', message: error});
             throw error; */
 

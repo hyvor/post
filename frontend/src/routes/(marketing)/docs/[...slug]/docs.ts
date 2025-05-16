@@ -1,7 +1,7 @@
-// TODO: remove the OR operator after completing the docs
-
+import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
+import SignupForm from './content/SignupForm.svelte';
 
 export const categories: Category[] = [
 	{
@@ -16,28 +16,17 @@ export const categories: Category[] = [
 	},
 
 	{
-		name: 'Hosting',
-		pages: [
-			{
-				slug: 'custom-domain',
-				name: 'Custom  Domain'
-				// component: CustomDomain
-			},
-			{
-				slug: 'subdirectory',
-				name: 'Subdirectory'
-				// component: SubDirectoryHosting
-			}
-		]
-	},
-
-	{
 		name: 'Features',
 		pages: [
 			{
-				slug: 'languages',
-				name: 'Languages'
-				// component: add component name
+				slug: 'design',
+				name: 'Email Design',
+				component: EmailDesign
+			},
+			{
+				slug: 'form',
+				name: 'Signup Form',
+				component: SignupForm
 			}
 		]
 	},

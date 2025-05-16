@@ -32,7 +32,7 @@ final class Version20250209024410 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id),
+            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
             email VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_status DEFAULT 'pending',
             subscribed_at timestamptz,
@@ -47,8 +47,8 @@ final class Version20250209024410 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE subscribers');
-        $this->addSql('DROP TYPE subscriber_status');
-        $this->addSql('DROP TYPE subscriber_source');
+        $this->addSql('DROP TABLE subscribers CASCADE');
+        $this->addSql('DROP TYPE subscriber_status CASCADE');
+        $this->addSql('DROP TYPE subscriber_source CASCADE');
     }
 }

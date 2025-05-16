@@ -2,9 +2,7 @@
 # Alias for deppendencies
 FROM node:22.12.0 AS node
 FROM composer:2.8.4 AS composer
-FROM php:8.4-fpm AS php-fpm
-FROM mlocati/php-extension-installer:2.7.13 AS php-extension-installer
-#FROM caddy:2.8.4 AS caddy
+FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
 
 ###################################################
 ################  FRONTEND STAGES  ################
@@ -43,18 +41,19 @@ RUN  npm install \
 
 
 ###################################################
-FROM php-fpm AS backend-base
+FROM frankenphp AS backend-base
 
 WORKDIR /app/backend
 
 # install php and dependencies
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions zip intl pdo_pgsql opcache
 
 
 ###################################################
 FROM backend-base AS backend-dev
+
+ENV APP_RUNTIME "Runtime\FrankenPhpSymfony\Runtime"
 
 # symfony cli
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
@@ -65,9 +64,9 @@ COPY backend/composer.json backend/composer.lock /app/backend/
 RUN composer install --no-interaction
 # set up code and install composer packages
 COPY backend /app/backend/
-# use local internal library if exists
-RUN if [ -d "packages/internal" ]; then composer require hyvor/internal:@dev; fi
-CMD symfony server:start --no-tls --listen-ip=0.0.0.0 --port=80
+COPY meta/image/dev/Caddyfile.dev /etc/caddy/Caddyfile
+COPY meta/image/dev/run.dev /app/run
+CMD ["sh", "/app/run"]
 
 ###################################################
 # FROM backend-base AS final

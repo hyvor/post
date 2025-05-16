@@ -8,6 +8,10 @@ class CreateListInput
 {
 
     #[Assert\NotBlank]
+    #[Assert\Type('string')]
     #[Assert\Length(max: 255)]
     public string $name;
+
+    #[Assert\Type('string')]
+    public ?string $description = null;
 }
