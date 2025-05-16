@@ -94,7 +94,7 @@ class SendingEmail
         return $this->custom_domain;
     }
 
-    public function setCustomDomainId(Domain $custom_domain): static
+    public function setCustomDomain(Domain $custom_domain): static
     {
         $this->custom_domain = $custom_domain;
 
