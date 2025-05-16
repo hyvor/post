@@ -36,6 +36,9 @@ class Project
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;
 
+    #[ORM\Column()]
+    private string $default_email_username;
+
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -116,6 +119,18 @@ class Project
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDefaultEmailUsername(): string
+    {
+        return $this->default_email_username;
+    }
+
+    public function setDefaultEmailUsername(string $default_email_username): static
+    {
+        $this->default_email_username = $default_email_username;
 
         return $this;
     }

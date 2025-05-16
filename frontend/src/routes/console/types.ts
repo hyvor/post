@@ -75,7 +75,8 @@ export type Project = {
 	id: number,
 	uuid: string,
 	created_at: number,
-	name: string
+	name: string,
+	default_email_username: string
 } & ProjectMeta;
 
 export interface ProjectStats {

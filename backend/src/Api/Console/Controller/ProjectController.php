@@ -65,6 +65,8 @@ class ProjectController extends AbstractController
         $updates = new UpdateProjectDto();
         if ($input->hasProperty('name'))
             $updates->name = $input->name;
+        if ($input->hasProperty('default_email_username'))
+            $updates->defaultEmailUsername = $input->default_email_username;
         $project = $this->projectService->updateProject($project, $updates);
 
         $updatesMeta = new UpdateProjectMetaDto();

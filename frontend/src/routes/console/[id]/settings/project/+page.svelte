@@ -44,7 +44,10 @@ async function onDelete() {
         <SplitControl label={I18n.t('console.settings.project.name')}>
             <TextInput block bind:value={$projectEditingStore.name} />
         </SplitControl>
-        <ProjectSaveDiscard keys={["name"]} />
+        <SplitControl label={I18n.t('console.settings.project.sendingEmail')}>
+            <TextInput block bind:value={$projectEditingStore.default_email_username} />
+        </SplitControl>
+        <ProjectSaveDiscard keys={["name", "default_email_username"]} />
 
         <SplitControl label={I18n.t('console.settings.project.uuid')}>
             <div class="project-uuid-row">
@@ -71,11 +74,5 @@ async function onDelete() {
         display: flex;
         align-items: center;
         gap: 10px;
-    }
-    .project-uuid {
-        font-size: 15px;
-        background: var(--accent-lightest);
-        padding: 2px 8px;
-        border-radius: 4px;
     }
 </style>

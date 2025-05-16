@@ -41,6 +41,7 @@
             },
             "project": {
                 "name": "Project Name",
+                "sendingEmail": "Sending email",
                 "uuid": "Project UUID",
                 "dangerZone": "Danger Zone",
                 "delete": "Delete Project",

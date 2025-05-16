@@ -38,7 +38,8 @@ final class ProjectFactory extends PersistentProxyObjectFactory
             'name' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'user_id' => self::faker()->randomNumber(),
-            'meta' => new ProjectMeta()
+            'meta' => new ProjectMeta(),
+            'default_email_username' => self::faker()->text(255)
         ];
     }
 

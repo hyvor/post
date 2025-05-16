@@ -27,6 +27,15 @@ class ProjectService
     {
     }
 
+    private function slugify(string $text): string {
+        // Trim
+        $text = trim($text, '-');
+        // Lowercase
+        $text = strtolower($text);
+        return empty($text) ? 'n-a' : $text;
+    }
+
+
     public function createProject(
         int    $userId,
         string $name,
@@ -38,6 +47,7 @@ class ProjectService
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
+            ->setDefaultEmailUsername($this->slugify($name) . '@hvrpst.com')
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -165,6 +175,9 @@ class ProjectService
     {
         if ($updates->hasProperty('name'))
             $project->setName($updates->name);
+
+        if ($updates->hasProperty('defaultEmailUsername'))
+            $project->setDefaultEmailUsername($updates->defaultEmailUsername);
 
         $project->setUpdatedAt($this->now());
         $this->em->persist($project);
