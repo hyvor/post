@@ -14,11 +14,13 @@
     }
 
     let { projectUuid, instance, shadowRoot }: Props = $props();
+    let email = $state("");
+    let selectedListsIds: number[] = $state([]);
     let loading = $state(true);
     let focused = $state(false);
     let subscribing = $state(false);
     let subscribingSuccess = $state(false);
-    let subscribingError = $state('Bad email address');
+    let subscribingError = $state("");
 
     let project: Project = $state({} as Project);
     let lists: List[] = $state([]);
@@ -37,8 +39,12 @@
             .then((response) => {
                 project = response.project;
                 lists = response.lists;
+                selectedListsIds = lists.map((list) => list.id);
 
                 setCustomCss();
+            })
+            .catch((err) => {
+                console.error("Error loading Hyvor Post form:", err);
             })
             .finally(() => {
                 loading = false;
@@ -49,11 +55,29 @@
         e.preventDefault();
 
         subscribing = true;
+        subscribingSuccess = false;
+        subscribingError = "";
 
-        setTimeout(() => {
-            subscribing = false;
-            subscribingSuccess = true;
-        }, 2000);
+        api<InitResponse>("/subscribe", {
+            project_uuid: projectUuid,
+            email,
+            list_ids: selectedListsIds,
+        })
+            .then((response) => {
+                console.log("Subscribed successfully:", response);
+
+                subscribingSuccess = true;
+                setTimeout(() => {
+                    subscribingSuccess = false;
+                }, 5000);
+            })
+            .catch((err) => {
+                console.error("Error loading Hyvor Post form:", err);
+                subscribingError = err.message || "An error occurred";
+            })
+            .finally(() => {
+                subscribing = false;
+            });
     }
 
     function setCustomCss() {
@@ -121,7 +145,7 @@
             {/each}
         </div>
 
-        <form class="input" class:focused={focused} onsubmit={onSubscribe}>
+        <form class="input" class:focused onsubmit={onSubscribe}>
             <input
                 type="email"
                 name="email"
@@ -130,6 +154,7 @@
                 class="email-input"
                 onfocus={() => (focused = true)}
                 onblur={() => (focused = false)}
+                bind:value={email}
             />
             <button type="submit" disabled={subscribing}>
                 {project.form.button_text || "Subscribe"}
@@ -137,17 +162,15 @@
         </form>
 
         {#if subscribingSuccess}
-            <Message 
-                message={project.form.success_message || "Subscribed successfully!"}
+            <Message
+                message={project.form.success_message ||
+                    "Thank you for subscribing!"}
                 type="success"
             />
         {/if}
 
         {#if subscribingError}
-            <Message 
-                message={subscribingError}
-                type="error"
-            />
+            <Message message={subscribingError} type="error" />
         {/if}
 
         <div transition:slide={laterElementsAnimation}>
