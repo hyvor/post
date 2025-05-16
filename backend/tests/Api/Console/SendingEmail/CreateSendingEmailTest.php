@@ -45,4 +45,43 @@ class CreateSendingEmailTest extends WebTestCase
         $this->assertInstanceOf(SendingEmail::class, $sendingEmail);
         $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
     }
+
+    public function test_create_sending_email_domain_not_found(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/sending-emails',
+            [
+                'email' => 'thibault@nonexistent.com'
+            ],
+        );
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+
+        $this->assertSame('Domain not found', $json['message']);
+    }
+
+    public function test_create_sending_email_domain_not_verified(): void
+    {
+        $project = ProjectFactory::createOne();
+        $domain = DomainFactory::createOne([
+            'domain' => 'hyvor.com',
+            'verified_in_ses' => false,
+            'user_id' => 1
+        ]);
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/sending-emails',
+            [
+                'email' => 'thibault@hyvor.com'
+            ],
+        );
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Domain is not verified', $json['message']);
+    }
 }

@@ -40,6 +40,9 @@ class SendingEmailController extends AbstractController
     {
         $domainName = explode("@", $input->email)[1];
         $domain = $this->domainService->getDomainByDomainName($domainName);
+        if (!$domain)
+            throw new BadRequestHttpException("Domain not found");
+
         if (!$domain->isVerifiedInSes())
             throw new BadRequestHttpException("Domain is not verified");
         $sendingEmail = $this->sendingEmailService->createSendingEmail($project, $domain, $input->email);
