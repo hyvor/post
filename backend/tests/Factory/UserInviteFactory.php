@@ -38,6 +38,7 @@ final class UserInviteFactory extends PersistentProxyObjectFactory
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'hyvor_user_id' => self::faker()->randomNumber(),
             'code' => self::faker()->uuid(),
+            'role' => UserRole::ADMIN,
             'expires_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

@@ -118,6 +118,7 @@ class SendService
         $send = new Send()
             ->setIssue($issue)
             ->setSubscriber($subscriber)
+            ->setProject($issue->getProject())
             ->setEmail($subscriber->getEmail())
             ->setStatus(SendStatus::PENDING)
             ->setCreatedAt($this->now())
@@ -231,7 +232,7 @@ class SendService
         SELECT COUNT(s.id)
         FROM App\Entity\Send s
         JOIN App\Entity\Project p WITH s.project = p.id
-        WHERE 
+        WHERE
             p.user_id = :hyvorUserId AND
             s.created_at >= :startOfMonth
         DQL;
