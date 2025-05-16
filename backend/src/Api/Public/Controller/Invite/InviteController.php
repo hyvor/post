@@ -32,10 +32,18 @@ class InviteController extends AbstractController
     {
         $user = $this->auth->check((string)$request->cookies->get(Auth::HYVOR_SESSION_COOKIE_NAME));
 
+        if (!$user) {
+            return $this->redirect(''); // TODO: Replace login URL
+        }
+
         $code = $request->query->getString('code');
         $invite = $this->userInviteService->getInviteFromCode($code);
         if (!$invite) {
             throw new NotFoundHttpException("No invitation found");
+        }
+
+        if ($invite->getHyvorUserId() != $user->id) {
+            throw new BadRequestHttpException("This invitation is not for this user");
         }
 
         if ($invite->getExpiresAt() < new \DateTime()) {
