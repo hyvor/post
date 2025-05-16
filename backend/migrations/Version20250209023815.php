@@ -25,7 +25,7 @@ final class Version20250209023815 extends AbstractMigration
             user_id BIGINT NOT NULL,
             meta JSONB,
             name VARCHAR(255) NOT NULL,
-            default_email_username VARCHAR(255) UNIQUE NOT NULL
+            default_email_username TEXT UNIQUE NOT NULL
         );
         SQL);
     }

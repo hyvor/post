@@ -44,6 +44,7 @@ class EntityResolver implements ValueResolverInterface
         }
 
         $argumentType = $argument->getType();
+
         if (!$argumentType || !str_starts_with($argumentType, 'App\Entity\\')) {
             return [];
         }

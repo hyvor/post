@@ -20,6 +20,9 @@ class SendingEmail
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
+    #[ORM\Column]
+    private string $email;
+
     #[ORM\ManyToOne(targetEntity: Project::class)]
     private Project $project;
 
@@ -62,6 +65,18 @@ class SendingEmail
         return $this;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getProject(): Project
     {
         return $this->project;
@@ -74,7 +89,7 @@ class SendingEmail
         return $this;
     }
 
-    public function getCustomDomainId(): Domain
+    public function getCustomDomain(): Domain
     {
         return $this->custom_domain;
     }

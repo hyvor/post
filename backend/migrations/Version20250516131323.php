@@ -24,8 +24,9 @@ final class Version20250516131323 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            email TEXT NOT NULL,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
-            custom_domain_id BIGINT NOT NULL references domains(id) ON DELETE CASCADE,
+            custom_domain_id BIGINT NOT NULL references domains(id) ON DELETE CASCADE
         );
         SQL);
     }
