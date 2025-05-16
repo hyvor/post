@@ -5,6 +5,7 @@
     import { apiFromInstance } from "./api";
     import type { List, Project } from "./types";
     import Switch from "./Switch.svelte";
+    import Message from "./Message.svelte";
 
     interface Props {
         projectUuid: string;
@@ -16,6 +17,8 @@
     let loading = $state(true);
     let focused = $state(false);
     let subscribing = $state(false);
+    let subscribingSuccess = $state(false);
+    let subscribingError = $state('Bad email address');
 
     let project: Project = $state({} as Project);
     let lists: List[] = $state([]);
@@ -42,11 +45,14 @@
             });
     });
 
-    function onSubscribe() {
+    function onSubscribe(e: Event) {
+        e.preventDefault();
+
         subscribing = true;
 
         setTimeout(() => {
             subscribing = false;
+            subscribingSuccess = true;
         }, 2000);
     }
 
@@ -115,19 +121,34 @@
             {/each}
         </div>
 
-        <div class="input" class:focused={focused}>
+        <form class="input" class:focused={focused} onsubmit={onSubscribe}>
             <input
                 type="email"
                 name="email"
+                required
                 placeholder="Your Email"
                 class="email-input"
                 onfocus={() => (focused = true)}
                 onblur={() => (focused = false)}
             />
-            <button onclick={onSubscribe} disabled={subscribing}>
+            <button type="submit" disabled={subscribing}>
                 {project.form.button_text || "Subscribe"}
             </button>
-        </div>
+        </form>
+
+        {#if subscribingSuccess}
+            <Message 
+                message={project.form.success_message || "Subscribed successfully!"}
+                type="success"
+            />
+        {/if}
+
+        {#if subscribingError}
+            <Message 
+                message={subscribingError}
+                type="error"
+            />
+        {/if}
 
         <div transition:slide={laterElementsAnimation}>
             {#if project.form.footer_text}

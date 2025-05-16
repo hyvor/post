@@ -1,5 +1,13 @@
 {
     "console": {
+        "nav": {
+            "domains": "Domains",
+            "billing": "Billing",
+            "home": "Home",
+            "subscribers": "Subscribers",
+            "issues": "Issues",
+            "settings": "Settings"
+        },
         "billing": {
             "usage": {
                 "title": "Usage",

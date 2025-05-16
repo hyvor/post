@@ -78,6 +78,12 @@ FORM
     cursor: not-allowed;
 }
 
+.form .success-message {
+    margin-top: 1rem;
+    font-size: 16px;
+    color: #666;
+}
+
 .form .lists {
     margin-bottom: 1.2rem;
 }
@@ -103,4 +109,22 @@ FORM
 .form .list-description {
     font-size: 14px;
     color: #666;
+}
+
+.form .message {
+    margin-top: 1rem;
+    padding: 10px 23px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.form .message.success {
+    background-color: #5d995d;
+    color: #fff;
+}
+.form .message.error {
+    background-color: #ab2525;
+    color: #fff;
 }
