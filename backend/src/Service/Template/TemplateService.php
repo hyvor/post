@@ -40,6 +40,17 @@ class TemplateService
         return $templateEntity;
     }
 
+    public function getTemplateStringFromProject(Project $project): string
+    {
+        $template = $this->getTemplate($project);
+
+        if ($template) {
+            return $template->getTemplate();
+        }
+
+        return $this->readDefaultTemplate();
+    }
+
     public function readDefaultTemplate(): string
     {
         $templatePath = $this->projectDir . '/templates/newsletter/default.html.twig';

@@ -223,4 +223,88 @@ class SendService
 
         return $send;
     }
+
+    public function getSendsCountThisMonthOfUser(int $hyvorUserId): int
+    {
+
+        $query = <<<DQL
+        SELECT COUNT(s.id)
+        FROM App\Entity\Send s
+        JOIN App\Entity\Project p WITH s.project = p.id
+        WHERE 
+            p.user_id = :hyvorUserId AND
+            s.created_at >= :startOfMonth
+        DQL;
+
+        $qb = $this->em->createQuery($query);
+        $qb->setParameter('hyvorUserId', $hyvorUserId);
+        $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
+
+        return (int) $qb->getSingleScalarResult();
+
+    }
+
+    public function getSendsCountThisMonthOfProject(int $projectId): int
+    {
+        $query = <<<DQL
+        SELECT COUNT(s.id)
+        FROM App\Entity\Send s
+        WHERE
+            s.project_id = :projectId AND
+            s.created_at >= :startOfMonth
+        DQL;
+
+        $qb = $this->em->createQuery($query);
+        $qb->setParameter('projectId', $projectId);
+        $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
+
+        return (int) $qb->getSingleScalarResult();
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getSendsCountLast12MonthsOfUser(int $hyvorUserId): array
+    {
+
+        $now = $this->now();
+        $date12MonthsAgo = $now->modify('-11 months'); // 11 months since we have to include this month
+
+        $query = <<<SQL
+        SELECT
+            to_char(sends.created_at, 'YYYY-MM') AS month,
+            count(sends.id) AS count
+        FROM sends
+        INNER JOIN projects ON sends.project_id = projects.id
+        WHERE
+            projects.user_id = :hyvorUserId AND
+            sends.created_at >= :startDate
+        GROUP BY month
+        SQL;
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue('hyvorUserId', $hyvorUserId);
+        $stmt->bindValue('startDate', $date12MonthsAgo->format('Y-m-d H:i:s'));
+
+        /** @var array<array{month: string, count: scalar}> $results */
+        $results = $stmt->executeQuery()->fetchAllAssociative();
+
+        $indexedResults = [];
+        foreach ($results as $result) {
+            $indexedResults[$result['month']] = (int) $result['count'];
+        }
+
+        $formattedResults = [];
+
+        for ($i = 0; $i < 12; $i++) {
+            $date = $date12MonthsAgo->modify('+' . $i . ' month');
+            $month = $date->format('Y-m');
+            $formattedResults[$month] = $indexedResults[$month] ?? 0;
+        }
+
+        return $formattedResults;
+
+    }
+
 }

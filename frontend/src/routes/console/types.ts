@@ -1,4 +1,9 @@
 export interface AppConfig {
+
+	hyvor: {
+		instance: string;
+	},
+  
 	project_defaults: {
 		FORM_COLOR_TEXT: string,
 		FORM_COLOR_TEXT_LIGHT: string,
@@ -6,7 +11,7 @@ export interface AppConfig {
 		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
 		FORM_COLOR_LIGHT_INPUT: string,
 		FORM_COLOR_LIGHT_INPUT_TEXT: string,
-
+      
 		LANG: string,
 		COLOR_ACCENT: string,
 		COLOR_BACKGROUND: string,
@@ -66,6 +71,7 @@ export type ProjectMeta = {
 
 export type Project = {
 	id: number,
+	uuid: string,
 	created_at: number,
 	name: string
 } & ProjectMeta;
