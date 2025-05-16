@@ -30,7 +30,8 @@ final class Version20250502144042 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id),
             hyvor_user_id BIGINT NOT NULL,
-            role user_role NOT NULL
+            role user_role NOT NULL,
+            UNIQUE (project_id, hyvor_user_id)
         );
         SQL
         );

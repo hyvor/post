@@ -67,7 +67,7 @@ class UserInviteService
         $mail = $this->mailTemplate->render('mail/user_invite.html.twig', [
             'component' => 'post',
             // TODO: URL
-            'buttonUrl' => 'https://post.hyvor.dev/public/invite/verify?code=' . $userInvite->getCode(),
+            'buttonUrl' => 'https://post.hyvor.dev/api/public/invite/verify?code=' . $userInvite->getCode(),
             'strings' => [
                 'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
                 'subject' => $strings->get(
