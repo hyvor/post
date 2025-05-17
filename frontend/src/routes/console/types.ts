@@ -4,7 +4,7 @@ export interface AppConfig {
 		instance: string;
 	},
 
-    template_defaults: {
+	template_defaults: {
 		LANG: string,
 		COLOR_ACCENT: string,
 		COLOR_BACKGROUND: string,
@@ -22,8 +22,7 @@ export interface AppConfig {
 	},
 
 	project_defaults: {
-		FORM_COLOR_TEXT: string,
-		FORM_COLOR_TEXT_LIGHT: string,
+		FORM_COLOR_LIGHT_TEXT: string,
 		FORM_COLOR_LIGHT_ACCENT: string,
 		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
 		FORM_COLOR_LIGHT_INPUT: string,
@@ -159,9 +158,9 @@ export type Domain = {
 }
 
 type VerifyDomainResponse = {
-    domain: Domain;
-    data: {
-        verified: boolean;
-        debug: Record<string, string>;
-    };
+	domain: Domain;
+	data: {
+		verified: boolean;
+		debug: Record<string, string>;
+	};
 };

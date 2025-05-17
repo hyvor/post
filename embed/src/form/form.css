@@ -6,12 +6,17 @@ FORM
     width: 425px;
     margin: 0 auto;
     max-width: 100%;
+    color: var(--hp-text);
 
     --hp-accent-light: #dedede;
 }
 
 .form * {
     box-sizing: border-box;
+}
+
+.form a {
+    color: var(--hp-accent);
 }
 
 .form .title.hidden,
@@ -35,7 +40,7 @@ FORM
 
 .form .input {
     position: relative;
-    background-color: #fff;
+    background-color: var(--hp-input);
     box-shadow: 0 0 8px #0000001c;
     border-radius: 20px;
     display: flex;
@@ -51,7 +56,12 @@ FORM
     border: none;
     flex: 1;
     font-family: inherit;
+    color: var(--hp-input-text);
     background-color: transparent;
+}
+
+.form .email-input::placeholder {
+    color: color-mix(in srgb, var(--hp-input-text), transparent 50%);
 }
 
 .form .email-input:focus {
@@ -72,7 +82,7 @@ FORM
 }
 
 .form button:disabled {
-    background-color: #dedede;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
@@ -106,7 +116,7 @@ FORM
 
 .form .list-description {
     font-size: 14px;
-    color: #666;
+    color: var(--hp-text-light);
 }
 
 .form .message {
@@ -118,10 +128,12 @@ FORM
     align-items: center;
     gap: 10px;
 }
+
 .form .message.success {
     background-color: #5d995d;
     color: #fff;
 }
+
 .form .message.error {
     background-color: #ab2525;
     color: #fff;

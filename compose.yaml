@@ -58,6 +58,7 @@ services:
       target: embed-dev
     volumes:
       - ./embed:/app/embed
+      - /app/embed/node_modules
     labels:
       traefik.enable: true
       # embed

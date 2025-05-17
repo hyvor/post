@@ -14,12 +14,15 @@ export interface Project {
 
     palette_light: Palette,
     palette_dark: Palette,
-    
+
 }
 
 export interface Palette {
+    text: string,
     accent: string,
     accent_text: string,
+    input: string;
+    input_text: string;
 }
 
 export interface List {

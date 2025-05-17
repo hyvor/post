@@ -115,8 +115,14 @@
     <div
         class="form"
         style="
+            --hp-text: {palette.text};
             --hp-accent: {palette.accent};
             --hp-accent-text: {palette.accent_text};
+            --hp-input: {palette.input};
+            --hp-input-text: {palette.input_text};
+
+            --hp-text-light: color-mix(in srgb, var(--hp-text), transparent 50%);
+            --hp-link: var(--hp-accent);
         "
     >
         <div

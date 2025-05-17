@@ -7,23 +7,7 @@
 	let { palette }: { palette: 'light' | 'dark' } = $props();
 
 	const i18n = getI18n();
-
-	let textValue: 'inherit' | 'custom' = $state(
-		$projectEditingStore.form_color_light_text === null ? 'inherit' : 'custom'
-	);
-
 	const projectDefaults = getAppConfig().project_defaults;
-
-	$effect(() => {
-		console.log('textValue', textValue);
-		if (textValue === 'inherit') {
-			$projectEditingStore.form_color_light_text = null;
-		} else {
-			$projectEditingStore.form_color_light_text =
-				$projectStore.form_color_light_text ||
-				(palette === 'light' ? '#000000' : '#ffffff');
-		}
-	});
 </script>
 
 <SplitControl
@@ -31,22 +15,13 @@
 	caption={i18n.t('console.settings.form.textColorCaption')}
 >
 	<FormControl>
-		<Radio name="color-text-inherit" bind:group={textValue} value="inherit">
-			{i18n.t('console.settings.form.textColorInherit')}
-		</Radio>
-		<Radio name="color-text-inherit" bind:group={textValue} value="custom">
-			{i18n.t('console.settings.form.textColorCustom')}
-		</Radio>
-
-		{#if textValue === 'custom'}
-			<ColorPicker
-				color={$projectEditingStore.form_color_light_text ||
-					(palette === 'light' ? '#000000' : '#ffffff')}
-				on:input={(e) => {
-					$projectEditingStore.form_color_light_text = e.detail;
-				}}
-			/>
-		{/if}
+		<ColorPicker
+			color={$projectEditingStore.form_color_light_text ||
+				projectDefaults.FORM_COLOR_LIGHT_TEXT}
+			on:input={(e) => {
+				$projectEditingStore.form_color_light_text = e.detail;
+			}}
+		/>
 	</FormControl>
 </SplitControl>
 

@@ -34,8 +34,6 @@
                 "paletteDark": "Dark Palette",
                 "textColor": "Text Color",
                 "textColorCaption": "Used for most texts in the form",
-                "textColorInherit": "Inherit from your website",
-                "textColorCustom": "Custom color",
                 "textLightColor": "Light Text Color",
                 "accentColor": "Accent",
                 "accentColorCaption": "Used for buttons and links",
@@ -46,7 +44,6 @@
             }
         }
     },
-
     "mail": {
         "common": {
             "greeting": "Hello {name},"
