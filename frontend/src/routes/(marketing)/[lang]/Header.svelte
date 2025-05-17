@@ -3,8 +3,11 @@
 	import { Button } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { getMarketingI18n } from './locale';
 
 	let loggedIn = $state(false);
+
+	const I18n = getMarketingI18n();
 
 	onMount(() => {
 		fetch('/api/auth/check', {
@@ -19,13 +22,13 @@
 	});
 </script>
 
-<Header logo='/img/logo.png' subName="Post" darkToggle={false} >
+<Header logo='/img/logo.png' subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
 	{#snippet center()}
 		<div class="center">
 			<Button
 				as="a"
 				size="small"
-				href="/pricing"
+				href="/{I18n.getLocale()}/pricing"
 				variant={$page.url.pathname === '/pricing' ? 'fill-light' : 'invisible'}
 			>
 				Pricing
