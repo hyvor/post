@@ -14,6 +14,11 @@
                 "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
             }
         },
+        "common": {
+            "cancel": "Cancel",
+            "copy": "Copy",
+            "copied": "{value} copied"
+        },
         "settings": {
             "form": {
                 "texts": "Texts",
@@ -45,6 +50,14 @@
                 "border": "Border",
                 "roundness": "Roundness",
                 "roundnessCaption": "Roundness of edges of the input, button, etc."
+            },
+            "project": {
+                "name": "Project Name",
+                "uuid": "Project UUID",
+                "uuidCaption": "Used in the signup form embed code",
+                "delete": "Delete Project",
+                "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
+                "deleted": "Project deleted"
             }
         }
     },

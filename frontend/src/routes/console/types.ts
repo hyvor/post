@@ -79,6 +79,7 @@ export type ProjectMeta = {
 
 export type Project = {
 	id: number;
+	uuid: string;
 	created_at: number;
 	name: string;
 } & ProjectMeta;

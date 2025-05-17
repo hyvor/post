@@ -1,8 +1,11 @@
 <script>
-	import AboveFold from './@components/AboveFold.svelte';
-	import TrialSignUp from './@components/TrialSignUp.svelte';
-	import AllFeatures from './@homepage/AllFeatures.svelte';
-	import StartStep from './@homepage/startstep/StartStep.svelte';
+	import { Button, Dropdown } from "@hyvor/design/components";
+	import AboveFold from "./@components/AboveFold.svelte";
+	import TrialSignUp from "./@components/TrialSignUp.svelte";
+	import AllFeatures from "./@homepage/AllFeatures.svelte";
+	import StartStep from "./@homepage/startstep/StartStep.svelte";
+
+	let showDropdown = false;
 </script>
 
 <svelte:head>
