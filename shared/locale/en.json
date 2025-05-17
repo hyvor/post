@@ -1,5 +1,13 @@
 {
     "console": {
+        "nav": {
+            "domains": "Domains",
+            "billing": "Billing",
+            "home": "Home",
+            "subscribers": "Subscribers",
+            "issues": "Issues",
+            "settings": "Settings"
+        },
         "billing": {
             "usage": {
                 "title": "Usage",
@@ -26,20 +34,22 @@
                 "successMessage": "Success Message",
                 "successMessageCaption": "Message shown after successful subscription",
                 "customCss": "Custom CSS",
-                "colors": "Colors",
+                "colorsUi": "Colors & UI",
                 "paletteLight": "Light Palette",
                 "paletteDark": "Dark Palette",
                 "textColor": "Text Color",
                 "textColorCaption": "Used for most texts in the form",
-                "textColorInherit": "Inherit from your website",
-                "textColorCustom": "Custom color",
                 "textLightColor": "Light Text Color",
                 "accentColor": "Accent",
                 "accentColorCaption": "Used for buttons and links",
                 "colorBackground": "Background",
                 "colorText": "Text",
                 "inputColor": "Input",
-                "inputColorCaption": "Used for email input"
+                "inputColorCaption": "Used for email input",
+                "boxShadow": "Box Shadow",
+                "border": "Border",
+                "roundness": "Roundness",
+                "roundnessCaption": "Roundness of edges of the input, button, etc."
             },
             "project": {
                 "name": "Project Name",
@@ -51,7 +61,6 @@
             }
         }
     },
-
     "mail": {
         "common": {
             "greeting": "Hello {name},"
