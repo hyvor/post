@@ -3,6 +3,9 @@ import Form from "./Form.svelte";
 import formCss from './form.css?inline'
 
 class HyvorPostForm extends HTMLElement {
+
+    private form: Record<string, any> | null = null;
+
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -15,7 +18,7 @@ class HyvorPostForm extends HTMLElement {
             throw new Error('project-uuid is required for Hyvor Post form.');
         }
 
-        mount(Form, {
+        this.form = mount(Form, {
             target: this.shadowRoot!,
             props: {
                 projectUuid,
@@ -35,7 +38,7 @@ class HyvorPostForm extends HTMLElement {
 
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         if (name === 'colors' && oldVal !== newVal) {
-            styles.setStyles(newVal as any);
+            this.form?.setPalette(newVal as any);
         }
     }
 }

@@ -41,6 +41,9 @@ class ProjectObject
     public ?string $form_color_light_accent_text;
     public ?string $form_color_light_input;
     public ?string $form_color_light_input_text;
+    public ?string $form_light_input_box_shadow;
+    public ?string $form_light_input_border;
+    public ?int $form_light_border_radius;
 
     public ?string $form_color_dark_text; // null = inherit
     public ?string $form_color_dark_text_light;
@@ -48,6 +51,9 @@ class ProjectObject
     public ?string $form_color_dark_accent_text;
     public ?string $form_color_dark_input;
     public ?string $form_color_dark_input_text;
+    public ?string $form_dark_input_box_shadow;
+    public ?string $form_dark_input_border;
+    public ?int $form_dark_border_radius;
 
     public function __construct(Project $project)
     {
@@ -85,6 +91,9 @@ class ProjectObject
         $this->form_color_light_accent_text = $meta->form_color_light_accent_text;
         $this->form_color_light_input = $meta->form_color_light_input;
         $this->form_color_light_input_text = $meta->form_color_light_input_text;
+        $this->form_light_input_box_shadow = $meta->form_light_input_box_shadow;
+        $this->form_light_input_border = $meta->form_light_input_border;
+        $this->form_light_border_radius = $meta->form_light_border_radius;
 
         $this->form_color_dark_text = $meta->form_color_dark_text;
         $this->form_color_dark_text_light = $meta->form_color_dark_text_light;
@@ -92,7 +101,9 @@ class ProjectObject
         $this->form_color_dark_accent_text = $meta->form_color_dark_accent_text;
         $this->form_color_dark_input = $meta->form_color_dark_input;
         $this->form_color_dark_input_text = $meta->form_color_dark_input_text;
-
+        $this->form_dark_input_box_shadow = $meta->form_dark_input_box_shadow;
+        $this->form_dark_input_border = $meta->form_dark_input_border;
+        $this->form_dark_border_radius = $meta->form_dark_border_radius;
     }
 
 }

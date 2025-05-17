@@ -29,7 +29,7 @@
                 "successMessage": "Success Message",
                 "successMessageCaption": "Message shown after successful subscription",
                 "customCss": "Custom CSS",
-                "colors": "Colors",
+                "colorsUi": "Colors & UI",
                 "paletteLight": "Light Palette",
                 "paletteDark": "Dark Palette",
                 "textColor": "Text Color",
@@ -40,7 +40,11 @@
                 "colorBackground": "Background",
                 "colorText": "Text",
                 "inputColor": "Input",
-                "inputColorCaption": "Used for email input"
+                "inputColorCaption": "Used for email input",
+                "boxShadow": "Box Shadow",
+                "border": "Border",
+                "roundness": "Roundness",
+                "roundnessCaption": "Roundness of edges of the input, button, etc."
             }
         }
     },

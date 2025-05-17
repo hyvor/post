@@ -88,6 +88,14 @@
         }
     }
 
+    export function setPalette(type: "light" | "dark") {
+        if (type === "dark") {
+            palette = project.palette_dark;
+        } else {
+            palette = project.palette_light;
+        }
+    }
+
     /**
      * Firstly loaded elements
      * The heading and the input
@@ -120,6 +128,9 @@
             --hp-accent-text: {palette.accent_text};
             --hp-input: {palette.input};
             --hp-input-text: {palette.input_text};
+            --hp-input-box-shadow: {palette.input_box_shadow};
+            --hp-input-border: {palette.input_border};
+            --hp-border-radius: {palette.border_radius}px;
 
             --hp-text-light: color-mix(in srgb, var(--hp-text), transparent 50%);
             --hp-link: var(--hp-accent);
