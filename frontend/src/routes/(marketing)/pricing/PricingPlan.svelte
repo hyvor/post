@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button, Slider } from '@hyvor/design/components';
-	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
+	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
+	import IconXCircleFill from '@hyvor/icons/IconXCircleFill';
 
 	interface Props {
 		yearly?: boolean;
@@ -56,12 +57,23 @@
 	<div class="features">
 		{#each features as feature}
 			<div class="feature">
-				<IconCheckCircle />
+				<IconCheckCircleFill color="accent" />
 				<div class="feature-text">
 					{feature}
 				</div>
 			</div>
 		{/each}
+		{#if currentPlan === 25_000}
+			<div class="feature">
+				<IconXCircleFill color="grey" />
+					Branding
+			</div>
+		{:else}
+		<div class="feature">
+			<IconCheckCircleFill color="accent" />
+			Branding
+		</div>
+		{/if}
 	</div>
 
 	<div class="email-selector">
@@ -127,9 +139,9 @@
 		padding: 6px 0;
 	}
 
-	.feature :global(svg) {
-		color: var(--green);
-	}
+	// .feature :global(svg) {
+	// 	color: var(--green);
+	// }
 	
 	.feature-text {
 		flex: 1;
