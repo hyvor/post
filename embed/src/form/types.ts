@@ -10,8 +10,16 @@ export interface Project {
         footer_text: string | null,
         button_text: string | null,
         success_message: string | null,
-    }
+    },
+
+    palette_light: Palette,
+    palette_dark: Palette,
     
+}
+
+export interface Palette {
+    accent: string,
+    accent_text: string,
 }
 
 export interface List {

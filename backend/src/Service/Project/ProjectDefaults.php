@@ -14,7 +14,10 @@ class ProjectDefaults
     public const FORM_COLOR_LIGHT_ACCENT = '#000';
     public const FORM_COLOR_LIGHT_ACCENT_TEXT = '#fff';
     public const FORM_COLOR_LIGHT_INPUT = '#fff';
-    public const FORM_COLOR_LIGHT_INPUT_TEXT = 'inherit';
+    public const FORM_COLOR_LIGHT_INPUT_TEXT = '#000';
+
+    public const FORM_COLOR_DARK_ACCENT = '#fff';
+    public const FORM_COLOR_DARK_ACCENT_TEXT = '#000';
 
     /**
      * @return array<string, mixed>

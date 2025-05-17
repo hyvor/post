@@ -7,9 +7,7 @@ FORM
     margin: 0 auto;
     max-width: 100%;
 
-    --hp-accent: #000;
     --hp-accent-light: #dedede;
-    --hp-accent-text: #fff;
 }
 
 .form * {
@@ -61,8 +59,8 @@ FORM
 }
 
 .form button {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--hp-accent);
+    color: var(--hp-accent-text);
     border: none;
     border-radius: 20px;
     cursor: pointer;

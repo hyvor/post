@@ -3,7 +3,7 @@
     import Skeleton from "./Skeleton.svelte";
     import { fade, slide } from "svelte/transition";
     import { apiFromInstance } from "./api";
-    import type { List, Project } from "./types";
+    import type { List, Palette, Project } from "./types";
     import Switch from "./Switch.svelte";
     import Message from "./Message.svelte";
 
@@ -24,6 +24,7 @@
 
     let project: Project = $state({} as Project);
     let lists: List[] = $state([]);
+    let palette = $state({} as Palette);
 
     const api = apiFromInstance(instance);
 
@@ -40,6 +41,7 @@
                 project = response.project;
                 lists = response.lists;
                 selectedListsIds = lists.map((list) => list.id);
+                palette = project.palette_light;
 
                 setCustomCss();
             })
@@ -64,8 +66,6 @@
             list_ids: selectedListsIds,
         })
             .then((response) => {
-                console.log("Subscribed successfully:", response);
-
                 subscribingSuccess = true;
                 setTimeout(() => {
                     subscribingSuccess = false;
@@ -112,7 +112,13 @@
 {#if loading}
     <Skeleton />
 {:else}
-    <div class="form">
+    <div
+        class="form"
+        style="
+            --hp-accent: {palette.accent};
+            --hp-accent-text: {palette.accent_text};
+        "
+    >
         <div
             class="title"
             transition:fade={firstElementsAnimation}
