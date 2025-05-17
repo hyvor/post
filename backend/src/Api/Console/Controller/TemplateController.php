@@ -79,21 +79,21 @@ class TemplateController extends AbstractController
             unsubscribe_url: '',
             unsubscribe_text: '',
 
-            color_accent: $meta->template_color_accent ?? ProjectDefaults::COLOR_ACCENT,
-            color_background: $meta->template_color_background ?? ProjectDefaults::COLOR_BACKGROUND,
-            color_box_background: $meta->template_color_box_background ?? ProjectDefaults::COLOR_BACKGROUND,
+            color_accent: $meta->template_color_accent ?? ProjectDefaults::TEMPLATE_COLOR_ACCENT,
+            color_background: $meta->template_color_background ?? ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_box_background: $meta->template_color_box_background ?? ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
 
-            font_family: $meta->template_font_family ?? ProjectDefaults::FONT_FAMILY,
-            font_size: $meta->template_font_size ?? ProjectDefaults::FONT_SIZE,
-            font_weight: $meta->template_font_weight ?? ProjectDefaults::FONT_WEIGHT,
-            font_weight_heading: $meta->template_font_weight_heading ?? ProjectDefaults::FONT_WEIGHT_HEADING,
-            font_color_on_background: $meta->template_font_color_on_background ?? ProjectDefaults::FONT_COLOR_ON_BACKGROUND,
-            font_color_on_box: $meta->template_font_color_on_box ?? ProjectDefaults::FONT_COLOR_ON_BOX,
-            font_line_height: $meta->template_font_line_height ?? ProjectDefaults::FONT_LINE_HEIGHT,
+            font_family: $meta->template_font_family ?? ProjectDefaults::TEMPLATE_FONT_FAMILY,
+            font_size: $meta->template_font_size ?? ProjectDefaults::TEMPLATE_FONT_SIZE,
+            font_weight: $meta->template_font_weight ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT,
+            font_weight_heading: $meta->template_font_weight_heading ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->template_font_color_on_background ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->template_font_color_on_box ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
+            font_line_height: $meta->template_font_line_height ?? ProjectDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
-            box_radius: $meta->template_box_radius ?? ProjectDefaults::BOX_RADIUS,
-            box_shadow: $meta->template_color_box_shadow ?? ProjectDefaults::BOX_SHADOW,
-            box_border: $meta->template_color_box_border ?? ProjectDefaults::BOX_BORDER,
+            box_radius: $meta->template_box_radius ?? ProjectDefaults::TEMPLATE_BOX_RADIUS,
+            box_shadow: $meta->template_color_box_shadow ?? ProjectDefaults::TEMPLATE_BOX_SHADOW,
+            box_border: $meta->template_color_box_border ?? ProjectDefaults::TEMPLATE_BOX_BORDER,
         );
 
         $html = $this->templateRenderer->renderAll($input->template, $variables);
