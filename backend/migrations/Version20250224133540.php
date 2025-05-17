@@ -21,8 +21,8 @@ final class Version20250224133540 extends AbstractMigration
     {
         $this->addSql(<<<SQL
             CREATE TABLE list_subscriber (
-                list_id BIGINT NOT NULL REFERENCES lists(id) on delete cascade,
-                subscriber_id BIGINT NOT NULL REFERENCES subscribers(id) on delete cascade
+                list_id BIGINT NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
+                subscriber_id BIGINT NOT NULL REFERENCES subscribers(id) ON DELETE CASCADE
             )
         SQL);
     }

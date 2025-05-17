@@ -2,12 +2,14 @@
 
 namespace App\Service\Project;
 
+use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
@@ -153,6 +155,18 @@ class ProjectService
         $project->setMeta(clone $currentMeta);
         $project->setUpdatedAt($this->now());
 
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
+    }
+
+    public function updateProject(Project $project, UpdateProjectDto $updates): Project
+    {
+        if ($updates->hasProperty('name'))
+            $project->setName($updates->name);
+
+        $project->setUpdatedAt($this->now());
         $this->em->persist($project);
         $this->em->flush();
 
