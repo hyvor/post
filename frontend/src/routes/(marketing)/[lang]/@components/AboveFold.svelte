@@ -1,15 +1,17 @@
 <!-- TODO: <Demo /> Add he demo if possible - i guess it is--> 
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	import  IconEnvelope  from '@hyvor/icons/IconEnvelope';
 	import TrialChecks from './TrialChecks.svelte';
 	import MainGraphic from './MainGraphic.svelte';
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n();
 </script>
 
 <div class="hds-container above-fold">
 	<div class="left">
 
-		<h1>Simple Newsletter Platform</h1>
+		<h1>{I18n.t('simpleNewsletterPlatform')}</h1>
 
 		<h2>
 			Newsletters for your website
