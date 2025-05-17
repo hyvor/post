@@ -65,7 +65,7 @@
 	{/snippet}
 </SplitControl>
 
-<SplitControl label={i18n.t('console.settings.form.colors')}>
+<SplitControl label={i18n.t('console.settings.form.colorsUi')}>
 	{#snippet nested()}
 		<TabNav active={palette}>
 			<TabNavItem name="light">{i18n.t('console.settings.form.paletteLight')}</TabNavItem>
@@ -95,12 +95,18 @@
 		'form_color_light_accent_text',
 		'form_color_light_input',
 		'form_color_light_input_text',
+		'form_light_input_box_shadow',
+		'form_light_input_border',
+		'form_light_border_radius',
 
 		'form_color_dark_text',
 		'form_color_dark_text_light',
 		'form_color_dark_accent',
 		'form_color_dark_accent_text',
 		'form_color_dark_input',
-		'form_color_dark_input_text'
+		'form_color_dark_input_text',
+		'form_dark_input_box_shadow',
+		'form_dark_input_border',
+		'form_dark_border_radius'
 	]}
 />

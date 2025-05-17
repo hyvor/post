@@ -4,6 +4,9 @@
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import NavItem from './NavItem.svelte';
+	import { getI18n } from '../../lib/i18n';
+
+	const I18n = getI18n();
 </script>
 
 <div class="wrap hds-box">
@@ -11,13 +14,13 @@
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
 			<NavItem>
 				<IconDatabase slot="icon" />
-				<span slot="text">Domains</span>
+				<span slot="text">{I18n.t('console.nav.domains')}</span>
 			</NavItem>
 		</NavLink>
 		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'}>
 			<NavItem>
 				<IconCoin slot="icon" />
-				<span slot="text">Billing</span>
+				<span slot="text">{I18n.t('console.nav.billing')}</span>
 			</NavItem>
 		</NavLink>
 	</div>

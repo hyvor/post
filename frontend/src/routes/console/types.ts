@@ -1,81 +1,87 @@
 export interface AppConfig {
-
 	hyvor: {
 		instance: string;
-	},
+	};
 
-    template_defaults: {
-		LANG: string,
-		COLOR_ACCENT: string,
-		COLOR_BACKGROUND: string,
-		COLOR_BOX_BACKGROUND: string,
-		BOX_RADIUS: string,
-		BOX_SHADOW: string,
-		BOX_BORDER: string,
-		FONT_FAMILY: string,
-		FONT_SIZE: string,
-		FONT_WEIGHT: string,
-		FONT_WEIGHT_HEADING: string,
-		FONT_COLOR_ON_BACKGROUND: string,
-		FONT_COLOR_ON_BOX: string,
-		FONT_LINE_HEIGHT: string,
-	},
+	template_defaults: {
+		LANG: string;
+		COLOR_ACCENT: string;
+		COLOR_BACKGROUND: string;
+		COLOR_BOX_BACKGROUND: string;
+		BOX_RADIUS: string;
+		BOX_SHADOW: string;
+		BOX_BORDER: string;
+		FONT_FAMILY: string;
+		FONT_SIZE: string;
+		FONT_WEIGHT: string;
+		FONT_WEIGHT_HEADING: string;
+		FONT_COLOR_ON_BACKGROUND: string;
+		FONT_COLOR_ON_BOX: string;
+		FONT_LINE_HEIGHT: string;
+	};
 
 	project_defaults: {
-		FORM_COLOR_TEXT: string,
-		FORM_COLOR_TEXT_LIGHT: string,
-		FORM_COLOR_LIGHT_ACCENT: string,
-		FORM_COLOR_LIGHT_ACCENT_TEXT: string,
-		FORM_COLOR_LIGHT_INPUT: string,
-		FORM_COLOR_LIGHT_INPUT_TEXT: string,
-	}
+		FORM_COLOR_LIGHT_TEXT: string;
+		FORM_COLOR_LIGHT_ACCENT: string;
+		FORM_COLOR_LIGHT_ACCENT_TEXT: string;
+		FORM_COLOR_LIGHT_INPUT: string;
+		FORM_COLOR_LIGHT_INPUT_TEXT: string;
+		FORM_LIGHT_INPUT_BOX_SHADOW: string;
+		FORM_LIGHT_INPUT_BORDER: string;
+		FORM_LIGHT_BORDER_RADIUS: string;
+	};
 }
 
 export type ProjectMeta = {
-	template_color_accent: string | null,
-	template_color_background: string | null,
-	template_color_box_background: string | null,
-	template_box_shadow: string | null,
-	template_box_border: string | null,
-	template_font_family: string | null,
-	template_font_size: string | null,
-	template_font_weight: string | null,
-	template_font_weight_heading: string | null,
-	template_font_color_on_background: string | null,
-	template_font_color_on_box: string | null,
-	template_font_line_height: string | null,
-	template_box_radius: string | null,
+	template_color_accent: string | null;
+	template_color_background: string | null;
+	template_color_box_background: string | null;
+	template_box_shadow: string | null;
+	template_box_border: string | null;
+	template_font_family: string | null;
+	template_font_size: string | null;
+	template_font_weight: string | null;
+	template_font_weight_heading: string | null;
+	template_font_color_on_background: string | null;
+	template_font_color_on_box: string | null;
+	template_font_line_height: string | null;
+	template_box_radius: string | null;
 
-	form_width: number | null,
-	form_custom_css: string | null,
+	form_width: number | null;
+	form_custom_css: string | null;
 
-	form_title: string | null,
-	form_description: string | null,
-	form_footer_text: string | null,
-	form_button_text: string | null,
-	form_success_message: string | null,
+	form_title: string | null;
+	form_description: string | null;
+	form_footer_text: string | null;
+	form_button_text: string | null;
+	form_success_message: string | null;
 
-	form_color_light_text: string | null,
-	form_color_light_text_light: string | null,
-	form_color_light_accent: string | null,
-	form_color_light_accent_text: string | null,
-	form_color_light_input: string | null,
-	form_color_light_input_text: string | null,
+	form_color_light_text: string | null;
+	form_color_light_text_light: string | null;
+	form_color_light_accent: string | null;
+	form_color_light_accent_text: string | null;
+	form_color_light_input: string | null;
+	form_color_light_input_text: string | null;
+	form_light_input_box_shadow: string | null;
+	form_light_input_border: string | null;
+	form_light_border_radius: string | null;
 
-	form_color_dark_text: string | null,
-	form_color_dark_text_light: string | null,
-	form_color_dark_accent: string | null,
-	form_color_dark_accent_text: string | null,
-	form_color_dark_input: string | null,
-	form_color_dark_input_text: string | null,
-
-}
+	form_color_dark_text: string | null;
+	form_color_dark_text_light: string | null;
+	form_color_dark_accent: string | null;
+	form_color_dark_accent_text: string | null;
+	form_color_dark_input: string | null;
+	form_color_dark_input_text: string | null;
+	form_dark_input_box_shadow: string | null;
+	form_dark_input_border: string | null;
+	form_dark_border_radius: string | null;
+};
 
 export type Project = {
-	id: number,
-	uuid: string,
-	created_at: number,
-	name: string
+	id: number;
+	uuid: string;
+	created_at: number;
+	name: string;
 } & ProjectMeta;
 
 export interface ProjectStats {
@@ -85,44 +91,44 @@ export interface ProjectStats {
 }
 
 export type List = {
-	id: number,
-	created_at: number,
-	name: string,
-	description: string | null,
-	subscribers_count: number,
-	subscribers_count_last_30d: number,
-}
+	id: number;
+	created_at: number;
+	name: string;
+	description: string | null;
+	subscribers_count: number;
+	subscribers_count_last_30d: number;
+};
 
 export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
 export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
 
 export type Subscriber = {
-	id: number,
-	email: string,
-	status: NewsletterSubscriberStatus,
-	list_ids: number[],
-	source: NewsletterSubscriberSource,
-	subscribed_at: number,
-	unsubscribed_at: number | null,
-}
+	id: number;
+	email: string;
+	status: NewsletterSubscriberStatus;
+	list_ids: number[];
+	source: NewsletterSubscriberSource;
+	subscribed_at: number;
+	unsubscribed_at: number | null;
+};
 
 export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'failed' | 'sent';
 
 export type Issue = {
-	id: number,
-	uuid: string,
-	created_at: number,
-	subject: string,
-	from_name: string,
-	from_email: string,
-	reply_to_email: string,
-	content: string,
-	status: IssueStatus,
-	lists: number[],
-	scheduled_at: number | null,
-	sending_at: number | null,
-	sent_at: number | null,
-}
+	id: number;
+	uuid: string;
+	created_at: number;
+	subject: string;
+	from_name: string;
+	from_email: string;
+	reply_to_email: string;
+	content: string;
+	status: IssueStatus;
+	lists: number[];
+	scheduled_at: number | null;
+	sending_at: number | null;
+	sent_at: number | null;
+};
 
 export type SendStatus = 'pending' | 'sent' | 'failed';
 export type SendType = 'all' | 'opened' | 'clicked' | 'unsubscribed' | 'bounced' | 'complained';
@@ -149,20 +155,20 @@ export interface IssueSend {
 }
 
 export type Domain = {
-	id: number,
-	domain: string,
-	dkim_public_key: string,
-	dkim_txt_name: string,
-	dkim_txt_value: string,
-	verified: boolean,
-	verified_in_ses: boolean,
-	requested_by_current_website: boolean,
-}
+	id: number;
+	domain: string;
+	dkim_public_key: string;
+	dkim_txt_name: string;
+	dkim_txt_value: string;
+	verified: boolean;
+	verified_in_ses: boolean;
+	requested_by_current_website: boolean;
+};
 
 type VerifyDomainResponse = {
-    domain: Domain;
-    data: {
-        verified: boolean;
-        debug: Record<string, string>;
-    };
+	domain: Domain;
+	data: {
+		verified: boolean;
+		debug: Record<string, string>;
+	};
 };

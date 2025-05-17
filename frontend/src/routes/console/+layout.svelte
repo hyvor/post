@@ -2,12 +2,12 @@
 	import {
 		HyvorBar,
 		InternationalizationProvider,
+		DarkProvider,
 		Loader,
 		toast
 	} from '@hyvor/design/components';
-	import en from '../../../../shared/locale/en-US.json';
-	import fr from '../../../../shared/locale/fr-FR.json';
-	import Nav from './@components/Nav/Nav.svelte';
+	import en from '../../../../shared/locale/en.json';
+	import fr from '../../../../shared/locale/fr.json';
 	import type { AppConfig, Project } from './types';
 
 	import { onMount } from 'svelte';
@@ -63,15 +63,15 @@
 <InternationalizationProvider
 	languages={[
 		{
-			code: 'en-US',
-			flag: '🇺🇸',
+			code: 'en',
+			flag: '🇬🇧',
 			name: 'English',
-			region: 'United States',
+			region: 'United Kindgom',
 			strings: en,
 			default: true
 		},
 		{
-			code: 'fr-FR',
+			code: 'fr',
 			flag: '🇫🇷',
 			name: 'Français',
 			region: 'France',
@@ -90,6 +90,8 @@
 		{/if}
 	</main>
 </InternationalizationProvider>
+
+<DarkProvider></DarkProvider>
 
 <style>
 	main {

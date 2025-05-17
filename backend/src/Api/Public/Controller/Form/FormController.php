@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api\Public\Controller\Form;
 
@@ -30,14 +32,12 @@ class FormController extends AbstractController
         private ProjectService $projectService,
         private NewsletterListService $newsletterListService,
         private SubscriberService $subscriberService,
-    )
-    {
+    ) {
     }
 
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-
         $project = $this->projectService->getProjectByUuid($input->project_uuid);
 
         if (!$project) {
@@ -63,20 +63,17 @@ class FormController extends AbstractController
         return new JsonResponse([
             'project' => new FormProjectObject($project),
             'is_subscribed' => false,
-            'lists' => $lists->map(fn ($list) => new FormListObject($list))->toArray(),
+            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
         ]);
-
     }
 
     #[Route('/form/subscribe', methods: 'POST')]
     public function subscribe(
         #[MapRequestPayload] FormSubscribeInput $input,
         Request $request,
-    ): JsonResponse
-    {
-
+    ): JsonResponse {
         $ip = $request->getClientIp();
-        $project = $this->projectService->getProjectById($input->project_id);
+        $project = $this->projectService->getProjectByUuid($input->project_uuid);
 
         if (!$project) {
             throw new UnprocessableEntityHttpException('Project not found');
@@ -98,7 +95,6 @@ class FormController extends AbstractController
         $subscriber = $this->subscriberService->getSubscriberByEmail($project, $email);
 
         if ($subscriber) {
-
             $update = new UpdateSubscriberDto();
             $update->status = SubscriberStatus::SUBSCRIBED;
             $update->lists = $lists;
@@ -107,9 +103,7 @@ class FormController extends AbstractController
                 $subscriber,
                 $update
             );
-
         } else {
-
             $subscriber = $this->subscriberService->createSubscriber(
                 $project,
                 $email,
@@ -119,7 +113,6 @@ class FormController extends AbstractController
                 $ip,
                 $this->now(),
             );
-
         }
 
         return new JsonResponse(new FormSubscriberObject($subscriber));
