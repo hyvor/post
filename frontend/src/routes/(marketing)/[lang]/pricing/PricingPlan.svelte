@@ -10,22 +10,18 @@
 	let { yearly = false, currency }: Props = $props();
 
 	const plans = {
-		// 1000: 4,
-		10_000: 7,
-		25_000: 15,
-		50_000: 30,
-		100_000: 50,
-		250_000: 90,
-		500_000: 150,
-		1_000_000: 250
+		25_000: 10,
+		100_000: 35,
+		300_000: 90,
+		1_000_000: 225
 	};
 
 	const currentPlans = plans;
-	let currentPlan = $state(100_000);
+	let currentPlan = $state(25_000);
 	let sliderVal = $state(1);
 
 	let currentPlanDisplay = $derived(
-		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}m` : `${currentPlan / 1_000}k`
+		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}m` : `${currentPlan / 25_000}k`
 	);
 
 	let currentPrice = $derived((currentPlans as any)[currentPlan] * (yearly ? 10 : 1));
@@ -74,14 +70,14 @@
 			<div>{currentPlanDisplay}</div>
 			<span class="max"> 1M </span>
 		</div>
-		<Slider min={1} max={7} step={1} value={sliderVal} on:change={onSliderChange} />
+		<Slider min={1} max={4} step={1} value={sliderVal} on:change={onSliderChange} />
 		<div class="amount">Monthly Emails</div>
 	</div>
 
 	<div class="price">
 		<div class="price-display">
 			<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-				>/{yearly ? 'year' : 'month'}{#if currentPrice === 4}*{/if}</span
+				>/{yearly ? 'year' : 'month'}{#if currentPrice === 10}*{/if}</span
 			>
 		</div>
 	</div>

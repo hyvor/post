@@ -8,6 +8,7 @@ class ProjectObject
 {
 
     public int $id;
+    public string $uuid;
     public int $created_at; // unix timestamp
     public string $name;
 
@@ -52,6 +53,7 @@ class ProjectObject
     public function __construct(Project $project)
     {
         $this->id = $project->getId();
+        $this->uuid = $project->getUuid();
         $this->created_at = $project->getCreatedAt()->getTimestamp();
         $this->name = $project->getName();
 
