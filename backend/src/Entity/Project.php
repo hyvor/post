@@ -30,9 +30,6 @@ class Project
     #[ORM\Column(length: 255)]
     private string $name;
 
-    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
-    public ?Template $template = null;
-
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;
 
@@ -119,5 +116,4 @@ class Project
 
         return $this;
     }
-
 }

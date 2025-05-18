@@ -1,8 +1,8 @@
-import { writable } from "svelte/store";
-import type { Project } from "../../types";
+import { writable } from 'svelte/store';
+import type { ProjectList } from '../../types';
 
-export const userProjectsStore = writable<Project[]>([]);
+export const userProjectsStore = writable<ProjectList[]>([]);
 
-export function addUserProject(project: Project) {
-    userProjectsStore.update((projects) => [...projects, project]);
+export function addUserProject(project: ProjectList) {
+	userProjectsStore.update((projects) => [...projects, project]);
 }

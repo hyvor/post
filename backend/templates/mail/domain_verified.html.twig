@@ -1,9 +1,22 @@
+{% extends '@Internal/mail/mail.html.twig' %}
+
+{% block title %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block heading %}
+    {{ strings.subject }}
+{% endblock %}
+
 {% block content %}
-    <h1>Domain Verified Successfully</h1>
+    <p>
+        {{ strings.greeting }}
+    </p>
 
-    <p>Your domain <strong>{{ domain }}</strong> has been successfully verified and is now ready to use for sending emails.</p>
-
-    <p>You can now use this domain to send emails from your newsletter platform.</p>
+    <p>
+        Your domain <strong>{{ strings.domain }}</strong> has been successfully verified and is now ready to use for
+        sending emails via Hyvor Post.
+    </p>
 
     <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
 {% endblock %}

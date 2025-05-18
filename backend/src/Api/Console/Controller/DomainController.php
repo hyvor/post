@@ -76,7 +76,7 @@ class DomainController extends AbstractController
         }
 
         try {
-            $result = $this->domainService->verifyDomain($domain, $user->email);
+            $result = $this->domainService->verifyDomain($domain, $user);
             return $this->json([
                 'data' => $result,
                 'domain' => new DomainObject($domain),

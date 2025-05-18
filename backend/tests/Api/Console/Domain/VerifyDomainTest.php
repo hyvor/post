@@ -26,7 +26,6 @@ class VerifyDomainTest extends WebTestCase
         $sesV2ClientMock->method('__call')->with(
             'getEmailIdentity',
             $this->callback(function ($args) {
-
                 $input = $args[0];
 
                 $this->assertSame('hyvor.com', $input['EmailIdentity']);
@@ -42,8 +41,7 @@ class VerifyDomainTest extends WebTestCase
                         'error_type' => 'None',
                     ]
                 ])
-            )
-        ;
+            );
 
         $sesServiceMock = $this->createMock(SesService::class);
         $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
@@ -79,7 +77,11 @@ class VerifyDomainTest extends WebTestCase
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Domain Verification Successful');
+        $this->assertEmailSubjectContains($email, 'Your domain hyvor.com is verified');
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'Your domain <strong>hyvor.com</strong> has been successfully verified'
+        );
     }
 
     public function test_already_verified(): void

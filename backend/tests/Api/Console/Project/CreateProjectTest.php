@@ -5,6 +5,8 @@ namespace App\Tests\Api\Console\Project;
 use App\Api\Console\Controller\ProjectController;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
+use App\Entity\User;
 use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
@@ -14,6 +16,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ProjectService::class)]
 #[CoversClass(ProjectRepository::class)]
 #[CoversClass(Project::class)]
+#[CoversClass(NewsletterList::class)]
+#[CoversClass(User::class)]
 class CreateProjectTest extends WebTestCase
 {
 
@@ -45,6 +49,11 @@ class CreateProjectTest extends WebTestCase
         $listRepository = $this->em->getRepository(NewsletterList::class);
         $lists = $listRepository->findBy(['project' => $project]);
         $this->assertCount(1, $lists);
+
+        $userRepository = $this->em->getRepository(User::class);
+        $users = $userRepository->findBy(['project' => $project]);
+        $this->assertSame(UserRole::OWNER, $users[0]->getRole());
+        $this->assertCount(1, $users);
     }
 
     public function testCreateProjectInvalid(): void

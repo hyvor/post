@@ -77,6 +77,34 @@ export type ProjectMeta = {
 	form_dark_border_radius: string | null;
 };
 
+export type UserMini = {
+	name: string,
+	username: string | null,
+	picture_url: string | null,
+}
+
+export type UserRole = 'owner' | 'admin';
+
+export type User = {
+	id: number,
+	role: UserRole,
+	created_at: number,
+	user: UserMini,
+}
+
+export type Invite = {
+	id: number,
+	created_at: number,
+	role: UserRole,
+	user: UserMini,
+	expires_at: number,
+}
+
+export type ProjectList = {
+	role: UserRole,
+	project: Project,
+}
+
 export type Project = {
 	id: number;
 	uuid: string;
