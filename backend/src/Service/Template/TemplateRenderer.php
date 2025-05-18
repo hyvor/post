@@ -2,9 +2,10 @@
 
 namespace App\Service\Template;
 
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Service\Project\ProjectDefaults;
 use Twig\Environment;
 
 class TemplateRenderer
@@ -42,7 +43,7 @@ JSON;
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: $meta->unsubscribe_text ?? '',
 
-            color_accent: TemplateDefaults::COLOR_ACCENT,
+            color_accent: ProjectDefaults::COLOR_ACCENT,
             // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
             color_background: $meta->color_background ?? TemplateDefaults::COLOR_BACKGROUND,
             color_box_background: $meta->color_box_background ?? TemplateDefaults::COLOR_BACKGROUND,
@@ -70,4 +71,9 @@ JSON;
         return $template->render((array)$variables);
     }
 
+    public function renderAll(string $template, TemplateVariables $variables): string
+    {
+        $template = $this->twig->createTemplate($template);
+        return $template->render((array)$variables);
+    }
 }

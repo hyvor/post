@@ -18,7 +18,7 @@
 
 <div class="settings">
 	<div class="nav hds-box">
-		<NavLink href="{prefix}/project" active={page.url.pathname === prefix + '/project'}>
+		<NavLink href={prefix} active={page.url.pathname === prefix}>
 			{#snippet start()}
 				<IconCardText />
 			{/snippet}

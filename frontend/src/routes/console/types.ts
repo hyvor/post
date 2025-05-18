@@ -1,24 +1,7 @@
 export interface AppConfig {
 	hyvor: {
 		instance: string;
-	};
-
-	template_defaults: {
-		LANG: string;
-		COLOR_ACCENT: string;
-		COLOR_BACKGROUND: string;
-		COLOR_BOX_BACKGROUND: string;
-		BOX_RADIUS: string;
-		BOX_SHADOW: string;
-		BOX_BORDER: string;
-		FONT_FAMILY: string;
-		FONT_SIZE: string;
-		FONT_WEIGHT: string;
-		FONT_WEIGHT_HEADING: string;
-		FONT_COLOR_ON_BACKGROUND: string;
-		FONT_COLOR_ON_BOX: string;
-		FONT_LINE_HEIGHT: string;
-	};
+	},
 
 	project_defaults: {
 		FORM_COLOR_LIGHT_TEXT: string;
@@ -29,6 +12,21 @@ export interface AppConfig {
 		FORM_LIGHT_INPUT_BOX_SHADOW: string;
 		FORM_LIGHT_INPUT_BORDER: string;
 		FORM_LIGHT_BORDER_RADIUS: string;
+    
+		TEMPLATE_LANG: string,
+		TEMPLATE_COLOR_ACCENT: string,
+		TEMPLATE_COLOR_BACKGROUND: string,
+		TEMPLATE_COLOR_BOX_BACKGROUND: string,
+		TEMPLATE_BOX_RADIUS: string,
+		TEMPLATE_BOX_SHADOW: string,
+		TEMPLATE_BOX_BORDER: string,
+		TEMPLATE_FONT_FAMILY: string,
+		TEMPLATE_FONT_SIZE: string,
+		TEMPLATE_FONT_WEIGHT: string,
+		TEMPLATE_FONT_WEIGHT_HEADING: string,
+		TEMPLATE_FONT_COLOR_ON_BACKGROUND: string,
+		TEMPLATE_FONT_COLOR_ON_BOX: string,
+		TEMPLATE_FONT_LINE_HEIGHT: string,
 	};
 }
 
