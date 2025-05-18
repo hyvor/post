@@ -1,0 +1,12 @@
+{
+    "console": {
+        "nav": {
+            "domains": "Domaines",
+            "billing": "Facturation",
+            "home": "Accueil",
+            "subscribers": "Abonnés",
+            "issues": "Numéros",
+            "settings": "Paramètres"
+        }
+    }
+}

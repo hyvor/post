@@ -2,11 +2,11 @@
 
 namespace App\Service\Issue;
 
+use App\Entity\Issue;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Entity\Issue;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
 use App\Service\Issue\Dto\UpdateSendDto;
@@ -118,6 +118,7 @@ class SendService
         $send = new Send()
             ->setIssue($issue)
             ->setSubscriber($subscriber)
+            ->setProject($issue->getProject())
             ->setEmail($subscriber->getEmail())
             ->setStatus(SendStatus::PENDING)
             ->setCreatedAt($this->now())
@@ -231,7 +232,7 @@ class SendService
         SELECT COUNT(s.id)
         FROM App\Entity\Send s
         JOIN App\Entity\Project p WITH s.project = p.id
-        WHERE 
+        WHERE
             p.user_id = :hyvorUserId AND
             s.created_at >= :startOfMonth
         DQL;

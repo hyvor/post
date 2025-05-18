@@ -2,7 +2,7 @@
 
 namespace App\Api;
 
-use Hyvor\Internal\Bundle\Exception\AbstractApiExceptionListener;
+use Hyvor\Internal\Bundle\Api\AbstractApiExceptionListener;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 

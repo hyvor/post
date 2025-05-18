@@ -94,6 +94,8 @@
         "symfony/css-selector": "7.2.*",
         "symfony/maker-bundle": "^1.63.0",
         "symfony/phpunit-bridge": "^7.2.6",
+        "symfony/stopwatch": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*",
         "zenstruck/foundry": "^2.4.3",
         "zenstruck/messenger-test": "^1.11"
     }

@@ -8,7 +8,7 @@ class FormSubscribeInput
 {
 
     #[Assert\NotBlank]
-    public int $project_id;
+    public string $project_uuid;
 
     #[Assert\NotBlank]
     #[Assert\Email]

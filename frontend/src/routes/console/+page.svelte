@@ -6,7 +6,7 @@
 
 	 onMount(() => {
         if ($userProjectsStore.length > 0) {
-            goto(consoleUrl($userProjectsStore[0]!.id.toString()), {replaceState: true})
+            goto(consoleUrl($userProjectsStore[0]!.project.id.toString()), {replaceState: true})
         } else {
             goto(consoleUrl('new'), {replaceState: true})
         }

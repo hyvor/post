@@ -2,8 +2,9 @@
 
 namespace App\Service\Issue;
 
-use App\Entity\NewsletterList;
+use App\Content\ContentService;
 use App\Entity\Issue;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;

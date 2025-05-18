@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { loadProject } from '../lib/projectLoader';
 	import { Loader, toast } from '@hyvor/design/components';
+	import ProjectSelector from '../@components/Nav/ProjectSelector.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -32,6 +33,7 @@
 		</div>
 	{:else}
 		<Nav />
+		<ProjectSelector />
 		<div class="content">
 			{@render children?.()}
 		</div>

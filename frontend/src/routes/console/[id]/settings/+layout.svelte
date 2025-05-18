@@ -4,6 +4,7 @@
 	import IconBrush from '@hyvor/icons/IconBrush';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
+	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
 
 	interface Props {
@@ -29,6 +30,13 @@
 				<IconBrush />
 			{/snippet}
 			Email Design
+		</NavLink>
+
+		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
+			{#snippet start()}
+				<IconPeople />
+			{/snippet}
+			Users
 		</NavLink>
 
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
