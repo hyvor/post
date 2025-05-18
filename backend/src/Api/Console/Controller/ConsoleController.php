@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
@@ -11,7 +12,6 @@ use App\Entity\Project;
 use App\Repository\ListRepository;
 use App\Service\Project\ProjectDefaults;
 use App\Service\Project\ProjectService;
-use App\Service\Template\TemplateDefaults;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
@@ -49,7 +49,7 @@ class ConsoleController extends AbstractController
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
                 ],
-                'template_defaults' => TemplateDefaults::getAll(),
+                // 'template_defaults' => TemplateDefaults::getAll(),
                 'project_defaults' => ProjectDefaults::getAll(),
             ],
         ]);

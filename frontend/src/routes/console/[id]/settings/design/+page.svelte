@@ -13,50 +13,59 @@
 	} from '@hyvor/design/components';
 	import { projectStore } from '../../../lib/stores/projectStore';
 	import { updateProject } from '../../../lib/actions/projectActions';
-	import type { ProjectMeta, Project, AppConfig } from '../../../types';
+	import type { ProjectMeta, Project } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
+	import SettingsTop from '../@components/SettingsTop.svelte';
+	import EditTemplateModal from './EditTemplateModal.svelte';
 
 	let hasChanges = false;
-	let showFontFamily = false;
 	let showFontWeight = false;
 	let showFontWeightHeading = false;
-	let showBoxRadius = false;
-	let showFontSize = false;
+	let showEditTemplateModal = false;
 
-	const templateDefaults = getAppConfig().template_defaults;
+	const projectDefaults = getAppConfig().project_defaults;
 
 	function getTemplateValues() {
 		return {
 			template_color_accent:
-				$projectStore.template_color_accent ?? templateDefaults.COLOR_ACCENT,
+				$projectStore.template_color_accent ?? projectDefaults.TEMPLATE_COLOR_ACCENT,
 			template_color_background:
-				$projectStore.template_color_background ?? templateDefaults.COLOR_BACKGROUND,
+				$projectStore.template_color_background ??
+				projectDefaults.TEMPLATE_COLOR_BACKGROUND,
 			template_color_box_background:
 				$projectStore.template_color_box_background ??
-				templateDefaults.COLOR_BOX_BACKGROUND,
-			template_box_shadow: $projectStore.template_box_shadow ?? templateDefaults.BOX_SHADOW,
-			template_box_border: $projectStore.template_box_border ?? templateDefaults.BOX_BORDER,
-			template_font_size: $projectStore.template_font_size ?? templateDefaults.FONT_SIZE,
+				projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND,
+			template_box_shadow:
+				$projectStore.template_box_shadow ?? projectDefaults.TEMPLATE_BOX_SHADOW,
+			template_box_border:
+				$projectStore.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER,
+			template_font_size:
+				$projectStore.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE,
 			template_font_family:
-				$projectStore.template_font_family ?? templateDefaults.FONT_FAMILY,
+				$projectStore.template_font_family ?? projectDefaults.TEMPLATE_FONT_FAMILY,
 			template_font_weight:
-				$projectStore.template_font_weight ?? templateDefaults.FONT_WEIGHT,
+				$projectStore.template_font_weight ?? projectDefaults.TEMPLATE_FONT_WEIGHT,
 			template_font_weight_heading:
-				$projectStore.template_font_weight_heading ?? templateDefaults.FONT_WEIGHT_HEADING,
+				$projectStore.template_font_weight_heading ??
+				projectDefaults.TEMPLATE_FONT_WEIGHT_HEADING,
 			template_font_color_on_background:
 				$projectStore.template_font_color_on_background ??
-				templateDefaults.FONT_COLOR_ON_BACKGROUND,
+				projectDefaults.TEMPLATE_FONT_COLOR_ON_BACKGROUND,
 			template_font_color_on_box:
-				$projectStore.template_font_color_on_box ?? templateDefaults.FONT_COLOR_ON_BOX,
+				$projectStore.template_font_color_on_box ??
+				projectDefaults.TEMPLATE_FONT_COLOR_ON_BOX,
 			template_font_line_height:
-				$projectStore.template_font_line_height ?? templateDefaults.FONT_LINE_HEIGHT,
-			template_box_radius: $projectStore.template_box_radius ?? templateDefaults.BOX_RADIUS
+				$projectStore.template_font_line_height ??
+				projectDefaults.TEMPLATE_FONT_LINE_HEIGHT,
+			template_box_radius:
+				$projectStore.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS
 		};
 	}
 
 	// Create a reactive object with all template values
-	let templateValues: Record<keyof ProjectMeta, string> = getTemplateValues();
+	let templateValues: Partial<ProjectMeta> = getTemplateValues();
 
 	// Object used to track changes
 	let metaToSave: Partial<ProjectMeta> = {};
@@ -67,17 +76,16 @@
 		hasChanges = true;
 	}
 
-	function saveChanges() {
-		updateProject(metaToSave as ProjectMeta)
-			.then((updatedProject: ProjectMeta) => {
-				projectStore.set(updatedProject as Project);
-				metaToSave = {};
-				hasChanges = false;
-				toast.success('Changes saved successfully!');
-			})
-			.catch((error) => {
-				toast.error('Failed to save changes: ' + error.message);
-			});
+	async function saveChanges() {
+		try {
+			const updatedProject: ProjectMeta = await updateProject(metaToSave as ProjectMeta);
+			projectStore.set(updatedProject as Project);
+			metaToSave = {};
+			hasChanges = false;
+			toast.success('Changes saved successfully!');
+		} catch (error: any) {
+			toast.error('Failed to save changes: ' + error.message);
+		}
 	}
 
 	async function discardChanges() {
@@ -153,14 +161,10 @@
 	}
 </script>
 
+<SettingsTop>
+	<Button on:click={() => (showEditTemplateModal = true)}>Edit Template</Button>
+</SettingsTop>
 <div class="wrap">
-	<div class="actions">
-		<Button color="accent" on:click={saveChanges} disabled={!hasChanges}>Save Changes</Button>
-		<Button variant="outline" on:click={discardChanges} disabled={!hasChanges}>
-			Discard Changes
-		</Button>
-	</div>
-
 	<SplitControl label="Colors">
 		{#snippet nested()}
 			<SplitControl label="Accent">
@@ -285,6 +289,12 @@
 		{/snippet}
 	</SplitControl>
 </div>
+
+{#if hasChanges}
+	<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
+{/if}
+
+<EditTemplateModal bind:show={showEditTemplateModal} />
 
 <style lang="scss">
 	.wrap {
