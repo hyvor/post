@@ -3,6 +3,8 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Project;
+use App\Entity\User;
+use Hyvor\Internal\Auth\AuthUser;
 
 class ProjectObject
 {

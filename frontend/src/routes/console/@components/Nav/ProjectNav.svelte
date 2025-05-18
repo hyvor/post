@@ -9,23 +9,25 @@
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
 	import { getI18n } from '../../lib/i18n';
+	import { selectingProject } from '../../lib/stores/consoleStore';
 
 	let width: number;
 
 	const I18n = getI18n();
+
+	function triggerProjectSelector() {
+		selectingProject.set(true);
+	}
+
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 <div class="wrap hds-box">
-	<button class="current">
+	<button class="current" on:click={triggerProjectSelector}>
 		<div class="left">
 			<div class="name">
 				{$projectStore.name}
-			</div>
-			<div class="id">
-				ID
-				<Tag size="x-small"><strong> {$projectStore.id}</strong></Tag>
 			</div>
 		</div>
 		<IconChevronExpand />

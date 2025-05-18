@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IssueRepository::class)]

@@ -3,11 +3,10 @@
 namespace App\Service\Issue;
 
 use App\Content\ContentService;
-use App\Entity\NewsletterList;
 use App\Entity\Issue;
+use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Send;
-use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;

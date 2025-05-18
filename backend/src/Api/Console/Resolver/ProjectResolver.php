@@ -4,7 +4,6 @@ namespace App\Api\Console\Resolver;
 
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;

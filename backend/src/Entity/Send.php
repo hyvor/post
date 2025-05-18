@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\SendRepository;
 use Doctrine\DBAL\Types\Types;
