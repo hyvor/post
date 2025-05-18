@@ -44,6 +44,7 @@ class UpdateProjectTest extends WebTestCase
             'PATCH',
             '/projects',
             [
+                'name' => 'UpdateName',
                 'template_color_accent' => '#ff0000',
                 'template_box_radius' => '10px',
                 'template_logo' => null,
@@ -53,6 +54,7 @@ class UpdateProjectTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
+        $this->assertSame('UpdateName', $json['name']);
         $this->assertSame('#ff0000', $json['template_color_accent']);
         $this->assertSame('10px', $json['template_box_radius']);
         $this->assertNull($json['template_logo']);
@@ -62,6 +64,7 @@ class UpdateProjectTest extends WebTestCase
 
         $this->assertNotNull($project);
         $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('UpdateName', $project->getName());
         $projectMeta = $project->getMeta();
         $this->assertInstanceOf(ProjectMeta::class, $projectMeta);
         $this->assertSame('#ff0000', $projectMeta->template_color_accent);

@@ -19,3 +19,9 @@ export function updateProject(
         data: project,
     });
 }
+
+export function deleteProject(project: Project) {
+    return consoleApi.delete<Project>({
+        endpoint: 'projects'
+    });
+}

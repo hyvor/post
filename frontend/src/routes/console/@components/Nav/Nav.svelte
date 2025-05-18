@@ -1,8 +1,7 @@
 <script>
-	import { onMount } from 'svelte';
+	import { DarkToggle, LanguageToggle } from '@hyvor/design/components';
 	import AccountNav from './AccountNav.svelte';
 	import ProjectNav from './ProjectNav.svelte';
-
 </script>
 
 <div id="nav">
@@ -12,6 +11,12 @@
 		</div>
 		<div class="project-nav">
 			<ProjectNav />
+		</div>
+		<div class="bottom">
+			<div class="lang hds-box">
+				<LanguageToggle position="top" />
+				<DarkToggle />
+			</div>
 		</div>
 	</div>
 </div>
@@ -34,9 +39,18 @@
 		height: 100%;
 	}
 
-	.nav {
+	.bottom {
 		flex: 1;
-		overflow: auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+
+	.bottom .lang {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 15px;
 	}
 
 	@media (max-width: 992px) {

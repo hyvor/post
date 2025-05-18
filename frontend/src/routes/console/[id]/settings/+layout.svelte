@@ -5,6 +5,7 @@
 	import { projectStore } from '../../lib/stores/projectStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
+	import IconCardText from '@hyvor/icons/IconCardText';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -17,6 +18,13 @@
 
 <div class="settings">
 	<div class="nav hds-box">
+		<NavLink href="{prefix}/project" active={page.url.pathname === prefix + '/project'}>
+			{#snippet start()}
+				<IconCardText />
+			{/snippet}
+			Project
+		</NavLink>
+
 		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
 			{#snippet start()}
 				<IconBrush />
@@ -30,7 +38,7 @@
 			{/snippet}
 			Users
 		</NavLink>
-  
+
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
 			{#snippet start()}
 				<IconEnvelopeAt />

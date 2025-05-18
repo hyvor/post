@@ -6,14 +6,17 @@ FORM
     width: 425px;
     margin: 0 auto;
     max-width: 100%;
+    color: var(--hp-text);
 
-    --hp-accent: #000;
     --hp-accent-light: #dedede;
-    --hp-accent-text: #fff;
 }
-    
+
 .form * {
     box-sizing: border-box;
+}
+
+.form a {
+    color: var(--hp-accent);
 }
 
 .form .title.hidden,
@@ -37,31 +40,57 @@ FORM
 
 .form .input {
     position: relative;
+    background-color: var(--hp-input);
+    box-shadow: var(--hp-input-box-shadow);
+    border-radius: var(--hp-border-radius);
+    border: var(--hp-input-border);
+    display: flex;
+    padding: 3px;
 }
+
+.form .input.focused {
+    outline: 2px solid var(--hp-accent);
+}
+
 .form .email-input {
-    padding: 10px 25px;
+    padding: 6px 20px;
     border: none;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 0 8px #0000001c;
-    border-radius: 20px;
-    width: 100%;
+    flex: 1;
     font-family: inherit;
+    color: var(--hp-input-text);
+    background-color: transparent;
 }
+
+.form .email-input::placeholder {
+    color: color-mix(in srgb, var(--hp-input-text), transparent 50%);
+}
+
+.form .email-input:focus {
+    outline: none;
+}
+
 .form button {
-    position: absolute;
-    right: 3px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 0 25px;
-    background-color: #000;
-    color: #fff;
+    background-color: var(--hp-accent);
+    color: var(--hp-accent-text);
     border: none;
-    border-radius: 20px;
+    border-radius: var(--hp-border-radius);
     cursor: pointer;
-    height: calc(100% - 6px);
     font-family: inherit;
-    z-index: 1;
+    padding: 0 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form .success-message {
+    margin-top: 1rem;
+    font-size: 16px;
+    color: #666;
 }
 
 .form .lists {
@@ -88,5 +117,25 @@ FORM
 
 .form .list-description {
     font-size: 14px;
-    color: #666;
+    color: var(--hp-text-light);
+}
+
+.form .message {
+    margin-top: 1rem;
+    padding: 10px 23px;
+    border-radius: var(--hp-border-radius);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form .message.success {
+    background-color: #5d995d;
+    color: #fff;
+}
+
+.form .message.error {
+    background-color: #ab2525;
+    color: #fff;
 }

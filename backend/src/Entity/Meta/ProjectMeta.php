@@ -25,6 +25,11 @@ class ProjectMeta
     public ?string $template_font_line_height = null;
     public ?string $template_box_radius = null;
     public ?string $template_logo = null;
+    public ?string $template_logo_alt = null;
+    public ?string $brand = null;
+    public ?string $brand_url = null;
+    public ?string $address = null;
+    public ?string $unsubscribe_text = null;
 
     /**
      * Signup Form
@@ -44,6 +49,9 @@ class ProjectMeta
     public ?string $form_color_light_accent_text = null;
     public ?string $form_color_light_input = null;
     public ?string $form_color_light_input_text = null;
+    public ?string $form_light_input_box_shadow = null;
+    public ?string $form_light_input_border = null;
+    public ?int $form_light_border_radius = null;
 
     public ?string $form_color_dark_text = null; // null = inherit
     public ?string $form_color_dark_text_light = null;
@@ -51,9 +59,12 @@ class ProjectMeta
     public ?string $form_color_dark_accent_text = null;
     public ?string $form_color_dark_input = null;
     public ?string $form_color_dark_input_text = null;
+    public ?string $form_dark_input_box_shadow = null;
+    public ?string $form_dark_input_border = null;
+    public ?int $form_dark_border_radius = null;
+
 
     public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;
-    public int $form_input_box_shadow = 8;
 
 }

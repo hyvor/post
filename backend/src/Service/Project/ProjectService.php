@@ -2,7 +2,6 @@
 
 namespace App\Service\Project;
 
-use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\ProjectMeta;
@@ -11,6 +10,7 @@ use App\Entity\Project;
 use App\Entity\Subscriber;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
+use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,12 +65,6 @@ class ProjectService
 
     public function deleteProject(Project $project): void
     {
-        // Delete project users
-        $projectUsers = $this->em->getRepository(User::class)->findBy(['project' => $project]);
-        foreach ($projectUsers as $projectUser) {
-            $this->em->remove($projectUser);
-        }
-
         $this->em->remove($project);
         $this->em->flush();
     }
@@ -204,6 +198,18 @@ class ProjectService
         $project->setMeta(clone $currentMeta);
         $project->setUpdatedAt($this->now());
 
+        $this->em->persist($project);
+        $this->em->flush();
+
+        return $project;
+    }
+
+    public function updateProject(Project $project, UpdateProjectDto $updates): Project
+    {
+        if ($updates->hasProperty('name'))
+            $project->setName($updates->name);
+
+        $project->setUpdatedAt($this->now());
         $this->em->persist($project);
         $this->em->flush();
 

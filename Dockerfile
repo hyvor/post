@@ -1,7 +1,7 @@
 ###################################################
 # Alias for deppendencies
-FROM node:22.12.0 AS node
-FROM composer:2.8.4 AS composer
+FROM node:23.11.0 AS node
+FROM composer:2.8.8 AS composer
 FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
 
 ###################################################
@@ -25,7 +25,7 @@ COPY shared /app/shared
 FROM frontend-base AS frontend-dev
 RUN npm install
 RUN if [ -d "src/design" ]; then cd src/design && npm link && cd ../.. && npm link @hyvor/design; fi
-CMD npm run dev
+CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM frontend-base AS frontend-prod
@@ -33,6 +33,34 @@ FROM frontend-base AS frontend-prod
 RUN  npm install \
     && npm run build \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
+
+
+###################################################
+################  EMBED STAGES  ################
+###################################################
+
+###################################################
+FROM node AS embed-base
+WORKDIR /app/embed
+# install dependencies
+COPY embed/package.json embed/package-lock.json \
+    embed/vite.config.ts \
+    embed/tsconfig.json \
+    embed/src/ \
+    /app/embed/
+
+###################################################
+FROM embed-base AS embed-dev
+EXPOSE 80
+RUN npm install
+CMD ["npm", "run", "dev"]
+
+###################################################
+FROM embed-base AS embed-prod
+# build the embed
+RUN  npm install \
+    && ./build.sh \
+    && find . -maxdepth 1 -not -name dist -not -name . -exec rm -rf {} \;
 
 
 ###################################################
@@ -53,7 +81,7 @@ RUN install-php-extensions zip intl pdo_pgsql opcache
 ###################################################
 FROM backend-base AS backend-dev
 
-ENV APP_RUNTIME "Runtime\FrankenPhpSymfony\Runtime"
+ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 
 # symfony cli
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \

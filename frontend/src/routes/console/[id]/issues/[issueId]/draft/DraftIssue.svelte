@@ -19,6 +19,7 @@
 	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let issue: Issue;
     export let send: (e: Issue) => void;
@@ -39,6 +40,23 @@
 
 	let sendingEmails = getSendingAddresses();
 	let currentSendingEmail = issue.from_email || sendingEmails?.[1] || sendingEmails[0];
+
+	let contentDirty = false;
+	let previewKey = 0;
+	let previewInterval: ReturnType<typeof setInterval>;
+
+	onMount(() => {
+		previewInterval = setInterval(() => {
+			if (contentDirty) {
+				previewKey += 1;
+				contentDirty = false;
+			}
+		}, 10000);
+	});
+
+	onDestroy(() => {
+		clearInterval(previewInterval);
+	});
 
 	function update() {
 		updateIssue(issue.id, {
@@ -148,6 +166,7 @@
 
 	function onContentDocUpdate(e: string) {
 		content = e;
+		contentDirty = true;
 		debouncedUpdate();
 	}
 
@@ -160,7 +179,7 @@
 	}
 </script>
 
-<div bind:this={scrollTopEl} />
+<div bind:this={scrollTopEl}></div>
 
 <SplitControl label="Subject">
 	<FormControl>
@@ -264,7 +283,9 @@
     />
 </SplitControl>
 
+{#key previewKey}
 <Preview id={issue.id} />
+{/key}
 
 <SplitControl label="Send Test Email">
 	<div class="send-test">

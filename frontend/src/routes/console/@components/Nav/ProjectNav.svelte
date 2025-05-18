@@ -8,14 +8,17 @@
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
+	import { getI18n } from '../../lib/i18n';
 	import { selectingProject } from '../../lib/stores/consoleStore';
 
 	let width: number;
 
+	const I18n = getI18n();
+
 	function triggerProjectSelector() {
 		selectingProject.set(true);
 	}
-	
+
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -37,7 +40,7 @@
 		>
 			<NavItem>
 				<IconHouse slot="icon" />
-				<span slot="text">Home</span>
+				<span slot="text">{I18n.t('console.nav.home')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -47,7 +50,7 @@
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
-				<span slot="text">Subscribers</span>
+				<span slot="text">{I18n.t('console.nav.subscribers')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -57,7 +60,7 @@
 		>
 			<NavItem>
 				<IconSend slot="icon" />
-				<span slot="text">Issues</span>
+				<span slot="text">{I18n.t('console.nav.issues')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -67,7 +70,7 @@
 		>
 			<NavItem>
 				<IconGear slot="icon" />
-				<span slot="text">Settings</span>
+				<span slot="text">{I18n.t('console.nav.settings')}</span>
 			</NavItem>
 		</NavLink>
 	</div>
