@@ -19,7 +19,8 @@ final class Version20250209024328 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE lists (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
@@ -27,9 +28,11 @@ final class Version20250209024328 extends AbstractMigration
             deleted_at timestamptz,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
             name TEXT NOT NULL,
-            description TEXT DEFAULT NULL
+            description TEXT DEFAULT NULL,
+            UNIQUE (project_id, name)
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

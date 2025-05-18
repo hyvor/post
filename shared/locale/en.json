@@ -6,6 +6,7 @@
             "home": "Home",
             "subscribers": "Subscribers",
             "issues": "Issues",
+            "tools": "Tools",
             "settings": "Settings"
         },
         "billing": {
@@ -18,6 +19,11 @@
             "cancel": "Cancel",
             "copy": "Copy",
             "copied": "{value} copied"
+        },
+        "tools": {
+            "import": {
+                "title": "Import"
+            }
         },
         "settings": {
             "form": {

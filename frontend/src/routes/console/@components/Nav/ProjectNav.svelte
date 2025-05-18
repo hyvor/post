@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { NavLink, Tag, toast } from '@hyvor/design/components';
+	import { Divider, NavLink, Tag, toast } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconGear from '@hyvor/icons/IconGear';
+	import IconTools from '@hyvor/icons/IconTools';
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
@@ -61,6 +62,18 @@
 			<NavItem>
 				<IconSend slot="icon" />
 				<span slot="text">{I18n.t('console.nav.issues')}</span>
+			</NavItem>
+		</NavLink>
+		
+		<Divider margin={15} />
+
+		<NavLink
+			href={'/console/' + $projectStore.id.toString() + '/tools'}
+			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/tools`)}
+		>
+			<NavItem>
+				<IconTools slot="icon" />
+				<span slot="text">{I18n.t('console.nav.tools')}</span>
 			</NavItem>
 		</NavLink>
 
