@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { MARKETING_LANGUAGES } from "./src/routes/(marketing)/[lang]/locale.ts";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,14 +15,17 @@ const config = {
 			{
 				fallback: '200.html'
 			}
-		)
+		),
+
+		prerender: {
+			entries: [
+				'*',
+				// add new entries when new languages are added
+				"/en",
+				"/fr",
+			]
+		}
 	},
-	prerender: {
-		entries: [
-			'*',
-			...Object.keys(MARKETING_LANGUAGES)
-		]
-	}
 };
 
 export default config;
