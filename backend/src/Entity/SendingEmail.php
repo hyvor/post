@@ -23,7 +23,7 @@ class SendingEmail
     #[ORM\Column]
     private string $email;
 
-    #[ORM\ManyToOne(targetEntity: Project::class)]
+    #[ORM\OneToOne(targetEntity: Project::class)]
     private Project $project;
 
     #[ORM\ManyToOne(targetEntity: Domain::class)]

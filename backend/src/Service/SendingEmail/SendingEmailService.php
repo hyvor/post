@@ -6,11 +6,15 @@ use App\Entity\Project;
 use App\Entity\SendingEmail;
 use App\Entity\Domain;
 use App\Repository\SendingEmailRepository;
+use App\Service\SendingEmail\Dto\UpdateSendingEmailDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
 
 class SendingEmailService
 {
+    use ClockAwareTrait;
+
     public function __construct(
         private EntityManagerInterface $em,
         private SendingEmailRepository $sendingEmailRepository
@@ -32,7 +36,7 @@ class SendingEmailService
     {
         $sendingEmail = new SendingEmail();
         $sendingEmail->setProject($project);
-        $sendingEmail->setCustomDomainId($customDomain);
+        $sendingEmail->setCustomDomain($customDomain);
         $sendingEmail->setEmail($email);
         $sendingEmail->setCreatedAt(new \DateTimeImmutable());
         $sendingEmail->setUpdatedAt(new \DateTimeImmutable());
@@ -41,10 +45,15 @@ class SendingEmailService
         return $sendingEmail;
     }
 
-    public function updateSendingEmail(SendingEmail $sendingEmail, Domain $customDomain): SendingEmail
+    public function updateSendingEmail(SendingEmail $sendingEmail, UpdateSendingEmailDto $updates): SendingEmail
     {
-        $sendingEmail->setCustomDomainId($customDomain);
-        $sendingEmail->setUpdatedAt(new \DateTimeImmutable());
+        if ($updates->hasProperty('email'))
+            $sendingEmail->setEmail($updates->email);
+
+        if ($updates->hasProperty('customDomain'))
+            $sendingEmail->setCustomDomain($updates->customDomain);
+
+        $sendingEmail->setUpdatedAt($this->now());
         $this->em->flush();
         return $sendingEmail;
     }

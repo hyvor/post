@@ -2,12 +2,14 @@
 
 namespace App\Api\Console\Input\SendingEmail;
 
+use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateSendingEmailInput
+
+class UpdateSendingEmailInput
 {
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
+    use OptionalPropertyTrait;
+
     #[Assert\Email]
     public string $email;
 }

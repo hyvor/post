@@ -6,6 +6,7 @@ use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\SendingEmail;
 use App\Entity\Subscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -23,6 +24,7 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'issues' => Issue::class,
         'domain' => Domain::class,
+        'sending-emails' => SendingEmail::class,
     ];
 
     public function __construct(
