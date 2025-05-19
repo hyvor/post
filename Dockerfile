@@ -105,7 +105,7 @@ RUN apt update && apt install -y supervisor
 
 COPY backend /app/backend
 
-RUN composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+RUN composer install --no-cache --prefer-dist --no-dev --no-scripts --no-progress
 
 COPY --from=frontend-prod /app/frontend/build /app/static
 COPY meta/image/prod/Caddyfile.prod /etc/caddy/Caddyfile
