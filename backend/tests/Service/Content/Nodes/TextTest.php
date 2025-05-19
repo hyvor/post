@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service\Nodes;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;

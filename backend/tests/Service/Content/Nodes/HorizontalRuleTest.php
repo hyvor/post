@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service\Nodes;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,10 @@ class HorizontalRuleTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertSame('<hr style="margin:0 0 20px;height:1px;background-color:currentColor;opacity:0.3" />', trim($html));
+        $this->assertSame(
+            '<hr style="margin:0 0 20px;height:1px;background-color:currentColor;opacity:0.3" />',
+            trim($html)
+        );
     }
 
     public function test_html_to_json(): void

@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Tests\Service\Marks;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class StrikeTest extends TestCase
+class ButtonTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'Strikethrough';
+        $text = 'Click me';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'paragraph',
+                    'type' => 'button',
                     'content' => [
                         [
-                            'type' => 'text',
-                            'text' => $content,
-                            'marks' => [
-                                ['type' => 'strike'],
+                            'type' => 'paragraph',
+                            'content' => [
+                                [
+                                    'type' => 'text',
+                                    'text' => $text,
+                                ],
                             ],
                         ],
                     ],
@@ -29,25 +31,27 @@ class StrikeTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><s>Strikethrough</s></p>', $html);
+        $this->assertSame('<button><p style="margin: 0 0 20px;line-height:26px;">Click me</p></button>', $html);
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'Strikethrough';
-        $html = "<p><s>$content</s></p>";
+        $text = 'Click me';
+        $html = "<button><p>$text</p></button>";
         $json = (new ContentService())->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'paragraph',
+                    'type' => 'button',
                     'content' => [
                         [
-                            'type' => 'text',
-                            'text' => $content,
-                            'marks' => [
-                                ['type' => 'strike'],
+                            'type' => 'paragraph',
+                            'content' => [
+                                [
+                                    'type' => 'text',
+                                    'text' => $text,
+                                ],
                             ],
                         ],
                     ],
