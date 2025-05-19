@@ -10,11 +10,13 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Response;
+use Hyvor\Internal\Bundle\Testing\ApiTestingTrait;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
 
     use AllTestCaseTrait;
+    use ApiTestingTrait;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
@@ -41,8 +43,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $method,
         string $uri,
         array $data = [],
-    ): Response
-    {
+    ): Response {
         $projectId = $project instanceof Project ? $project->getId() : $project;
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'default'));
@@ -53,7 +54,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X_PROJECT_ID' => $projectId,
             ],
-            content: (string) json_encode($data)
+            content: (string)json_encode($data)
         );
         return $this->client->getResponse();
     }
@@ -67,9 +68,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $uri,
         array $data = [],
         array $headers = [],
-    ): Response
-    {
-
+    ): Response {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
@@ -82,50 +81,9 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             $method,
             '/api/public' . $uri,
             server: $server,
-            content: (string) json_encode($data)
+            content: (string)json_encode($data)
         );
         return $this->client->getResponse();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getJson(Response $response): array
-    {
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-        $json = json_decode($content, true);
-        $this->assertIsArray($json);
-        return $json;
-    }
-
-    /**
-     * @param array<mixed>|Response $response
-     */
-    public function assertHasViolation(array|Response $response, string $property, string $message = ''): void
-    {
-
-        if ($response instanceof Response) {
-            $response = $this->getJson($response);
-        }
-
-        $this->assertArrayHasKey('violations', $response);
-        $this->assertIsArray($response['violations']);
-
-        $found = false;
-        foreach ($response['violations'] as $violation) {
-            $this->assertIsArray($violation);
-            if ($violation['property'] === $property) {
-                $found = true;
-                if ($message) {
-                    $this->assertStringContainsString($message, $violation['message']);
-                }
-            }
-        }
-
-        $this->assertTrue($found, 'Violation not found');
-
     }
 
     public function getTestLogger(): TestHandler
@@ -134,7 +92,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertInstanceOf(TestHandler::class, $logger);
         return $logger;
     }
-
 
 
 }

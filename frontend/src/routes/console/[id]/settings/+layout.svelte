@@ -6,6 +6,7 @@
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
+	import IconDatabase from '@hyvor/icons/IconDatabase';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -44,6 +45,13 @@
 				<IconEnvelopeAt />
 			{/snippet}
 			Signup Form
+		</NavLink>
+
+		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>
+			{#snippet start()}
+				<IconDatabase />
+			{/snippet}
+			Subscriber Metadata
 		</NavLink>
 
 		<div class="section-div"></div>

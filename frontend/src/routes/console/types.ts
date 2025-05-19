@@ -1,7 +1,7 @@
 export interface AppConfig {
 	hyvor: {
 		instance: string;
-	},
+	};
 
 	project_defaults: {
 		FORM_COLOR_LIGHT_TEXT: string;
@@ -12,21 +12,21 @@ export interface AppConfig {
 		FORM_LIGHT_INPUT_BOX_SHADOW: string;
 		FORM_LIGHT_INPUT_BORDER: string;
 		FORM_LIGHT_BORDER_RADIUS: string;
-    
-		TEMPLATE_LANG: string,
-		TEMPLATE_COLOR_ACCENT: string,
-		TEMPLATE_COLOR_BACKGROUND: string,
-		TEMPLATE_COLOR_BOX_BACKGROUND: string,
-		TEMPLATE_BOX_RADIUS: string,
-		TEMPLATE_BOX_SHADOW: string,
-		TEMPLATE_BOX_BORDER: string,
-		TEMPLATE_FONT_FAMILY: string,
-		TEMPLATE_FONT_SIZE: string,
-		TEMPLATE_FONT_WEIGHT: string,
-		TEMPLATE_FONT_WEIGHT_HEADING: string,
-		TEMPLATE_FONT_COLOR_ON_BACKGROUND: string,
-		TEMPLATE_FONT_COLOR_ON_BOX: string,
-		TEMPLATE_FONT_LINE_HEIGHT: string,
+
+		TEMPLATE_LANG: string;
+		TEMPLATE_COLOR_ACCENT: string;
+		TEMPLATE_COLOR_BACKGROUND: string;
+		TEMPLATE_COLOR_BOX_BACKGROUND: string;
+		TEMPLATE_BOX_RADIUS: string;
+		TEMPLATE_BOX_SHADOW: string;
+		TEMPLATE_BOX_BORDER: string;
+		TEMPLATE_FONT_FAMILY: string;
+		TEMPLATE_FONT_SIZE: string;
+		TEMPLATE_FONT_WEIGHT: string;
+		TEMPLATE_FONT_WEIGHT_HEADING: string;
+		TEMPLATE_FONT_COLOR_ON_BACKGROUND: string;
+		TEMPLATE_FONT_COLOR_ON_BOX: string;
+		TEMPLATE_FONT_LINE_HEIGHT: string;
 	};
 }
 
@@ -76,32 +76,32 @@ export type ProjectMeta = {
 };
 
 export type UserMini = {
-	name: string,
-	username: string | null,
-	picture_url: string | null,
-}
+	name: string;
+	username: string | null;
+	picture_url: string | null;
+};
 
 export type UserRole = 'owner' | 'admin';
 
 export type User = {
-	id: number,
-	role: UserRole,
-	created_at: number,
-	user: UserMini,
-}
+	id: number;
+	role: UserRole;
+	created_at: number;
+	user: UserMini;
+};
 
 export type Invite = {
-	id: number,
-	created_at: number,
-	role: UserRole,
-	user: UserMini,
-	expires_at: number,
-}
+	id: number;
+	created_at: number;
+	role: UserRole;
+	user: UserMini;
+	expires_at: number;
+};
 
 export type ProjectList = {
-	role: UserRole,
-	project: Project,
-}
+	role: UserRole;
+	project: Project;
+};
 
 export type Project = {
 	id: number;
@@ -109,6 +109,14 @@ export type Project = {
 	created_at: number;
 	name: string;
 } & ProjectMeta;
+
+export interface SubscriberMetadataDefinition {
+	id: number;
+	created_at: number;
+	key: string;
+	name: string;
+	type: 'text';
+}
 
 export interface ProjectStats {
 	subscribers: { total: number; last_30d: number };

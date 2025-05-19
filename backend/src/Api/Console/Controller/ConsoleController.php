@@ -8,10 +8,12 @@ use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\ProjectListObject;
 use App\Api\Console\Object\ProjectObject;
 use App\Api\Console\Object\StatsObject;
+use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Project;
 use App\Repository\ListRepository;
 use App\Service\Project\ProjectDefaults;
 use App\Service\Project\ProjectService;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
@@ -27,7 +29,8 @@ class ConsoleController extends AbstractController
     public function __construct(
         private ProjectService $projectService,
         private ListRepository $listRepository,
-        private InternalConfig $internalConfig
+        private InternalConfig $internalConfig,
+        private SubscriberMetadataService $subscriberMetadataService,
     ) {
     }
 
@@ -66,9 +69,13 @@ class ConsoleController extends AbstractController
             ]
         );
 
+        $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($project);
+
         return new JsonResponse([
             'project' => new ProjectObject($project),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
+            'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
+                $subscriberMetadataDefinitions),
             'stats' => new StatsObject(
                 $projectStats[0],
                 $projectStats[1],

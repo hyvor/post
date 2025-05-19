@@ -5,6 +5,7 @@ namespace App\Command\Dev;
 use App\Entity\Type\UserRole;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -39,6 +40,12 @@ class DevSeedCommand extends Command
         $project = ProjectFactory::createOne([
             'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Project',
+        ]);
+
+        SubscriberMetadataDefinitionFactory::createOne([
+            'project' => $project,
+            'key' => 'name',
+            'name' => 'Name',
         ]);
 
         $user = UserFactory::createOne([
