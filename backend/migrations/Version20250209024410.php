@@ -46,7 +46,7 @@ final class Version20250209024410 extends AbstractMigration
             source_id VARCHAR(255),
             subscribe_ip VARCHAR(255),
             unsubscribe_reason VARCHAR(255),
-            metadata JSONB DEFAULT '{}'::jsonb,
+            metadata JSONB DEFAULT '{}'::jsonb
         );
         SQL
         );
