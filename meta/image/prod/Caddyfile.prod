@@ -1,0 +1,45 @@
+{
+
+	frankenphp {
+        worker "/app/backend/public/index.php" {$WORKERS:0}
+    }
+
+}
+
+:80 {
+	# backend
+	@backend {
+		path /api/*
+	}
+	handle @backend {
+		root * /app/backend/public
+		php_server {
+		   file_server off
+           try_files index.php
+        }
+    }
+
+	# static pages
+	handle {
+		root * /app/static
+		file_server
+		encode zstd gzip
+		try_files {path} {path}.html
+	}
+
+	# console
+	handle /console* {
+		root * /app/static
+		encode zstd gzip
+		file_server
+		rewrite * /fallback.html
+	}
+
+	# 404 page is still fallback.html
+	handle_errors {
+		root * /app/static
+        rewrite * /fallback.html
+        header Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        file_server
+    }
+}

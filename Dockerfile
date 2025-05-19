@@ -99,7 +99,18 @@ CMD ["sh", "/app/run"]
 ###################################################
 FROM backend-base AS final
 
+ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
+
 RUN apt update && apt install -y supervisor
 
 COPY backend /app/backend
+
+RUN composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+
 COPY --from=frontend-prod /app/frontend/build /app/static
+COPY meta/image/prod/Caddyfile.prod /etc/caddy/Caddyfile
+COPY meta/image/prod/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY meta/image/prod/run.prod /app/run
+
+EXPOSE 80
+CMD ["sh", "/app/run"]
