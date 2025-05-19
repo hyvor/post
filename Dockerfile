@@ -97,5 +97,9 @@ COPY meta/image/dev/run.dev /app/run
 CMD ["sh", "/app/run"]
 
 ###################################################
-# FROM backend-base AS final
-# TODO
+FROM backend-base AS final
+
+RUN apt update && apt install -y supervisor
+
+COPY backend /app/backend
+COPY --from=frontend-prod /app/frontend/build /app/static
