@@ -39,8 +39,8 @@ class ListController extends AbstractController
     ): JsonResponse {
         $listCounter = $this->newsletterListService->getListCounter($project);
 
-        if ($listCounter >= 50) {
-            throw new BadRequestHttpException("You have reached the maximum number of lists (50) for this project.");
+        if ($listCounter >= $this->newsletterListService::MAX_LIST_DEFINITIONS_PER_PROJECT) {
+            throw new BadRequestHttpException("You have reached the maximum number of lists for this project.");
         }
 
         if (str_contains($input->name, ',')) {

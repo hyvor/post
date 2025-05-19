@@ -82,7 +82,7 @@ class CreateListTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson($response);
-        $this->assertSame('You have reached the maximum number of lists (50) for this project.', $json['message']);
+        $this->assertSame('You have reached the maximum number of lists for this project.', $json['message']);
     }
 
     public function test_create_list_name_already_exists(): void
@@ -107,5 +107,24 @@ class CreateListTest extends WebTestCase
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertSame('List name already exists.', $json['message']);
+    }
+
+    public function test_create_list_name_with_comma(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => 'Valid List Name, with comma',
+                'description' => 'Valid List Description',
+            ],
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('List name cannot contain a comma.', $json['message']);
     }
 }

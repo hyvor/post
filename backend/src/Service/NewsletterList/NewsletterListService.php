@@ -19,12 +19,13 @@ class NewsletterListService
     {
     }
 
+    public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
+
     public function getListCounter(Project $project): int
     {
         return $this->em->getRepository(NewsletterList::class)
             ->count([
                 'project' => $project,
-                'deleted_at' => null,
             ]);
     }
 
@@ -37,7 +38,6 @@ class NewsletterListService
             ->count([
                 'project' => $project,
                 'name' => $name,
-                'deleted_at' => null,
             ]) === 0;
     }
 
