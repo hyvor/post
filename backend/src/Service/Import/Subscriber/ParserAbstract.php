@@ -17,6 +17,10 @@ abstract class ParserAbstract
      */
     abstract public function parse(): Collection;
 
+    public function __construct()
+    {
+    }
+
     public function error(string $message): void
     {
         $this->errors->add($message);

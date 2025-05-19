@@ -5,6 +5,8 @@ namespace App\Service\Import\Subscriber;
 class CsvParser
 {
 
-    __con
+    public function __construct()
+    {
+    }
 
 }
