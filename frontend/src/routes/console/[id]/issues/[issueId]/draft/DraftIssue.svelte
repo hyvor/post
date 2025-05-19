@@ -4,6 +4,7 @@
 		Checkbox,
 		FormControl,
 		Link,
+		Modal,
 		Radio,
 		SplitControl,
 		TextInput,
@@ -19,6 +20,9 @@
 	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
+	import { getSendingEmails } from '../../../../lib/actions/sendingEmailActions';
+	import { onMount } from 'svelte';
+	import SendingEmails from '../../../settings/sending/SendingEmails.svelte';
 
 	export let issue: Issue;
     export let send: (e: Issue) => void;
@@ -30,6 +34,7 @@
 	let replyToEmail = issue.reply_to_email || '';
 	let selectedLists = issue.lists;
 	let content = issue.content || '';
+	let showSendingEmailsModal = false;
 
 	let subjectError = '';
 	let replyToEmailError = '';
@@ -37,8 +42,20 @@
 
 	let testEmail = '';
 
-	let sendingEmails = getSendingAddresses();
-	let currentSendingEmail = issue.from_email || sendingEmails?.[1] || sendingEmails[0];
+	let sendingEmails = [] as string[];
+	let currentSendingEmail = issue.from_email;
+
+	function initSendingEmails() {
+		getSendingEmails()
+			.then((emails) => {
+				let emailList = emails.map((email) => email.email);
+				emailList = [$projectStore.default_email_username + '(Default email)', ...emailList];
+				sendingEmails = emailList;
+			})
+			.catch((e) => {
+				toast.error('Failed to load sending emails: ' + e.message);
+			});
+	}
 
 	function update() {
 		updateIssue(issue.id, {
@@ -151,13 +168,10 @@
 		debouncedUpdate();
 	}
 
-	function updateSendingAddresses() {
-		sendingEmails = getSendingAddresses();
-	}
-	function getSendingAddresses() {
-        // TODO: Add sending addresses stored in project
-		return ['newsletters@post.hyvor.com'];
-	}
+	onMount(() => {
+		initSendingEmails();
+	});
+
 </script>
 
 <div bind:this={scrollTopEl} />
@@ -194,67 +208,66 @@
 </SplitControl>
 
 <SplitControl label="Emails">
-	<div slot="nested">
-		<SplitControl label="From Name">
+	<SplitControl label="From Name">
+		<TextInput
+			block
+			placeholder={$projectStore.name}
+			bind:value={fromName}
+			on:input={debouncedUpdate}
+			on:blur={debouncedUpdate}
+		/>
+	</SplitControl>
+	<SplitControl
+		label="From Email"
+		caption="This is the email address that will be shown as the sender"
+	>
+		<div class="from-email">
+			<FormControl>
+				{#each sendingEmails as sendingEmail}
+					<Radio
+						bind:group={currentSendingEmail}
+						value={sendingEmail}
+						name="sending-email"
+						style="font-weight:normal"
+						on:change={debouncedUpdate}
+					>
+						{sendingEmail}
+					</Radio>
+				{/each}
+			</FormControl>
+			<Button on:click={() => (showSendingEmailsModal = true)}>
+				Manage Sending Emails
+			</Button>
+		</div>
+		<!-- 
+		TODO: Implement custom email domain
+		<div style="font-size:14px;margin-top:5px;">
+			{#if $emailDomain && $emailDomain.verified && $emailDomain.verified_in_ses}
+				<ConfigureSendingAddresses on:update={updateSendingAddresses} />
+			{:else}
+				<Link href={consoleUrlWithProject('/settings/notifications')}
+					>Configure a custom email domain</Link
+				> to send email from your own domain.
+			{/if}
+		</div>
+		-->
+	</SplitControl>
+	<SplitControl
+		label="Reply to Email"
+		caption="You will receive replies to this email address"
+	>
+		<FormControl>
 			<TextInput
 				block
-				placeholder={$projectStore.name}
-				bind:value={fromName}
-				on:input={debouncedUpdate}
-				on:blur={debouncedUpdate}
+				bind:value={replyToEmail}
+				on:blur={updateReplyToEmail}
+				state={replyToEmailError ? 'error' : undefined}
 			/>
-		</SplitControl>
-		<SplitControl
-			label="From Email"
-			caption="This is the email address that will be shown as the sender"
-		>
-			<div class="from-email">
-				<FormControl>
-					{#each sendingEmails as sendingEmail}
-						<Radio
-							bind:group={currentSendingEmail}
-							value={sendingEmail}
-							name="sending-email"
-							style="font-weight:normal"
-							on:change={debouncedUpdate}
-						>
-							{sendingEmail}
-						</Radio>
-					{/each}
-				</FormControl>
-			</div>
-
-
-            <!-- 
-            TODO: Implement custom email domain
-			<div style="font-size:14px;margin-top:5px;">
-				{#if $emailDomain && $emailDomain.verified && $emailDomain.verified_in_ses}
-					<ConfigureSendingAddresses on:update={updateSendingAddresses} />
-				{:else}
-					<Link href={consoleUrlWithProject('/settings/notifications')}
-						>Configure a custom email domain</Link
-					> to send email from your own domain.
-				{/if}
-			</div>
-            -->
-		</SplitControl>
-		<SplitControl
-			label="Reply to Email"
-			caption="You will receive replies to this email address"
-		>
-			<FormControl>
-				<TextInput
-					block
-					bind:value={replyToEmail}
-					on:blur={updateReplyToEmail}
-					state={replyToEmailError ? 'error' : undefined}
-				/>
-				{#if replyToEmailError}
-					<Validation state="error">{replyToEmailError}</Validation>
-				{/if}
-			</FormControl>
-		</SplitControl>
-	</div>
+			{#if replyToEmailError}
+				<Validation state="error">{replyToEmailError}</Validation>
+			{/if}
+		</FormControl>
+	</SplitControl>
 </SplitControl>
 
 <SplitControl label="Content" column>
@@ -282,6 +295,15 @@
 		{/snippet}
 	</Button>
 </div>
+
+<Modal
+	bind:show={showSendingEmailsModal}
+	title="Manage Sending Emails"
+>
+	<SendingEmails 
+		updateContent={() => initSendingEmails()}
+	/>
+</Modal>
 
 <style>
 	.list {

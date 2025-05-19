@@ -167,3 +167,9 @@ type VerifyDomainResponse = {
         debug: Record<string, string>;
     };
 };
+
+export type SendingEmail = {
+	id: number,
+	email: string,
+	domain: Domain
+}
