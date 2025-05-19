@@ -16,9 +16,9 @@
 		},
 
 		{
-			title: 'Multiple Segments',
+			title: 'Multiple Lists',
 			description:
-				'Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.',
+				'Create multiple lists to organize your subscribers.',
 			image: '/img/multiple-segments.svg'
 		},
 

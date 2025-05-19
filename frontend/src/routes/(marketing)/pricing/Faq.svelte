@@ -17,7 +17,7 @@
 		</FAQs>
 
 		<FAQs q="What happens if I exceed the emails limit?" icon={IconBarChart}>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies ultricies,
+			The embed will be disabled. You must upgrade your plan to continue using the service
 		</FAQs>
 
 		<FAQs q="How do payments work?" icon={IconWallet}>
