@@ -7,6 +7,7 @@
 	import SettingsBody from '../@components/SettingsBody.svelte';
 	import MetadataRow from './MetadataRow.svelte';
 	import { getI18n } from '../../../lib/i18n';
+	import AddUpdateModal from './MetadataAddUpdateModal.svelte';
 
 	const I18n = getI18n();
 
@@ -26,8 +27,8 @@
 	{#if $subscriberMetadataDefinitionStore.length}
 		<Table columns="1fr 1fr 100px">
 			<TableRow head>
-				<div>Key</div>
-				<div>Name</div>
+				<div>{I18n.t('console.settings.metadata.key')}</div>
+				<div>{I18n.t('console.settings.metadata.displayName')}</div>
 			</TableRow>
 
 			{#each $subscriberMetadataDefinitionStore as metadata}
@@ -35,6 +36,10 @@
 			{/each}
 		</Table>
 	{:else}
-		<IconMessage empty message="No metadata found" />
+		<IconMessage empty message={I18n.t('console.settings.metadata.notFound')} padding={200} />
 	{/if}
 </SettingsBody>
+
+{#if adderOpen}
+	<AddUpdateModal bind:show={adderOpen} />
+{/if}

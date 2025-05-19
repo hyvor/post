@@ -17,7 +17,11 @@
         "common": {
             "cancel": "Cancel",
             "copy": "Copy",
-            "copied": "{value} copied"
+            "copied": "{value} copied",
+            "cannotBeEmpty": "{field} cannot be empty",
+            "created": "{field} created",
+            "updated": "{field} updated",
+            "deleted": "{field} deleted"
         },
         "settings": {
             "form": {
@@ -60,6 +64,13 @@
                 "deleted": "Project deleted"
             },
             "metadata": {
+                "metadata": "Metadata",
+                "key": "Key",
+                "keyCaption": "Uniquely identifies the metadata",
+                "keyValdation": "Only {characters} are allowed",
+                "displayName": "Display Name",
+                "displayNameCaption": "Shown in the Console and custom form fields",
+                "notFound": "No metadata found",
                 "add": "Add Metadata",
                 "delete": "Delete Metadata",
                 "deleteContent": "Are you sure you want to delete this metadata? This metadata will be removed from all subscribers. This action cannot be undone."

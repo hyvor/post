@@ -2,11 +2,17 @@
 
 namespace App\Tests\Api\Console\SubscriberMetadata;
 
+use App\Api\Console\Controller\SubscriberMetadataController;
 use App\Entity\SubscriberMetadataDefinition;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(SubscriberMetadataController::class)]
+#[CoversClass(SubscriberMetadataDefinition::class)]
+#[CoversClass(SubscriberMetadataService::class)]
 class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 {
 
@@ -27,7 +33,7 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(403);
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Entity does not belong to the project', $json['message']);
     }
 

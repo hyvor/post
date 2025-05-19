@@ -11,6 +11,8 @@ use Symfony\Component\Clock\ClockAwareTrait;
 class SubscriberMetadataService
 {
 
+    public const int MAX_METADATA_DEFINITIONS_PER_PROJECT = 20;
+
     use ClockAwareTrait;
 
     public function __construct(
@@ -35,6 +37,13 @@ class SubscriberMetadataService
             ->findOneBy(['project' => $project, 'key' => $key]);
     }
 
+    public function getMetadataDefinitionsCount(Project $project): int
+    {
+        return $this->entityManager
+            ->getRepository(SubscriberMetadataDefinition::class)
+            ->count(['project' => $project]);
+    }
+
     public function createMetadataDefinition(
         Project $project,
         string $key,
@@ -52,6 +61,16 @@ class SubscriberMetadataService
         $this->entityManager->flush();
 
         return $metadataDefinition;
+    }
+
+    public function updateMetadataDefinition(
+        SubscriberMetadataDefinition $metadataDefinition,
+        string $name,
+    ): void {
+        $metadataDefinition->setName($name);
+        $metadataDefinition->setUpdatedAt($this->now());
+
+        $this->entityManager->flush();
     }
 
     public function deleteMetadataDefinition(SubscriberMetadataDefinition $metadataDefinition): void

@@ -3,6 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\SubscriberMetadata\CreateSubscriberMetadataDefinitionInput;
+use App\Api\Console\Input\SubscriberMetadata\UpdateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Project;
 use App\Entity\SubscriberMetadataDefinition;
@@ -32,12 +33,27 @@ class SubscriberMetadataController extends AbstractController
             throw new BadRequestException('Key already exists');
         }
 
+        $count = $this->subscriberMetadataService->getMetadataDefinitionsCount($project);
+
+        if ($count >= SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT) {
+            throw new BadRequestException('Maximum number of metadata definitions reached');
+        }
+
         $metadataDefinition = $this->subscriberMetadataService->createMetadataDefinition(
             $project,
             $input->key,
             $input->name
         );
 
+        return $this->json(new SubscriberMetadataDefinitionObject($metadataDefinition));
+    }
+
+    #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
+    public function updateMetadata(
+        SubscriberMetadataDefinition $metadataDefinition,
+        #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input
+    ): JsonResponse {
+        $this->subscriberMetadataService->updateMetadataDefinition($metadataDefinition, $input->name);
         return $this->json(new SubscriberMetadataDefinitionObject($metadataDefinition));
     }
 
