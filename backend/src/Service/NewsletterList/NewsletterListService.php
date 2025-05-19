@@ -19,6 +19,28 @@ class NewsletterListService
     {
     }
 
+    public function getListCounter(Project $project): int
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+                'deleted_at' => null,
+            ]);
+    }
+
+    public function isNameAvailable(
+        Project $project,
+        string $name
+    ): bool
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+                'name' => $name,
+                'deleted_at' => null,
+            ]) === 0;
+    }
+
     public function createNewsletterList(
         Project $project,
         string $name,

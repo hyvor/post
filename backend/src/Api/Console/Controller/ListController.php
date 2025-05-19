@@ -11,6 +11,7 @@ use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ListController extends AbstractController
@@ -36,6 +37,20 @@ class ListController extends AbstractController
         Project $project,
         #[MapRequestPayload] CreateListInput $input
     ): JsonResponse {
+        $listCounter = $this->newsletterListService->getListCounter($project);
+
+        if ($listCounter >= 50) {
+            throw new BadRequestHttpException("You have reached the maximum number of lists (50) for this project.");
+        }
+
+        if (str_contains($input->name, ',')) {
+            throw new BadRequestHttpException("List name cannot contain a comma.");
+        }
+
+        if (!$this->newsletterListService->isNameAvailable($project, $input->name)) {
+            throw new BadRequestHttpException("List name already exists.");
+        }
+
         $list = $this->newsletterListService->createNewsletterList(
             $project,
             $input->name,
