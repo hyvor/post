@@ -58,6 +58,11 @@
                 "delete": "Delete Project",
                 "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
                 "deleted": "Project deleted"
+            },
+            "metadata": {
+                "add": "Add Metadata",
+                "delete": "Delete Metadata",
+                "deleteContent": "Are you sure you want to delete this metadata? This metadata will be removed from all subscribers. This action cannot be undone."
             }
         }
     },
