@@ -6,6 +6,7 @@ use App\Api\Console\Input\Media\MediaUploadInput;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -29,9 +30,11 @@ class MediaController extends AbstractController
         $errors = $this->validator->validate($input);
 
         if (count($errors) > 0) {
-            throw new ValidationFailedException(
-                'Invalid file upload',
-                $errors
+            throw new UnprocessableEntityHttpException(
+                previous: new ValidationFailedException(
+                    'Invalid file upload',
+                    $errors
+                )
             );
         }
 

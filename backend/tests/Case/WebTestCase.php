@@ -37,12 +37,14 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     /**
      * @param array<string, mixed> $data
+     * @param array<string, mixed> $files
      */
     public function consoleApi(
         Project|int|null $project,
         string $method,
         string $uri,
         array $data = [],
+        array $files = [],
     ): Response {
         $projectId = $project instanceof Project ? $project->getId() : $project;
 
@@ -50,11 +52,12 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client->request(
             $method,
             '/api/console' . $uri,
+            files: $files,
             server: [
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X_PROJECT_ID' => $projectId,
             ],
-            content: (string)json_encode($data)
+            content: (string)json_encode($data),
         );
         return $this->client->getResponse();
     }
