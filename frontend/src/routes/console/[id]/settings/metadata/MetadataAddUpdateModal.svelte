@@ -105,14 +105,17 @@
 				});
 		}
 	}
+
+	const title = metadata
+		? I18n.t('console.settings.metadata.update')
+		: I18n.t('console.settings.metadata.add');
 </script>
 
 <Modal
 	bind:show
-	title="Add Metadata"
+	{title}
 	footer={{
 		confirm: {
-			text: 'Create'
 		}
 	}}
 	on:confirm={handleConfirm}

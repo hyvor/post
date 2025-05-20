@@ -19,6 +19,28 @@ class NewsletterListService
     {
     }
 
+    public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
+
+    public function getListCounter(Project $project): int
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+            ]);
+    }
+
+    public function isNameAvailable(
+        Project $project,
+        string $name
+    ): bool
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+                'name' => $name,
+            ]) === 0;
+    }
+
     public function createNewsletterList(
         Project $project,
         string $name,
