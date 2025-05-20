@@ -51,6 +51,13 @@
 				let emailList = emails.map((email) => email.email);
 				emailList = [$projectStore.default_email_username + '@hvrpst.com' + '(Default email)', ...emailList];
 				sendingEmails = emailList;
+				
+				// Find the default sending address
+				const defaultEmail = emails.find(email => email.is_default)?.email;
+				if (defaultEmail) {
+					currentSendingEmail = defaultEmail;
+					debouncedUpdate();
+				}
 			})
 			.catch((e) => {
 				toast.error('Failed to load sending emails: ' + e.message);
