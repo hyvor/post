@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ImportRepository;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ImportRepository::class)]
-#[ORM\Table(name: 'imports')]
-class Import
+#[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ORM\Table(name: 'media')]
+class Media
 {
 
     #[ORM\Id]
@@ -24,6 +24,12 @@ class Import
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
+
+    #[ORM\Column(length: 255)]
+    private string $path;
+
+    #[ORM\Column]
+    private int $size;
 
     public function getId(): int
     {
@@ -72,5 +78,30 @@ class Import
 
         return $this;
     }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): static
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function setSize(int $size): static
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
 
 }

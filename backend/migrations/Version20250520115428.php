@@ -7,29 +7,26 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20250519075019 extends AbstractMigration
+final class Version20250520115428 extends AbstractMigration
 {
+
     public function getDescription(): string
     {
-        return 'subscriber_metadata_definitions table';
+        return 'Create media table';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql(
             <<<SQL
-        CREATE TABLE subscriber_metadata_definitions (
+        CREATE TABLE media (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
-            key VARCHAR(255) NOT NULL,
-            name VARCHAR(255) NOT NULL,
-            type VARCHAR(255) NOT NULL,
-            UNIQUE (project_id, key)
+            path VARCHAR(255) NOT NULL UNIQUE, -- ex: test.txt or import/import1.csv
+            size BIGINT NOT NULL,
+            UNIQUE (project_id, path)
         );
         SQL
         );
@@ -37,6 +34,6 @@ final class Version20250519075019 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE subscriber_metadata_definitions');
+        $this->addSql('DROP TABLE media');
     }
 }

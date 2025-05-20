@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\Import;
+use App\Entity\Media;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Import>
+ * @extends ServiceEntityRepository<Media>
  */
-class ImportRepository extends ServiceEntityRepository
+class MediaRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Import::class);
+        parent::__construct($registry, Media::class);
     }
 
 }
