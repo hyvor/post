@@ -6,8 +6,8 @@ use App\Repository\SendingEmailRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SendingEmailRepository::class)]
-#[ORM\Table(name: 'sending_emails')]
-class SendingEmail
+#[ORM\Table(name: 'sending_addresses')]
+class SendingAddress
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,7 +27,7 @@ class SendingEmail
     private Project $project;
 
     #[ORM\ManyToOne(targetEntity: Domain::class)]
-    private Domain $custom_domain;
+    private Domain $domain;
 
     public function getId(): int
     {
@@ -89,14 +89,14 @@ class SendingEmail
         return $this;
     }
 
-    public function getCustomDomain(): Domain
+    public function getDomain(): Domain
     {
-        return $this->custom_domain;
+        return $this->domain;
     }
 
-    public function setCustomDomain(Domain $custom_domain): static
+    public function setDomain(Domain $custom_domain): static
     {
-        $this->custom_domain = $custom_domain;
+        $this->domain = $custom_domain;
 
         return $this;
     }

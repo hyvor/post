@@ -2,11 +2,11 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SendingEmail>
+ * @extends PersistentProxyObjectFactory<SendingAddress>
  */
 final class SendingEmailFactory extends PersistentProxyObjectFactory
 {
@@ -21,7 +21,7 @@ final class SendingEmailFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return SendingEmail::class;
+        return SendingAddress::class;
     }
 
     /**

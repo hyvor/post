@@ -4,7 +4,7 @@ namespace App\Tests\Api\Console\SendingEmail;
 
 use App\Api\Console\Controller\SendingEmailController;
 use App\Api\Console\Object\SendingEmailObject;
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingEmailService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -41,7 +41,7 @@ class DeleteSendingEmailTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->getJson($response);
 
-        $repository = $this->em->getRepository(SendingEmail::class);
+        $repository = $this->em->getRepository(SendingAddress::class);
         $deletedSendingEmail = $repository->findOneBy(['id' => $id]);
         $this->assertNull($deletedSendingEmail);
     }

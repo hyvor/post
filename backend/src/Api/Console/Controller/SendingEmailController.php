@@ -7,7 +7,7 @@ use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Object\SendingEmailObject;
 use App\Entity\Project;
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use App\Service\Domain\DomainService;
 use App\Service\SendingEmail\Dto\UpdateSendingEmailDto;
 use App\Service\SendingEmail\SendingEmailService;
@@ -52,7 +52,7 @@ class SendingEmailController extends AbstractController
 
     #[Route('/sending-emails/{id}', methods: 'PATCH')]
     public function updateSendingEmail(
-        SendingEmail $sendingEmail,
+        SendingAddress $sendingEmail,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
         Project $project
     ): JsonResponse
@@ -77,8 +77,8 @@ class SendingEmailController extends AbstractController
 
     #[Route('/sending-emails/{id}', methods: 'DELETE')]
     public function deleteSendingEmail(
-        SendingEmail $sendingEmail,
-        Project $project
+        SendingAddress $sendingEmail,
+        Project        $project
     ): JsonResponse
     {
         $this->sendingEmailService->deleteSendingEmail($sendingEmail);

@@ -4,7 +4,7 @@ namespace App\Tests\Api\Console\SendingEmail;
 
 use App\Api\Console\Controller\SendingEmailController;
 use App\Api\Console\Object\SendingEmailObject;
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingEmailService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -65,8 +65,8 @@ class UpdateSendingEmailTest extends WebTestCase
         $this->assertIsArray($json['domain']);
         $this->assertSame($domain2->getId(), $json['domain']['id']);
 
-        $sendingEmail = $this->em->getRepository(SendingEmail::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingEmail::class, $sendingEmail);
+        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
         $this->assertSame($domain2->getId(), $sendingEmail->getCustomDomain()->getId());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));

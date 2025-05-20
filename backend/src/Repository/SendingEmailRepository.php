@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SendingEmail>
+ * @extends ServiceEntityRepository<SendingAddress>
  */
 class SendingEmailRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SendingEmail::class);
+        parent::__construct($registry, SendingAddress::class);
     }
 
     //    /**

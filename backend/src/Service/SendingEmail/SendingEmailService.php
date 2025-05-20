@@ -3,7 +3,7 @@
 namespace App\Service\SendingEmail;
 
 use App\Entity\Project;
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use App\Entity\Domain;
 use App\Repository\SendingEmailRepository;
 use App\Service\SendingEmail\Dto\UpdateSendingEmailDto;
@@ -22,7 +22,7 @@ class SendingEmailService
 
 
     /**
-     * @return ArrayCollection<int, SendingEmail>
+     * @return ArrayCollection<int, SendingAddress>
      */
     public function getSendingEmails(Project $project): ArrayCollection
     {
@@ -32,11 +32,11 @@ class SendingEmailService
         return new ArrayCollection($sendingEmails);
     }
 
-    public function createSendingEmail(Project $project, Domain $customDomain, string $email): SendingEmail
+    public function createSendingEmail(Project $project, Domain $customDomain, string $email): SendingAddress
     {
-        $sendingEmail = new SendingEmail();
+        $sendingEmail = new SendingAddress();
         $sendingEmail->setProject($project);
-        $sendingEmail->setCustomDomain($customDomain);
+        $sendingEmail->setDomain($customDomain);
         $sendingEmail->setEmail($email);
         $sendingEmail->setCreatedAt(new \DateTimeImmutable());
         $sendingEmail->setUpdatedAt(new \DateTimeImmutable());
@@ -45,20 +45,20 @@ class SendingEmailService
         return $sendingEmail;
     }
 
-    public function updateSendingEmail(SendingEmail $sendingEmail, UpdateSendingEmailDto $updates): SendingEmail
+    public function updateSendingEmail(SendingAddress $sendingEmail, UpdateSendingEmailDto $updates): SendingAddress
     {
         if ($updates->hasProperty('email'))
             $sendingEmail->setEmail($updates->email);
 
         if ($updates->hasProperty('customDomain'))
-            $sendingEmail->setCustomDomain($updates->customDomain);
+            $sendingEmail->setDomain($updates->customDomain);
 
         $sendingEmail->setUpdatedAt($this->now());
         $this->em->flush();
         return $sendingEmail;
     }
 
-    public function deleteSendingEmail(SendingEmail $sendingEmail): void
+    public function deleteSendingEmail(SendingAddress $sendingEmail): void
     {
         $this->em->remove($sendingEmail);
         $this->em->flush();

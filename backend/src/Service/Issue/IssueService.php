@@ -6,7 +6,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Send;
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
@@ -38,7 +38,7 @@ class IssueService
         $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
         $fromEmail = $project->getDefaultEmailUsername();
-        $sendingEmail = $this->em->getRepository(SendingEmail::class)->findOneBy(['project' => $project]);
+        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['project' => $project]);
         if ($sendingEmail)
             $fromEmail = $sendingEmail->getEmail();
 

@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Object;
 
-use App\Entity\SendingEmail;
+use App\Entity\SendingAddress;
 
 class SendingEmailObject
 {
@@ -10,10 +10,10 @@ class SendingEmailObject
     public string $email;
     public DomainObject $domain;
 
-    public function __construct(SendingEmail $sendingEmail)
+    public function __construct(SendingAddress $sendingAddress)
     {
-        $this->id = $sendingEmail->getId();
-        $this->email = $sendingEmail->getEmail();
-        $this->domain = new DomainObject($sendingEmail->getCustomDomain());
+        $this->id = $sendingAddress->getId();
+        $this->email = $sendingAddress->getEmail();
+        $this->domain = new DomainObject($sendingAddress->getDomain());
     }
 }
