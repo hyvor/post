@@ -1,26 +1,26 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Loader, Button, IconButton, SplitControl, TextInput, Modal, FormControl, Validation, toast, IconMessage, confirm } from '@hyvor/design/components';
-import { getSendingEmails, createSendingEmail, updateSendingEmail, deleteSendingEmail } from '../../../lib/actions/sendingEmailActions';
-import type { SendingEmail } from '../../../types';
+import { getSendingAddresses, createSendingAddress, updateSendingAddress, deleteSendingAddress } from '../../../lib/actions/sendingAddressActions';
+import type { SendingAddress } from '../../../types';
 import IconTrash from '@hyvor/icons/IconTrash';
 
 export let updateContent: (() => void) | null = null;
 
 let loading = true;
-let sendingEmails: SendingEmail[] = [];
+let sendingAddresses: SendingAddress[] = [];
 let error: string | null = null;
 
-let newEmail = '';
+let newAddress = '';
 let addError: string | null = null;
 let addLoading = false;
 
 
 function load() {
     loading = true;
-    getSendingEmails()
+    getSendingAddresses()
         .then((data) => {
-            sendingEmails = data;
+            sendingAddresses = data;
         })
         .catch((e) => {
             error = e.message;
@@ -30,16 +30,16 @@ function load() {
         });
 }
 
-function addSendingEmail() {
-    if (!newEmail.trim()) {
-        addError = 'Email is required.';
+function addSendingAddress() {
+    if (!newAddress.trim()) {
+        addError = 'Address is required.';
         return;
     }
     addLoading = true;
-    createSendingEmail(newEmail.trim())
+    createSendingAddress(newAddress.trim())
         .then(() => {
             load();
-            toast.success('Sending email added');
+            toast.success('Sending address added');
             updateContent?.();
         })
         .catch((e) => {
@@ -50,20 +50,20 @@ function addSendingEmail() {
         });
 }
 
-async function removeSendingEmail(id: number) {
+async function removeSendingaddress(id: number) {
     const confirmation = await confirm({
-				title: 'Delete Sending Email',
-				content: 'Are you sure you want to delete this sending email?',
+				title: 'Delete Sending address',
+				content: 'Are you sure you want to delete this sending address?',
 				confirmText: 'Delete',
 				cancelText: 'Cancel',
 				danger: true
 			});
 
 			if (!confirmation) return;
-    deleteSendingEmail(id)
+    deleteSendingAddress(id)
         .then(() => {
             load();
-            toast.success('Sending email deleted');
+            toast.success('Sending address deleted');
             updateContent?.();
         })
         .catch((e) => {
@@ -75,29 +75,29 @@ onMount(load);
 
 </script>
 
-<SplitControl label="Add sending Email">
-    <div class="add-sending-email">
+<SplitControl label="Add sending address">
+    <div class="add-sending-address">
         <TextInput
-            type="email"
-            placeholder="Enter new sending email"
-            bind:value={newEmail}
-            on:keydown={(e) => { if (e.key === 'Enter') addSendingEmail(); }}
+            type="address"
+            placeholder="Enter new sending address"
+            bind:value={newAddress}
+            on:keydown={(e) => { if (e.key === 'Enter') addSendingAddress(); }}
             disabled={addLoading}
             block
         />
-        <Button on:click={addSendingEmail} disabled={addLoading || !newEmail.trim()}>Add</Button>
+        <Button on:click={addSendingAddress} disabled={addLoading || !newAddress.trim()}>Add</Button>
     </div>
 </SplitControl>
 {#if loading}
     <Loader />
-{:else if sendingEmails.length > 0}
-    <SplitControl label="Sending Email available">
-        <div class="sending-email-list">
-            {#each sendingEmails as email}
-                <div class="sending-email-item">
-                    <span class="sending-email-label">{email.email}</span>
-                    <span class="sending-email-actions">
-                        <IconButton color="red" variant="fill-light" size="small" on:click={() => removeSendingEmail(email.id)}>
+{:else if sendingAddresses.length > 0}
+    <SplitControl label="Sending address available">
+        <div class="sending-address-list">
+            {#each sendingAddresses as address}
+                <div class="sending-address-item">
+                    <span class="sending-address-label">{address.email}</span>
+                    <span class="sending-address-actions">
+                        <IconButton color="red" variant="fill-light" size="small" on:click={() => removeSendingaddress(address.id)}>
                             <IconTrash size={12} />
                         </IconButton>
                     </span>
@@ -108,29 +108,29 @@ onMount(load);
 {/if}
 
 <style>
-    .add-sending-email {
+    .add-sending-address {
         display: flex;
         gap: 10px;
         margin-bottom: 20px;
     }
-    .sending-email-list {
+    .sending-address-list {
         display: flex;
         flex-direction: column;
         gap: 12px;
     }
-    .sending-email-item {
+    .sending-address-item {
         display: flex;
         align-items: center;
         gap: 8px;
         justify-content: space-between;
     }
-    .sending-email-label {
+    .sending-address-label {
         flex: 1 1 auto;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .sending-email-actions {
+    .sending-address-actions {
         display: flex;
         gap: 8px;
         flex-shrink: 0;

@@ -168,7 +168,7 @@ type VerifyDomainResponse = {
     };
 };
 
-export type SendingEmail = {
+export type SendingAddress = {
 	id: number,
 	email: string,
 	domain: Domain
