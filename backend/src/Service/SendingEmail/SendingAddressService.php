@@ -54,6 +54,18 @@ class SendingAddressService
         if ($updates->hasProperty('customDomain'))
             $sendingAddress->setDomain($updates->customDomain);
 
+        if ($updates->hasProperty('isDefault')) {
+            $sendingAddress->setIsDefault($updates->isDefault);
+            // Set all other sending addresses to not default
+            $currentSendingAddresses = $this->getSendingAddresses($sendingAddress->getProject());
+            foreach ($currentSendingAddresses as $currentSendingAddress) {
+                if ($currentSendingAddress->getId() !== $sendingAddress->getId()) {
+                    $currentSendingAddress->setIsDefault(false);
+                    $currentSendingAddress->setUpdatedAt($this->now());
+                }
+            }
+        }
+
         $sendingAddress->setUpdatedAt($this->now());
         $this->em->flush();
         return $sendingAddress;

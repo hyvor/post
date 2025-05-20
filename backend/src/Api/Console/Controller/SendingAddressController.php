@@ -71,8 +71,8 @@ class SendingAddressController extends AbstractController
             $updates->email = $input->email;
         }
 
-        if ($input->hasProperty('isDefault')) {
-            $updates->isDefault = $input->isDefault;
+        if ($input->hasProperty('is_default')) {
+            $updates->isDefault = $input->is_default;
         }
 
         $sendingAddress = $this->sendingAddressService->updateSendingAddress($sendingAddress, $updates);

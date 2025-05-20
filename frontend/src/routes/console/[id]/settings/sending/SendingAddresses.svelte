@@ -1,9 +1,10 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { Loader, Button, IconButton, SplitControl, TextInput, Modal, FormControl, Validation, toast, IconMessage, confirm } from '@hyvor/design/components';
+import { Loader, Button, IconButton, SplitControl, TextInput, Modal, FormControl, Validation, toast, IconMessage, confirm, Dropdown, ActionList, ActionListItem } from '@hyvor/design/components';
 import { getSendingAddresses, createSendingAddress, updateSendingAddress, deleteSendingAddress } from '../../../lib/actions/sendingAddressActions';
 import type { SendingAddress } from '../../../types';
 import IconTrash from '@hyvor/icons/IconTrash';
+import IconCaretDown from '@hyvor/icons/IconCaretDown';
 
 export let updateContent: (() => void) | null = null;
 
@@ -71,6 +72,18 @@ async function removeSendingaddress(id: number) {
         });
 }
 
+function setDefault(id: number) {
+    updateSendingAddress(id, sendingAddresses.find(a => a.id === id)?.email || '', true)
+        .then(() => {
+            load();
+            toast.success('Default sending address updated');
+            updateContent?.();
+        })
+        .catch((e: any) => {
+            toast.error(e.message);
+        });
+}
+
 onMount(load);
 
 </script>
@@ -95,11 +108,32 @@ onMount(load);
         <div class="sending-address-list">
             {#each sendingAddresses as address}
                 <div class="sending-address-item">
-                    <span class="sending-address-label">{address.email}</span>
+                    <span class="sending-address-label">
+                        {address.email}
+                        {#if address.is_default}
+                            <span class="default-badge">Default</span>
+                        {/if}
+                    </span>
                     <span class="sending-address-actions">
-                        <IconButton color="red" variant="fill-light" size="small" on:click={() => removeSendingaddress(address.id)}>
-                            <IconTrash size={12} />
-                        </IconButton>
+                        <Dropdown width={200}>
+                            {#snippet trigger()}
+                                <IconButton size="small" color="input">
+                                    <IconCaretDown size={12} />
+                                </IconButton>
+                            {/snippet}
+                            {#snippet content()}
+                                <ActionList>
+                                    {#if !address.is_default}
+                                        <ActionListItem on:click={() => setDefault(address.id)}>
+                                            Set as default
+                                        </ActionListItem>
+                                    {/if}
+                                    <ActionListItem color="red" on:click={() => removeSendingaddress(address.id)}>
+                                        Delete
+                                    </ActionListItem>
+                                </ActionList>
+                            {/snippet}
+                        </Dropdown>
                     </span>
                 </div>
             {/each}
@@ -134,5 +168,10 @@ onMount(load);
         display: flex;
         gap: 8px;
         flex-shrink: 0;
+    }
+    .default-badge {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-left: 8px;
     }
 </style>

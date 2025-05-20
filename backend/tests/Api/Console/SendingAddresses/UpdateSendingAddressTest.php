@@ -74,4 +74,69 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertSame(false, $sendingEmail->isDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
+
+    public function test_update_default_sending_address(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne();
+
+        $domain1 = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+                'verified_in_ses' => true,
+                'user_id' => 1
+            ]
+        );
+
+        $domain2 = DomainFactory::createOne(
+            [
+                'domain' => 'gmail.com',
+                'verified_in_ses' => true,
+                'user_id' => 1
+            ]
+        );
+
+        $sendingEmail1 = SendingAddressFactory::createOne(
+            [
+                'email' => 'thibault@hyvor.com',
+                'is_default' => true,
+                'project' => $project,
+                'domain' => $domain1
+            ]
+        );
+
+        $sendingEmail2 = SendingAddressFactory::createOne(
+            [
+                'email' => 'supun@hyvor.com',
+                'is_default' => false,
+                'project' => $project,
+                'domain' => $domain2
+            ]
+        );
+
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/sending-addresses/' . $sendingEmail2->getId(),
+            [
+                'is_default' => true,
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame(true, $json['is_default']);
+        $this->assertSame($sendingEmail2->getId(), $json['id']);
+        $this->assertSame($sendingEmail2->getEmail(), $json['email']);
+
+        $sendingEmail1 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail1->getId()]);
+        $this->assertInstanceOf(SendingAddress::class, $sendingEmail1);
+        $this->assertSame(false, $sendingEmail1->isDefault());
+        $this->assertSame('2025-02-21 00:00:00', $sendingEmail1->getUpdatedAt()->format('Y-m-d H:i:s'));
+        $sendingEmail2 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail2->getId()]);
+        $this->assertInstanceOf(SendingAddress::class, $sendingEmail2);
+        $this->assertSame(true, $sendingEmail2->isDefault());
+        $this->assertSame('2025-02-21 00:00:00', $sendingEmail2->getUpdatedAt()->format('Y-m-d H:i:s'));
+    }
 }

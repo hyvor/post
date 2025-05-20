@@ -171,5 +171,6 @@ type VerifyDomainResponse = {
 export type SendingAddress = {
 	id: number,
 	email: string,
-	domain: Domain
+	domain: Domain,
+	is_default: boolean,
 }

@@ -16,11 +16,12 @@ export function createSendingAddress(email: string) {
     });
 }
 
-export function updateSendingAddress(id: number, email: string) {
+export function updateSendingAddress(id: number, email: string, is_default?: boolean) {
     return consoleApi.patch<SendingAddress>({
         endpoint: `sending-addresses/${id}`,
         data: {
             email,
+            is_default,
         },
     });
 }
