@@ -116,7 +116,6 @@
 	{title}
 	footer={{
 		confirm: {
-			text: title
 		}
 	}}
 	on:confirm={handleConfirm}
