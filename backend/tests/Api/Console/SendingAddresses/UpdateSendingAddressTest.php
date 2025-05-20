@@ -55,6 +55,7 @@ class UpdateSendingAddressTest extends WebTestCase
             '/sending-addresses/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
+                'is_default' => false,
             ]
         );
 
@@ -64,11 +65,13 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertSame('thibault@gmail.com', $json['email']);
         $this->assertIsArray($json['domain']);
         $this->assertSame($domain2->getId(), $json['domain']['id']);
+        $this->assertSame(false, $json['is_default']);
 
         $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
+        $this->assertSame(false, $sendingEmail->isDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 }

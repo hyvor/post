@@ -10,7 +10,7 @@ use App\Entity\Domain;
 use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Service\Domain\DomainService;
-use App\Service\SendingEmail\Dto\UpdateSendingAddress;
+use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
 use App\Service\SendingEmail\SendingAddressService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -64,11 +64,15 @@ class SendingAddressController extends AbstractController
         Project $project
     ): JsonResponse
     {
-        $updates = new UpdateSendingAddress();
+        $updates = new UpdateSendingAddressDto();
         if ($input->hasProperty('email')) {
             $domain = $this->getDomainFromEmail($input->email);
             $updates->customDomain = $domain;
             $updates->email = $input->email;
+        }
+
+        if ($input->hasProperty('isDefault')) {
+            $updates->isDefault = $input->isDefault;
         }
 
         $sendingAddress = $this->sendingAddressService->updateSendingAddress($sendingAddress, $updates);

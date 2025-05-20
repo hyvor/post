@@ -44,6 +44,7 @@ class CreateSendingAddressTest extends WebTestCase
         $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
         $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
+        $this->assertSame(true, $sendingEmail->isDefault());
     }
 
     public function test_create_sending_email_domain_not_found(): void

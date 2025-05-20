@@ -29,6 +29,9 @@ class SendingAddress
     #[ORM\ManyToOne(targetEntity: Domain::class)]
     private Domain $domain;
 
+    #[ORM\Column]
+    private bool $is_default = false;
+
     public function getId(): int
     {
         return $this->id;
@@ -97,6 +100,18 @@ class SendingAddress
     public function setDomain(Domain $custom_domain): static
     {
         $this->domain = $custom_domain;
+
+        return $this;
+    }
+
+    public function isDefault(): bool
+    {
+        return $this->is_default;
+    }
+
+    public function setIsDefault(bool $is_default): static
+    {
+        $this->is_default = $is_default;
 
         return $this;
     }

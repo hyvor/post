@@ -27,6 +27,7 @@ final class Version20250516131323 extends AbstractMigration
             email TEXT NOT NULL,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
             domain_id BIGINT NOT NULL references domains(id) ON DELETE CASCADE,
+            is_default BOOLEAN DEFAULT FALSE NOT NULL,
             UNIQUE (project_id, email)
         );
         SQL);

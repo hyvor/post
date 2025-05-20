@@ -6,7 +6,7 @@ use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Entity\Domain;
 use App\Repository\SendingAddressRepository;
-use App\Service\SendingEmail\Dto\UpdateSendingAddress;
+use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -32,10 +32,13 @@ class SendingAddressService
 
     public function createSendingAddress(Project $project, Domain $customDomain, string $email): SendingAddress
     {
+        $currentSendingAddresses = $this->getSendingAddresses($project);
+
         $sendingAddress = new SendingAddress();
         $sendingAddress->setProject($project);
         $sendingAddress->setDomain($customDomain);
         $sendingAddress->setEmail($email);
+        $sendingAddress->setIsDefault($currentSendingAddresses->isEmpty());
         $sendingAddress->setCreatedAt(new \DateTimeImmutable());
         $sendingAddress->setUpdatedAt(new \DateTimeImmutable());
         $this->em->persist($sendingAddress);
@@ -43,7 +46,7 @@ class SendingAddressService
         return $sendingAddress;
     }
 
-    public function updateSendingAddress(SendingAddress $sendingAddress, UpdateSendingAddress $updates): SendingAddress
+    public function updateSendingAddress(SendingAddress $sendingAddress, UpdateSendingAddressDto $updates): SendingAddress
     {
         if ($updates->hasProperty('email'))
             $sendingAddress->setEmail($updates->email);

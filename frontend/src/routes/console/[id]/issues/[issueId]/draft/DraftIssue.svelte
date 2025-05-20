@@ -20,7 +20,7 @@
 	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
-	import { getSendingAddresses } from '../../../../lib/actions/sendingEmailActions';
+	import { getSendingAddresses } from '../../../../lib/actions/sendingAddressActions';
 	import { onMount } from 'svelte';
 	import SendingEmails from '../../../settings/sending/SendingAddresses.svelte';
 
@@ -49,7 +49,7 @@
 		getSendingAddresses()
 			.then((emails) => {
 				let emailList = emails.map((email) => email.email);
-				emailList = [$projectStore.default_email_username + '(Default email)', ...emailList];
+				emailList = [$projectStore.default_email_username + '@hvrpst.com' + '(Default email)', ...emailList];
 				sendingEmails = emailList;
 			})
 			.catch((e) => {
