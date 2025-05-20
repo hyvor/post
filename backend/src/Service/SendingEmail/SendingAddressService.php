@@ -27,8 +27,6 @@ class SendingAddressService
     public function getSendingAddresses(Project $project): ArrayCollection
     {
         $sendingEmails = $this->sendingEmailRepository->findBy(['project' => $project]);
-        if (!$sendingEmails)
-            return new ArrayCollection();
         return new ArrayCollection($sendingEmails);
     }
 

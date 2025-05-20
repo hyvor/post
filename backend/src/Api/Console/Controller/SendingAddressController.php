@@ -6,6 +6,7 @@ use App\Api\Console\Input\SendingEmail\CreateSendingEmailInput;
 use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Object\SendingAddressObject;
+use App\Entity\Domain;
 use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Service\Domain\DomainService;
@@ -25,6 +26,17 @@ class SendingAddressController extends AbstractController
         private DomainService $domainService
     ) {}
 
+    private function getDomainFromEmail(string $email): Domain
+    {
+        $domainName = explode("@", $email)[1];
+        $domain = $this->domainService->getDomainByDomainName($domainName);
+        if (!$domain)
+            throw new BadRequestHttpException("Domain not found");
+        if (!$domain->isVerifiedInSes())
+            throw new BadRequestHttpException("Domain is not verified");
+        return $domain;
+    }
+
     #[Route('/sending-addresses', methods: 'GET')]
     public function getSendingAddresses(Request $request, Project $project): JsonResponse
     {
@@ -39,13 +51,7 @@ class SendingAddressController extends AbstractController
         Project $project,
     ): JsonResponse
     {
-        $domainName = explode("@", $input->email)[1];
-        $domain = $this->domainService->getDomainByDomainName($domainName);
-        if (!$domain)
-            throw new BadRequestHttpException("Domain not found");
-
-        if (!$domain->isVerifiedInSes())
-            throw new BadRequestHttpException("Domain is not verified");
+        $domain = $this->getDomainFromEmail($input->email);
         $sendingAddress = $this->sendingAddressService->createSendingAddress($project, $domain, $input->email);
 
         return $this->json(new SendingAddressObject($sendingAddress));
@@ -60,13 +66,7 @@ class SendingAddressController extends AbstractController
     {
         $updates = new UpdateSendingAddress();
         if ($input->hasProperty('email')) {
-            $domainName = explode("@", $input->email)[1];
-            $domain = $this->domainService->getDomainByDomainName($domainName);
-            if (!$domain)
-                throw new BadRequestHttpException("Domain not found");
-            if (!$domain->isVerifiedInSes())
-                throw new BadRequestHttpException("Domain is not verified");
-
+            $domain = $this->getDomainFromEmail($input->email);
             $updates->customDomain = $domain;
             $updates->email = $input->email;
         }

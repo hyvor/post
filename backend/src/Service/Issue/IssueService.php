@@ -37,7 +37,7 @@ class IssueService
     {
         $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $project->getDefaultEmailUsername();
+        $fromEmail = $project->getDefaultEmailUsername() . '@hvrpst.com';
         $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['project' => $project]);
         if ($sendingEmail)
             $fromEmail = $sendingEmail->getEmail();

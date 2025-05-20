@@ -30,7 +30,7 @@ class CreateIssueTest extends WebTestCase
 
         $project = ProjectFactory::createOne(
             [
-                'default_email_username' => 'thibault@hyvor.com'
+                'default_email_username' => 'thibault'
             ]
         );
 
@@ -79,7 +79,7 @@ class CreateIssueTest extends WebTestCase
             [
                 'email' => 'thibault@hyvor.com',
                 'project' => $project,
-                'custom_domain' => $domain
+                'domain' => $domain
             ]
         );
 

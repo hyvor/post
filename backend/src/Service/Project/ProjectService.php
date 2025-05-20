@@ -14,6 +14,7 @@ use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
 
@@ -27,27 +28,19 @@ class ProjectService
     {
     }
 
-    private function slugify(string $text): string {
-        // Trim
-        $text = trim($text, '-');
-        // Lowercase
-        $text = strtolower($text);
-        return empty($text) ? 'n-a' : $text;
-    }
-
 
     public function createProject(
         int    $userId,
         string $name,
     ): Project
     {
-
+        $slugger = new AsciiSlugger();
         $project = new Project()
             ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
-            ->setDefaultEmailUsername($this->slugify($name) . '@hvrpst.com')
+            ->setDefaultEmailUsername($slugger->slug($name))
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 

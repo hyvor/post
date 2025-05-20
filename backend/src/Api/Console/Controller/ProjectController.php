@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
@@ -40,6 +41,10 @@ class ProjectController extends AbstractController
     {
         $user = $this->getUser();
         assert($user instanceof AuthUser);
+
+        $slugger = new AsciiSlugger();
+        while ($this->projectService->isUsernameTaken($slugger->slug($input->name)))
+            $input->name .= ' ' . random_int(1, 100);
 
         $project = $this->projectService->createProject($user->id, $input->name);
         return $this->json(new ProjectObject($project));
