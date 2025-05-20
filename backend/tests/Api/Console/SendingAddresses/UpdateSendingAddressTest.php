@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingEmail;
+namespace App\Tests\Api\Console\SendingAddresses;
 
-use App\Api\Console\Controller\SendingEmailController;
-use App\Api\Console\Object\SendingEmailObject;
+use App\Api\Console\Controller\SendingAddressController;
+use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingEmailService;
+use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SendingEmailFactory;
+use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
-#[CoversClass(SendingEmailController::class)]
-#[CoversClass(SendingEmailObject::class)]
-#[CoversClass(SendingEmailService::class)]
-class UpdateSendingEmailTest extends WebTestCase
+#[CoversClass(SendingAddressController::class)]
+#[CoversClass(SendingAddressObject::class)]
+#[CoversClass(SendingAddressService::class)]
+class UpdateSendingAddressTest extends WebTestCase
 {
     public function test_update_sending_email(): void
     {
@@ -41,18 +41,18 @@ class UpdateSendingEmailTest extends WebTestCase
             ]
         );
 
-        $sendingEmail = SendingEmailFactory::createOne(
+        $sendingEmail = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
                 'project' => $project,
-                'custom_domain' => $domain1
+                'domain' => $domain1
             ]
         );
 
         $response = $this->consoleApi(
             $project,
             'PATCH',
-            '/sending-emails/' . $sendingEmail->getId(),
+            '/sending-addresses/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
             ]
@@ -68,7 +68,7 @@ class UpdateSendingEmailTest extends WebTestCase
         $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
-        $this->assertSame($domain2->getId(), $sendingEmail->getCustomDomain()->getId());
+        $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 }

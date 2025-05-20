@@ -5,7 +5,7 @@ namespace App\Service\SendingEmail\Dto;
 use App\Entity\Domain;
 use App\Util\OptionalPropertyTrait;
 
-class UpdateSendingEmailDto
+class UpdateSendingAddress
 {
     use OptionalPropertyTrait;
 

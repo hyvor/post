@@ -13,6 +13,7 @@ use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
@@ -65,8 +66,11 @@ class ProjectController extends AbstractController
         $updates = new UpdateProjectDto();
         if ($input->hasProperty('name'))
             $updates->name = $input->name;
-        if ($input->hasProperty('default_email_username'))
+        if ($input->hasProperty('default_email_username')) {
+            if ($this->projectService->isUsernameTaken($input->default_email_username))
+                throw new BadRequestHttpException("Username is already taken");
             $updates->defaultEmailUsername = $input->default_email_username;
+        }
         $project = $this->projectService->updateProject($project, $updates);
 
         $updatesMeta = new UpdateProjectMetaDto();

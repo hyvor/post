@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingEmail;
+namespace App\Tests\Api\Console\SendingAddresses;
 
-use App\Api\Console\Controller\SendingEmailController;
-use App\Api\Console\Object\SendingEmailObject;
+use App\Api\Console\Controller\SendingAddressController;
+use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingEmailService;
+use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingEmailController::class)]
-#[CoversClass(SendingEmailObject::class)]
-#[CoversClass(SendingEmailService::class)]
-class CreateSendingEmailTest extends WebTestCase
+#[CoversClass(SendingAddressController::class)]
+#[CoversClass(SendingAddressObject::class)]
+#[CoversClass(SendingAddressService::class)]
+class CreateSendingAddressTest extends WebTestCase
 {
     public function test_create_sending_email(): void
     {
@@ -30,7 +30,7 @@ class CreateSendingEmailTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/sending-emails',
+            '/sending-addresses',
             [
                 'email' => 'thibault@hyvor.com'
             ],
@@ -53,7 +53,7 @@ class CreateSendingEmailTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/sending-emails',
+            '/sending-addresses',
             [
                 'email' => 'thibault@nonexistent.com'
             ],
@@ -75,7 +75,7 @@ class CreateSendingEmailTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'POST',
-            '/sending-emails',
+            '/sending-addresses',
             [
                 'email' => 'thibault@hyvor.com'
             ],

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingEmail;
+namespace App\Tests\Api\Console\SendingAddresses;
 
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SendingEmailFactory;
+use App\Tests\Factory\SendingAddressFactory;
 
-class GetSendingEmailTest extends WebTestCase
+class GetSendingAddressTest extends WebTestCase
 {
     public function test_get_sending_email_test(): void
     {
@@ -17,24 +17,24 @@ class GetSendingEmailTest extends WebTestCase
             'verified_in_ses' => true,
         ]);
 
-        $sendingEmail = SendingEmailFactory::createOne([
+        $sendingAddress = SendingAddressFactory::createOne([
             'project' => $project,
-            'custom_domain' => $domain,
+            'domain' => $domain,
             'email' => 'test@hyvor.com',
         ]);
 
         $response = $this->consoleApi(
             $project,
             'GET',
-            '/sending-emails'
+            '/sending-addresses'
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertCount(1, $json);
         $item = $json[0];
-        $this->assertSame($sendingEmail->getId(), $item['id']);
+        $this->assertSame($sendingAddress->getId(), $item['id']);
         $this->assertSame('test@hyvor.com', $item['email']);
-        $this->assertSame($domain->getId(), $item['customDomain']['id']);
+        $this->assertSame($domain->getId(), $item['domain']['id']);
     }
 }

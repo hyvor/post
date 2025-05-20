@@ -12,7 +12,7 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SendingEmailFactory;
+use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -75,7 +75,7 @@ class CreateIssueTest extends WebTestCase
             ]
         );
 
-        $sendingEmail = SendingEmailFactory::createOne(
+        $sendingEmail = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
                 'project' => $project,

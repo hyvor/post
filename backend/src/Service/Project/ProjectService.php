@@ -186,9 +186,9 @@ class ProjectService
         return $project;
     }
 
-    public function isUsernameAvailable(string $username): bool
+    public function isUsernameTaken(string $username): bool
     {
         $project = $this->em->getRepository(Project::class)->findOneBy(['default_email_username' => $username]);
-        return !$project;
+        return $project !== null;
     }
 }

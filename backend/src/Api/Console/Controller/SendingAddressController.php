@@ -5,12 +5,12 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\SendingEmail\CreateSendingEmailInput;
 use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Api\Console\Object\SendingEmailObject;
+use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Service\Domain\DomainService;
-use App\Service\SendingEmail\Dto\UpdateSendingEmailDto;
-use App\Service\SendingEmail\SendingEmailService;
+use App\Service\SendingEmail\Dto\UpdateSendingAddress;
+use App\Service\SendingEmail\SendingAddressService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,22 +18,23 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SendingEmailController extends AbstractController
+class SendingAddressController extends AbstractController
 {
     public function __construct(
-        private SendingEmailService $sendingEmailService,
+        private SendingAddressService $sendingAddressService,
         private DomainService $domainService
     ) {}
 
-    #[Route('/sending-emails', methods: 'GET')]
-    public function getSendingEmails(Request $request, Project $project): JsonResponse
+    #[Route('/sending-addresses', methods: 'GET')]
+    public function getSendingAddresses(Request $request, Project $project): JsonResponse
     {
-        $sendingEmails = $this->sendingEmailService->getSendingEmails($project);
-        return $this->json($sendingEmails->toArray());
+        $sendingAddresses = $this->sendingAddressService->getSendingAddresses($project)
+            ->map(fn($sendingAddress) => new SendingAddressObject($sendingAddress));
+        return $this->json($sendingAddresses);
     }
 
-    #[Route('/sending-emails', methods: 'POST')]
-    public function createSendingEmail(
+    #[Route('/sending-addresses', methods: 'POST')]
+    public function createSendingAddress(
         #[MapRequestPayload] CreateSendingEmailInput $input,
         Project $project,
     ): JsonResponse
@@ -45,19 +46,19 @@ class SendingEmailController extends AbstractController
 
         if (!$domain->isVerifiedInSes())
             throw new BadRequestHttpException("Domain is not verified");
-        $sendingEmail = $this->sendingEmailService->createSendingEmail($project, $domain, $input->email);
+        $sendingAddress = $this->sendingAddressService->createSendingAddress($project, $domain, $input->email);
 
-        return $this->json(new SendingEmailObject($sendingEmail));
+        return $this->json(new SendingAddressObject($sendingAddress));
     }
 
-    #[Route('/sending-emails/{id}', methods: 'PATCH')]
-    public function updateSendingEmail(
-        SendingAddress $sendingEmail,
+    #[Route('/sending-addresses/{id}', methods: 'PATCH')]
+    public function updateSendingAddress(
+        SendingAddress $sendingAddress,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
         Project $project
     ): JsonResponse
     {
-        $updates = new UpdateSendingEmailDto();
+        $updates = new UpdateSendingAddress();
         if ($input->hasProperty('email')) {
             $domainName = explode("@", $input->email)[1];
             $domain = $this->domainService->getDomainByDomainName($domainName);
@@ -70,18 +71,18 @@ class SendingEmailController extends AbstractController
             $updates->email = $input->email;
         }
 
-        $sendingEmail = $this->sendingEmailService->updateSendingEmail($sendingEmail, $updates);
+        $sendingAddress = $this->sendingAddressService->updateSendingAddress($sendingAddress, $updates);
 
-        return $this->json(new SendingEmailObject($sendingEmail));
+        return $this->json(new SendingAddressObject($sendingAddress));
     }
 
-    #[Route('/sending-emails/{id}', methods: 'DELETE')]
-    public function deleteSendingEmail(
-        SendingAddress $sendingEmail,
-        Project        $project
+    #[Route('/sending-addresses/{id}', methods: 'DELETE')]
+    public function deleteSendingAddress(
+        SendingAddress $sendingAddress,
+        Project $project
     ): JsonResponse
     {
-        $this->sendingEmailService->deleteSendingEmail($sendingEmail);
+        $this->sendingAddressService->deleteSendingAddress($sendingAddress);
 
         return $this->json([]);
     }

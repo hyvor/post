@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingEmail;
+namespace App\Tests\Api\Console\SendingAddresses;
 
-use App\Api\Console\Controller\SendingEmailController;
-use App\Api\Console\Object\SendingEmailObject;
+use App\Api\Console\Controller\SendingAddressController;
+use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingEmailService;
+use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
-use App\Tests\Factory\SendingEmailFactory;
+use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingEmailController::class)]
-#[CoversClass(SendingEmailService::class)]
-class DeleteSendingEmailTest extends WebTestCase
+#[CoversClass(SendingAddressController::class)]
+#[CoversClass(SendingAddressService::class)]
+class DeleteSendingAddressTest extends WebTestCase
 {
     public function test_delete_sending_email(): void
     {
@@ -24,9 +24,9 @@ class DeleteSendingEmailTest extends WebTestCase
             'verified_in_ses' => true,
         ]);
 
-        $sendingEmail = SendingEmailFactory::createOne([
+        $sendingEmail = SendingAddressFactory::createOne([
             'project' => $project,
-            'custom_domain' => $domain,
+            'domain' => $domain,
             'email' => 'test@hyvor.com',
         ]);
 
@@ -35,7 +35,7 @@ class DeleteSendingEmailTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'DELETE',
-            '/sending-emails/' . $sendingEmail->getId()
+            '/sending-addresses/' . $sendingEmail->getId()
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -53,7 +53,7 @@ class DeleteSendingEmailTest extends WebTestCase
         $response = $this->consoleApi(
             $project,
             'DELETE',
-            '/sending-emails/1'
+            '/sending-addresses/1'
         );
 
         $this->assertSame(404, $response->getStatusCode());

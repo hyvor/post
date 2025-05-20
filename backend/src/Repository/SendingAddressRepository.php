@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<SendingAddress>
  */
-class SendingEmailRepository extends ServiceEntityRepository
+class SendingAddressRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

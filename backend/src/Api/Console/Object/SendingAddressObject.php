@@ -4,7 +4,7 @@ namespace App\Api\Console\Object;
 
 use App\Entity\SendingAddress;
 
-class SendingEmailObject
+class SendingAddressObject
 {
     public int $id;
     public string $email;

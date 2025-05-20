@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\SendingEmailRepository;
+use App\Repository\SendingAddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SendingEmailRepository::class)]
+#[ORM\Entity(repositoryClass: SendingAddressRepository::class)]
 #[ORM\Table(name: 'sending_addresses')]
 class SendingAddress
 {

@@ -8,7 +8,7 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 /**
  * @extends PersistentProxyObjectFactory<SendingAddress>
  */
-final class SendingEmailFactory extends PersistentProxyObjectFactory
+final class SendingAddressFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services

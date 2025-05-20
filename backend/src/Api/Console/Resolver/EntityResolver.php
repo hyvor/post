@@ -24,7 +24,7 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'issues' => Issue::class,
         'domain' => Domain::class,
-        'sending-emails' => SendingAddress::class,
+        'sending-addresses' => SendingAddress::class,
     ];
 
     public function __construct(
