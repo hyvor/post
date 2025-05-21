@@ -100,7 +100,7 @@ class MediaService
         $componentUrl = $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent());
 
         return sprintf(
-            '%s/api/media/%s/%s',
+            '%s/api/public/media/%s/%s',
             $componentUrl,
             $project->getUuid(),
             $path
