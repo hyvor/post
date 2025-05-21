@@ -27,18 +27,20 @@
 			Project
 		</NavLink>
 
-		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
-			{#snippet start()}
-				<IconBrush />
-			{/snippet}
-			Email Design
-		</NavLink>
-
 		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
 			{#snippet start()}
 				<IconPeople />
 			{/snippet}
 			Users
+		</NavLink>
+
+		<div class="section-div"></div>
+
+		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
+			{#snippet start()}
+				<IconBrush />
+			{/snippet}
+			Email Design
 		</NavLink>
 
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
@@ -52,7 +54,7 @@
 			{#snippet start()}
 				<IconEnvelopeCheck />
 			{/snippet}
-			Sending Email
+			Sending Email Addresses
 		</NavLink>
 
 		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>

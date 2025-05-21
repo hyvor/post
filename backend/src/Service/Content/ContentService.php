@@ -34,7 +34,7 @@ class ContentService
             return '';
         }
 
-        return $this->htmlFromJson($content);
+        return $this->getHtmlFromJson($content);
     }
 
     public function textFromIssue(Issue $issue): string
@@ -49,13 +49,13 @@ class ContentService
         return $document->toText();
     }
 
-    public function htmlFromJson(string $content): string
+    public function getHtmlFromJson(string $content): string
     {
         $document = Document::fromJson($this->getSchema(), $content);
         return $document->toHtml();
     }
 
-    public function getJsonFromHtml(string $html, bool $sanitize = true) : string
+    public function getJsonFromHtml(string $html, bool $sanitize = true): string
     {
         return $this->getDocumentFromHtml($html, $sanitize)->toJson();
     }
@@ -63,8 +63,7 @@ class ContentService
     public function getDocumentFromHtml(
         string $html,
         bool $sanitize = true
-    ) : Node
-    {
+    ): Node {
         $schema = $this->getSchema();
         $parser = HtmlParser::fromSchema($schema);
         return $parser->parse($html, sanitize: $sanitize);
@@ -72,7 +71,6 @@ class ContentService
 
     public function getSchema(): Schema
     {
-
         return new Schema(
             [
                 new Doc(),
@@ -94,7 +92,6 @@ class ContentService
                 new Code(),
             ]
         );
-
     }
 
 }

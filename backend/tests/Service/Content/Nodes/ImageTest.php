@@ -24,7 +24,7 @@ class ImageTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = new ContentService()->htmlFromJson($json);
+        $html = new ContentService()->getHtmlFromJson($json);
         $this->assertSame(
             '<img     src="https://example.com/image.png"
     alt="Alt text"

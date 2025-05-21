@@ -22,11 +22,10 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount, onDestroy } from 'svelte';
 	import { getSendingAddresses } from '../../../../lib/actions/sendingAddressActions';
-	import { onMount } from 'svelte';
 	import SendingEmails from '../../../settings/sending/SendingAddresses.svelte';
 
 	export let issue: Issue;
-    export let send: (e: Issue) => void;
+	export let send: (e: Issue) => void;
 
 	let scrollTopEl: HTMLDivElement;
 
@@ -50,11 +49,14 @@
 		getSendingAddresses()
 			.then((emails) => {
 				let emailList = emails.map((email) => email.email);
-				emailList = [$projectStore.default_email_username + '@hvrpst.com' + '(Default email)', ...emailList];
+				emailList = [
+					$projectStore.default_email_username + '@hvrpst.com' + '(Default email)',
+					...emailList
+				];
 				sendingEmails = emailList;
 
 				// Find the default sending address
-				const defaultEmail = emails.find(email => email.is_default)?.email;
+				const defaultEmail = emails.find((email) => email.is_default)?.email;
 				if (defaultEmail) {
 					currentSendingEmail = defaultEmail;
 					debouncedUpdate();
@@ -185,7 +187,6 @@
 			.catch((e) => {
 				toast.error('Failed to send test email: ' + e.message, { id: toastId });
 			});
-        
 	}
 
 	function onContentDocUpdate(e: string) {
@@ -197,7 +198,6 @@
 	onMount(() => {
 		initSendingEmails();
 	});
-
 </script>
 
 <div bind:this={scrollTopEl}></div>
@@ -261,9 +261,7 @@
 					</Radio>
 				{/each}
 			</FormControl>
-			<Button on:click={() => (showSendingEmailsModal = true)}>
-				Manage Sending Emails
-			</Button>
+			<Button on:click={() => (showSendingEmailsModal = true)}>Manage Sending Emails</Button>
 		</div>
 		<!--
 		TODO: Implement custom email domain
@@ -278,10 +276,7 @@
 		</div>
 		-->
 	</SplitControl>
-	<SplitControl
-		label="Reply to Email"
-		caption="You will receive replies to this email address"
-	>
+	<SplitControl label="Reply to Email" caption="You will receive replies to this email address">
 		<FormControl>
 			<TextInput
 				block
@@ -297,14 +292,11 @@
 </SplitControl>
 
 <SplitControl label="Content" column>
-	<Editor
-        content={content}
-        docupdate={onContentDocUpdate}
-    />
+	<Editor {content} docupdate={onContentDocUpdate} />
 </SplitControl>
 
 {#key previewKey}
-<Preview id={issue.id} />
+	<Preview id={issue.id} />
 {/key}
 
 <SplitControl label="Send Test Email">
@@ -324,13 +316,8 @@
 	</Button>
 </div>
 
-<Modal
-	bind:show={showSendingEmailsModal}
-	title="Manage Sending Emails"
->
-	<SendingEmails
-		updateContent={() => initSendingEmails()}
-	/>
+<Modal bind:show={showSendingEmailsModal} title="Manage Sending Emails">
+	<SendingEmails updateContent={() => initSendingEmails()} />
 </Modal>
 
 <style>

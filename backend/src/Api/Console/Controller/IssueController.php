@@ -33,8 +33,7 @@ class IssueController extends AbstractController
         private NewsletterListService $newsletterListService,
         private TemplateRenderer $templateRenderer,
         private EmailTransportService $emailTransportService
-    )
-    {
+    ) {
     }
 
     #[Route('/issues', methods: 'GET')]
@@ -70,21 +69,23 @@ class IssueController extends AbstractController
         Issue $issue,
         Project $project,
         #[MapRequestPayload] UpdateIssueInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject'))
+        if ($input->hasProperty('subject')) {
             $updates->subject = $input->subject;
+        }
 
-        if ($input->hasProperty('from_name'))
+        if ($input->hasProperty('from_name')) {
             $updates->fromName = $input->from_name;
+        }
 
         if ($input->hasProperty('lists')) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfProject($project, $input->lists);
 
-            if ($missingListIds !== null)
+            if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
 
             $updates->lists = $input->lists;
         }
@@ -94,11 +95,13 @@ class IssueController extends AbstractController
             $updates->fromEmail = $input->from_email;
         }
 
-        if ($input->hasProperty('reply_to_email'))
+        if ($input->hasProperty('reply_to_email')) {
             $updates->replyToEmail = $input->reply_to_email;
+        }
 
-        if ($input->hasProperty('content'))
+        if ($input->hasProperty('content')) {
             $updates->content = $input->content;
+        }
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
 
@@ -108,8 +111,9 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}', methods: 'DELETE')]
     public function deleteIssue(Issue $issue): JsonResponse
     {
-        if ($issue->getStatus() != IssueStatus::DRAFT)
+        if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
+        }
         $this->issueService->deleteIssue($issue);
         return $this->json([]);
     }
@@ -117,24 +121,29 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/send', methods: 'POST')]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
-        if ($issue->getStatus() != IssueStatus::DRAFT)
+        if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
+        }
 
-        if ($issue->getSubject() === null || trim($issue->getSubject()) === '')
+        if ($issue->getSubject() === null || trim($issue->getSubject()) === '') {
             throw new UnprocessableEntityHttpException("Subject cannot be empty.");
+        }
 
-        if ($issue->getListIds() === [])
+        if ($issue->getListIds() === []) {
             throw new UnprocessableEntityHttpException("Issue must have at least one list.");
+        }
 
-        if ($issue->getContent() === null)
+        if ($issue->getContent() === null) {
             throw new UnprocessableEntityHttpException("Content cannot be empty.");
+        }
 
         $fromEmail = $issue->getFromEmail();
         // TODO: validate from email
 
         $subscribersCount = $this->sendService->getSendableSubscribersCount($issue);
-        if ($subscribersCount == 0)
+        if ($subscribersCount == 0) {
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
+        }
 
 
         $updates = new UpdateIssueDto();
@@ -156,13 +165,12 @@ class IssueController extends AbstractController
         Project $project,
         Issue $issue,
         #[MapRequestPayload] SendTestInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         // $content = $templateService->renderIssue($issue, $send);
 
         $this->emailTransportService->send(
             $input->email,
-            (string) $issue->getSubject(),
+            (string)$issue->getSubject(),
             '<p>See Twig integration for better HTML integration!</p>'
         );
 
@@ -172,7 +180,7 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/preview', methods: 'GET')]
     public function previewIssue(Project $project, Issue $issue): JsonResponse
     {
-        $preview = $this->templateRenderer->renderFromIssue($project, $issue);
+        $preview = $this->templateRenderer->renderFromIssue($issue);
         return $this->json(['html' => $preview]);
     }
 

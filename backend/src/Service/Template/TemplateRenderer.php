@@ -25,18 +25,18 @@ JSON;
     ) {
     }
 
-    public function renderFromIssue(Project $project, Issue $issue): string
+    public function getTemplateVariablesFromProject(Project $project): TemplateVariables
     {
         $meta = $project->getMeta();
 
-        $variables = new TemplateVariables(
+        return new TemplateVariables(
             lang: 'en',
-            subject: (string)$issue->getSubject(),
-            content: $this->contentService->htmlFromJson($issue->getContent() ?? self::DEFAULT_CONTENT),
+            subject: '',
+            content: '',
 
             logo: $meta->template_logo ?? '',
             logo_alt: $meta->template_logo_alt ?? '',
-            brand: $meta->brand ?? '',
+            brand: $meta->brand ?? $project->getName(),
             brand_url: $meta->brand_url ?? '',
 
             address: $meta->address ?? '',
@@ -59,8 +59,28 @@ JSON;
             box_shadow: $meta->box_shadow ?? ProjectDefaults::TEMPLATE_BOX_SHADOW,
             box_border: $meta->box_border ?? ProjectDefaults::TEMPLATE_BOX_BORDER,
         );
+    }
 
-        $template = $this->templateService->getTemplateStringFromProject($issue->getProject());
+    public function renderFromIssue(Issue $issue): string
+    {
+        return $this->renderFromSubjectAndContent(
+            $issue->getProject(),
+            (string)$issue->getSubject(),
+            $this->contentService->getHtmlFromJson($issue->getContent() ?? self::DEFAULT_CONTENT),
+        );
+    }
+
+    public function renderFromSubjectAndContent(
+        Project $project,
+        string $subject,
+        string $content,
+    ): string {
+        $variables = $this->getTemplateVariablesFromProject($project);
+        $variables->subject = $subject;
+        $variables->content = $content;
+
+        $template = $this->templateService->getTemplateStringFromProject($project);
+
         return $this->render($template, $variables);
     }
 
@@ -70,10 +90,4 @@ JSON;
         return $template->render((array)$variables);
     }
 
-    public function renderDefaultTemplate(TemplateVariables $variables): string
-    {
-        $defaultTemplate = $this->templateService->readDefaultTemplate();
-        $template = $this->twig->createTemplate($defaultTemplate);
-        return $template->render((array)$variables);
-    }
 }

@@ -20,8 +20,7 @@ class TemplateController extends AbstractController
         private TemplateRenderer $renderer,
         private TemplateService $templateService,
         private ContentService $contentService
-    )
-    {
+    ) {
     }
 
 
@@ -32,8 +31,9 @@ class TemplateController extends AbstractController
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);
 
-        if (!is_array($variablesInput))
+        if (!is_array($variablesInput)) {
             throw new HttpException('Invalid template variables');
+        }
 
         foreach ($variablesInput as $key => $value) {
             if (property_exists($variables, $key)) {
@@ -61,7 +61,7 @@ class TemplateController extends AbstractController
     #[Route('/template/content', methods: 'POST')]
     public function retrieveContentHtml(#[MapRequestPayload] RetrieveContentHtmlInput $input): JsonResponse
     {
-        $contentHtml = $this->contentService->htmlFromJson($input->content);
+        $contentHtml = $this->contentService->getHtmlFromJson($input->content);
         return new JsonResponse([
             'html' => $contentHtml
         ]);

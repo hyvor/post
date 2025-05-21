@@ -27,7 +27,7 @@ export const MARKETING_LANGUAGES = [
 ];
 
 export function replaceLanguageCodeInUrl(url: string, lang: string): string {
-	const urlObj = new URL(url);
+	const urlObj = new URL(url, "https://post.hyvor.com");
 	const pathname = urlObj.pathname.split('/');
 	pathname[1] = lang;
 	urlObj.pathname = pathname.join('/');
