@@ -39,6 +39,9 @@ class Media
     #[ORM\Column()]
     private string $extension;
 
+    #[ORM\Column]
+    private bool $isPrivate;
+
     public function getId(): int
     {
         return $this->id;
@@ -131,6 +134,18 @@ class Media
     public function setExtension(string $extension): static
     {
         $this->extension = $extension;
+
+        return $this;
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->isPrivate;
+    }
+
+    public function setIsPrivate(bool $isPrivate): static
+    {
+        $this->isPrivate = $isPrivate;
 
         return $this;
     }

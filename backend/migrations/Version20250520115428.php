@@ -28,6 +28,7 @@ final class Version20250520115428 extends AbstractMigration
             path text NOT NULL UNIQUE, -- ex: test.txt or import/import1.csv
             size bigint NOT NULL,
             extension text NOT NULL,
+            is_private boolean NOT NULL DEFAULT false,
             UNIQUE (project_id, path)
         );
         SQL

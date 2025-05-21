@@ -27,9 +27,14 @@ enum MediaUploadTypeEnum: string
 
     public function getUploadFolder(): string
     {
+        return $this->value;
+    }
+
+    public function isPrivate(): bool
+    {
         return match ($this) {
-            self::ISSUE_IMAGES => 'issue_images',
-            self::IMPORT => 'import',
+            self::ISSUE_IMAGES => false,
+            self::IMPORT => true,
         };
     }
 

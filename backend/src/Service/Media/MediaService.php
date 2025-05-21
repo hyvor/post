@@ -10,6 +10,7 @@ use Hyvor\Internal\InternalConfig;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\MimeTypes;
 
 class MediaService
 {
@@ -79,6 +80,7 @@ class MediaService
         $media->setPath($filepath);
         $media->setSize($file->getSize());
         $media->setExtension($extension);
+        $media->setIsPrivate($type->isPrivate());
 
         $this->em->persist($media);
         $this->em->flush();
@@ -105,6 +107,42 @@ class MediaService
             $project->getUuid(),
             $path
         );
+    }
+
+    public function getMediaByPath(Project $project, string $path): ?Media
+    {
+        return $this->em
+            ->getRepository(Media::class)
+            ->findOneBy([
+                'project' => $project,
+                'path' => $path,
+            ]);
+    }
+
+    /**
+     * @return resource
+     * @throws MediaReadException
+     */
+    public function getMediaStream(Media $media)
+    {
+        $uploadPath = $this->getUploadPath($media->getProject(), $media->getPath());
+        try {
+            return $this->filesystem->readStream($uploadPath);
+        } catch (FilesystemException $e) {
+            throw new MediaReadException('Unable to read media stream', previous: $e);
+        }
+    }
+
+    public function getMimeType(string $extension): string
+    {
+        $mime = new MimeTypes();
+        $mimeTypes = $mime->getMimeTypes($extension);
+
+        if (count($mimeTypes) === 0) {
+            return 'application/octet-stream';
+        }
+
+        return $mimeTypes[0];
     }
 
 }
