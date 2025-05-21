@@ -41,7 +41,7 @@ class ProjectDefaults
     public const TEMPLATE_COLOR_BACKGROUND = '#f8f9fa';
     public const TEMPLATE_COLOR_BOX_BACKGROUND = '#ffffff';
 
-    public const TEMPLATE_FONT_FAMILY = 'Arial, sans-serif';
+    public const TEMPLATE_FONT_FAMILY = "'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'";
     public const TEMPLATE_FONT_SIZE = '16px';
     public const TEMPLATE_FONT_WEIGHT = 'normal';
     public const TEMPLATE_FONT_WEIGHT_HEADING = 'bold';
