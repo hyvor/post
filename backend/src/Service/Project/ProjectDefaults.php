@@ -47,7 +47,7 @@ class ProjectDefaults
     public const TEMPLATE_FONT_WEIGHT_HEADING = 'bold';
     public const TEMPLATE_FONT_COLOR_ON_BACKGROUND = '#007bff';
     public const TEMPLATE_FONT_COLOR_ON_BOX = '#333333';
-    public const TEMPLATE_FONT_LINE_HEIGHT = '1.5';
+    public const TEMPLATE_FONT_LINE_HEIGHT = '1.6';
 
     public const TEMPLATE_BOX_RADIUS = '20px';
     public const TEMPLATE_BOX_SHADOW = '0 0 8px rgba(0, 0, 0, 0.1)';

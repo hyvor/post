@@ -14,14 +14,33 @@ class Button extends NodeType
 
     public function toHtml(Node $node, string $children): string
     {
-        // TODO: Add Styling
-        return "<button>$children</button>";
+        /** @var string $href */
+        $href = $node->attr('href');
+        return "<p class=\"button-wrap\"><a href=\"$href\" target=\"_blank\" class=\"button\">$children</a></p>";
     }
 
     public function fromHtml(): array
     {
         return [
-            new ParserRule(tag: 'button')
+            new ParserRule(
+                tag: 'a',
+                getAttrs: function (\DOMElement $node): ButtonAttrs|bool {
+                    $class = $node->getAttribute('class');
+
+                    if (!$class || !str_contains($class, 'button')) {
+                        return false;
+                    }
+
+                    $href = $node->getAttribute('href');
+                    $text = $node->textContent;
+
+                    if (!$href || !$text) {
+                        return false;
+                    }
+
+                    return ButtonAttrs::fromArray(['href' => $href, 'text' => $text]);
+                }
+            ),
         ];
     }
 }
