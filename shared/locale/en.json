@@ -6,6 +6,7 @@
             "home": "Home",
             "subscribers": "Subscribers",
             "issues": "Issues",
+            "tools": "Tools",
             "settings": "Settings"
         },
         "billing": {
@@ -22,6 +23,11 @@
             "created": "{field} created",
             "updated": "{field} updated",
             "deleted": "{field} deleted"
+        },
+        "tools": {
+            "import": {
+                "title": "Import"
+            }
         },
         "settings": {
             "form": {

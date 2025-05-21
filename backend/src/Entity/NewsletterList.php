@@ -16,7 +16,7 @@ class NewsletterList
     #[ORM\Column]
     private int $id;
 
-    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\ManyToOne()]
     private Project $project;
 
     /**
@@ -139,6 +139,7 @@ class NewsletterList
     {
         return $this->subscribers;
     }
+
     public function addSubscriber(Subscriber $subscriber): self
     {
         if (!$this->subscribers->contains($subscriber)) {
@@ -146,6 +147,7 @@ class NewsletterList
         }
         return $this;
     }
+
     public function removeSubscriber(Subscriber $subscriber): self
     {
         $this->subscribers->removeElement($subscriber);
