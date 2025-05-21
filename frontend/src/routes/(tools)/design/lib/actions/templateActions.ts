@@ -1,9 +1,6 @@
 import consoleApi from "../../../../console/lib/consoleApi";
+import type { TemplateResponse } from "../../types";
 
-// Define a custom type for the template response
-interface TemplateResponse {
-    template: string;
-}
 
 // Define a custom type for the preview response
 interface PreviewResponse {

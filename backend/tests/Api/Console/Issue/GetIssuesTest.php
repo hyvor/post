@@ -37,13 +37,13 @@ class GetIssuesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertCount(5, $json);
 
         $issueInDb = $issues[count($issues) - 1];
 
+        /** @var array<int, array<string, mixed>> $json */
         $issue = $json[0];
-        $this->assertIsArray($issue);
         $this->assertSame($issue['id'], $issueInDb->getId());
         // values are tested in GetIssueTest
         $this->assertArrayHasKey('uuid', $issue);
@@ -73,13 +73,13 @@ class GetIssuesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertCount(2, $json);
 
         $issueInDb = $issues[3];
 
+        /** @var array<int, array<string, mixed>> $json */
         $issue = $json[0];
-        $this->assertIsArray($issue);
         $this->assertSame($issue['id'], $issueInDb->getId());
         $this->assertArrayHasKey('uuid', $issue);
         $this->assertArrayHasKey('created_at', $issue);
@@ -106,7 +106,7 @@ class GetIssuesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertCount(0, $json);
     }
 
@@ -125,11 +125,11 @@ class GetIssuesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertCount(5, $json);
 
+        /** @var array<int, array<string, mixed>> $json */
         $issue = $json[0];
-        $this->assertIsArray($issue);
         $this->assertSame($issuesProject1[count($issuesProject1) - 1]->getId(), $issue['id']);
     }
 }

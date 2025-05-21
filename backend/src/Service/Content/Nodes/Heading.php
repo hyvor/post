@@ -18,7 +18,8 @@ class Heading extends NodeType
 
     public function toHtml(Node $node, string $children): string
     {
-        $level = intval($node->attr('level'));
+        $levelAttr = $node->attr('level');
+        $level = is_scalar($levelAttr) ? intval($levelAttr) : 2;
         $level = in_array($level, self::ALLOWED_LEVELS) ? $level : 2;
 
         $fontSizes = [
@@ -29,7 +30,7 @@ class Heading extends NodeType
             5 => '16px',
             6 => '14px',
         ];
-        $fontSize = $fontSizes[$level] ?? '28px';
+        $fontSize = $fontSizes[$level];
         $bottomMargin = '20px';
         $style = "margin: 0 0 $bottomMargin; font-size: $fontSize; font-weight: bold;";
 

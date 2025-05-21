@@ -50,7 +50,7 @@
 		verifyDomain(domain.id)
 			.then((res) => {
 				domain = res.domain;
-				if (res.data.verified === false) {
+				if (res.domain.verified === false) {
 					verificationDebug = res.data.debug;
 					showVerificationDebug = true;
 				}

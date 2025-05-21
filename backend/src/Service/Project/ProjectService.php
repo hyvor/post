@@ -86,10 +86,10 @@ class ProjectService
     {
 
         $query = <<<DQL
-        SELECT u, p
-        FROM App\Entity\User u
-        JOIN u.project p
-        WHERE u.hyvor_user_id = :hyvor_user_id
+            SELECT u, p
+            FROM App\Entity\User u
+            JOIN u.project p
+            WHERE u.hyvor_user_id = :hyvor_user_id
         DQL;
 
         $query = $this->em->createQuery($query);
@@ -206,8 +206,9 @@ class ProjectService
 
     public function updateProject(Project $project, UpdateProjectDto $updates): Project
     {
-        if ($updates->hasProperty('name'))
+        if ($updates->hasProperty('name')) {
             $project->setName($updates->name);
+        }
 
         $project->setUpdatedAt($this->now());
         $this->em->persist($project);

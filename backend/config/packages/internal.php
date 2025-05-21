@@ -2,5 +2,8 @@
 
 
 return static function (\Symfony\Config\InternalConfig $internal): void {
+
     $internal->component('post');
+    $internal->i18n(['default' => 'en']);
+
 };

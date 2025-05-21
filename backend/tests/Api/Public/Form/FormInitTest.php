@@ -25,7 +25,7 @@ class FormInitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(422, $response);
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('Project not found', $json['message']);
 
@@ -44,7 +44,7 @@ class FormInitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(200, $response);
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         // project
         $projectArray = $json['project'];
@@ -75,7 +75,7 @@ class FormInitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(200, $response);
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         // lists
         $lists = $json['lists'];
@@ -100,7 +100,7 @@ class FormInitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(422, $response);
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         // error
         $list2Id = $list2->getId();

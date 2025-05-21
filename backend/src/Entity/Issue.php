@@ -24,7 +24,7 @@ class Issue
     #[ORM\Column(length: 255)]
     private string $uuid;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 

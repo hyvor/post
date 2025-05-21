@@ -29,27 +29,6 @@ class TemplateWithTest extends WebTestCase
                     }
                 </style>
             </head>
-
-            <body style="
-                margin: 0;
-                padding: 20px;
-                font-family: {{ font_family }};
-                font-size: {{ font_size }};
-                font-weight: {{ font_weight }};
-                line-height: {{ font_line_height }};
-                background-color: {{ color_accent }}05
-            ">
-            <div class="box" style="
-                    width: 625px;
-                    max-width: 100%;
-                    margin: auto;
-                    color: {{ font_color_on_box }};
-                    background-color: {{ color_box_background  }};
-                    border-radius: {{ color_box_radius  }};
-                    box-shadow: {{ color_box_shadow }};
-                    border: {{ color_box_border }};
-                    --accent: {{ color_accent }};
-                    ">
                 <div style="
                     padding: 30px 35px 10px;
                     display: flex;
@@ -127,7 +106,7 @@ class TemplateWithTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $content = $this->getJson($response);
+        $content = $this->getJson();
 
         // TODO: add tests
 

@@ -49,7 +49,7 @@ class UpdateIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('thibault@hyvor.com', $json['from_email']);
         $this->assertSame('Test subject', $json['subject']);
@@ -86,7 +86,7 @@ class UpdateIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('List with id ' . $list->getId() . ' not found', $json['message']);
     }
 
@@ -108,7 +108,7 @@ class UpdateIssueTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Entity does not belong to the project', $json['message']);
     }
 
@@ -132,7 +132,7 @@ class UpdateIssueTest extends WebTestCase
             $input($project),
         );
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
         $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
     }

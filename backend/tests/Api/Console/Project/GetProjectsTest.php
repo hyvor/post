@@ -32,7 +32,7 @@ class GetProjectsTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $data = $this->getJson($response);
+        $data = $this->getJson();
         $this->assertCount(0, $data);
     }
 

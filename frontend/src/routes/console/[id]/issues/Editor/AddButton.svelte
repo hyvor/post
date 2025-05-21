@@ -56,9 +56,4 @@
 		flex-direction: column;
 		gap: 20px;
 	}
-	.actions {
-		display: flex;
-		justify-content: flex-end;
-		gap: 10px;
-	}
 </style> 

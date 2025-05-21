@@ -96,7 +96,7 @@ class TemplateController extends AbstractController
             box_border: $meta->template_color_box_border ?? ProjectDefaults::TEMPLATE_BOX_BORDER,
         );
 
-        $html = $this->templateRenderer->renderAll($input->template, $variables);
+        $html = $this->templateRenderer->render($input->template, $variables);
         return $this->json(['html' => $html]);
     }
 }

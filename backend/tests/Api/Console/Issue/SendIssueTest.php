@@ -47,7 +47,7 @@ class SendIssueTest extends WebTestCase
             "/issues/" . $issue->getId() . "/send"
         );
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Issue is not a draft.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -73,7 +73,7 @@ class SendIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Subject cannot be empty.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -99,7 +99,7 @@ class SendIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Issue must have at least one list.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -128,7 +128,7 @@ class SendIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Content cannot be empty.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -158,7 +158,7 @@ class SendIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('No subscribers to send to.', $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -196,7 +196,7 @@ class SendIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame($issue->getId(), $json['id']);
         $this->assertSame('sending', $json['status']);
         $this->assertSame(new \DateTimeImmutable()->getTimestamp(), $json['sending_at']);

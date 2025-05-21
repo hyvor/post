@@ -48,7 +48,7 @@ class TemplateController extends AbstractController
             color_accent: '#007bff',
             color_background: '#f8f9fa',
             color_box_background: '#ffffff',
-            color_box_radius: '5px',
+            box_radius: '5px',
             box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
             box_border: '1px solid #e9ecef',
 
@@ -61,7 +61,7 @@ class TemplateController extends AbstractController
             font_line_height: '1.8',
         );
 
-        return new Response($this->renderer->render($variables));
+        return new Response($this->renderer->renderDefaultTemplate($variables));
 
     }
 

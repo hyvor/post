@@ -103,11 +103,10 @@
 		min={0}
 		max={30}
 		valueFormat={(value) => `${value}px`}
-		value={$projectEditingStore.form_light_border_radius ??
-			projectDefaults.FORM_LIGHT_BORDER_RADIUS}
+		value={parseInt($projectEditingStore.form_light_border_radius ??
+			projectDefaults.FORM_LIGHT_BORDER_RADIUS)}
 		onchange={(value) => {
-			$projectEditingStore.form_light_border_radius = value;
+			$projectEditingStore.form_light_border_radius = value.toString();
 		}}
-		position="top"
 	/>
 </SplitControl>

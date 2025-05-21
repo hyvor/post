@@ -171,8 +171,4 @@
 	.email-selector :global(.tip) {
 		display: none !important;
 	}
-
-	.wrap.enterprise .email-selector {
-		display: none;
-	}
 </style>

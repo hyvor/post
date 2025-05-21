@@ -29,7 +29,7 @@ class UpdateTemplateTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
         $this->assertIsString($json['template']);
         $this->assertStringContainsString('<title>{{ subject }}</title>', $json['template']);
@@ -75,7 +75,7 @@ class UpdateTemplateTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
         $this->assertIsString($json['template']);
         $this->assertStringContainsString('<title>{% block title %}Custom Template</title>', $json['template']);
@@ -106,9 +106,9 @@ class UpdateTemplateTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
         $this->assertIsString($json['template']);
         $this->assertStringContainsString('<title>{{ subject }}</title>', $json['template']);

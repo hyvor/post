@@ -79,6 +79,6 @@ class DeleteSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson($response)['message']);
+        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
     }
 }

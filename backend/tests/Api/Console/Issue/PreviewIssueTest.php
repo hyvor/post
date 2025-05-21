@@ -22,7 +22,7 @@ class PreviewIssueTest extends WebTestCase
             [
                 'project' => $project,
                 'subject' => 'Test subject',
-                'content' => 'Test content',
+                'content' => '{"type": "doc"}',
             ]
         );
 
@@ -33,7 +33,7 @@ class PreviewIssueTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertArrayHasKey('html', $json);
     }

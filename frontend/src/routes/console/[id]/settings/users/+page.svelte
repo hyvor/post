@@ -88,8 +88,4 @@
 	.moderators {
 		padding: 15px 30px;
 	}
-
-	.empty {
-		color: var(--text-light);
-	}
 </style>
