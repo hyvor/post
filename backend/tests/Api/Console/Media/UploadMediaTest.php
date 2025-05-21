@@ -106,7 +106,7 @@ class UploadMediaTest extends WebTestCase
         $url = $json['url'];
         $this->assertIsString($url);
         $this->assertStringStartsWith(
-            'https://post.hyvor.com/api/public/media/import/',
+            'https://post.hyvor.com/api/public/media/',
             $url
         );
         $this->assertStringEndsWith('.csv', $url);

@@ -2,9 +2,8 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\Issue;
 use App\Entity\Media;
-use App\Entity\Type\IssueStatus;
+use App\Entity\Type\MediaFolder;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -26,12 +25,15 @@ final class MediaFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
+            'uuid' => self::faker()->uuid(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'extension' => self::faker()->text(255),
-            'file' => self::faker()->text(255),
-            'size' => self::faker()->randomNumber(),
-            'type' => self::faker()->randomElement(['image/jpeg', 'image/png']),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'project' => ProjectFactory::new(),
+            'folder' => self::faker()->randomElement(MediaFolder::cases()),
+            'extension' => self::faker()->text(255),
+            'size' => self::faker()->randomNumber(),
+            'original_name' => self::faker()->text(15),
+            'is_private' => false,
         ];
     }
 

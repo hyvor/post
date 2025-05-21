@@ -25,7 +25,7 @@ class Media
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 

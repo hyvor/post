@@ -79,7 +79,7 @@ class MediaService
         return $media;
     }
 
-    private function getUploadPath(Media $media): string
+    public function getUploadPath(Media $media): string
     {
         return sprintf(
             '%s/%s/%s.%s',
@@ -95,21 +95,19 @@ class MediaService
         $componentUrl = $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent());
 
         return sprintf(
-            '%s/api/public/media/%s/%s.%s',
+            '%s/api/public/media/%s.%s',
             $componentUrl,
-            $media->getFolder()->value,
             $media->getUuid(),
             $media->getExtension()
         );
     }
 
-    public function getMediaByPath(Project $project, string $path): ?Media
+    public function getMediaByUuid(string $uuid): ?Media
     {
         return $this->em
             ->getRepository(Media::class)
             ->findOneBy([
-                'project' => $project,
-                'path' => $path,
+                'uuid' => $uuid,
             ]);
     }
 
