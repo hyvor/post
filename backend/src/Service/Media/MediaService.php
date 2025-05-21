@@ -4,6 +4,7 @@ namespace App\Service\Media;
 
 use App\Entity\Media;
 use App\Entity\Project;
+use App\Entity\Type\MediaFolder;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
@@ -11,6 +12,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Uid\Uuid;
 
 class MediaService
 {
@@ -28,15 +30,11 @@ class MediaService
      */
     public function upload(
         Project $project,
-        MediaUploadTypeEnum $type,
+        MediaFolder $folder,
         UploadedFile $file,
     ): Media {
-        // upload file
-        $folder = $type->getUploadFolder();
-
+        $uuid = Uuid::v4();
         $originalName = $file->getClientOriginalName();
-        $originalNameWithoutExtension = pathinfo($originalName, PATHINFO_FILENAME);
-
         $extension = $file->guessExtension();
 
         if ($extension === null) {
@@ -47,22 +45,26 @@ class MediaService
             throw new MediaUploadException('Unable to determine file extension');
         }
 
-        $filepath = sprintf(
-            '%s/%s.%s',
-            $folder,
-            $originalNameWithoutExtension . '-' . uniqid(),
-            $extension
-        );
+        // create media entity
+        $media = new Media();
+        $media->setUuid($uuid);
+        $media->setProject($project);
+        $media->setCreatedAt(new \DateTimeImmutable());
+        $media->setUpdatedAt(new \DateTimeImmutable());
+        $media->setFolder($folder);
+        $media->setExtension($extension);
+        $media->setSize($file->getSize());
+        $media->setOriginalName($originalName);
+        $media->setIsPrivate($folder->isPrivate());
 
         $stream = fopen($file->getPathname(), 'r+');
-
         if ($stream === false) {
             throw new MediaUploadException('Unable to open file stream');
         }
 
         try {
             $this->filesystem->writeStream(
-                $this->getUploadPath($project, $filepath),
+                $this->getUploadPath($media),
                 $stream
             );
         } catch (FilesystemException $e) {
@@ -71,41 +73,33 @@ class MediaService
             fclose($stream);
         }
 
-        // create media entity
-        $media = new Media();
-        $media->setProject($project);
-        $media->setCreatedAt(new \DateTimeImmutable());
-        $media->setUpdatedAt(new \DateTimeImmutable());
-        $media->setType($type->value);
-        $media->setPath($filepath);
-        $media->setSize($file->getSize());
-        $media->setExtension($extension);
-        $media->setIsPrivate($type->isPrivate());
-
         $this->em->persist($media);
         $this->em->flush();
 
         return $media;
     }
 
-    private function getUploadPath(Project $project, string $path): string
+    private function getUploadPath(Media $media): string
     {
         return sprintf(
-            '%s/%s',
-            $project->getId(),
-            $path
+            '%s/%s/%s.%s',
+            $media->getProject()->getId(),
+            $media->getFolder()->value,
+            $media->getUuid(),
+            $media->getExtension()
         );
     }
 
-    public function getMediaUrlFromPath(Project $project, string $path): string
+    public function getPublicUrl(Media $media): string
     {
         $componentUrl = $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent());
 
         return sprintf(
-            '%s/api/public/media/%s/%s',
+            '%s/api/public/media/%s/%s.%s',
             $componentUrl,
-            $project->getUuid(),
-            $path
+            $media->getFolder()->value,
+            $media->getUuid(),
+            $media->getExtension()
         );
     }
 
@@ -125,7 +119,7 @@ class MediaService
      */
     public function getMediaStream(Media $media)
     {
-        $uploadPath = $this->getUploadPath($media->getProject(), $media->getPath());
+        $uploadPath = $this->getUploadPath($media);
         try {
             return $this->filesystem->readStream($uploadPath);
         } catch (FilesystemException $e) {

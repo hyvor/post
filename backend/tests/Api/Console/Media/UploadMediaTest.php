@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\Media;
 use App\Api\Console\Controller\MediaController;
 use App\Api\Console\Object\MediaObject;
 use App\Entity\Media;
+use App\Entity\Type\MediaFolder;
 use App\Service\Media\MediaService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
@@ -93,19 +94,19 @@ class UploadMediaTest extends WebTestCase
                 'file' => $file,
             ],
             parameters: [
-                'type' => 'import',
+                'folder' => 'import',
             ]
         );
 
         $this->assertResponseStatusCodeSame(200);
 
         $json = $this->getJson();
-        $this->assertSame('import', $json['type']);
+        $this->assertSame('import', $json['folder']);
 
         $url = $json['url'];
         $this->assertIsString($url);
         $this->assertStringStartsWith(
-            'https://post.hyvor.com/api/public/media/' . $project->getUuid() . '/import/import-',
+            'https://post.hyvor.com/api/public/media/import/',
             $url
         );
         $this->assertStringEndsWith('.csv', $url);
@@ -116,16 +117,19 @@ class UploadMediaTest extends WebTestCase
         $entity = $this->em->getRepository(Media::class)->find($json['id']);
         $this->assertInstanceOf(Media::class, $entity);
         $this->assertSame($project->getId(), $entity->getProject()->getId());
-        $this->assertSame('import', $entity->getType());
+        $this->assertSame(MediaFolder::IMPORT, $entity->getFolder());
         $this->assertSame('csv', $entity->getExtension());
         $this->assertSame(135, $entity->getSize());
-        $this->assertStringStartsWith("import/import-", $entity->getPath());
 
         // uploaded file
         $filesystem = $this->container->get(Filesystem::class);
         assert($filesystem instanceof Filesystem);
 
-        $read = $filesystem->read($project->getId() . '/' . $entity->getPath());
+        $read = $filesystem->read(
+            $project->getId() . '/' .
+            $entity->getFolder()->value . '/' .
+            $entity->getUuid() . '.' . $entity->getExtension()
+        );
         $this->assertStringContainsString('ID,Name,Department,Salary', $read);
     }
 

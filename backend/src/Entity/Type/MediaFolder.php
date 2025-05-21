@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service\Media;
+namespace App\Entity\Type;
 
-enum MediaUploadTypeEnum: string
+enum MediaFolder: string
 {
 
     case ISSUE_IMAGES = 'issue_images';
@@ -23,11 +23,6 @@ enum MediaUploadTypeEnum: string
             self::ISSUE_IMAGES => $imageExtensions,
             self::IMPORT => ['csv'],
         };
-    }
-
-    public function getUploadFolder(): string
-    {
-        return $this->value;
     }
 
     public function isPrivate(): bool

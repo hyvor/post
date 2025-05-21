@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\MediaFolder;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,6 +16,9 @@ class Media
     #[ORM\Column]
     private int $id;
 
+    #[ORM\Column()]
+    private string $uuid;
+
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
 
@@ -25,19 +29,17 @@ class Media
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
-    // this does not use the MediaUploadTypeEnum to make it easier to change if needed
-    // but the value still comes from it
     #[ORM\Column(length: 255)]
-    private string $type;
+    private MediaFolder $folder;
 
-    #[ORM\Column(length: 255)]
-    private string $path;
+    #[ORM\Column()]
+    private string $extension;
 
     #[ORM\Column]
     private int $size;
 
     #[ORM\Column()]
-    private string $extension;
+    private string $originalName;
 
     #[ORM\Column]
     private bool $isPrivate;
@@ -50,6 +52,18 @@ class Media
     public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): static
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }
@@ -90,26 +104,14 @@ class Media
         return $this;
     }
 
-    public function getType(): string
+    public function getFolder(): MediaFolder
     {
-        return $this->type;
+        return $this->folder;
     }
 
-    public function setType(string $type): static
+    public function setFolder(MediaFolder $folder): static
     {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path): static
-    {
-        $this->path = $path;
+        $this->folder = $folder;
 
         return $this;
     }
@@ -137,6 +139,19 @@ class Media
 
         return $this;
     }
+
+    public function getOriginalName(): string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(string $originalName): static
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
 
     public function isPrivate(): bool
     {

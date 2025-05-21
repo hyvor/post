@@ -34,11 +34,11 @@ class MediaController extends AbstractController
         #[MapRequestPayload] MediaUploadInput $input
     ): JsonResponse {
         $file = $request->files->get('file');
-        $type = $input->type;
+        $folder = $input->folder;
 
         $constraint = new Constraints\File(
             maxSize: '100M',
-            extensions: $type->getAllowedExtensions()
+            extensions: $folder->getAllowedExtensions()
         );
         $errors = $this->validator->validate($file, $constraint);
 
@@ -56,7 +56,7 @@ class MediaController extends AbstractController
         try {
             $media = $this->mediaService->upload(
                 $project,
-                $type,
+                $folder,
                 $file
             );
         } catch (MediaUploadException $e) {
@@ -66,7 +66,7 @@ class MediaController extends AbstractController
         return $this->json(
             new MediaObject(
                 $media,
-                $this->mediaService->getMediaUrlFromPath($project, $media->getPath())
+                $this->mediaService->getPublicUrl($media)
             )
         );
     }

@@ -21,15 +21,15 @@ final class Version20250520115428 extends AbstractMigration
             <<<SQL
         CREATE TABLE media (
             id BIGSERIAL PRIMARY KEY,
+            uuid UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
-            type text NOT NULL,
-            path text NOT NULL UNIQUE, -- ex: test.txt or import/import1.csv
-            size bigint NOT NULL,
+            folder text NOT NULL,
             extension text NOT NULL,
-            is_private boolean NOT NULL DEFAULT false,
-            UNIQUE (project_id, path)
+            size bigint NOT NULL,
+            original_name text NOT NULL,
+            is_private boolean NOT NULL DEFAULT false
         );
         SQL
         );

@@ -3,13 +3,14 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Media;
+use App\Entity\Type\MediaFolder;
 
 class MediaObject
 {
 
     public int $id;
     public int $created_at;
-    public string $type;
+    public MediaFolder $folder;
     public string $url;
     public int $size;
     public string $extension;
@@ -18,7 +19,7 @@ class MediaObject
     {
         $this->id = $media->getId();
         $this->created_at = $media->getCreatedAt()->getTimestamp();
-        $this->type = $media->getType();
+        $this->folder = $media->getFolder();
         $this->url = $url;
         $this->size = $media->getSize();
         $this->extension = $media->getExtension();
