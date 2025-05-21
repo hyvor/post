@@ -12,7 +12,9 @@ use App\Service\Project\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
@@ -30,6 +32,10 @@ class ProjectController extends AbstractController
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
         $user = $this->getHyvorUser();
+
+        $slugger = new AsciiSlugger();
+        while ($this->projectService->isUsernameTaken($slugger->slug($input->name)))
+            $input->name .= ' ' . random_int(1, 100);
 
         $project = $this->projectService->createProject($user->id, $input->name);
         return $this->json(new ProjectObject($project));
@@ -56,6 +62,11 @@ class ProjectController extends AbstractController
         $updates = new UpdateProjectDto();
         if ($input->hasProperty('name'))
             $updates->name = $input->name;
+        if ($input->hasProperty('default_email_username')) {
+            if ($this->projectService->isUsernameTaken($input->default_email_username))
+                throw new BadRequestHttpException("Username is already taken");
+            $updates->defaultEmailUsername = $input->default_email_username;
+        }
         $project = $this->projectService->updateProject($project, $updates);
 
         $updatesMeta = new UpdateProjectMetaDto();

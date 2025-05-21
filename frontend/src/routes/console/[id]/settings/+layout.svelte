@@ -6,6 +6,7 @@
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
+	import IconEnvelopeCheck from '@hyvor/icons/IconEnvelopeCheck';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 
 	interface Props {
@@ -45,6 +46,13 @@
 				<IconEnvelopeAt />
 			{/snippet}
 			Signup Form
+		</NavLink>
+
+		<NavLink href="{prefix}/sending" active={page.url.pathname === prefix + '/sending'}>
+			{#snippet start()}
+				<IconEnvelopeCheck />
+			{/snippet}
+			Sending Email
 		</NavLink>
 
 		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>

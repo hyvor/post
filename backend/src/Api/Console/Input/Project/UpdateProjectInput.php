@@ -10,6 +10,7 @@ class UpdateProjectInput extends ProjectObject
     use OptionalPropertyTrait;
 
     public string $name;
+    public string $default_email_username;
 
     public const UNUPDATABLE_PROPERTIES = [
         'id',

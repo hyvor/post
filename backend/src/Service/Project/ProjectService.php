@@ -15,6 +15,7 @@ use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
 
@@ -28,16 +29,19 @@ class ProjectService
     {
     }
 
+
     public function createProject(
         int    $userId,
         string $name,
     ): Project
     {
+        $slugger = new AsciiSlugger();
         $project = new Project()
             ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new ProjectMeta())
+            ->setDefaultEmailUsername($slugger->slug($name))
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -210,10 +214,19 @@ class ProjectService
             $project->setName($updates->name);
         }
 
+        if ($updates->hasProperty('defaultEmailUsername'))
+            $project->setDefaultEmailUsername($updates->defaultEmailUsername);
+
         $project->setUpdatedAt($this->now());
         $this->em->persist($project);
         $this->em->flush();
 
         return $project;
+    }
+
+    public function isUsernameTaken(string $username): bool
+    {
+        $project = $this->em->getRepository(Project::class)->findOneBy(['default_email_username' => $username]);
+        return $project !== null;
     }
 }

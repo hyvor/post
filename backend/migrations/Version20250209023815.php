@@ -24,7 +24,8 @@ final class Version20250209023815 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             user_id BIGINT NOT NULL,
             meta JSONB,
-            name VARCHAR(255) NOT NULL
+            name VARCHAR(255) NOT NULL,
+            default_email_username TEXT UNIQUE NOT NULL
         );
         SQL);
     }
