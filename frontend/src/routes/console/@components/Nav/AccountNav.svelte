@@ -68,14 +68,5 @@
 				display: none !important;
 			}
 		}
-		.current {
-			margin: 0px auto;
-			margin-bottom: 5px;
-		}
-		.current .left {
-			display: flex;
-			gap: 10px;
-			align-items: center;
-		}
 	}
 </style>

@@ -8,7 +8,7 @@
 	} from '@hyvor/design/components';
 	import en from '../../../../shared/locale/en.json';
 	import fr from '../../../../shared/locale/fr.json';
-	import type { AppConfig, Project } from './types';
+	import type { AppConfig, ProjectList } from './types';
 
 	import { onMount } from "svelte";
 	import consoleApi from "./lib/consoleApi";
@@ -16,7 +16,6 @@
 	import { setAppConfig, getAppConfig } from './lib/stores/consoleStore';
 	import { projectRoleStore, projectStore } from "./lib/stores/projectStore";
 	import { userProjectsStore } from "./lib/stores/userProjectsStore";
-	import ProjectList from "./@components/Nav/ProjectList.svelte";
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -42,7 +41,7 @@
 
 				userProjectsStore.set(res.projects);
 				if (res.projects.length != 0) {
-					projectStore.set(res.projects[0]); // Set the first project as the active project
+					projectStore.set(res.projects[0].project); // Set the first project as the active project
 					projectRoleStore.set(res.projects[0].role);
 				}
 				isLoading = false;
@@ -70,7 +69,6 @@
 			code: 'en',
 			flag: '🇬🇧',
 			name: 'English',
-			region: 'United Kindgom',
 			strings: en,
 			default: true
 		},
@@ -78,7 +76,6 @@
 			code: 'fr',
 			flag: '🇫🇷',
 			name: 'Français',
-			region: 'France',
 			strings: fr
 		}
 	]}

@@ -71,15 +71,20 @@
 	let metaToSave: Partial<ProjectMeta> = {};
 
 	function handleChange(key: keyof ProjectMeta, value: string) {
-		metaToSave[key] = value;
-		templateValues[key] = value;
+		metaToSave[key] = value as any;
+		templateValues[key] = value as any;
 		hasChanges = true;
 	}
 
 	async function saveChanges() {
 		try {
-			const updatedProject: ProjectMeta = await updateProject(metaToSave as ProjectMeta);
-			projectStore.set(updatedProject as Project);
+			const currentProject = $projectStore;
+			const updateData = {
+				...currentProject,
+				...metaToSave
+			};
+			const updatedProject: Project = await updateProject(updateData);
+			projectStore.set(updatedProject);
 			metaToSave = {};
 			hasChanges = false;
 			toast.success('Changes saved successfully!');
@@ -105,9 +110,8 @@
 		templateValues = getTemplateValues();
 	}
 
-	const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'];
 	const fontSizeValues = [12, 14, 16, 18, 20, 24, 28, 32];
-	const fontSizeIndex = fontSizeValues.indexOf(parseInt(templateValues.template_font_size));
+	const fontSizeIndex = fontSizeValues.indexOf(parseInt(templateValues.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE));
 	const fontWeights = [
 		'normal',
 		'bold',
@@ -122,9 +126,9 @@
 		'900'
 	];
 	const boxRadiusValues = [0, 4, 8, 12, 16];
-	const boxRadiusIndex = boxRadiusValues.indexOf(parseInt(templateValues.template_box_radius));
+	const boxRadiusIndex = boxRadiusValues.indexOf(parseInt(templateValues.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS));
 	const boxBorderValues = [0, 1, 2, 3, 4];
-	const currentBorder = decodeBorderValue(templateValues.template_box_border);
+	const currentBorder = decodeBorderValue(templateValues.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER);
 	const boxBorderIndex = boxBorderValues.indexOf(currentBorder.width);
 	const lineHeights = ['1.2', '1.4', '1.6', '1.8', '2.0'];
 
@@ -169,28 +173,28 @@
 		{#snippet nested()}
 			<SplitControl label="Accent">
 				<ColorPicker
-					color={templateValues.template_color_accent}
+					color={templateValues.template_color_accent ?? projectDefaults.TEMPLATE_COLOR_ACCENT}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_accent', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Background">
 				<ColorPicker
-					color={templateValues.template_color_background}
+					color={templateValues.template_color_background ?? projectDefaults.TEMPLATE_COLOR_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box background">
 				<ColorPicker
-					color={templateValues.template_color_box_background}
+					color={templateValues.template_color_box_background ?? projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_box_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box shadow">
 				<ColorPicker
-					color={templateValues.template_box_shadow}
+					color={templateValues.template_box_shadow ?? projectDefaults.TEMPLATE_BOX_SHADOW} 
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_box_shadow', e.detail)}
 				/>
@@ -301,18 +305,6 @@
 		padding: 25px 30px 60px;
 		overflow: auto;
 		flex: 1;
-	}
-
-	.actions {
-		display: flex;
-		gap: 10px;
-		margin-bottom: 20px;
-	}
-
-	.font-size-value {
-		margin-top: 8px;
-		font-size: 14px;
-		color: var(--text-secondary);
 	}
 
 	.box-border-controls {

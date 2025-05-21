@@ -160,9 +160,6 @@
 
 		.user-interface-wrap {
 			overflow: auto;
-			.hds-box {
-				padding: 30px;
-			}
 		}
 
 		:global(.CodeMirror) {

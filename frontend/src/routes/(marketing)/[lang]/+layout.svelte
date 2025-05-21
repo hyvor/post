@@ -11,19 +11,20 @@
     }
 
     let { children, data }: Props & PageProps = $props();
+    
+    const lang = (data as { lang: string }).lang;
 </script>
 
 <svelte:head>
 
     {#each MARKETING_LANGUAGES as lang}
-        <link rel="alternate" href={replaceLanguageCodeInUrl(page.url, lang.code)} hreflang={lang.code} />
+        <link rel="alternate" href={replaceLanguageCodeInUrl(page.url.pathname, lang.code)} hreflang={lang.code} />
     {/each}
 
 </svelte:head>
-
 <InternationalizationProvider
+    forceLanguage={lang}
     languages={MARKETING_LANGUAGES}
-    forceLanguage={data.lang}
 >
 
     <Header />

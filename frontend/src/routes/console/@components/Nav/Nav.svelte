@@ -70,12 +70,5 @@
 			height: 0;
 			padding: 0;
 		}
-
-		.nav {
-			border-radius: 0;
-			box-shadow: none;
-			border-bottom: none;
-			width: 100%;
-		}
 	}
 </style>
