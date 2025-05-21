@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { FooterLinkList, Footer } from '@hyvor/design/marketing';
+	import { getMarketingI18n } from './locale';
+
+	const I18n = getMarketingI18n();
 </script>
 
 <Footer
@@ -11,17 +14,17 @@
 	}}
 >
 	{#snippet center()}
-		<div >
+		<div>
 			<div class="row first">
 				<FooterLinkList title="Product">
 					<a href="/console">Console</a>
-					<a href="/pricing">Pricing</a>
+					<a href="/{I18n.getLocale()}/pricing">Pricing</a>
 					<a href="/docs">Docs</a>
 				</FooterLinkList>
 
 				<FooterLinkList title="Legal">
-					<a href="/terms">Terms of Service</a>
-					<a href="/privacy">Privacy Policy</a>
+					<!-- <a href="/terms">Terms of Service</a>
+					<a href="/privacy">Privacy Policy</a> -->
 					<a href="https://hyvor.com/compliance" target="_blank">Compliance</a>
 				</FooterLinkList>
 
