@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Tests\Service\Marks;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class EmTest extends TestCase
+class HeadingTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'Emphasized';
+        $content = 'Heading 2';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'paragraph',
+                    'type' => 'heading',
+                    'attrs' => ['level' => 2],
                     'content' => [
                         [
                             'type' => 'text',
                             'text' => $content,
-                            'marks' => [
-                                ['type' => 'em'],
-                            ],
                         ],
                     ],
                 ],
@@ -29,26 +27,27 @@ class EmTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><em>Emphasized</em></p>', $html);
+        $this->assertSame(
+            '<h2 style="margin: 0 0 20px; font-size: 28px; font-weight: bold;">Heading 2</h2>',
+            trim($html)
+        );
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'Emphasized';
-        $html = "<p><em>$content</em></p>";
+        $content = 'Heading 3';
+        $html = "<h3>$content</h3>";
         $json = (new ContentService())->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'paragraph',
+                    'type' => 'heading',
+                    'attrs' => ['level' => 3],
                     'content' => [
                         [
                             'type' => 'text',
                             'text' => $content,
-                            'marks' => [
-                                ['type' => 'em'],
-                            ],
                         ],
                     ],
                 ],

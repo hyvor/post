@@ -15,7 +15,7 @@ class Project
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\Column(unique: true)]
     private string $uuid;
 
     #[ORM\Column]

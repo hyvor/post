@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\Service\Nodes;
+namespace App\Tests\Service\Content\Marks;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class ParagraphTest extends TestCase
+class StrongTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'I am a paragraph';
+        $content = 'Bold';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
@@ -19,6 +19,9 @@ class ParagraphTest extends TestCase
                         [
                             'type' => 'text',
                             'text' => $content,
+                            'marks' => [
+                                ['type' => 'strong'],
+                            ],
                         ],
                     ],
                 ],
@@ -26,14 +29,14 @@ class ParagraphTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;">I am a paragraph</p>', trim($html));
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><strong>Bold</strong></p>', $html);
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'A paragraph';
-        $html = "<p>$content</p>";
-        $json = (new ContentService())->getJsonFromHtml($html);
+        $content = 'Bold';
+        $html = "<p><strong>$content</strong></p>";
+        $json = new ContentService()->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
@@ -43,6 +46,9 @@ class ParagraphTest extends TestCase
                         [
                             'type' => 'text',
                             'text' => $content,
+                            'marks' => [
+                                ['type' => 'strong'],
+                            ],
                         ],
                     ],
                 ],
