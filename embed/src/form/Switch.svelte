@@ -42,7 +42,7 @@
         bottom: 0;
         background-color: var(--hp-accent-light);
         transition: 0.2s;
-        border-radius: 30px;
+        border-radius: var(--hp-border-radius);
     }
 
     .slider:hover {
@@ -52,7 +52,7 @@
     .slider:before {
         position: absolute;
         content: "";
-        border-radius: 50%;
+        border-radius: var(--hp-border-radius);
         background-color: var(--hp-accent-text);
         transition: 0.1s;
         width: 16px;

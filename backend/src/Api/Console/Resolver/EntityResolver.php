@@ -8,6 +8,9 @@ use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Entity\Subscriber;
+use App\Entity\SubscriberMetadataDefinition;
+use App\Entity\User;
+use App\Entity\UserInvite;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +25,18 @@ class EntityResolver implements ValueResolverInterface
     public const ENTITIES = [
         'lists' => NewsletterList::class,
         'subscribers' => Subscriber::class,
+        'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
         'domain' => Domain::class,
         'sending-addresses' => SendingAddress::class,
+        'users' => User::class,
+        'invites' => UserInvite::class,
     ];
 
     public function __construct(
         private EntityManagerInterface $em,
         private ProjectResolver $projectResolver,
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,7 +44,6 @@ class EntityResolver implements ValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-
         $controllerName = $argument->getControllerName();
         if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
             return [];
@@ -56,7 +60,7 @@ class EntityResolver implements ValueResolverInterface
         }
 
         $id = $request->attributes->get('id');
-        $id = is_string($id) ? (int) $id : null;
+        $id = is_string($id) ? (int)$id : null;
 
         if (!$id) {
             throw new BadRequestException('Invalid ID');
@@ -95,13 +99,12 @@ class EntityResolver implements ValueResolverInterface
             null,
             controllerName: $controllerName
         );
-        $currentProject = (array) $this->projectResolver->resolve($request, $argumentMetadata);
+        $currentProject = (array)$this->projectResolver->resolve($request, $argumentMetadata);
         if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
             throw new AccessDeniedHttpException('Entity does not belong to the project');
         }
 
         return [$entity];
-
     }
 
 }

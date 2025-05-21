@@ -76,7 +76,7 @@
 		border: 1px solid var(--hds-color-border);
 	}
 
-	.loading, .empty {
+	.loading {
 		padding: 20px;
 		text-align: center;
 		color: var(--hds-color-text-light);

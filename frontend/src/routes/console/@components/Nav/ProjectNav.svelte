@@ -1,32 +1,34 @@
 <script lang="ts">
-	import { NavLink, Tag, toast } from '@hyvor/design/components';
+	import { Divider, NavLink, Tag, toast } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconGear from '@hyvor/icons/IconGear';
+	import IconTools from '@hyvor/icons/IconTools';
 	import NavItem from './NavItem.svelte';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import { page } from '$app/state';
-	import { onMount } from 'svelte';
-	import { loadProject } from '../../lib/projectLoader';
-	import { userProjectsStore } from '../../lib/stores/userProjectsStore';
+	import { getI18n } from '../../lib/i18n';
+	import { selectingProject } from '../../lib/stores/consoleStore';
 
 	let width: number;
-	
+
+	const I18n = getI18n();
+
+	function triggerProjectSelector() {
+		selectingProject.set(true);
+	}
+
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 <div class="wrap hds-box">
-	<button class="current">
+	<button class="current" on:click={triggerProjectSelector}>
 		<div class="left">
 			<div class="name">
 				{$projectStore.name}
-			</div>
-			<div class="id">
-				ID
-				<Tag size="x-small"><strong> {$projectStore.id}</strong></Tag>
 			</div>
 		</div>
 		<IconChevronExpand />
@@ -39,7 +41,7 @@
 		>
 			<NavItem>
 				<IconHouse slot="icon" />
-				<span slot="text">Home</span>
+				<span slot="text">{I18n.t('console.nav.home')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -49,7 +51,7 @@
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
-				<span slot="text">Subscribers</span>
+				<span slot="text">{I18n.t('console.nav.subscribers')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -59,7 +61,19 @@
 		>
 			<NavItem>
 				<IconSend slot="icon" />
-				<span slot="text">Issues</span>
+				<span slot="text">{I18n.t('console.nav.issues')}</span>
+			</NavItem>
+		</NavLink>
+		
+		<Divider margin={15} />
+
+		<NavLink
+			href={'/console/' + $projectStore.id.toString() + '/tools'}
+			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/tools`)}
+		>
+			<NavItem>
+				<IconTools slot="icon" />
+				<span slot="text">{I18n.t('console.nav.tools')}</span>
 			</NavItem>
 		</NavLink>
 
@@ -69,7 +83,7 @@
 		>
 			<NavItem>
 				<IconGear slot="icon" />
-				<span slot="text">Settings</span>
+				<span slot="text">{I18n.t('console.nav.settings')}</span>
 			</NavItem>
 		</NavLink>
 	</div>

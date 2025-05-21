@@ -1,17 +1,22 @@
-<script>
-	import AboveFold from './@components/AboveFold.svelte';
-	import TrialSignUp from './@components/TrialSignUp.svelte';
-	import AllFeatures from './@homepage/AllFeatures.svelte';
-	import StartStep from './@homepage/startstep/StartStep.svelte';
+<script lang="ts">
+	import { browser } from '$app/environment';
+	import { InternationalizationService } from '@hyvor/design/components';
+	import { MARKETING_LANGUAGES } from './[lang]/locale';
+	import { goto } from '$app/navigation';
+
+	if (browser) {
+		const closestLanguage =
+			InternationalizationService.getLocaleFromLocalStorage() ||
+			InternationalizationService.getClosestLanguageCode(
+				window.navigator.language,
+				MARKETING_LANGUAGES.map((lang) => lang.code)
+			) ||
+			MARKETING_LANGUAGES[0].code;
+
+		goto(`/${closestLanguage}`, { replaceState: true });
+	}
 </script>
 
 <svelte:head>
 	<title>Hyvor Post</title>
-	<meta name="description" content="Simple Newsletter Platform" />
-	<link rel="canonical" href="https://post.hyvor.com" />
 </svelte:head>
-
-<AboveFold />
-<StartStep />
-<AllFeatures />
-<TrialSignUp />

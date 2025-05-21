@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\List;
 use App\Api\Console\Controller\ListController;
 use App\Entity\NewsletterList;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -33,7 +34,7 @@ class CreateListTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('Valid List Name', $json['name']);
 
@@ -61,4 +62,69 @@ class CreateListTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
     }
 
+    public function test_create_list_trigger_limit(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $lists = NewsletterListFactory::createMany(50, [
+            'project' => $project,
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => 'Valid List Name',
+                'description' => 'Valid List Description',
+            ],
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('You have reached the maximum number of lists for this project.', $json['message']);
+    }
+
+    public function test_create_list_name_already_exists(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        NewsletterListFactory::createOne([
+            'name' => 'Valid List Name',
+            'project' => $project,
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => 'Valid List Name',
+                'description' => 'Valid List Description',
+            ],
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('List name already exists.', $json['message']);
+    }
+
+    public function test_create_list_name_with_comma(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/lists',
+            [
+                'name' => 'Valid List Name, with comma',
+                'description' => 'Valid List Description',
+            ],
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('List name cannot contain a comma.', $json['message']);
+    }
 }

@@ -20,6 +20,7 @@
 	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
+	import { onMount, onDestroy } from 'svelte';
 	import { getSendingAddresses } from '../../../../lib/actions/sendingAddressActions';
 	import { onMount } from 'svelte';
 	import SendingEmails from '../../../settings/sending/SendingAddresses.svelte';
@@ -51,7 +52,7 @@
 				let emailList = emails.map((email) => email.email);
 				emailList = [$projectStore.default_email_username + '@hvrpst.com' + '(Default email)', ...emailList];
 				sendingEmails = emailList;
-				
+
 				// Find the default sending address
 				const defaultEmail = emails.find(email => email.is_default)?.email;
 				if (defaultEmail) {
@@ -63,6 +64,23 @@
 				toast.error('Failed to load sending emails: ' + e.message);
 			});
 	}
+
+	let contentDirty = false;
+	let previewKey = 0;
+	let previewInterval: ReturnType<typeof setInterval>;
+
+	onMount(() => {
+		previewInterval = setInterval(() => {
+			if (contentDirty) {
+				previewKey += 1;
+				contentDirty = false;
+			}
+		}, 10000);
+	});
+
+	onDestroy(() => {
+		clearInterval(previewInterval);
+	});
 
 	function update() {
 		updateIssue(issue.id, {
@@ -172,6 +190,7 @@
 
 	function onContentDocUpdate(e: string) {
 		content = e;
+		contentDirty = true;
 		debouncedUpdate();
 	}
 
@@ -181,7 +200,7 @@
 
 </script>
 
-<div bind:this={scrollTopEl} />
+<div bind:this={scrollTopEl}></div>
 
 <SplitControl label="Subject">
 	<FormControl>
@@ -246,7 +265,7 @@
 				Manage Sending Emails
 			</Button>
 		</div>
-		<!-- 
+		<!--
 		TODO: Implement custom email domain
 		<div style="font-size:14px;margin-top:5px;">
 			{#if $emailDomain && $emailDomain.verified && $emailDomain.verified_in_ses}
@@ -284,7 +303,9 @@
     />
 </SplitControl>
 
+{#key previewKey}
 <Preview id={issue.id} />
+{/key}
 
 <SplitControl label="Send Test Email">
 	<div class="send-test">
@@ -307,7 +328,7 @@
 	bind:show={showSendingEmailsModal}
 	title="Manage Sending Emails"
 >
-	<SendingEmails 
+	<SendingEmails
 		updateContent={() => initSendingEmails()}
 	/>
 </Modal>

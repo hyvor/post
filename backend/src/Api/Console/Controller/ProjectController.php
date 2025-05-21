@@ -9,7 +9,6 @@ use App\Entity\Project;
 use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -25,22 +24,14 @@ class ProjectController extends AbstractController
 
     public function __construct(
         private ProjectService $projectService
-    ) {
-    }
-
-    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") === null')]
-    public function getUserAllProjects(): JsonResponse
+    )
     {
-        $user = $this->getHyvorUser();
-        $projects = $this->projectService->getProjectsOfUser($user->id);
-        return $this->json(array_map(fn(Project $project) => new ProjectObject($project), $projects));
     }
 
     #[Route('/projects', methods: 'POST')]
     public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
     {
-        $user = $this->getUser();
-        assert($user instanceof AuthUser);
+        $user = $this->getHyvorUser();
 
         $slugger = new AsciiSlugger();
         while ($this->projectService->isUsernameTaken($slugger->slug($input->name)))

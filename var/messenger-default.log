@@ -1,0 +1,1120 @@
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#90
+  #message: """
+    Attempted to load class "MakerBundle" from namespace "Symfony\Bundle\MakerBundle".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}
+Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#70
+  #message: """
+    Attempted to load class "ZenstruckFoundryBundle" from namespace "Zenstruck\Foundry".\n
+    Did you forget a "use" statement for another namespace?
+    """
+  #code: 0
+  #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+  #line: 143
+  trace: {
+    ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+    ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+    ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+    ./vendor/symfony/console/Application.php:193 { …}
+    ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+    ./vendor/autoload_runtime.php:29 { …}
+    ./bin/console:15 {
+      › 
+      › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+      › 
+      arguments: {
+        "/app/backend/vendor/autoload_runtime.php"
+      }
+    }
+  }
+}

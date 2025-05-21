@@ -2,13 +2,14 @@
 
 namespace App\Service\Project;
 
-use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Subscriber;
+use App\Entity\Type\UserRole;
+use App\Entity\User;
 use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Util\ClassUpdater;
@@ -44,12 +45,20 @@ class ProjectService
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
 
+        $user = new User()
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setHyvorUserId($userId)
+            ->setProject($project)
+            ->setRole(UserRole::OWNER);
+
         $list = new NewsletterList()
             ->setName('Default List')
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setProject($project);
 
+        $this->em->persist($user);
         $this->em->persist($project);
         $this->em->persist($list);
         $this->em->flush();
@@ -75,11 +84,46 @@ class ProjectService
     }
 
     /**
-     * @return list<Project>
+     * @return array<array{project: Project, user: User}>
      */
-    public function getProjectsOfUser(int $userId): array
+    public function getProjectsOfUser(int $hyvorUserId): array
     {
-        return $this->em->getRepository(Project::class)->findBy(['user_id' => $userId]);
+
+        $query = <<<DQL
+            SELECT u, p
+            FROM App\Entity\User u
+            JOIN u.project p
+            WHERE u.hyvor_user_id = :hyvor_user_id
+        DQL;
+
+        $query = $this->em->createQuery($query);
+        $query->setParameter('hyvor_user_id', $hyvorUserId);
+        /** @var User[] $users */
+        $users = $query->getResult();
+
+        $projects = [];
+        foreach ($users as $user) {
+            $projects[] = [
+                'project' => $user->getProject(),
+                'user' => $user,
+            ];
+        }
+        return $projects;
+    }
+
+    public function getProjectUser(Project $project, int $userId): User
+    {
+
+        $projectUser = $this->em->getRepository(User::class)->findOneBy([
+            'project' => $project,
+            'hyvor_user_id' => $userId,
+        ]);
+
+        if ($projectUser === null) {
+            throw new \RuntimeException('Project user not found');
+        }
+
+        return $projectUser;
     }
 
     /**
@@ -166,8 +210,9 @@ class ProjectService
 
     public function updateProject(Project $project, UpdateProjectDto $updates): Project
     {
-        if ($updates->hasProperty('name'))
+        if ($updates->hasProperty('name')) {
             $project->setName($updates->name);
+        }
 
         if ($updates->hasProperty('defaultEmailUsername'))
             $project->setDefaultEmailUsername($updates->defaultEmailUsername);

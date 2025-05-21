@@ -26,7 +26,6 @@ class VerifyDomainTest extends WebTestCase
         $sesV2ClientMock->method('__call')->with(
             'getEmailIdentity',
             $this->callback(function ($args) {
-
                 $input = $args[0];
 
                 $this->assertSame('hyvor.com', $input['EmailIdentity']);
@@ -42,8 +41,7 @@ class VerifyDomainTest extends WebTestCase
                         'error_type' => 'None',
                     ]
                 ])
-            )
-        ;
+            );
 
         $sesServiceMock = $this->createMock(SesService::class);
         $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
@@ -72,14 +70,18 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsArray($json['domain']);
         $this->assertSame('hyvor.com', $json['domain']['domain']);
         $this->assertTrue($json['domain']['verified_in_ses']);
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Domain Verification Successful');
+        $this->assertEmailSubjectContains($email, 'Your domain hyvor.com is verified');
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'Your domain <strong>hyvor.com</strong> has been successfully verified'
+        );
     }
 
     public function test_already_verified(): void
@@ -105,7 +107,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain already verified', $json['message']);
     }
 
@@ -124,7 +126,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain not found', $json['message']);
     }
 
@@ -150,7 +152,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('You are not the owner of this domain', $json['message']);
     }
 }

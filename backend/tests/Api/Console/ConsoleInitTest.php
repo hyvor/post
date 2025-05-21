@@ -3,21 +3,23 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
-use App\Entity\Type\IssueStatus;
+use App\Api\Console\Object\ProjectListObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
+use App\Entity\Type\UserRole;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberFactory;
+use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
 #[CoversClass(ProjectService::class)]
 #[CoversClass(StatsObject::class)]
 #[CoversClass(StatCategoryObject::class)]
+#[CoversClass(ProjectListObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 
@@ -30,9 +32,33 @@ class ConsoleInitTest extends WebTestCase
             'user_id' => 1,
         ]);
 
+        foreach ($projects as $project) {
+            UserFactory::createOne([
+                'project' => $project,
+                'hyvor_user_id' => 1,
+                'role' => UserRole::OWNER
+            ]);
+        }
+
+        $doctrine = $this->container->get('doctrine');
+        assert($doctrine instanceof \Doctrine\Bundle\DoctrineBundle\Registry);
+        $doctrine->getManager()->clear();
+
+
         // other user
-        ProjectFactory::createMany(2, [
+        ProjectFactory::createMany(1, [
             'user_id' => 2,
+        ]);
+
+        $projectAdmin = ProjectFactory::createOne([
+            'user_id' => 1
+        ]);
+
+        // admin
+        $user = UserFactory::createOne([
+            'project' => $projectAdmin,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::ADMIN
         ]);
 
         $response = $this->consoleApi(
@@ -51,16 +77,24 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('projects', $data);
         $this->assertIsArray($data['projects']);
-        $this->assertSame(10, count($data['projects']));
+        $this->assertSame(11, count($data['projects']));
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
-        $this->assertArrayHasKey('template_defaults', $config);
+        $this->assertArrayHasKey('project_defaults', $config);
     }
 
     public function testInitProject(): void
     {
         $project = ProjectFactory::createOne();
+
+        $projectId = $project->getId();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -78,12 +112,19 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
-        $this->assertSame($project->getId(), $data['project']['id']);
+        $this->assertSame($projectId, $data['project']['id']);
     }
 
     public function testInitProjectWithStats(): void
     {
         $project = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
+
         NewsletterListFactory::createMany(10, [
             'project' => $project,
             'created_at' => new \DateTimeImmutable()
@@ -128,6 +169,13 @@ class ConsoleInitTest extends WebTestCase
     public function testInitProjectWithLists(): void
     {
         $project = ProjectFactory::createOne();
+
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
+
         $newsletterList = NewsletterListFactory::createOne([
             'project' => $project,
         ]);
@@ -138,11 +186,20 @@ class ConsoleInitTest extends WebTestCase
             'created_at' => new \DateTimeImmutable('2021-01-01'),
         ]);
 
+
         $subscribersNew = SubscriberFactory::createMany(5, [
             'project' => $project,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable(),
         ]);
+
+        foreach ($subscribersOld as $subscriber) {
+            $newsletterList->addSubscriber($subscriber);
+        }
+
+        foreach ($subscribersNew as $subscriber) {
+            $newsletterList->addSubscriber($subscriber);
+        }
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -167,6 +224,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
+
         $this->assertSame(10, $list['subscribers_count']);
         $this->assertSame(5, $list['subscribers_count_last_30d']);
     }

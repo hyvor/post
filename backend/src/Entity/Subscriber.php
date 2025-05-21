@@ -24,7 +24,7 @@ class Subscriber
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'subscribers')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
@@ -59,6 +59,12 @@ class Subscriber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $unsubscribe_reason = null;
+
+    /**
+     * @var array<string, string>
+     */
+    #[ORM\Column(type: 'json', options: ['default' => '{}'])]
+    private array $metadata = [];
 
     public function __construct()
     {
@@ -217,6 +223,7 @@ class Subscriber
     {
         return $this->lists;
     }
+
     public function addList(NewsletterList $list): self
     {
         if (!$this->lists->contains($list)) {
@@ -224,9 +231,28 @@ class Subscriber
         }
         return $this;
     }
+
     public function removeList(NewsletterList $list): self
     {
         $this->lists->removeElement($list);
+        return $this;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array<string, string> $metadata
+     */
+    public function setMetadata(array $metadata): static
+    {
+        $this->metadata = $metadata;
+
         return $this;
     }
 }

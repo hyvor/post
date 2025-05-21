@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IssueRepository::class)]
@@ -25,7 +24,7 @@ class Issue
     #[ORM\Column(length: 255)]
     private string $uuid;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 

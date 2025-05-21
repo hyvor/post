@@ -27,7 +27,8 @@ final class Version20250209024328 extends AbstractMigration
             deleted_at timestamptz,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
             name TEXT NOT NULL,
-            description TEXT DEFAULT NULL
+            description TEXT DEFAULT NULL,
+            UNIQUE (project_id, name)
         );
         SQL);
     }

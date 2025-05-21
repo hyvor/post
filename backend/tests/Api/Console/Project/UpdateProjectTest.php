@@ -6,10 +6,12 @@ use App\Api\Console\Controller\ProjectController;
 use App\Api\Console\Input\Project\UpdateProjectInput;
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\Project;
+use App\Entity\Type\UserRole;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
 use App\Service\Project\ProjectService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -31,6 +33,12 @@ class UpdateProjectTest extends WebTestCase
             'meta' => $meta
         ]);
 
+        $user = UserFactory::createOne([
+            'project' => $project,
+            'hyvor_user_id' => 1,
+            'role' => UserRole::OWNER
+        ]);
+
         $response = $this->consoleApi(
             $project,
             'PATCH',
@@ -45,7 +53,7 @@ class UpdateProjectTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('UpdateName', $json['name']);
         $this->assertSame('#ff0000', $json['template_color_accent']);
         $this->assertSame('10px', $json['template_box_radius']);

@@ -44,7 +44,7 @@ class GetIssueProgressTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame(1, $json['total']);
         $this->assertSame(0, $json['sent']);
@@ -80,7 +80,7 @@ class GetIssueProgressTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame(1, $json['total']);
         $this->assertSame(1, $json['sent']);

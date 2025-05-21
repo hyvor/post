@@ -8,7 +8,7 @@ class UpdateProjectDto
 {
     use OptionalPropertyTrait;
 
-    public ?string $name;
+    public string $name;
 
     public ?string $defaultEmailUsername;
 }

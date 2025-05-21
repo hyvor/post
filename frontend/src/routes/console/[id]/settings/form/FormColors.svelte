@@ -1,29 +1,14 @@
 <script lang="ts">
-	import { ColorPicker, FormControl, Radio, SplitControl } from '@hyvor/design/components';
+	import { ColorPicker, FormControl, BoxShadowPicker, SplitControl, Slider } from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
 	import { projectEditingStore, projectStore } from '../../../lib/stores/projectStore';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import BorderPicker from './BorderPicker.svelte';
 
 	let { palette }: { palette: 'light' | 'dark' } = $props();
 
 	const i18n = getI18n();
-
-	let textValue: 'inherit' | 'custom' = $state(
-		$projectEditingStore.form_color_light_text === null ? 'inherit' : 'custom'
-	);
-
 	const projectDefaults = getAppConfig().project_defaults;
-
-	$effect(() => {
-		console.log('textValue', textValue);
-		if (textValue === 'inherit') {
-			$projectEditingStore.form_color_light_text = null;
-		} else {
-			$projectEditingStore.form_color_light_text =
-				$projectStore.form_color_light_text ||
-				(palette === 'light' ? '#000000' : '#ffffff');
-		}
-	});
 </script>
 
 <SplitControl
@@ -31,22 +16,13 @@
 	caption={i18n.t('console.settings.form.textColorCaption')}
 >
 	<FormControl>
-		<Radio name="color-text-inherit" bind:group={textValue} value="inherit">
-			{i18n.t('console.settings.form.textColorInherit')}
-		</Radio>
-		<Radio name="color-text-inherit" bind:group={textValue} value="custom">
-			{i18n.t('console.settings.form.textColorCustom')}
-		</Radio>
-
-		{#if textValue === 'custom'}
-			<ColorPicker
-				color={$projectEditingStore.form_color_light_text ||
-					(palette === 'light' ? '#000000' : '#ffffff')}
-				on:input={(e) => {
-					$projectEditingStore.form_color_light_text = e.detail;
-				}}
-			/>
-		{/if}
+		<ColorPicker
+			color={$projectEditingStore.form_color_light_text ||
+				projectDefaults.FORM_COLOR_LIGHT_TEXT}
+			on:input={(e) => {
+				$projectEditingStore.form_color_light_text = e.detail;
+			}}
+		/>
 	</FormControl>
 </SplitControl>
 
@@ -99,5 +75,38 @@
 				}}
 			/>
 		</SplitControl>
+		<SplitControl label={i18n.t('console.settings.form.boxShadow')}>
+			<BoxShadowPicker
+				value={$projectEditingStore.form_light_input_box_shadow ||
+					projectDefaults.FORM_COLOR_LIGHT_INPUT_TEXT}
+				oninput={(value) => {
+					$projectEditingStore.form_light_input_box_shadow = value;
+				}}
+				position="top"
+			/>
+		</SplitControl>
+		<SplitControl label={i18n.t('console.settings.form.border')}>
+			<BorderPicker
+				value={$projectEditingStore.form_light_input_border ||
+					projectDefaults.FORM_LIGHT_INPUT_BORDER}
+				oninput={(value) => {
+					console.log(value);
+					$projectEditingStore.form_light_input_border = value;
+				}}
+			/>
+		</SplitControl>
 	{/snippet}
+</SplitControl>
+
+<SplitControl label={i18n.t('console.settings.form.roundness')} caption={i18n.t('console.settings.form.roundnessCaption')}>
+	<Slider
+		min={0}
+		max={30}
+		valueFormat={(value) => `${value}px`}
+		value={parseInt($projectEditingStore.form_light_border_radius ??
+			projectDefaults.FORM_LIGHT_BORDER_RADIUS)}
+		onchange={(value) => {
+			$projectEditingStore.form_light_border_radius = value.toString();
+		}}
+	/>
 </SplitControl>

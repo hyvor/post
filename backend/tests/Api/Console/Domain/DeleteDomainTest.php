@@ -58,7 +58,7 @@ class DeleteDomainTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->getJson($response);
+        $this->getJson();
 
         $repository = $this->em->getRepository(Domain::class);
         $find = $repository->find($domain_id);
@@ -77,7 +77,7 @@ class DeleteDomainTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain not found', $json['message']);
     }
 
@@ -101,7 +101,7 @@ class DeleteDomainTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('You are not the owner of this domain', $json['message']);
     }
 }

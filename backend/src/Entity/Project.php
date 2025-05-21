@@ -15,7 +15,7 @@ class Project
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\Column(unique: true)]
     private string $uuid;
 
     #[ORM\Column]
@@ -29,9 +29,6 @@ class Project
 
     #[ORM\Column(length: 255)]
     private string $name;
-
-    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
-    public ?Template $template = null;
 
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
     private ProjectMeta $meta;

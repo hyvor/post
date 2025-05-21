@@ -54,7 +54,7 @@
 			.then((res) => {
 				toast.success('Project created successfully');
                 
-				addUserProject(res);
+				addUserProject({role: 'owner', project: res});	
 
 				goto('/console/' + res.id);
 			})

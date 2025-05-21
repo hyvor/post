@@ -4,7 +4,7 @@ namespace App\Api\Public\Controller\Template;
 
 use App\Api\Public\Input\RetrieveContentHtmlInput;
 use App\Api\Public\Input\TemplateRenderWithInput;
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Service\Template\TemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;
@@ -28,7 +28,6 @@ class TemplateController extends AbstractController
     #[Route('/template/with', methods: 'POST')]
     public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-
         $variables = new TemplateVariables();
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);
@@ -42,7 +41,8 @@ class TemplateController extends AbstractController
             }
         }
 
-        $html = $this->renderer->render($variables);
+        $html = $this->renderer->render($input->template, $variables);
+
         return $this->json(['html' => $html]);
     }
 

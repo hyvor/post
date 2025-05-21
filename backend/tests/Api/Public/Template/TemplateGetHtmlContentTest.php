@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Public\Template;
 
 use App\Api\Public\Controller\Template\TemplateController;
-use App\Content\ContentService;
+use App\Service\Content\ContentService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -22,7 +22,7 @@ class TemplateGetHtmlContentTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('html', $json);
         $this->assertIsString($json['html']);
         $this->assertStringContainsString('Hello World', $json['html']);

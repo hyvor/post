@@ -4,11 +4,9 @@ namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
 use App\Entity\Project;
-use App\Repository\IssueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class NewsletterListService
 {
@@ -19,6 +17,28 @@ class NewsletterListService
         private EntityManagerInterface $em,
     )
     {
+    }
+
+    public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
+
+    public function getListCounter(Project $project): int
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+            ]);
+    }
+
+    public function isNameAvailable(
+        Project $project,
+        string $name
+    ): bool
+    {
+        return $this->em->getRepository(NewsletterList::class)
+            ->count([
+                'project' => $project,
+                'name' => $name,
+            ]) === 0;
     }
 
     public function createNewsletterList(

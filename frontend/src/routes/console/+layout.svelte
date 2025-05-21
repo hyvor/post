@@ -2,20 +2,20 @@
 	import {
 		HyvorBar,
 		InternationalizationProvider,
+		DarkProvider,
 		Loader,
 		toast
 	} from '@hyvor/design/components';
-	import en from '../../../../shared/locale/en-US.json';
-	import fr from '../../../../shared/locale/fr-FR.json';
-	import Nav from './@components/Nav/Nav.svelte';
-	import type { AppConfig, Project } from './types';
+	import en from '../../../../shared/locale/en.json';
+	import fr from '../../../../shared/locale/fr.json';
+	import type { AppConfig, ProjectList } from './types';
 
-	import { onMount } from 'svelte';
-	import consoleApi from './lib/consoleApi';
-	import { userProjectsStore } from './lib/stores/userProjectsStore';
-	import { page } from '$app/stores';
-	import { getAppConfig, setAppConfig } from './lib/stores/consoleStore';
-	import { projectStore } from './lib/stores/projectStore';
+	import { onMount } from "svelte";
+	import consoleApi from "./lib/consoleApi";
+	import { page } from "$app/stores";
+	import { setAppConfig, getAppConfig } from './lib/stores/consoleStore';
+	import { projectRoleStore, projectStore } from "./lib/stores/projectStore";
+	import { userProjectsStore } from "./lib/stores/userProjectsStore";
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -24,8 +24,8 @@
 	let { children }: Props = $props();
 
 	interface InitResponse {
-		config: AppConfig;
-		projects: Project[];
+		config: AppConfig
+		projects: ProjectList[]
 	}
 
 	let isLoading = $state(true);
@@ -40,7 +40,10 @@
 				setAppConfig(res.config);
 
 				userProjectsStore.set(res.projects);
-				projectStore.set(res.projects[0]); // Set the first project as the active project
+				if (res.projects.length != 0) {
+					projectStore.set(res.projects[0].project); // Set the first project as the active project
+					projectRoleStore.set(res.projects[0].role);
+				}
 				isLoading = false;
 			})
 			.catch((err) => {
@@ -63,18 +66,16 @@
 <InternationalizationProvider
 	languages={[
 		{
-			code: 'en-US',
-			flag: '🇺🇸',
+			code: 'en',
+			flag: '🇬🇧',
 			name: 'English',
-			region: 'United States',
 			strings: en,
 			default: true
 		},
 		{
-			code: 'fr-FR',
+			code: 'fr',
 			flag: '🇫🇷',
 			name: 'Français',
-			region: 'France',
 			strings: fr
 		}
 	]}
@@ -90,6 +91,8 @@
 		{/if}
 	</main>
 </InternationalizationProvider>
+
+<DarkProvider></DarkProvider>
 
 <style>
 	main {

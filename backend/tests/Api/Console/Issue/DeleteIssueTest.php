@@ -61,7 +61,7 @@ class DeleteIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame("Issue is not a draft.", $json['message']);
 
         $repository = $this->em->getRepository(Issue::class);
@@ -81,7 +81,7 @@ class DeleteIssueTest extends WebTestCase
         );
 
         $this->assertSame(404, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame("Entity not found", $json['message']);
 
     }
@@ -102,7 +102,7 @@ class DeleteIssueTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson($response)['message']);
+        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());

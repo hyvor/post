@@ -31,7 +31,7 @@ class GetIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame($issue->getId(), $json['id']);
         $this->assertSame($issue->getUuid(), $json['uuid']);
         $this->assertSame($issue->getCreatedAt()->getTimestamp(), $json['created_at']);
@@ -77,7 +77,7 @@ class GetIssueTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame("Entity does not belong to the project", $json['message']);
     }
 }

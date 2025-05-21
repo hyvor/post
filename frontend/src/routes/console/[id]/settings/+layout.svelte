@@ -4,8 +4,10 @@
 	import IconBrush from '@hyvor/icons/IconBrush';
 	import { projectStore } from '../../lib/stores/projectStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
+	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
 	import IconEnvelopeCheck from '@hyvor/icons/IconEnvelopeCheck';
+	import IconDatabase from '@hyvor/icons/IconDatabase';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -18,11 +20,11 @@
 
 <div class="settings">
 	<div class="nav hds-box">
-		<NavLink href="{prefix}/project" active={page.url.pathname === prefix + '/project'}>
+		<NavLink href={prefix} active={page.url.pathname === prefix}>
 			{#snippet start()}
 				<IconCardText />
 			{/snippet}
-			Project 
+			Project
 		</NavLink>
 
 		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
@@ -30,6 +32,13 @@
 				<IconBrush />
 			{/snippet}
 			Email Design
+		</NavLink>
+
+		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
+			{#snippet start()}
+				<IconPeople />
+			{/snippet}
+			Users
 		</NavLink>
 
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
@@ -44,6 +53,13 @@
 				<IconEnvelopeCheck />
 			{/snippet}
 			Sending Email
+		</NavLink>
+
+		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>
+			{#snippet start()}
+				<IconDatabase />
+			{/snippet}
+			Subscriber Metadata
 		</NavLink>
 
 		<div class="section-div"></div>

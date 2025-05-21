@@ -1,11 +1,18 @@
-import type { List, Project, ProjectStats } from '../types';
+import type { List, Project, ProjectStats, SubscriberMetadataDefinition } from '../types';
 import consoleApi from '../lib/consoleApi';
-import { issueStore, listStore, projectStatsStore, setProjectStore } from './stores/projectStore';
+import {
+	issueStore,
+	listStore,
+	projectStatsStore,
+	setProjectStore,
+	subscriberMetadataDefinitionStore
+} from './stores/projectStore';
 
 interface ProjectResponse {
 	project: Project;
 	stats: ProjectStats;
 	lists: List[];
+	subscriber_metadata_definitions: SubscriberMetadataDefinition[];
 }
 
 // to prevent multiple requests for the same subdomain
@@ -24,12 +31,12 @@ export function loadProject(projectId: string) {
 				projectId: projectId
 			})
 			.then((res) => {
-				
 				setProjectStore(res.project);
 				projectStatsStore.set(res.stats);
 				listStore.set(res.lists);
+				subscriberMetadataDefinitionStore.set(res.subscriber_metadata_definitions);
 
-				issueStore.set([]); 
+				issueStore.set([]);
 
 				resolve(res);
 			})

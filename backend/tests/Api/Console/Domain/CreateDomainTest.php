@@ -68,7 +68,7 @@ class CreateDomainTest extends WebTestCase
         );
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $domainId = $json['id'];
         $this->assertIsInt($domainId);
         $this->assertSame('hyvor.com', $json['domain']);
@@ -97,7 +97,7 @@ class CreateDomainTest extends WebTestCase
         );
         $this->assertSame(422, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsArray($json['violations']);
         $violation = $json['violations'][0];
         $this->assertIsArray($violation);
@@ -128,7 +128,7 @@ class CreateDomainTest extends WebTestCase
             ]
         );
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame(
             $current ?
                 'This domain is already registered' :
@@ -157,7 +157,7 @@ class CreateDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Failed to create domain. Contact support for more details', $json['message']);
 
         // logging

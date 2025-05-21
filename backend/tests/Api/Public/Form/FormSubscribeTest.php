@@ -37,39 +37,37 @@ class FormSubscribeTest extends WebTestCase
     public function test_error_on_missing_project(): void
     {
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_id' => 1,
+            'project_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
             'email' => 'test@hyvor.com',
             'list_ids' => [1],
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('Project not found', $json['message']);
     }
 
     public function test_validates_list_ids(): void
     {
-
         $project = ProjectFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => ProjectFactory::createOne()]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_id' => $project->getId(),
+            'project_uuid' => $project->getUuid(),
             'email' => 'test@hyvor.com',
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame("List with id {$list2->getId()} not found", $json['message']);
     }
 
     public function test_subscribes_email(): void
     {
-
         $date = new \DateTimeImmutable('2025-04-14 00:00:00');
         Clock::set(new MockClock($date));
 
@@ -79,7 +77,7 @@ class FormSubscribeTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_id' => $project->getId(),
+            'project_uuid' => $project->getUuid(),
             'email' => 'supun@hyvor.com',
             'list_ids' => [
                 $list1->getId(),
@@ -89,7 +87,7 @@ class FormSubscribeTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200, $response);
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertIsInt($json['id']);
         $this->assertSame('supun@hyvor.com', $json['email']);
@@ -107,12 +105,10 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
         $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
-
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
-
         $project = ProjectFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
@@ -127,7 +123,7 @@ class FormSubscribeTest extends WebTestCase
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_id' => $project->getId(),
+            'project_uuid' => $project->getUuid(),
             'email' => $email,
             'list_ids' => [
                 $list1->getId(),
@@ -136,7 +132,7 @@ class FormSubscribeTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(200, $response);
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertIsInt($json['id']);
         $this->assertSame($subscriber->getId(), $json['id']);
@@ -153,7 +149,6 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
-
     }
 
 }

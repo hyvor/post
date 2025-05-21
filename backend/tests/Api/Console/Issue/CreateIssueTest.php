@@ -45,7 +45,7 @@ class CreateIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
         $this->assertSame([$list->getId()], $json['lists']);
