@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\Service\Marks;
+namespace App\Tests\Service\Content\Marks;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class UnderlineTest extends TestCase
+class EmTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'Underlined';
+        $content = 'Emphasized';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
@@ -20,7 +20,7 @@ class UnderlineTest extends TestCase
                             'type' => 'text',
                             'text' => $content,
                             'marks' => [
-                                ['type' => 'underline'],
+                                ['type' => 'em'],
                             ],
                         ],
                     ],
@@ -29,14 +29,14 @@ class UnderlineTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertStringContainsString('<p style="margin: 0 0 20px;line-height:26px;"><span style="text-decoration:underline">Underlined</span></p>', $html);
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><em>Emphasized</em></p>', $html);
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'Underlined';
-        $html = "<p><span style=\"text-decoration: underline\">$content</span></p>";
-        $json = new ContentService()->getJsonFromHtml($html);
+        $content = 'Emphasized';
+        $html = "<p><em>$content</em></p>";
+        $json = (new ContentService())->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
@@ -47,7 +47,7 @@ class UnderlineTest extends TestCase
                             'type' => 'text',
                             'text' => $content,
                             'marks' => [
-                                ['type' => 'underline'],
+                                ['type' => 'em'],
                             ],
                         ],
                     ],

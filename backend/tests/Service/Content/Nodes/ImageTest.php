@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service\Nodes;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
@@ -25,14 +25,17 @@ class ImageTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertSame('<img     src="https://example.com/image.png"
+        $this->assertSame(
+            '<img     src="https://example.com/image.png"
     alt="Alt text"
     style="
         display: block;
         margin: 30px auto;
         max-width: 100%;
         height: auto;
-    " />', trim($html));
+    " />',
+            trim($html)
+        );
     }
 
     public function test_html_to_json(): void

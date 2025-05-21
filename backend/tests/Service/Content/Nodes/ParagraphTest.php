@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Tests\Service\Marks;
+namespace App\Tests\Service\Content\Nodes;
 
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class CodeTest extends TestCase
+class ParagraphTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'Inline code';
+        $content = 'I am a paragraph';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'text',
-                    'text' => 'Example Text',
-                    'marks' => [
+                    'type' => 'paragraph',
+                    'content' => [
                         [
-                            'type' => 'code',
+                            'type' => 'text',
+                            'text' => $content,
                         ],
                     ],
                 ],
@@ -26,13 +26,13 @@ class CodeTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->htmlFromJson($json);
-        $this->assertStringContainsString('<code style="background: rgba(135, 131, 120, 0.15);color: #eb5757;border-radius: 3px;font-size: 0.85em;padding: 0.2em 0.4em;font-family: monospace;">Example Text</code>', $html);
+        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;">I am a paragraph</p>', trim($html));
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'Inline code';
-        $html = "<p><code>$content</code></p>";
+        $content = 'A paragraph';
+        $html = "<p>$content</p>";
         $json = (new ContentService())->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
@@ -43,9 +43,6 @@ class CodeTest extends TestCase
                         [
                             'type' => 'text',
                             'text' => $content,
-                            'marks' => [
-                                ['type' => 'code'],
-                            ],
                         ],
                     ],
                 ],
