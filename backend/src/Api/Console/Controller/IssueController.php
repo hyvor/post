@@ -145,12 +145,12 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
         }
 
-
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
         $updates->sendingAt = new \DateTimeImmutable();
-        $updates->html = $this->sendService->renderHtml($issue);
-        $updates->text = $this->sendService->renderText($issue);
+        $updates->html = $this->templateRenderer->renderFromIssue($issue);
+        // TODO:
+        $updates->text = ""; // $this->sendService->renderText($issue);
         $updates->totalSends = $subscribersCount;
         $issue = $this->issueService->updateIssue($issue, $updates);
 

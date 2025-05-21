@@ -41,12 +41,10 @@ class SendEmailMessageHandler
 
         try {
 
-            // $content = $templateService->renderIssue($issue, $send);
-
             $this->emailTransportService->send(
                 $send->getEmail(),
                 (string) $issue->getSubject(),
-                '<p>See Twig integration for better HTML integration!</p>'
+                $issue->getHtml(),
             );
 
             $this->em->wrapInTransaction(function() use ($send, $issue) {

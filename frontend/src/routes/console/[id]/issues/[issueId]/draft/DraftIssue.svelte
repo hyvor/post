@@ -23,36 +23,39 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { getSendingAddresses } from '../../../../lib/actions/sendingAddressActions';
 	import SendingEmails from '../../../settings/sending/SendingAddresses.svelte';
+	import { getI18n } from '../../../../lib/i18n';
 
-	export let issue: Issue;
-	export let send: (e: Issue) => void;
+	interface Props {
+		issue: Issue;
+		send: (e: Issue) => void;
+	}
 
-	let scrollTopEl: HTMLDivElement;
+	let { issue, send }: Props = $props();
 
-	let subject = issue.subject || '';
-	let fromName = issue.from_name;
-	let replyToEmail = issue.reply_to_email || '';
-	let selectedLists = issue.lists;
-	let content = issue.content || '';
-	let showSendingEmailsModal = false;
+	let scrollTopEl = $state({} as HTMLDivElement);
+	let subjectInput = $state({} as HTMLInputElement);
 
-	let subjectError = '';
-	let replyToEmailError = '';
-	let selectedSegmentsError = '';
+	let subject = $state(issue.subject || '');
+	let fromName = $state(issue.from_name);
+	let replyToEmail = $state(issue.reply_to_email || '');
+	let selectedLists = $state(issue.lists);
+	let content = $state(issue.content || '');
+	let showSendingEmailsModal = $state(false);
 
-	let testEmail = '';
+	let subjectError = $state('');
+	let replyToEmailError = $state('');
+	let selectedSegmentsError = $state('');
 
-	let sendingEmails = [] as string[];
-	let currentSendingEmail = issue.from_email;
+	let testEmail = $state('');
+
+	let sendingEmails = $state([] as string[]);
+	let currentSendingEmail = $state(issue.from_email);
 
 	function initSendingEmails() {
 		getSendingAddresses()
 			.then((emails) => {
 				let emailList = emails.map((email) => email.email);
-				emailList = [
-					$projectStore.default_email_username + '@hvrpst.com' + '(Default email)',
-					...emailList
-				];
+				emailList = [$projectStore.default_email_username + '@hvrpst.com', ...emailList];
 				sendingEmails = emailList;
 
 				// Find the default sending address
@@ -68,7 +71,7 @@
 	}
 
 	let contentDirty = false;
-	let previewKey = 0;
+	let previewKey = $state(0);
 	let previewInterval: ReturnType<typeof setInterval>;
 
 	onMount(() => {
@@ -195,14 +198,20 @@
 		debouncedUpdate();
 	}
 
+	const I18n = getI18n();
+
 	onMount(() => {
 		initSendingEmails();
+
+		if (subjectInput.value === '') {
+			subjectInput.focus();
+		}
 	});
 </script>
 
 <div bind:this={scrollTopEl}></div>
 
-<SplitControl label="Subject">
+<SplitControl label={I18n.t('console.issues.draft.subject')}>
 	<FormControl>
 		<TextInput
 			block
@@ -210,6 +219,8 @@
 			maxlength={255}
 			on:input={debouncedUpdate}
 			state={subjectError ? 'error' : undefined}
+			bind:input={subjectInput}
+			placeholder={I18n.t('console.issues.draft.subject') + '...'}
 		/>
 		{#if subjectError}
 			<Validation state="error">{subjectError}</Validation>
@@ -217,7 +228,7 @@
 	</FormControl>
 </SplitControl>
 
-<SplitControl label="Segments">
+<SplitControl label={I18n.t('console.issues.draft.lists')}>
 	{#each $listStore as list}
 		<div class="list">
 			<Checkbox
@@ -234,36 +245,40 @@
 </SplitControl>
 
 <SplitControl label="Emails">
-	<SplitControl label="From Name">
-		<TextInput
-			block
-			placeholder={$projectStore.name}
-			bind:value={fromName}
-			on:input={debouncedUpdate}
-			on:blur={debouncedUpdate}
-		/>
-	</SplitControl>
-	<SplitControl
-		label="From Email"
-		caption="This is the email address that will be shown as the sender"
-	>
-		<div class="from-email">
-			<FormControl>
-				{#each sendingEmails as sendingEmail}
-					<Radio
-						bind:group={currentSendingEmail}
-						value={sendingEmail}
-						name="sending-email"
-						style="font-weight:normal"
-						on:change={debouncedUpdate}
-					>
-						{sendingEmail}
-					</Radio>
-				{/each}
-			</FormControl>
-			<Button on:click={() => (showSendingEmailsModal = true)}>Manage Sending Emails</Button>
-		</div>
-		<!--
+	{#snippet nested()}
+		<SplitControl label="From Name">
+			<TextInput
+				block
+				placeholder={$projectStore.name}
+				bind:value={fromName}
+				on:input={debouncedUpdate}
+				on:blur={debouncedUpdate}
+			/>
+		</SplitControl>
+
+		<SplitControl
+			label="From Email"
+			caption="This is the email address that will be shown as the sender"
+		>
+			<div class="from-email">
+				<FormControl>
+					{#each sendingEmails as sendingEmail}
+						<Radio
+							bind:group={currentSendingEmail}
+							value={sendingEmail}
+							name="sending-email"
+							style="font-weight:normal"
+							on:change={debouncedUpdate}
+						>
+							{sendingEmail}
+						</Radio>
+					{/each}
+				</FormControl>
+				<Button on:click={() => (showSendingEmailsModal = true)}
+					>Manage Sending Emails</Button
+				>
+			</div>
+			<!--
 		TODO: Implement custom email domain
 		<div style="font-size:14px;margin-top:5px;">
 			{#if $emailDomain && $emailDomain.verified && $emailDomain.verified_in_ses}
@@ -275,20 +290,25 @@
 			{/if}
 		</div>
 		-->
-	</SplitControl>
-	<SplitControl label="Reply to Email" caption="You will receive replies to this email address">
-		<FormControl>
-			<TextInput
-				block
-				bind:value={replyToEmail}
-				on:blur={updateReplyToEmail}
-				state={replyToEmailError ? 'error' : undefined}
-			/>
-			{#if replyToEmailError}
-				<Validation state="error">{replyToEmailError}</Validation>
-			{/if}
-		</FormControl>
-	</SplitControl>
+		</SplitControl>
+
+		<SplitControl
+			label="Reply to Email"
+			caption="You will receive replies to this email address"
+		>
+			<FormControl>
+				<TextInput
+					block
+					bind:value={replyToEmail}
+					on:blur={updateReplyToEmail}
+					state={replyToEmailError ? 'error' : undefined}
+				/>
+				{#if replyToEmailError}
+					<Validation state="error">{replyToEmailError}</Validation>
+				{/if}
+			</FormControl>
+		</SplitControl>
+	{/snippet}
 </SplitControl>
 
 <SplitControl label="Content" column>

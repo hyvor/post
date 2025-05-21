@@ -84,7 +84,7 @@ class IssueService
         }
 
         if ($updates->hasProperty('html')) {
-            $issue->setContent($updates->html);
+            $issue->setHtml($updates->html);
         }
 
         if ($updates->hasProperty('status')) {

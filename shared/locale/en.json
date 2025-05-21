@@ -27,7 +27,11 @@
         "issues": {
             "newIssue": "New Issue",
             "noIssuesSent": "No issues sent yet",
-            "createFirstIssue": "Create your first issue"
+            "createFirstIssue": "Create your first issue",
+            "draft": {
+                "subject": "Subject",
+                "lists": "Lists"
+            }
         },
         "tools": {
             "import": {

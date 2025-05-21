@@ -93,7 +93,7 @@ class SendService
     public function getSendableSubscribersCount(Issue $issue): int
     {
         return (int) $this->getSendableSubscribersQuery($issue)
-            ->select('COUNT(s.id)')
+            ->select('COUNT(DISTINCT s.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -128,29 +128,6 @@ class SendService
         $this->em->flush();
 
         return $send;
-    }
-
-   //  public function getUnsubscribedUrl()
-    public function renderHtml(Issue $issue): string
-    {
-        // TODO: Create a proper IssueHTML class ?
-        return "
-            <html>
-                <head>
-                    <title>{$issue->getSubject()}</title>
-                </head>
-                <body>
-                    {$issue->getContent()}
-                </body>
-            </html>
-         ";
-    }
-
-    public function renderText(Issue $issue): string
-    {
-        return "
-            {$issue->getSubject()}
-            {$issue->getContent()}";
     }
 
     /**
