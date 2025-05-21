@@ -44,11 +44,11 @@ class GetProjectUserTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
+        /** @var array<int, array<string, mixed>> $json */
         $this->assertCount(1, $json);
 
         $user = $json[0];
-        $this->assertIsArray($user);
         $this->assertSame('admin', $user['role']);
         $this->assertIsArray($user['user']);
         $this->assertSame('supun', $user['user']['username']);

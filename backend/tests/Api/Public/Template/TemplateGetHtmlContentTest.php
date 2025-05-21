@@ -22,7 +22,7 @@ class TemplateGetHtmlContentTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('html', $json);
         $this->assertIsString($json['html']);
         $this->assertStringContainsString('Hello World', $json['html']);

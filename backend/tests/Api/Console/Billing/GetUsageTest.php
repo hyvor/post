@@ -48,7 +48,7 @@ class GetUsageTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsArray($json['emails']);
         $this->assertSame(3, $json['emails']['this_month']);
 

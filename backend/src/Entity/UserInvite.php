@@ -21,7 +21,7 @@ class UserInvite
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'userInvites')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
@@ -37,7 +37,7 @@ class UserInvite
     #[ORM\Column(nullable: false, enumType: UserRole::class)]
     private UserRole $role;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

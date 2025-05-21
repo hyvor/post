@@ -34,7 +34,7 @@ class CreateListTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('Valid List Name', $json['name']);
 
@@ -81,7 +81,7 @@ class CreateListTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('You have reached the maximum number of lists for this project.', $json['message']);
     }
 
@@ -105,7 +105,7 @@ class CreateListTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('List name already exists.', $json['message']);
     }
 
@@ -124,7 +124,7 @@ class CreateListTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('List name cannot contain a comma.', $json['message']);
     }
 }

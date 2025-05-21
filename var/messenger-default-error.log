@@ -1,0 +1,261 @@
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+Could not open input file: /path/to/your/project/bin/console
+2025-05-20T13:11:24+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:24+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:25+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:25+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:27+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:27+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:30+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:11:30+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:11+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:11+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:12+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:12+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:14+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:14+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:18+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:18+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:20+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:20+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:21+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:21+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:23+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:23+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:26+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:13:26+00:00 [critical] Uncaught Error: Class "Symfony\Bundle\MakerBundle\MakerBundle" not found
+2025-05-20T13:30:32+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:32+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:33+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:33+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:35+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:35+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:38+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:30:38+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:01+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:01+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:02+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:02+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:04+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:04+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:07+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+2025-05-20T13:34:07+00:00 [critical] Uncaught Error: Class "Zenstruck\Foundry\ZenstruckFoundryBundle" not found
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.668420+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.668429+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.668432+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:43.669733+00:00","extra":{}}
+13:34:43 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.673250+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.673267+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:43.673340+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.673355+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:43.673361+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.749748+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.749757+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.749760+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:44.751762+00:00","extra":{}}
+13:34:44 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.755493+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.755514+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:44.755587+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.755606+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.755615+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.793289+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.793296+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.793298+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:44.794535+00:00","extra":{}}
+13:34:44 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.797499+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.797510+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:44.797556+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.797568+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:44.797574+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873335+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873343+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873346+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:46.874806+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873364+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873371+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.873374+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:46.874824+00:00","extra":{}}
+13:34:46 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+13:34:46 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878269+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878284+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878267+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878282+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:46.878342+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878358+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878365+00:00","extra":{}}
+
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:46.878346+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878362+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:46.878369+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.956973+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.956983+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.956987+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:47.958911+00:00","extra":{}}
+13:34:47 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.962428+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.962443+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:47.962503+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.962519+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:47.962526+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.029448+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.029456+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.029460+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:50.031156+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.031111+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.031120+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.031123+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:50.032890+00:00","extra":{}}
+13:34:50 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.035024+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.035043+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:50.035107+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.035124+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.035132+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+13:34:50 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.036744+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.036762+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:50.036839+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.036855+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:50.036864+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure\".","context":{"event":"console.command","listener":"Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener::configure"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.113664+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand\".","context":{"event":"console.command","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.113674+00:00","extra":{}}
+{"message":"Notified event \"console.command\" to listener \"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand\".","context":{"event":"console.command","listener":"Doctrine\\Bundle\\MigrationsBundle\\EventListener\\SchemaFilterListener::onConsoleCommand"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.113677+00:00","extra":{}}
+{"message":"Error thrown while running command \"messenger:consume async\". Message: \"Could not find Doctrine connection from Messenger DSN.\"","context":{"exception":{"class":"Symfony\\Component\\Messenger\\Exception\\TransportException","message":"Could not find Doctrine connection from Messenger DSN.","code":0,"file":"/app/backend/vendor/symfony/doctrine-messenger/Transport/DoctrineTransportFactory.php:46","previous":{"class":"Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException","message":"Environment variable not found: \"DATABASE_URL\".","code":0,"file":"/app/backend/vendor/symfony/dependency-injection/EnvVarProcessor.php:221"}},"command":"messenger:consume async","message":"Could not find Doctrine connection from Messenger DSN."},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-05-20T13:34:53.115408+00:00","extra":{}}
+13:34:53 CRITICAL  [console] Error thrown while running command "messenger:consume async". Message: "Could not find Doctrine connection from Messenger DSN." ["exception" => Symfony\Component\Messenger\Exception\TransportException { …},"command" => "messenger:consume async","message" => "Could not find Doctrine connection from Messenger DSN."]
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.119146+00:00","extra":{}}
+{"message":"Notified event \"console.error\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError\".","context":{"event":"console.error","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleError"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.119161+00:00","extra":{}}
+{"message":"Command \"messenger:consume async\" exited with code \"1\"","context":{"command":"messenger:consume async","code":1},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-05-20T13:34:53.119232+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Component\\Console\\EventListener\\ErrorListener::onConsoleTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.119247+00:00","extra":{}}
+{"message":"Notified event \"console.terminate\" to listener \"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate\".","context":{"event":"console.terminate","listener":"Symfony\\Bridge\\Monolog\\Handler\\ConsoleHandler::onTerminate"},"level":100,"level_name":"DEBUG","channel":"event","datetime":"2025-05-20T13:34:53.119255+00:00","extra":{}}
+
+In DoctrineTransportFactory.php line 46:
+                                                          
+  Could not find Doctrine connection from Messenger DSN.  
+                                                          
+
+In EnvVarProcessor.php line 221:
+                                                   
+  Environment variable not found: "DATABASE_URL".  
+                                                   
+
+messenger:consume [-l|--limit LIMIT] [-f|--failure-limit FAILURE-LIMIT] [-m|--memory-limit MEMORY-LIMIT] [-t|--time-limit TIME-LIMIT] [--sleep SLEEP] [-b|--bus BUS] [--queues QUEUES] [--no-reset] [--all] [--keepalive [KEEPALIVE]] [--] [<receivers>...]
+

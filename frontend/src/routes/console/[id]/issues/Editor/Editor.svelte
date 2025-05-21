@@ -363,7 +363,7 @@
 			</IconButton>
 		</div>
 	</div>
-	<div bind:this={el} class="content" />
+	<div bind:this={el} class="content"></div>
 </div>
 
 <input

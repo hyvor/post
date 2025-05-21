@@ -41,7 +41,8 @@ class TemplateController extends AbstractController
             }
         }
 
-        $html = $this->renderer->render($variables);
+        $html = $this->renderer->render($input->template, $variables);
+
         return $this->json(['html' => $html]);
     }
 

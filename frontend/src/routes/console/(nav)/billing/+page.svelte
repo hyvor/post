@@ -63,19 +63,6 @@
 		margin-bottom: 15px;
 	}
 
-	.not-owner {
-		padding: 30px;
-		margin: 15px;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-	.not-owner .msg {
-		margin-bottom: 15px;
-	}
-
 	@media (max-width: 992px) {
 		#billing {
 			flex-direction: column;

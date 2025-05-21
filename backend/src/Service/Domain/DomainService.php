@@ -25,8 +25,6 @@ class DomainService
         private EntityManagerInterface $em,
         private EmailNotificationService $emailNotificationService,
         private AwsDomainService $awsDomainService,
-        #[Autowire('%kernel.project_dir%')]
-        private string $projectDir,
         private LoggerInterface $logger,
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,

@@ -15,6 +15,7 @@ class VerifyInviteTest extends WebTestCase
         $project = ProjectFactory::createOne();
 
         $userInvite = UserInviteFactory::createOne([
+            'hyvor_user_id' => 1,
             'project' => $project,
             'code' => '3f1e9b8c6d2a4e1f5a7b3c9e8f2d6a4b',
             'expires_at' => new \DateTime('+1 day'),

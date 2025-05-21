@@ -37,7 +37,7 @@ class CreateProjectTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $projectId = $json['id'];
         $this->assertIsInt($projectId);
 
@@ -74,7 +74,7 @@ class CreateProjectTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
-        $this->assertHasViolation($data, 'name', 'This value is too long. It should have 255 characters or less.');
+        $this->assertHasViolation('name', 'This value is too long. It should have 255 characters or less.');
     }
 
 }

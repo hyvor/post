@@ -44,7 +44,7 @@ class CreateSubscriberTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('test@email.com', $json['email']);
 
@@ -86,7 +86,7 @@ class CreateSubscriberTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('supun@hyvor.com', $json['email']);
         $this->assertSame('unsubscribed', $json['status']);
@@ -248,7 +248,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
         $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
     }
@@ -271,7 +271,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertSame('List with id ' . $newsletterList1->getId() . ' not found', $this->getJson($response)['message']);
+        $this->assertSame('List with id ' . $newsletterList1->getId() . ' not found', $this->getJson()['message']);
     }
 
     public function testCreateSubscriberDuplicateEmail(): void
@@ -297,7 +297,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this ->assertSame('Subscriber with email ' . $subscriber->getEmail() . ' already exists', $this->getJson($response)['message']);
+        $this ->assertSame('Subscriber with email ' . $subscriber->getEmail() . ' already exists', $this->getJson()['message']);
     }
 
 }

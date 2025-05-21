@@ -24,7 +24,7 @@ class Subscriber
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'subscribers')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 

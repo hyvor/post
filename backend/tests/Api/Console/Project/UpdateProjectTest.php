@@ -53,7 +53,7 @@ class UpdateProjectTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('UpdateName', $json['name']);
         $this->assertSame('#ff0000', $json['template_color_accent']);
         $this->assertSame('10px', $json['template_box_radius']);

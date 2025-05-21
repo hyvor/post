@@ -17,7 +17,7 @@ class DefaultTemplateTest extends WebTestCase
         $response = $this->publicApi('GET', '/template/default');
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
         $this->assertArrayHasKey('variables', $json);
 

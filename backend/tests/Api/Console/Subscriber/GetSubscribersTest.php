@@ -52,12 +52,12 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
 
         $this->assertCount(5, $json);
 
         $subscriber = $json[4];
-        $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
 
@@ -85,11 +85,11 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(2, $json);
 
         $subscriber = $json[1];
-        $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
     }
@@ -105,7 +105,7 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertCount(0, $json);
     }
 
@@ -137,11 +137,11 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(5, $json);
 
         $subscriber = $json[4];
-        $this->assertIsArray($subscriber);
         $this->assertArrayHasKey('id', $subscriber);
         $this->assertArrayHasKey('email', $subscriber);
 
@@ -180,7 +180,8 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
         $this->assertSame($subscriber1->getId(), $json[0]['id']);
     }
@@ -225,7 +226,8 @@ class GetSubscribersTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
         $this->assertSame($subscriber1->getId(), $json[0]['id']);
     }
