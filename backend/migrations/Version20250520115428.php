@@ -24,8 +24,10 @@ final class Version20250520115428 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
-            path VARCHAR(255) NOT NULL UNIQUE, -- ex: test.txt or import/import1.csv
-            size BIGINT NOT NULL,
+            type text NOT NULL,
+            path text NOT NULL UNIQUE, -- ex: test.txt or import/import1.csv
+            size bigint NOT NULL,
+            extension text NOT NULL,
             UNIQUE (project_id, path)
         );
         SQL

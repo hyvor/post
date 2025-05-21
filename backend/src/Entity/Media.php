@@ -25,11 +25,19 @@ class Media
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
+    // this does not use the MediaUploadTypeEnum to make it easier to change if needed
+    // but the value still comes from it
+    #[ORM\Column(length: 255)]
+    private string $type;
+
     #[ORM\Column(length: 255)]
     private string $path;
 
     #[ORM\Column]
     private int $size;
+
+    #[ORM\Column()]
+    private string $extension;
 
     public function getId(): int
     {
@@ -79,6 +87,18 @@ class Media
         return $this;
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getPath(): string
     {
         return $this->path;
@@ -99,6 +119,18 @@ class Media
     public function setSize(int $size): static
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getExtension(): string
+    {
+        return $this->extension;
+    }
+
+    public function setExtension(string $extension): static
+    {
+        $this->extension = $extension;
 
         return $this;
     }

@@ -30,7 +30,7 @@ final class Version20250520124027 extends AbstractMigration
             filename VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_import_status NOT NULL DEFAULT 'requires_input',
             fields JSONB,
-            error_message TEXT,
+            error_message TEXT
         );
         SQL
         );

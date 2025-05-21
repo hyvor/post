@@ -4,6 +4,10 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Api\Console\Resolver\ProjectResolver;
 use App\Api\Console\Resolver\EntityResolver;
+use App\Service\Media\FilesystemFactory;
+use Aws\AwsClient;
+use Aws\S3\S3Client;
+use League\Flysystem\Filesystem;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -35,4 +39,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'controller.argument_value_resolver',
             ['name' => 'console_api_resource', 'priority' => 150]
         );
+
+    // ================ STORAGE =================
+    $services->set(S3Client::class)
+        ->arg('$args', [
+            'version' => 'latest',
+            'region' => '%env(AWS_REGION)%',
+            'credentials' => [
+                'key' => '%env(AWS_ACCESS_KEY_ID)%',
+                'secret' => '%env(AWS_SECRET_ACCESS_KEY)%'
+            ]
+        ]);
+
+    $services->set(Filesystem::class)
+        ->factory([FilesystemFactory::class, 'create'])
+        ->args([
+            '%env(FILESYSTEM_ADAPTER)%',
+            service(S3Client::class),
+            '%env(AWS_BUCKET)%',
+            '%kernel.project_dir%/var/uploads',
+        ]);
 };

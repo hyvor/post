@@ -2,28 +2,13 @@
 
 namespace App\Api\Console\Input\Media;
 
+use App\Service\Media\MediaUploadTypeEnum;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class MediaUploadInput
 {
 
     #[Assert\NotBlank]
-    #[Assert\File(
-        maxSize: '100M',
-        extensions: [
-
-            // images
-            'jpg',
-            'jpeg',
-            'png',
-            'gif',
-            'webp',
-
-            // csv (imports)
-            'csv',
-
-        ],
-    )]
-    public mixed $file;
+    public MediaUploadTypeEnum $type;
 
 }
