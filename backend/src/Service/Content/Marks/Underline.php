@@ -18,8 +18,24 @@ class Underline extends MarkType
     public function fromHtml(): array
     {
         return [
-            new ParserRule(tag: 'underline'),
-            new ParserRule(tag: 'u'),
+            // Support for <u> tag
+            new ParserRule(
+                tag: 'u',
+                getAttrs: fn(\DOMElement $dom) => []
+            ),
+
+            // Support for inline style "text-decoration: underline"
+            new ParserRule(
+                tag: 'span',
+                getAttrs: function (\DOMElement $dom): ?array {
+                    $style = $dom->getAttribute('style') ?? '';
+                    $style = strtolower($style);
+                    if (str_contains($style, 'text-decoration') && str_contains($style, 'underline')) {
+                        return [];
+                    }
+                    return null;
+                }
+            )
         ];
     }
 }

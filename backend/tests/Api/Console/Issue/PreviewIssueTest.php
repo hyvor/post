@@ -22,7 +22,7 @@ class PreviewIssueTest extends WebTestCase
             [
                 'project' => $project,
                 'subject' => 'Test subject',
-                'content' => 'Test content',
+                'content' => '{"type": "doc"}',
             ]
         );
 

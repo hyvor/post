@@ -66,7 +66,6 @@ class ProjectResolver implements ValueResolverInterface
         }*/
 
         // TODO: check roles
-
         return [$project];
 
     }

@@ -43,22 +43,21 @@ JSON;
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: $meta->unsubscribe_text ?? '',
 
-            color_accent: ProjectDefaults::COLOR_ACCENT,
-            // $project->getColorAccent() ?? TemplateDefaults::COLOR_ACCENT,
-            color_background: $meta->color_background ?? TemplateDefaults::COLOR_BACKGROUND,
-            color_box_background: $meta->color_box_background ?? TemplateDefaults::COLOR_BACKGROUND,
+            color_accent: $meta->template_color_accent ?? ProjectDefaults::TEMPLATE_COLOR_ACCENT,
+            color_background: $meta->color_background ?? ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_box_background: $meta->color_box_background ?? ProjectDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
 
-            font_family: $meta->font_family ?? TemplateDefaults::FONT_FAMILY,
-            font_size: $meta->font_size ?? TemplateDefaults::FONT_SIZE,
-            font_weight: $meta->font_weight ?? TemplateDefaults::FONT_WEIGHT,
-            font_weight_heading: $meta->font_weight ?? TemplateDefaults::FONT_WEIGHT_HEADING,
-            font_color_on_background: $meta->font_color_on_background ?? TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
-            font_color_on_box: $meta->font_color_on_box ?? TemplateDefaults::FONT_COLOR_ON_BACKGROUND,
-            font_line_height: $meta->font_line_height ?? TemplateDefaults::FONT_LINE_HEIGHT,
+            font_family: $meta->font_family ?? ProjectDefaults::TEMPLATE_FONT_FAMILY,
+            font_size: $meta->font_size ?? ProjectDefaults::TEMPLATE_FONT_SIZE,
+            font_weight: $meta->font_weight ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT,
+            font_weight_heading: $meta->font_weight ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->font_color_on_background ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->font_color_on_box ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
+            font_line_height: $meta->font_line_height ?? ProjectDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
-            box_radius: $meta->box_radius ?? TemplateDefaults::BOX_RADIUS,
-            box_shadow: $meta->box_shadow ?? TemplateDefaults::BOX_SHADOW,
-            box_border: $meta->box_border ?? TemplateDefaults::BOX_BORDER,
+            box_radius: $meta->box_radius ?? ProjectDefaults::TEMPLATE_BOX_RADIUS,
+            box_shadow: $meta->box_shadow ?? ProjectDefaults::TEMPLATE_BOX_SHADOW,
+            box_border: $meta->box_border ?? ProjectDefaults::TEMPLATE_BOX_BORDER,
         );
 
         $template = $this->templateService->getTemplateStringFromProject($issue->getProject());

@@ -86,10 +86,10 @@ class ProjectService
     {
 
         $query = <<<DQL
-        SELECT u, p
-        FROM App\Entity\User u
-        JOIN u.project p
-        WHERE u.hyvor_user_id = :hyvor_user_id
+            SELECT u, p
+            FROM App\Entity\User u
+            JOIN u.project p
+            WHERE u.hyvor_user_id = :hyvor_user_id
         DQL;
 
         $query = $this->em->createQuery($query);

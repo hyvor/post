@@ -88,6 +88,8 @@ class ConsoleInitTest extends WebTestCase
     {
         $project = ProjectFactory::createOne();
 
+        $projectId = $project->getId();
+
         $user = UserFactory::createOne([
             'project' => $project,
             'hyvor_user_id' => 1,
@@ -110,7 +112,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('project', $data);
         $this->assertIsArray($data['project']);
-        $this->assertSame($project->getId(), $data['project']['id']);
+        $this->assertSame($projectId, $data['project']['id']);
     }
 
     public function testInitProjectWithStats(): void
@@ -184,11 +186,20 @@ class ConsoleInitTest extends WebTestCase
             'created_at' => new \DateTimeImmutable('2021-01-01'),
         ]);
 
+
         $subscribersNew = SubscriberFactory::createMany(5, [
             'project' => $project,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable(),
         ]);
+
+        foreach ($subscribersOld as $subscriber) {
+            $newsletterList->addSubscriber($subscriber);
+        }
+
+        foreach ($subscribersNew as $subscriber) {
+            $newsletterList->addSubscriber($subscriber);
+        }
 
         $response = $this->consoleApi(
             $project->getId(),
@@ -213,6 +224,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
+
         $this->assertSame(10, $list['subscribers_count']);
         $this->assertSame(5, $list['subscribers_count_last_30d']);
     }

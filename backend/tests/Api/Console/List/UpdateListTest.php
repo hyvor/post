@@ -78,7 +78,7 @@ class UpdateListTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
 
-        $this->assertHasViolation($data, 'name', 'This value is too long. It should have 255 characters or less.');
+        $this->assertHasViolation('name',  'This value is too long. It should have 255 characters or less.');
     }
 
     public function test_update_list_descritption(): void

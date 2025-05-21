@@ -21,7 +21,7 @@ class UserInvite
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'userInvites')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 

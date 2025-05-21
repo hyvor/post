@@ -26,7 +26,7 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
-        'domain' => Domain::class,
+        'domains' => Domain::class,
         'users' => User::class,
         'invites' => UserInvite::class,
     ];

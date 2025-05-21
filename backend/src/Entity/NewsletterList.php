@@ -16,7 +16,7 @@ class NewsletterList
     #[ORM\Column]
     private int $id;
 
-    #[ORM\ManyToOne(inversedBy: 'lists', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     private Project $project;
 
     /**
