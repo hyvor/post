@@ -17,9 +17,9 @@
 
 	const id = Number(page.params.issueId);
 
-	let issue: Issue;
-	let loading = true;
-	let error: null | string = null;
+	let issue: Issue = $state();
+	let loading = $state(true);
+	let error: null | string = $state(null);
 
 	async function onDelete() {
 		const confirmed = await confirm({
@@ -125,6 +125,7 @@
 		padding: 30px 35px;
 		display: flex;
 		flex-direction: column;
+		overflow: auto;
 	}
 	.content {
 		flex: 1;

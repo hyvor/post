@@ -24,6 +24,11 @@
             "updated": "{field} updated",
             "deleted": "{field} deleted"
         },
+        "issues": {
+            "newIssue": "New Issue",
+            "noIssuesSent": "No issues sent yet",
+            "createFirstIssue": "Create your first issue"
+        },
         "tools": {
             "import": {
                 "title": "Import"

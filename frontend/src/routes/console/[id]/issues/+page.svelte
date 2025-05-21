@@ -1,17 +1,18 @@
 <script>
-	import IconSend from "@hyvor/icons/IconSend";
-    import IconPlus from "@hyvor/icons/IconPlus";
-	import { issueStore } from "../../lib/stores/projectStore";
-	import CreateIssueButton from "./CreateIssueButton.svelte";
-	import SingleBox from "../../@components/content/SingleBox.svelte";
-	import IssueRow from "./IssueRow.svelte";
-	import { onMount } from "svelte";
-	import { getIssues } from "../../lib/actions/issueActions";
-	import { LoadButton, Loader } from "@hyvor/design/components";
+	import IconSend from '@hyvor/icons/IconSend';
+	import IconPlus from '@hyvor/icons/IconPlus';
+	import { issueStore } from '../../lib/stores/projectStore';
+	import CreateIssueButton from './CreateIssueButton.svelte';
+	import SingleBox from '../../@components/content/SingleBox.svelte';
+	import IssueRow from './IssueRow.svelte';
+	import { onMount } from 'svelte';
+	import { getIssues } from '../../lib/actions/issueActions';
+	import { LoadButton, Loader } from '@hyvor/design/components';
+	import { getI18n } from '../../lib/i18n';
 
-	let loading = true;
-	let hasMore = true;
-	let loadingMore = false;
+	let loading = $state(true);
+	let hasMore = $state(true);
+	let loadingMore = $state(false);
 	const ISSUES_PER_PAGE = 50;
 
 	function load(more = false) {
@@ -22,69 +23,66 @@
 				$issueStore = more ? [...$issueStore, ...data] : data;
 				hasMore = data.length === ISSUES_PER_PAGE;
 			})
-			.catch((e) => {
-
-			})
+			.catch((e) => {})
 			.finally(() => {
 				loading = false;
 				loadingMore = false;
 			});
 	}
 
+	const I18n = getI18n();
+
 	onMount(() => {
 		load();
 	});
-
 </script>
 
 <SingleBox style="overflow-auto">
-    <div class="issues">
+	<div class="issues">
 		{#if loading}
 			<Loader full />
-		{:else}
-			{#if $issueStore.length}
-				<div class="issues-title">
-					Sent Issues
-					<CreateIssueButton
-						text="New"
-						icon={IconPlus}
-						size="small"
-					/>
-				</div>
-				{#each $issueStore as issue}
-					<IssueRow {issue} />
-				{/each}
-				<LoadButton
-					text={"Load more"}
-					loading={loadingMore}
-					show={hasMore}
-					on:click={() => load(true)}
+		{:else if $issueStore.length}
+			<div class="issues-title">
+				{I18n.t('console.nav.issues')}
+				<CreateIssueButton
+					text={I18n.t('console.issues.newIssue')}
+					icon={IconPlus}
+					size="small"
 				/>
-			{:else}
-				<div class="create-first">
-					<IconSend size={60} />
-					<div class="message">
-						No issues sent yet
-					</div>
-					<CreateIssueButton
-						size="large"
-						text="Create your first issue"
-						icon={IconSend}
-					/>
+			</div>
+			{#each $issueStore as issue}
+				<IssueRow {issue} />
+			{/each}
+			<LoadButton
+				text={'Load more'}
+				loading={loadingMore}
+				show={hasMore}
+				on:click={() => load(true)}
+			/>
+		{:else}
+			<div class="create-first">
+				<IconSend size={60} />
+				<div class="message">
+					{I18n.t('console.issues.noIssuesSent')}
 				</div>
-			{/if}
+				<CreateIssueButton
+					size="large"
+					text={I18n.t('console.issues.createFirstIssue')}
+					icon={IconSend}
+				/>
+			</div>
 		{/if}
-    </div>
+	</div>
 </SingleBox>
 
 <style>
 	.create-first {
-		padding: 100px;
 		text-align: center;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		height: 100%;
 	}
 	.create-first .message {
 		margin-top: 20px;
@@ -93,13 +91,18 @@
 	}
 	.issues {
 		margin-top: 15px;
-		padding: 30px;
+		padding: 20px 30px;
+		height: 100%;
+		overflow: auto;
 	}
 	.issues-title {
 		font-weight: 600;
-		font-size: 18px;
-		margin-bottom: 10px;
-		padding: 8px;
+		font-size: 22px;
+		margin-bottom: 15px;
 		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
 	}
 </style>
