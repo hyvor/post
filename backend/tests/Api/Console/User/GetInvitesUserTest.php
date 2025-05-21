@@ -43,9 +43,9 @@ class GetInvitesUserTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(200);
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, array<string, mixed>>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
-        $this->assertIsArray($json[0]);
         $this->assertSame('admin', $json[0]['role']);
         $this->assertSame('supun', $json[0]['user']['username']);
     }

@@ -29,7 +29,7 @@ class GetTemplateTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
         $this->assertSame('<!DOCTYPE html>
 <html lang="{{ lang }}">
@@ -125,7 +125,7 @@ class GetTemplateTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('MyCustomTemplate', $json['template']);
     }

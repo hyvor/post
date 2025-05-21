@@ -52,7 +52,7 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('new@email.com', $json['email']);
 
         $repository = $this->em->getRepository(Subscriber::class);
@@ -123,7 +123,7 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
         $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
     }
@@ -146,7 +146,7 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame(
             'List with id ' . $newsletterList->getId() . ' not found',
@@ -176,7 +176,7 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson($response)['message']);
+        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
 
         $repository = $this->em->getRepository(Subscriber::class);
         $subscriber = $repository->find($subscriber->getId());
@@ -199,6 +199,6 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertSame('Subscriber with email ' . $subscriber2->getEmail() . ' already exists', $this->getJson($response)['message']);
+        $this->assertSame('Subscriber with email ' . $subscriber2->getEmail() . ' already exists', $this->getJson()['message']);
     }
 }

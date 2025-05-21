@@ -50,6 +50,8 @@ class DeleteListTest extends WebTestCase
 
         $repository = $this->em->getRepository(NewsletterList::class);
         $list = $repository->find($newsletterListId);
+        $this->assertNotNull($list);
+        $this->assertNotNull($list->getDeletedAt());
         $this->assertSame('2025-02-21 00:00:00', $list->getDeletedAt()->format('Y-m-d H:i:s'));
     }
 

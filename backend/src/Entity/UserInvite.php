@@ -37,7 +37,7 @@ class UserInvite
     #[ORM\Column(nullable: false, enumType: UserRole::class)]
     private UserRole $role;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

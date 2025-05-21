@@ -70,7 +70,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsArray($json['domain']);
         $this->assertSame('hyvor.com', $json['domain']['domain']);
         $this->assertTrue($json['domain']['verified_in_ses']);
@@ -107,7 +107,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain already verified', $json['message']);
     }
 
@@ -126,7 +126,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain not found', $json['message']);
     }
 
@@ -152,7 +152,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('You are not the owner of this domain', $json['message']);
     }
 }

@@ -48,10 +48,10 @@ class GetSendsTest extends WebTestCase
             "/issues/" . $issue->getId() . "/sends"
         );
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
 
         $this->assertSame(1, count($json));
-        $this->assertIsArray($json[0]);
         $this->assertSame($send->getId(), $json[0]['id']);
         $this->assertSame($send->getCreatedAt()->getTimestamp(), $json[0]['created_at']);
     }
@@ -79,7 +79,7 @@ class GetSendsTest extends WebTestCase
             "/issues/" . $issue->getId() . "/sends?limit=5"
         );
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame(5, count($json));
     }
@@ -115,7 +115,8 @@ class GetSendsTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
 
         $this->assertSame(1, count($json));
         $this->assertSame($send1->getId(), $json[0]['id']);
@@ -153,7 +154,8 @@ class GetSendsTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertSame(1, count($json));
         $this->assertSame($send1->getId(), $json[0]['id']);
     }

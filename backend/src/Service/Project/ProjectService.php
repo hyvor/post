@@ -206,8 +206,9 @@ class ProjectService
 
     public function updateProject(Project $project, UpdateProjectDto $updates): Project
     {
-        if ($updates->hasProperty('name'))
+        if ($updates->hasProperty('name')) {
             $project->setName($updates->name);
+        }
 
         $project->setUpdatedAt($this->now());
         $this->em->persist($project);

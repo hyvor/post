@@ -70,9 +70,10 @@ JSON;
         return $template->render((array)$variables);
     }
 
-    public function renderAll(string $template, TemplateVariables $variables): string
+    public function renderDefaultTemplate(TemplateVariables $variables): string
     {
-        $template = $this->twig->createTemplate($template);
+        $defaultTemplate = $this->templateService->readDefaultTemplate();
+        $template = $this->twig->createTemplate($defaultTemplate);
         return $template->render((array)$variables);
     }
 }

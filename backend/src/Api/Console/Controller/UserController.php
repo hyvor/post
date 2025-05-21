@@ -78,9 +78,11 @@ class UserController extends AbstractController
             throw new InvalidArgumentException('Either email or username must be provided.');
         }
 
+        $hyvorUser = null;
+
         if ($input->email !== null) {
             $hyvorUser = $this->auth->fromEmail($input->email);
-        } else {
+        } else if ($input->username !== null) {
             $hyvorUser = $this->auth->fromUsername($input->username);
         }
 

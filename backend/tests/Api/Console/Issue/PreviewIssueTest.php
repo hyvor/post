@@ -33,7 +33,7 @@ class PreviewIssueTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertArrayHasKey('html', $json);
     }

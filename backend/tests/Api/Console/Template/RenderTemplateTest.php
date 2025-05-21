@@ -94,7 +94,7 @@ class RenderTemplateTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertIsString($json['html']);
         $this->assertStringContainsString('--accent: #007bff;', $json['html']);
