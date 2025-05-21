@@ -32,7 +32,7 @@ class TemplateVariables
         // colors in HEX format
         public string $color_accent = ProjectDefaults::TEMPLATE_COLOR_ACCENT,
         public string $color_background = ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
-        public string $color_box_background = ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
+        public string $color_box_background = ProjectDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
 
         // font
         public string $font_family = ProjectDefaults::TEMPLATE_FONT_FAMILY,

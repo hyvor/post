@@ -2,14 +2,13 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\Meta\ProjectMeta;
-use App\Entity\Project;
+use App\Entity\SendingAddress;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Project>
+ * @extends PersistentProxyObjectFactory<SendingAddress>
  */
-final class ProjectFactory extends PersistentProxyObjectFactory
+final class SendingAddressFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -22,24 +21,20 @@ final class ProjectFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Project::class;
+        return SendingAddress::class;
     }
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     protected function defaults(): array
     {
         return [
-            'uuid' => self::faker()->uuid(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'name' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'user_id' => self::faker()->randomNumber(),
-            'meta' => new ProjectMeta(),
-            'default_email_username' => self::faker()->text(255)
+            'email' => self::faker()->email(),
         ];
     }
 
@@ -49,7 +44,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Project $project): void {})
+            // ->afterInstantiate(function(SendingEmail $sendingEmail): void {})
         ;
     }
 }

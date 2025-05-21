@@ -63,6 +63,7 @@
             },
             "project": {
                 "name": "Project Name",
+                "sendingEmail": "Sending email",
                 "uuid": "Project UUID",
                 "uuidCaption": "Used in the signup form embed code",
                 "delete": "Delete Project",
