@@ -16,14 +16,12 @@ class TemplateController extends AbstractController
 
     public function __construct(
         private TemplateRenderer $renderer,
-    )
-    {
+    ) {
     }
 
     #[Route('/template/basic', methods: 'GET')]
     public function basicTemplate(): Response
     {
-
         $variables = new TemplateVariables(
             lang: 'en',
             subject: 'Introducing Hyvor Post',
@@ -44,25 +42,9 @@ class TemplateController extends AbstractController
             address: '10 Rue de Penthiévre, 75008 Paris, France',
             unsubscribe_url: 'https://example.com/unsubscribe',
             unsubscribe_text: 'Unsubscribe',
-
-            color_accent: '#007bff',
-            color_background: '#f8f9fa',
-            color_box_background: '#ffffff',
-            box_radius: '5px',
-            box_shadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-            box_border: '1px solid #e9ecef',
-
-            font_family: "'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
-            font_size: '16px',
-            font_weight: '400',
-            font_weight_heading: '700',
-            font_color_on_background: '#777',
-            font_color_on_box: '#343a40',
-            font_line_height: '1.8',
         );
 
         return new Response($this->renderer->renderDefaultTemplate($variables));
-
     }
 
 }

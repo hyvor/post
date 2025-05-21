@@ -72,4 +72,62 @@ class UpdateProjectTest extends WebTestCase
         $this->assertSame(null, $projectMeta->template_logo);
         $this->assertSame('Subscribe to newsletter', $projectMeta->form_title);
     }
+
+    public function test_update_project_email_username(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne([
+            'default_email_username' => 'thibault@project.com'
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/projects',
+            [
+                'default_email_username' => 'thibault@gmail.com',
+                'name' => 'UpdateName',
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson($response);
+        $this->assertSame('UpdateName', $json['name']);
+        $this->assertSame('thibault@gmail.com', $json['default_email_username']);
+
+        $repository = $this->em->getRepository(Project::class);
+        $project = $repository->find($json['id']);
+        $this->assertNotNull($project);
+        $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('UpdateName', $project->getName());
+        $this->assertSame('thibault@gmail.com', $project->getDefaultEmailUsername());
+    }
+
+    public function test_update_project_email_username_taken(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $project = ProjectFactory::createOne([
+            'default_email_username' => 'thibault@gmail.com',
+        ]);
+
+        ProjectFactory::createOne([
+            'default_email_username' => 'thibault@hyvor.com',
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'PATCH',
+            '/projects',
+            [
+                'default_email_username' => 'thibault@hyvor.com',
+            ]
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertSame('Username is already taken', $json['message']);
+    }
 }

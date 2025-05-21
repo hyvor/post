@@ -6,6 +6,7 @@ use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
+use App\Entity\SendingAddress;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\User;
@@ -26,6 +27,8 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
+        'domain' => Domain::class,
+        'sending-addresses' => SendingAddress::class,
         'users' => User::class,
         'invites' => UserInvite::class,
     ];
@@ -47,6 +50,7 @@ class EntityResolver implements ValueResolverInterface
         }
 
         $argumentType = $argument->getType();
+
         if (!$argumentType || !str_starts_with($argumentType, 'App\Entity\\')) {
             return [];
         }

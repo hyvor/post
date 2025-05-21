@@ -1,4 +1,5 @@
 export interface AppConfig {
+
 	hyvor: {
 		instance: string;
 	};
@@ -104,10 +105,11 @@ export type ProjectList = {
 };
 
 export type Project = {
-	id: number;
-	uuid: string;
-	created_at: number;
-	name: string;
+	id: number,
+	uuid: string,
+	created_at: number,
+	name: string,
+	default_email_username: string
 } & ProjectMeta;
 
 export interface SubscriberMetadataDefinition {
@@ -206,3 +208,10 @@ type VerifyDomainResponse = {
 		debug: Record<string, string>;
 	};
 };
+
+export type SendingAddress = {
+	id: number,
+	email: string,
+	domain: Domain,
+	is_default: boolean,
+}

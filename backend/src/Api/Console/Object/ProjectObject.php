@@ -13,6 +13,7 @@ class ProjectObject
     public string $uuid;
     public int $created_at; // unix timestamp
     public string $name;
+    public string $default_email_username;
 
     public ?string $template_color_accent;
     public ?string $template_color_background;
@@ -64,6 +65,7 @@ class ProjectObject
         $this->uuid = $project->getUuid();
         $this->created_at = $project->getCreatedAt()->getTimestamp();
         $this->name = $project->getName();
+        $this->default_email_username = $project->getDefaultEmailUsername();
 
         $meta = $project->getMeta();
         $this->template_color_accent = $meta->template_color_accent;

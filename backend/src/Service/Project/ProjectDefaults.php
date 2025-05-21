@@ -49,7 +49,7 @@ class ProjectDefaults
     public const TEMPLATE_FONT_COLOR_ON_BOX = '#333333';
     public const TEMPLATE_FONT_LINE_HEIGHT = '1.5';
 
-    public const TEMPLATE_BOX_RADIUS = '5px';
+    public const TEMPLATE_BOX_RADIUS = '20px';
     public const TEMPLATE_BOX_SHADOW = '0 0 10px rgba(0, 0, 0, 0.1)';
     public const TEMPLATE_BOX_BORDER = '1px solid #e9ecef';
 
