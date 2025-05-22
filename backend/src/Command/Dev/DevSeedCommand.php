@@ -3,6 +3,7 @@
 namespace App\Command\Dev;
 
 use App\Entity\Type\UserRole;
+use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
@@ -63,6 +64,12 @@ class DevSeedCommand extends Command
             'project' => $project,
             'name' => 'Typescript',
             'description' => 'Get the latest Typescript news'
+        ]);
+
+        DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'example.com',
+            'verified_in_ses' => true
         ]);
 
         $output->writeln('<info>Database seeded with test data.</info>');

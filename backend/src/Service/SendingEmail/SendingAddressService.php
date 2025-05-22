@@ -18,8 +18,8 @@ class SendingAddressService
     public function __construct(
         private EntityManagerInterface $em,
         private SendingAddressRepository $sendingEmailRepository
-    ) {}
-
+    ) {
+    }
 
     /**
      * @return ArrayCollection<int, SendingAddress>
@@ -46,29 +46,45 @@ class SendingAddressService
         return $sendingAddress;
     }
 
-    public function updateSendingAddress(SendingAddress $sendingAddress, UpdateSendingAddressDto $updates): SendingAddress
-    {
-        if ($updates->hasProperty('email'))
+    public function updateSendingAddress(
+        SendingAddress $sendingAddress,
+        UpdateSendingAddressDto $updates
+    ): SendingAddress {
+        if ($updates->hasProperty('email')) {
             $sendingAddress->setEmail($updates->email);
+        }
 
-        if ($updates->hasProperty('customDomain'))
+        if ($updates->hasProperty('customDomain')) {
             $sendingAddress->setDomain($updates->customDomain);
+        }
 
         if ($updates->hasProperty('isDefault')) {
+            // only true is supported
+            assert($updates->isDefault === true);
             $sendingAddress->setIsDefault($updates->isDefault);
-            // Set all other sending addresses to not default
-            $currentSendingAddresses = $this->getSendingAddresses($sendingAddress->getProject());
-            foreach ($currentSendingAddresses as $currentSendingAddress) {
-                if ($currentSendingAddress->getId() !== $sendingAddress->getId()) {
-                    $currentSendingAddress->setIsDefault(false);
-                    $currentSendingAddress->setUpdatedAt($this->now());
-                }
+
+            $currentDefaultSendingAddress = $this->getCurrentDefaultSendingAddressOfProject(
+                $sendingAddress->getProject()
+            );
+
+            if ($currentDefaultSendingAddress) {
+                $currentDefaultSendingAddress->setIsDefault(false);
+                $currentDefaultSendingAddress->setUpdatedAt($this->now());
             }
         }
 
         $sendingAddress->setUpdatedAt($this->now());
+
         $this->em->flush();
         return $sendingAddress;
+    }
+
+    public function getCurrentDefaultSendingAddressOfProject(Project $project): ?SendingAddress
+    {
+        return $this->sendingEmailRepository->findOneBy([
+            'project' => $project,
+            'isDefault' => true
+        ]);
     }
 
     public function deleteSendingAddress(SendingAddress $sendingAddress): void

@@ -30,7 +30,7 @@ class SendingAddress
     private Domain $domain;
 
     #[ORM\Column]
-    private bool $is_default = false;
+    private bool $isDefault = false;
 
     public function getId(): int
     {
@@ -106,12 +106,12 @@ class SendingAddress
 
     public function isDefault(): bool
     {
-        return $this->is_default;
+        return $this->isDefault;
     }
 
-    public function setIsDefault(bool $is_default): static
+    public function setIsDefault(bool $isDefault): static
     {
-        $this->is_default = $is_default;
+        $this->isDefault = $isDefault;
 
         return $this;
     }

@@ -14,16 +14,19 @@ final class Version20250209024452 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create issues table';
     }
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
             CREATE TYPE issues_status AS ENUM ('draft', 'scheduled', 'sending', 'failed', 'sent');
-        SQL);
+        SQL
+        );
 
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE issues (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -48,7 +51,8 @@ final class Version20250209024452 extends AbstractMigration
             failed_at timestamptz,
             sent_at timestamptz
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

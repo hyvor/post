@@ -19,6 +19,7 @@ final class Version20250518004215 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        // TODO: remove this
         $this->addSql(
             <<<SQL
         CREATE TABLE imports (
