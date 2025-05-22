@@ -8,7 +8,7 @@ use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserInviteFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,9 +20,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserInvite::class)]
 class GetInvitesUserTest extends WebTestCase
 {
-    public function test_get_project_invites(): void
+    public function test_get_newsletter_invites(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -32,12 +32,12 @@ class GetInvitesUserTest extends WebTestCase
 
         $invite = UserInviteFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/invites'
         );

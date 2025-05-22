@@ -19,13 +19,14 @@ final class Version20250518004215 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        // TODO: remove this
         $this->addSql(
             <<<SQL
         CREATE TABLE imports (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id),
+            newsletter_id BIGINT NOT NULL references newsletters(id),
             filename VARCHAR(255) NOT NULL
         );
         SQL

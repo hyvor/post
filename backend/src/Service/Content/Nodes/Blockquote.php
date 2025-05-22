@@ -14,15 +14,7 @@ class Blockquote extends NodeType
 
     public function toHtml(Node $node, string $children): string
     {
-        $styles = "
-            border-left: 4px solid;
-            border-color: #000;
-            border-color: currentColor;
-            border-color: var(--accent);
-            margin: 0 0 20px;
-            padding: 15px;
-        ";
-        return "<blockquote style=\"$styles\">$children</blockquote>";
+        return "<blockquote>$children</blockquote>";
     }
 
     public function fromHtml(): array

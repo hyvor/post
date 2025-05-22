@@ -3,12 +3,12 @@
 namespace App\Tests\Api\Public\Template;
 
 use App\Api\Public\Controller\Template\TemplateController;
-use App\Service\Template\TemplateService;
+use App\Service\EmailTemplate\EmailTemplateService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(TemplateController::class)]
-#[CoversClass(TemplateService::class)]
+#[CoversClass(EmailTemplateService::class)]
 class TemplateWithTest extends WebTestCase
 {
 
@@ -107,7 +107,6 @@ class TemplateWithTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $content = $this->getJson();
-
         // TODO: add tests
 
     }

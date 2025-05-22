@@ -7,7 +7,7 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
-use App\Service\Issue\EmailTransportService;
+use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,30 +26,21 @@ class SendEmailMessageHandler
     public function __construct(
         private EntityManagerInterface $em,
         private IssueService $issueService,
-        private EmailTransportService $emailTransportService,
+        private EmailSenderService $emailSenderService,
         private MessageBusInterface $messageBus,
-    )
-    {
+    ) {
     }
 
     public function __invoke(SendEmailMessage $message): void
     {
-
         $send = $this->em->getRepository(Send::class)->find($message->getSendId());
         assert($send !== null);
         $issue = $send->getIssue();
 
         try {
+            $this->emailSenderService->send($issue, $send);
 
-            // $content = $templateService->renderIssue($issue, $send);
-
-            $this->emailTransportService->send(
-                $send->getEmail(),
-                (string) $issue->getSubject(),
-                '<p>See Twig integration for better HTML integration!</p>'
-            );
-
-            $this->em->wrapInTransaction(function() use ($send, $issue) {
+            $this->em->wrapInTransaction(function () use ($send, $issue) {
                 $send->setStatus(SendStatus::SENT);
                 $send->setSentAt($this->now());
 
@@ -60,16 +51,11 @@ class SendEmailMessageHandler
                 $this->em->flush();
                 $this->checkCompletion($issue);
             });
-
-
         } catch (\Exception $e) {
-
             $attempts = $message->getAttempt();
 
-            if ($attempts >= 4)
-            {
-
-                $this->em->wrapInTransaction(function() use ($send, $issue, $e) {
+            if ($attempts >= 4) {
+                $this->em->wrapInTransaction(function () use ($send, $issue, $e) {
                     $send->setStatus(SendStatus::FAILED);
                     $send->setFailedAt($this->now());
                     $send->setErrorPrivate($e->getMessage());
@@ -88,9 +74,7 @@ class SendEmailMessageHandler
                 });
 
                 throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
-            }
-            else
-            {
+            } else {
                 // Redispatch with exponential backoff
                 // 1m, 4m, 16m
                 $delaySeconds = pow(4, $attempts) * 15;
@@ -105,7 +89,6 @@ class SendEmailMessageHandler
                 );
             }
         }
-
     }
 
     /**
@@ -128,6 +111,5 @@ class SendEmailMessageHandler
 
             $this->issueService->updateIssue($issue, $updates);
         }
-
     }
 }

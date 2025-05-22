@@ -50,15 +50,15 @@ class InviteController extends AbstractController
             throw new BadRequestHttpException("Invitation expired");
         }
 
-        $project = $invite->getProject();
-        if ($this->userService->isAdmin($project, $invite->getHyvorUserId())) {
-            throw new BadRequestHttpException("You are already an admin of this project");
+        $newsletter = $invite->getNewsletter();
+        if ($this->userService->isAdmin($newsletter, $invite->getHyvorUserId())) {
+            throw new BadRequestHttpException("You are already an admin of this newsletter");
         }
 
-        $this->userService->createUser($project, $invite->getHyvorUserId());
+        $this->userService->createUser($newsletter, $invite->getHyvorUserId());
 
         $this->userInviteService->deleteInvite($invite);
 
-        return $this->redirect('https://post.hyvor.dev/console/' . $project->getId());
+        return $this->redirect('https://post.hyvor.dev/console/' . $newsletter->getId());
     }
 }

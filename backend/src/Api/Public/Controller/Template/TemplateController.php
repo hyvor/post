@@ -5,9 +5,9 @@ namespace App\Api\Public\Controller\Template;
 use App\Api\Public\Input\RetrieveContentHtmlInput;
 use App\Api\Public\Input\TemplateRenderWithInput;
 use App\Service\Content\ContentService;
-use App\Service\Template\TemplateRenderer;
-use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariables;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\EmailTemplate\EmailTemplateService;
+use App\Service\EmailTemplate\EmailTemplateVariables;
 use Hyvor\Internal\Http\Exceptions\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,23 +17,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private TemplateRenderer $renderer,
-        private TemplateService $templateService,
+        private HtmlEmailTemplateRenderer $renderer,
+        private EmailTemplateService $templateService,
         private ContentService $contentService
-    )
-    {
+    ) {
     }
 
 
     #[Route('/template/with', methods: 'POST')]
     public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-        $variables = new TemplateVariables();
+        $variables = new EmailTemplateVariables();
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);
 
-        if (!is_array($variablesInput))
+        if (!is_array($variablesInput)) {
             throw new HttpException('Invalid template variables');
+        }
 
         foreach ($variablesInput as $key => $value) {
             if (property_exists($variables, $key)) {
@@ -50,7 +50,7 @@ class TemplateController extends AbstractController
     public function defaultTemplate(): JsonResponse
     {
         $rawTemplate = $this->templateService->readDefaultTemplate();
-        $defaults = new TemplateVariables();
+        $defaults = new EmailTemplateVariables();
 
         return new JsonResponse([
             'template' => $rawTemplate,
@@ -61,7 +61,7 @@ class TemplateController extends AbstractController
     #[Route('/template/content', methods: 'POST')]
     public function retrieveContentHtml(#[MapRequestPayload] RetrieveContentHtmlInput $input): JsonResponse
     {
-        $contentHtml = $this->contentService->htmlFromJson($input->content);
+        $contentHtml = $this->contentService->getHtmlFromJson($input->content);
         return new JsonResponse([
             'html' => $contentHtml
         ]);

@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import Nav from '../@components/Nav/Nav.svelte';
 	import { page } from '$app/state';
-	import { loadProject } from '../lib/projectLoader';
+	import { loadNewsletter } from '../lib/newsletterLoader';
 	import { Loader, toast } from '@hyvor/design/components';
-	import ProjectSelector from '../@components/Nav/ProjectSelector.svelte';
+	import NewsletterSelector from '../@components/Nav/NewsletterSelector.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -15,13 +15,13 @@
 	let isLoading = $state(true);
 
 	onMount(() => {
-		const projectId = page.params.id;
-		loadProject(projectId)
+		const newsletterId = page.params.id;
+		loadNewsletter(newsletterId)
 			.then(() => {
 				isLoading = false;
 			})
 			.catch((e) => {
-				toast.error('Unable to load project');
+				toast.error('Unable to load newsletter');
 			});
 	});
 </script>
@@ -33,7 +33,7 @@
 		</div>
 	{:else}
 		<Nav />
-		<ProjectSelector />
+		<NewsletterSelector />
 		<div class="content">
 			{@render children?.()}
 		</div>

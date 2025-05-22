@@ -3,30 +3,30 @@
 namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
-use App\Service\Template\TemplateRenderer;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
-#[CoversClass(TemplateRenderer::class)]
+#[CoversClass(HtmlEmailTemplateRenderer::class)]
 class SendTestIssueTest extends WebTestCase
 {
 
     public function test_send_test(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [
@@ -43,17 +43,17 @@ class SendTestIssueTest extends WebTestCase
 
     public function test_send_invalid_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [

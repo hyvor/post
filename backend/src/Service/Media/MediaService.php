@@ -3,7 +3,7 @@
 namespace App\Service\Media;
 
 use App\Entity\Media;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\MediaFolder;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Component\InstanceUrlResolver;
@@ -29,7 +29,7 @@ class MediaService
      * @throws MediaUploadException
      */
     public function upload(
-        Project $project,
+        Newsletter $newsletter,
         MediaFolder $folder,
         UploadedFile $file,
     ): Media {
@@ -48,7 +48,7 @@ class MediaService
         // create media entity
         $media = new Media();
         $media->setUuid($uuid);
-        $media->setProject($project);
+        $media->setNewsletter($newsletter);
         $media->setCreatedAt(new \DateTimeImmutable());
         $media->setUpdatedAt(new \DateTimeImmutable());
         $media->setFolder($folder);
@@ -83,7 +83,7 @@ class MediaService
     {
         return sprintf(
             '%s/%s/%s.%s',
-            $media->getProject()->getId(),
+            $media->getNewsletter()->getId(),
             $media->getFolder()->value,
             $media->getUuid(),
             $media->getExtension()

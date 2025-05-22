@@ -37,7 +37,7 @@ final class Version20250209024410 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             email VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_status DEFAULT 'pending',
             subscribed_at timestamptz,

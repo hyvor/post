@@ -4,7 +4,7 @@ export interface AppConfig {
 		instance: string;
 	};
 
-	project_defaults: {
+	newsletter_defaults: {
 		FORM_COLOR_LIGHT_TEXT: string;
 		FORM_COLOR_LIGHT_ACCENT: string;
 		FORM_COLOR_LIGHT_ACCENT_TEXT: string;
@@ -31,7 +31,7 @@ export interface AppConfig {
 	};
 }
 
-export type ProjectMeta = {
+export type NewsletterMeta = {
 	template_color_accent: string | null;
 	template_color_background: string | null;
 	template_color_box_background: string | null;
@@ -99,18 +99,18 @@ export type Invite = {
 	expires_at: number;
 };
 
-export type ProjectList = {
+export type NewsletterList = {
 	role: UserRole;
-	project: Project;
+	newsletter: Newsletter;
 };
 
-export type Project = {
+export type Newsletter = {
 	id: number,
 	uuid: string,
 	created_at: number,
 	name: string,
 	default_email_username: string
-} & ProjectMeta;
+} & NewsletterMeta;
 
 export interface SubscriberMetadataDefinition {
 	id: number;
@@ -120,7 +120,7 @@ export interface SubscriberMetadataDefinition {
 	type: 'text';
 }
 
-export interface ProjectStats {
+export interface NewsletterStats {
 	subscribers: { total: number; last_30d: number };
 	issues: { total: number; last_30d: number };
 	lists: { total: number; last_30d: number };
@@ -199,14 +199,6 @@ export type Domain = {
 	verified: boolean;
 	verified_in_ses: boolean;
 	requested_by_current_website: boolean;
-};
-
-type VerifyDomainResponse = {
-	domain: Domain;
-	data: {
-		verified: boolean;
-		debug: Record<string, string>;
-	};
 };
 
 export type SendingAddress = {

@@ -1,10 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { page } from '$app/state';
-	import { loadProject } from '../lib/projectLoader';
-	import { Loader, toast } from '@hyvor/design/components';
 	import Nav from '../@components/Nav/Nav.svelte';
-    
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -14,10 +9,10 @@
 </script>
 
 <div class="main-inner">
-    <Nav />
-    <div class="content">
-        {@render children?.()}
-    </div>
+	<Nav />
+	<div class="content">
+		{@render children?.()}
+	</div>
 </div>
 
 <style>

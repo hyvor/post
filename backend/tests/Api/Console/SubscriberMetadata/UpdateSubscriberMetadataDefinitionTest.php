@@ -7,7 +7,7 @@ use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -20,11 +20,11 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_updates_name(): void
     {
-        $project = ProjectFactory::createOne();
-        $metadata = SubscriberMetadataDefinitionFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $metadata = SubscriberMetadataDefinitionFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/subscriber-metadata-definitions/' . $metadata->getId(),
             [
@@ -41,24 +41,24 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
         $this->assertEquals('Test Name 2', $entity->getName());
     }
 
-    public function test_cannot_update_other_project_entities(): void
+    public function test_cannot_update_other_newsletter_entities(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $otherProject,
+            'newsletter' => $otherNewsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/subscriber-metadata-definitions/' . $metadata->getId()
         );
 
         $this->assertResponseStatusCodeSame(403);
         $json = $this->getJson();
-        $this->assertSame('Entity does not belong to the project', $json['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $json['message']);
     }
 
 

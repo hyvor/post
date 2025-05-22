@@ -4,27 +4,27 @@ namespace App\Tests\Api\Console\SendingAddresses;
 
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 
 class GetSendingAddressTest extends WebTestCase
 {
     public function test_get_sending_email_test(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
             'verified_in_ses' => true,
         ]);
 
         $sendingAddress = SendingAddressFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'domain' => $domain,
             'email' => 'test@hyvor.com',
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/sending-addresses'
         );

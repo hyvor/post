@@ -3,7 +3,7 @@
 namespace App\Service\Subscriber;
 
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
@@ -23,15 +23,14 @@ class SubscriberService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository
-    )
-    {
+    ) {
     }
 
     /**
      * @param iterable<NewsletterList> $lists
      */
     public function createSubscriber(
-        Project $project,
+        Newsletter $newsletter,
         string $email,
         iterable $lists,
         SubscriberStatus $status,
@@ -39,11 +38,9 @@ class SubscriberService
         ?string $subscribeIp = null,
         ?\DateTimeImmutable $subscribedAt = null,
         ?\DateTimeImmutable $unsubscribedAt = null
-    ): Subscriber
-    {
-
+    ): Subscriber {
         $subscriber = new Subscriber()
-            ->setProject($project)
+            ->setNewsletter($newsletter)
             ->setEmail($email)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now())
@@ -88,20 +85,18 @@ class SubscriberService
      * @return ArrayCollection<int, Subscriber>
      */
     public function getSubscribers(
-        Project $project,
+        Newsletter $newsletter,
         ?string $status,
         ?int $listId,
         ?string $search,
         int $limit,
         int $offset
-    ): ArrayCollection
-    {
-
+    ): ArrayCollection {
         $qb = $this->subscriberRepository->createQueryBuilder('s');
 
         $qb->leftJoin('s.lists', 'l')
-            ->where('s.project = :project')
-            ->setParameter('project', $project)
+            ->where('s.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
             ->orderBy('s.id', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
@@ -133,9 +128,9 @@ class SubscriberService
 
         return new ArrayCollection($results);
     }
+
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {
-
         if ($updates->hasProperty('email')) {
             $subscriber->setEmail($updates->email);
         }
@@ -170,9 +165,9 @@ class SubscriberService
         return $subscriber;
     }
 
-    public function getSubscriberByEmail(Project $project, string $email): ?Subscriber
+    public function getSubscriberByEmail(Newsletter $newsletter, string $email): ?Subscriber
     {
-        return $this->subscriberRepository->findOneBy(['project' => $project, 'email' => $email]);
+        return $this->subscriberRepository->findOneBy(['newsletter' => $newsletter, 'email' => $email]);
     }
 
     public function unsubscribeBySend(

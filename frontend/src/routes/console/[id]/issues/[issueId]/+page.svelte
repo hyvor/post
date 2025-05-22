@@ -4,8 +4,8 @@
 	import { Button, IconMessage, Loader, confirm, toast } from '@hyvor/design/components';
 	import IssueStatusTag from '../IssueStatusTag.svelte';
 	import { goto } from '$app/navigation';
-	import { consoleUrlWithProject } from '../../../lib/consoleUrl';
-	import { issueStore } from '../../../lib/stores/projectStore';
+	import { consoleUrlWithNewsletter } from '../../../lib/consoleUrl';
+	import { issueStore } from '../../../lib/stores/newsletterStore';
 	import type { Issue } from '../../../types';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import IconTrash from '@hyvor/icons/IconTrash';
@@ -17,9 +17,9 @@
 
 	const id = Number(page.params.issueId);
 
-	let issue: Issue;
-	let loading = true;
-	let error: null | string = null;
+	let issue: Issue = $state();
+	let loading = $state(true);
+	let error: null | string = $state(null);
 
 	async function onDelete() {
 		const confirmed = await confirm({
@@ -37,7 +37,7 @@
 				.then(() => {
 					$issueStore = $issueStore.filter((i) => i.id !== id);
 					toast.success('Issue deleted successfully');
-					goto(consoleUrlWithProject('/issues'));
+					goto(consoleUrlWithNewsletter('/issues'));
 				})
 				.catch((err) => {
 					toast.error(err.message);
@@ -86,7 +86,7 @@
 						size="small"
 						color="input"
 						as="a"
-						href={consoleUrlWithProject('/issues')}
+						href={consoleUrlWithNewsletter('/issues')}
 					>
 						{#snippet start()}
 							<IconCaretLeft size={12} />
@@ -125,6 +125,7 @@
 		padding: 30px 35px;
 		display: flex;
 		flex-direction: column;
+		overflow: auto;
 	}
 	.content {
 		flex: 1;

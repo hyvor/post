@@ -1,7 +1,5 @@
 <script>
-	import CreateProject from "./CreateProject.svelte";
-
-
+	import CreateNewsletter from './CreateNewsletter.svelte';
 </script>
 
-<CreateProject />
+<CreateNewsletter />

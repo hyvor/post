@@ -6,7 +6,7 @@ use App\Api\Public\Controller\Media\MediaController;
 use App\Service\Media\MediaService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\MediaFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use League\Flysystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -48,7 +48,7 @@ class ServiceMediaTest extends WebTestCase
 
     public function test_when_private(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $media = MediaFactory::createOne([
             'is_private' => true,
             'extension' => 'txt',
@@ -67,7 +67,7 @@ class ServiceMediaTest extends WebTestCase
     public function test_serves_media(): void
     {
         $uuid = Uuid::v4();
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $filesystem = $this->container->get(Filesystem::class);
         assert($filesystem instanceof Filesystem);
@@ -77,7 +77,7 @@ class ServiceMediaTest extends WebTestCase
 
         $content = 'Hello World';
         $media = MediaFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'uuid' => $uuid,
             'extension' => 'txt',
             'size' => strlen($content),
