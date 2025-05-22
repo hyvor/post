@@ -2,10 +2,12 @@
 
 namespace App\Command\Dev;
 
+use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -64,6 +66,19 @@ class DevSeedCommand extends Command
             'project' => $project,
             'name' => 'Typescript',
             'description' => 'Get the latest Typescript news'
+        ]);
+
+        SubscriberFactory::createOne([
+            'project' => $project,
+            'email' => 'supun@hyvor.com',
+            'lists' => [$list1, $list2],
+            'status' => SubscriberStatus::SUBSCRIBED
+        ]);
+        SubscriberFactory::createOne([
+            'project' => $project,
+            'email' => 'ishini@hyvor.com',
+            'lists' => [$list1, $list2],
+            'status' => SubscriberStatus::SUBSCRIBED
         ]);
 
         DomainFactory::createOne([

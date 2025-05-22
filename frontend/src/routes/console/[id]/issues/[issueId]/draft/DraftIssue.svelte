@@ -3,7 +3,6 @@
 		Button,
 		Checkbox,
 		FormControl,
-		Link,
 		Modal,
 		Radio,
 		SplitControl,
@@ -92,7 +91,7 @@
 			subject,
 			from_name: fromName,
 			from_email: currentSendingEmail,
-			reply_to_email: replyToEmail,
+			// reply_to_email: replyToEmail,
 			lists: selectedLists,
 			content
 		})

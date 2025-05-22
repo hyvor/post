@@ -25,7 +25,9 @@ class EmailSenderService
         $email ??= $send?->getEmail();
         assert(is_string($email));
 
-        $html = $this->htmlEmailTemplateRenderer->renderFromIssue($issue);
+        $html = $send ?
+            $this->htmlEmailTemplateRenderer->renderFromSend($send) :
+            $this->htmlEmailTemplateRenderer->renderFromIssue($issue);
 
         $email = new Email()
             ->from('hello@example.com')

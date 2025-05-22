@@ -3,6 +3,7 @@
 namespace App\Service\EmailTemplate;
 
 // https://post.hyvor.com/docs/email-templates
+use App\Entity\Project;
 use App\Service\Project\ProjectDefaults;
 
 class EmailTemplateVariables
@@ -48,6 +49,43 @@ class EmailTemplateVariables
         public string $box_shadow = ProjectDefaults::TEMPLATE_BOX_SHADOW,
         public string $box_border = ProjectDefaults::TEMPLATE_BOX_BORDER,
     ) {
+    }
+
+
+    public static function fromProject(Project $project): self
+    {
+        $meta = $project->getMeta();
+
+        return new EmailTemplateVariables(
+            lang: 'en',
+            subject: '',
+            content: '',
+
+            logo: $meta->template_logo ?? '',
+            logo_alt: $meta->template_logo_alt ?? '',
+            brand: $meta->brand ?? $project->getName(),
+            brand_url: $meta->brand_url ?? '',
+
+            address: $meta->address ?? '',
+            unsubscribe_url: '',
+            unsubscribe_text: $meta->unsubscribe_text ?? 'Unsubscribe',
+
+            color_accent: $meta->template_color_accent ?? ProjectDefaults::TEMPLATE_COLOR_ACCENT,
+            color_background: $meta->color_background ?? ProjectDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_box_background: $meta->color_box_background ?? ProjectDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
+
+            font_family: $meta->font_family ?? ProjectDefaults::TEMPLATE_FONT_FAMILY,
+            font_size: $meta->font_size ?? ProjectDefaults::TEMPLATE_FONT_SIZE,
+            font_weight: $meta->font_weight ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT,
+            font_weight_heading: $meta->font_weight ?? ProjectDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->font_color_on_background ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->font_color_on_box ?? ProjectDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
+            font_line_height: $meta->font_line_height ?? ProjectDefaults::TEMPLATE_FONT_LINE_HEIGHT,
+
+            box_radius: $meta->box_radius ?? ProjectDefaults::TEMPLATE_BOX_RADIUS,
+            box_shadow: $meta->box_shadow ?? ProjectDefaults::TEMPLATE_BOX_SHADOW,
+            box_border: $meta->box_border ?? ProjectDefaults::TEMPLATE_BOX_BORDER,
+        );
     }
 
 }

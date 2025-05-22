@@ -26,6 +26,12 @@ use Hyvor\Phrosemirror\Types\Schema;
 class ContentService
 {
 
+    const DEFAULT_CONTENT = <<<JSON
+{
+    "type": "doc"
+}
+JSON;
+
     public function htmlFromIssue(Issue $issue): string
     {
         $content = $issue->getContent();
