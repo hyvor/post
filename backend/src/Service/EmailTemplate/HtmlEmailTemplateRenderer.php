@@ -13,7 +13,7 @@ class HtmlEmailTemplateRenderer
     public function __construct(
         private Environment $twig,
         private ContentService $contentService,
-        private EmailTemplateService $templateService,
+        private EmailTemplateService $emailTemplateService,
     ) {
     }
 
@@ -31,7 +31,7 @@ class HtmlEmailTemplateRenderer
     {
         $newsletter = $issue->getNewsletter();
         $variables = $this->variablesFromIssue($issue);
-        $template = $this->templateService->getTemplateStringFromNewsletter($newsletter);
+        $template = $this->emailTemplateService->getTemplateStringFromNewsletter($newsletter);
 
         return $this->render($template, $variables);
     }
@@ -40,6 +40,7 @@ class HtmlEmailTemplateRenderer
     {
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
+        // TODO: unsubscribe URL
         $variables->unsubscribe_url = 'https://post.hyvor.com/mypage/unsubscribe/' . $send->getId();
         return $variables;
     }
@@ -47,7 +48,7 @@ class HtmlEmailTemplateRenderer
     public function renderFromSend(Send $send): string
     {
         $variables = $this->variablesFromSend($send);
-        $template = $this->templateService->getTemplateStringFromNewsletter($send->getIssue()->getNewsletter());
+        $template = $this->emailTemplateService->getTemplateStringFromNewsletter($send->getIssue()->getNewsletter());
 
         return $this->render($template, $variables);
     }

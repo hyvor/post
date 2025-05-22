@@ -4,6 +4,7 @@ namespace App\Tests\Factory;
 
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
+use Symfony\Component\Uid\Uuid;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -33,6 +34,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
+            'uuid' => Uuid::v4(),
             'newsletter' => NewsletterFactory::new(),
             'content' => (string)json_encode([
                 'type' => 'doc',
@@ -62,7 +64,6 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'subject' => self::faker()->text(255),
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'uuid' => self::faker()->text(255),
             'list_ids' => [],
             'total_sends' => 0,
             'ok_sends' => 0,
