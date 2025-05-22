@@ -33,6 +33,11 @@ class IssueService
     ) {
     }
 
+    public function getIssueByUuid(string $uuid): ?Issue
+    {
+        return $this->issueRepository->findOneBy(['uuid' => $uuid]);
+    }
+
     public function createIssueDraft(Newsletter $newsletter): Issue
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
@@ -127,12 +132,22 @@ class IssueService
     /**
      * @return ArrayCollection<int, Issue>
      */
-    public function getIssues(Newsletter $newsletter, int $limit, int $offset): ArrayCollection
-    {
+    public function getIssues(
+        Newsletter $newsletter,
+        int $limit,
+        int $offset,
+        ?IssueStatus $status = null,
+    ): ArrayCollection {
+        $where = ['newsletter' => $newsletter];
+
+        if ($status !== null) {
+            $where['status'] = $status;
+        }
+
         return new ArrayCollection(
             $this->issueRepository
                 ->findBy(
-                    ['newsletter' => $newsletter],
+                    $where,
                     ['id' => 'DESC'],
                     $limit,
                     $offset

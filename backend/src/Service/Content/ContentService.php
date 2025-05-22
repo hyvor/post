@@ -22,9 +22,16 @@ use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Converters\HtmlParser\HtmlParser;
 use Hyvor\Phrosemirror\Document\Document;
 use Hyvor\Phrosemirror\Types\Schema;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class ContentService
 {
+
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        private string $projectDir,
+    ) {
+    }
 
     const DEFAULT_CONTENT = <<<JSON
 {
@@ -98,6 +105,11 @@ JSON;
                 new Code(),
             ]
         );
+    }
+
+    public function getDefaultContentStyleHtml(): string
+    {
+        return (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');
     }
 
 }
