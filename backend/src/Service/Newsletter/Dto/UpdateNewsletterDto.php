@@ -9,6 +9,5 @@ class UpdateNewsletterDto
     use OptionalPropertyTrait;
 
     public string $name;
-
-    public ?string $defaultEmailUsername;
+    public string $slug;
 }

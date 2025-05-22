@@ -34,12 +34,12 @@ final class NewsletterFactory extends PersistentProxyObjectFactory
     {
         return [
             'uuid' => self::faker()->uuid(),
+            'slug' => self::faker()->userName(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'name' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'user_id' => self::faker()->randomNumber(),
             'meta' => new NewsletterMeta(),
-            'default_email_username' => self::faker()->userName()
         ];
     }
 

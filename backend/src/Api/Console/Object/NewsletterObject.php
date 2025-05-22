@@ -11,9 +11,9 @@ class NewsletterObject
 
     public int $id;
     public string $uuid;
+    public string $slug;
     public int $created_at; // unix timestamp
     public string $name;
-    public string $default_email_username;
 
     public ?string $template_color_accent;
     public ?string $template_color_background;
@@ -63,9 +63,9 @@ class NewsletterObject
     {
         $this->id = $newsletter->getId();
         $this->uuid = $newsletter->getUuid();
+        $this->slug = $newsletter->getSlug();
         $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
         $this->name = $newsletter->getName();
-        $this->default_email_username = $newsletter->getDefaultEmailUsername();
 
         $meta = $newsletter->getMeta();
         $this->template_color_accent = $meta->template_color_accent;

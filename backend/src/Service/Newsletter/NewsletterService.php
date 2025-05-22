@@ -207,8 +207,8 @@ class NewsletterService
             $newsletter->setName($updates->name);
         }
 
-        if ($updates->hasProperty('defaultEmailUsername')) {
-            $newsletter->setDefaultEmailUsername($updates->defaultEmailUsername);
+        if ($updates->hasProperty('slug')) {
+            $newsletter->setSlug($updates->slug);
         }
 
         $newsletter->setUpdatedAt($this->now());
