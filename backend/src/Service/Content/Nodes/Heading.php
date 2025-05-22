@@ -34,7 +34,7 @@ class Heading extends NodeType
         $bottomMargin = '20px';
         $style = "margin: 0 0 $bottomMargin; font-size: $fontSize; font-weight: bold;";
 
-        return "<h$level style=\"$style\">$children</h$level>";
+        return "<h$level>$children</h$level>";
     }
 
     public function fromHtml(): array

@@ -2,27 +2,27 @@
 	import { Button, Loader, SplitControl } from '@hyvor/design/components';
 	import TopBar from '../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { getProjectInvites, getProjectUsers } from '../../../lib/actions/userActions';
+	import { getNewsletterInvites, getNewsletterUsers } from '../../../lib/actions/userActions';
 	import { onMount } from 'svelte';
 	import type { Invite, User } from '../../../types';
 	import InviteRow from './InviteRow.svelte';
 	import UserRow from './UserRow.svelte';
 	import UserInvitationModal from './UserInvitationModal.svelte';
 
-    let loading = true;
-    let users: User[] = [];
+	let loading = true;
+	let users: User[] = [];
 	let invites: Invite[] = [];
 
-    function load() {
-        getProjectUsers()
-            .then((data) => {
-                users = data;
-            })
-            .catch((e) => {
-                console.error(e);
-            });
+	function load() {
+		getNewsletterUsers()
+			.then((data) => {
+				users = data;
+			})
+			.catch((e) => {
+				console.error(e);
+			});
 
-		getProjectInvites()
+		getNewsletterInvites()
 			.then((data) => {
 				invites = data;
 			})
@@ -39,22 +39,21 @@
 	});
 
 	let inviterOpen = false;
-	
 </script>
 
 <TopBar>
 	<Button on:click={() => (inviterOpen = true)}>
-		Add User 
-        {#snippet end()}
-            <IconPlus />
-        {/snippet}
+		Add User
+		{#snippet end()}
+			<IconPlus />
+		{/snippet}
 	</Button>
 
 	{#if inviterOpen}
 		<UserInvitationModal
-            bind:show={inviterOpen}
+			bind:show={inviterOpen}
 			refreshInvite={(i: Invite) => (invites = [i, ...invites])}
-        />
+		/>
 	{/if}
 </TopBar>
 
@@ -64,8 +63,8 @@
 	<div class="moderators">
 		<SplitControl label="Users" column>
 			{#each users as user}
-				<UserRow 
-					user={user}
+				<UserRow
+					{user}
 					refreshUserDelete={(u: User) => (users = users.filter((e) => e.id !== u.id))}
 				/>
 			{/each}
@@ -73,14 +72,14 @@
 		{#if invites.length > 0}
 			<SplitControl label="Invites" column>
 				{#each invites as invite}
-					<InviteRow 
-						invite={invite} 
-						refreshInviteDelete={(i: Invite) => (invites = invites.filter((e) => e.id !== i.id))}
+					<InviteRow
+						{invite}
+						refreshInviteDelete={(i: Invite) =>
+							(invites = invites.filter((e) => e.id !== i.id))}
 					/>
 				{/each}
 			</SplitControl>
 		{/if}
-
 	</div>
 {/if}
 

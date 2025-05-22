@@ -24,7 +24,7 @@ final class Version20250520115428 extends AbstractMigration
             uuid UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             folder text NOT NULL,
             extension text NOT NULL,
             size bigint NOT NULL,

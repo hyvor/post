@@ -14,5 +14,6 @@ class UpdateSendingEmailInput
     #[Assert\Length(max: 255)]
     public string $email;
 
+    #[Assert\IsTrue]
     public bool $is_default;
 }

@@ -6,7 +6,7 @@ use App\Api\Console\Controller\ListController;
 use App\Entity\NewsletterList;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -20,11 +20,11 @@ class GetListTest extends WebTestCase
 
     public function testGetSpecificList(): void
     {
-        $project = ProjectFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/lists/' . $newsletterList->getId()
         );

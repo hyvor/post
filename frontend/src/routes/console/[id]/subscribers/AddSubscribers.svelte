@@ -8,7 +8,7 @@
 		Validation,
 		toast
 	} from '@hyvor/design/components';
-	import { listStore } from '../../lib/stores/projectStore';
+	import { listStore } from '../../lib/stores/newsletterStore';
 	import ListSelector from './ListSelector.svelte';
 	import { createSubscriber } from '../../lib/actions/subscriberActions';
 
@@ -62,7 +62,6 @@
 					loading = false;
 				});
 		}
-		
 	}
 </script>
 
@@ -86,7 +85,7 @@
 				rows={5}
 				placeholder="user@example.com
 other@example.org
-"				
+"
 				bind:value={emailsString}
 				bind:textarea={input!}
 				state={emailsError ? 'error' : 'default'}

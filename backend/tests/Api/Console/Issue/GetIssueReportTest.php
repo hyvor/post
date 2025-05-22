@@ -9,7 +9,7 @@ use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -20,13 +20,13 @@ class GetIssueReportTest extends WebTestCase
 
     public function test_get_issue_report_basic(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'total_sends' => 1,
                 'ok_sends' => 1,
             ]
@@ -40,7 +40,7 @@ class GetIssueReportTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/report",
         );

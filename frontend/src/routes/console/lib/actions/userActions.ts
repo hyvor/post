@@ -2,13 +2,13 @@ import type { Invite, User } from "../../types";
 import consoleApi from "../consoleApi";
 
 
-export function getProjectUsers() {
+export function getNewsletterUsers() {
 	return consoleApi.get<User[]>({
 		endpoint: 'users'
 	});
 }
 
-export function getProjectInvites() {
+export function getNewsletterInvites() {
     return consoleApi.get<Invite[]>({
         endpoint: 'invites'
     });

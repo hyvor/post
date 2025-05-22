@@ -1,7 +1,7 @@
 <script>
 	import { DarkToggle, LanguageToggle } from '@hyvor/design/components';
 	import AccountNav from './AccountNav.svelte';
-	import ProjectNav from './ProjectNav.svelte';
+	import NewsletterNav from './NewsletterNav.svelte';
 </script>
 
 <div id="nav">
@@ -9,8 +9,8 @@
 		<div class="account-nav">
 			<AccountNav />
 		</div>
-		<div class="project-nav">
-			<ProjectNav />
+		<div class="newsletter-nav">
+			<NewsletterNav />
 		</div>
 		<div class="bottom">
 			<div class="lang hds-box">

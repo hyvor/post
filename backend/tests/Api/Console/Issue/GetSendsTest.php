@@ -8,7 +8,7 @@ use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,18 +20,18 @@ class GetSendsTest extends WebTestCase
 {
     public function test_get_sends_from_issue(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list]
         ]);
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
             ]
         );
 
@@ -43,7 +43,7 @@ class GetSendsTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/sends"
         );
@@ -58,11 +58,11 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_limit(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
             ]
         );
 
@@ -74,7 +74,7 @@ class GetSendsTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/sends?limit=5"
         );
@@ -86,11 +86,11 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_email_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
             ]
         );
 
@@ -109,7 +109,7 @@ class GetSendsTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/sends?search=thibault"
         );
@@ -124,11 +124,11 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_clicked_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
             ]
         );
 
@@ -148,7 +148,7 @@ class GetSendsTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/sends?type=clicked"
         );

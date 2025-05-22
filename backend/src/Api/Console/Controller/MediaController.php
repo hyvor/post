@@ -4,7 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Media\MediaUploadInput;
 use App\Api\Console\Object\MediaObject;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Service\Media\MediaService;
 use App\Service\Media\MediaUploadException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +29,7 @@ class MediaController extends AbstractController
 
     #[Route('/media', methods: 'POST')]
     public function upload(
-        Project $project,
+        Newsletter $newsletter,
         Request $request,
         #[MapRequestPayload] MediaUploadInput $input
     ): JsonResponse {
@@ -55,7 +55,7 @@ class MediaController extends AbstractController
 
         try {
             $media = $this->mediaService->upload(
-                $project,
+                $newsletter,
                 $folder,
                 $file
             );

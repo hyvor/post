@@ -2,9 +2,13 @@
 
 namespace App\Api\Local;
 
-use App\Service\Template\TemplateRenderer;
-use App\Service\Template\TemplateVariables;
+use App\Entity\Newsletter;
+use App\Service\Content\ContentService;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\EmailTemplate\EmailTemplateVariables;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -15,36 +19,29 @@ class TemplateController extends AbstractController
 {
 
     public function __construct(
-        private TemplateRenderer $renderer,
+        private HtmlEmailTemplateRenderer $renderer,
+        private EntityManagerInterface $em,
+        private ContentService $contentService,
+        #[Autowire('%kernel.project_dir%')]
+        private string $projectDir,
     ) {
     }
 
     #[Route('/template/basic', methods: 'GET')]
     public function basicTemplate(): Response
     {
-        $variables = new TemplateVariables(
-            lang: 'en',
-            subject: 'Introducing Hyvor Post',
-            content: <<<HTML
-                    <h1>
-                        Introducing Hyvor Post
-                    </h1>
-                    <p>
-                        We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
-                    </p>
-                    HTML,
+        $newsletter = $this->em->getRepository(Newsletter::class)->find(1);
+        assert($newsletter instanceof Newsletter);
 
-            logo: '/img/logo.png',
-            logo_alt: 'Hyvor Post Logo',
-            brand: 'Hyvor Post',
-            brand_url: 'https://post.hyvor.com',
+        $subject = 'Introducing Hyvor Post';
+        $content = (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');
 
-            address: '10 Rue de Penthiévre, 75008 Paris, France',
-            unsubscribe_url: 'https://example.com/unsubscribe',
-            unsubscribe_text: 'Unsubscribe',
-        );
+        $json = $this->contentService->getJsonFromHtml($content);
+        $content = $this->contentService->getHtmlFromJson($json);
 
-        return new Response($this->renderer->renderDefaultTemplate($variables));
+        $html = $this->renderer->renderFromSubjectAndContent($newsletter, $subject, $content);
+
+        return new Response($html);
     }
 
 }

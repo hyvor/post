@@ -9,7 +9,7 @@ use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Issue::class)]
@@ -24,14 +24,14 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesNonEmpty(): void
     {
-        $project = ProjectFactory::createOne();
-        $issues = IssueFactory::createMany(5, ['project' => $project,]);
+        $newsletter = NewsletterFactory::createOne();
+        $issues = IssueFactory::createMany(5, ['newsletter' => $newsletter,]);
 
-        $otherProject = ProjectFactory::createOne();
-        IssueFactory::createMany(1, ['project' => $otherProject]);
+        $otherNewsletter = NewsletterFactory::createOne();
+        IssueFactory::createMany(1, ['newsletter' => $otherNewsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/issues'
         );
@@ -63,11 +63,11 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesPagination(): void
     {
-        $project = ProjectFactory::createOne();
-        $issues = IssueFactory::createMany(5, ['project' => $project,]);
+        $newsletter = NewsletterFactory::createOne();
+        $issues = IssueFactory::createMany(5, ['newsletter' => $newsletter,]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/issues?limit=2&offset=1'
         );
@@ -97,10 +97,10 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/issues'
         );
@@ -110,16 +110,16 @@ class GetIssuesTest extends WebTestCase
         $this->assertCount(0, $json);
     }
 
-    public function testListIssuesProjectValidation(): void
+    public function testListIssuesNewsletterValidation(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $issuesProject1 = IssueFactory::createMany(5, ['project' => $project1,]);
-        $issuesProject2 = IssueFactory::createMany(5, ['project' => $project2,]);
+        $issuesNewsletter1 = IssueFactory::createMany(5, ['newsletter' => $newsletter1,]);
+        $issuesNewsletter2 = IssueFactory::createMany(5, ['newsletter' => $newsletter2,]);
 
         $response = $this->consoleApi(
-            $project1,
+            $newsletter1,
             'GET',
             '/issues'
         );
@@ -130,6 +130,6 @@ class GetIssuesTest extends WebTestCase
 
         /** @var array<int, array<string, mixed>> $json */
         $issue = $json[0];
-        $this->assertSame($issuesProject1[count($issuesProject1) - 1]->getId(), $issue['id']);
+        $this->assertSame($issuesNewsletter1[count($issuesNewsletter1) - 1]->getId(), $issue['id']);
     }
 }

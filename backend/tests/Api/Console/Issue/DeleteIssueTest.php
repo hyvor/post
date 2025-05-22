@@ -9,7 +9,7 @@ use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -23,18 +23,18 @@ class DeleteIssueTest extends WebTestCase
 
     public function testDeleteDraftIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT
         ]);
 
         $issueId = $issue->getId();
 
         $response = $this->consoleApi(
-          $project,
-          'DELETE',
-          '/issues/' . $issue->getId(),
+            $newsletter,
+            'DELETE',
+            '/issues/' . $issue->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -46,16 +46,16 @@ class DeleteIssueTest extends WebTestCase
 
     public function testDeleteNonDraftIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::SENDING
         ]);
 
         $issueId = $issue->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/issues/' . $issue->getId(),
         );
@@ -67,15 +67,14 @@ class DeleteIssueTest extends WebTestCase
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issueId);
         $this->assertNotNull($issue);
-
     }
 
     public function testDeleteIssueNotFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/issues/1'
         );
@@ -83,26 +82,25 @@ class DeleteIssueTest extends WebTestCase
         $this->assertSame(404, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame("Entity not found", $json['message']);
-
     }
 
-    public function testCannotDeleteOtherProjectIssues(): void
+    public function testCannotDeleteOtherNewsletterIssues(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
-            'project' => $project
+            'newsletter' => $newsletter
         ]);
 
         $response = $this->consoleApi(
-            $otherProject,
+            $otherNewsletter,
             'DELETE',
             '/issues/' . $issue->getId()
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $this->getJson()['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());

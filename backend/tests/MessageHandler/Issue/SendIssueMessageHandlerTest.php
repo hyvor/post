@@ -12,7 +12,7 @@ use App\Service\Issue\SendService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -25,20 +25,20 @@ class SendIssueMessageHandlerTest extends KernelTestCase
 
     public function test_send_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscribers = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
         ]);

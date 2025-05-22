@@ -8,7 +8,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -19,23 +19,23 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class DeleteSubscriberTest extends WebTestCase
 {
 
-    // TODO: tests for input validation (when the project is not found)
+    // TODO: tests for input validation (when the newsletter is not found)
     // TODO: tests for authentication
 
     public function testDeleteSubscriberFound(): void
     {
-        $project = ProjectFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList],
         ]);
 
         $subscriberId = $subscriber->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscribers/' . $subscriber->getId()
         );
@@ -49,10 +49,10 @@ class DeleteSubscriberTest extends WebTestCase
 
     public function testDeleteSubscriberNotFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscribers/1'
         );
@@ -60,25 +60,25 @@ class DeleteSubscriberTest extends WebTestCase
         $this->assertSame(404, $response->getStatusCode());
     }
 
-    public function testCannotDeleteOtherProjectSubscriber(): void
+    public function testCannotDeleteOtherNewsletterSubscriber(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList],
         ]);
 
         $response = $this->consoleApi(
-            $otherProject,
+            $otherNewsletter,
             'DELETE',
             '/subscribers/' . $subscriber->getId()
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $this->getJson()['message']);
     }
 }

@@ -6,7 +6,7 @@ use App\Api\Console\Controller\SubscriberMetadataController;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -16,17 +16,17 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 {
 
-    public function test_cannot_delete_other_project_entities(): void
+    public function test_cannot_delete_other_newsletter_entities(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $otherProject,
+            'newsletter' => $otherNewsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscriber-metadata-definitions/' . $metadata->getId()
         );
@@ -34,20 +34,20 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $json = $this->getJson();
-        $this->assertSame('Entity does not belong to the project', $json['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $json['message']);
     }
 
     public function test_deletes_metadata(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $metadataId = $metadata->getId();
 
         $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscriber-metadata-definitions/' . $metadataId
         );

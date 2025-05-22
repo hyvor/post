@@ -17,8 +17,7 @@ class MailController extends AbstractController
     public function __construct(
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
-    )
-    {
+    ) {
     }
 
     #[Route('/mail')]
@@ -30,8 +29,11 @@ class MailController extends AbstractController
             'component' => 'post',
             'strings' => [
                 'greeting' => $strings->get('mail.common.greeting', ['name' => 'Supun']),
-                'subject' => $strings->get('mail.userInvite.subject', ['projectName' => 'TestProject']),
-                'text' => $strings->get('mail.userInvite.text', ['projectName' => 'TestProject', 'role' => 'admin']),
+                'subject' => $strings->get('mail.userInvite.subject', ['newsletterName' => 'TestNewsletter']),
+                'text' => $strings->get(
+                    'mail.userInvite.text',
+                    ['newsletterName' => 'TestNewsletter', 'role' => 'admin']
+                ),
                 'buttonText' => $strings->get('mail.userInvite.buttonText'),
                 'footerText' => $strings->get('mail.userInvite.footerText'),
             ],

@@ -26,7 +26,7 @@ class HeadingTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = new ContentService()->htmlFromJson($json);
+        $html = new ContentService()->getHtmlFromJson($json);
         $this->assertSame(
             '<h2 style="margin: 0 0 20px; font-size: 28px; font-weight: bold;">Heading 2</h2>',
             trim($html)

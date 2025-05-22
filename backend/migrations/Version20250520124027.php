@@ -26,7 +26,7 @@ final class Version20250520124027 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             filename VARCHAR(255) NOT NULL UNIQUE,
             status subscriber_import_status NOT NULL DEFAULT 'requires_input',
             fields JSONB,

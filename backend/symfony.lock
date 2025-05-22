@@ -299,6 +299,9 @@
             "config/routes/web_profiler.yaml"
         ]
     },
+    "twig/extra-bundle": {
+        "version": "v3.21.0"
+    },
     "zenstruck/foundry": {
         "version": "2.3",
         "recipe": {

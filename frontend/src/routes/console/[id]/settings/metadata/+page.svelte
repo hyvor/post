@@ -2,7 +2,7 @@
 	import { Button, IconMessage, Table, TableRow } from '@hyvor/design/components';
 	import TopBar from '../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/projectStore';
+	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/newsletterStore';
 	import SettingsBody from '../@components/SettingsBody.svelte';
 	import MetadataRow from './MetadataRow.svelte';
 	import { getI18n } from '../../../lib/i18n';
