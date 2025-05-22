@@ -69,7 +69,7 @@ class NewsletterObject
         $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
         $this->name = $newsletter->getName();
         $this->logo = $meta->logo;
-
+      
         $this->template_color_accent = $meta->template_color_accent;
         $this->template_color_background = $meta->template_color_background;
         $this->template_color_box_background = $meta->template_color_box_background;
