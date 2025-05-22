@@ -2,19 +2,18 @@
 
 namespace App\Service\Issue;
 
-use App\Content\ContentService;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Project;
 use App\Entity\Send;
 use App\Entity\SendingAddress;
-use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
 use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\SendingEmail\SendingAddressService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -30,6 +29,7 @@ class IssueService
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
         private NewsletterListService $newsletterListService,
+        private SendingAddressService $sendingAddressService,
     ) {
     }
 
@@ -37,12 +37,7 @@ class IssueService
     {
         $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $project->getDefaultEmailUsername() . '@hvrpst.com';
-        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['project' => $project]);
-
-        if ($sendingEmail) {
-            $fromEmail = $sendingEmail->getEmail();
-        }
+        $fromEmail = $this->sendingAddressService->getDefaultEmailAddressOfProjectWithFallback($project);
 
         $issue = new Issue()
             ->setProject($project)

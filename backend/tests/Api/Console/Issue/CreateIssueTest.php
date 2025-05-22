@@ -28,11 +28,9 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne(
-            [
-                'default_email_username' => 'thibault'
-            ]
-        );
+        $project = ProjectFactory::createOne([
+            'default_email_username' => 'thibault'
+        ]);
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -49,7 +47,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
         $this->assertSame([$list->getId()], $json['lists']);
-        $this->assertSame('thibault@hyvor.com', $json['from_email']);
+        $this->assertSame('thibault@hvrpst.com', $json['from_email']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($json['id']);
@@ -58,7 +56,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
         $this->assertSame($project->getId(), $issue->getProject()->getId());
-        $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
+        $this->assertSame('thibault@hvrpst.com', $issue->getFromEmail());
     }
 
     public function test_create_issue_draft_with_custom_email(): void
@@ -75,13 +73,12 @@ class CreateIssueTest extends WebTestCase
             ]
         );
 
-        $sendingEmail = SendingAddressFactory::createOne(
-            [
-                'email' => 'thibault@hyvor.com',
-                'project' => $project,
-                'domain' => $domain
-            ]
-        );
+        $sendingEmail = SendingAddressFactory::createOne([
+            'email' => 'thibault@hyvor.com',
+            'project' => $project,
+            'domain' => $domain,
+            'is_default' => true
+        ]);
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -93,7 +90,7 @@ class CreateIssueTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
         $this->assertSame([$list->getId()], $json['lists']);

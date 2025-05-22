@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\SendingAddress;
 use App\Entity\Domain;
 use App\Repository\SendingAddressRepository;
+use App\Service\AppConfig;
 use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +18,8 @@ class SendingAddressService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SendingAddressRepository $sendingEmailRepository
+        private SendingAddressRepository $sendingEmailRepository,
+        private AppConfig $appConfig,
     ) {
     }
 
@@ -30,15 +32,18 @@ class SendingAddressService
         return new ArrayCollection($sendingEmails);
     }
 
+    public function getSendingAddressesCount(Project $project): int
+    {
+        return $this->sendingEmailRepository->count(['project' => $project]);
+    }
+
     public function createSendingAddress(Project $project, Domain $customDomain, string $email): SendingAddress
     {
-        $currentSendingAddresses = $this->getSendingAddresses($project);
-
         $sendingAddress = new SendingAddress();
         $sendingAddress->setProject($project);
         $sendingAddress->setDomain($customDomain);
         $sendingAddress->setEmail($email);
-        $sendingAddress->setIsDefault($currentSendingAddresses->isEmpty());
+        $sendingAddress->setIsDefault($this->getSendingAddressesCount($project) === 0);
         $sendingAddress->setCreatedAt(new \DateTimeImmutable());
         $sendingAddress->setUpdatedAt(new \DateTimeImmutable());
         $this->em->persist($sendingAddress);
@@ -85,6 +90,26 @@ class SendingAddressService
             'project' => $project,
             'isDefault' => true
         ]);
+    }
+
+    public function getDefaultEmailAddressOfProjectWithFallback(Project $project): string
+    {
+        $sendingAddress = $this->getCurrentDefaultSendingAddressOfProject($project);
+
+        if ($sendingAddress) {
+            return $sendingAddress->getEmail();
+        }
+
+        return $this->getFallbackAddressOfProject($project);
+    }
+
+    public function getFallbackAddressOfProject(Project $project): string
+    {
+        return sprintf(
+            "%s@%s",
+            $project->getDefaultEmailUsername(),
+            $this->appConfig->getDefaultEmailDomain()
+        );
     }
 
     public function deleteSendingAddress(SendingAddress $sendingAddress): void

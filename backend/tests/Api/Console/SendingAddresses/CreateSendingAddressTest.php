@@ -9,6 +9,7 @@ use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SendingAddressController::class)]
@@ -37,14 +38,49 @@ class CreateSendingAddressTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('thibault@hyvor.com', $json['email']);
+        $this->assertSame(true, $json['is_default']);
 
         $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
         $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
         $this->assertSame(true, $sendingEmail->isDefault());
+    }
+
+    public function test_it_does_not_make_it_default_when_there_is_already_one(): void
+    {
+        $project = ProjectFactory::createOne();
+
+        $domain = DomainFactory::createOne([
+                'domain' => 'hyvor.com',
+                'verified_in_ses' => true,
+                'user_id' => 1
+            ]
+        );
+
+        SendingAddressFactory::createOne([
+            'project' => $project,
+            'domain' => $domain
+        ]);
+
+        $response = $this->consoleApi(
+            $project,
+            'POST',
+            '/sending-addresses',
+            [
+                'email' => 'thibault@hyvor.com'
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame(false, $json['is_default']);
+
+        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
+        $this->assertSame(false, $sendingEmail->isDefault());
     }
 
     public function test_create_sending_email_domain_not_found(): void
@@ -60,7 +96,7 @@ class CreateSendingAddressTest extends WebTestCase
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('Domain not found', $json['message']);
     }
@@ -82,7 +118,7 @@ class CreateSendingAddressTest extends WebTestCase
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('Domain is not verified', $json['message']);
     }
 }

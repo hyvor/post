@@ -55,12 +55,11 @@ class UpdateSendingAddressTest extends WebTestCase
             '/sending-addresses/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
-                'is_default' => false,
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('thibault@gmail.com', $json['email']);
         $this->assertIsArray($json['domain']);
@@ -97,6 +96,7 @@ class UpdateSendingAddressTest extends WebTestCase
             ]
         );
 
+        // old default email
         $sendingEmail1 = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
@@ -125,7 +125,7 @@ class UpdateSendingAddressTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame(true, $json['is_default']);
         $this->assertSame($sendingEmail2->getId(), $json['id']);
         $this->assertSame($sendingEmail2->getEmail(), $json['email']);
@@ -134,6 +134,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail1);
         $this->assertSame(false, $sendingEmail1->isDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail1->getUpdatedAt()->format('Y-m-d H:i:s'));
+
         $sendingEmail2 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail2->getId()]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail2);
         $this->assertSame(true, $sendingEmail2->isDefault());
