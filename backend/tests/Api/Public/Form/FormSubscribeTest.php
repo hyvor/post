@@ -34,10 +34,10 @@ class FormSubscribeTest extends WebTestCase
         $this->assertResponseHeaderSame('Ratelimit-Reset', '0');
     }
 
-    public function test_error_on_missing_project(): void
+    public function test_error_on_missing_newsletter(): void
     {
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
+            'newsletter_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
             'email' => 'test@hyvor.com',
             'list_ids' => [1],
         ]);
@@ -55,7 +55,7 @@ class FormSubscribeTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['newsletter' => NewsletterFactory::createOne()]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $newsletter->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => 'test@hyvor.com',
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
@@ -77,7 +77,7 @@ class FormSubscribeTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $newsletter->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => 'supun@hyvor.com',
             'list_ids' => [
                 $list1->getId(),
@@ -123,7 +123,7 @@ class FormSubscribeTest extends WebTestCase
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $newsletter->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => $email,
             'list_ids' => [
                 $list1->getId(),

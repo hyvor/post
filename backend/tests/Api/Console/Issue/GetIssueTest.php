@@ -51,7 +51,7 @@ class GetIssueTest extends WebTestCase
     {
         $response = $this->consoleApi(
             null,
-            // TODO: this is wrong. We should always send a project. This error was not caught because of the lack of validation for the error message
+            // TODO: this is wrong. We should always send a newsletter. This error was not caught because of the lack of validation for the error message
             'GET',
             '/issues/999'
         );
@@ -79,6 +79,6 @@ class GetIssueTest extends WebTestCase
 
         $this->assertSame(403, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame("Entity does not belong to the project", $json['message']);
+        $this->assertSame("Entity does not belong to the newsletter", $json['message']);
     }
 }

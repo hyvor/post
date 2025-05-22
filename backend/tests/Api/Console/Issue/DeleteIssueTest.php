@@ -100,7 +100,7 @@ class DeleteIssueTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $this->getJson()['message']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($issue->getId());

@@ -83,7 +83,7 @@ class CreateListTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('You have reached the maximum number of lists for this project.', $json['message']);
+        $this->assertSame('You have reached the maximum number of lists for this newsletter.', $json['message']);
     }
 
     public function test_create_list_name_already_exists(): void

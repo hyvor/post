@@ -41,7 +41,7 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
         $this->assertEquals('Test Name 2', $entity->getName());
     }
 
-    public function test_cannot_update_other_project_entities(): void
+    public function test_cannot_update_other_newsletter_entities(): void
     {
         $newsletter = NewsletterFactory::createOne();
         $otherNewsletter = NewsletterFactory::createOne();
@@ -58,7 +58,7 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(403);
         $json = $this->getJson();
-        $this->assertSame('Entity does not belong to the project', $json['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $json['message']);
     }
 
 

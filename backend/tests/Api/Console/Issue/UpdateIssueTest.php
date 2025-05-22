@@ -109,7 +109,7 @@ class UpdateIssueTest extends WebTestCase
 
         $this->assertSame(403, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('Entity does not belong to the project', $json['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $json['message']);
     }
 
     /**

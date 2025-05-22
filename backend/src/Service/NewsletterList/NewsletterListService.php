@@ -122,7 +122,7 @@ class NewsletterListService
     }
 
     /**
-     * Note that we should validate the lists are within the project (using isListsAvailable) before calling this method
+     * Note that we should validate the lists are within the newsletter (using isListsAvailable) before calling this method
      * @param array<int> $listIds
      * @return ArrayCollection<int, NewsletterList>
      */

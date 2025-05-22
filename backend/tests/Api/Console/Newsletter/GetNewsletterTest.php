@@ -50,11 +50,11 @@ class GetNewsletterTest extends WebTestCase
 
     public function testGetSpecificNewsletterNotFound(): void
     {
-        $find_project = $this->consoleApi(
+        $find_newsletter = $this->consoleApi(
             999,
             'GET',
             '/newsletters'
         );
-        $this->assertSame(404, $find_project->getStatusCode());
+        $this->assertSame(404, $find_newsletter->getStatusCode());
     }
 }

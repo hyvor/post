@@ -17,10 +17,10 @@ use Symfony\Component\Uid\Uuid;
 class FormInitTest extends WebTestCase
 {
 
-    public function test_error_when_project_by_uuid_not_found(): void
+    public function test_error_when_newsletter_by_uuid_not_found(): void
     {
         $response = $this->publicApi('POST', '/form/init', [
-            'project_uuid' => Uuid::v4(),
+            'newsletter_uuid' => Uuid::v4(),
         ]);
 
         $this->assertResponseStatusCodeSame(422, $response);
@@ -37,13 +37,13 @@ class FormInitTest extends WebTestCase
 
         $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
-            'project_uuid' => $uuid,
+            'newsletter_uuid' => $uuid,
         ]);
 
         $this->assertResponseStatusCodeSame(200, $response);
         $json = $this->getJson();
 
-        // project
+        // newsletter
         $newsletterArray = $json['newsletter'];
         $this->assertIsArray($newsletterArray);
         $this->assertSame($uuid, $newsletterArray['uuid']);
@@ -65,7 +65,7 @@ class FormInitTest extends WebTestCase
 
         $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
-            'project_uuid' => $uuid,
+            'newsletter_uuid' => $uuid,
             'list_ids' => [$list1->getId()],
         ]);
 
@@ -88,7 +88,7 @@ class FormInitTest extends WebTestCase
 
         $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
-            'project_uuid' => $uuid,
+            'newsletter_uuid' => $uuid,
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
 

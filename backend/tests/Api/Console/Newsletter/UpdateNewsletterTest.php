@@ -23,7 +23,7 @@ use Symfony\Component\Clock\MockClock;
 class UpdateNewsletterTest extends WebTestCase
 {
 
-    public function test_update_project_meta(): void
+    public function test_update_newsletter_meta(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
@@ -73,12 +73,12 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('Subscribe to newsletter', $newsletterMeta->form_title);
     }
 
-    public function test_update_project_email_username(): void
+    public function test_update_newsletter_email_username(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'default_email_username' => 'thibault@project.com'
+            'default_email_username' => 'thibault@newsletter.com'
         ]);
 
         $response = $this->consoleApi(
@@ -105,7 +105,7 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('thibault@gmail.com', $newsletter->getDefaultEmailUsername());
     }
 
-    public function test_update_project_email_username_taken(): void
+    public function test_update_newsletter_email_username_taken(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 

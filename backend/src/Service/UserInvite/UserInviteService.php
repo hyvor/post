@@ -72,11 +72,11 @@ class UserInviteService
                 'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
                 'subject' => $strings->get(
                     'mail.userInvite.subject',
-                    ['projectName' => $userInvite->getNewsletter()->getName()]
+                    ['newsletterName' => $userInvite->getNewsletter()->getName()]
                 ),
                 'text' => $strings->get(
                     'mail.userInvite.text',
-                    ['projectName' => $userInvite->getNewsletter()->getName(), 'role' => 'admin']
+                    ['newsletterName' => $userInvite->getNewsletter()->getName(), 'role' => 'admin']
                 ),
                 'buttonText' => $strings->get('mail.userInvite.buttonText'),
                 'footerText' => $strings->get('mail.userInvite.footerText'),
@@ -85,7 +85,7 @@ class UserInviteService
 
         $this->emailNotificationService->send(
             $hyvorUser->email,
-            $strings->get('mail.userInvite.subject', ['projectName' => $userInvite->getNewsletter()->getName()]),
+            $strings->get('mail.userInvite.subject', ['newsletterName' => $userInvite->getNewsletter()->getName()]),
             $mail,
         );
     }

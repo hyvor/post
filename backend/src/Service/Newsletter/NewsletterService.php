@@ -80,7 +80,7 @@ class NewsletterService
     }
 
     /**
-     * @return array<array{project: Newsletter, user: User}>
+     * @return array<array{newsletter: Newsletter, user: User}>
      */
     public function getNewslettersOfUser(int $hyvorUserId): array
     {

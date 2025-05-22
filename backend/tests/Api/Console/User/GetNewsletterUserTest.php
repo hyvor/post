@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserObject::class)]
 class GetNewsletterUserTest extends WebTestCase
 {
-    public function test_get_project_users(): void
+    public function test_get_newsletter_users(): void
     {
         $newsletter = NewsletterFactory::createOne();
 

@@ -99,7 +99,7 @@ class ConsoleInitTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -139,7 +139,7 @@ class ConsoleInitTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -203,7 +203,7 @@ class ConsoleInitTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());

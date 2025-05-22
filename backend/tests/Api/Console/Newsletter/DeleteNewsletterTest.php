@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class DeleteNewsletterTest extends WebTestCase
 {
 
-    // TODO: tests for input validation (when the project is not found)
+    // TODO: tests for input validation (when the newsletter is not found)
     // TODO: tests for authentication
     public function testDeleteNewsletterFound(): void
     {

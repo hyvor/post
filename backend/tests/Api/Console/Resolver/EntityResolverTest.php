@@ -196,7 +196,7 @@ class EntityResolverTest extends KernelTestCase
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
-        $this->expectExceptionMessage('Entity does not belong to the project');
+        $this->expectExceptionMessage('Entity does not belong to the newsletter');
         $resolver->resolve($request, $argument);
     }
 }

@@ -173,7 +173,7 @@ class UpdateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $this->getJson()['message']);
 
         $repository = $this->em->getRepository(Subscriber::class);
         $subscriber = $repository->find($subscriber->getId());

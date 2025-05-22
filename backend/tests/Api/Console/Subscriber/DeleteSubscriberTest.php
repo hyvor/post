@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class DeleteSubscriberTest extends WebTestCase
 {
 
-    // TODO: tests for input validation (when the project is not found)
+    // TODO: tests for input validation (when the newsletter is not found)
     // TODO: tests for authentication
 
     public function testDeleteSubscriberFound(): void
@@ -79,6 +79,6 @@ class DeleteSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('Entity does not belong to the project', $this->getJson()['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $this->getJson()['message']);
     }
 }

@@ -229,7 +229,7 @@ class SendService
         DQL;
 
         $qb = $this->em->createQuery($query);
-        $qb->setParameter('projectId', $newsletterId);
+        $qb->setParameter('newsletterId', $newsletterId);
         $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
 
         return (int)$qb->getSingleScalarResult();

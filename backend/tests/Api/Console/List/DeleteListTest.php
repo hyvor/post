@@ -18,7 +18,7 @@ use Symfony\Component\Clock\MockClock;
 class DeleteListTest extends WebTestCase
 {
 
-    // TODO: tests for input validation (when the project is not found)
+    // TODO: tests for input validation (when the newsletter is not found)
     // TODO: tests for authentication
 
     public function testDeleteNewsletterListFound(): void

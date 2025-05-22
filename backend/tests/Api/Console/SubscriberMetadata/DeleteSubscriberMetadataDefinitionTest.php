@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 {
 
-    public function test_cannot_delete_other_project_entities(): void
+    public function test_cannot_delete_other_newsletter_entities(): void
     {
         $newsletter = NewsletterFactory::createOne();
         $otherNewsletter = NewsletterFactory::createOne();
@@ -34,7 +34,7 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $json = $this->getJson();
-        $this->assertSame('Entity does not belong to the project', $json['message']);
+        $this->assertSame('Entity does not belong to the newsletter', $json['message']);
     }
 
     public function test_deletes_metadata(): void

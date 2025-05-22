@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserInvite::class)]
 class GetInvitesUserTest extends WebTestCase
 {
-    public function test_get_project_invites(): void
+    public function test_get_newsletter_invites(): void
     {
         $newsletter = NewsletterFactory::createOne();
 

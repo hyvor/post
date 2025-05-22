@@ -52,7 +52,7 @@ class InviteController extends AbstractController
 
         $newsletter = $invite->getNewsletter();
         if ($this->userService->isAdmin($newsletter, $invite->getHyvorUserId())) {
-            throw new BadRequestHttpException("You are already an admin of this project");
+            throw new BadRequestHttpException("You are already an admin of this newsletter");
         }
 
         $this->userService->createUser($newsletter, $invite->getHyvorUserId());
