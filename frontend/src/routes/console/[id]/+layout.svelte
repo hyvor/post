@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import Nav from '../@components/Nav/Nav.svelte';
 	import { page } from '$app/state';
-	import { loadProject } from '../lib/projectLoader';
+	import { loadProject } from '../lib/newsletterLoader';
 	import { Loader, toast } from '@hyvor/design/components';
-	import ProjectSelector from '../@components/Nav/ProjectSelector.svelte';
+	import ProjectSelector from '../@components/Nav/NewsletterSelector.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;

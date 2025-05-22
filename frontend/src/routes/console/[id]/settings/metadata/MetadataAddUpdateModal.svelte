@@ -12,7 +12,7 @@
 		createSubscriberMetadataDefinition,
 		updateSubscriberMetadataDefinition
 	} from '../../../lib/actions/subscriberMetadataActions';
-	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/projectStore';
+	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/newsletterStore';
 	import { getI18n } from '../../../lib/i18n';
 
 	interface Props {
@@ -115,8 +115,7 @@
 	bind:show
 	{title}
 	footer={{
-		confirm: {
-		}
+		confirm: {}
 	}}
 	on:confirm={handleConfirm}
 	{loading}

@@ -5,7 +5,7 @@
 	import IssueStatusTag from '../IssueStatusTag.svelte';
 	import { goto } from '$app/navigation';
 	import { consoleUrlWithProject } from '../../../lib/consoleUrl';
-	import { issueStore } from '../../../lib/stores/projectStore';
+	import { issueStore } from '../../../lib/stores/newsletterStore';
 	import type { Issue } from '../../../types';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import IconTrash from '@hyvor/icons/IconTrash';

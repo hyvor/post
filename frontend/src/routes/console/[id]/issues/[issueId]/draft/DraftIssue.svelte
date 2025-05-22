@@ -12,7 +12,7 @@
 		toast
 	} from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
-	import { issueStore, listStore, projectStore } from '../../../../lib/stores/projectStore';
+	import { issueStore, listStore, projectStore } from '../../../../lib/stores/newsletterStore';
 	import { sendIssue, sendIssueTest, updateIssue } from '../../../../lib/actions/issueActions';
 	import { debounce } from '../../../../../../lib/helpers/debounce';
 	import { EMAIL_REGEX } from '../../../../lib/regex';

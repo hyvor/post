@@ -11,9 +11,9 @@
 		Slider,
 		TextInput
 	} from '@hyvor/design/components';
-	import { projectStore } from '../../../lib/stores/projectStore';
-	import { updateProject } from '../../../lib/actions/projectActions';
-	import type { ProjectMeta, Project } from '../../../types';
+	import { projectStore } from '../../../lib/stores/newsletterStore';
+	import { updateProject } from '../../../lib/actions/newsletterActions';
+	import type { NewsletterMeta, Newsletter } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
 	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
@@ -25,7 +25,7 @@
 	let showFontWeightHeading = false;
 	let showEditTemplateModal = false;
 
-	const projectDefaults = getAppConfig().project_defaults;
+	const projectDefaults = getAppConfig().newsletter_defaults;
 
 	function getTemplateValues() {
 		return {
@@ -65,12 +65,12 @@
 	}
 
 	// Create a reactive object with all template values
-	let templateValues: Partial<ProjectMeta> = getTemplateValues();
+	let templateValues: Partial<NewsletterMeta> = getTemplateValues();
 
 	// Object used to track changes
-	let metaToSave: Partial<ProjectMeta> = {};
+	let metaToSave: Partial<NewsletterMeta> = {};
 
-	function handleChange(key: keyof ProjectMeta, value: string) {
+	function handleChange(key: keyof NewsletterMeta, value: string) {
 		metaToSave[key] = value as any;
 		templateValues[key] = value as any;
 		hasChanges = true;
@@ -83,7 +83,7 @@
 				...currentProject,
 				...metaToSave
 			};
-			const updatedProject: Project = await updateProject(updateData);
+			const updatedProject: Newsletter = await updateProject(updateData);
 			projectStore.set(updatedProject);
 			metaToSave = {};
 			hasChanges = false;
@@ -111,7 +111,9 @@
 	}
 
 	const fontSizeValues = [12, 14, 16, 18, 20, 24, 28, 32];
-	const fontSizeIndex = fontSizeValues.indexOf(parseInt(templateValues.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE));
+	const fontSizeIndex = fontSizeValues.indexOf(
+		parseInt(templateValues.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE)
+	);
 	const fontWeights = [
 		'normal',
 		'bold',
@@ -126,9 +128,13 @@
 		'900'
 	];
 	const boxRadiusValues = [0, 4, 8, 12, 16];
-	const boxRadiusIndex = boxRadiusValues.indexOf(parseInt(templateValues.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS));
+	const boxRadiusIndex = boxRadiusValues.indexOf(
+		parseInt(templateValues.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS)
+	);
 	const boxBorderValues = [0, 1, 2, 3, 4];
-	const currentBorder = decodeBorderValue(templateValues.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER);
+	const currentBorder = decodeBorderValue(
+		templateValues.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER
+	);
 	const boxBorderIndex = boxBorderValues.indexOf(currentBorder.width);
 	const lineHeights = ['1.2', '1.4', '1.6', '1.8', '2.0'];
 
@@ -173,28 +179,32 @@
 		{#snippet nested()}
 			<SplitControl label="Accent">
 				<ColorPicker
-					color={templateValues.template_color_accent ?? projectDefaults.TEMPLATE_COLOR_ACCENT}
+					color={templateValues.template_color_accent ??
+						projectDefaults.TEMPLATE_COLOR_ACCENT}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_accent', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Background">
 				<ColorPicker
-					color={templateValues.template_color_background ?? projectDefaults.TEMPLATE_COLOR_BACKGROUND}
+					color={templateValues.template_color_background ??
+						projectDefaults.TEMPLATE_COLOR_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box background">
 				<ColorPicker
-					color={templateValues.template_color_box_background ?? projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
+					color={templateValues.template_color_box_background ??
+						projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_box_background', e.detail)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box shadow">
 				<ColorPicker
-					color={templateValues.template_box_shadow ?? projectDefaults.TEMPLATE_BOX_SHADOW} 
+					color={templateValues.template_box_shadow ??
+						projectDefaults.TEMPLATE_BOX_SHADOW}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_box_shadow', e.detail)}
 				/>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { IconButton, toast, confirm } from '@hyvor/design/components';
-	import { listStore, projectStore } from '../../lib/stores/projectStore';
+	import { listStore, projectStore } from '../../lib/stores/newsletterStore';
 	import type { List } from '../../types';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteList, updateList } from '../../lib/actions/listActions';
@@ -11,10 +11,8 @@
 	let listDescription = $state(list.description);
 	let modalOpen = false;
 
-
 	function truncateDescription(description: string | null): string {
-		if (!description)
-		 return '(No description)';
+		if (!description) return '(No description)';
 		if (description.length > 50) {
 			return description.slice(0, 50) + '...';
 		}
@@ -76,7 +74,6 @@
 				confirmation.close();
 			});
 	}
-
 </script>
 
 <div class="list-item">
@@ -105,12 +102,7 @@
 		</div>
 	</a>
 	<div class="actions">
-		<EditListButton
-			bind:listName
-			bind:listDescription
-			onEdit={onEdit}
-			submitList={submitEdit}
-		/>
+		<EditListButton bind:listName bind:listDescription {onEdit} submitList={submitEdit} />
 		<IconButton color="red" variant="fill-light" size="small" on:click={onDelete}>
 			<IconTrash size={12} />
 		</IconButton>

@@ -1,14 +1,20 @@
 <script lang="ts">
-	import { ColorPicker, FormControl, BoxShadowPicker, SplitControl, Slider } from '@hyvor/design/components';
+	import {
+		ColorPicker,
+		FormControl,
+		BoxShadowPicker,
+		SplitControl,
+		Slider
+	} from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
-	import { projectEditingStore, projectStore } from '../../../lib/stores/projectStore';
+	import { projectEditingStore, projectStore } from '../../../lib/stores/newsletterStore';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
 	import BorderPicker from './BorderPicker.svelte';
 
 	let { palette }: { palette: 'light' | 'dark' } = $props();
 
 	const i18n = getI18n();
-	const projectDefaults = getAppConfig().project_defaults;
+	const projectDefaults = getAppConfig().newsletter_defaults;
 </script>
 
 <SplitControl
@@ -98,13 +104,18 @@
 	{/snippet}
 </SplitControl>
 
-<SplitControl label={i18n.t('console.settings.form.roundness')} caption={i18n.t('console.settings.form.roundnessCaption')}>
+<SplitControl
+	label={i18n.t('console.settings.form.roundness')}
+	caption={i18n.t('console.settings.form.roundnessCaption')}
+>
 	<Slider
 		min={0}
 		max={30}
 		valueFormat={(value) => `${value}px`}
-		value={parseInt($projectEditingStore.form_light_border_radius ??
-			projectDefaults.FORM_LIGHT_BORDER_RADIUS)}
+		value={parseInt(
+			$projectEditingStore.form_light_border_radius ??
+				projectDefaults.FORM_LIGHT_BORDER_RADIUS
+		)}
 		onchange={(value) => {
 			$projectEditingStore.form_light_border_radius = value.toString();
 		}}

@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { toast } from '@hyvor/design/components';
-	import { updateProject } from '../../../lib/actions/projectActions';
+	import { updateProject } from '../../../lib/actions/newsletterActions';
 	import {
 		projectEditingStore,
 		projectStore,
 		updateProjectStore
-	} from '../../../lib/stores/projectStore';
-	import type { Project } from '../../../types';
+	} from '../../../lib/stores/newsletterStore';
+	import type { Newsletter } from '../../../types';
 	import SaveDiscard from './SaveDiscard.svelte';
 
 	interface Props {
-		keys: (keyof Project)[];
+		keys: (keyof Newsletter)[];
 		onsave?: () => void;
 	}
 
@@ -19,7 +18,8 @@
 	let changes = $derived(
 		keys.filter(
 			(key) =>
-				$projectEditingStore[key as keyof Project] !== $projectStore[key as keyof Project]
+				$projectEditingStore[key as keyof Newsletter] !==
+				$projectStore[key as keyof Newsletter]
 		)
 	);
 	let hasChanges = $derived(changes.length > 0);
@@ -29,12 +29,12 @@
 			changes.reduce(
 				(acc, key) => ({
 					...acc,
-					[key]: $projectEditingStore[key as keyof Project]
+					[key]: $projectEditingStore[key as keyof Newsletter]
 				}),
 				{} as any
 			)
 		);
-		
+
 		updateProjectStore(project);
 
 		onsave?.();

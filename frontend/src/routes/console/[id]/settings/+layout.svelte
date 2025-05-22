@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
-	import { projectStore } from '../../lib/stores/projectStore';
+	import { projectStore } from '../../lib/stores/newsletterStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';

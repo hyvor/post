@@ -1,7 +1,7 @@
 <script>
 	import { DarkToggle, LanguageToggle } from '@hyvor/design/components';
 	import AccountNav from './AccountNav.svelte';
-	import ProjectNav from './ProjectNav.svelte';
+	import ProjectNav from './NewsletterNav.svelte';
 </script>
 
 <div id="nav">

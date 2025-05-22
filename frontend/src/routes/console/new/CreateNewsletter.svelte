@@ -10,19 +10,17 @@
 		toast
 	} from '@hyvor/design/components';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
-	import { addUserProject, userProjectsStore } from '../lib/stores/userProjectsStore';
-	import { createProject } from '../lib/actions/projectActions';
-
+	import { addUserProject, userNewslettersStore } from '../lib/stores/userNewslettersStore';
+	import { createProject } from '../lib/actions/newsletterActions';
 
 	let name = $state('');
 
-    let nameError: string | null = $state(null);
+	let nameError: string | null = $state(null);
 
 	let isCreating = $state(false);
 
-
 	function handleBack() {
-		if ($userProjectsStore.length > 0) {
+		if ($userNewslettersStore.length > 0) {
 			goto('/console');
 		} else {
 			goto('/');
@@ -34,7 +32,6 @@
 
 		const value = e.target.value;
 	}
-
 
 	function handleCreate() {
 		let valid = true;
@@ -53,8 +50,8 @@
 		createProject(name)
 			.then((res) => {
 				toast.success('Project created successfully');
-                
-				addUserProject({role: 'owner', project: res});	
+
+				addUserProject({ role: 'owner', project: res });
 
 				goto('/console/' + res.id);
 			})
@@ -84,7 +81,6 @@
 			<div class="title">Start a new project</div>
 
 			<div class="form">
-
 				<SplitControl label="Name" caption="A name for your project">
 					<FormControl>
 						<TextInput

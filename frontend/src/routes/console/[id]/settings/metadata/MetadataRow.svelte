@@ -5,7 +5,7 @@
 	import type { SubscriberMetadataDefinition } from '../../../types';
 	import { getI18n } from '../../../lib/i18n';
 	import { deleteSubscriberMetadataDefinition } from '../../../lib/actions/subscriberMetadataActions';
-	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/projectStore';
+	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/newsletterStore';
 	import MetadataAddUpdateModal from './MetadataAddUpdateModal.svelte';
 
 	let { metadata }: { metadata: SubscriberMetadataDefinition } = $props();

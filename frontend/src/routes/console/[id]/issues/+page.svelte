@@ -1,7 +1,7 @@
 <script>
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { issueStore } from '../../lib/stores/projectStore';
+	import { issueStore } from '../../lib/stores/newsletterStore';
 	import CreateIssueButton from './CreateIssueButton.svelte';
 	import SingleBox from '../../@components/content/SingleBox.svelte';
 	import IssueRow from './IssueRow.svelte';

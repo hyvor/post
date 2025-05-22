@@ -7,7 +7,7 @@
 	import IconGear from '@hyvor/icons/IconGear';
 	import IconTools from '@hyvor/icons/IconTools';
 	import NavItem from './NavItem.svelte';
-	import { projectStore } from '../../lib/stores/projectStore';
+	import { projectStore } from '../../lib/stores/newsletterStore';
 	import { page } from '$app/state';
 	import { getI18n } from '../../lib/i18n';
 	import { selectingProject } from '../../lib/stores/consoleStore';
@@ -19,7 +19,6 @@
 	function triggerProjectSelector() {
 		selectingProject.set(true);
 	}
-
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -64,7 +63,7 @@
 				<span slot="text">{I18n.t('console.nav.issues')}</span>
 			</NavItem>
 		</NavLink>
-		
+
 		<Divider margin={15} />
 
 		<NavLink

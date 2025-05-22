@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { TextInput, SplitControl, Button, toast, confirm } from '@hyvor/design/components';
 	import SettingsBody from './@components/SettingsBody.svelte';
-	import ProjectSaveDiscard from '../@components/save/ProjectSaveDiscard.svelte';
-	import { projectEditingStore, projectStore } from '../../lib/stores/projectStore';
+	import ProjectSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
+	import { projectEditingStore, projectStore } from '../../lib/stores/newsletterStore';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
-	import { deleteProject } from '../../lib/actions/projectActions';
+	import { deleteProject } from '../../lib/actions/newsletterActions';
 	import { getI18n } from '../../lib/i18n';
 
 	const I18n = getI18n();

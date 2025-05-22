@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Tag } from '@hyvor/design/components';
-	import type { ProjectList } from '../../types';
-	import { projectStore } from '../../lib/stores/projectStore';
-	import { loadProject } from '../../lib/projectLoader';
+	import type { NewsletterList } from '../../types';
+	import { projectStore } from '../../lib/stores/newsletterStore';
+	import { loadProject } from '../../lib/newsletterLoader';
 	import RoleTag from './RoleTag.svelte';
 	import { selectingProject } from '../../lib/stores/consoleStore';
 
-	export let projectList: ProjectList;
+	export let projectList: NewsletterList;
 
 	function onClick() {
 		projectStore.set(projectList.project);
-        goto(`/console/${projectList.project.id}`);
+		goto(`/console/${projectList.project.id}`);
 		loadProject(String(projectList.project.id));
 		selectingProject.set(false);
 	}
@@ -33,18 +33,17 @@
 		</div>
 	</div>
 
-    <div class="role">
+	<div class="role">
 		<RoleTag role={projectList.role} />
 	</div>
 
 	<div class="right">&rarr;</div>
-
 </div>
 
 <style lang="scss">
 	.wrap {
 		padding: 15px 25px;
-        background-color: var(--accent-light-mid);
+		background-color: var(--accent-light-mid);
 		cursor: pointer;
 		border-radius: var(--box-radius);
 		display: flex;

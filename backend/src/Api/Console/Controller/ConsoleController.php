@@ -53,7 +53,7 @@ class ConsoleController extends AbstractController
                     'instance' => $this->internalConfig->getInstance(),
                 ],
                 // 'template_defaults' => TemplateDefaults::getAll(),
-                'project_defaults' => NewsletterDefaults::getAll(),
+                'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
         ]);
     }

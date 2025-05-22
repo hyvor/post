@@ -7,8 +7,8 @@
 		TextInput
 	} from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
-	import { projectEditingStore } from '../../../lib/stores/projectStore';
-	import ProjectSaveDiscard from '../../@components/save/ProjectSaveDiscard.svelte';
+	import { projectEditingStore } from '../../../lib/stores/newsletterStore';
+	import ProjectSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
 	import FormColors from './FormColors.svelte';
 
 	const i18n = getI18n();

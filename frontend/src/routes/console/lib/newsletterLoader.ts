@@ -1,16 +1,16 @@
-import type { List, Project, ProjectStats, SubscriberMetadataDefinition } from '../types';
-import consoleApi from '../lib/consoleApi';
+import type { List, Newsletter, NewsletterStats, SubscriberMetadataDefinition } from '../types';
+import consoleApi from './consoleApi';
 import {
 	issueStore,
 	listStore,
 	projectStatsStore,
 	setProjectStore,
 	subscriberMetadataDefinitionStore
-} from './stores/projectStore';
+} from './stores/newsletterStore';
 
 interface ProjectResponse {
-	project: Project;
-	stats: ProjectStats;
+	project: Newsletter;
+	stats: NewsletterStats;
 	lists: List[];
 	subscriber_metadata_definitions: SubscriberMetadataDefinition[];
 }
