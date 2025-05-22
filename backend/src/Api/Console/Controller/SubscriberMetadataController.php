@@ -5,7 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\SubscriberMetadata\CreateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Input\SubscriberMetadata\UpdateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +24,7 @@ class SubscriberMetadataController extends AbstractController
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
     public function createMetadata(
-        Project $project,
+        Newsletter $project,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
     ): JsonResponse {
         $current = $this->subscriberMetadataService->getMetadataDefinitionByKey($project, $input->key);

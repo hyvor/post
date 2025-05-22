@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service\Project;
+namespace App\Service\Newsletter;
 
 /**
  * TemplateDefaults are separately defined
  */
-class ProjectDefaults
+class NewsletterDefaults
 {
 
     public const FORM_COLOR_LIGHT_TEXT = '#000000';

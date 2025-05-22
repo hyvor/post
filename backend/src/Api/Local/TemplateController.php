@@ -2,7 +2,7 @@
 
 namespace App\Api\Local;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Service\Content\ContentService;
 use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use App\Service\EmailTemplate\EmailTemplateVariables;
@@ -30,8 +30,8 @@ class TemplateController extends AbstractController
     #[Route('/template/basic', methods: 'GET')]
     public function basicTemplate(): Response
     {
-        $project = $this->em->getRepository(Project::class)->find(1);
-        assert($project instanceof Project);
+        $project = $this->em->getRepository(Newsletter::class)->find(1);
+        assert($project instanceof Newsletter);
 
         $subject = 'Introducing Hyvor Post';
         $content = (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');

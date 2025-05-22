@@ -8,7 +8,7 @@ use App\Entity\Media;
 use App\Entity\Type\MediaFolder;
 use App\Service\Media\MediaService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use League\Flysystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -21,7 +21,7 @@ class UploadMediaTest extends WebTestCase
 
     public function test_upload_invalid_file_when_importing(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $file = new UploadedFile(
             __DIR__ . '/upload_test.css',
@@ -58,7 +58,7 @@ class UploadMediaTest extends WebTestCase
             'large_test_file.jpg',
         );
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $response = $this->consoleApi(
             $project,
             'POST',
@@ -85,7 +85,7 @@ class UploadMediaTest extends WebTestCase
             mimeType: "text/csv",
         );
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $this->consoleApi(
             $project,
             'POST',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Console\User;
+namespace App\Tests\Api\Console\User;
 
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserService::class)]
 #[CoversClass(UserInviteService::class)]
 #[CoversClass(UserObject::class)]
-class GetProjectUserTest extends WebTestCase
+class GetNewsletterUserTest extends WebTestCase
 {
     public function test_get_project_users(): void
     {

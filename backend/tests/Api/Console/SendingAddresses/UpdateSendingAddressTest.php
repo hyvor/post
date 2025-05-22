@@ -8,7 +8,7 @@ use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -23,7 +23,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [
@@ -78,7 +78,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [

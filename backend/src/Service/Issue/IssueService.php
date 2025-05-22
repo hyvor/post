@@ -4,7 +4,7 @@ namespace App\Service\Issue;
 
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\SendingAddress;
 use App\Entity\Type\IssueStatus;
@@ -33,7 +33,7 @@ class IssueService
     ) {
     }
 
-    public function createIssueDraft(Project $project): Issue
+    public function createIssueDraft(Newsletter $project): Issue
     {
         $lists = $this->newsletterListService->getListsOfProject($project);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
@@ -127,7 +127,7 @@ class IssueService
     /**
      * @return ArrayCollection<int, Issue>
      */
-    public function getIssues(Project $project, int $limit, int $offset): ArrayCollection
+    public function getIssues(Newsletter $project, int $limit, int $offset): ArrayCollection
     {
         return new ArrayCollection(
             $this->issueRepository

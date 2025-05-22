@@ -7,7 +7,7 @@ use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
 use App\Api\Console\Object\SendObject;
 use App\Entity\Issue;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailSenderService;
@@ -37,7 +37,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'GET')]
-    public function getIssues(Request $request, Project $project): JsonResponse
+    public function getIssues(Request $request, Newsletter $project): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -51,7 +51,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'POST')]
-    public function createIssue(Project $project): JsonResponse
+    public function createIssue(Newsletter $project): JsonResponse
     {
         $issue = $this->issueService->createIssueDraft($project);
 
@@ -67,7 +67,7 @@ class IssueController extends AbstractController
     #[Route('/issues/{id}', methods: 'PATCH')]
     public function updateIssue(
         Issue $issue,
-        Project $project,
+        Newsletter $project,
         #[MapRequestPayload] UpdateIssueInput $input
     ): JsonResponse {
         $updates = new UpdateIssueDto();
@@ -162,7 +162,7 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/test', methods: 'POST')]
     public function sendTest(
         Request $request,
-        Project $project,
+        Newsletter $project,
         Issue $issue,
         #[MapRequestPayload] SendTestInput $input
     ): JsonResponse {
@@ -178,14 +178,14 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]
-    public function previewIssue(Project $project, Issue $issue): JsonResponse
+    public function previewIssue(Newsletter $project, Issue $issue): JsonResponse
     {
         $preview = $this->templateRenderer->renderFromIssue($issue);
         return $this->json(['html' => $preview]);
     }
 
     #[Route ('/issues/{id}/progress', methods: 'GET')]
-    public function getIssueProgress(Project $project, Issue $issue): JsonResponse
+    public function getIssueProgress(Newsletter $project, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
         return $this->json($progress);

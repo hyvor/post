@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Tests\Api\Console\Project;
+namespace App\Tests\Api\Console\Newsletter;
 
-use App\Api\Console\Controller\ProjectController;
-use App\Entity\Project;
+use App\Api\Console\Controller\NewsletterController;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ProjectController::class)]
-#[CoversClass(ProjectService::class)]
-#[CoversClass(Project::class)]
-class GetProjectTest extends WebTestCase
+#[CoversClass(NewsletterController::class)]
+#[CoversClass(NewsletterService::class)]
+#[CoversClass(Newsletter::class)]
+class GetNewsletterTest extends WebTestCase
 {
 
     // TODO: tests for input validation
@@ -22,7 +22,7 @@ class GetProjectTest extends WebTestCase
 
     public function testGetSpecificProjet(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
             'project' => $project,

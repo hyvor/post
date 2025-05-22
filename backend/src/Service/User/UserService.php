@@ -2,7 +2,7 @@
 
 namespace App\Service\User;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Entity\UserInvite;
@@ -21,7 +21,7 @@ class UserService
     /**
      * @return ArrayCollection<int, User>
      */
-    public function getProjectUsers(Project $project): ArrayCollection
+    public function getProjectUsers(Newsletter $project): ArrayCollection
     {
         $users = $this->em->getRepository(User::class)->findBy([
             'project' => $project,
@@ -33,7 +33,7 @@ class UserService
         return new ArrayCollection($users);
     }
 
-    public function isAdmin(Project $project, int $hyvorUserId): bool
+    public function isAdmin(Newsletter $project, int $hyvorUserId): bool
     {
         $user = $this->em->getRepository(User::class)->findBy([
             'project' => $project,
@@ -46,7 +46,7 @@ class UserService
         return true;
     }
 
-    public function createUser(Project $project, int $hyvorUserId): User
+    public function createUser(Newsletter $project, int $hyvorUserId): User
     {
         $user = new User();
         $user->setCreatedAt(new \DateTimeImmutable());
@@ -61,7 +61,7 @@ class UserService
         return $user;
     }
 
-    public function deleteUser(Project $project, User $user): void
+    public function deleteUser(Newsletter $project, User $user): void
     {
         $this->em->remove($user);
         $this->em->flush();

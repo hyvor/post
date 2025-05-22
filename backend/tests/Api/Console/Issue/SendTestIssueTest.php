@@ -6,7 +6,7 @@ use App\Api\Console\Controller\IssueController;
 use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -16,7 +16,7 @@ class SendTestIssueTest extends WebTestCase
 
     public function test_send_test(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
                 'project' => $project,
@@ -43,7 +43,7 @@ class SendTestIssueTest extends WebTestCase
 
     public function test_send_invalid_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
                 'project' => $project,

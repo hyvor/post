@@ -3,23 +3,23 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
-use App\Api\Console\Object\ProjectListObject;
+use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
 use App\Entity\Type\UserRole;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
-#[CoversClass(ProjectService::class)]
+#[CoversClass(NewsletterService::class)]
 #[CoversClass(StatsObject::class)]
 #[CoversClass(StatCategoryObject::class)]
-#[CoversClass(ProjectListObject::class)]
+#[CoversClass(NewsletterListObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 
@@ -28,7 +28,7 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitConsole(): void
     {
-        $projects = ProjectFactory::createMany(10, [
+        $projects = NewsletterFactory::createMany(10, [
             'user_id' => 1,
         ]);
 
@@ -46,11 +46,11 @@ class ConsoleInitTest extends WebTestCase
 
 
         // other user
-        ProjectFactory::createMany(1, [
+        NewsletterFactory::createMany(1, [
             'user_id' => 2,
         ]);
 
-        $projectAdmin = ProjectFactory::createOne([
+        $projectAdmin = NewsletterFactory::createOne([
             'user_id' => 1
         ]);
 
@@ -86,7 +86,7 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProject(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $projectId = $project->getId();
 
@@ -117,7 +117,7 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProjectWithStats(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
             'project' => $project,
@@ -130,7 +130,7 @@ class ConsoleInitTest extends WebTestCase
             'created_at' => new \DateTimeImmutable()
         ]);
 
-        $otherProject = ProjectFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
         NewsletterListFactory::createMany(5, [
             'project' => $otherProject,
             'created_at' => new \DateTimeImmutable()
@@ -168,7 +168,7 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitProjectWithLists(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
             'project' => $project,

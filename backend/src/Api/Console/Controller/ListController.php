@@ -6,7 +6,7 @@ use App\Api\Console\Input\List\CreateListInput;
 use App\Api\Console\Input\List\UpdateListInput;
 use App\Api\Console\Object\ListObject;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +23,7 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'GET')]
-    public function getNewsletterLists(Project $project): JsonResponse
+    public function getNewsletterLists(Newsletter $project): JsonResponse
     {
         $lists = $this->newsletterListService
             ->getListsOfProject($project)
@@ -34,7 +34,7 @@ class ListController extends AbstractController
 
     #[Route('/lists', methods: 'POST')]
     public function createNewsletterList(
-        Project $project,
+        Newsletter $project,
         #[MapRequestPayload] CreateListInput $input
     ): JsonResponse {
         $listCounter = $this->newsletterListService->getListCounter($project);

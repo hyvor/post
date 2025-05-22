@@ -2,7 +2,7 @@
 
 namespace App\Entity\Type;
 
-enum ProjectFormDefaultColorPalette: string
+enum NewsletterFormDefaultColorPalette: string
 {
 
     case LIGHT =  'light';

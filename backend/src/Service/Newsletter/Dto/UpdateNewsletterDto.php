@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service\Project\Dto;
+namespace App\Service\Newsletter\Dto;
 
 use App\Util\OptionalPropertyTrait;
 
-class UpdateProjectDto
+class UpdateNewsletterDto
 {
     use OptionalPropertyTrait;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\Public\Object\Form\Project;
+namespace App\Api\Public\Object\Form\Newsletter;
 
-use App\Entity\Meta\ProjectMeta;
+use App\Entity\Meta\NewsletterMeta;
 
 class FormObject
 {
@@ -16,7 +16,7 @@ class FormObject
     public ?string $button_text;
     public ?string $success_message;
 
-    public function __construct(ProjectMeta $meta)
+    public function __construct(NewsletterMeta $meta)
     {
 
         $this->width = $meta->form_width;

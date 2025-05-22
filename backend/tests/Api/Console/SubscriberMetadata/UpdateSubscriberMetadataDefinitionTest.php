@@ -7,7 +7,7 @@ use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -20,7 +20,7 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_updates_name(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
@@ -43,8 +43,8 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_update_other_project_entities(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
             'project' => $otherProject,

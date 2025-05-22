@@ -7,7 +7,7 @@ use App\Api\Console\Object\ListObject;
 use App\Entity\NewsletterList;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -21,7 +21,7 @@ class GetListsTest extends WebTestCase
 
     public function testListNewsletterListNonEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $lists = NewsletterListFactory::createMany(10, ['project' => $project]);
 
         $response = $this->consoleApi(
@@ -43,8 +43,8 @@ class GetListsTest extends WebTestCase
 
     public function testNewsletterListMultipleProject(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $newsletterLists1 = NewsletterListFactory::createMany(10, ['project' => $project1]);
         $newsletterLists2 = NewsletterListFactory::createMany(10, ['project' => $project2]);

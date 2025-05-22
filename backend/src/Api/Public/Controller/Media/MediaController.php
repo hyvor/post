@@ -3,7 +3,7 @@
 namespace App\Api\Public\Controller\Media;
 
 use App\Service\Media\MediaService;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;

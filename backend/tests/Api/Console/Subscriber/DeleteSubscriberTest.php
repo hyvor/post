@@ -8,7 +8,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -24,7 +24,7 @@ class DeleteSubscriberTest extends WebTestCase
 
     public function testDeleteSubscriberFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         $subscriber = SubscriberFactory::createOne([
@@ -49,7 +49,7 @@ class DeleteSubscriberTest extends WebTestCase
 
     public function testDeleteSubscriberNotFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -62,8 +62,8 @@ class DeleteSubscriberTest extends WebTestCase
 
     public function testCannotDeleteOtherProjectSubscriber(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 

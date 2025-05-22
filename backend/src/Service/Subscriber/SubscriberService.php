@@ -3,7 +3,7 @@
 namespace App\Service\Subscriber;
 
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
@@ -31,7 +31,7 @@ class SubscriberService
      * @param iterable<NewsletterList> $lists
      */
     public function createSubscriber(
-        Project $project,
+        Newsletter $project,
         string $email,
         iterable $lists,
         SubscriberStatus $status,
@@ -88,7 +88,7 @@ class SubscriberService
      * @return ArrayCollection<int, Subscriber>
      */
     public function getSubscribers(
-        Project $project,
+        Newsletter $project,
         ?string $status,
         ?int $listId,
         ?string $search,
@@ -170,7 +170,7 @@ class SubscriberService
         return $subscriber;
     }
 
-    public function getSubscriberByEmail(Project $project, string $email): ?Subscriber
+    public function getSubscriberByEmail(Newsletter $project, string $email): ?Subscriber
     {
         return $this->subscriberRepository->findOneBy(['project' => $project, 'email' => $email]);
     }

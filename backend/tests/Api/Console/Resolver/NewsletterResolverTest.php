@@ -12,18 +12,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 #[CoversClass(NewsletterResolver::class)]
-class ProjectResolverTest extends KernelTestCase
+class NewsletterResolverTest extends KernelTestCase
 {
 
     public function testDoesNotResolveClassesOutsideConsoleApiControllers(): void
     {
-
         /** @var NewsletterResolver $resolver */
         $resolver = $this->container->get(NewsletterResolver::class);
 
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
-        $argument->method('getControllerName')->willReturn('App\Api\SomeOther\Controller\ProjectController::getProjects');
+        $argument->method('getControllerName')->willReturn(
+            'App\Api\SomeOther\Controller\ProjectController::getProjects'
+        );
 
         $output = $resolver->resolve($request, $argument);
         $this->assertSame([], $output);
@@ -38,10 +39,12 @@ class ProjectResolverTest extends KernelTestCase
         $resolver = $this->container->get(EntityResolver::class);
 
         $request = new Request();
-        $request->attributes->set('id', (string) $newsletterList->getId());
+        $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
         $argument = $this->createMock(ArgumentMetadata::class);
-        $argument->method('getControllerName')->willReturn('App\Api\Console\Controller\NewsletterListController::getLists');
+        $argument->method('getControllerName')->willReturn(
+            'App\Api\Console\Controller\NewsletterListController::getLists'
+        );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
         $this->expectExceptionMessage('Missing X-Project-Id header');

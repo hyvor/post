@@ -2,7 +2,7 @@
 
 namespace App\Service\UserInvite;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,7 +27,7 @@ class UserInviteService
     /**
      * @return ArrayCollection<int, UserInvite>
      */
-    public function getProjectInvites(Project $project): ArrayCollection
+    public function getProjectInvites(Newsletter $project): ArrayCollection
     {
         $userInvites = $this->em->getRepository(UserInvite::class)->findBy([
             'project' => $project,
@@ -41,7 +41,7 @@ class UserInviteService
     }
 
     public function createInvite(
-        Project $project,
+        Newsletter $project,
         int $hyvorUserId,
         UserRole $role,
     ): UserInvite {
@@ -60,7 +60,7 @@ class UserInviteService
         return $userInvite;
     }
 
-    public function sendEmail(Project $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
+    public function sendEmail(Newsletter $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
     {
         $strings = $this->stringsFactory->create();
 

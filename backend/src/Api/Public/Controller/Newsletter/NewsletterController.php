@@ -2,7 +2,16 @@
 
 namespace App\Api\Public\Controller\Newsletter;
 
-class NewsletterController
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+
+class NewsletterController extends AbstractController
 {
+
+    #[Route('/newsletter', methods: 'GET')]
+    public function getNewsletter(): void
+    {
+        //
+    }
 
 }

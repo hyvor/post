@@ -8,7 +8,7 @@ use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -19,7 +19,7 @@ class CreateSendingAddressTest extends WebTestCase
 {
     public function test_create_sending_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
@@ -51,7 +51,7 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
@@ -85,7 +85,7 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_create_sending_email_domain_not_found(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -103,7 +103,7 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_create_sending_email_domain_not_verified(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $domain = DomainFactory::createOne([
             'domain' => 'hyvor.com',
             'verified_in_ses' => false,

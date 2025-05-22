@@ -1,35 +1,35 @@
 <?php
 
-namespace App\Tests\Api\Console\Project;
+namespace App\Tests\Api\Console\Newsletter;
 
-use App\Api\Console\Controller\ProjectController;
-use App\Api\Console\Input\Project\UpdateProjectInput;
-use App\Entity\Meta\ProjectMeta;
-use App\Entity\Project;
+use App\Api\Console\Controller\NewsletterController;
+use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
+use App\Entity\Meta\NewsletterMeta;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
-use App\Service\Project\Dto\UpdateProjectMetaDto;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
-#[CoversClass(ProjectController::class)]
-#[CoversClass(ProjectService::class)]
-#[CoversClass(UpdateProjectMetaDto::class)]
-#[CoversClass(UpdateProjectInput::class)]
-class UpdateProjectTest extends WebTestCase
+#[CoversClass(NewsletterController::class)]
+#[CoversClass(NewsletterService::class)]
+#[CoversClass(UpdateNewsletterMetaDto::class)]
+#[CoversClass(UpdateNewsletterInput::class)]
+class UpdateNewsletterTest extends WebTestCase
 {
 
     public function test_update_project_meta(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $meta = new ProjectMeta();
+        $meta = new NewsletterMeta();
         $meta->template_logo = 'https://example.com/logo.png';
-        $project = ProjectFactory::createOne([
+        $project = NewsletterFactory::createOne([
             'meta' => $meta
         ]);
 
@@ -59,14 +59,14 @@ class UpdateProjectTest extends WebTestCase
         $this->assertSame('10px', $json['template_box_radius']);
         $this->assertNull($json['template_logo']);
 
-        $repository = $this->em->getRepository(Project::class);
+        $repository = $this->em->getRepository(Newsletter::class);
         $project = $repository->find($json['id']);
 
         $this->assertNotNull($project);
         $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('UpdateName', $project->getName());
         $projectMeta = $project->getMeta();
-        $this->assertInstanceOf(ProjectMeta::class, $projectMeta);
+        $this->assertInstanceOf(NewsletterMeta::class, $projectMeta);
         $this->assertSame('#ff0000', $projectMeta->template_color_accent);
         $this->assertSame('10px', $projectMeta->template_box_radius);
         $this->assertSame(null, $projectMeta->template_logo);
@@ -77,7 +77,7 @@ class UpdateProjectTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne([
+        $project = NewsletterFactory::createOne([
             'default_email_username' => 'thibault@project.com'
         ]);
 
@@ -97,7 +97,7 @@ class UpdateProjectTest extends WebTestCase
         $this->assertSame('UpdateName', $json['name']);
         $this->assertSame('thibault@gmail.com', $json['default_email_username']);
 
-        $repository = $this->em->getRepository(Project::class);
+        $repository = $this->em->getRepository(Newsletter::class);
         $project = $repository->find($json['id']);
         $this->assertNotNull($project);
         $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
@@ -109,11 +109,11 @@ class UpdateProjectTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne([
+        $project = NewsletterFactory::createOne([
             'default_email_username' => 'thibault@gmail.com',
         ]);
 
-        ProjectFactory::createOne([
+        NewsletterFactory::createOne([
             'default_email_username' => 'thibault@hyvor.com',
         ]);
 

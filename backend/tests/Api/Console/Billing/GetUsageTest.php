@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console\Billing;
 
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -16,7 +16,7 @@ class GetUsageTest extends WebTestCase
         Clock::set(new MockClock('2025-05-10'));
 
         // current user sends
-        $currentUserProject = ProjectFactory::createOne(['user_id' => 1]);
+        $currentUserProject = NewsletterFactory::createOne(['user_id' => 1]);
         $firstDayThisMonth = new \DateTimeImmutable('first day of this month')->modify('+1 day');
         SendFactory::createMany(3, [
             'project' => $currentUserProject,
@@ -34,7 +34,7 @@ class GetUsageTest extends WebTestCase
         ]);
 
         // other user
-        $otherUserProject = ProjectFactory::createOne(['user_id' => 2]);
+        $otherUserProject = NewsletterFactory::createOne(['user_id' => 2]);
         SendFactory::createMany(5, [
             'project' => $otherUserProject,
             'created_at' => $firstDayThisMonth,

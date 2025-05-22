@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\Public\Object\Form\Project;
+namespace App\Api\Public\Object\Form\Newsletter;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 
-class FormProjectObject
+class FormNewsletterObject
 {
 
     public string $uuid;
@@ -12,7 +12,7 @@ class FormProjectObject
     public PaletteObject $palette_light;
     public PaletteObject $palette_dark;
 
-    public function __construct(Project $project)
+    public function __construct(Newsletter $project)
     {
         $this->uuid = $project->getUuid();
         $meta = $project->getMeta();

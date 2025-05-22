@@ -2,7 +2,7 @@
 
 namespace App\Tests\Case;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Monolog\Handler\TestHandler;
@@ -41,7 +41,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      * @param array<string, mixed> $parameters
      */
     public function consoleApi(
-        Project|int|null $project,
+        Newsletter|int|null $project,
         string $method,
         string $uri,
         array $data = [],
@@ -49,7 +49,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         // only use this if $files is used. otherwise, use $data
         array $parameters = [],
     ): Response {
-        $projectId = $project instanceof Project ? $project->getId() : $project;
+        $projectId = $project instanceof Newsletter ? $project->getId() : $project;
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'default'));
         $this->client->request(

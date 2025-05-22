@@ -2,7 +2,7 @@
 
 namespace App\Service\EmailTemplate;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Template;
 use App\Service\EmailTemplate\Dto\UpdateTemplateDto;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,14 +19,14 @@ class EmailTemplateService
     ) {
     }
 
-    public function getTemplate(Project $project): ?Template
+    public function getTemplate(Newsletter $project): ?Template
     {
         return $this->em->getRepository(Template::class)->findOneBy([
             'project' => $project,
         ]);
     }
 
-    public function createTemplate(Project $project, string $template): Template
+    public function createTemplate(Newsletter $project, string $template): Template
     {
         $templateEntity = new Template()
             ->setProject($project)
@@ -40,7 +40,7 @@ class EmailTemplateService
         return $templateEntity;
     }
 
-    public function getTemplateStringFromProject(Project $project): string
+    public function getTemplateStringFromProject(Newsletter $project): string
     {
         $template = $this->getTemplate($project);
 

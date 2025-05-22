@@ -2,7 +2,7 @@
 
 namespace App\Service\SubscriberMetadata;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,21 +23,21 @@ class SubscriberMetadataService
     /**
      * @return SubscriberMetadataDefinition[]
      */
-    public function getMetadataDefinitions(Project $project): array
+    public function getMetadataDefinitions(Newsletter $project): array
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
             ->findBy(['project' => $project]);
     }
 
-    public function getMetadataDefinitionByKey(Project $project, string $key): ?SubscriberMetadataDefinition
+    public function getMetadataDefinitionByKey(Newsletter $project, string $key): ?SubscriberMetadataDefinition
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
             ->findOneBy(['project' => $project, 'key' => $key]);
     }
 
-    public function getMetadataDefinitionsCount(Project $project): int
+    public function getMetadataDefinitionsCount(Newsletter $project): int
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
@@ -45,7 +45,7 @@ class SubscriberMetadataService
     }
 
     public function createMetadataDefinition(
-        Project $project,
+        Newsletter $project,
         string $key,
         string $name,
     ): SubscriberMetadataDefinition {

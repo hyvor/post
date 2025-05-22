@@ -22,7 +22,7 @@ class Template
     private \DateTimeImmutable $updated_at;
 
     #[ORM\OneToOne(inversedBy: 'templates', cascade: ['persist'])]
-    private Project $project;
+    private Newsletter $project;
 
     #[ORM\Column(type: 'text')]
     private string $template;
@@ -63,12 +63,12 @@ class Template
         return $this;
     }
 
-    public function getProject(): Project
+    public function getProject(): Newsletter
     {
         return $this->project;
     }
 
-    public function setProject(Project $project): static
+    public function setProject(Newsletter $project): static
     {
         $this->project = $project;
 

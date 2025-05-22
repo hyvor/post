@@ -8,7 +8,7 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\Integration\Aws\SnsValidationService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -99,7 +99,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_delivery(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -132,7 +132,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_complaint(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -176,7 +176,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_soft_bounce(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -214,7 +214,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_hard_bounce(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -260,7 +260,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_click_first(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -296,7 +296,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_click_second(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -334,7 +334,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_open_first(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -369,7 +369,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_open_second(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);
@@ -407,7 +407,7 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_subscription(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
         ]);

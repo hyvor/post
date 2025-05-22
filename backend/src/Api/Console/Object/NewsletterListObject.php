@@ -2,19 +2,19 @@
 
 namespace App\Api\Console\Object;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 
-class ProjectListObject
+class NewsletterListObject
 {
     public UserRole $role;
-    public ProjectObject $project;
+    public NewsletterObject $project;
 
-    public function __construct(Project $project, User $user)
+    public function __construct(Newsletter $project, User $user)
     {
         $this->role = $user->getRole();
-        $this->project = new ProjectObject($project);
+        $this->project = new NewsletterObject($project);
     }
 
 }

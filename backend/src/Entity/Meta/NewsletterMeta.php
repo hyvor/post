@@ -3,9 +3,9 @@
 namespace App\Entity\Meta;
 
 // all variables must have a default value
-use App\Entity\Type\ProjectFormDefaultColorPalette;
+use App\Entity\Type\NewsletterFormDefaultColorPalette;
 
-class ProjectMeta
+class NewsletterMeta
 {
 
     /**
@@ -64,7 +64,7 @@ class ProjectMeta
     public ?int $form_dark_border_radius = null;
 
 
-    public ProjectFormDefaultColorPalette $form_default_color_palette = ProjectFormDefaultColorPalette::LIGHT;
+    public NewsletterFormDefaultColorPalette $form_default_color_palette = NewsletterFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;
 
 }

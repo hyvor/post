@@ -8,7 +8,7 @@ use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +20,7 @@ class GetSendsTest extends WebTestCase
 {
     public function test_get_sends_from_issue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -58,7 +58,7 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_limit(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [
@@ -86,7 +86,7 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_email_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [
@@ -124,7 +124,7 @@ class GetSendsTest extends WebTestCase
 
     public function test_get_sends_clicked_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(
             [

@@ -5,7 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -29,7 +29,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    public function getSubscribers(Request $request, Project $project): JsonResponse
+    public function getSubscribers(Request $request, Newsletter $project): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -65,7 +65,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
-    public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Project $project): JsonResponse
+    public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Newsletter $project): JsonResponse
     {
         $missingListIds = $this
             ->newsletterListService
@@ -99,7 +99,7 @@ class SubscriberController extends AbstractController
     #[Route('/subscribers/{id}', methods: 'PATCH')]
     public function updateSubscriber(
         Subscriber $subscriber,
-        Project $project,
+        Newsletter $project,
         #[MapRequestPayload] UpdateSubscriberInput $input
     ): JsonResponse {
         $updates = new UpdateSubscriberDto();

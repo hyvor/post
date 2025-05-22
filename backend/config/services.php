@@ -2,7 +2,7 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use App\Api\Console\Resolver\ProjectResolver;
+use App\Api\Console\Resolver\NewsletterResolver;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Service\Media\FilesystemFactory;
 use Aws\AwsClient;
@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     // ================ CONSOLE API =================
-    $services->set(ProjectResolver::class)
+    $services->set(NewsletterResolver::class)
         ->tag(
             'controller.argument_value_resolver',
             ['name' => 'console_api_project', 'priority' => 150]

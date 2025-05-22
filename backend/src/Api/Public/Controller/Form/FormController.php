@@ -8,11 +8,11 @@ use App\Api\Public\Input\Form\FormInitInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
-use App\Api\Public\Object\Form\Project\FormProjectObject;
+use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +29,7 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private ProjectService $projectService,
+        private NewsletterService $projectService,
         private NewsletterListService $newsletterListService,
         private SubscriberService $subscriberService,
     ) {
@@ -61,7 +61,7 @@ class FormController extends AbstractController
         }
 
         return new JsonResponse([
-            'project' => new FormProjectObject($project),
+            'project' => new FormNewsletterObject($project),
             'is_subscribed' => false,
             'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
         ]);

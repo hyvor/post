@@ -5,7 +5,7 @@ namespace App\Api\Console\Resolver;
 use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SendingAddress;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
@@ -35,7 +35,7 @@ class EntityResolver implements ValueResolverInterface
 
     public function __construct(
         private EntityManagerInterface $em,
-        private ProjectResolver $projectResolver,
+        private NewsletterResolver $projectResolver,
     ) {
     }
 
@@ -55,7 +55,7 @@ class EntityResolver implements ValueResolverInterface
             return [];
         }
 
-        if ($argumentType === Project::class) {
+        if ($argumentType === Newsletter::class) {
             return [];
         }
 
@@ -93,7 +93,7 @@ class EntityResolver implements ValueResolverInterface
 
         $argumentMetadata = new ArgumentMetadata(
             'project',
-            Project::class,
+            Newsletter::class,
             false,
             false,
             null,

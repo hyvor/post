@@ -2,7 +2,7 @@
 
 namespace App\Service\SendingEmail;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SendingAddress;
 use App\Entity\Domain;
 use App\Repository\SendingAddressRepository;
@@ -26,18 +26,18 @@ class SendingAddressService
     /**
      * @return ArrayCollection<int, SendingAddress>
      */
-    public function getSendingAddresses(Project $project): ArrayCollection
+    public function getSendingAddresses(Newsletter $project): ArrayCollection
     {
         $sendingEmails = $this->sendingEmailRepository->findBy(['project' => $project]);
         return new ArrayCollection($sendingEmails);
     }
 
-    public function getSendingAddressesCount(Project $project): int
+    public function getSendingAddressesCount(Newsletter $project): int
     {
         return $this->sendingEmailRepository->count(['project' => $project]);
     }
 
-    public function createSendingAddress(Project $project, Domain $customDomain, string $email): SendingAddress
+    public function createSendingAddress(Newsletter $project, Domain $customDomain, string $email): SendingAddress
     {
         $sendingAddress = new SendingAddress();
         $sendingAddress->setProject($project);
@@ -84,7 +84,7 @@ class SendingAddressService
         return $sendingAddress;
     }
 
-    public function getCurrentDefaultSendingAddressOfProject(Project $project): ?SendingAddress
+    public function getCurrentDefaultSendingAddressOfProject(Newsletter $project): ?SendingAddress
     {
         return $this->sendingEmailRepository->findOneBy([
             'project' => $project,
@@ -92,7 +92,7 @@ class SendingAddressService
         ]);
     }
 
-    public function getDefaultEmailAddressOfProjectWithFallback(Project $project): string
+    public function getDefaultEmailAddressOfProjectWithFallback(Newsletter $project): string
     {
         $sendingAddress = $this->getCurrentDefaultSendingAddressOfProject($project);
 
@@ -103,7 +103,7 @@ class SendingAddressService
         return $this->getFallbackAddressOfProject($project);
     }
 
-    public function getFallbackAddressOfProject(Project $project): string
+    public function getFallbackAddressOfProject(Newsletter $project): string
     {
         return sprintf(
             "%s@%s",

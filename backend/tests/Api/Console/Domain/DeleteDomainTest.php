@@ -10,7 +10,7 @@ use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -40,7 +40,7 @@ class DeleteDomainTest extends WebTestCase
     public function testDeleteDomain(): void
     {
         $this->mockDeleteDomainEntity();
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -67,7 +67,7 @@ class DeleteDomainTest extends WebTestCase
 
     public function testDeleteDomainNotFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -84,7 +84,7 @@ class DeleteDomainTest extends WebTestCase
     public function test_user_can_only_delete_their_domains(): void
     {
         $this->mockDeleteDomainEntity();
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [

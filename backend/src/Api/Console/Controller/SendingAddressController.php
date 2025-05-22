@@ -7,7 +7,7 @@ use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\Domain;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SendingAddress;
 use App\Service\Domain\DomainService;
 use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
@@ -38,7 +38,7 @@ class SendingAddressController extends AbstractController
     }
 
     #[Route('/sending-addresses', methods: 'GET')]
-    public function getSendingAddresses(Request $request, Project $project): JsonResponse
+    public function getSendingAddresses(Request $request, Newsletter $project): JsonResponse
     {
         $sendingAddresses = $this->sendingAddressService->getSendingAddresses($project)
             ->map(fn($sendingAddress) => new SendingAddressObject($sendingAddress));
@@ -48,7 +48,7 @@ class SendingAddressController extends AbstractController
     #[Route('/sending-addresses', methods: 'POST')]
     public function createSendingAddress(
         #[MapRequestPayload] CreateSendingEmailInput $input,
-        Project $project,
+        Newsletter $project,
     ): JsonResponse
     {
         $domain = $this->getDomainFromEmail($input->email);
@@ -61,7 +61,7 @@ class SendingAddressController extends AbstractController
     public function updateSendingAddress(
         SendingAddress $sendingAddress,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
-        Project $project
+        Newsletter $project
     ): JsonResponse
     {
         $updates = new UpdateSendingAddressDto();
@@ -83,7 +83,7 @@ class SendingAddressController extends AbstractController
     #[Route('/sending-addresses/{id}', methods: 'DELETE')]
     public function deleteSendingAddress(
         SendingAddress $sendingAddress,
-        Project $project
+        Newsletter $project
     ): JsonResponse
     {
         $this->sendingAddressService->deleteSendingAddress($sendingAddress);

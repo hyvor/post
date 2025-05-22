@@ -2,19 +2,19 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Entity\Project;
-use App\Repository\ProjectRepository;
+use App\Entity\Newsletter;
+use App\Repository\NewsletterRepository;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ProjectResolver implements ValueResolverInterface
+class NewsletterResolver implements ValueResolverInterface
 {
 
     public function __construct(
-        private ProjectRepository $projectRepository,
+        private NewsletterRepository $projectRepository,
         // TODO: enable this after auth fake
         //private Security $security
     )
@@ -22,11 +22,10 @@ class ProjectResolver implements ValueResolverInterface
     }
 
     /**
-     * @return iterable<Project>
+     * @return iterable<Newsletter>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-
         $controllerName = $argument->getControllerName();
         if (!str_starts_with($controllerName, 'App\Api\Console\Controller\\')) {
             return [];
@@ -36,9 +35,8 @@ class ProjectResolver implements ValueResolverInterface
 
         if (
             !$argumentType ||
-            $argumentType !== Project::class
-        )
-        {
+            $argumentType !== Newsletter::class
+        ) {
             return [];
         }
 
@@ -67,7 +65,6 @@ class ProjectResolver implements ValueResolverInterface
 
         // TODO: check roles
         return [$project];
-
     }
 
 

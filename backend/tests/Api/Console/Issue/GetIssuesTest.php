@@ -9,7 +9,7 @@ use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Issue::class)]
@@ -24,10 +24,10 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesNonEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issues = IssueFactory::createMany(5, ['project' => $project,]);
 
-        $otherProject = ProjectFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
         IssueFactory::createMany(1, ['project' => $otherProject]);
 
         $response = $this->consoleApi(
@@ -63,7 +63,7 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesPagination(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issues = IssueFactory::createMany(5, ['project' => $project,]);
 
         $response = $this->consoleApi(
@@ -97,7 +97,7 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -112,8 +112,8 @@ class GetIssuesTest extends WebTestCase
 
     public function testListIssuesProjectValidation(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $issuesProject1 = IssueFactory::createMany(5, ['project' => $project1,]);
         $issuesProject2 = IssueFactory::createMany(5, ['project' => $project2,]);

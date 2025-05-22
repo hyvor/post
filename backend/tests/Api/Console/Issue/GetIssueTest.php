@@ -7,7 +7,7 @@ use App\Api\Console\Object\IssueObject;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -20,7 +20,7 @@ class GetIssueTest extends WebTestCase
 
     public function testGetSpecificIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
@@ -65,8 +65,8 @@ class GetIssueTest extends WebTestCase
 
     public function testGetSpecificIssueProjectValidation(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(['project' => $project1]);
 

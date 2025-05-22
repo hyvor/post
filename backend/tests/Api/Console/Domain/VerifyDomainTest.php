@@ -8,7 +8,7 @@ use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use Aws\Result;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -54,7 +54,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -90,7 +90,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -117,7 +117,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -136,7 +136,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [

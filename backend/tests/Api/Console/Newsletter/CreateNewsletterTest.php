@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Tests\Api\Console\Project;
+namespace App\Tests\Api\Console\Newsletter;
 
-use App\Api\Console\Controller\ProjectController;
+use App\Api\Console\Controller\NewsletterController;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
-use App\Repository\ProjectRepository;
-use App\Service\Project\ProjectService;
+use App\Repository\NewsletterRepository;
+use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ProjectController::class)]
-#[CoversClass(ProjectService::class)]
-#[CoversClass(ProjectRepository::class)]
-#[CoversClass(Project::class)]
+#[CoversClass(NewsletterController::class)]
+#[CoversClass(NewsletterService::class)]
+#[CoversClass(NewsletterRepository::class)]
+#[CoversClass(Newsletter::class)]
 #[CoversClass(NewsletterList::class)]
 #[CoversClass(User::class)]
-class CreateProjectTest extends WebTestCase
+class CreateNewsletterTest extends WebTestCase
 {
 
     // TODO: tests for input validation
@@ -41,7 +41,7 @@ class CreateProjectTest extends WebTestCase
         $projectId = $json['id'];
         $this->assertIsInt($projectId);
 
-        $repository = $this->em->getRepository(Project::class);
+        $repository = $this->em->getRepository(Newsletter::class);
         $project = $repository->find($projectId);
         $this->assertNotNull($project);
         $this->assertSame('Valid Project Name', $project->getName());

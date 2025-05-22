@@ -3,14 +3,14 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -30,7 +30,7 @@ class UpdateSubscriberTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -70,7 +70,7 @@ class UpdateSubscriberTest extends WebTestCase
     {
 
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'email' => 'mybademail',
                 'list_ids' => [],
             ],
@@ -90,7 +90,7 @@ class UpdateSubscriberTest extends WebTestCase
     public function testValidatesStatus(): void
     {
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'status' => 'invalid',
             ],
             [
@@ -103,7 +103,7 @@ class UpdateSubscriberTest extends WebTestCase
     }
 
     /**
-     * @param callable(Project): array<string, mixed> $input
+     * @param callable(Newsletter): array<string, mixed> $input
      * @param array<mixed> $violations
      * @return void
      */
@@ -112,7 +112,7 @@ class UpdateSubscriberTest extends WebTestCase
         array $violations
     ): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $subscriber = SubscriberFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
@@ -130,8 +130,8 @@ class UpdateSubscriberTest extends WebTestCase
 
     public function testUpdateSubscriberInvalidListId(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne(['project' => $project2]);
         $subscriber = SubscriberFactory::createOne(['project' => $project1]);
@@ -156,8 +156,8 @@ class UpdateSubscriberTest extends WebTestCase
 
     public function testCannotUpdateSubscriberOfOtherProject(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne(['project' => $project1]);
         $subscriber = SubscriberFactory::createOne([
@@ -185,7 +185,7 @@ class UpdateSubscriberTest extends WebTestCase
 
     public function testUpdateSubscriberWithTakenEmail(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $subscriber1 = SubscriberFactory::createOne(['project' => $project, 'email' => 'thibault@hyvor.com']);
         $subscriber2 = SubscriberFactory::createOne(['project' => $project, 'email' => 'supun@hyvor.com']);
 

@@ -6,7 +6,7 @@ use App\Api\Console\Input\UserInvite\InviteUserInput;
 use App\Api\Console\Object\UserInviteObject;
 use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Entity\UserInvite;
@@ -34,7 +34,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', methods: 'GET')]
-    public function getUsers(Project $project): JsonResponse
+    public function getUsers(Newsletter $project): JsonResponse
     {
         $users = $this->userService->getProjectUsers($project)
             ->map(function ($user) {
@@ -49,14 +49,14 @@ class UserController extends AbstractController
     }
 
     #[Route('users/{id}', methods: 'DELETE')]
-    public function deleteUser(Project $project, User $user): JsonResponse
+    public function deleteUser(Newsletter $project, User $user): JsonResponse
     {
         $this->userService->deleteUser($project, $user);
         return $this->json([]);
     }
 
     #[Route('/invites', methods: 'GET')]
-    public function getInvites(Project $project): JsonResponse
+    public function getInvites(Newsletter $project): JsonResponse
     {
         $invites = $this->userInviteService->getProjectInvites($project)
             ->map(function ($invite) {
@@ -72,7 +72,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'POST')]
-    public function invite(Project $project, #[MapRequestPayload] InviteUserInput $input): JsonResponse
+    public function invite(Newsletter $project, #[MapRequestPayload] InviteUserInput $input): JsonResponse
     {
         if (!$input->email && !$input->username) {
             throw new InvalidArgumentException('Either email or username must be provided.');
@@ -105,7 +105,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites/{id}', methods: 'DELETE')]
-    public function deleteInvite(Project $project, UserInvite $userInvite): JsonResponse
+    public function deleteInvite(Newsletter $project, UserInvite $userInvite): JsonResponse
     {
         $this->userInviteService->deleteInvite($userInvite);
         return $this->json([]);

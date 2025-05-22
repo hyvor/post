@@ -10,7 +10,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -27,7 +27,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersNonEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
         $newsletterList2 = NewsletterListFactory::createOne(['project' => $project]);
@@ -38,7 +38,7 @@ class GetSubscribersTest extends WebTestCase
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
-        $projectOther = ProjectFactory::createOne();
+        $projectOther = NewsletterFactory::createOne();
         SubscriberFactory::createMany(2, [
             'project' => $projectOther,
             'lists' => [NewsletterListFactory::createOne(['project' => $project])],
@@ -72,7 +72,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersPagination(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         SubscriberFactory::createMany(5, [
             'project' => $project,
             'status' => SubscriberStatus::SUBSCRIBED,
@@ -96,7 +96,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -113,7 +113,7 @@ class GetSubscribersTest extends WebTestCase
     #[TestWith([SubscriberStatus::UNSUBSCRIBED, SubscriberStatus::SUBSCRIBED])]
     public function testListSubscribersByStatus(SubscriberStatus $status, SubscriberStatus $oppositeStatus): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -155,7 +155,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function test_list_subscribers_email_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -189,7 +189,7 @@ class GetSubscribersTest extends WebTestCase
 
     public function test_list_subscribers_list_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(
             [

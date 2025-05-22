@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Api\Public\Object\Form\Project;
+namespace App\Api\Public\Object\Form\Newsletter;
 
-use App\Entity\Meta\ProjectMeta;
-use App\Service\Project\ProjectDefaults;
+use App\Entity\Meta\NewsletterMeta;
+use App\Service\Newsletter\NewsletterDefaults;
 
 class PaletteObject
 {
@@ -21,30 +21,30 @@ class PaletteObject
     /**
      * @param 'light' | 'dark' $mode
      */
-    public function __construct(ProjectMeta $meta, string $mode)
+    public function __construct(NewsletterMeta $meta, string $mode)
     {
-        $this->text = $meta->{'form_color_' . $mode . '_text'} ?? ProjectDefaults::{'FORM_COLOR_' . strtoupper(
+        $this->text = $meta->{'form_color_' . $mode . '_text'} ?? NewsletterDefaults::{'FORM_COLOR_' . strtoupper(
                 $mode
             ) . '_TEXT'};
-        $this->accent = $meta->{'form_color_' . $mode . '_accent'} ?? ProjectDefaults::{'FORM_COLOR_' . strtoupper(
+        $this->accent = $meta->{'form_color_' . $mode . '_accent'} ?? NewsletterDefaults::{'FORM_COLOR_' . strtoupper(
                 $mode
             ) . '_ACCENT'};
-        $this->accent_text = $meta->{'form_color_' . $mode . '_accent_text'} ?? ProjectDefaults::{'FORM_COLOR_' . strtoupper(
+        $this->accent_text = $meta->{'form_color_' . $mode . '_accent_text'} ?? NewsletterDefaults::{'FORM_COLOR_' . strtoupper(
                 $mode
             ) . '_ACCENT_TEXT'};
-        $this->input = $meta->{'form_color_' . $mode . '_input'} ?? ProjectDefaults::{'FORM_COLOR_' . strtoupper(
+        $this->input = $meta->{'form_color_' . $mode . '_input'} ?? NewsletterDefaults::{'FORM_COLOR_' . strtoupper(
                 $mode
             ) . '_INPUT'};
-        $this->input_text = $meta->{'form_color_' . $mode . '_input_text'} ?? ProjectDefaults::{'FORM_COLOR_' . strtoupper(
+        $this->input_text = $meta->{'form_color_' . $mode . '_input_text'} ?? NewsletterDefaults::{'FORM_COLOR_' . strtoupper(
                 $mode
             ) . '_INPUT_TEXT'};
-        $this->input_box_shadow = $meta->{'form_' . $mode . '_input_box_shadow'} ?? ProjectDefaults::{'FORM_' . strtoupper(
+        $this->input_box_shadow = $meta->{'form_' . $mode . '_input_box_shadow'} ?? NewsletterDefaults::{'FORM_' . strtoupper(
                 $mode
             ) . '_INPUT_BOX_SHADOW'};
-        $this->input_border = $meta->{'form_' . $mode . '_input_border'} ?? ProjectDefaults::{'FORM_' . strtoupper(
+        $this->input_border = $meta->{'form_' . $mode . '_input_border'} ?? NewsletterDefaults::{'FORM_' . strtoupper(
                 $mode
             ) . '_INPUT_BORDER'};
-        $this->border_radius = $meta->{'form_' . $mode . '_border_radius'} ?? ProjectDefaults::{'FORM_' . strtoupper(
+        $this->border_radius = $meta->{'form_' . $mode . '_border_radius'} ?? NewsletterDefaults::{'FORM_' . strtoupper(
                 $mode
             ) . '_BORDER_RADIUS'};
     }

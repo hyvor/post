@@ -13,7 +13,7 @@ use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +32,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
             'project' => $project,
@@ -88,7 +88,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         Clock::set(new MockClock('2025-02-21'));
 
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
             'project' => $project,
@@ -150,7 +150,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         int $attempt,
         int $delaySeconds,
     ): void {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
             'project' => $project,

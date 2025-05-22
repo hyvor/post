@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Api\Console\Input\Project;
+namespace App\Api\Console\Input\Newsletter;
 
-use App\Api\Console\Object\ProjectObject;
+use App\Api\Console\Object\NewsletterObject;
 use App\Util\OptionalPropertyTrait;
 
-class UpdateProjectInput extends ProjectObject
+class UpdateNewsletterInput extends NewsletterObject
 {
     use OptionalPropertyTrait;
 

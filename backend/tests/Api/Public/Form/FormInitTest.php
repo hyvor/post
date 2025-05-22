@@ -4,16 +4,16 @@ namespace App\Tests\Api\Public\Form;
 
 use App\Api\Public\Controller\Form\FormController;
 use App\Api\Public\Object\Form\FormListObject;
-use App\Api\Public\Object\Form\Project\FormProjectObject;
+use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(FormController::class)]
 #[CoversClass(FormListObject::class)]
-#[CoversClass(FormProjectObject::class)]
+#[CoversClass(FormNewsletterObject::class)]
 class FormInitTest extends WebTestCase
 {
 
@@ -34,7 +34,7 @@ class FormInitTest extends WebTestCase
     public function test_inits_with_all_lists(): void
     {
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -64,7 +64,7 @@ class FormInitTest extends WebTestCase
     public function test_inits_with_given_lists(): void
     {
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -89,9 +89,9 @@ class FormInitTest extends WebTestCase
     public function test_error_on_invalid_list_id(): void
     {
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => ProjectFactory::createOne()]);
+        $list2 = NewsletterListFactory::createOne(['project' => NewsletterFactory::createOne()]);
 
         $uuid = $project->getUuid();
         $response = $this->publicApi('POST', '/form/init', [

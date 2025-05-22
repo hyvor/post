@@ -3,7 +3,7 @@
 namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -21,7 +21,7 @@ class NewsletterListService
 
     public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
 
-    public function getListCounter(Project $project): int
+    public function getListCounter(Newsletter $project): int
     {
         return $this->em->getRepository(NewsletterList::class)
             ->count([
@@ -30,7 +30,7 @@ class NewsletterListService
     }
 
     public function isNameAvailable(
-        Project $project,
+        Newsletter $project,
         string $name
     ): bool
     {
@@ -42,7 +42,7 @@ class NewsletterListService
     }
 
     public function createNewsletterList(
-        Project $project,
+        Newsletter $project,
         string $name,
         ?string $description
     ): NewsletterList
@@ -75,7 +75,7 @@ class NewsletterListService
     /**
      * @return ArrayCollection<int, NewsletterList>
      */
-    public function getListsOfProject(Project $project): ArrayCollection
+    public function getListsOfProject(Newsletter $project): ArrayCollection
     {
         return new ArrayCollection(
             $this->em->getRepository(NewsletterList::class)
@@ -105,7 +105,7 @@ class NewsletterListService
      * @param array<int> $listIds
      * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function getMissingListIdsOfProject(Project $project, array $listIds): ?array
+    public function getMissingListIdsOfProject(Newsletter $project, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb

@@ -2,17 +2,17 @@
 
 namespace Api\Public\Invite;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\UserInvite;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserInviteFactory;
 
 class VerifyInviteTest extends WebTestCase
 {
     public function test_verify_invite_valid(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $userInvite = UserInviteFactory::createOne([
             'hyvor_user_id' => 1,
@@ -42,7 +42,7 @@ class VerifyInviteTest extends WebTestCase
 
     public function test_verify_invite_expired(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $userInvite = UserInviteFactory::createOne([
             'project' => $project,

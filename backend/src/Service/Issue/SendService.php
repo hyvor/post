@@ -208,7 +208,7 @@ class SendService
         $query = <<<DQL
         SELECT COUNT(s.id)
         FROM App\Entity\Send s
-        JOIN App\Entity\Project p WITH s.project = p.id
+        JOIN App\Entity\Newsletter p WITH s.project = p.id
         WHERE
             p.user_id = :hyvorUserId AND
             s.created_at >= :startOfMonth

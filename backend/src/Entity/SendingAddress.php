@@ -23,8 +23,8 @@ class SendingAddress
     #[ORM\Column]
     private string $email;
 
-    #[ORM\ManyToOne(targetEntity: Project::class)]
-    private Project $project;
+    #[ORM\ManyToOne(targetEntity: Newsletter::class)]
+    private Newsletter $project;
 
     #[ORM\ManyToOne(targetEntity: Domain::class)]
     private Domain $domain;
@@ -80,12 +80,12 @@ class SendingAddress
         return $this;
     }
 
-    public function getProject(): Project
+    public function getProject(): Newsletter
     {
         return $this->project;
     }
 
-    public function setProject(Project $project): static
+    public function setProject(Newsletter $project): static
     {
         $this->project = $project;
 

@@ -7,7 +7,7 @@ use App\Api\Console\Object\TemplateObject;
 use App\Entity\Template;
 use App\Service\EmailTemplate\EmailTemplateService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -19,7 +19,7 @@ class GetTemplateTest extends WebTestCase
 {
     public function test_get_default_template(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -112,7 +112,7 @@ class GetTemplateTest extends WebTestCase
 
     public function test_get_custom_template(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne(
             [

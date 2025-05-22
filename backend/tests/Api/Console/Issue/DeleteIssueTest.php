@@ -9,7 +9,7 @@ use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -23,7 +23,7 @@ class DeleteIssueTest extends WebTestCase
 
     public function testDeleteDraftIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
             'status' => IssueStatus::DRAFT
@@ -46,7 +46,7 @@ class DeleteIssueTest extends WebTestCase
 
     public function testDeleteNonDraftIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'project' => $project,
             'status' => IssueStatus::SENDING
@@ -72,7 +72,7 @@ class DeleteIssueTest extends WebTestCase
 
     public function testDeleteIssueNotFound(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -88,8 +88,8 @@ class DeleteIssueTest extends WebTestCase
 
     public function testCannotDeleteOtherProjectIssues(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
             'project' => $project

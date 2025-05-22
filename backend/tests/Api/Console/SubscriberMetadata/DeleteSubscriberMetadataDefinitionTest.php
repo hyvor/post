@@ -6,7 +6,7 @@ use App\Api\Console\Controller\SubscriberMetadataController;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -18,8 +18,8 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_delete_other_project_entities(): void
     {
-        $project = ProjectFactory::createOne();
-        $otherProject = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
+        $otherProject = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
             'project' => $otherProject,
@@ -39,7 +39,7 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_deletes_metadata(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
             'project' => $project,
         ]);

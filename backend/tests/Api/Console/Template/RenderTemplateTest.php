@@ -3,13 +3,13 @@
 namespace App\Tests\Api\Console\Template;
 
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 
 class RenderTemplateTest extends WebTestCase
 {
     public function test_render_template(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,

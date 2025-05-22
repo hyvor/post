@@ -11,7 +11,7 @@ use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -50,9 +50,9 @@ class FormSubscribeTest extends WebTestCase
 
     public function test_validates_list_ids(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => ProjectFactory::createOne()]);
+        $list2 = NewsletterListFactory::createOne(['project' => NewsletterFactory::createOne()]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
             'project_uuid' => $project->getUuid(),
@@ -71,7 +71,7 @@ class FormSubscribeTest extends WebTestCase
         $date = new \DateTimeImmutable('2025-04-14 00:00:00');
         Clock::set(new MockClock($date));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
@@ -109,7 +109,7 @@ class FormSubscribeTest extends WebTestCase
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);

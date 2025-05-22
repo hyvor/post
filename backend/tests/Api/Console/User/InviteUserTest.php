@@ -9,7 +9,7 @@ use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\Factory\UserInviteFactory;
 use Hyvor\Internal\Auth\AuthFake;
@@ -28,7 +28,7 @@ class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -61,7 +61,7 @@ class InviteUserTest extends WebTestCase
     {
 
         Clock::set(new MockClock('2025-05-10'));
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -99,7 +99,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email_with_wrong_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         AuthFake::databaseAdd([
             'id' => 15,
             'username' => 'supun',
@@ -123,7 +123,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email_with_wrong_username(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -150,7 +150,7 @@ class InviteUserTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-05-10'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,

@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Service\Project;
+namespace App\Service\Newsletter;
 
 use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
-use App\Entity\Meta\ProjectMeta;
+use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
-use App\Service\Project\Dto\UpdateProjectDto;
-use App\Service\Project\Dto\UpdateProjectMetaDto;
+use App\Service\Newsletter\Dto\UpdateNewsletterDto;
+use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
 
-class ProjectService
+class NewsletterService
 {
     use ClockAwareTrait;
 
@@ -37,7 +37,7 @@ class ProjectService
             ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
-            ->setMeta(new ProjectMeta())
+            ->setMeta(new NewsletterMeta())
             ->setDefaultEmailUsername($slugger->slug($name))
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
@@ -183,7 +183,7 @@ class ProjectService
         ];
     }
 
-    public function updateProjectMeta(Newsletter $project, UpdateProjectMetaDto $updates): Newsletter
+    public function updateProjectMeta(Newsletter $project, UpdateNewsletterMetaDto $updates): Newsletter
     {
         $currentMeta = $project->getMeta();
 
@@ -201,7 +201,7 @@ class ProjectService
         return $project;
     }
 
-    public function updateProject(Newsletter $project, UpdateProjectDto $updates): Newsletter
+    public function updateProject(Newsletter $project, UpdateNewsletterDto $updates): Newsletter
     {
         if ($updates->hasProperty('name')) {
             $project->setName($updates->name);

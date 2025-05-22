@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\Meta\ProjectMeta;
-use App\Repository\ProjectRepository;
+use App\Entity\Meta\NewsletterMeta;
+use App\Repository\NewsletterRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[ORM\Table(name: 'projects')]
-class Project
+#[ORM\Entity(repositoryClass: NewsletterRepository::class)]
+#[ORM\Table(name: 'newsletters')]
+class Newsletter
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,6 +17,9 @@ class Project
 
     #[ORM\Column(unique: true)]
     private string $uuid;
+
+    #[ORM\Column(unique: true)]
+    private string $slug;
 
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
@@ -31,10 +34,7 @@ class Project
     private string $name;
 
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
-    private ProjectMeta $meta;
-
-    #[ORM\Column()]
-    private string $default_email_username;
+    private NewsletterMeta $meta;
 
     public function setId(int $id): static
     {
@@ -58,6 +58,18 @@ class Project
     public function getUuid(): string
     {
         return $this->uuid;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -89,14 +101,14 @@ class Project
         return $this->user_id;
     }
 
-    public function setMeta(ProjectMeta $meta): static
+    public function setMeta(NewsletterMeta $meta): static
     {
         $this->meta = $meta;
 
         return $this;
     }
 
-    public function getMeta(): ProjectMeta
+    public function getMeta(): NewsletterMeta
     {
         return $this->meta;
     }
@@ -119,17 +131,4 @@ class Project
 
         return $this;
     }
-
-    public function getDefaultEmailUsername(): string
-    {
-        return $this->default_email_username;
-    }
-
-    public function setDefaultEmailUsername(string $default_email_username): static
-    {
-        $this->default_email_username = $default_email_username;
-
-        return $this;
-    }
-
 }

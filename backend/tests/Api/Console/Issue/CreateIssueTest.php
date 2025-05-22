@@ -11,7 +11,7 @@ use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -28,7 +28,7 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne([
+        $project = NewsletterFactory::createOne([
             'default_email_username' => 'thibault'
         ]);
 
@@ -63,7 +63,7 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [

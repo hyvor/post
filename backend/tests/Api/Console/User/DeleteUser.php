@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 
 use Hyvor\Internal\Auth\AuthFake;
@@ -22,7 +22,7 @@ class DeleteUser extends WebTestCase
 {
     public function test_delete_user(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -51,7 +51,7 @@ class DeleteUser extends WebTestCase
 
     public function test_delete_user_not_found(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,

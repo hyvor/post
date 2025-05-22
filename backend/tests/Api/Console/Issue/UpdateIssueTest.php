@@ -5,13 +5,13 @@ namespace App\Tests\Api\Console\Issue;
 use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -26,7 +26,7 @@ class UpdateIssueTest extends WebTestCase
 
     public function testUpdateIssueAllFields(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
@@ -69,8 +69,8 @@ class UpdateIssueTest extends WebTestCase
 
     public function testCreateIssueWithInvalidList(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project1]);
 
@@ -93,8 +93,8 @@ class UpdateIssueTest extends WebTestCase
 
     public function testUpdateIssueWrongProject(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne(['project' => $project1]);
 
@@ -113,7 +113,7 @@ class UpdateIssueTest extends WebTestCase
     }
 
     /**
-     * @param callable(Project): array<string, mixed> $input
+     * @param callable(Newsletter): array<string, mixed> $input
      * @param array<mixed> $violations
      * @return void
      */
@@ -122,7 +122,7 @@ class UpdateIssueTest extends WebTestCase
         array $violations
     ): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(['project' => $project]);
 
         $response = $this->consoleApi(
@@ -140,7 +140,7 @@ class UpdateIssueTest extends WebTestCase
     public function testInputValidationInvalidEmail(): void
     {
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'from_email' => 'not-email',
             ],
             [
@@ -155,7 +155,7 @@ class UpdateIssueTest extends WebTestCase
     public function testInputValidationEmailTooLong(): void
     {
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'from_email' => str_repeat('a', 256) . '@hyvor.com',
             ],
             [

@@ -15,7 +15,7 @@ use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -34,7 +34,7 @@ class SendIssueTest extends WebTestCase
     // TODO: Refactor validation test into one
     public function testSendNonDraftIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
             'project' => $project,
@@ -58,7 +58,7 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutSubject(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
             'project' => $project,
@@ -84,7 +84,7 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutList(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
             'project' => $project,
@@ -110,7 +110,7 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutContent(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -139,7 +139,7 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutSubscribers(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
@@ -171,7 +171,7 @@ class SendIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 

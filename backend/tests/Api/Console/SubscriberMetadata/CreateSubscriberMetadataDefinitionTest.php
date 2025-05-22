@@ -7,7 +7,7 @@ use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -20,7 +20,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_key_cannot_be_blank(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $response = $this->consoleApi(
             $project,
             'POST',
@@ -37,7 +37,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_key_should_match_regex(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $response = $this->consoleApi(
             $project,
             'POST',
@@ -54,7 +54,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_create_when_key_exists(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne(
             [
                 'project' => $project,
@@ -79,7 +79,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_creates_subscriber_metadata_definition(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $response = $this->consoleApi(
             $project,
             'POST',
@@ -106,7 +106,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
     {
         $limit = SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT;
 
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         SubscriberMetadataDefinitionFactory::createMany($limit, [
             'project' => $project,
         ]);

@@ -6,7 +6,7 @@ use App\Api\Console\Controller\ListController;
 use App\Entity\NewsletterList;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListController::class)]
@@ -20,7 +20,7 @@ class CreateListTest extends WebTestCase
 
     public function testCreateNewsLetterListValid(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -47,7 +47,7 @@ class CreateListTest extends WebTestCase
 
     public function testCreateProjectInvalid(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $long_string = str_repeat('a', 256);
         $response = $this->consoleApi(
@@ -64,7 +64,7 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_trigger_limit(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $lists = NewsletterListFactory::createMany(50, [
             'project' => $project,
@@ -87,7 +87,7 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_name_already_exists(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         NewsletterListFactory::createOne([
             'name' => 'Valid List Name',
@@ -111,7 +111,7 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_name_with_comma(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,

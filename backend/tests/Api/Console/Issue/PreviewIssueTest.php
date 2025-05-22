@@ -7,7 +7,7 @@ use App\Entity\Issue;
 use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Issue::class)]
@@ -17,7 +17,7 @@ class PreviewIssueTest extends WebTestCase
 {
     public function testPreviewIssue(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
                 'project' => $project,

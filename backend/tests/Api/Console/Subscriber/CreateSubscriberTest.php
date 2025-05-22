@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -11,7 +11,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -27,7 +27,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberMinimal(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['project' => $project]);
         $list2 = NewsletterListFactory::createOne(['project' => $project]);
@@ -63,7 +63,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberWithAllInputs(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
         $subscribedAt = new \DateTimeImmutable('2021-08-27 12:00:00');
@@ -110,7 +110,7 @@ class CreateSubscriberTest extends WebTestCase
     public function testInputValidationEmptyEmailAndListIds(): void
     {
         $this->validateInput(
-            fn (Project $project) => [],
+            fn (Newsletter $project) => [],
             [
                 [
                     'property' => 'email',
@@ -127,7 +127,7 @@ class CreateSubscriberTest extends WebTestCase
     public function testInputValidationInvalidEmailAndListIds(): void
     {
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'email' => 'not-email',
                 'list_ids' => [
                     null,
@@ -156,7 +156,7 @@ class CreateSubscriberTest extends WebTestCase
     {
 
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'email' => str_repeat('a', 256) . '@hyvor.com',
                 'list_ids' => [1],
             ],
@@ -174,7 +174,7 @@ class CreateSubscriberTest extends WebTestCase
     {
 
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
                 'status' => 'invalid-status',
@@ -213,7 +213,7 @@ class CreateSubscriberTest extends WebTestCase
     {
 
         $this->validateInput(
-            fn (Project $project) => [
+            fn (Newsletter $project) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
                 'subscribe_ip' => $ip,
@@ -229,7 +229,7 @@ class CreateSubscriberTest extends WebTestCase
     }
 
     /**
-     * @param callable(Project): array<string, mixed> $input
+     * @param callable(Newsletter): array<string, mixed> $input
      * @param array<mixed> $violations
      * @return void
      */
@@ -238,7 +238,7 @@ class CreateSubscriberTest extends WebTestCase
         array $violations
     ): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $project,
@@ -255,8 +255,8 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberInvalidList(): void
     {
-        $project1 = ProjectFactory::createOne();
-        $project2 = ProjectFactory::createOne();
+        $project1 = NewsletterFactory::createOne();
+        $project2 = NewsletterFactory::createOne();
 
         $newsletterList1 = NewsletterListFactory::createOne(['project' => $project2]);
 
@@ -276,7 +276,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberDuplicateEmail(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['project' => $project]);
         $subscriber = SubscriberFactory::createOne(
             [

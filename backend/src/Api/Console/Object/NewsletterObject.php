@@ -2,11 +2,11 @@
 
 namespace App\Api\Console\Object;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\User;
 use Hyvor\Internal\Auth\AuthUser;
 
-class ProjectObject
+class NewsletterObject
 {
 
     public int $id;
@@ -59,7 +59,7 @@ class ProjectObject
     public ?string $form_dark_input_border;
     public ?int $form_dark_border_radius;
 
-    public function __construct(Project $project)
+    public function __construct(Newsletter $project)
     {
         $this->id = $project->getId();
         $this->uuid = $project->getUuid();

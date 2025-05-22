@@ -2,13 +2,13 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\Project\CreateProjectInput;
-use App\Api\Console\Input\Project\UpdateProjectInput;
-use App\Api\Console\Object\ProjectObject;
-use App\Entity\Project;
-use App\Service\Project\Dto\UpdateProjectDto;
-use App\Service\Project\Dto\UpdateProjectMetaDto;
-use App\Service\Project\ProjectService;
+use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
+use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
+use App\Api\Console\Object\NewsletterObject;
+use App\Entity\Newsletter;
+use App\Service\Newsletter\Dto\UpdateNewsletterDto;
+use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -18,58 +18,60 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
-class ProjectController extends AbstractController
+class NewsletterController extends AbstractController
 {
     use HasHyvorUser;
 
     public function __construct(
-        private ProjectService $projectService
-    )
-    {
+        private NewsletterService $projectService
+    ) {
     }
 
-    #[Route('/projects', methods: 'POST')]
-    public function createProject(#[MapRequestPayload] CreateProjectInput $input): JsonResponse
+    #[Route('/newsletter', methods: 'POST')]
+    public function createProject(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
     {
         $user = $this->getHyvorUser();
 
         $slugger = new AsciiSlugger();
-        while ($this->projectService->isUsernameTaken($slugger->slug($input->name)))
+        while ($this->projectService->isUsernameTaken($slugger->slug($input->name))) {
             $input->name .= ' ' . random_int(1, 100);
+        }
 
         $project = $this->projectService->createProject($user->id, $input->name);
-        return $this->json(new ProjectObject($project));
+        return $this->json(new NewsletterObject($project));
     }
 
-    #[Route('/projects', methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
-    public function getProjectById(Project $project): JsonResponse
+    #[Route('/newsletter', methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
+    public function getProjectById(Newsletter $project): JsonResponse
     {
-        return $this->json(new ProjectObject($project));
+        return $this->json(new NewsletterObject($project));
     }
 
-    #[Route('/projects', methods: 'DELETE')]
-    public function deleteProject(Project $project): JsonResponse
+    #[Route('/newsletter', methods: 'DELETE')]
+    public function deleteProject(Newsletter $project): JsonResponse
     {
         $this->projectService->deleteProject($project);
         return $this->json([]);
     }
 
-    #[Route('/projects', methods: 'PATCH')]
+    #[Route('/newsletter', methods: 'PATCH')]
     public function updateProject(
-        Project $project,
-        #[MapRequestPayload] UpdateProjectInput $input
+        Newsletter $project,
+        #[MapRequestPayload] UpdateNewsletterInput $input
     ): JsonResponse {
-        $updates = new UpdateProjectDto();
-        if ($input->hasProperty('name'))
+        $updates = new UpdateNewsletterDto();
+        if ($input->hasProperty('name')) {
             $updates->name = $input->name;
+        }
         if ($input->hasProperty('default_email_username')) {
-            if ($this->projectService->isUsernameTaken($input->default_email_username))
+            if ($this->projectService->isUsernameTaken($input->default_email_username)) {
                 throw new BadRequestHttpException("Username is already taken");
+            }
             $updates->defaultEmailUsername = $input->default_email_username;
         }
         $project = $this->projectService->updateProject($project, $updates);
 
-        $updatesMeta = new UpdateProjectMetaDto();
+        $updatesMeta = new UpdateNewsletterMetaDto();
         $properties = $input->getSetProperties();
         foreach ($properties as $property) {
             $cased = new UnicodeString($property)->camel();
@@ -78,6 +80,6 @@ class ProjectController extends AbstractController
 
         $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
 
-        return $this->json(new ProjectObject($project));
+        return $this->json(new NewsletterObject($project));
     }
 }

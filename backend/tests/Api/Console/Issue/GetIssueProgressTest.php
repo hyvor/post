@@ -8,7 +8,7 @@ use App\Entity\Type\SendStatus;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,7 +19,7 @@ class GetIssueProgressTest extends WebTestCase
 {
     public function test_issue_progress_pending(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
@@ -54,7 +54,7 @@ class GetIssueProgressTest extends WebTestCase
 
     public function test_issue_progress_success(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne(['project' => $project]);
 
