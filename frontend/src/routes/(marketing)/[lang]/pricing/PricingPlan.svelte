@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { Button, Slider } from '@hyvor/design/components';
 	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n();
 
 	interface Props {
 		yearly?: boolean;
@@ -51,7 +54,7 @@
 </script>
 
 <div class="wrap hds-box">
-	<div class="name">Choose your plan</div>
+	<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
 
 	<div class="features">
 		{#each features as feature}
@@ -71,19 +74,19 @@
 			<span class="max"> 1M </span>
 		</div>
 		<Slider min={1} max={4} step={1} value={sliderVal} on:change={onSliderChange} />
-		<div class="amount">Monthly Emails</div>
+		<div class="amount">{I18n.t('pricing.monthlyEmail')}</div>
 	</div>
 
 	<div class="price">
 		<div class="price-display">
 			<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-				>/{yearly ? 'year' : 'month'}{#if currentPrice === 10}*{/if}</span
+				>/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
 			>
 		</div>
 	</div>
 
 	<div class="button-wrap">
-		<Button size="large" {target} as="a" href={url}>Choose Plan</Button>
+		<Button size="large" {target} as="a" href={url}>{I18n.t('pricing.choosePlan')}</Button>
 	</div>
 </div>
 
