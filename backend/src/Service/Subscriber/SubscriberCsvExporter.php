@@ -2,7 +2,7 @@
 
 namespace App\Service\Subscriber;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +28,7 @@ class SubscriberCsvExporter
         return $path . '.' . $extension;
     }
 
-    public function createFile(Project $project): string
+    public function createFile(Newsletter $newsletter): string
     {
         $csv = $this->getTemporaryFile('csv');
 
@@ -38,7 +38,7 @@ class SubscriberCsvExporter
             throw new \Exception('Could not create file');
         }
 
-        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['project' => $project]);
+        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['newsletter' => $newsletter]);
         $headers = ['Email', 'Status', 'Subscribed At', 'Source'];
         foreach ($subscriberMetadata as $sb) {
             $headers[] = $sb->getKey();
@@ -53,8 +53,8 @@ class SubscriberCsvExporter
             /** @var Subscriber[] $subscribers */
             $subscribers = $this->em->getRepository(Subscriber::class)
                 ->createQueryBuilder('s')
-                ->where('s.project = :project')
-                ->setParameter('project', $project)
+                ->where('s.newsletter = :newsletter')
+                ->setParameter('newsletter', $newsletter)
                 ->orderBy('s.id', 'ASC')
                 ->setFirstResult($offset)
                 ->setMaxResults($batchSize)

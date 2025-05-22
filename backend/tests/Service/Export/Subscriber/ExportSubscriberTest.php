@@ -5,7 +5,7 @@ namespace App\Tests\Service\Export\Subscriber;
 use App\Service\Subscriber\SubscriberCsvExporter;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\TestCase;
@@ -15,22 +15,22 @@ class ExportSubscriberTest extends KernelTestCase
 {
     public function test_export_subscriber(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $subscribers = SubscriberFactory::createMany(50, [
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscriberMetadata  = SubscriberMetadataDefinitionFactory::createOne([
             'key' => 'Phone Number',
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $exporter = new SubscriberCsvExporter(
             $this->em
         );
 
-        $file = $exporter->createFile($project->_real());
+        $file = $exporter->createFile($newsletter->_real());
         $read = file_get_contents($file);
         $this->assertNotFalse($read);
         $lines = explode("\n", $read);
