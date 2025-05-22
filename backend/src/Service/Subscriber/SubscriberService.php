@@ -10,9 +10,11 @@ use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\Message\ExportSubscribersMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\String\Exception\InvalidArgumentException;
 
 class SubscriberService
@@ -22,7 +24,8 @@ class SubscriberService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SubscriberRepository $subscriberRepository
+        private SubscriberRepository $subscriberRepository,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -184,5 +187,10 @@ class SubscriberService
         $update->unsubscribedReason = $reason;
 
         $this->updateSubscriber($subscriber, $update);
+    }
+
+    public function exportSubscribers(Newsletter $newsletter): void
+    {
+        $this->messageBus->dispatch(new ExportSubscribersMessage($newsletter->getId()));
     }
 }

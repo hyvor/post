@@ -142,4 +142,11 @@ class SubscriberController extends AbstractController
         $this->subscriberService->deleteSubscriber($subscriber);
         return $this->json([]);
     }
+
+    #[Route('/subscribers/export', methods: 'POST')]
+    public function exportSubscribers(Newsletter $newsletter): JsonResponse
+    {
+        $this->subscriberService->exportSubscribers($newsletter);
+        return $this->json(['message' => 'Export started']);
+    }
 }
