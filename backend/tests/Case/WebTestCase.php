@@ -59,7 +59,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             files: $files,
             server: [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X_PROJECT_ID' => $newsletterId,
+                'HTTP_X_NEWSLETTER_ID' => $newsletterId,
             ],
             content: (string)json_encode($data),
         );

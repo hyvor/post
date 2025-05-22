@@ -11,7 +11,7 @@ use Symfony\Component\Clock\ClockAwareTrait;
 class SubscriberMetadataService
 {
 
-    public const int MAX_METADATA_DEFINITIONS_PER_PROJECT = 20;
+    public const int MAX_METADATA_DEFINITIONS_PER_NEWSLETTER = 20;
 
     use ClockAwareTrait;
 

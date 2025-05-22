@@ -35,7 +35,7 @@ class SubscriberMetadataController extends AbstractController
 
         $count = $this->subscriberMetadataService->getMetadataDefinitionsCount($newsletter);
 
-        if ($count >= SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT) {
+        if ($count >= SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_NEWSLETTER) {
             throw new BadRequestException('Maximum number of metadata definitions reached');
         }
 

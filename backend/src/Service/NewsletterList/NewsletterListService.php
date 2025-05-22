@@ -18,7 +18,7 @@ class NewsletterListService
     ) {
     }
 
-    public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
+    public const int MAX_LIST_DEFINITIONS_PER_NEWSLETTER = 20;
 
     public function getListCounter(Newsletter $newsletter): int
     {

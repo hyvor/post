@@ -104,7 +104,7 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_create_after_the_limit(): void
     {
-        $limit = SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT;
+        $limit = SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_NEWSLETTER;
 
         $newsletter = NewsletterFactory::createOne();
         SubscriberMetadataDefinitionFactory::createMany($limit, [
