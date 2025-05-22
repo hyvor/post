@@ -3,23 +3,23 @@
 namespace App\Tests\Api\Console\Resolver;
 
 use App\Api\Console\Resolver\EntityResolver;
-use App\Api\Console\Resolver\ProjectResolver;
+use App\Api\Console\Resolver\NewsletterResolver;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
-#[CoversClass(ProjectResolver::class)]
+#[CoversClass(NewsletterResolver::class)]
 class ProjectResolverTest extends KernelTestCase
 {
 
     public function testDoesNotResolveClassesOutsideConsoleApiControllers(): void
     {
 
-        /** @var ProjectResolver $resolver */
-        $resolver = $this->container->get(ProjectResolver::class);
+        /** @var NewsletterResolver $resolver */
+        $resolver = $this->container->get(NewsletterResolver::class);
 
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
@@ -31,7 +31,7 @@ class ProjectResolverTest extends KernelTestCase
 
     public function testDoesNotResolveWhenMissingHeader(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
         $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
 
         /** @var EntityResolver $resolver */

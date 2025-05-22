@@ -6,13 +6,12 @@ use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\NewsletterList;
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Service\Project\Dto\UpdateProjectDto;
 use App\Service\Project\Dto\UpdateProjectMetaDto;
-use App\Util\ClassUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -25,18 +24,16 @@ class ProjectService
 
     public function __construct(
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
 
     public function createProject(
-        int    $userId,
+        int $userId,
         string $name,
-    ): Project
-    {
+    ): Newsletter {
         $slugger = new AsciiSlugger();
-        $project = new Project()
+        $project = new Newsletter()
             ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
@@ -64,31 +61,29 @@ class ProjectService
         $this->em->flush();
 
         return $project;
-
     }
 
-    public function deleteProject(Project $project): void
+    public function deleteProject(Newsletter $project): void
     {
         $this->em->remove($project);
         $this->em->flush();
     }
 
-    public function getProjectById(int $id): ?Project
+    public function getProjectById(int $id): ?Newsletter
     {
-        return $this->em->getRepository(Project::class)->find($id);
+        return $this->em->getRepository(Newsletter::class)->find($id);
     }
 
-    public function getProjectByUuid(string $uuid): ?Project
+    public function getProjectByUuid(string $uuid): ?Newsletter
     {
-        return $this->em->getRepository(Project::class)->findOneBy(['uuid' => $uuid]);
+        return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);
     }
 
     /**
-     * @return array<array{project: Project, user: User}>
+     * @return array<array{project: Newsletter, user: User}>
      */
     public function getProjectsOfUser(int $hyvorUserId): array
     {
-
         $query = <<<DQL
             SELECT u, p
             FROM App\Entity\User u
@@ -111,9 +106,8 @@ class ProjectService
         return $projects;
     }
 
-    public function getProjectUser(Project $project, int $userId): User
+    public function getProjectUser(Newsletter $project, int $userId): User
     {
-
         $projectUser = $this->em->getRepository(User::class)->findOneBy([
             'project' => $project,
             'hyvor_user_id' => $userId,
@@ -129,16 +123,16 @@ class ProjectService
     /**
      * @return list<StatCategoryObject>
      */
-    public function getProjectStats(Project $project): array
+    public function getProjectStats(Newsletter $project): array
     {
-        $lists = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+        $lists = (int)$this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
             ->setParameter('project', $project)
             ->getQuery()
             ->getSingleScalarResult();
 
-        $listsLast30d = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+        $listsLast30d = (int)$this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('count(l.id)')
             ->where('l.project = :project')
             ->andWhere('l.deleted_at IS NULL')
@@ -148,23 +142,23 @@ class ProjectService
             ->getQuery()
             ->getSingleScalarResult();
 
-        $subscribers = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+        $subscribers = (int)$this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
             ->select('count(s.id)')
             ->where('s.project = :project')
             ->setParameter('project', $project)
             ->getQuery()
             ->getSingleScalarResult();
 
-        $subscribersLast30d = (int) $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
-                ->select('count(s.id)')
-                ->where('s.project = :project')
-                ->andWhere('s.subscribed_at > :date')
-                ->setParameter('project', $project)
-                ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
-                ->getQuery()
-                ->getSingleScalarResult();
+        $subscribersLast30d = (int)$this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.project = :project')
+            ->andWhere('s.subscribed_at > :date')
+            ->setParameter('project', $project)
+            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $issues = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+        $issues = (int)$this->em->getRepository(Issue::class)->createQueryBuilder('s')
             ->select('count(s.id)')
             ->where('s.project = :project')
             ->setParameter('project', $project)
@@ -172,7 +166,7 @@ class ProjectService
             ->getSingleScalarResult();
 
 
-        $issuesLast30d = (int) $this->em->getRepository(Issue::class)->createQueryBuilder('s')
+        $issuesLast30d = (int)$this->em->getRepository(Issue::class)->createQueryBuilder('s')
             ->select('count(s.id)')
             ->where('s.project = :project')
             ->andWhere('s.created_at > :date')
@@ -189,9 +183,8 @@ class ProjectService
         ];
     }
 
-    public function updateProjectMeta(Project $project, UpdateProjectMetaDto $updates): Project
+    public function updateProjectMeta(Newsletter $project, UpdateProjectMetaDto $updates): Newsletter
     {
-
         $currentMeta = $project->getMeta();
 
         foreach (get_object_vars($updates) as $property => $value) {
@@ -208,14 +201,15 @@ class ProjectService
         return $project;
     }
 
-    public function updateProject(Project $project, UpdateProjectDto $updates): Project
+    public function updateProject(Newsletter $project, UpdateProjectDto $updates): Newsletter
     {
         if ($updates->hasProperty('name')) {
             $project->setName($updates->name);
         }
 
-        if ($updates->hasProperty('defaultEmailUsername'))
+        if ($updates->hasProperty('defaultEmailUsername')) {
             $project->setDefaultEmailUsername($updates->defaultEmailUsername);
+        }
 
         $project->setUpdatedAt($this->now());
         $this->em->persist($project);
@@ -226,7 +220,7 @@ class ProjectService
 
     public function isUsernameTaken(string $username): bool
     {
-        $project = $this->em->getRepository(Project::class)->findOneBy(['default_email_username' => $username]);
+        $project = $this->em->getRepository(Newsletter::class)->findOneBy(['default_email_username' => $username]);
         return $project !== null;
     }
 }

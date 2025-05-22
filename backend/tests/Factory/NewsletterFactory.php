@@ -2,14 +2,14 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\Meta\ProjectMeta;
-use App\Entity\Project;
+use App\Entity\Meta\NewsletterMeta;
+use App\Entity\Newsletter;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Project>
+ * @extends PersistentProxyObjectFactory<Newsletter>
  */
-final class ProjectFactory extends PersistentProxyObjectFactory
+final class NewsletterFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -22,7 +22,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Project::class;
+        return Newsletter::class;
     }
 
     /**
@@ -38,7 +38,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
             'name' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'user_id' => self::faker()->randomNumber(),
-            'meta' => new ProjectMeta(),
+            'meta' => new NewsletterMeta(),
             'default_email_username' => self::faker()->userName()
         ];
     }

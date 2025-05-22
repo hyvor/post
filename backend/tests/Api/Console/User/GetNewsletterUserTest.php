@@ -7,7 +7,7 @@ use App\Api\Console\Object\UserObject;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use App\Entity\Type\UserRole;
 use Hyvor\Internal\Auth\AuthFake;
@@ -21,7 +21,7 @@ class GetProjectUserTest extends WebTestCase
 {
     public function test_get_project_users(): void
     {
-        $project = ProjectFactory::createOne();
+        $project = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
