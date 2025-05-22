@@ -4,7 +4,7 @@ namespace App\Service\Domain;
 
 use App\Entity\Domain;
 use App\Service\Integration\Aws\AwsDomainService;
-use App\Service\Issue\EmailTransportService;
+use App\Service\Issue\EmailSenderService;
 use App\Service\UserInvite\EmailNotificationService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;

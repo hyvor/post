@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
-import { projectStore } from "./stores/projectStore";
+import { newsletterStore } from "./stores/newsletterStore";
 
 export interface ConsoleApiOptions {
     endpoint: string,
     data?: Record<string, any> | FormData,
     userApi?: boolean,
     publicApi?: boolean,
-    projectId?: string,
+    newsletterId?: string,
     signal?: AbortSignal,
 }
 
@@ -23,7 +23,7 @@ function getConsoleApi() {
         method,
         userApi = false,
         data = {},
-        projectId,
+        newsletterId: newsletterId,
         signal
     }: CallOptions) : Promise<T> {
 
@@ -41,11 +41,11 @@ function getConsoleApi() {
         const headers = {} as Record<string, string>;
         
         if (!userApi) {
-            const project = get(projectStore);
-            headers['X-Project-Id'] = project.id.toString();
+            const newsletter = get(newsletterStore);
+            headers['X-Newsletter-Id'] = newsletter.id.toString();
         }
-        else if (projectId) {
-            headers['X-Project-Id'] = projectId;
+        else if (newsletterId) {
+            headers['X-Newsletter-Id'] = newsletterId;
         }
 
         if (!(data instanceof FormData)) {

@@ -35,6 +35,7 @@ final class SendingAddressFactory extends PersistentProxyObjectFactory
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'email' => self::faker()->email(),
+            'is_default' => false,
         ];
     }
 
@@ -43,8 +44,7 @@ final class SendingAddressFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(SendingEmail $sendingEmail): void {})
-        ;
+        return $this// ->afterInstantiate(function(SendingEmail $sendingEmail): void {})
+            ;
     }
 }

@@ -10,13 +10,12 @@
 		toast
 	} from '@hyvor/design/components';
 	import type { Subscriber } from '../../types';
-	import { listStore } from '../../lib/stores/projectStore';
+	import { listStore } from '../../lib/stores/newsletterStore';
 	import { updateSubscriber } from '../../lib/actions/subscriberActions';
-
 
 	export let subscriber: Subscriber;
 	export let show = false;
-    export let refreshList: () => void;
+	export let refreshList: () => void;
 
 	let email = subscriber.email;
 	let status = subscriber.status;
@@ -52,11 +51,11 @@
 		loading = true;
 		emailError = null;
 
-        updateSubscriber(subscriber.id, data)
+		updateSubscriber(subscriber.id, data)
 			.then((res) => {
-                toast.success('Subscriber updated successfully');
+				toast.success('Subscriber updated successfully');
 				show = false;
-                refreshList();
+				refreshList();
 			})
 			.catch((err) => {
 				if (err.message === 'email_taken') {
@@ -68,7 +67,6 @@
 			.finally(() => {
 				loading = false;
 			});
-
 	}
 </script>
 

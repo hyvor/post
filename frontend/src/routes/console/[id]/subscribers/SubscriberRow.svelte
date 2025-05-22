@@ -13,7 +13,7 @@
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import RelativeTime from '../../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
-	import { listStore } from '../../lib/stores/projectStore';
+	import { listStore } from '../../lib/stores/newsletterStore';
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
 

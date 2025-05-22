@@ -11,7 +11,7 @@ use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -28,16 +28,14 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne(
-            [
-                'default_email_username' => 'thibault'
-            ]
-        );
+        $newsletter = NewsletterFactory::createOne([
+            'default_email_username' => 'thibault'
+        ]);
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/issues',
             []
@@ -45,6 +43,53 @@ class CreateIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
+        $json = $this->getJson();
+        $this->assertIsInt($json['id']);
+        $this->assertSame('draft', $json['status']);
+        $this->assertSame([$list->getId()], $json['lists']);
+        $this->assertSame('thibault@hvrpst.com', $json['from_email']);
+
+        $repository = $this->em->getRepository(Issue::class);
+        $issue = $repository->find($json['id']);
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
+        $this->assertSame([$list->getId()], $issue->getListids());
+        $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
+        $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
+        $this->assertSame('thibault@hvrpst.com', $issue->getFromEmail());
+    }
+
+    public function test_create_issue_draft_with_custom_email(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $newsletter = NewsletterFactory::createOne();
+
+        $domain = DomainFactory::createOne(
+            [
+                'domain' => 'hyvor.com',
+                'verified_in_ses' => true,
+                'user_id' => 1
+            ]
+        );
+
+        $sendingEmail = SendingAddressFactory::createOne([
+            'email' => 'thibault@hyvor.com',
+            'newsletter' => $newsletter,
+            'domain' => $domain,
+            'is_default' => true
+        ]);
+
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/issues',
+            []
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
@@ -57,55 +102,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
-        $this->assertSame($project->getId(), $issue->getProject()->getId());
-        $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
-    }
-
-    public function test_create_issue_draft_with_custom_email(): void
-    {
-        Clock::set(new MockClock('2025-02-21'));
-
-        $project = ProjectFactory::createOne();
-
-        $domain = DomainFactory::createOne(
-            [
-                'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
-                'user_id' => 1
-            ]
-        );
-
-        $sendingEmail = SendingAddressFactory::createOne(
-            [
-                'email' => 'thibault@hyvor.com',
-                'project' => $project,
-                'domain' => $domain
-            ]
-        );
-
-        $list = NewsletterListFactory::createOne(['project' => $project]);
-
-        $response = $this->consoleApi(
-            $project,
-            'POST',
-            '/issues',
-            []
-        );
-
-        $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
-        $this->assertIsInt($json['id']);
-        $this->assertSame('draft', $json['status']);
-        $this->assertSame([$list->getId()], $json['lists']);
-        $this->assertSame('thibault@hyvor.com', $json['from_email']);
-
-        $repository = $this->em->getRepository(Issue::class);
-        $issue = $repository->find($json['id']);
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
-        $this->assertSame([$list->getId()], $issue->getListids());
-        $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
-        $this->assertSame($project->getId(), $issue->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
         $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
     }
 }

@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
-	import { projectStore } from '../../lib/stores/projectStore';
+	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
@@ -15,7 +15,7 @@
 
 	let { children }: Props = $props();
 
-	const prefix = `/console/${$projectStore.id}/settings`;
+	const prefix = `/console/${$newsletterStore.id}/settings`;
 </script>
 
 <div class="settings">
@@ -24,14 +24,7 @@
 			{#snippet start()}
 				<IconCardText />
 			{/snippet}
-			Project
-		</NavLink>
-
-		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
-			{#snippet start()}
-				<IconBrush />
-			{/snippet}
-			Email Design
+			Newsletter
 		</NavLink>
 
 		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
@@ -39,6 +32,15 @@
 				<IconPeople />
 			{/snippet}
 			Users
+		</NavLink>
+
+		<div class="section-div"></div>
+
+		<NavLink href="{prefix}/design" active={page.url.pathname === prefix + '/design'}>
+			{#snippet start()}
+				<IconBrush />
+			{/snippet}
+			Email Design
 		</NavLink>
 
 		<NavLink href="{prefix}/form" active={page.url.pathname === prefix + '/form'}>
@@ -52,7 +54,7 @@
 			{#snippet start()}
 				<IconEnvelopeCheck />
 			{/snippet}
-			Sending Email
+			Sending Email Addresses
 		</NavLink>
 
 		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>

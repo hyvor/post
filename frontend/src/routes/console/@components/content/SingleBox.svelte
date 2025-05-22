@@ -17,5 +17,6 @@
 		flex: 1;
 		flex-direction: column;
 		position: relative;
+		min-height: 0;
 	}
 </style>

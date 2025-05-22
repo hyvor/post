@@ -2,7 +2,7 @@
 
 namespace App\Service\SubscriberMetadata;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Clock\ClockAwareTrait;
 class SubscriberMetadataService
 {
 
-    public const int MAX_METADATA_DEFINITIONS_PER_PROJECT = 20;
+    public const int MAX_METADATA_DEFINITIONS_PER_NEWSLETTER = 20;
 
     use ClockAwareTrait;
 
@@ -23,34 +23,34 @@ class SubscriberMetadataService
     /**
      * @return SubscriberMetadataDefinition[]
      */
-    public function getMetadataDefinitions(Project $project): array
+    public function getMetadataDefinitions(Newsletter $newsletter): array
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->findBy(['project' => $project]);
+            ->findBy(['newsletter' => $newsletter]);
     }
 
-    public function getMetadataDefinitionByKey(Project $project, string $key): ?SubscriberMetadataDefinition
+    public function getMetadataDefinitionByKey(Newsletter $newsletter, string $key): ?SubscriberMetadataDefinition
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->findOneBy(['project' => $project, 'key' => $key]);
+            ->findOneBy(['newsletter' => $newsletter, 'key' => $key]);
     }
 
-    public function getMetadataDefinitionsCount(Project $project): int
+    public function getMetadataDefinitionsCount(Newsletter $newsletter): int
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->count(['project' => $project]);
+            ->count(['newsletter' => $newsletter]);
     }
 
     public function createMetadataDefinition(
-        Project $project,
+        Newsletter $newsletter,
         string $key,
         string $name,
     ): SubscriberMetadataDefinition {
         $metadataDefinition = new SubscriberMetadataDefinition();
-        $metadataDefinition->setProject($project);
+        $metadataDefinition->setNewsletter($newsletter);
         $metadataDefinition->setKey($key);
         $metadataDefinition->setName($name);
         $metadataDefinition->setType(SubscriberMetadataDefinitionType::TEXT);

@@ -27,7 +27,7 @@ class BlockquoteTest extends TestCase
         ]);
 
         $this->assertIsString($json);
-        $html = new ContentService()->htmlFromJson($json);
+        $html = new ContentService()->getHtmlFromJson($json);
 
         $this->assertSame(
             '<blockquote style="

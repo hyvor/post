@@ -13,7 +13,7 @@
 	import type { User } from '../../../types';
 	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
-	import { projectRoleStore, projectStore } from '../../../lib/stores/projectStore';
+	import { newsletterRoleStore, newsletterStore } from '../../../lib/stores/newsletterStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteUser } from '../../../lib/actions/userActions';
 
@@ -22,10 +22,10 @@
 
 	async function handleRemove() {
 		const confirmation = await confirm({
-			title: "Remove Admin",
-			content: "Are you sure you want to remove this admin?",
-			confirmText: "Yes",
-			cancelText: "Cancel",
+			title: 'Remove Admin',
+			content: 'Are you sure you want to remove this admin?',
+			confirmText: 'Yes',
+			cancelText: 'Cancel',
 			danger: true
 		});
 		if (!confirmation) return;
@@ -47,7 +47,6 @@
 </script>
 
 <TableRow>
-
 	<div class="profile">
 		<ProfilePicture size={25} user={user.user} />
 		<div class="name-badge">
@@ -63,15 +62,13 @@
 			</div>
 		</div>
 		<div class="buttons">
-			{#if user.role != 'owner' && $projectRoleStore == 'owner'}
+			{#if user.role != 'owner' && $newsletterRoleStore == 'owner'}
 				<IconButton size={27} on:click={handleRemove}>
 					<IconTrash size={13} />
 				</IconButton>
 			{/if}
 		</div>
 	</div>
-	
-
 </TableRow>
 
 <style>

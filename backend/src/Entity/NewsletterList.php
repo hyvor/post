@@ -17,7 +17,7 @@ class NewsletterList
     private int $id;
 
     #[ORM\ManyToOne()]
-    private Project $project;
+    private Newsletter $newsletter;
 
     /**
      * @var Collection<int, Subscriber>
@@ -60,14 +60,14 @@ class NewsletterList
         return $this->id;
     }
 
-    public function getProject(): Project
+    public function getNewsletter(): Newsletter
     {
-        return $this->project;
+        return $this->newsletter;
     }
 
-    public function setProject(Project $project): static
+    public function setNewsletter(Newsletter $newsletter): static
     {
-        $this->project = $project;
+        $this->newsletter = $newsletter;
 
         return $this;
     }

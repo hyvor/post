@@ -25,11 +25,11 @@ final class Version20250519075019 extends AbstractMigration
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             key VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             type VARCHAR(255) NOT NULL,
-            UNIQUE (project_id, key)
+            UNIQUE (newsletter_id, key)
         );
         SQL
         );

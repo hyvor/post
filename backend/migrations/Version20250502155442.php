@@ -16,18 +16,20 @@ final class Version20250502155442 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE user_invites (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id),
+            newsletter_id BIGINT NOT NULL references newsletters(id),
             hyvor_user_id BIGINT NOT NULL UNIQUE,
             code VARCHAR(255) NOT NULL UNIQUE,
             expires_at timestamptz NOT NULL,
             role user_role NOT NULL
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

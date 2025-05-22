@@ -10,7 +10,7 @@ use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use Aws\Command;
 use Aws\Exception\AwsException;
 use Aws\SesV2\SesV2Client;
@@ -34,7 +34,6 @@ class CreateDomainTest extends WebTestCase
         $sesV2ClientMock->method('__call')->with(
             'createEmailIdentity',
             $this->callback(function ($args) {
-
                 $input = $args[0];
 
                 $this->assertSame('hyvor.com', $input['EmailIdentity']);
@@ -56,10 +55,10 @@ class CreateDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains',
             [
@@ -85,10 +84,10 @@ class CreateDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains',
             [
@@ -136,9 +135,9 @@ class CreateDomainTest extends WebTestCase
             $json['message']
         );
     }
+
     public function test_error_on_aws_call_fails_and_logs(): void
     {
-
         $sesV2ClientMock = $this->createMock(SesV2Client::class);
         $sesV2ClientMock->method('__call')
             ->willThrowException(new AwsException('Bad API key', new Command('CreateEmailIdentity')));
@@ -164,7 +163,7 @@ class CreateDomainTest extends WebTestCase
         $testLogger = $this->getTestLogger();
         $this->assertTrue($testLogger->hasCriticalThatContains('Failed to create email domain in AWS SES'));
         $record = new ArrayCollection($testLogger->getRecords())
-            ->findFirst(fn ($index, $record) => $record->message === 'Failed to create email domain in AWS SES');
+            ->findFirst(fn($index, $record) => $record->message === 'Failed to create email domain in AWS SES');
         $this->assertNotNull($record);
         $this->assertSame('hyvor.com', $record->context['domain']);
         $this->assertInstanceOf(AwsException::class, $record->context['error']);

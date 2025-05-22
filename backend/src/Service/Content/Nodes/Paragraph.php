@@ -14,8 +14,7 @@ class Paragraph extends NodeType
 
     public function toHtml(Node $node, string $children): string
     {
-        $style = "margin: 0 0 20px;line-height:26px;";
-        return "<p style=\"$style\">$children</p>";
+        return "<p>$children</p>";
     }
 
     public function fromHtml(): array

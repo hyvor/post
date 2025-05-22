@@ -19,17 +19,19 @@ final class Version20250310193454 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
             CREATE TYPE send_status AS ENUM ('pending', 'sent', 'failed');
-        SQL);
+        SQL
+        );
 
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE sends (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             issue_id BIGINT NOT NULL references issues(id),
             subscriber_id BIGINT NOT NULL references subscribers(id) ON DELETE CASCADE,
             email TEXT NOT NULL,
@@ -50,7 +52,8 @@ final class Version20250310193454 extends AbstractMigration
             click_count INT DEFAULT 0 NOT NULL,
             hard_bounce BOOLEAN DEFAULT FALSE NOT NULL
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

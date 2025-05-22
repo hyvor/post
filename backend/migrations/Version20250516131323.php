@@ -19,18 +19,20 @@ final class Version20250516131323 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
         CREATE TABLE sending_addresses (
             id BIGSERIAL PRIMARY KEY,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             email TEXT NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             domain_id BIGINT NOT NULL references domains(id) ON DELETE CASCADE,
             is_default BOOLEAN DEFAULT FALSE NOT NULL,
-            UNIQUE (project_id, email)
+            UNIQUE (newsletter_id, email)
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

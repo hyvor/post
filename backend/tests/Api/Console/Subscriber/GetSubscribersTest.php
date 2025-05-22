@@ -10,7 +10,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -27,26 +27,26 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersNonEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
-        $newsletterList2 = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletterList1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $newsletterList2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscribers = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList1, $newsletterList2],
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
-        $projectOther = ProjectFactory::createOne();
+        $newsletterOther = NewsletterFactory::createOne();
         SubscriberFactory::createMany(2, [
-            'project' => $projectOther,
-            'lists' => [NewsletterListFactory::createOne(['project' => $project])],
+            'newsletter' => $newsletterOther,
+            'lists' => [NewsletterListFactory::createOne(['newsletter' => $newsletter])],
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/subscribers'
         );
@@ -65,21 +65,21 @@ class GetSubscribersTest extends WebTestCase
         $subscriberDb = $repository->find($subscriber['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriberDb);
         $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
-        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getNewsletter(), $subscriberDb->getNewsletter());
         $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
 
     public function testListSubscribersPagination(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/subscribers?limit=2&offset=1'
         );
@@ -96,10 +96,10 @@ class GetSubscribersTest extends WebTestCase
 
     public function testListSubscribersEmpty(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/subscribers'
         );
@@ -113,25 +113,25 @@ class GetSubscribersTest extends WebTestCase
     #[TestWith([SubscriberStatus::UNSUBSCRIBED, SubscriberStatus::SUBSCRIBED])]
     public function testListSubscribersByStatus(SubscriberStatus $status, SubscriberStatus $oppositeStatus): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletterList1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscribers = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList1],
             'status' => $status,
         ]);
 
         // Opposite status subscribers
         SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList1],
             'status' => $oppositeStatus,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/subscribers?status={$status->value}"
         );
@@ -149,32 +149,32 @@ class GetSubscribersTest extends WebTestCase
         $subscriberDb = $repository->find($subscriber['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriberDb);
         $this->assertSame($subscribers[0]->getEmail(), $subscriberDb->getEmail());
-        $this->assertSame($subscribers[0]->getProject(), $subscriberDb->getProject());
+        $this->assertSame($subscribers[0]->getNewsletter(), $subscriberDb->getNewsletter());
         $this->assertSame($subscribers[0]->getLists(), $subscriberDb->getLists());
     }
 
     public function test_list_subscribers_email_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber1 = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
             'email' => 'thibault@hyvor.com',
         ]);
 
         $subscriber2 = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
             'email' => 'supun@hyvor.com',
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/subscribers?search=thibault"
         );
@@ -189,38 +189,38 @@ class GetSubscribersTest extends WebTestCase
 
     public function test_list_subscribers_list_search(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'name' => 'list_1'
             ]
         );
 
         $list2 = NewsletterListFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'name' => 'list_2'
             ]
         );
 
         $subscriber1 = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list1],
             'status' => SubscriberStatus::SUBSCRIBED,
             'email' => 'thibault@hyvor.com',
         ]);
 
         $subscriber2 = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list2],
             'status' => SubscriberStatus::SUBSCRIBED,
             'email' => 'supun@hyvor.com',
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/subscribers?list_id={$list1->getId()}"
         );

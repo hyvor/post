@@ -8,11 +8,11 @@ use App\Api\Public\Input\Form\FormInitInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
-use App\Api\Public\Object\Form\Project\FormProjectObject;
+use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +29,7 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private ProjectService $projectService,
+        private NewsletterService $newsletterService,
         private NewsletterListService $newsletterListService,
         private SubscriberService $subscriberService,
     ) {
@@ -38,17 +38,17 @@ class FormController extends AbstractController
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-        $project = $this->projectService->getProjectByUuid($input->project_uuid);
+        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
 
-        if (!$project) {
-            throw new UnprocessableEntityHttpException('Project not found');
+        if (!$newsletter) {
+            throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
         $listIds = $input->list_ids;
 
         if ($listIds !== null) {
-            $missingListIds = $this->newsletterListService->getMissingListIdsOfProject(
-                $project,
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
+                $newsletter,
                 $listIds
             );
             if ($missingListIds !== null) {
@@ -57,11 +57,11 @@ class FormController extends AbstractController
 
             $lists = $this->newsletterListService->getListsByIds($listIds);
         } else {
-            $lists = $this->newsletterListService->getListsOfProject($project);
+            $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         }
 
         return new JsonResponse([
-            'project' => new FormProjectObject($project),
+            'newsletter' => new FormNewsletterObject($newsletter),
             'is_subscribed' => false,
             'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
         ]);
@@ -73,15 +73,15 @@ class FormController extends AbstractController
         Request $request,
     ): JsonResponse {
         $ip = $request->getClientIp();
-        $project = $this->projectService->getProjectByUuid($input->project_uuid);
+        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
 
-        if (!$project) {
-            throw new UnprocessableEntityHttpException('Project not found');
+        if (!$newsletter) {
+            throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
         $listIds = $input->list_ids;
-        $missingListIds = $this->newsletterListService->getMissingListIdsOfProject(
-            $project,
+        $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
+            $newsletter,
             $listIds
         );
 
@@ -92,7 +92,7 @@ class FormController extends AbstractController
         $lists = $this->newsletterListService->getListsByIds($listIds);
 
         $email = $input->email;
-        $subscriber = $this->subscriberService->getSubscriberByEmail($project, $email);
+        $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
@@ -105,7 +105,7 @@ class FormController extends AbstractController
             );
         } else {
             $subscriber = $this->subscriberService->createSubscriber(
-                $project,
+                $newsletter,
                 $email,
                 $lists,
                 SubscriberStatus::SUBSCRIBED,

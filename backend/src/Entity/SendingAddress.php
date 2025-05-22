@@ -23,14 +23,14 @@ class SendingAddress
     #[ORM\Column]
     private string $email;
 
-    #[ORM\ManyToOne(targetEntity: Project::class)]
-    private Project $project;
+    #[ORM\ManyToOne(targetEntity: Newsletter::class)]
+    private Newsletter $newsletter;
 
     #[ORM\ManyToOne(targetEntity: Domain::class)]
     private Domain $domain;
 
     #[ORM\Column]
-    private bool $is_default = false;
+    private bool $isDefault = false;
 
     public function getId(): int
     {
@@ -80,14 +80,14 @@ class SendingAddress
         return $this;
     }
 
-    public function getProject(): Project
+    public function getNewsletter(): Newsletter
     {
-        return $this->project;
+        return $this->newsletter;
     }
 
-    public function setProject(Project $project): static
+    public function setNewsletter(Newsletter $newsletter): static
     {
-        $this->project = $project;
+        $this->newsletter = $newsletter;
 
         return $this;
     }
@@ -106,12 +106,12 @@ class SendingAddress
 
     public function isDefault(): bool
     {
-        return $this->is_default;
+        return $this->isDefault;
     }
 
-    public function setIsDefault(bool $is_default): static
+    public function setIsDefault(bool $isDefault): static
     {
-        $this->is_default = $is_default;
+        $this->isDefault = $isDefault;
 
         return $this;
     }
