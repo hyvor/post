@@ -14,6 +14,7 @@ class NewsletterObject
     public string $slug;
     public int $created_at; // unix timestamp
     public string $name;
+    public ?string $logo;
 
     public ?string $template_color_accent;
     public ?string $template_color_background;
@@ -28,7 +29,6 @@ class NewsletterObject
     public ?string $template_font_color_on_box;
     public ?string $template_font_line_height;
     public ?string $template_box_radius;
-    public ?string $template_logo;
 
     public ?string $form_title;
     public ?string $form_description;
@@ -61,13 +61,15 @@ class NewsletterObject
 
     public function __construct(Newsletter $newsletter)
     {
+        $meta = $newsletter->getMeta();
+
         $this->id = $newsletter->getId();
         $this->uuid = $newsletter->getUuid();
         $this->slug = $newsletter->getSlug();
         $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
         $this->name = $newsletter->getName();
+        $this->logo = $meta->logo;
 
-        $meta = $newsletter->getMeta();
         $this->template_color_accent = $meta->template_color_accent;
         $this->template_color_background = $meta->template_color_background;
         $this->template_color_box_background = $meta->template_color_box_background;
@@ -81,7 +83,6 @@ class NewsletterObject
         $this->template_font_color_on_box = $meta->template_font_color_on_box;
         $this->template_font_line_height = $meta->template_font_line_height;
         $this->template_box_radius = $meta->template_box_radius;
-        $this->template_logo = $meta->template_logo;
 
         $this->form_width = $meta->form_width;
         $this->form_custom_css = $meta->form_custom_css;

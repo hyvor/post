@@ -79,6 +79,11 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);
     }
 
+    public function getNewsletterBySlug(string $slug): ?Newsletter
+    {
+        return $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $slug]);
+    }
+
     /**
      * @return array<array{newsletter: Newsletter, user: User}>
      */
