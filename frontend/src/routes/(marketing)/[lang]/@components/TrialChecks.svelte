@@ -1,21 +1,24 @@
 <script>
 	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n();
 </script>
 
 <div class="checks" {...$$restProps}>
 	<div class="check">
 		<IconCheckCircleFill />
-		14-day free trial
+		{I18n.t('14DayFreeTrial')}
 	</div>
 
 	<div class="check">
 		<IconCheckCircleFill />
-		No credit card required
+		{I18n.t('noCreditCardRequired')}
 	</div>
 
 	<div class="check">
 		<IconCheckCircleFill />
-		Cancel anytime
+		{I18n.t('cancelAnytime')}
 	</div>
 </div>
 

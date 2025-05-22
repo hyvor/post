@@ -14,13 +14,13 @@
 		<h1>{I18n.t('simpleNewsletterPlatform')}</h1>
 
 		<h2>
-			Newsletters for your website
+			{I18n.t('newslettersForYourWebsite')}
 		</h2>
 
 		<div class="buttons">
-			<Button as="a" href="/console?signup" size="large">Install Hyvor Post</Button>
+			<Button as="a" href="/console?signup" size="large">{I18n.t('installHyvorPost')}</Button>
 			<!-- <Demo /> Add he demo if possible - i guess it is--> 
-			<Button as="a" href="/console?signup" size="large" variant="outline">Demo</Button>
+			<Button as="a" href="/console?signup" size="large" variant="outline">{I18n.t('demo')}</Button>
 		</div>
 
 		<div class="trial-checks">

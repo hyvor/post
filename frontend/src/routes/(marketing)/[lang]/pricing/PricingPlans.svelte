@@ -1,6 +1,9 @@
 <script>
 	import { Button } from '@hyvor/design/components';
 	import PricingPlan from './PricingPlan.svelte';
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n();
 
 	let currency = '€';
 	let yearly = false;
@@ -12,13 +15,13 @@
 			on:click={() => (yearly = false)}
 			color="input"
 			size="small"
-			variant={yearly ? 'invisible' : 'fill'}>Monthly</Button
+			variant={yearly ? 'invisible' : 'fill'}>{I18n.t('pricing.monthly')}</Button
 		>
 		<Button
 			on:click={() => (yearly = true)}
 			color="input"
 			size="small"
-			variant={!yearly ? 'invisible' : 'fill'}>Yearly<span class="off">(2 months off)</span></Button
+			variant={!yearly ? 'invisible' : 'fill'}>{I18n.t('pricing.yearly')}<span class="off">{I18n.t('pricing.2MonthsOff')}</span></Button
 		>
 	</div>
 </div>
@@ -28,7 +31,7 @@
 </div>
 
 <div class="disclaimers">
-	<div>* All VAT charges are included in the price.</div>
+	<div>{I18n.t('pricing.vatIncluded')}</div>
 </div>
 
 <style>
