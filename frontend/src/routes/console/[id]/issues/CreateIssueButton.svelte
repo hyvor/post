@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { issueStore } from '../../lib/stores/newsletterStore';
 	import { createIssueDraft } from '../../lib/actions/issueActions';
-	import { consoleUrlWithProject } from '../../lib/consoleUrl';
+	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
 	import type { Component } from 'svelte';
 
 	interface Props {
@@ -26,7 +26,7 @@
 		createIssueDraft()
 			.then((res) => {
 				issueStore.update((prev) => [res, ...prev]);
-				goto(consoleUrlWithProject(`/issues/${res.id}`));
+				goto(consoleUrlWithNewsletter(`/issues/${res.id}`));
 			})
 			.catch((e) => {
 				toast.error(e.message);

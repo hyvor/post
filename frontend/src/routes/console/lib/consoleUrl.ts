@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { projectStore } from "./stores/newsletterStore";
+import { newsletterStore } from "./stores/newsletterStore";
 
 
 export function consoleUrl(path: string) {
@@ -11,8 +11,8 @@ export function consoleUrl(path: string) {
 }
 
 
-export function consoleUrlWithProject(path: string) {
-    const projectId = get(projectStore).id;
+export function consoleUrlWithNewsletter(path: string) {
+    const newsletterId = get(newsletterStore).id;
     path = path.replace(/^\//, '');
-    return consoleUrl(`${projectId}/${path}`)
+    return consoleUrl(`${newsletterId}/${path}`)
 }

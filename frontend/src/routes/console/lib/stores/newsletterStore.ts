@@ -8,28 +8,28 @@ import {
 	type SubscriberMetadataDefinition
 } from '../../types';
 
-export const projectStore = writable<Newsletter>();
-export const projectEditingStore = writable<Newsletter>();
-export const projectRoleStore = writable<UserRole>();
+export const newsletterStore = writable<Newsletter>();
+export const newsletterEditingStore = writable<Newsletter>();
+export const newsletterRoleStore = writable<UserRole>();
 
-export const projectStatsStore = writable<NewsletterStats>();
+export const newsletterStatsStore = writable<NewsletterStats>();
 export const listStore = writable<List[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();
 export const issueStore = writable<Issue[]>([]);
 
-export function setProjectStore(project: Newsletter) {
-	projectStore.set(project);
-	projectEditingStore.set({ ...project });
+export function setNewsletterStore(newsletter: Newsletter) {
+	newsletterStore.set(newsletter);
+	newsletterEditingStore.set({ ...newsletter });
 }
 
-export function updateProjectStore(
-	project: Partial<Newsletter> | ((currentproject: Newsletter) => Partial<Newsletter>)
+export function updateNewsletterStore(
+	newsletter: Partial<Newsletter> | ((currentnewsletter: Newsletter) => Partial<Newsletter>)
 ) {
-	const stores = [projectStore, projectEditingStore];
+	const stores = [newsletterStore, newsletterEditingStore];
 
 	stores.forEach((store) => {
 		store.update((b) => {
-			const val = typeof project === 'function' ? project(b) : project;
+			const val = typeof newsletter === 'function' ? newsletter(b) : newsletter;
 			return { ...b, ...val };
 		});
 	});

@@ -1,34 +1,35 @@
 <script lang="ts">
 	import { userNewslettersStore } from '../../lib/stores/userNewslettersStore';
-	import ProjectRow from './NewsletterRow.svelte';
+	import NewsletterRow from './NewsletterRow.svelte';
 
 	export let own = false;
 
-	const projects = own
+	const newsletters = own
 		? $userNewslettersStore.filter((p) => p.role == 'owner')
 		: $userNewslettersStore.filter((p) => p.role != 'owner');
 </script>
 
-{#if projects.length}
+{#if newsletters.length}
 	<div class="wrap">
 		<div class="title-wrap">
 			<div class="title">
 				{#if own}
-					Projects you own
+					Newsletters you own
 				{:else}
-					Projects you are admin
+					Newsletters you are admin
 				{/if}
 			</div>
 			<div class="description">
 				{#if own}
-					You are the owner of these projects. Your subscription applies to all of them.
+					You are the owner of these newsletters. Your subscription applies to all of
+					them.
 				{:else}
 					You are admin on these websites. Your subscription does not apply to them.
 				{/if}
 			</div>
 		</div>
-		{#each projects as project}
-			<ProjectRow projectList={project} />
+		{#each newsletters as newsletter}
+			<NewsletterRow newsletterList={newsletter} />
 		{/each}
 	</div>
 {/if}

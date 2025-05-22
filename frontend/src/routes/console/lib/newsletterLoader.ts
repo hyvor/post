@@ -3,36 +3,36 @@ import consoleApi from './consoleApi';
 import {
 	issueStore,
 	listStore,
-	projectStatsStore,
-	setProjectStore,
+	newsletterStatsStore,
+	setNewsletterStore,
 	subscriberMetadataDefinitionStore
 } from './stores/newsletterStore';
 
-interface ProjectResponse {
-	project: Newsletter;
+interface NewsletterResponse {
+	newsletter: Newsletter;
 	stats: NewsletterStats;
 	lists: List[];
 	subscriber_metadata_definitions: SubscriberMetadataDefinition[];
 }
 
 // to prevent multiple requests for the same subdomain
-const LOADER_PROMISES: Record<string, Promise<ProjectResponse>> = {};
+const LOADER_PROMISES: Record<string, Promise<NewsletterResponse>> = {};
 
-export function loadProject(projectId: string) {
-	if (LOADER_PROMISES[projectId] !== undefined) {
-		return LOADER_PROMISES[projectId];
+export function loadNewsletter(newsletterId: string) {
+	if (LOADER_PROMISES[newsletterId] !== undefined) {
+		return LOADER_PROMISES[newsletterId];
 	}
 
-	const promise = new Promise<ProjectResponse>((resolve, reject) => {
+	const promise = new Promise<NewsletterResponse>((resolve, reject) => {
 		consoleApi
-			.get<ProjectResponse>({
-				endpoint: 'init/project',
+			.get<NewsletterResponse>({
+				endpoint: 'init/newsletter',
 				userApi: true,
-				projectId: projectId
+				newsletterId: newsletterId
 			})
 			.then((res) => {
-				setProjectStore(res.project);
-				projectStatsStore.set(res.stats);
+				setNewsletterStore(res.newsletter);
+				newsletterStatsStore.set(res.stats);
 				listStore.set(res.lists);
 				subscriberMetadataDefinitionStore.set(res.subscriber_metadata_definitions);
 
@@ -44,11 +44,11 @@ export function loadProject(projectId: string) {
 				reject(err);
 			})
 			.finally(() => {
-				delete LOADER_PROMISES[projectId];
+				delete LOADER_PROMISES[newsletterId];
 			});
 	});
 
-	LOADER_PROMISES[projectId] = promise;
+	LOADER_PROMISES[newsletterId] = promise;
 
 	return promise;
 }

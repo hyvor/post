@@ -11,8 +11,8 @@
 		Slider,
 		TextInput
 	} from '@hyvor/design/components';
-	import { projectStore } from '../../../lib/stores/newsletterStore';
-	import { updateProject } from '../../../lib/actions/newsletterActions';
+	import { newsletterStore } from '../../../lib/stores/newsletterStore';
+	import { updateNewsletter } from '../../../lib/actions/newsletterActions';
 	import type { NewsletterMeta, Newsletter } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
@@ -25,42 +25,42 @@
 	let showFontWeightHeading = false;
 	let showEditTemplateModal = false;
 
-	const projectDefaults = getAppConfig().newsletter_defaults;
+	const newsletterDefaults = getAppConfig().newsletter_defaults;
 
 	function getTemplateValues() {
 		return {
 			template_color_accent:
-				$projectStore.template_color_accent ?? projectDefaults.TEMPLATE_COLOR_ACCENT,
+				$newsletterStore.template_color_accent ?? newsletterDefaults.TEMPLATE_COLOR_ACCENT,
 			template_color_background:
-				$projectStore.template_color_background ??
-				projectDefaults.TEMPLATE_COLOR_BACKGROUND,
+				$newsletterStore.template_color_background ??
+				newsletterDefaults.TEMPLATE_COLOR_BACKGROUND,
 			template_color_box_background:
-				$projectStore.template_color_box_background ??
-				projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND,
+				$newsletterStore.template_color_box_background ??
+				newsletterDefaults.TEMPLATE_COLOR_BOX_BACKGROUND,
 			template_box_shadow:
-				$projectStore.template_box_shadow ?? projectDefaults.TEMPLATE_BOX_SHADOW,
+				$newsletterStore.template_box_shadow ?? newsletterDefaults.TEMPLATE_BOX_SHADOW,
 			template_box_border:
-				$projectStore.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER,
+				$newsletterStore.template_box_border ?? newsletterDefaults.TEMPLATE_BOX_BORDER,
 			template_font_size:
-				$projectStore.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE,
+				$newsletterStore.template_font_size ?? newsletterDefaults.TEMPLATE_FONT_SIZE,
 			template_font_family:
-				$projectStore.template_font_family ?? projectDefaults.TEMPLATE_FONT_FAMILY,
+				$newsletterStore.template_font_family ?? newsletterDefaults.TEMPLATE_FONT_FAMILY,
 			template_font_weight:
-				$projectStore.template_font_weight ?? projectDefaults.TEMPLATE_FONT_WEIGHT,
+				$newsletterStore.template_font_weight ?? newsletterDefaults.TEMPLATE_FONT_WEIGHT,
 			template_font_weight_heading:
-				$projectStore.template_font_weight_heading ??
-				projectDefaults.TEMPLATE_FONT_WEIGHT_HEADING,
+				$newsletterStore.template_font_weight_heading ??
+				newsletterDefaults.TEMPLATE_FONT_WEIGHT_HEADING,
 			template_font_color_on_background:
-				$projectStore.template_font_color_on_background ??
-				projectDefaults.TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+				$newsletterStore.template_font_color_on_background ??
+				newsletterDefaults.TEMPLATE_FONT_COLOR_ON_BACKGROUND,
 			template_font_color_on_box:
-				$projectStore.template_font_color_on_box ??
-				projectDefaults.TEMPLATE_FONT_COLOR_ON_BOX,
+				$newsletterStore.template_font_color_on_box ??
+				newsletterDefaults.TEMPLATE_FONT_COLOR_ON_BOX,
 			template_font_line_height:
-				$projectStore.template_font_line_height ??
-				projectDefaults.TEMPLATE_FONT_LINE_HEIGHT,
+				$newsletterStore.template_font_line_height ??
+				newsletterDefaults.TEMPLATE_FONT_LINE_HEIGHT,
 			template_box_radius:
-				$projectStore.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS
+				$newsletterStore.template_box_radius ?? newsletterDefaults.TEMPLATE_BOX_RADIUS
 		};
 	}
 
@@ -78,13 +78,13 @@
 
 	async function saveChanges() {
 		try {
-			const currentProject = $projectStore;
+			const currentNewsletter = $newsletterStore;
 			const updateData = {
-				...currentProject,
+				...currentNewsletter,
 				...metaToSave
 			};
-			const updatedProject: Newsletter = await updateProject(updateData);
-			projectStore.set(updatedProject);
+			const updatedNewsletter: Newsletter = await updateNewsletter(updateData);
+			newsletterStore.set(updatedNewsletter);
 			metaToSave = {};
 			hasChanges = false;
 			toast.success('Changes saved successfully!');
@@ -112,7 +112,7 @@
 
 	const fontSizeValues = [12, 14, 16, 18, 20, 24, 28, 32];
 	const fontSizeIndex = fontSizeValues.indexOf(
-		parseInt(templateValues.template_font_size ?? projectDefaults.TEMPLATE_FONT_SIZE)
+		parseInt(templateValues.template_font_size ?? newsletterDefaults.TEMPLATE_FONT_SIZE)
 	);
 	const fontWeights = [
 		'normal',
@@ -129,11 +129,11 @@
 	];
 	const boxRadiusValues = [0, 4, 8, 12, 16];
 	const boxRadiusIndex = boxRadiusValues.indexOf(
-		parseInt(templateValues.template_box_radius ?? projectDefaults.TEMPLATE_BOX_RADIUS)
+		parseInt(templateValues.template_box_radius ?? newsletterDefaults.TEMPLATE_BOX_RADIUS)
 	);
 	const boxBorderValues = [0, 1, 2, 3, 4];
 	const currentBorder = decodeBorderValue(
-		templateValues.template_box_border ?? projectDefaults.TEMPLATE_BOX_BORDER
+		templateValues.template_box_border ?? newsletterDefaults.TEMPLATE_BOX_BORDER
 	);
 	const boxBorderIndex = boxBorderValues.indexOf(currentBorder.width);
 	const lineHeights = ['1.2', '1.4', '1.6', '1.8', '2.0'];
@@ -180,7 +180,7 @@
 			<SplitControl label="Accent">
 				<ColorPicker
 					color={templateValues.template_color_accent ??
-						projectDefaults.TEMPLATE_COLOR_ACCENT}
+						newsletterDefaults.TEMPLATE_COLOR_ACCENT}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_accent', e.detail)}
 				/>
@@ -188,7 +188,7 @@
 			<SplitControl label="Background">
 				<ColorPicker
 					color={templateValues.template_color_background ??
-						projectDefaults.TEMPLATE_COLOR_BACKGROUND}
+						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_background', e.detail)}
 				/>
@@ -196,7 +196,7 @@
 			<SplitControl label="Box background">
 				<ColorPicker
 					color={templateValues.template_color_box_background ??
-						projectDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
+						newsletterDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_color_box_background', e.detail)}
 				/>
@@ -204,7 +204,7 @@
 			<SplitControl label="Box shadow">
 				<ColorPicker
 					color={templateValues.template_box_shadow ??
-						projectDefaults.TEMPLATE_BOX_SHADOW}
+						newsletterDefaults.TEMPLATE_BOX_SHADOW}
 					on:input={(e: CustomEvent<string>) =>
 						handleChange('template_box_shadow', e.detail)}
 				/>

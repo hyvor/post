@@ -10,8 +10,8 @@
 		toast
 	} from '@hyvor/design/components';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
-	import { addUserProject, userNewslettersStore } from '../lib/stores/userNewslettersStore';
-	import { createProject } from '../lib/actions/newsletterActions';
+	import { addUserNewsletter, userNewslettersStore } from '../lib/stores/userNewslettersStore';
+	import { createNewsletter } from '../lib/actions/newsletterActions';
 
 	let name = $state('');
 
@@ -47,11 +47,11 @@
 
 		isCreating = true;
 
-		createProject(name)
+		createNewsletter(name)
 			.then((res) => {
-				toast.success('Project created successfully');
+				toast.success('Newsletter created successfully');
 
-				addUserProject({ role: 'owner', project: res });
+				addUserNewsletter({ role: 'owner', newsletter: res });
 
 				goto('/console/' + res.id);
 			})
@@ -76,12 +76,12 @@
 		</div>
 
 		{#if isCreating}
-			<Loader block padding={130}>Creating your project...</Loader>
+			<Loader block padding={130}>Creating your newsletter...</Loader>
 		{:else}
-			<div class="title">Start a new project</div>
+			<div class="title">Start a new newsletter</div>
 
 			<div class="form">
-				<SplitControl label="Name" caption="A name for your project">
+				<SplitControl label="Name" caption="A name for your newsletter">
 					<FormControl>
 						<TextInput
 							block
@@ -103,7 +103,7 @@
 			</div>
 
 			<div class="footer">
-				<Button size="large" on:click={handleCreate}>Create Project</Button>
+				<Button size="large" on:click={handleCreate}>Create Newsletter</Button>
 			</div>
 		{/if}
 	</div>

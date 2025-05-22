@@ -2,18 +2,18 @@
 	import { goto } from '$app/navigation';
 	import { Tag } from '@hyvor/design/components';
 	import type { NewsletterList } from '../../types';
-	import { projectStore } from '../../lib/stores/newsletterStore';
-	import { loadProject } from '../../lib/newsletterLoader';
+	import { newsletterStore } from '../../lib/stores/newsletterStore';
+	import { loadNewsletter } from '../../lib/newsletterLoader';
 	import RoleTag from './RoleTag.svelte';
-	import { selectingProject } from '../../lib/stores/consoleStore';
+	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 
-	export let projectList: NewsletterList;
+	export let newsletterList: NewsletterList;
 
 	function onClick() {
-		projectStore.set(projectList.project);
-		goto(`/console/${projectList.project.id}`);
-		loadProject(String(projectList.project.id));
-		selectingProject.set(false);
+		newsletterStore.set(newsletterList.newsletter);
+		goto(`/console/${newsletterList.newsletter.id}`);
+		loadNewsletter(String(newsletterList.newsletter.id));
+		selectingNewsletter.set(false);
 	}
 </script>
 
@@ -25,16 +25,16 @@
 	tabindex="0"
 >
 	<div class="name-id">
-		<div class="name">{projectList.project.name}</div>
+		<div class="name">{newsletterList.newsletter.name}</div>
 		<div class="id">
 			<span class="id-tag">ID: </span><Tag size="x-small"
-				><strong>{projectList.project.id}</strong></Tag
+				><strong>{newsletterList.newsletter.id}</strong></Tag
 			>
 		</div>
 	</div>
 
 	<div class="role">
-		<RoleTag role={projectList.role} />
+		<RoleTag role={newsletterList.role} />
 	</div>
 
 	<div class="right">&rarr;</div>

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { updateProject } from '../../../lib/actions/newsletterActions';
+	import { updateNewsletter } from '../../../lib/actions/newsletterActions';
 	import {
-		projectEditingStore,
-		projectStore,
-		updateProjectStore
+		newsletterEditingStore,
+		newsletterStore,
+		updateNewsletterStore
 	} from '../../../lib/stores/newsletterStore';
 	import type { Newsletter } from '../../../types';
 	import SaveDiscard from './SaveDiscard.svelte';
@@ -18,30 +18,30 @@
 	let changes = $derived(
 		keys.filter(
 			(key) =>
-				$projectEditingStore[key as keyof Newsletter] !==
-				$projectStore[key as keyof Newsletter]
+				$newsletterEditingStore[key as keyof Newsletter] !==
+				$newsletterStore[key as keyof Newsletter]
 		)
 	);
 	let hasChanges = $derived(changes.length > 0);
 
 	async function onSave() {
-		const project = await updateProject(
+		const newsletter = await updateNewsletter(
 			changes.reduce(
 				(acc, key) => ({
 					...acc,
-					[key]: $projectEditingStore[key as keyof Newsletter]
+					[key]: $newsletterEditingStore[key as keyof Newsletter]
 				}),
 				{} as any
 			)
 		);
 
-		updateProjectStore(project);
+		updateNewsletterStore(newsletter);
 
 		onsave?.();
 	}
 
 	function onDiscard() {
-		$projectEditingStore = { ...$projectStore };
+		$newsletterEditingStore = { ...$newsletterStore };
 	}
 </script>
 

@@ -70,14 +70,14 @@
                 "roundness": "Roundness",
                 "roundnessCaption": "Roundness of edges of the input, button, etc."
             },
-            "project": {
-                "name": "Project Name",
+            "newsletter": {
+                "name": "Newsletter Name",
                 "sendingEmail": "Sending email",
-                "uuid": "Project UUID",
+                "uuid": "Newsletter UUID",
                 "uuidCaption": "Used in the signup form embed code",
-                "delete": "Delete Project",
+                "delete": "Delete Newsletter",
                 "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
-                "deleted": "Project deleted"
+                "deleted": "Newsletter deleted"
             },
             "metadata": {
                 "metadata": "Metadata",

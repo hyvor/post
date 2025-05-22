@@ -7,8 +7,8 @@
 		TextInput
 	} from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
-	import { projectEditingStore } from '../../../lib/stores/newsletterStore';
-	import ProjectSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
+	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
+	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
 	import FormColors from './FormColors.svelte';
 
 	const i18n = getI18n();
@@ -25,21 +25,21 @@
 			label={i18n.t('console.settings.form.title')}
 			caption={i18n.t('console.settings.form.titleCaption')}
 		>
-			<TextInput block bind:value={$projectEditingStore.form_title} />
+			<TextInput block bind:value={$newsletterEditingStore.form_title} />
 		</SplitControl>
 
 		<SplitControl
 			label={i18n.t('console.settings.form.description')}
 			caption={i18n.t('console.settings.form.descriptionCaption')}
 		>
-			<TextInput block bind:value={$projectEditingStore.form_description} />
+			<TextInput block bind:value={$newsletterEditingStore.form_description} />
 		</SplitControl>
 
 		<SplitControl
 			label={i18n.t('console.settings.form.footerText')}
 			caption={i18n.t('console.settings.form.footerTextCaption')}
 		>
-			<TextInput block bind:value={$projectEditingStore.form_footer_text} />
+			<TextInput block bind:value={$newsletterEditingStore.form_footer_text} />
 		</SplitControl>
 
 		<SplitControl
@@ -48,7 +48,7 @@
 		>
 			<TextInput
 				block
-				bind:value={$projectEditingStore.form_button_text}
+				bind:value={$newsletterEditingStore.form_button_text}
 				placeholder="Subscribe"
 			/>
 		</SplitControl>
@@ -58,7 +58,7 @@
 		>
 			<TextInput
 				block
-				bind:value={$projectEditingStore.form_success_message}
+				bind:value={$newsletterEditingStore.form_success_message}
 				placeholder="Thank you for subscribing!"
 			/>
 		</SplitControl>
@@ -77,10 +77,10 @@
 </SplitControl>
 
 <SplitControl label={i18n.t('console.settings.form.customCss')} column>
-	<Textarea bind:value={$projectEditingStore.form_custom_css} block />
+	<Textarea bind:value={$newsletterEditingStore.form_custom_css} block />
 </SplitControl>
 
-<ProjectSaveDiscard
+<NewsletterSaveDiscard
 	keys={[
 		'form_title',
 		'form_description',

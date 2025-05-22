@@ -27,7 +27,7 @@ class ConsoleController extends AbstractController
     use HasHyvorUser;
 
     public function __construct(
-        private NewsletterService $projectService,
+        private NewsletterService $newsletterService,
         private ListRepository $listRepository,
         private InternalConfig $internalConfig,
         private SubscriberMetadataService $subscriberMetadataService,
@@ -40,14 +40,14 @@ class ConsoleController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof AuthUser);
 
-        $projectsUsers = $this->projectService->getProjectsOfUser($user->id);
-        $projects = array_map(
-            fn(array $pair) => new NewsletterListObject($pair['project'], $pair['user']),
-            $projectsUsers
+        $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);
+        $newsletters = array_map(
+            fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
+            $newslettersUsers
         );
 
         return new JsonResponse([
-            'projects' => $projects,
+            'newsletters' => $newsletters,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -58,28 +58,28 @@ class ConsoleController extends AbstractController
         ]);
     }
 
-    #[Route('/init/project', methods: 'GET')]
-    public function initProject(Newsletter $project): JsonResponse
+    #[Route('/init/newsletter', methods: 'GET')]
+    public function initNewsletter(Newsletter $newsletter): JsonResponse
     {
-        $projectStats = $this->projectService->getProjectStats($project);
+        $newsletterStats = $this->newsletterService->getnewsletterStats($newsletter);
         $lists = $this->listRepository->findBy(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'deleted_at' => null,
             ]
         );
 
-        $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($project);
+        $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
         return new JsonResponse([
-            'project' => new NewsletterObject($project),
+            'newsletter' => new NewsletterObject($newsletter),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
                 $subscriberMetadataDefinitions),
             'stats' => new StatsObject(
-                $projectStats[0],
-                $projectStats[1],
-                $projectStats[2]
+                $newsletterStats[0],
+                $newsletterStats[1],
+                $newsletterStats[2]
             )
         ]);
     }

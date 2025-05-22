@@ -40,16 +40,16 @@ class NewsletterResolver implements ValueResolverInterface
             return [];
         }
 
-        $projectId = $request->headers->get('X-Project-Id');
+        $projectId = $request->headers->get('X-Newsletter-Id');
 
         if (!$projectId) {
-            throw new BadRequestException('Missing X-Project-Id header');
+            throw new BadRequestException('Missing X-Newsletter-Id header');
         }
 
         $project = $this->projectRepository->find($projectId);
 
         if (!$project) {
-            throw new NotFoundHttpException('Project not found');
+            throw new NotFoundHttpException('Newsletter not found');
         }
 
         // TODO: enable this after auth fake

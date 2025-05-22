@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
-	import { projectStore } from '../../lib/stores/newsletterStore';
+	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 	import { getI18n } from '../../lib/i18n';
 
@@ -11,7 +11,7 @@
 
 	let { children }: Props = $props();
 
-	const prefix = `/console/${$projectStore.id}/tools`;
+	const prefix = `/console/${$newsletterStore.id}/tools`;
 	const I18n = getI18n();
 </script>
 

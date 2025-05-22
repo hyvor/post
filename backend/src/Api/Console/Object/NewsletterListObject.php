@@ -9,12 +9,12 @@ use App\Entity\User;
 class NewsletterListObject
 {
     public UserRole $role;
-    public NewsletterObject $project;
+    public NewsletterObject $newsletter;
 
-    public function __construct(Newsletter $project, User $user)
+    public function __construct(Newsletter $newsletter, User $user)
     {
         $this->role = $user->getRole();
-        $this->project = new NewsletterObject($project);
+        $this->newsletter = new NewsletterObject($newsletter);
     }
 
 }

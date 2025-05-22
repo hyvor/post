@@ -28,14 +28,14 @@
 <CodeBlock
 	code={`
     <hyvor-post-form
-        project="YOUR_PROJECT_UUID"
+        newsletter="YOUR_NEWSLETTER_UUID"
     ></hyvor-post-form>
 `}
 />
 
 <p>
-	Replace <code>YOUR_PROJECT_UUID</code> with your project UUID. You can find it at
-	<strong>Console &rarr; Settings &rarr; Project &rarr; Project UUID</strong>.
+	Replace <code>YOUR_NEWSLETTER_UUID</code> with your newsletter UUID. You can find it at
+	<strong>Console &rarr; Settings &rarr; Newsletter &rarr; Newsletter UUID</strong>.
 </p>
 
 <h2 id="attributes">Form Attributes</h2>

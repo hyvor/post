@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NewsletterResolver::class)
         ->tag(
             'controller.argument_value_resolver',
-            ['name' => 'console_api_project', 'priority' => 150]
+            ['name' => 'console_api_newsletter', 'priority' => 150]
         );
     $services->set(EntityResolver::class)
         ->tag(

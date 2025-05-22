@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { IconButton, toast, confirm } from '@hyvor/design/components';
-	import { listStore, projectStore } from '../../lib/stores/newsletterStore';
+	import { listStore, newsletterStore } from '../../lib/stores/newsletterStore';
 	import type { List } from '../../types';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteList, updateList } from '../../lib/actions/listActions';
@@ -77,7 +77,7 @@
 </script>
 
 <div class="list-item">
-	<a class="list-content" href={`/console/${$projectStore.id}/subscribers?list=${list.id}`}>
+	<a class="list-content" href={`/console/${$newsletterStore.id}/subscribers?list=${list.id}`}>
 		<div class="list-title">
 			{list.name || '(Untitled)'}
 			<div class="list-description">

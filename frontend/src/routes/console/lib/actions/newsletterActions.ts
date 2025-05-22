@@ -1,7 +1,7 @@
 import consoleApi from "../consoleApi";
 import type { Newsletter } from "../../types";
 
-export function createProject(name: string) {
+export function createNewsletter(name: string) {
     return consoleApi.post<Newsletter>({
         endpoint: 'newsletter',
         userApi: true,
@@ -11,16 +11,16 @@ export function createProject(name: string) {
     });
 }
 
-export function updateProject(
-    project: Omit<Newsletter, 'id' | 'created_at'>
+export function updateNewsletter(
+    newsletter: Omit<Newsletter, 'id' | 'created_at'>
 ) {
     return consoleApi.patch<Newsletter>({
         endpoint: 'newsletter',
-        data: project,
+        data: newsletter,
     });
 }
 
-export function deleteProject(project: Newsletter) {
+export function deleteNewsletter(newsletter: Newsletter) {
     return consoleApi.delete<Newsletter>({
         endpoint: 'newsletter'
     });

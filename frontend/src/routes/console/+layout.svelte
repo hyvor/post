@@ -14,7 +14,7 @@
 	import consoleApi from './lib/consoleApi';
 	import { page } from '$app/stores';
 	import { setAppConfig, getAppConfig } from './lib/stores/consoleStore';
-	import { projectRoleStore, projectStore } from './lib/stores/newsletterStore';
+	import { newsletterRoleStore, newsletterStore } from './lib/stores/newsletterStore';
 	import { userNewslettersStore } from './lib/stores/userNewslettersStore';
 
 	interface Props {
@@ -25,7 +25,7 @@
 
 	interface InitResponse {
 		config: AppConfig;
-		projects: NewsletterList[];
+		newsletters: NewsletterList[];
 	}
 
 	let isLoading = $state(true);
@@ -39,10 +39,10 @@
 			.then((res) => {
 				setAppConfig(res.config);
 
-				userNewslettersStore.set(res.projects);
-				if (res.projects.length != 0) {
-					projectStore.set(res.projects[0].project); // Set the first project as the active project
-					projectRoleStore.set(res.projects[0].role);
+				userNewslettersStore.set(res.newsletters);
+				if (res.newsletters.length != 0) {
+					newsletterStore.set(res.newsletters[0].newsletter); // Set the first newsletter as the active newsletter
+					newsletterRoleStore.set(res.newsletters[0].role);
 				}
 				isLoading = false;
 			})

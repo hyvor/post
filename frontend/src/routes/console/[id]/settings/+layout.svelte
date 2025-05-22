@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
-	import { projectStore } from '../../lib/stores/newsletterStore';
+	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
@@ -15,7 +15,7 @@
 
 	let { children }: Props = $props();
 
-	const prefix = `/console/${$projectStore.id}/settings`;
+	const prefix = `/console/${$newsletterStore.id}/settings`;
 </script>
 
 <div class="settings">
@@ -24,7 +24,7 @@
 			{#snippet start()}
 				<IconCardText />
 			{/snippet}
-			Project
+			Newsletter
 		</NavLink>
 
 		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>

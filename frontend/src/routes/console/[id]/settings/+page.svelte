@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { TextInput, SplitControl, Button, toast, confirm } from '@hyvor/design/components';
 	import SettingsBody from './@components/SettingsBody.svelte';
-	import ProjectSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
-	import { projectEditingStore, projectStore } from '../../lib/stores/newsletterStore';
+	import NewsletterSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
+	import { newsletterEditingStore, newsletterStore } from '../../lib/stores/newsletterStore';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
-	import { deleteProject } from '../../lib/actions/newsletterActions';
+	import { deleteNewsletter } from '../../lib/actions/newsletterActions';
 	import { getI18n } from '../../lib/i18n';
 
 	const I18n = getI18n();
@@ -14,9 +14,9 @@
 
 	async function onDelete() {
 		const confirmation = await confirm({
-			title: I18n.t('console.settings.project.delete'),
-			content: I18n.t('console.settings.project.deleteContent'),
-			confirmText: I18n.t('console.settings.project.delete'),
+			title: I18n.t('console.settings.newsletter.delete'),
+			content: I18n.t('console.settings.newsletter.deleteContent'),
+			confirmText: I18n.t('console.settings.newsletter.delete'),
 			cancelText: I18n.t('console.common.cancel'),
 			danger: true
 		});
@@ -25,9 +25,9 @@
 		confirmation.loading();
 		deleting = true;
 
-		deleteProject(get(projectStore))
+		deleteNewsletter(get(newsletterStore))
 			.then(() => {
-				toast.success(I18n.t('console.settings.project.deleted'));
+				toast.success(I18n.t('console.settings.newsletter.deleted'));
 				goto('/');
 			})
 			.catch((e) => {
@@ -40,11 +40,11 @@
 	}
 
 	function copyUuid() {
-		const uuid = $projectStore.uuid;
+		const uuid = $newsletterStore.uuid;
 		navigator.clipboard.writeText(uuid).then(() => {
 			toast.success(
 				I18n.t('console.common.copied', {
-					value: I18n.t('console.settings.project.uuid')
+					value: I18n.t('console.settings.newsletter.uuid')
 				})
 			);
 		});
@@ -52,38 +52,38 @@
 </script>
 
 <SettingsBody>
-	<SplitControl label={I18n.t('console.settings.project.name')}>
-		<TextInput block bind:value={$projectEditingStore.name} />
+	<SplitControl label={I18n.t('console.settings.newsletter.name')}>
+		<TextInput block bind:value={$newsletterEditingStore.name} />
 	</SplitControl>
 
 	<SplitControl
-		label={I18n.t('console.settings.project.uuid')}
-		caption={I18n.t('console.settings.project.uuidCaption')}
+		label={I18n.t('console.settings.newsletter.uuid')}
+		caption={I18n.t('console.settings.newsletter.uuidCaption')}
 	>
-		<div class="project-uuid-row">
-			<TextInput block readonly bind:value={$projectStore.uuid} />
+		<div class="newsletter-uuid-row">
+			<TextInput block readonly bind:value={$newsletterStore.uuid} />
 		</div>
 		<Button size="small" color="input" on:click={copyUuid}>
 			{I18n.t('console.common.copy')}
 		</Button>
 	</SplitControl>
 
-	<SplitControl label={I18n.t('console.settings.project.delete')}>
+	<SplitControl label={I18n.t('console.settings.newsletter.delete')}>
 		<Button color="red" on:click={onDelete} loading={deleting}>
-			{I18n.t('console.settings.project.delete')}
+			{I18n.t('console.settings.newsletter.delete')}
 		</Button>
 	</SplitControl>
 </SettingsBody>
 
-<ProjectSaveDiscard keys={['name']} />
+<NewsletterSaveDiscard keys={['name']} />
 
 <style>
-	.project-uuid-row {
+	.newsletter-uuid-row {
 		display: flex;
 		align-items: center;
 		gap: 10px;
 	}
-	.project-uuid-row {
+	.newsletter-uuid-row {
 		margin-bottom: 6px;
 	}
 </style>

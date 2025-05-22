@@ -12,7 +12,7 @@
 		toast
 	} from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
-	import { issueStore, listStore, projectStore } from '../../../../lib/stores/newsletterStore';
+	import { issueStore, listStore, newsletterStore } from '../../../../lib/stores/newsletterStore';
 	import { sendIssue, sendIssueTest, updateIssue } from '../../../../lib/actions/issueActions';
 	import { debounce } from '../../../../../../lib/helpers/debounce';
 	import { EMAIL_REGEX } from '../../../../lib/regex';
@@ -54,7 +54,7 @@
 		getSendingAddresses()
 			.then((emails) => {
 				let emailList = emails.map((email) => email.email);
-				emailList = [$projectStore.default_email_username + '@hvrpst.com', ...emailList];
+				emailList = [$newsletterStore.default_email_username + '@hvrpst.com', ...emailList];
 				sendingEmails = emailList;
 
 				// Find the default sending address
@@ -248,7 +248,7 @@
 		<SplitControl label="From Name">
 			<TextInput
 				block
-				placeholder={$projectStore.name}
+				placeholder={$newsletterStore.name}
 				bind:value={fromName}
 				on:input={debouncedUpdate}
 				on:blur={debouncedUpdate}
@@ -277,18 +277,6 @@
 					>Manage Sending Emails</Button
 				>
 			</div>
-			<!--
-		TODO: Implement custom email domain
-		<div style="font-size:14px;margin-top:5px;">
-			{#if $emailDomain && $emailDomain.verified && $emailDomain.verified_in_ses}
-				<ConfigureSendingAddresses on:update={updateSendingAddresses} />
-			{:else}
-				<Link href={consoleUrlWithProject('/settings/notifications')}
-					>Configure a custom email domain</Link
-				> to send email from your own domain.
-			{/if}
-		</div>
-		-->
 		</SplitControl>
 
 		<SplitControl

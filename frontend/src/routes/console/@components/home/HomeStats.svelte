@@ -2,7 +2,7 @@
 	import { Button, Loader } from '@hyvor/design/components';
 	import type { NewsletterStats } from '../../types';
 	import Stat from './Stat.svelte';
-	import { projectStatsStore, projectStore } from '../../lib/stores/newsletterStore';
+	import { newsletterStatsStore, newsletterStore } from '../../lib/stores/newsletterStore';
 
 	let loading = false;
 </script>
@@ -14,18 +14,18 @@
 		<div class="stats">
 			<Stat
 				title="Subscribers"
-				counts={$projectStatsStore.subscribers}
-				href={`/console/${$projectStore.id}/subscribers`}
+				counts={$newsletterStatsStore.subscribers}
+				href={`/console/${$newsletterStore.id}/subscribers`}
 			/>
 			<Stat
 				title="Issues"
-				counts={$projectStatsStore.issues}
-				href={`/console/${$projectStore.id}/issues`}
+				counts={$newsletterStatsStore.issues}
+				href={`/console/${$newsletterStore.id}/issues`}
 			/>
 			<Stat
 				title="Lists"
-				counts={$projectStatsStore.lists}
-				href={`/console/${$projectStore.id}`}
+				counts={$newsletterStatsStore.lists}
+				href={`/console/${$newsletterStore.id}`}
 			/>
 		</div>
 	{/if}

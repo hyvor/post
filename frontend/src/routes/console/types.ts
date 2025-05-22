@@ -101,7 +101,7 @@ export type Invite = {
 
 export type NewsletterList = {
 	role: UserRole;
-	project: Newsletter;
+	newsletter: Newsletter;
 };
 
 export type Newsletter = {

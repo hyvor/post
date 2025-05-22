@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		if ($userNewslettersStore.length > 0) {
-			goto(consoleUrl($userNewslettersStore[0]!.project.id.toString()), {
+			goto(consoleUrl($userNewslettersStore[0]!.newsletter.id.toString()), {
 				replaceState: true
 			});
 		} else {

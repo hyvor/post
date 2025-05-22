@@ -7,27 +7,27 @@
 	import IconGear from '@hyvor/icons/IconGear';
 	import IconTools from '@hyvor/icons/IconTools';
 	import NavItem from './NavItem.svelte';
-	import { projectStore } from '../../lib/stores/newsletterStore';
+	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import { page } from '$app/state';
 	import { getI18n } from '../../lib/i18n';
-	import { selectingProject } from '../../lib/stores/consoleStore';
+	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 
 	let width: number;
 
 	const I18n = getI18n();
 
-	function triggerProjectSelector() {
-		selectingProject.set(true);
+	function triggerNewsletterSelector() {
+		selectingNewsletter.set(true);
 	}
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 <div class="wrap hds-box">
-	<button class="current" on:click={triggerProjectSelector}>
+	<button class="current" on:click={triggerNewsletterSelector}>
 		<div class="left">
 			<div class="name">
-				{$projectStore.name}
+				{$newsletterStore.name}
 			</div>
 		</div>
 		<IconChevronExpand />
@@ -35,8 +35,8 @@
 
 	<div class="nav-links">
 		<NavLink
-			href={'/console/' + $projectStore.id.toString()}
-			active={page.url.pathname === `/console/${$projectStore.id}`}
+			href={'/console/' + $newsletterStore.id.toString()}
+			active={page.url.pathname === `/console/${$newsletterStore.id}`}
 		>
 			<NavItem>
 				<IconHouse slot="icon" />
@@ -45,8 +45,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + $projectStore.id.toString() + '/subscribers'}
-			active={page.url.pathname === `/console/${$projectStore.id}/subscribers`}
+			href={'/console/' + $newsletterStore.id.toString() + '/subscribers'}
+			active={page.url.pathname === `/console/${$newsletterStore.id}/subscribers`}
 		>
 			<NavItem>
 				<IconPeople slot="icon" />
@@ -55,8 +55,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + $projectStore.id.toString() + '/issues'}
-			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/issues`)}
+			href={'/console/' + $newsletterStore.id.toString() + '/issues'}
+			active={page.url.pathname.startsWith(`/console/${$newsletterStore.id}/issues`)}
 		>
 			<NavItem>
 				<IconSend slot="icon" />
@@ -67,8 +67,8 @@
 		<Divider margin={15} />
 
 		<NavLink
-			href={'/console/' + $projectStore.id.toString() + '/tools'}
-			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/tools`)}
+			href={'/console/' + $newsletterStore.id.toString() + '/tools'}
+			active={page.url.pathname.startsWith(`/console/${$newsletterStore.id}/tools`)}
 		>
 			<NavItem>
 				<IconTools slot="icon" />
@@ -77,8 +77,8 @@
 		</NavLink>
 
 		<NavLink
-			href={'/console/' + $projectStore.id.toString() + '/settings'}
-			active={page.url.pathname.startsWith(`/console/${$projectStore.id}/settings`)}
+			href={'/console/' + $newsletterStore.id.toString() + '/settings'}
+			active={page.url.pathname.startsWith(`/console/${$newsletterStore.id}/settings`)}
 		>
 			<NavItem>
 				<IconGear slot="icon" />

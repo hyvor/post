@@ -4,7 +4,7 @@
 	import { Button, IconMessage, Loader, confirm, toast } from '@hyvor/design/components';
 	import IssueStatusTag from '../IssueStatusTag.svelte';
 	import { goto } from '$app/navigation';
-	import { consoleUrlWithProject } from '../../../lib/consoleUrl';
+	import { consoleUrlWithNewsletter } from '../../../lib/consoleUrl';
 	import { issueStore } from '../../../lib/stores/newsletterStore';
 	import type { Issue } from '../../../types';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
@@ -37,7 +37,7 @@
 				.then(() => {
 					$issueStore = $issueStore.filter((i) => i.id !== id);
 					toast.success('Issue deleted successfully');
-					goto(consoleUrlWithProject('/issues'));
+					goto(consoleUrlWithNewsletter('/issues'));
 				})
 				.catch((err) => {
 					toast.error(err.message);
@@ -86,7 +86,7 @@
 						size="small"
 						color="input"
 						as="a"
-						href={consoleUrlWithProject('/issues')}
+						href={consoleUrlWithNewsletter('/issues')}
 					>
 						{#snippet start()}
 							<IconCaretLeft size={12} />

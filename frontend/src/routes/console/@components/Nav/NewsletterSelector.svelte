@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Button, Modal } from '@hyvor/design/components';
-	import { selectingProject } from '../../lib/stores/consoleStore';
+	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 	import IconPlus from '@hyvor/icons/IconPlus';
 	import NewsletterList from './NewsletterList.svelte';
 </script>
 
-{#if $selectingProject}
-	<Modal size="large" bind:show={$selectingProject}>
+{#if $selectingNewsletter}
+	<Modal size="large" bind:show={$selectingNewsletter}>
 		{#snippet title()}
-			<span class="title">Choose a project </span>
-			<Button as="a" href="/console/new" on:click={() => selectingProject.set(false)}>
-				Create new project
+			<span class="title">Choose a newsletter </span>
+			<Button as="a" href="/console/new" on:click={() => selectingNewsletter.set(false)}>
+				Create new newsletter
 				{#snippet end()}
 					<IconPlus size={12} />
 				{/snippet}
