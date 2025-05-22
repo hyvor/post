@@ -25,7 +25,7 @@ final class SubscriberMetadataDefinitionFactory extends PersistentProxyObjectFac
     protected function defaults(): array
     {
         return [
-            'project' => NewsletterFactory::new(),
+            'newsletter' => NewsletterFactory::new(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'key' => self::faker()->text(255),

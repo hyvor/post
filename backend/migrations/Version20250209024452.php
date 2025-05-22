@@ -32,7 +32,7 @@ final class Version20250209024452 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             uuid TEXT UNIQUE NOT NULL,
-            project_id BIGINT NOT NULL references projects(id) ON DELETE CASCADE,
+            newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             subject VARCHAR(255),
             from_name VARCHAR(255),
             from_email TEXT NOT NULL,

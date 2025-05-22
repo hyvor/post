@@ -29,7 +29,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    public function getSubscribers(Request $request, Newsletter $project): JsonResponse
+    public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -52,7 +52,7 @@ class SubscriberController extends AbstractController
         $subscribers = $this
             ->subscriberService
             ->getSubscribers(
-                $project,
+                $newsletter,
                 $status,
                 $list_id,
                 $search,
@@ -65,17 +65,19 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
-    public function createSubscriber(#[MapRequestPayload] CreateSubscriberInput $input, Newsletter $project): JsonResponse
-    {
+    public function createSubscriber(
+        #[MapRequestPayload] CreateSubscriberInput $input,
+        Newsletter $newsletter
+    ): JsonResponse {
         $missingListIds = $this
             ->newsletterListService
-            ->getMissingListIdsOfProject($project, $input->list_ids);
+            ->getMissingListIdsOfNewsletter($newsletter, $input->list_ids);
 
         if ($missingListIds !== null) {
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
-        $subscriberDB = $this->subscriberService->getSubscriberByEmail($project, $input->email);
+        $subscriberDB = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
         if ($subscriberDB !== null) {
             throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
         }
@@ -83,7 +85,7 @@ class SubscriberController extends AbstractController
         $lists = $this->newsletterListService->getListsByIds($input->list_ids);
 
         $subscriber = $this->subscriberService->createSubscriber(
-            $project,
+            $newsletter,
             $input->email,
             $lists,
             $input->status ?? SubscriberStatus::SUBSCRIBED,
@@ -99,13 +101,13 @@ class SubscriberController extends AbstractController
     #[Route('/subscribers/{id}', methods: 'PATCH')]
     public function updateSubscriber(
         Subscriber $subscriber,
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] UpdateSubscriberInput $input
     ): JsonResponse {
         $updates = new UpdateSubscriberDto();
 
         if ($input->hasProperty('email')) {
-            $subscriberDB = $this->subscriberService->getSubscriberByEmail($project, $input->email);
+            $subscriberDB = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
             if ($subscriberDB !== null) {
                 throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
             }
@@ -114,7 +116,10 @@ class SubscriberController extends AbstractController
         }
 
         if ($input->hasProperty('list_ids')) {
-            $missingListIds = $this->newsletterListService->getMissingListIdsOfProject($project, $input->list_ids);
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
+                $newsletter,
+                $input->list_ids
+            );
 
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");

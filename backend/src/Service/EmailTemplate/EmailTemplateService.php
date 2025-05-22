@@ -19,17 +19,17 @@ class EmailTemplateService
     ) {
     }
 
-    public function getTemplate(Newsletter $project): ?Template
+    public function getTemplate(Newsletter $newsletter): ?Template
     {
         return $this->em->getRepository(Template::class)->findOneBy([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
     }
 
-    public function createTemplate(Newsletter $project, string $template): Template
+    public function createTemplate(Newsletter $newsletter, string $template): Template
     {
         $templateEntity = new Template()
-            ->setProject($project)
+            ->setNewsletter($newsletter)
             ->setTemplate($template)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable());
@@ -40,9 +40,9 @@ class EmailTemplateService
         return $templateEntity;
     }
 
-    public function getTemplateStringFromProject(Newsletter $project): string
+    public function getTemplateStringFromNewsletter(Newsletter $newsletter): string
     {
-        $template = $this->getTemplate($project);
+        $template = $this->getTemplate($newsletter);
 
         if ($template) {
             return $template->getTemplate();

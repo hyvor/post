@@ -23,34 +23,34 @@ class SubscriberMetadataService
     /**
      * @return SubscriberMetadataDefinition[]
      */
-    public function getMetadataDefinitions(Newsletter $project): array
+    public function getMetadataDefinitions(Newsletter $newsletter): array
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->findBy(['project' => $project]);
+            ->findBy(['newsletter' => $newsletter]);
     }
 
-    public function getMetadataDefinitionByKey(Newsletter $project, string $key): ?SubscriberMetadataDefinition
+    public function getMetadataDefinitionByKey(Newsletter $newsletter, string $key): ?SubscriberMetadataDefinition
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->findOneBy(['project' => $project, 'key' => $key]);
+            ->findOneBy(['newsletter' => $newsletter, 'key' => $key]);
     }
 
-    public function getMetadataDefinitionsCount(Newsletter $project): int
+    public function getMetadataDefinitionsCount(Newsletter $newsletter): int
     {
         return $this->entityManager
             ->getRepository(SubscriberMetadataDefinition::class)
-            ->count(['project' => $project]);
+            ->count(['newsletter' => $newsletter]);
     }
 
     public function createMetadataDefinition(
-        Newsletter $project,
+        Newsletter $newsletter,
         string $key,
         string $name,
     ): SubscriberMetadataDefinition {
         $metadataDefinition = new SubscriberMetadataDefinition();
-        $metadataDefinition->setProject($project);
+        $metadataDefinition->setNewsletter($newsletter);
         $metadataDefinition->setKey($key);
         $metadataDefinition->setName($name);
         $metadataDefinition->setType(SubscriberMetadataDefinitionType::TEXT);

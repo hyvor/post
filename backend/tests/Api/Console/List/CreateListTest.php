@@ -20,10 +20,10 @@ class CreateListTest extends WebTestCase
 
     public function testCreateNewsLetterListValid(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/lists',
             [
@@ -45,17 +45,18 @@ class CreateListTest extends WebTestCase
         $this->assertSame('Valid List Description', $list->getDescription());
     }
 
-    public function testCreateProjectInvalid(): void
+    public function testCreateNewsletterInvalid(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $long_string = str_repeat('a', 256);
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/lists',
             [
-                'name' => $long_string, 'project_id' => $project->getId()
+                'name' => $long_string,
+                'newsletter_id' => $newsletter->getId()
             ]
         );
 
@@ -64,14 +65,14 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_trigger_limit(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $lists = NewsletterListFactory::createMany(50, [
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/lists',
             [
@@ -87,15 +88,15 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_name_already_exists(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         NewsletterListFactory::createOne([
             'name' => 'Valid List Name',
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/lists',
             [
@@ -111,10 +112,10 @@ class CreateListTest extends WebTestCase
 
     public function test_create_list_name_with_comma(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/lists',
             [

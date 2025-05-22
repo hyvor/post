@@ -24,44 +24,45 @@ class CreateNewsletterTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testCreateProjectValid(): void
+    public function testCreateNewsletterValid(): void
     {
         $response = $this->consoleApi(
             null,
             'POST',
-            '/projects',
+            '/newsletters',
             [
-                'name' => 'Valid Project Name'
+                'name' => 'Valid Newsletter Name'
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
 
         $json = $this->getJson();
-        $projectId = $json['id'];
-        $this->assertIsInt($projectId);
+        $newsletterId = $json['id'];
+        $this->assertIsInt($newsletterId);
 
         $repository = $this->em->getRepository(Newsletter::class);
-        $project = $repository->find($projectId);
-        $this->assertNotNull($project);
-        $this->assertSame('Valid Project Name', $project->getName());
+        $newsletter = $repository->find($newsletterId);
+        $this->assertNotNull($newsletter);
+        $this->assertSame('Valid Newsletter Name', $newsletter->getName());
 
         $listRepository = $this->em->getRepository(NewsletterList::class);
-        $lists = $listRepository->findBy(['project' => $project]);
+        $lists = $listRepository->findBy(['newsletter' => $newsletter]);
         $this->assertCount(1, $lists);
 
         $userRepository = $this->em->getRepository(User::class);
-        $users = $userRepository->findBy(['project' => $project]);
+        $users = $userRepository->findBy(['newsletter' => $newsletter]);
         $this->assertSame(UserRole::OWNER, $users[0]->getRole());
         $this->assertCount(1, $users);
     }
 
-    public function testCreateProjectInvalid(): void
+    public function testCreateNewsletterInvalid(): void
     {
         $long_string = str_repeat('a', 256);
         $response = $this->consoleApi(
             null,
-            'POST', '/projects',
+            'POST',
+            '/newsletters',
             [
                 'name' => $long_string
             ]

@@ -26,15 +26,15 @@ class UpdateIssueTest extends WebTestCase
 
     public function testUpdateIssueAllFields(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $issue = IssueFactory::createOne(['project' => $project, 'list_ids' => [$list1->getId()]]);
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter, 'list_ids' => [$list1->getId()]]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/issues/' . $issue->getId(),
             [
@@ -69,15 +69,15 @@ class UpdateIssueTest extends WebTestCase
 
     public function testCreateIssueWithInvalidList(): void
     {
-        $project1 = NewsletterFactory::createOne();
-        $project2 = NewsletterFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project1]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter1]);
 
-        $issue = IssueFactory::createOne(['project' => $project2]);
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter2]);
 
         $response = $this->consoleApi(
-            $project2,
+            $newsletter2,
             'PATCH',
             '/issues/' . $issue->getId(),
             [
@@ -91,15 +91,15 @@ class UpdateIssueTest extends WebTestCase
     }
 
 
-    public function testUpdateIssueWrongProject(): void
+    public function testUpdateIssueWrongNewsletter(): void
     {
-        $project1 = NewsletterFactory::createOne();
-        $project2 = NewsletterFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $issue = IssueFactory::createOne(['project' => $project1]);
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter1]);
 
         $response = $this->consoleApi(
-            $project2,
+            $newsletter2,
             'PATCH',
             '/issues/' . $issue->getId(),
             [
@@ -120,16 +120,15 @@ class UpdateIssueTest extends WebTestCase
     private function validateInput(
         callable $input,
         array $violations
-    ): void
-    {
-        $project = NewsletterFactory::createOne();
-        $issue = IssueFactory::createOne(['project' => $project]);
+    ): void {
+        $newsletter = NewsletterFactory::createOne();
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/issues/' . $issue->getId(),
-            $input($project),
+            $input($newsletter),
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
@@ -140,7 +139,7 @@ class UpdateIssueTest extends WebTestCase
     public function testInputValidationInvalidEmail(): void
     {
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'from_email' => 'not-email',
             ],
             [
@@ -155,7 +154,7 @@ class UpdateIssueTest extends WebTestCase
     public function testInputValidationEmailTooLong(): void
     {
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'from_email' => str_repeat('a', 256) . '@hyvor.com',
             ],
             [

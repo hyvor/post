@@ -23,40 +23,40 @@ class NewsletterController extends AbstractController
     use HasHyvorUser;
 
     public function __construct(
-        private NewsletterService $projectService
+        private NewsletterService $newsletterService
     ) {
     }
 
     #[Route('/newsletter', methods: 'POST')]
-    public function createProject(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
+    public function createNewsletter(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
     {
         $user = $this->getHyvorUser();
 
         $slugger = new AsciiSlugger();
-        while ($this->projectService->isUsernameTaken($slugger->slug($input->name))) {
+        while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
             $input->name .= ' ' . random_int(1, 100);
         }
 
-        $project = $this->projectService->createProject($user->id, $input->name);
-        return $this->json(new NewsletterObject($project));
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name);
+        return $this->json(new NewsletterObject($newsletter));
     }
 
-    #[Route('/newsletter', methods: 'GET', condition: 'request.headers.get("X-Project-Id") !== null')]
-    public function getProjectById(Newsletter $project): JsonResponse
+    #[Route('/newsletter', methods: 'GET', condition: 'request.headers.get("X-Newsletter-Id") !== null')]
+    public function getNewsletterById(Newsletter $newsletter): JsonResponse
     {
-        return $this->json(new NewsletterObject($project));
+        return $this->json(new NewsletterObject($newsletter));
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
-    public function deleteProject(Newsletter $project): JsonResponse
+    public function deleteNewsletter(Newsletter $newsletter): JsonResponse
     {
-        $this->projectService->deleteProject($project);
+        $this->newsletterService->deleteNewsletter($newsletter);
         return $this->json([]);
     }
 
     #[Route('/newsletter', methods: 'PATCH')]
-    public function updateProject(
-        Newsletter $project,
+    public function updateNewsletter(
+        Newsletter $newsletter,
         #[MapRequestPayload] UpdateNewsletterInput $input
     ): JsonResponse {
         $updates = new UpdateNewsletterDto();
@@ -64,12 +64,12 @@ class NewsletterController extends AbstractController
             $updates->name = $input->name;
         }
         if ($input->hasProperty('default_email_username')) {
-            if ($this->projectService->isUsernameTaken($input->default_email_username)) {
+            if ($this->newsletterService->isUsernameTaken($input->default_email_username)) {
                 throw new BadRequestHttpException("Username is already taken");
             }
             $updates->defaultEmailUsername = $input->default_email_username;
         }
-        $project = $this->projectService->updateProject($project, $updates);
+        $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();
         $properties = $input->getSetProperties();
@@ -78,8 +78,8 @@ class NewsletterController extends AbstractController
             $updatesMeta->{$cased} = $input->{$property};
         }
 
-        $project = $this->projectService->updateProjectMeta($project, $updatesMeta);
+        $newsletter = $this->newsletterService->updateNewsletterMeta($newsletter, $updatesMeta);
 
-        return $this->json(new NewsletterObject($project));
+        return $this->json(new NewsletterObject($newsletter));
     }
 }

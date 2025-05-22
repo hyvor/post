@@ -25,9 +25,9 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates', methods: 'GET')]
-    public function getProjectTemplate(Newsletter $project): JsonResponse
+    public function getNewsletterTemplate(Newsletter $newsletter): JsonResponse
     {
-        $template = $this->templateService->getTemplate($project);
+        $template = $this->templateService->getTemplate($newsletter);
 
         if (!$template) {
             // Load default template
@@ -41,29 +41,29 @@ class TemplateController extends AbstractController
 
     #[Route('/templates/update', methods: 'POST')]
     public function updateTemplate(
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input
     ): JsonResponse {
         $templateString = $input->template ?? $this->templateService->readDefaultTemplate();
 
-        $template = $this->templateService->getTemplate($project);
+        $template = $this->templateService->getTemplate($newsletter);
 
         if ($template) {
             $updates = new UpdateTemplateDto();
             $updates->template = $templateString;
             $template = $this->templateService->updateTemplate($template, $updates);
         } else {
-            $template = $this->templateService->createTemplate($project, $templateString);
+            $template = $this->templateService->createTemplate($newsletter, $templateString);
         }
         return $this->json(new TemplateObject($template));
     }
 
     #[Route('/templates/render', methods: 'POST')]
     public function renderTemplate(
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input
     ): JsonResponse {
-        $meta = $project->getMeta();
+        $meta = $newsletter->getMeta();
 
         $variables = new EmailTemplateVariables(
             lang: 'en',

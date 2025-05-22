@@ -48,7 +48,7 @@ class ServiceMediaTest extends WebTestCase
 
     public function test_when_private(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $media = MediaFactory::createOne([
             'is_private' => true,
             'extension' => 'txt',
@@ -67,7 +67,7 @@ class ServiceMediaTest extends WebTestCase
     public function test_serves_media(): void
     {
         $uuid = Uuid::v4();
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $filesystem = $this->container->get(Filesystem::class);
         assert($filesystem instanceof Filesystem);
@@ -77,7 +77,7 @@ class ServiceMediaTest extends WebTestCase
 
         $content = 'Hello World';
         $media = MediaFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'uuid' => $uuid,
             'extension' => 'txt',
             'size' => strlen($content),

@@ -33,7 +33,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'project' => NewsletterFactory::new(),
+            'newsletter' => NewsletterFactory::new(),
             'content' => (string)json_encode([
                 'type' => 'doc',
                 'content' => [

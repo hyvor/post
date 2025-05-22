@@ -27,18 +27,18 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberMinimal(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscribers',
             [
                 'email' => 'test@email.com',
-                'list_ids'=> [$list1->getId(), $list2->getId()]
+                'list_ids' => [$list1->getId(), $list2->getId()]
             ]
         );
 
@@ -63,19 +63,19 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberWithAllInputs(): void
     {
-        $project = NewsletterFactory::createOne();
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscribedAt = new \DateTimeImmutable('2021-08-27 12:00:00');
         $unsubscribedAt = new \DateTimeImmutable('2021-08-29 12:00:00');
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscribers',
             [
                 'email' => 'supun@hyvor.com',
-                'list_ids'=> [$list->getId()],
+                'list_ids' => [$list->getId()],
                 'status' => 'unsubscribed',
                 'source' => 'form',
                 'subscribe_ip' => '79.255.1.1',
@@ -104,13 +104,12 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('79.255.1.1', $subscriber->getSubscribeIp());
         $this->assertSame('2021-08-27 12:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-29 12:00:00', $subscriber->getUnsubscribedAt()?->format('Y-m-d H:i:s'));
-
     }
 
     public function testInputValidationEmptyEmailAndListIds(): void
     {
         $this->validateInput(
-            fn (Newsletter $project) => [],
+            fn(Newsletter $newsletter) => [],
             [
                 [
                     'property' => 'email',
@@ -127,7 +126,7 @@ class CreateSubscriberTest extends WebTestCase
     public function testInputValidationInvalidEmailAndListIds(): void
     {
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'email' => 'not-email',
                 'list_ids' => [
                     null,
@@ -154,9 +153,8 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testInputValidationEmailTooLong(): void
     {
-
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'email' => str_repeat('a', 256) . '@hyvor.com',
                 'list_ids' => [1],
             ],
@@ -167,14 +165,12 @@ class CreateSubscriberTest extends WebTestCase
                 ],
             ]
         );
-
     }
 
     public function testInputValidationOptionalValues(): void
     {
-
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
                 'status' => 'invalid-status',
@@ -202,18 +198,17 @@ class CreateSubscriberTest extends WebTestCase
                 ],
             ]
         );
-
     }
 
     #[TestWith(['not a valid ip'])]
     #[TestWith(['127.0.0.1'])] // private ip
     #[TestWith(['::1'])] // localhost
     #[TestWith(['169.254.255.255'])] // reserved ip
-    public function testValidatesIp(string $ip): void
-    {
-
+    public function testValidatesIp(
+        string $ip
+    ): void {
         $this->validateInput(
-            fn (Newsletter $project) => [
+            fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
                 'subscribe_ip' => $ip,
@@ -225,7 +220,6 @@ class CreateSubscriberTest extends WebTestCase
                 ],
             ]
         );
-
     }
 
     /**
@@ -236,15 +230,14 @@ class CreateSubscriberTest extends WebTestCase
     private function validateInput(
         callable $input,
         array $violations
-    ): void
-    {
-        $project = NewsletterFactory::createOne();
+    ): void {
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscribers',
-            $input($project),
+            $input($newsletter),
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -255,18 +248,18 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberInvalidList(): void
     {
-        $project1 = NewsletterFactory::createOne();
-        $project2 = NewsletterFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $newsletterList1 = NewsletterListFactory::createOne(['project' => $project2]);
+        $newsletterList1 = NewsletterListFactory::createOne(['newsletter' => $newsletter2]);
 
         $response = $this->consoleApi(
-            $project1,
+            $newsletter1,
             'POST',
             '/subscribers',
             [
                 'email' => 'supun@hyvor.com',
-                'list_ids'=> [$newsletterList1->getId()]
+                'list_ids' => [$newsletterList1->getId()]
             ]
         );
 
@@ -276,28 +269,31 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberDuplicateEmail(): void
     {
-        $project = NewsletterFactory::createOne();
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $subscriber = SubscriberFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'email' => 'thibault@hyvor.com',
                 'lists' => [$list],
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscribers',
             [
                 'email' => 'thibault@hyvor.com',
-                'list_ids'=> [$list->getId()],
+                'list_ids' => [$list->getId()],
             ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this ->assertSame('Subscriber with email ' . $subscriber->getEmail() . ' already exists', $this->getJson()['message']);
+        $this->assertSame(
+            'Subscriber with email ' . $subscriber->getEmail() . ' already exists',
+            $this->getJson()['message']
+        );
     }
 
 }

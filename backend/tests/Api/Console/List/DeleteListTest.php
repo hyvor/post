@@ -25,17 +25,17 @@ class DeleteListTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne([
-            'project' => $project
+            'newsletter' => $newsletter
         ]);
 
         $newsletterListId = $newsletterList->getId();
 
         $response = $this->consoleApi(
-            $project,
-        'DELETE',
+            $newsletter,
+            'DELETE',
             '/lists/' . $newsletterList->getId()
         );
 
@@ -57,10 +57,10 @@ class DeleteListTest extends WebTestCase
 
     public function testDeleteNewsletterListNotFound(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/lists/1'
         );
@@ -72,7 +72,6 @@ class DeleteListTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertSame('Entity not found', $data['message']);
-
     }
 
 }

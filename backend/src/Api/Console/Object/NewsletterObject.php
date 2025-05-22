@@ -59,15 +59,15 @@ class NewsletterObject
     public ?string $form_dark_input_border;
     public ?int $form_dark_border_radius;
 
-    public function __construct(Newsletter $project)
+    public function __construct(Newsletter $newsletter)
     {
-        $this->id = $project->getId();
-        $this->uuid = $project->getUuid();
-        $this->created_at = $project->getCreatedAt()->getTimestamp();
-        $this->name = $project->getName();
-        $this->default_email_username = $project->getDefaultEmailUsername();
+        $this->id = $newsletter->getId();
+        $this->uuid = $newsletter->getUuid();
+        $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
+        $this->name = $newsletter->getName();
+        $this->default_email_username = $newsletter->getDefaultEmailUsername();
 
-        $meta = $project->getMeta();
+        $meta = $newsletter->getMeta();
         $this->template_color_accent = $meta->template_color_accent;
         $this->template_color_background = $meta->template_color_background;
         $this->template_color_box_background = $meta->template_color_box_background;

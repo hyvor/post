@@ -17,7 +17,7 @@ class NewsletterRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return Project[] Returns an array of Project objects
+    //     * @return Newsletter[] Returns an array of Newsletter objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class NewsletterRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Project
+    //    public function findOneBySomeField($value): ?Newsletter
     //    {
     //        return $this->createQueryBuilder('p')
     //            ->andWhere('p.exampleField = :val')

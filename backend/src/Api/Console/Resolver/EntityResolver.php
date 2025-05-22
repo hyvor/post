@@ -35,7 +35,7 @@ class EntityResolver implements ValueResolverInterface
 
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterResolver $projectResolver,
+        private NewsletterResolver $newsletterResolver,
     ) {
     }
 
@@ -89,19 +89,19 @@ class EntityResolver implements ValueResolverInterface
             throw new NotFoundHttpException('Entity not found');
         }
 
-        $projectOfEntity = $entity->getProject();
+        $newsletterOfEntity = $entity->getNewsletter();
 
         $argumentMetadata = new ArgumentMetadata(
-            'project',
+            'newsletter',
             Newsletter::class,
             false,
             false,
             null,
             controllerName: $controllerName
         );
-        $currentProject = (array)$this->projectResolver->resolve($request, $argumentMetadata);
-        if ($projectOfEntity->getId() !== $currentProject[0]->getId()) {
-            throw new AccessDeniedHttpException('Entity does not belong to the project');
+        $currentNewsletter = (array)$this->newsletterResolver->resolve($request, $argumentMetadata);
+        if ($newsletterOfEntity->getId() !== $currentNewsletter[0]->getId()) {
+            throw new AccessDeniedHttpException('Entity does not belong to the newsletter');
         }
 
         return [$entity];

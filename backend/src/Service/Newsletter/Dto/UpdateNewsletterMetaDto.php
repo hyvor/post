@@ -5,7 +5,7 @@ namespace App\Service\Newsletter\Dto;
 use App\Util\OptionalPropertyTrait;
 
 /**
- * compared to ProjectMeta, this is camelCase and does not have default values
+ * compared to NewsletterMeta, this is camelCase and does not have default values
  */
 class UpdateNewsletterMetaDto
 {

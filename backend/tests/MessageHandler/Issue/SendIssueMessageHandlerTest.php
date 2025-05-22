@@ -25,20 +25,20 @@ class SendIssueMessageHandlerTest extends KernelTestCase
 
     public function test_send_email(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscribers = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
         ]);

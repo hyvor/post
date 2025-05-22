@@ -36,7 +36,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'email' => self::faker()->email(),
-            'project' => NewsletterFactory::new(),
+            'newsletter' => NewsletterFactory::new(),
             'source' => self::faker()->randomElement(SubscriberSource::cases()),
             'source_id' => self::faker()->randomNumber(),
             'status' => self::faker()->randomElement(SubscriberStatus::cases()),
@@ -53,8 +53,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Subscriber $subscriber): void {})
-        ;
+        return $this// ->afterInstantiate(function(Subscriber $subscriber): void {})
+            ;
     }
 }

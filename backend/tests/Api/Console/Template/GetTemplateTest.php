@@ -19,10 +19,10 @@ class GetTemplateTest extends WebTestCase
 {
     public function test_get_default_template(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/templates',
         );
@@ -112,17 +112,17 @@ class GetTemplateTest extends WebTestCase
 
     public function test_get_custom_template(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'template' => 'MyCustomTemplate'
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/templates',
         );

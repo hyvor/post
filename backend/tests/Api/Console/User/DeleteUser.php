@@ -22,7 +22,7 @@ class DeleteUser extends WebTestCase
 {
     public function test_delete_user(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -32,13 +32,13 @@ class DeleteUser extends WebTestCase
 
         $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $userId = $user->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/users/' . $user->getId()
         );
@@ -51,7 +51,7 @@ class DeleteUser extends WebTestCase
 
     public function test_delete_user_not_found(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -61,13 +61,13 @@ class DeleteUser extends WebTestCase
 
         $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $userId = $user->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/users/' . ($user->getId() + 1)
         );

@@ -20,13 +20,13 @@ class GetIssueReportTest extends WebTestCase
 
     public function test_get_issue_report_basic(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'total_sends' => 1,
                 'ok_sends' => 1,
             ]
@@ -40,7 +40,7 @@ class GetIssueReportTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/report",
         );

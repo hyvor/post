@@ -22,7 +22,7 @@ class GetInvitesUserTest extends WebTestCase
 {
     public function test_get_project_invites(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -32,12 +32,12 @@ class GetInvitesUserTest extends WebTestCase
 
         $invite = UserInviteFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/invites'
         );

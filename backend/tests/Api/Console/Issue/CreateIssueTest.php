@@ -28,14 +28,14 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne([
+        $newsletter = NewsletterFactory::createOne([
             'default_email_username' => 'thibault'
         ]);
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/issues',
             []
@@ -55,7 +55,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
-        $this->assertSame($project->getId(), $issue->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
         $this->assertSame('thibault@hvrpst.com', $issue->getFromEmail());
     }
 
@@ -63,7 +63,7 @@ class CreateIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -75,15 +75,15 @@ class CreateIssueTest extends WebTestCase
 
         $sendingEmail = SendingAddressFactory::createOne([
             'email' => 'thibault@hyvor.com',
-            'project' => $project,
+            'newsletter' => $newsletter,
             'domain' => $domain,
             'is_default' => true
         ]);
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/issues',
             []
@@ -102,7 +102,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
-        $this->assertSame($project->getId(), $issue->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
         $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
     }
 }

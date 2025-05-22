@@ -21,7 +21,7 @@ class UploadMediaTest extends WebTestCase
 
     public function test_upload_invalid_file_when_importing(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $file = new UploadedFile(
             __DIR__ . '/upload_test.css',
@@ -29,7 +29,7 @@ class UploadMediaTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/media',
             files: [
@@ -58,9 +58,9 @@ class UploadMediaTest extends WebTestCase
             'large_test_file.jpg',
         );
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/media',
             files: [
@@ -85,9 +85,9 @@ class UploadMediaTest extends WebTestCase
             mimeType: "text/csv",
         );
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/media',
             files: [
@@ -116,7 +116,7 @@ class UploadMediaTest extends WebTestCase
 
         $entity = $this->em->getRepository(Media::class)->find($json['id']);
         $this->assertInstanceOf(Media::class, $entity);
-        $this->assertSame($project->getId(), $entity->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $entity->getNewsletter()->getId());
         $this->assertSame(MediaFolder::IMPORT, $entity->getFolder());
         $this->assertSame('csv', $entity->getExtension());
         $this->assertSame(135, $entity->getSize());
@@ -126,7 +126,7 @@ class UploadMediaTest extends WebTestCase
         assert($filesystem instanceof Filesystem);
 
         $read = $filesystem->read(
-            $project->getId() . '/' .
+            $newsletter->getId() . '/' .
             $entity->getFolder()->value . '/' .
             $entity->getUuid() . '.' . $entity->getExtension()
         );

@@ -19,13 +19,13 @@ class GetIssueProgressTest extends WebTestCase
 {
     public function test_issue_progress_pending(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'total_sends' => 1,
             ]
         );
@@ -38,7 +38,7 @@ class GetIssueProgressTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/progress",
         );
@@ -54,13 +54,13 @@ class GetIssueProgressTest extends WebTestCase
 
     public function test_issue_progress_success(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'total_sends' => 1,
                 'ok_sends' => 1,
             ]
@@ -74,7 +74,7 @@ class GetIssueProgressTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/progress",
         );

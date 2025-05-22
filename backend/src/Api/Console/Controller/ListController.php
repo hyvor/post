@@ -23,10 +23,10 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'GET')]
-    public function getNewsletterLists(Newsletter $project): JsonResponse
+    public function getNewsletterLists(Newsletter $newsletter): JsonResponse
     {
         $lists = $this->newsletterListService
-            ->getListsOfProject($project)
+            ->getListsOfNewsletter($newsletter)
             ->map(fn(NewsletterList $list) => new ListObject($list));
 
         return $this->json($lists);
@@ -34,25 +34,25 @@ class ListController extends AbstractController
 
     #[Route('/lists', methods: 'POST')]
     public function createNewsletterList(
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] CreateListInput $input
     ): JsonResponse {
-        $listCounter = $this->newsletterListService->getListCounter($project);
+        $listCounter = $this->newsletterListService->getListCounter($newsletter);
 
         if ($listCounter >= $this->newsletterListService::MAX_LIST_DEFINITIONS_PER_PROJECT) {
-            throw new BadRequestHttpException("You have reached the maximum number of lists for this project.");
+            throw new BadRequestHttpException("You have reached the maximum number of lists for this newsletter.");
         }
 
         if (str_contains($input->name, ',')) {
             throw new BadRequestHttpException("List name cannot contain a comma.");
         }
 
-        if (!$this->newsletterListService->isNameAvailable($project, $input->name)) {
+        if (!$this->newsletterListService->isNameAvailable($newsletter, $input->name)) {
             throw new BadRequestHttpException("List name already exists.");
         }
 
         $list = $this->newsletterListService->createNewsletterList(
-            $project,
+            $newsletter,
             $input->name,
             $input->description
         );

@@ -23,7 +23,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [
@@ -44,13 +44,13 @@ class UpdateSendingAddressTest extends WebTestCase
         $sendingEmail = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain1
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/sending-addresses/' . $sendingEmail->getId(),
             [
@@ -78,7 +78,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [
@@ -101,7 +101,7 @@ class UpdateSendingAddressTest extends WebTestCase
             [
                 'email' => 'thibault@hyvor.com',
                 'is_default' => true,
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain1
             ]
         );
@@ -110,13 +110,13 @@ class UpdateSendingAddressTest extends WebTestCase
             [
                 'email' => 'supun@hyvor.com',
                 'is_default' => false,
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain2
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/sending-addresses/' . $sendingEmail2->getId(),
             [

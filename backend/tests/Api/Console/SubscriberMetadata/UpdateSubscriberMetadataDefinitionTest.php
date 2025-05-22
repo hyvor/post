@@ -20,11 +20,11 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_updates_name(): void
     {
-        $project = NewsletterFactory::createOne();
-        $metadata = SubscriberMetadataDefinitionFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $metadata = SubscriberMetadataDefinitionFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/subscriber-metadata-definitions/' . $metadata->getId(),
             [
@@ -43,15 +43,15 @@ class UpdateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_update_other_project_entities(): void
     {
-        $project = NewsletterFactory::createOne();
-        $otherProject = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $otherProject,
+            'newsletter' => $otherNewsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/subscriber-metadata-definitions/' . $metadata->getId()
         );

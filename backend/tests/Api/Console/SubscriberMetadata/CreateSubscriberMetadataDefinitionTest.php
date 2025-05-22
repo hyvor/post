@@ -20,9 +20,9 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_key_cannot_be_blank(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscriber-metadata-definitions',
             [
@@ -37,9 +37,9 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_key_should_match_regex(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscriber-metadata-definitions',
             [
@@ -54,16 +54,16 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_create_when_key_exists(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'key' => 'test_key',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscriber-metadata-definitions',
             [
@@ -79,9 +79,9 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_creates_subscriber_metadata_definition(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscriber-metadata-definitions',
             [
@@ -99,20 +99,20 @@ class CreateSubscriberMetadataDefinitionTest extends WebTestCase
         $this->assertNotNull($entity);
         $this->assertSame('test_key', $entity->getKey());
         $this->assertSame('Test Name', $entity->getName());
-        $this->assertSame($project->getId(), $entity->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $entity->getNewsletter()->getId());
     }
 
     public function test_cannot_create_after_the_limit(): void
     {
         $limit = SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT;
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         SubscriberMetadataDefinitionFactory::createMany($limit, [
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/subscriber-metadata-definitions',
             [

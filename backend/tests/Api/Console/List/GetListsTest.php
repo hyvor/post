@@ -21,11 +21,11 @@ class GetListsTest extends WebTestCase
 
     public function testListNewsletterListNonEmpty(): void
     {
-        $project = NewsletterFactory::createOne();
-        $lists = NewsletterListFactory::createMany(10, ['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $lists = NewsletterListFactory::createMany(10, ['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/lists'
         );
@@ -41,16 +41,16 @@ class GetListsTest extends WebTestCase
         $this->assertSame(10, count($data));
     }
 
-    public function testNewsletterListMultipleProject(): void
+    public function testNewsletterListMultipleNewsletter(): void
     {
-        $project1 = NewsletterFactory::createOne();
-        $project2 = NewsletterFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $newsletterLists1 = NewsletterListFactory::createMany(10, ['project' => $project1]);
-        $newsletterLists2 = NewsletterListFactory::createMany(10, ['project' => $project2]);
+        $newsletterLists1 = NewsletterListFactory::createMany(10, ['newsletter' => $newsletter1]);
+        $newsletterLists2 = NewsletterListFactory::createMany(10, ['newsletter' => $newsletter2]);
 
         $response = $this->consoleApi(
-            $project1,
+            $newsletter1,
             'GET',
             '/lists'
         );

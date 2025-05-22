@@ -20,11 +20,11 @@ class GetListTest extends WebTestCase
 
     public function testGetSpecificList(): void
     {
-        $project = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/lists/' . $newsletterList->getId()
         );

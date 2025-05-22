@@ -12,10 +12,10 @@ class FormNewsletterObject
     public PaletteObject $palette_light;
     public PaletteObject $palette_dark;
 
-    public function __construct(Newsletter $project)
+    public function __construct(Newsletter $newsletter)
     {
-        $this->uuid = $project->getUuid();
-        $meta = $project->getMeta();
+        $this->uuid = $newsletter->getUuid();
+        $meta = $newsletter->getMeta();
         $this->form = new FormObject($meta);
 
         $this->palette_light = new PaletteObject($meta, 'light');

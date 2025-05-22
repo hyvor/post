@@ -33,7 +33,7 @@ class Newsletter
     #[ORM\Column(length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"projects_meta"}'])]
+    #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"newsletters_meta"}'])]
     private NewsletterMeta $meta;
 
     public function setId(int $id): static

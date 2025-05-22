@@ -21,7 +21,7 @@ class GetNewsletterUserTest extends WebTestCase
 {
     public function test_get_project_users(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -31,13 +31,13 @@ class GetNewsletterUserTest extends WebTestCase
         ]);
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::ADMIN
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             '/users'
         );

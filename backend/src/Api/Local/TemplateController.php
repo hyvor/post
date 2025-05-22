@@ -30,8 +30,8 @@ class TemplateController extends AbstractController
     #[Route('/template/basic', methods: 'GET')]
     public function basicTemplate(): Response
     {
-        $project = $this->em->getRepository(Newsletter::class)->find(1);
-        assert($project instanceof Newsletter);
+        $newsletter = $this->em->getRepository(Newsletter::class)->find(1);
+        assert($newsletter instanceof Newsletter);
 
         $subject = 'Introducing Hyvor Post';
         $content = (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');
@@ -39,7 +39,7 @@ class TemplateController extends AbstractController
         $json = $this->contentService->getJsonFromHtml($content);
         $content = $this->contentService->getHtmlFromJson($json);
 
-        $html = $this->renderer->renderFromSubjectAndContent($project, $subject, $content);
+        $html = $this->renderer->renderFromSubjectAndContent($newsletter, $subject, $content);
 
         return new Response($html);
     }

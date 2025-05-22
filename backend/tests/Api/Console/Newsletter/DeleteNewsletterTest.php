@@ -19,20 +19,21 @@ class DeleteNewsletterTest extends WebTestCase
 
     // TODO: tests for input validation (when the project is not found)
     // TODO: tests for authentication
-    public function testDeleteProjectFound(): void
+    public function testDeleteNewsletterFound(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
-        $project_id = $project->getId();
+        $newsletter_id = $newsletter->getId();
 
         $response = $this->consoleApi(
-            $project,
-            'DELETE', '/projects'
+            $newsletter,
+            'DELETE',
+            '/newsletters'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -45,16 +46,16 @@ class DeleteNewsletterTest extends WebTestCase
         $this->assertIsArray($data);
 
         $repository = $this->em->getRepository(Newsletter::class);
-        $find = $repository->find($project_id);
+        $find = $repository->find($newsletter_id);
         $this->assertNull($find);
     }
 
-    public function testDeleteProjectNotFound(): void
+    public function testDeleteNewsletterNotFound(): void
     {
         $response = $this->consoleApi(
             null,
             'DELETE',
-            '/projects'
+            '/newsletters'
         );
 
         $this->assertSame(400, $response->getStatusCode());

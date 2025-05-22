@@ -28,7 +28,7 @@ class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -38,7 +38,7 @@ class InviteUserTest extends WebTestCase
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/invites',
             [
@@ -59,9 +59,8 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email(): void
     {
-
         Clock::set(new MockClock('2025-05-10'));
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -71,7 +70,7 @@ class InviteUserTest extends WebTestCase
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/invites',
             [
@@ -92,14 +91,14 @@ class InviteUserTest extends WebTestCase
             'hyvor_user_id' => 15,
         ]);
         $this->assertNotNull($userInvite);
-        $this->assertSame($project->getId(), $userInvite->getProject()->getId());
+        $this->assertSame($newsletter->getId(), $userInvite->getNewsletter()->getId());
         $this->assertSame(15, $userInvite->getHyvorUserId());
         $this->assertSame('2025-05-11 00:00:00', $userInvite->getExpiresAt()->format('Y-m-d H:i:s'));
     }
 
     public function test_invite_user_by_email_with_wrong_email(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         AuthFake::databaseAdd([
             'id' => 15,
             'username' => 'supun',
@@ -108,7 +107,7 @@ class InviteUserTest extends WebTestCase
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/invites',
             [
@@ -123,7 +122,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email_with_wrong_username(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -133,7 +132,7 @@ class InviteUserTest extends WebTestCase
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/invites',
             [
@@ -150,7 +149,7 @@ class InviteUserTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-05-10'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 15,
@@ -162,12 +161,12 @@ class InviteUserTest extends WebTestCase
         $expirationDate = new \DateTimeImmutable('2025-05-10 00:00:00');
         UserInviteFactory::createOne([
             'hyvor_user_id' => 15,
-            'project' => $project,
+            'newsletter' => $newsletter,
             'expires_at' => $expirationDate,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/invites',
             [
@@ -180,6 +179,5 @@ class InviteUserTest extends WebTestCase
         $this->assertSame('admin', $json['role']);
         $newExpirationDate = $expirationDate->add(new \DateInterval('P1D'));
         $this->assertSame($newExpirationDate->getTimestamp(), $json['expires_at']);
-
     }
 }

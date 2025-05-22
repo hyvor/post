@@ -29,20 +29,20 @@ class UpdateNewsletterTest extends WebTestCase
 
         $meta = new NewsletterMeta();
         $meta->template_logo = 'https://example.com/logo.png';
-        $project = NewsletterFactory::createOne([
+        $newsletter = NewsletterFactory::createOne([
             'meta' => $meta
         ]);
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
-            '/projects',
+            '/newsletters',
             [
                 'name' => 'UpdateName',
                 'template_color_accent' => '#ff0000',
@@ -60,31 +60,31 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertNull($json['template_logo']);
 
         $repository = $this->em->getRepository(Newsletter::class);
-        $project = $repository->find($json['id']);
+        $newsletter = $repository->find($json['id']);
 
-        $this->assertNotNull($project);
-        $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('UpdateName', $project->getName());
-        $projectMeta = $project->getMeta();
-        $this->assertInstanceOf(NewsletterMeta::class, $projectMeta);
-        $this->assertSame('#ff0000', $projectMeta->template_color_accent);
-        $this->assertSame('10px', $projectMeta->template_box_radius);
-        $this->assertSame(null, $projectMeta->template_logo);
-        $this->assertSame('Subscribe to newsletter', $projectMeta->form_title);
+        $this->assertNotNull($newsletter);
+        $this->assertSame('2025-02-21 00:00:00', $newsletter->getUpdatedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('UpdateName', $newsletter->getName());
+        $newsletterMeta = $newsletter->getMeta();
+        $this->assertInstanceOf(NewsletterMeta::class, $newsletterMeta);
+        $this->assertSame('#ff0000', $newsletterMeta->template_color_accent);
+        $this->assertSame('10px', $newsletterMeta->template_box_radius);
+        $this->assertSame(null, $newsletterMeta->template_logo);
+        $this->assertSame('Subscribe to newsletter', $newsletterMeta->form_title);
     }
 
     public function test_update_project_email_username(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne([
+        $newsletter = NewsletterFactory::createOne([
             'default_email_username' => 'thibault@project.com'
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
-            '/projects',
+            '/newsletters',
             [
                 'default_email_username' => 'thibault@gmail.com',
                 'name' => 'UpdateName',
@@ -98,18 +98,18 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('thibault@gmail.com', $json['default_email_username']);
 
         $repository = $this->em->getRepository(Newsletter::class);
-        $project = $repository->find($json['id']);
-        $this->assertNotNull($project);
-        $this->assertSame('2025-02-21 00:00:00', $project->getUpdatedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('UpdateName', $project->getName());
-        $this->assertSame('thibault@gmail.com', $project->getDefaultEmailUsername());
+        $newsletter = $repository->find($json['id']);
+        $this->assertNotNull($newsletter);
+        $this->assertSame('2025-02-21 00:00:00', $newsletter->getUpdatedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('UpdateName', $newsletter->getName());
+        $this->assertSame('thibault@gmail.com', $newsletter->getDefaultEmailUsername());
     }
 
     public function test_update_project_email_username_taken(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne([
+        $newsletter = NewsletterFactory::createOne([
             'default_email_username' => 'thibault@gmail.com',
         ]);
 
@@ -118,9 +118,9 @@ class UpdateNewsletterTest extends WebTestCase
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
-            '/projects',
+            '/newsletters',
             [
                 'default_email_username' => 'thibault@hyvor.com',
             ]

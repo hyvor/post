@@ -32,20 +32,20 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscribers = SubscriberFactory::createMany(2, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
             'subject' => 'First Newsletter Issue!',
@@ -88,21 +88,21 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         Clock::set(new MockClock('2025-02-21'));
 
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'email' => 'test_failed@hyvor.com',
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
         ]);
@@ -150,21 +150,21 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         int $attempt,
         int $delaySeconds,
     ): void {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$list],
             'email' => 'test_failed@hyvor.com',
             'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
         ]);

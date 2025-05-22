@@ -22,18 +22,18 @@ class GetNewsletterTest extends WebTestCase
 
     public function testGetSpecificProjet(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
-            '/projects'
+            '/newsletters'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -44,16 +44,16 @@ class GetNewsletterTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertSame($project->getId(), $data['id']);
-        $this->assertSame($project->getName(), $data['name']);
+        $this->assertSame($newsletter->getId(), $data['id']);
+        $this->assertSame($newsletter->getName(), $data['name']);
     }
 
-    public function testGetSpecificProjectNotFound(): void
+    public function testGetSpecificNewsletterNotFound(): void
     {
         $find_project = $this->consoleApi(
             999,
             'GET',
-            '/projects'
+            '/newsletters'
         );
         $this->assertSame(404, $find_project->getStatusCode());
     }

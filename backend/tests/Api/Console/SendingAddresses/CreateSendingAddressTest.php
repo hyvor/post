@@ -19,7 +19,7 @@ class CreateSendingAddressTest extends WebTestCase
 {
     public function test_create_sending_email(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
@@ -29,7 +29,7 @@ class CreateSendingAddressTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/sending-addresses',
             [
@@ -51,7 +51,7 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
@@ -61,12 +61,12 @@ class CreateSendingAddressTest extends WebTestCase
         );
 
         SendingAddressFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'domain' => $domain
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/sending-addresses',
             [
@@ -85,10 +85,10 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_create_sending_email_domain_not_found(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/sending-addresses',
             [
@@ -103,14 +103,14 @@ class CreateSendingAddressTest extends WebTestCase
 
     public function test_create_sending_email_domain_not_verified(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $domain = DomainFactory::createOne([
             'domain' => 'hyvor.com',
             'verified_in_ses' => false,
             'user_id' => 1
         ]);
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/sending-addresses',
             [

@@ -29,7 +29,7 @@ class MediaController extends AbstractController
 
     #[Route('/media', methods: 'POST')]
     public function upload(
-        Newsletter $project,
+        Newsletter $newsletter,
         Request $request,
         #[MapRequestPayload] MediaUploadInput $input
     ): JsonResponse {
@@ -55,7 +55,7 @@ class MediaController extends AbstractController
 
         try {
             $media = $this->mediaService->upload(
-                $project,
+                $newsletter,
                 $folder,
                 $file
             );

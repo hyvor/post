@@ -26,24 +26,24 @@ class SendingAddressService
     /**
      * @return ArrayCollection<int, SendingAddress>
      */
-    public function getSendingAddresses(Newsletter $project): ArrayCollection
+    public function getSendingAddresses(Newsletter $newsletter): ArrayCollection
     {
-        $sendingEmails = $this->sendingEmailRepository->findBy(['project' => $project]);
+        $sendingEmails = $this->sendingEmailRepository->findBy(['newsletter' => $newsletter]);
         return new ArrayCollection($sendingEmails);
     }
 
-    public function getSendingAddressesCount(Newsletter $project): int
+    public function getSendingAddressesCount(Newsletter $newsletter): int
     {
-        return $this->sendingEmailRepository->count(['project' => $project]);
+        return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
-    public function createSendingAddress(Newsletter $project, Domain $customDomain, string $email): SendingAddress
+    public function createSendingAddress(Newsletter $newsletter, Domain $customDomain, string $email): SendingAddress
     {
         $sendingAddress = new SendingAddress();
-        $sendingAddress->setProject($project);
+        $sendingAddress->setNewsletter($newsletter);
         $sendingAddress->setDomain($customDomain);
         $sendingAddress->setEmail($email);
-        $sendingAddress->setIsDefault($this->getSendingAddressesCount($project) === 0);
+        $sendingAddress->setIsDefault($this->getSendingAddressesCount($newsletter) === 0);
         $sendingAddress->setCreatedAt(new \DateTimeImmutable());
         $sendingAddress->setUpdatedAt(new \DateTimeImmutable());
         $this->em->persist($sendingAddress);
@@ -68,8 +68,8 @@ class SendingAddressService
             assert($updates->isDefault === true);
             $sendingAddress->setIsDefault($updates->isDefault);
 
-            $currentDefaultSendingAddress = $this->getCurrentDefaultSendingAddressOfProject(
-                $sendingAddress->getProject()
+            $currentDefaultSendingAddress = $this->getCurrentDefaultSendingAddressOfNewsletter(
+                $sendingAddress->getNewsletter()
             );
 
             if ($currentDefaultSendingAddress) {
@@ -84,30 +84,30 @@ class SendingAddressService
         return $sendingAddress;
     }
 
-    public function getCurrentDefaultSendingAddressOfProject(Newsletter $project): ?SendingAddress
+    public function getCurrentDefaultSendingAddressOfNewsletter(Newsletter $newsletter): ?SendingAddress
     {
         return $this->sendingEmailRepository->findOneBy([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'isDefault' => true
         ]);
     }
 
-    public function getDefaultEmailAddressOfProjectWithFallback(Newsletter $project): string
+    public function getDefaultEmailAddressOfNewsletterWithFallback(Newsletter $newsletter): string
     {
-        $sendingAddress = $this->getCurrentDefaultSendingAddressOfProject($project);
+        $sendingAddress = $this->getCurrentDefaultSendingAddressOfNewsletter($newsletter);
 
         if ($sendingAddress) {
             return $sendingAddress->getEmail();
         }
 
-        return $this->getFallbackAddressOfProject($project);
+        return $this->getFallbackAddressOfNewsletter($newsletter);
     }
 
-    public function getFallbackAddressOfProject(Newsletter $project): string
+    public function getFallbackAddressOfNewsletter(Newsletter $newsletter): string
     {
         return sprintf(
             "%s@%s",
-            $project->getDefaultEmailUsername(),
+            $newsletter->getDefaultEmailUsername(),
             $this->appConfig->getDefaultEmailDomain()
         );
     }

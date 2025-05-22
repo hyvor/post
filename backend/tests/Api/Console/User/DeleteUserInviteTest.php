@@ -21,7 +21,7 @@ class DeleteUserInviteTest extends WebTestCase
 {
     public function test_delete_user_invite(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -31,13 +31,13 @@ class DeleteUserInviteTest extends WebTestCase
 
         $invite = UserInviteFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $inviteId = $invite->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/invites/' . $invite->getId()
         );
@@ -50,7 +50,7 @@ class DeleteUserInviteTest extends WebTestCase
 
     public function test_delete_user_invite_not_found(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
             'id' => 1,
@@ -60,13 +60,13 @@ class DeleteUserInviteTest extends WebTestCase
 
         $invite = UserInviteFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $inviteId = $invite->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/invites/' . ($inviteId + 1)
         );

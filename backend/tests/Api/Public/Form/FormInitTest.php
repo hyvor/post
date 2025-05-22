@@ -19,7 +19,6 @@ class FormInitTest extends WebTestCase
 
     public function test_error_when_project_by_uuid_not_found(): void
     {
-
         $response = $this->publicApi('POST', '/form/init', [
             'project_uuid' => Uuid::v4(),
         ]);
@@ -27,18 +26,16 @@ class FormInitTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422, $response);
         $json = $this->getJson();
 
-        $this->assertSame('Project not found', $json['message']);
-
+        $this->assertSame('Newsletter not found', $json['message']);
     }
 
     public function test_inits_with_all_lists(): void
     {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $project = NewsletterFactory::createOne();
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
-
-        $uuid = $project->getUuid();
+        $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
             'project_uuid' => $uuid,
         ]);
@@ -47,9 +44,9 @@ class FormInitTest extends WebTestCase
         $json = $this->getJson();
 
         // project
-        $projectArray = $json['project'];
-        $this->assertIsArray($projectArray);
-        $this->assertSame($uuid, $projectArray['uuid']);
+        $newsletterArray = $json['newsletter'];
+        $this->assertIsArray($newsletterArray);
+        $this->assertSame($uuid, $newsletterArray['uuid']);
 
         // lists
         $lists = $json['lists'];
@@ -58,17 +55,15 @@ class FormInitTest extends WebTestCase
         $this->assertIsArray($lists[0]);
         $this->assertSame($list1->getId(), $lists[0]['id']);
         $this->assertSame($list2->getId(), $lists[1]['id']);
-
     }
 
     public function test_inits_with_given_lists(): void
     {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $project = NewsletterFactory::createOne();
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
-
-        $uuid = $project->getUuid();
+        $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
             'project_uuid' => $uuid,
             'list_ids' => [$list1->getId()],
@@ -83,17 +78,15 @@ class FormInitTest extends WebTestCase
         $this->assertCount(1, $lists);
         $this->assertIsArray($lists[0]);
         $this->assertSame($list1->getId(), $lists[0]['id']);
-
     }
 
     public function test_error_on_invalid_list_id(): void
     {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => NewsletterFactory::createOne()]);
 
-        $project = NewsletterFactory::createOne();
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => NewsletterFactory::createOne()]);
-
-        $uuid = $project->getUuid();
+        $uuid = $newsletter->getUuid();
         $response = $this->publicApi('POST', '/form/init', [
             'project_uuid' => $uuid,
             'list_ids' => [$list1->getId(), $list2->getId()],
@@ -105,7 +98,6 @@ class FormInitTest extends WebTestCase
         // error
         $list2Id = $list2->getId();
         $this->assertSame("List with id $list2Id not found", $json['message']);
-
     }
 
 }

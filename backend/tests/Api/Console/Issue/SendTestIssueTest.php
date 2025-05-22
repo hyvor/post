@@ -16,17 +16,17 @@ class SendTestIssueTest extends WebTestCase
 
     public function test_send_test(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [
@@ -43,17 +43,17 @@ class SendTestIssueTest extends WebTestCase
 
     public function test_send_invalid_email(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [

@@ -33,14 +33,14 @@ class IssueService
     ) {
     }
 
-    public function createIssueDraft(Newsletter $project): Issue
+    public function createIssueDraft(Newsletter $newsletter): Issue
     {
-        $lists = $this->newsletterListService->getListsOfProject($project);
+        $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $this->sendingAddressService->getDefaultEmailAddressOfProjectWithFallback($project);
+        $fromEmail = $this->sendingAddressService->getDefaultEmailAddressOfNewsletterWithFallback($newsletter);
 
         $issue = new Issue()
-            ->setProject($project)
+            ->setNewsletter($newsletter)
             ->setUuid(Uuid::v4())
             ->setStatus(IssueStatus::DRAFT)
             ->setFromEmail($fromEmail)
@@ -127,12 +127,12 @@ class IssueService
     /**
      * @return ArrayCollection<int, Issue>
      */
-    public function getIssues(Newsletter $project, int $limit, int $offset): ArrayCollection
+    public function getIssues(Newsletter $newsletter, int $limit, int $offset): ArrayCollection
     {
         return new ArrayCollection(
             $this->issueRepository
                 ->findBy(
-                    ['project' => $project],
+                    ['newsletter' => $newsletter],
                     ['id' => 'DESC'],
                     $limit,
                     $offset

@@ -16,27 +16,27 @@ class GetUsageTest extends WebTestCase
         Clock::set(new MockClock('2025-05-10'));
 
         // current user sends
-        $currentUserProject = NewsletterFactory::createOne(['user_id' => 1]);
+        $currentUserNewsletter = NewsletterFactory::createOne(['user_id' => 1]);
         $firstDayThisMonth = new \DateTimeImmutable('first day of this month')->modify('+1 day');
         SendFactory::createMany(3, [
-            'project' => $currentUserProject,
+            'newsletter' => $currentUserNewsletter,
             'created_at' => $firstDayThisMonth,
         ]);
 
         // not this month
         SendFactory::createMany(4, [
-            'project' => $currentUserProject,
+            'newsletter' => $currentUserNewsletter,
             'created_at' => $firstDayThisMonth->modify('-1 month'),
         ]);
         SendFactory::createMany(1, [
-            'project' => $currentUserProject,
+            'newsletter' => $currentUserNewsletter,
             'created_at' => $firstDayThisMonth->modify('-2 month'),
         ]);
 
         // other user
-        $otherUserProject = NewsletterFactory::createOne(['user_id' => 2]);
+        $otherUserNewsletter = NewsletterFactory::createOne(['user_id' => 2]);
         SendFactory::createMany(5, [
-            'project' => $otherUserProject,
+            'newsletter' => $otherUserNewsletter,
             'created_at' => $firstDayThisMonth,
         ]);
 

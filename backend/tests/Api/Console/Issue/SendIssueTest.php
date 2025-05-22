@@ -27,22 +27,21 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(Issue::class)]
 #[CoversClass(IssueObject::class)]
 #[CoversClass(SendService::class)]
-
 class SendIssueTest extends WebTestCase
 {
     // Input validation tests
     // TODO: Refactor validation test into one
     public function testSendNonDraftIssue(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::SENT
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
@@ -58,16 +57,16 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutSubject(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'subject' => null
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
@@ -84,16 +83,16 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutList(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'listIds' => []
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
@@ -110,19 +109,19 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutContent(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list->getId()],
             'content' => null
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
@@ -139,20 +138,20 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueWithoutSubscribers(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list1->getId()],
             'content' => 'content'
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );
@@ -171,25 +170,25 @@ class SendIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list = NewsletterListFactory::createOne(['project' => $project]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
             'lists' => [$list]
         ]);
 
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list->getId()],
             'content' => "content"
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/send"
         );

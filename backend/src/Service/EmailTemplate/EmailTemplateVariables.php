@@ -52,9 +52,9 @@ class EmailTemplateVariables
     }
 
 
-    public static function fromProject(Newsletter $project): self
+    public static function fromNewsletter(Newsletter $newsletter): self
     {
-        $meta = $project->getMeta();
+        $meta = $newsletter->getMeta();
 
         return new EmailTemplateVariables(
             lang: 'en',
@@ -63,7 +63,7 @@ class EmailTemplateVariables
 
             logo: $meta->template_logo ?? '',
             logo_alt: $meta->template_logo_alt ?? '',
-            brand: $meta->brand ?? $project->getName(),
+            brand: $meta->brand ?? $newsletter->getName(),
             brand_url: $meta->brand_url ?? '',
 
             address: $meta->address ?? '',

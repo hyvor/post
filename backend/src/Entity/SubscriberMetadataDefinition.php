@@ -24,7 +24,7 @@ class SubscriberMetadataDefinition
 
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
-    private Newsletter $project;
+    private Newsletter $newsletter;
 
     #[ORM\Column(length: 255)]
     private string $key;
@@ -67,14 +67,14 @@ class SubscriberMetadataDefinition
         $this->updated_at = $updated_at;
     }
 
-    public function getProject(): Newsletter
+    public function getNewsletter(): Newsletter
     {
-        return $this->project;
+        return $this->newsletter;
     }
 
-    public function setProject(Newsletter $project): void
+    public function setNewsletter(Newsletter $newsletter): void
     {
-        $this->project = $project;
+        $this->newsletter = $newsletter;
     }
 
     public function getKey(): string

@@ -15,40 +15,37 @@ class NewsletterListService
 
     public function __construct(
         private EntityManagerInterface $em,
-    )
-    {
+    ) {
     }
 
     public const int MAX_LIST_DEFINITIONS_PER_PROJECT = 20;
 
-    public function getListCounter(Newsletter $project): int
+    public function getListCounter(Newsletter $newsletter): int
     {
         return $this->em->getRepository(NewsletterList::class)
             ->count([
-                'project' => $project,
+                'newsletter' => $newsletter,
             ]);
     }
 
     public function isNameAvailable(
-        Newsletter $project,
+        Newsletter $newsletter,
         string $name
-    ): bool
-    {
+    ): bool {
         return $this->em->getRepository(NewsletterList::class)
-            ->count([
-                'project' => $project,
-                'name' => $name,
-            ]) === 0;
+                ->count([
+                    'newsletter' => $newsletter,
+                    'name' => $name,
+                ]) === 0;
     }
 
     public function createNewsletterList(
-        Newsletter $project,
+        Newsletter $newsletter,
         string $name,
         ?string $description
-    ): NewsletterList
-    {
+    ): NewsletterList {
         $list = new NewsletterList()
-            ->setProject($project)
+            ->setNewsletter($newsletter)
             ->setName($name)
             ->setDescription($description)
             ->setCreatedAt($this->now())
@@ -75,13 +72,13 @@ class NewsletterListService
     /**
      * @return ArrayCollection<int, NewsletterList>
      */
-    public function getListsOfProject(Newsletter $project): ArrayCollection
+    public function getListsOfNewsletter(Newsletter $newsletter): ArrayCollection
     {
         return new ArrayCollection(
             $this->em->getRepository(NewsletterList::class)
                 ->findBy(
                     [
-                        'project' => $project,
+                        'newsletter' => $newsletter,
                         'deleted_at' => null,
                     ]
                 )
@@ -105,15 +102,15 @@ class NewsletterListService
      * @param array<int> $listIds
      * @return ?non-empty-array<int> null if all found, otherwise, an array of missing ids
      */
-    public function getMissingListIdsOfProject(Newsletter $project, array $listIds): ?array
+    public function getMissingListIdsOfNewsletter(Newsletter $newsletter, array $listIds): ?array
     {
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('l.id')
             ->from(NewsletterList::class, 'l')
-            ->where('l.project = :project')
+            ->where('l.newsletter = :newsletter')
             ->andWhere($qb->expr()->in('l.id', ':listIds'))
-            ->setParameter('project', $project)
+            ->setParameter('newsletter', $newsletter)
             ->setParameter('listIds', $listIds);
 
         $result = $qb->getQuery()->getScalarResult();

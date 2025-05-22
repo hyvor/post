@@ -37,23 +37,23 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'GET')]
-    public function getIssues(Request $request, Newsletter $project): JsonResponse
+    public function getIssues(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
         $issues = $this
             ->issueService
-            ->getIssues($project, $limit, $offset)
+            ->getIssues($newsletter, $limit, $offset)
             ->map(fn($subscriber) => new IssueObject($subscriber));
 
         return $this->json($issues);
     }
 
     #[Route('/issues', methods: 'POST')]
-    public function createIssue(Newsletter $project): JsonResponse
+    public function createIssue(Newsletter $newsletter): JsonResponse
     {
-        $issue = $this->issueService->createIssueDraft($project);
+        $issue = $this->issueService->createIssueDraft($newsletter);
 
         return $this->json(new IssueObject($issue));
     }
@@ -67,7 +67,7 @@ class IssueController extends AbstractController
     #[Route('/issues/{id}', methods: 'PATCH')]
     public function updateIssue(
         Issue $issue,
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] UpdateIssueInput $input
     ): JsonResponse {
         $updates = new UpdateIssueDto();
@@ -81,7 +81,7 @@ class IssueController extends AbstractController
         }
 
         if ($input->hasProperty('lists')) {
-            $missingListIds = $this->newsletterListService->getMissingListIdsOfProject($project, $input->lists);
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter($newsletter, $input->lists);
 
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
@@ -162,7 +162,7 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/test', methods: 'POST')]
     public function sendTest(
         Request $request,
-        Newsletter $project,
+        Newsletter $newsletter,
         Issue $issue,
         #[MapRequestPayload] SendTestInput $input
     ): JsonResponse {
@@ -178,14 +178,14 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]
-    public function previewIssue(Newsletter $project, Issue $issue): JsonResponse
+    public function previewIssue(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $preview = $this->templateRenderer->renderFromIssue($issue);
         return $this->json(['html' => $preview]);
     }
 
     #[Route ('/issues/{id}/progress', methods: 'GET')]
-    public function getIssueProgress(Newsletter $project, Issue $issue): JsonResponse
+    public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
         return $this->json($progress);

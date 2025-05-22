@@ -23,14 +23,13 @@ class UpdateListTest extends WebTestCase
 
     public function testUpdateListName(): void
     {
-
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/lists/' . $newsletterList->getId(),
             [
@@ -53,16 +52,15 @@ class UpdateListTest extends WebTestCase
         $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
         $this->assertSame('New Name', $newsletterList->getName());
         $this->assertSame('2025-02-21 00:00:00', $newsletterList->getUpdatedAt()->format('Y-m-d H:i:s'));
-
     }
 
     public function testUpdateListNameInvalid(): void
     {
-        $project = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/lists/' . $newsletterList->getId(),
             [
@@ -78,19 +76,18 @@ class UpdateListTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
 
-        $this->assertHasViolation('name',  'This value is too long. It should have 255 characters or less.');
+        $this->assertHasViolation('name', 'This value is too long. It should have 255 characters or less.');
     }
 
     public function test_update_list_descritption(): void
     {
-
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/lists/' . $newsletterList->getId(),
             [
@@ -113,6 +110,5 @@ class UpdateListTest extends WebTestCase
         $this->em->getRepository(NewsletterList::class)->find($newsletterList->getId());
         $this->assertSame('New description', $newsletterList->getDescription());
         $this->assertSame('2025-02-21 00:00:00', $newsletterList->getUpdatedAt()->format('Y-m-d H:i:s'));
-
     }
 }

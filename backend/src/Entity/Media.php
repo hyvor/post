@@ -27,7 +27,7 @@ class Media
 
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
-    private Newsletter $project;
+    private Newsletter $newsletter;
 
     #[ORM\Column(length: 255)]
     private MediaFolder $folder;
@@ -92,14 +92,14 @@ class Media
         return $this;
     }
 
-    public function getProject(): Newsletter
+    public function getNewsletter(): Newsletter
     {
-        return $this->project;
+        return $this->newsletter;
     }
 
-    public function setProject(Newsletter $project): static
+    public function setNewsletter(Newsletter $newsletter): static
     {
-        $this->project = $project;
+        $this->newsletter = $newsletter;
 
         return $this;
     }

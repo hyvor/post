@@ -41,7 +41,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      * @param array<string, mixed> $parameters
      */
     public function consoleApi(
-        Newsletter|int|null $project,
+        Newsletter|int|null $newsletter,
         string $method,
         string $uri,
         array $data = [],
@@ -49,7 +49,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         // only use this if $files is used. otherwise, use $data
         array $parameters = [],
     ): Response {
-        $projectId = $project instanceof Newsletter ? $project->getId() : $project;
+        $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'default'));
         $this->client->request(
@@ -59,7 +59,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             files: $files,
             server: [
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X_PROJECT_ID' => $projectId,
+                'HTTP_X_PROJECT_ID' => $newsletterId,
             ],
             content: (string)json_encode($data),
         );

@@ -54,7 +54,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -64,7 +64,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains/verify/' . $domain->getId(),
         );
@@ -90,7 +90,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -101,7 +101,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains/verify/' . $domain->getId(),
         );
@@ -117,10 +117,10 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains/verify/99999',
         );
@@ -136,7 +136,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne(
             [
@@ -146,7 +146,7 @@ class VerifyDomainTest extends WebTestCase
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/domains/verify/' . $domain->getId(),
         );

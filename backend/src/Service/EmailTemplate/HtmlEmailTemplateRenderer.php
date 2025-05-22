@@ -19,7 +19,7 @@ class HtmlEmailTemplateRenderer
 
     private function variablesFromIssue(Issue $issue): EmailTemplateVariables
     {
-        $variables = EmailTemplateVariables::fromProject($issue->getProject());
+        $variables = EmailTemplateVariables::fromNewsletter($issue->getNewsletter());
         $variables->subject = (string)$issue->getSubject();
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT
@@ -29,9 +29,9 @@ class HtmlEmailTemplateRenderer
 
     public function renderFromIssue(Issue $issue): string
     {
-        $project = $issue->getProject();
+        $newsletter = $issue->getNewsletter();
         $variables = $this->variablesFromIssue($issue);
-        $template = $this->templateService->getTemplateStringFromProject($project);
+        $template = $this->templateService->getTemplateStringFromNewsletter($newsletter);
 
         return $this->render($template, $variables);
     }
@@ -47,7 +47,7 @@ class HtmlEmailTemplateRenderer
     public function renderFromSend(Send $send): string
     {
         $variables = $this->variablesFromSend($send);
-        $template = $this->templateService->getTemplateStringFromProject($send->getIssue()->getProject());
+        $template = $this->templateService->getTemplateStringFromNewsletter($send->getIssue()->getNewsletter());
 
         return $this->render($template, $variables);
     }

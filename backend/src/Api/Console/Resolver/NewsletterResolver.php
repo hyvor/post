@@ -14,7 +14,7 @@ class NewsletterResolver implements ValueResolverInterface
 {
 
     public function __construct(
-        private NewsletterRepository $projectRepository,
+        private NewsletterRepository $newsletterRepository,
         // TODO: enable this after auth fake
         //private Security $security
     )
@@ -40,15 +40,15 @@ class NewsletterResolver implements ValueResolverInterface
             return [];
         }
 
-        $projectId = $request->headers->get('X-Newsletter-Id');
+        $newsletterId = $request->headers->get('X-Newsletter-Id');
 
-        if (!$projectId) {
+        if (!$newsletterId) {
             throw new BadRequestException('Missing X-Newsletter-Id header');
         }
 
-        $project = $this->projectRepository->find($projectId);
+        $newsletter = $this->newsletterRepository->find($newsletterId);
 
-        if (!$project) {
+        if (!$newsletter) {
             throw new NotFoundHttpException('Newsletter not found');
         }
 
@@ -59,12 +59,12 @@ class NewsletterResolver implements ValueResolverInterface
             throw new AccessDeniedException('User not authenticated');
         }
 
-        if ($project->getUserId() !== $user->id) {
-            throw new AccessDeniedException('Project does not belong to the user');
+        if ($newsletter->getUserId() !== $user->id) {
+            throw new AccessDeniedException('Newsletter does not belong to the user');
         }*/
 
         // TODO: check roles
-        return [$project];
+        return [$newsletter];
     }
 
 

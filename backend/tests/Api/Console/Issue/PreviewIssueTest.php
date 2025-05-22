@@ -17,17 +17,17 @@ class PreviewIssueTest extends WebTestCase
 {
     public function testPreviewIssue(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(
             [
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => '{"type": "doc"}',
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId() . "/preview"
         );

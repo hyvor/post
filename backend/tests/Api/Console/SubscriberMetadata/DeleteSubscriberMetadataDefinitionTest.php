@@ -18,15 +18,15 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_cannot_delete_other_project_entities(): void
     {
-        $project = NewsletterFactory::createOne();
-        $otherProject = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $otherProject,
+            'newsletter' => $otherNewsletter,
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscriber-metadata-definitions/' . $metadata->getId()
         );
@@ -39,15 +39,15 @@ class DeleteSubscriberMetadataDefinitionTest extends WebTestCase
 
     public function test_deletes_metadata(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $metadataId = $metadata->getId();
 
         $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/subscriber-metadata-definitions/' . $metadataId
         );

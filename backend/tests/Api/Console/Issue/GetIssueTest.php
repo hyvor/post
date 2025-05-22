@@ -20,11 +20,11 @@ class GetIssueTest extends WebTestCase
 
     public function testGetSpecificIssue(): void
     {
-        $project = NewsletterFactory::createOne();
-        $issue = IssueFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'GET',
             "/issues/" . $issue->getId()
         );
@@ -50,7 +50,8 @@ class GetIssueTest extends WebTestCase
     public function testGetSpecificIssueNotFound(): void
     {
         $response = $this->consoleApi(
-            null, // TODO: this is wrong. We should always send a project. This error was not caught because of the lack of validation for the error message
+            null,
+            // TODO: this is wrong. We should always send a project. This error was not caught because of the lack of validation for the error message
             'GET',
             '/issues/999'
         );
@@ -63,15 +64,15 @@ class GetIssueTest extends WebTestCase
         $this->assertJson($content);
     }
 
-    public function testGetSpecificIssueProjectValidation(): void
+    public function testGetSpecificIssueNewsletterValidation(): void
     {
-        $project1 = NewsletterFactory::createOne();
-        $project2 = NewsletterFactory::createOne();
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
 
-        $issue = IssueFactory::createOne(['project' => $project1]);
+        $issue = IssueFactory::createOne(['newsletter' => $newsletter1]);
 
         $response = $this->consoleApi(
-            $project2,
+            $newsletter2,
             'GET',
             "/issues/" . $issue->getId()
         );

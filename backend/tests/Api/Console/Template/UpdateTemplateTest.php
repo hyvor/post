@@ -19,10 +19,10 @@ class UpdateTemplateTest extends WebTestCase
 {
     public function test_create_template_valid(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/templates/update',
         );
@@ -36,21 +36,21 @@ class UpdateTemplateTest extends WebTestCase
 
         $repository = $this->em->getRepository(Template::class);
         $template = $repository->findOneBy([
-            'project' => $project->getId(),
+            'newsletter' => $newsletter->getId(),
         ]);
         $this->assertNotNull($template);
     }
 
     public function test_update_template(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne([
-            'project' => $project
+            'newsletter' => $newsletter
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/templates/update',
             [
@@ -82,7 +82,7 @@ class UpdateTemplateTest extends WebTestCase
 
         $repository = $this->em->getRepository(Template::class);
         $template = $repository->findOneBy([
-            'project' => $project->getId(),
+            'newsletter' => $newsletter->getId(),
         ]);
         $this->assertNotNull($template);
         $this->assertStringContainsString('<title>{% block title %}Custom Template</title>', $template->getTemplate());
@@ -90,14 +90,14 @@ class UpdateTemplateTest extends WebTestCase
 
     public function test_restore_default_template(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne([
-            'project' => $project
+            'newsletter' => $newsletter
         ]);
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/templates/update',
             [
@@ -115,7 +115,7 @@ class UpdateTemplateTest extends WebTestCase
 
         $repository = $this->em->getRepository(Template::class);
         $template = $repository->findOneBy([
-            'project' => $project->getId(),
+            'newsletter' => $newsletter->getId(),
         ]);
         $this->assertNotNull($template);
         $this->assertStringContainsString('<title>{{ subject }}</title>', $template->getTemplate());

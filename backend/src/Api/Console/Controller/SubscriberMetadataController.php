@@ -24,23 +24,23 @@ class SubscriberMetadataController extends AbstractController
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
     public function createMetadata(
-        Newsletter $project,
+        Newsletter $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
     ): JsonResponse {
-        $current = $this->subscriberMetadataService->getMetadataDefinitionByKey($project, $input->key);
+        $current = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $input->key);
 
         if ($current) {
             throw new BadRequestException('Key already exists');
         }
 
-        $count = $this->subscriberMetadataService->getMetadataDefinitionsCount($project);
+        $count = $this->subscriberMetadataService->getMetadataDefinitionsCount($newsletter);
 
         if ($count >= SubscriberMetadataService::MAX_METADATA_DEFINITIONS_PER_PROJECT) {
             throw new BadRequestException('Maximum number of metadata definitions reached');
         }
 
         $metadataDefinition = $this->subscriberMetadataService->createMetadataDefinition(
-            $project,
+            $newsletter,
             $input->key,
             $input->name
         );

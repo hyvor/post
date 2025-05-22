@@ -9,10 +9,10 @@ class RenderTemplateTest extends WebTestCase
 {
     public function test_render_template(): void
     {
-        $project = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'POST',
             '/templates/render',
             [

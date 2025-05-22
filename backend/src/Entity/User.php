@@ -22,7 +22,7 @@ class User
     private \DateTimeImmutable $updated_at;
 
     #[ORM\ManyToOne(targetEntity: Newsletter::class)]
-    private Newsletter $project;
+    private Newsletter $newsletter;
 
     #[ORM\Column]
     private int $hyvor_user_id;
@@ -66,14 +66,14 @@ class User
         return $this;
     }
 
-    public function getProject(): Newsletter
+    public function getNewsletter(): Newsletter
     {
-        return $this->project;
+        return $this->newsletter;
     }
 
-    public function setProject(Newsletter $project): static
+    public function setNewsletter(Newsletter $newsletter): static
     {
-        $this->project = $project;
+        $this->newsletter = $newsletter;
 
         return $this;
     }

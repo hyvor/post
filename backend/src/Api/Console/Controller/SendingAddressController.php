@@ -24,23 +24,26 @@ class SendingAddressController extends AbstractController
     public function __construct(
         private SendingAddressService $sendingAddressService,
         private DomainService $domainService
-    ) {}
+    ) {
+    }
 
     private function getDomainFromEmail(string $email): Domain
     {
         $domainName = explode("@", $email)[1];
         $domain = $this->domainService->getDomainByDomainName($domainName);
-        if (!$domain)
+        if (!$domain) {
             throw new BadRequestHttpException("Domain not found");
-        if (!$domain->isVerifiedInSes())
+        }
+        if (!$domain->isVerifiedInSes()) {
             throw new BadRequestHttpException("Domain is not verified");
+        }
         return $domain;
     }
 
     #[Route('/sending-addresses', methods: 'GET')]
-    public function getSendingAddresses(Request $request, Newsletter $project): JsonResponse
+    public function getSendingAddresses(Request $request, Newsletter $newsletter): JsonResponse
     {
-        $sendingAddresses = $this->sendingAddressService->getSendingAddresses($project)
+        $sendingAddresses = $this->sendingAddressService->getSendingAddresses($newsletter)
             ->map(fn($sendingAddress) => new SendingAddressObject($sendingAddress));
         return $this->json($sendingAddresses);
     }
@@ -48,11 +51,10 @@ class SendingAddressController extends AbstractController
     #[Route('/sending-addresses', methods: 'POST')]
     public function createSendingAddress(
         #[MapRequestPayload] CreateSendingEmailInput $input,
-        Newsletter $project,
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+    ): JsonResponse {
         $domain = $this->getDomainFromEmail($input->email);
-        $sendingAddress = $this->sendingAddressService->createSendingAddress($project, $domain, $input->email);
+        $sendingAddress = $this->sendingAddressService->createSendingAddress($newsletter, $domain, $input->email);
 
         return $this->json(new SendingAddressObject($sendingAddress));
     }
@@ -61,9 +63,8 @@ class SendingAddressController extends AbstractController
     public function updateSendingAddress(
         SendingAddress $sendingAddress,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
-        Newsletter $project
-    ): JsonResponse
-    {
+        Newsletter $newsletter
+    ): JsonResponse {
         $updates = new UpdateSendingAddressDto();
         if ($input->hasProperty('email')) {
             $domain = $this->getDomainFromEmail($input->email);
@@ -83,9 +84,8 @@ class SendingAddressController extends AbstractController
     #[Route('/sending-addresses/{id}', methods: 'DELETE')]
     public function deleteSendingAddress(
         SendingAddress $sendingAddress,
-        Newsletter $project
-    ): JsonResponse
-    {
+        Newsletter $newsletter
+    ): JsonResponse {
         $this->sendingAddressService->deleteSendingAddress($sendingAddress);
 
         return $this->json([]);

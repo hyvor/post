@@ -23,7 +23,7 @@ class NewsletterResolverTest extends KernelTestCase
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\SomeOther\Controller\ProjectController::getProjects'
+            'App\Api\SomeOther\Controller\NewsletterController::getNewsletters'
         );
 
         $output = $resolver->resolve($request, $argument);
@@ -32,8 +32,8 @@ class NewsletterResolverTest extends KernelTestCase
 
     public function testDoesNotResolveWhenMissingHeader(): void
     {
-        $project = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['project' => $project]);
+        $newsletter = NewsletterFactory::createOne();
+        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         /** @var EntityResolver $resolver */
         $resolver = $this->container->get(EntityResolver::class);
@@ -47,7 +47,7 @@ class NewsletterResolverTest extends KernelTestCase
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
-        $this->expectExceptionMessage('Missing X-Project-Id header');
+        $this->expectExceptionMessage('Missing X-Newsletter-Id header');
         $resolver->resolve($request, $argument);
     }
 

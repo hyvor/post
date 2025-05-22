@@ -48,8 +48,7 @@ final class NewsletterFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Project $project): void {})
-        ;
+        return $this// ->afterInstantiate(function(Newsletter $newsletter): void {})
+            ;
     }
 }

@@ -34,9 +34,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', methods: 'GET')]
-    public function getUsers(Newsletter $project): JsonResponse
+    public function getUsers(Newsletter $newsletter): JsonResponse
     {
-        $users = $this->userService->getProjectUsers($project)
+        $users = $this->userService->getNewsletterUsers($newsletter)
             ->map(function ($user) {
                 $hyvorUser = $this->auth->fromId($user->getHyvorUserId());
                 if ($hyvorUser === null) {
@@ -49,16 +49,16 @@ class UserController extends AbstractController
     }
 
     #[Route('users/{id}', methods: 'DELETE')]
-    public function deleteUser(Newsletter $project, User $user): JsonResponse
+    public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
     {
-        $this->userService->deleteUser($project, $user);
+        $this->userService->deleteUser($newsletter, $user);
         return $this->json([]);
     }
 
     #[Route('/invites', methods: 'GET')]
-    public function getInvites(Newsletter $project): JsonResponse
+    public function getInvites(Newsletter $newsletter): JsonResponse
     {
-        $invites = $this->userInviteService->getProjectInvites($project)
+        $invites = $this->userInviteService->getNewsletterInvites($newsletter)
             ->map(function ($invite) {
                 // N+1 problem
                 $user = $this->auth->fromId($invite->getHyvorUserId());
@@ -72,7 +72,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'POST')]
-    public function invite(Newsletter $project, #[MapRequestPayload] InviteUserInput $input): JsonResponse
+    public function invite(Newsletter $newsletter, #[MapRequestPayload] InviteUserInput $input): JsonResponse
     {
         if (!$input->email && !$input->username) {
             throw new InvalidArgumentException('Either email or username must be provided.');
@@ -82,22 +82,27 @@ class UserController extends AbstractController
 
         if ($input->email !== null) {
             $hyvorUser = $this->auth->fromEmail($input->email);
-        } else if ($input->username !== null) {
-            $hyvorUser = $this->auth->fromUsername($input->username);
+        } else {
+            if ($input->username !== null) {
+                $hyvorUser = $this->auth->fromUsername($input->username);
+            }
         }
 
-        if (!$hyvorUser)
+        if (!$hyvorUser) {
             throw new BadRequestHttpException("User does not exists");
+        }
 
-        if ($this->userService->isAdmin($project, $hyvorUser->id))
+        if ($this->userService->isAdmin($newsletter, $hyvorUser->id)) {
             throw new BadRequestHttpException("User is already an admin");
+        }
 
-        if ($this->userInviteService->isInvited($hyvorUser->id))
+        if ($this->userInviteService->isInvited($hyvorUser->id)) {
             $invite = $this->userInviteService->extendInvite($hyvorUser->id);
-        else
-            $invite = $this->userInviteService->createInvite($project, $hyvorUser->id, UserRole::ADMIN);
+        } else {
+            $invite = $this->userInviteService->createInvite($newsletter, $hyvorUser->id, UserRole::ADMIN);
+        }
 
-        $this->userInviteService->sendEmail($project, $hyvorUser, $invite);
+        $this->userInviteService->sendEmail($newsletter, $hyvorUser, $invite);
 
         return $this->json(
             new UserInviteObject($invite, $hyvorUser),
@@ -105,7 +110,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites/{id}', methods: 'DELETE')]
-    public function deleteInvite(Newsletter $project, UserInvite $userInvite): JsonResponse
+    public function deleteInvite(Newsletter $newsletter, UserInvite $userInvite): JsonResponse
     {
         $this->userInviteService->deleteInvite($userInvite);
         return $this->json([]);
