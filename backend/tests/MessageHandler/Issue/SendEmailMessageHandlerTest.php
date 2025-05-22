@@ -7,7 +7,7 @@ use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Issue\EmailTransportService;
+use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
@@ -24,12 +24,12 @@ use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[CoversClass(SendEmailMessageHandler::class)]
 #[CoversClass(SendEmailMessage::class)]
+#[CoversClass(EmailSenderService::class)]
 class SendEmailMessageHandlerTest extends KernelTestCase
 {
 
     public function test_send_job(): void
     {
-
         Clock::set(new MockClock('2025-02-21'));
 
         $project = ProjectFactory::createOne();
@@ -94,7 +94,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'project' => $project,
         ]);
 
-        $subscriber = SubscriberFactory::createOne( [
+        $subscriber = SubscriberFactory::createOne([
             'project' => $project,
             'lists' => [$list],
             'email' => 'test_failed@hyvor.com',
@@ -116,11 +116,11 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
 
-        $emailTransportMock = $this->createMock(EmailTransportService::class);
+        $emailTransportMock = $this->createMock(EmailSenderService::class);
         $emailTransportMock->expects(self::exactly(4))
             ->method('send')
             ->willThrowException(new \Exception('Email sending failed'));
-        $this->container->set(EmailTransportService::class, $emailTransportMock);
+        $this->container->set(EmailSenderService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
         $this->transport()->process();
@@ -149,15 +149,14 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job_increase_attempts(
         int $attempt,
         int $delaySeconds,
-    ): void
-    {
+    ): void {
         $project = ProjectFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
             'project' => $project,
         ]);
 
-        $subscriber = SubscriberFactory::createOne( [
+        $subscriber = SubscriberFactory::createOne([
             'project' => $project,
             'lists' => [$list],
             'email' => 'test_failed@hyvor.com',
@@ -179,11 +178,11 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $message = new SendEmailMessage($send->getId(), $attempt);
         $this->getMessageBus()->dispatch($message);
 
-        $emailTransportMock = $this->createMock(EmailTransportService::class);
+        $emailTransportMock = $this->createMock(EmailSenderService::class);
         $emailTransportMock->expects(self::once())
             ->method('send')
             ->willThrowException(new \Exception('Email sending failed'));
-        $this->container->set(EmailTransportService::class, $emailTransportMock);
+        $this->container->set(EmailSenderService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
         $this->transport()->process(1);

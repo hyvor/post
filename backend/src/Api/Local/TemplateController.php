@@ -4,8 +4,8 @@ namespace App\Api\Local;
 
 use App\Entity\Project;
 use App\Service\Content\ContentService;
-use App\Service\Template\TemplateRenderer;
-use App\Service\Template\TemplateVariables;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\EmailTemplate\EmailTemplateVariables;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -19,7 +19,7 @@ class TemplateController extends AbstractController
 {
 
     public function __construct(
-        private TemplateRenderer $renderer,
+        private HtmlEmailTemplateRenderer $renderer,
         private EntityManagerInterface $em,
         private ContentService $contentService,
         #[Autowire('%kernel.project_dir%')]

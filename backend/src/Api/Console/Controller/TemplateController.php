@@ -7,10 +7,10 @@ use App\Api\Console\Input\Template\RenderTemplateInput;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Project;
 use App\Service\Project\ProjectDefaults;
-use App\Service\Template\Dto\UpdateTemplateDto;
-use App\Service\Template\TemplateRenderer;
-use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariables;
+use App\Service\EmailTemplate\Dto\UpdateTemplateDto;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\EmailTemplate\EmailTemplateService;
+use App\Service\EmailTemplate\EmailTemplateVariables;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private TemplateService $templateService,
-        private TemplateRenderer $templateRenderer
+        private EmailTemplateService $templateService,
+        private HtmlEmailTemplateRenderer $templateRenderer
     ) {
     }
 
@@ -65,7 +65,7 @@ class TemplateController extends AbstractController
     ): JsonResponse {
         $meta = $project->getMeta();
 
-        $variables = new TemplateVariables(
+        $variables = new EmailTemplateVariables(
             lang: 'en',
             subject: 'Default subject',
             content: 'Default content',

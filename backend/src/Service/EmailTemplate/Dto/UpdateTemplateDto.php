@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Template\Dto;
+namespace App\Service\EmailTemplate\Dto;
 
 use App\Util\OptionalPropertyTrait;
 

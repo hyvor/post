@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Template;
+namespace App\Service\EmailTemplate;
 
 use App\Service\Content\ContentService;
 use App\Entity\Issue;
@@ -8,7 +8,7 @@ use App\Entity\Project;
 use App\Service\Project\ProjectDefaults;
 use Twig\Environment;
 
-class TemplateRenderer
+class HtmlEmailTemplateRenderer
 {
 
     const DEFAULT_CONTENT = <<<JSON
@@ -21,15 +21,15 @@ JSON;
     public function __construct(
         private Environment $twig,
         private ContentService $contentService,
-        private TemplateService $templateService,
+        private EmailTemplateService $templateService,
     ) {
     }
 
-    public function getTemplateVariablesFromProject(Project $project): TemplateVariables
+    public function getTemplateVariablesFromProject(Project $project): EmailTemplateVariables
     {
         $meta = $project->getMeta();
 
-        return new TemplateVariables(
+        return new EmailTemplateVariables(
             lang: 'en',
             subject: '',
             content: '',
@@ -40,7 +40,7 @@ JSON;
             brand_url: $meta->brand_url ?? '',
 
             address: $meta->address ?? '',
-            unsubscribe_url: 'https://example.com/unsubscribe',
+            unsubscribe_url: '',
             unsubscribe_text: $meta->unsubscribe_text ?? '',
 
             color_accent: $meta->template_color_accent ?? ProjectDefaults::TEMPLATE_COLOR_ACCENT,
@@ -84,7 +84,7 @@ JSON;
         return $this->render($template, $variables);
     }
 
-    public function render(string $template, TemplateVariables $variables): string
+    public function render(string $template, EmailTemplateVariables $variables): string
     {
         $template = $this->twig->createTemplate($template);
         return $template->render((array)$variables);

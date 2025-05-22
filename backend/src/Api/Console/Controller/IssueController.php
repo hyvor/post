@@ -10,12 +10,12 @@ use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\Dto\UpdateIssueDto;
-use App\Service\Issue\EmailTransportService;
+use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\Template\TemplateRenderer;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,8 +31,8 @@ class IssueController extends AbstractController
         private IssueService $issueService,
         private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private TemplateRenderer $templateRenderer,
-        private EmailTransportService $emailTransportService
+        private HtmlEmailTemplateRenderer $templateRenderer,
+        private EmailSenderService $emailTransportService
     ) {
     }
 

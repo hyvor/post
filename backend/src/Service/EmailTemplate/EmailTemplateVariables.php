@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service\Template;
+namespace App\Service\EmailTemplate;
 
 // https://post.hyvor.com/docs/email-templates
 use App\Service\Project\ProjectDefaults;
 
-class TemplateVariables
+class EmailTemplateVariables
 {
 
     public function __construct(

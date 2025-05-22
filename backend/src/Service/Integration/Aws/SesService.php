@@ -7,6 +7,8 @@ use Aws\SesV2\SesV2Client;
 class SesService
 {
 
+    public const string NEWSLETTER_CONFIGURATION_SET_NAME = 'newsletter';
+
     public function getClient(): SesV2Client
     {
         return new SesV2Client([

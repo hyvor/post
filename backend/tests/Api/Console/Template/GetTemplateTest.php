@@ -5,14 +5,14 @@ namespace Api\Console\Template;
 use App\Api\Console\Controller\TemplateController;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Template;
-use App\Service\Template\TemplateService;
+use App\Service\EmailTemplate\EmailTemplateService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ProjectFactory;
 use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(TemplateController::class)]
-#[CoversClass(TemplateService::class)]
+#[CoversClass(EmailTemplateService::class)]
 #[CoversClass(TemplateObject::class)]
 #[CoversClass(Template::class)]
 class GetTemplateTest extends WebTestCase
@@ -31,7 +31,8 @@ class GetTemplateTest extends WebTestCase
 
         $json = $this->getJson();
         $this->assertArrayHasKey('template', $json);
-        $this->assertSame('<!DOCTYPE html>
+        $this->assertSame(
+            '<!DOCTYPE html>
 <html lang="{{ lang }}">
 
 <head>
@@ -104,7 +105,9 @@ class GetTemplateTest extends WebTestCase
     </div>
 </div>
 </body>
-', $json['template']);
+',
+            $json['template']
+        );
     }
 
     public function test_get_custom_template(): void
