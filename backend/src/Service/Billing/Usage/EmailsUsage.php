@@ -11,8 +11,7 @@ class EmailsUsage extends UsageAbstract
 
     public function __construct(
         private SendService $sendService,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -33,7 +32,7 @@ class EmailsUsage extends UsageAbstract
 
     public function usageOfResource(int $resourceId): int
     {
-        return $this->sendService->getSendsCountThisMonthOfProject($resourceId);
+        return $this->sendService->getSendsCountThisMonthOfNewsletter($resourceId);
     }
 
 }

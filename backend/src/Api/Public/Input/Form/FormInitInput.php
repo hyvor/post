@@ -9,7 +9,7 @@ class FormInitInput
 
     #[Assert\NotBlank]
     #[Assert\Uuid]
-    public string $project_uuid;
+    public string $newsletter_uuid;
 
     public ?string $language = null;
 

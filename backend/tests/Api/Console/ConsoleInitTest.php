@@ -3,23 +3,23 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
-use App\Api\Console\Object\ProjectListObject;
+use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
 use App\Entity\Type\UserRole;
-use App\Service\Project\ProjectService;
+use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
-#[CoversClass(ProjectService::class)]
+#[CoversClass(NewsletterService::class)]
 #[CoversClass(StatsObject::class)]
 #[CoversClass(StatCategoryObject::class)]
-#[CoversClass(ProjectListObject::class)]
+#[CoversClass(NewsletterListObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
 
@@ -28,13 +28,13 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitConsole(): void
     {
-        $projects = ProjectFactory::createMany(10, [
+        $newsletters = NewsletterFactory::createMany(10, [
             'user_id' => 1,
         ]);
 
-        foreach ($projects as $project) {
+        foreach ($newsletters as $newsletter) {
             UserFactory::createOne([
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'hyvor_user_id' => 1,
                 'role' => UserRole::OWNER
             ]);
@@ -46,17 +46,17 @@ class ConsoleInitTest extends WebTestCase
 
 
         // other user
-        ProjectFactory::createMany(1, [
+        NewsletterFactory::createMany(1, [
             'user_id' => 2,
         ]);
 
-        $projectAdmin = ProjectFactory::createOne([
+        $newsletterAdmin = NewsletterFactory::createOne([
             'user_id' => 1
         ]);
 
         // admin
         $user = UserFactory::createOne([
-            'project' => $projectAdmin,
+            'newsletter' => $newsletterAdmin,
             'hyvor_user_id' => 1,
             'role' => UserRole::ADMIN
         ]);
@@ -75,31 +75,31 @@ class ConsoleInitTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertArrayHasKey('projects', $data);
-        $this->assertIsArray($data['projects']);
-        $this->assertSame(11, count($data['projects']));
+        $this->assertArrayHasKey('newsletters', $data);
+        $this->assertIsArray($data['newsletters']);
+        $this->assertSame(11, count($data['newsletters']));
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
-        $this->assertArrayHasKey('project_defaults', $config);
+        $this->assertArrayHasKey('newsletter_defaults', $config);
     }
 
-    public function testInitProject(): void
+    public function testInitNewsletter(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $projectId = $project->getId();
+        $newsletterId = $newsletter->getId();
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
         $response = $this->consoleApi(
-            $project->getId(),
+            $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -110,36 +110,36 @@ class ConsoleInitTest extends WebTestCase
 
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertArrayHasKey('project', $data);
-        $this->assertIsArray($data['project']);
-        $this->assertSame($projectId, $data['project']['id']);
+        $this->assertArrayHasKey('newsletter', $data);
+        $this->assertIsArray($data['newsletter']);
+        $this->assertSame($newsletterId, $data['newsletter']['id']);
     }
 
-    public function testInitProjectWithStats(): void
+    public function testInitNewsletterWithStats(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
         NewsletterListFactory::createMany(10, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'created_at' => new \DateTimeImmutable()
         ]);
 
-        $otherProject = ProjectFactory::createOne();
+        $otherNewsletter = NewsletterFactory::createOne();
         NewsletterListFactory::createMany(5, [
-            'project' => $otherProject,
+            'newsletter' => $otherNewsletter,
             'created_at' => new \DateTimeImmutable()
         ]);
 
         $response = $this->consoleApi(
-            $project->getId(),
+            $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -163,32 +163,31 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('last_30d', $lists);
         $this->assertSame(10, $lists['total']);
         $this->assertSame(10, $lists['last_30d']);
-
     }
 
-    public function testInitProjectWithLists(): void
+    public function testInitNewsletterWithLists(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $user = UserFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
 
         $newsletterList = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         $subscribersOld = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable('2021-01-01'),
         ]);
 
 
         $subscribersNew = SubscriberFactory::createMany(5, [
-            'project' => $project,
+            'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable(),
         ]);
@@ -202,9 +201,9 @@ class ConsoleInitTest extends WebTestCase
         }
 
         $response = $this->consoleApi(
-            $project->getId(),
+            $newsletter->getId(),
             'GET',
-            '/init/project',
+            '/init/newsletter',
         );
 
         $this->assertSame(200, $response->getStatusCode());

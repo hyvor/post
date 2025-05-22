@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { Button, Loader, toast } from '@hyvor/design/components';
 	import { goto } from '$app/navigation';
-	import { issueStore } from '../../lib/stores/projectStore';
+	import { issueStore } from '../../lib/stores/newsletterStore';
 	import { createIssueDraft } from '../../lib/actions/issueActions';
-	import { consoleUrlWithProject } from '../../lib/consoleUrl';
+	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
 	import type { Component } from 'svelte';
 
-	export let text: string;
-	export let size: 'small' | 'medium' | 'large' = 'medium';
-	export let icon: Component;
+	interface Props {
+		text: string;
+		size?: 'small' | 'medium' | 'large';
+		icon: Component;
+	}
+
+	let { text, size = 'medium', icon }: Props = $props();
 
 	function create() {
 		if (loading) return;
@@ -22,14 +26,14 @@
 		createIssueDraft()
 			.then((res) => {
 				issueStore.update((prev) => [res, ...prev]);
-				goto(consoleUrlWithProject(`/issues/${res.id}`));
+				goto(consoleUrlWithNewsletter(`/issues/${res.id}`));
 			})
 			.catch((e) => {
 				toast.error(e.message);
 			});
 	}
 
-	let loading = false;
+	let loading = $state(false);
 </script>
 
 <Button on:click={create} {size}>
@@ -38,7 +42,8 @@
 		{#if loading}
 			<Loader size={14} invert />
 		{:else}
-			<svelte:component this={icon} size={14} />
+			{@const SvelteComponent = icon}
+			<SvelteComponent size={14} />
 		{/if}
 	{/snippet}
 </Button>

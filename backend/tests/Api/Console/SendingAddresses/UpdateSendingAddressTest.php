@@ -8,7 +8,7 @@ use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -23,7 +23,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [
@@ -44,23 +44,22 @@ class UpdateSendingAddressTest extends WebTestCase
         $sendingEmail = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain1
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/sending-addresses/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
-                'is_default' => false,
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
 
         $this->assertSame('thibault@gmail.com', $json['email']);
         $this->assertIsArray($json['domain']);
@@ -79,7 +78,7 @@ class UpdateSendingAddressTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain1 = DomainFactory::createOne(
             [
@@ -97,11 +96,12 @@ class UpdateSendingAddressTest extends WebTestCase
             ]
         );
 
+        // old default email
         $sendingEmail1 = SendingAddressFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
                 'is_default' => true,
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain1
             ]
         );
@@ -110,13 +110,13 @@ class UpdateSendingAddressTest extends WebTestCase
             [
                 'email' => 'supun@hyvor.com',
                 'is_default' => false,
-                'project' => $project,
+                'newsletter' => $newsletter,
                 'domain' => $domain2
             ]
         );
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'PATCH',
             '/sending-addresses/' . $sendingEmail2->getId(),
             [
@@ -125,7 +125,7 @@ class UpdateSendingAddressTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame(true, $json['is_default']);
         $this->assertSame($sendingEmail2->getId(), $json['id']);
         $this->assertSame($sendingEmail2->getEmail(), $json['email']);
@@ -134,6 +134,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail1);
         $this->assertSame(false, $sendingEmail1->isDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail1->getUpdatedAt()->format('Y-m-d H:i:s'));
+
         $sendingEmail2 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail2->getId()]);
         $this->assertInstanceOf(SendingAddress::class, $sendingEmail2);
         $this->assertSame(true, $sendingEmail2->isDefault());

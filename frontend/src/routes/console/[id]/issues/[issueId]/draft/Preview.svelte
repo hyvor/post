@@ -13,7 +13,7 @@
 	import { fade } from 'svelte/transition';
 	import { previewIssue } from '../../../../lib/actions/issueActions';
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
-	import { consoleUrlWithProject } from '../../../../lib/consoleUrl';
+	import { consoleUrlWithNewsletter } from '../../../../lib/consoleUrl';
 	import { contentUpdateId } from '../issueStore';
 
 	export let id: number;
@@ -36,7 +36,7 @@
 	function fetchPreview() {
 		// Don't fetch preview if the component is destroyed or issue is deleted
 		if (!iframe) return;
-		
+
 		previewIssue(id)
 			.then((res) => {
 				html = res.html;
@@ -90,8 +90,8 @@
 	<Caption slot="caption">
 		Settings:&nbsp;&nbsp;<Link
 			target="_blank"
-			href={consoleUrlWithProject('/settings/notifications')}>Email branding</Link
-		>&nbsp;&nbsp;<Link target="_blank" href={consoleUrlWithProject('/settings/appearance')}
+			href={consoleUrlWithNewsletter('/settings/notifications')}>Email branding</Link
+		>&nbsp;&nbsp;<Link target="_blank" href={consoleUrlWithNewsletter('/settings/appearance')}
 			>Styles & colors</Link
 		>
 	</Caption>

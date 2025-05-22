@@ -12,8 +12,7 @@ class Code extends MarkType
 
     public function toHtml(Mark $mark, string $children): string
     {
-        $styles = "background: rgba(135, 131, 120, 0.15);color: #eb5757;border-radius: 3px;font-size: 0.85em;padding: 0.2em 0.4em;font-family: monospace;";
-        return "<code style=\"$styles\">$children</code>";
+        return "<code>$children</code>";
     }
 
     public function fromHtml(): array

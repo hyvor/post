@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import type { AppConfig } from "../../types";
 
-export const selectingProject = writable(false);
+export const selectingNewsletter = writable(false);
 
 let appConfig = {} as AppConfig;
 

@@ -8,7 +8,7 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\Integration\Aws\SnsValidationService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -30,9 +30,7 @@ class AwsWebhookTest extends WebTestCase
         string $type = 'Notification',
         array $additionalData = [],
         bool $mockSns = true,
-    ): Response
-    {
-
+    ): Response {
         if ($mockSns) {
             $this->mockSnsValidation();
         }
@@ -57,7 +55,6 @@ class AwsWebhookTest extends WebTestCase
             '/integration/aws/webhook',
             $data
         );
-
     }
 
     private function mockSnsValidation(): void
@@ -99,9 +96,9 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_delivery(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -132,12 +129,12 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_complaint(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -176,12 +173,12 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_soft_bounce(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -214,12 +211,12 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_hard_bounce(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -255,14 +252,14 @@ class AwsWebhookTest extends WebTestCase
         $subscriber = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertNotNull($subscriber);
         $this->assertNotNull($subscriber->getUnsubscribedAt());
-        $this->assertSame('Bounce: Permanent - General' ,$subscriber->getUnsubscribeReason());
+        $this->assertSame('Bounce: Permanent - General', $subscriber->getUnsubscribeReason());
     }
 
     public function test_click_first(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -296,9 +293,9 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_click_second(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -334,9 +331,9 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_open_first(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -369,9 +366,9 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_open_second(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
@@ -407,12 +404,12 @@ class AwsWebhookTest extends WebTestCase
 
     public function test_subscription(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,

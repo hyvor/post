@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Service\EmailTemplate;
+
+// https://post.hyvor.com/docs/email-templates
+use App\Entity\Newsletter;
+use App\Service\Newsletter\NewsletterDefaults;
+
+class EmailTemplateVariables
+{
+
+    public function __construct(
+        // language code to be used in <html> tag
+        public string $lang = NewsletterDefaults::TEMPLATE_LANG,
+
+        // subject of the email to be used in <title> tag
+        public string $subject = '',
+
+        // content in HTML format
+        public string $content = '',
+
+        // header
+        public string $logo = '',
+        public string $logo_alt = '',
+        public string $brand = '',
+        public string $brand_url = '',
+
+        // footer
+        public string $address = '',
+        public string $unsubscribe_url = '',
+        public string $unsubscribe_text = '',
+
+        // colors in HEX format
+        public string $color_accent = NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
+        public string $color_background = NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
+        public string $color_box_background = NewsletterDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
+
+        // font
+        public string $font_family = NewsletterDefaults::TEMPLATE_FONT_FAMILY,
+        public string $font_size = NewsletterDefaults::TEMPLATE_FONT_SIZE,
+        public string $font_weight = NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
+        public string $font_weight_heading = NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+        public string $font_color_on_background = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+        public string $font_color_on_box = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
+        public string $font_line_height = NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
+
+        // Box radius
+        public string $box_radius = NewsletterDefaults::TEMPLATE_BOX_RADIUS,
+        public string $box_shadow = NewsletterDefaults::TEMPLATE_BOX_SHADOW,
+        public string $box_border = NewsletterDefaults::TEMPLATE_BOX_BORDER,
+    ) {
+    }
+
+
+    public static function fromNewsletter(Newsletter $newsletter): self
+    {
+        $meta = $newsletter->getMeta();
+
+        return new EmailTemplateVariables(
+            lang: 'en',
+            subject: '',
+            content: '',
+
+            logo: $meta->template_logo ?? '',
+            logo_alt: $meta->template_logo_alt ?? '',
+            brand: $meta->brand ?? $newsletter->getName(),
+            brand_url: $meta->brand_url ?? '',
+
+            address: $meta->address ?? '',
+            unsubscribe_url: '',
+            unsubscribe_text: $meta->unsubscribe_text ?? 'Unsubscribe',
+
+            color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
+            color_background: $meta->color_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_box_background: $meta->color_box_background ?? NewsletterDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
+
+            font_family: $meta->font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
+            font_size: $meta->font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
+            font_weight: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
+            font_weight_heading: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->font_color_on_background ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->font_color_on_box ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
+            font_line_height: $meta->font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
+
+            box_radius: $meta->box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
+            box_shadow: $meta->box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
+            box_border: $meta->box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
+        );
+    }
+
+}

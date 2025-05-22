@@ -2,7 +2,7 @@
 
 namespace App\Service\User;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Entity\UserInvite;
@@ -14,44 +14,45 @@ class UserService
 
     public function __construct(
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     /**
      * @return ArrayCollection<int, User>
      */
-    public function getProjectUsers(Project $project): ArrayCollection
+    public function getNewsletterUsers(Newsletter $newsletter): ArrayCollection
     {
         $users = $this->em->getRepository(User::class)->findBy([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
-        if (!$users)
+        if (!$users) {
             return new ArrayCollection();
+        }
 
         return new ArrayCollection($users);
     }
 
-    public function isAdmin(Project $project, int $hyvorUserId): bool
+    public function isAdmin(Newsletter $newsletter, int $hyvorUserId): bool
     {
         $user = $this->em->getRepository(User::class)->findBy([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'hyvor_user_id' => $hyvorUserId,
             'role' => UserRole::ADMIN->value
         ]);
 
-        if (!$user)
+        if (!$user) {
             return false;
+        }
         return true;
     }
 
-    public function createUser(Project $project, int $hyvorUserId): User
+    public function createUser(Newsletter $newsletter, int $hyvorUserId): User
     {
         $user = new User();
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
-        $user->setProject($project);
+        $user->setNewsletter($newsletter);
         $user->setHyvorUserId($hyvorUserId);
         $user->setRole(UserRole::ADMIN); // Hardcoded for now
 
@@ -61,7 +62,7 @@ class UserService
         return $user;
     }
 
-    public function deleteUser(Project $project, User $user): void
+    public function deleteUser(Newsletter $newsletter, User $user): void
     {
         $this->em->remove($user);
         $this->em->flush();

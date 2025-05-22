@@ -2,7 +2,7 @@
 
 namespace App\Service\UserInvite;
 
-use App\Entity\Project;
+use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,10 +27,10 @@ class UserInviteService
     /**
      * @return ArrayCollection<int, UserInvite>
      */
-    public function getProjectInvites(Project $project): ArrayCollection
+    public function getNewsletterInvites(Newsletter $newsletter): ArrayCollection
     {
         $userInvites = $this->em->getRepository(UserInvite::class)->findBy([
-            'project' => $project,
+            'newsletter' => $newsletter,
         ]);
 
         if (!$userInvites) {
@@ -41,14 +41,14 @@ class UserInviteService
     }
 
     public function createInvite(
-        Project $project,
+        Newsletter $newsletter,
         int $hyvorUserId,
         UserRole $role,
     ): UserInvite {
         $userInvite = new UserInvite();
         $userInvite->setCreatedAt(new \DateTimeImmutable());
         $userInvite->setUpdatedAt(new \DateTimeImmutable());
-        $userInvite->setProject($project);
+        $userInvite->setNewsletter($newsletter);
         $userInvite->setHyvorUserId($hyvorUserId);
         $userInvite->setCode(bin2hex(random_bytes(16)));
         $userInvite->setExpiresAt($this->now()->add(new \DateInterval('P1D')));
@@ -60,7 +60,7 @@ class UserInviteService
         return $userInvite;
     }
 
-    public function sendEmail(Project $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
+    public function sendEmail(Newsletter $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
     {
         $strings = $this->stringsFactory->create();
 
@@ -72,11 +72,11 @@ class UserInviteService
                 'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
                 'subject' => $strings->get(
                     'mail.userInvite.subject',
-                    ['projectName' => $userInvite->getProject()->getName()]
+                    ['newsletterName' => $userInvite->getNewsletter()->getName()]
                 ),
                 'text' => $strings->get(
                     'mail.userInvite.text',
-                    ['projectName' => $userInvite->getProject()->getName(), 'role' => 'admin']
+                    ['newsletterName' => $userInvite->getNewsletter()->getName(), 'role' => 'admin']
                 ),
                 'buttonText' => $strings->get('mail.userInvite.buttonText'),
                 'footerText' => $strings->get('mail.userInvite.footerText'),
@@ -85,7 +85,7 @@ class UserInviteService
 
         $this->emailNotificationService->send(
             $hyvorUser->email,
-            $strings->get('mail.userInvite.subject', ['projectName' => $userInvite->getProject()->getName()]),
+            $strings->get('mail.userInvite.subject', ['newsletterName' => $userInvite->getNewsletter()->getName()]),
             $mail,
         );
     }

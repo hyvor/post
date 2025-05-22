@@ -11,7 +11,7 @@ use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -34,10 +34,10 @@ class FormSubscribeTest extends WebTestCase
         $this->assertResponseHeaderSame('Ratelimit-Reset', '0');
     }
 
-    public function test_error_on_missing_project(): void
+    public function test_error_on_missing_newsletter(): void
     {
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
+            'newsletter_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
             'email' => 'test@hyvor.com',
             'list_ids' => [1],
         ]);
@@ -45,17 +45,17 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
 
-        $this->assertSame('Project not found', $json['message']);
+        $this->assertSame('Newsletter not found', $json['message']);
     }
 
     public function test_validates_list_ids(): void
     {
-        $project = ProjectFactory::createOne();
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => ProjectFactory::createOne()]);
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => NewsletterFactory::createOne()]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $project->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => 'test@hyvor.com',
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
@@ -71,13 +71,13 @@ class FormSubscribeTest extends WebTestCase
         $date = new \DateTimeImmutable('2025-04-14 00:00:00');
         Clock::set(new MockClock($date));
 
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $project->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => 'supun@hyvor.com',
             'list_ids' => [
                 $list1->getId(),
@@ -109,21 +109,21 @@ class FormSubscribeTest extends WebTestCase
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
-        $list1 = NewsletterListFactory::createOne(['project' => $project]);
-        $list2 = NewsletterListFactory::createOne(['project' => $project]);
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $email = 'supun@hyvor.com';
         $subscriber = SubscriberFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'email' => $email,
             'lists' => [$list1],
             'status' => SubscriberStatus::UNSUBSCRIBED,
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'project_uuid' => $project->getUuid(),
+            'newsletter_uuid' => $newsletter->getUuid(),
             'email' => $email,
             'list_ids' => [
                 $list1->getId(),

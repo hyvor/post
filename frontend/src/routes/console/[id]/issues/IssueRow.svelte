@@ -1,12 +1,12 @@
-<script lang="ts">;
-	import { consoleUrlWithProject } from '../../lib/consoleUrl';
+<script lang="ts">
+	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
 	import type { Issue } from '../../types';
 	import IssueStatusTag from './IssueStatusTag.svelte';
 
 	export let issue: Issue;
 </script>
 
-<a class="issue" href={consoleUrlWithProject(`/issues/${issue.id}`)}>
+<a class="issue" href={consoleUrlWithNewsletter(`/issues/${issue.id}`)}>
 	<div class="subject">
 		{issue.subject || '(Subject not set)'}
 	</div>

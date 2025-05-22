@@ -34,7 +34,7 @@ class LinkTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = (new ContentService())->htmlFromJson($json);
+        $html = (new ContentService())->getHtmlFromJson($json);
         $this->assertStringContainsString('<a', $html);
         $this->assertStringContainsString($href, $html);
         $this->assertStringContainsString($content, $html);

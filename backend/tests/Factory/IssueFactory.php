@@ -33,8 +33,21 @@ final class IssueFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'project' => ProjectFactory::new(),
-            'content' => self::faker()->text(255),
+            'newsletter' => NewsletterFactory::new(),
+            'content' => (string)json_encode([
+                'type' => 'doc',
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'content' => [
+                            [
+                                'type' => 'text',
+                                'text' => self::faker()->text(),
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'error_private' => self::faker()->text(255),
             'failed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -62,8 +75,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Issue $issue): void {})
-        ;
+        return $this// ->afterInstantiate(function(Issue $issue): void {})
+            ;
     }
 }

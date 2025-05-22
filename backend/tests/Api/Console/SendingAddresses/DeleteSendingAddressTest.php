@@ -8,7 +8,7 @@ use App\Entity\SendingAddress;
 use App\Service\SendingEmail\SendingAddressService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingAddressFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -18,14 +18,14 @@ class DeleteSendingAddressTest extends WebTestCase
 {
     public function test_delete_sending_email(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
             'verified_in_ses' => true,
         ]);
 
         $sendingEmail = SendingAddressFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'domain' => $domain,
             'email' => 'test@hyvor.com',
         ]);
@@ -33,7 +33,7 @@ class DeleteSendingAddressTest extends WebTestCase
         $id = $sendingEmail->getId();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/sending-addresses/' . $sendingEmail->getId()
         );
@@ -48,10 +48,10 @@ class DeleteSendingAddressTest extends WebTestCase
 
     public function test_delete_sending_email_not_found(): void
     {
-        $project = ProjectFactory::createOne();
+        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
-            $project,
+            $newsletter,
             'DELETE',
             '/sending-addresses/1'
         );

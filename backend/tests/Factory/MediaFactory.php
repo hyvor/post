@@ -28,7 +28,7 @@ final class MediaFactory extends PersistentProxyObjectFactory
             'uuid' => self::faker()->uuid(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'project' => ProjectFactory::new(),
+            'newsletter' => NewsletterFactory::new(),
             'folder' => self::faker()->randomElement(MediaFolder::cases()),
             'extension' => self::faker()->text(255),
             'size' => self::faker()->randomNumber(),

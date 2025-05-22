@@ -2,9 +2,12 @@
 
 namespace App\Command\Dev;
 
+use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\ProjectFactory;
+use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -37,32 +40,51 @@ class DevSeedCommand extends Command
             return Command::FAILURE;
         }
 
-        $project = ProjectFactory::createOne([
+        $newsletter = NewsletterFactory::createOne([
             'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
-            'name' => 'Test Project',
+            'name' => 'Test Newsletter',
         ]);
 
         SubscriberMetadataDefinitionFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'key' => 'name',
             'name' => 'Name',
         ]);
 
         $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
-            'project' => $project,
+            'newsletter' => $newsletter,
             'role' => UserRole::OWNER
         ]);
 
         $list1 = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'name' => 'PHP',
             'description' => 'Get the latest PHP news'
         ]);
         $list2 = NewsletterListFactory::createOne([
-            'project' => $project,
+            'newsletter' => $newsletter,
             'name' => 'Typescript',
             'description' => 'Get the latest Typescript news'
+        ]);
+
+        SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => 'supun@hyvor.com',
+            'lists' => [$list1, $list2],
+            'status' => SubscriberStatus::SUBSCRIBED
+        ]);
+        SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => 'ishini@hyvor.com',
+            'lists' => [$list1, $list2],
+            'status' => SubscriberStatus::SUBSCRIBED
+        ]);
+
+        DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'example.com',
+            'verified_in_ses' => true
         ]);
 
         $output->writeln('<info>Database seeded with test data.</info>');
