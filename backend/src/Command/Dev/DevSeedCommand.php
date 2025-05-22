@@ -43,6 +43,7 @@ class DevSeedCommand extends Command
         $newsletter = NewsletterFactory::createOne([
             'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Newsletter',
+            'slug' => 'test'
         ]);
 
         SubscriberMetadataDefinitionFactory::createOne([

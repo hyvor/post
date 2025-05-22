@@ -8,6 +8,8 @@ use App\Entity\Type\NewsletterFormDefaultColorPalette;
 class NewsletterMeta
 {
 
+    public ?string $logo = null;
+
     /**
      * Template variables
      */
@@ -24,10 +26,7 @@ class NewsletterMeta
     public ?string $template_font_color_on_box = null;
     public ?string $template_font_line_height = null;
     public ?string $template_box_radius = null;
-    public ?string $template_logo = null;
-    public ?string $template_logo_alt = null;
-    public ?string $brand = null;
-    public ?string $brand_url = null;
+    public ?string $template_logo_url = null;
     public ?string $address = null;
     public ?string $unsubscribe_text = null;
 

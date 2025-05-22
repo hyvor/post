@@ -20,10 +20,9 @@ class EmailTemplateVariables
         public string $content = '',
 
         // header
+        public string $name = '',
         public string $logo = '',
-        public string $logo_alt = '',
-        public string $brand = '',
-        public string $brand_url = '',
+        public string $logo_url = '',
 
         // footer
         public string $address = '',
@@ -61,10 +60,9 @@ class EmailTemplateVariables
             subject: '',
             content: '',
 
-            logo: $meta->template_logo ?? '',
-            logo_alt: $meta->template_logo_alt ?? '',
-            brand: $meta->brand ?? $newsletter->getName(),
-            brand_url: $meta->brand_url ?? '',
+            name: $newsletter->getName(),
+            logo: $meta->logo ?? '',
+            logo_url: $meta->template_logo_url ?? '',
 
             address: $meta->address ?? '',
             unsubscribe_url: '',
