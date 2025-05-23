@@ -228,4 +228,13 @@ class SubscriberService
         $this->em->persist($subscriberExport);
         $this->em->flush();
     }
+
+    /**
+     * @return array<SubscriberExport>
+     */
+    public function getExports(Newsletter $newsletter): array
+    {
+        return $this->em->getRepository(SubscriberExport::class)
+            ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
+    }
 }

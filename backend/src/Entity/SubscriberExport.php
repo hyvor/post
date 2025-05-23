@@ -22,7 +22,7 @@ class SubscriberExport
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'newsletters')]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private Newsletter $newsletter;
 

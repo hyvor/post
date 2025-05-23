@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\SubscriberExport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Newsletter;
 
 /**
  * @extends ServiceEntityRepository<SubscriberExport>
@@ -16,4 +15,5 @@ class SubscriberExportRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SubscriberExport::class);
     }
+
 }
