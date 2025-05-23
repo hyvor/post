@@ -207,3 +207,13 @@ export type SendingAddress = {
 	domain: Domain,
 	is_default: boolean,
 }
+
+export type ExportStatus = 'pending' | 'completed' | 'failed';
+
+export type Export = {
+	id: number,
+	created_at: number,
+	status: ExportStatus,
+	url: string | null,
+	error_message: string | null,
+}

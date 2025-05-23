@@ -29,8 +29,8 @@ enum MediaFolder: string
     public function isPrivate(): bool
     {
         return match ($this) {
-            self::ISSUE_IMAGES => false,
-            self::IMPORT, self::EXPORT => true,
+            self::ISSUE_IMAGES, self::EXPORT => false,
+            self::IMPORT => true,
         };
     }
 
