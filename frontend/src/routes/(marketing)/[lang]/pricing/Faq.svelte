@@ -5,30 +5,47 @@
     import IconBoxArrowRight from '@hyvor/icons/IconBoxArrowRight';
     import FAQs from '../@components/FAQs.svelte'
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n()
 </script>
 
+<!-- "faqs": "FAQs",
+		"isThereATrial": "Is there a trial?",
+		"isThereATrialAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
+		"whatHappensIfIExceedTheEmailsLimit": "What happens if I exceed the emails limit?",
+		"whatHappensIfIExceedTheEmailsLimitAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
+		"howDoPaymentsWork": "How do payments work?",
+		"howDoPaymentsWorkAnswer": "Payments are processed securely through our in-house billing system. We accept all major credit/debit cards. You can choose to pay monthly or annually.",
+		"canICancelAnytime": "Can I cancel anytime?",
+		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals." -->
+
 <div class="wrap hds-container">
-	<FeatureSectionHead title="FAQs" />
+	<FeatureSectionHead title={I18n.t('pricing.faqs')} />
 	<div class="faqs">
-		<FAQs q="Is there a trial?" icon={IconArrowClockwise}>
-			Yes, we offer a 14-days trial with all the features, except email custom domain. After
+		<FAQs q={I18n.t('pricing.isThereATrial')} icon={IconArrowClockwise}>
+			<!-- Yes, we offer a 14-days trial with all the features, except email custom domain. After
 			the trial, you can choose to upgrade to a paid plan. Please contact us if you want to
-			extend your trial.
+			extend your trial. -->
+			{I18n.t('pricing.isThereATrialAnswer')}
 		</FAQs>
 
-		<FAQs q="What happens if I exceed the emails limit?" icon={IconBarChart}>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies ultricies,
+		<FAQs q={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimit')} icon={IconBarChart}>
+			<!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies ultricies, -->
+			{I18n.t('pricing.whatHappensIfIExceedTheEmailsLimitAnswer')}
 		</FAQs>
 
-		<FAQs q="How do payments work?" icon={IconWallet}>
-			Payments are processed securely through our in-house billing system. We accept all major
-            credit/debit cards. You can choose to pay monthly or annually.
+		<FAQs q={I18n.t('pricing.howDoPaymentsWork')} icon={IconWallet}>
+			{I18n.t('pricing.howDoPaymentsWorkAnswer')}
+			<!-- Payments are processed securely through our in-house billing system. We accept all major
+            credit/debit cards. You can choose to pay monthly or annually. -->
 		</FAQs>
 
-		<FAQs q="Can I cancel anytime?" icon={IconBoxArrowRight}>
-			Yes, all subscriptions are self-managed. You can change your plan or cancel your
+		<FAQs q={I18n.t('pricing.canICancelAnytime')} icon={IconBoxArrowRight}>
+			{I18n.t('pricing.canICancelAnytimeAnswer')}
+			<!-- Yes, all subscriptions are self-managed. You can change your plan or cancel your
 			subscription at any time in a few clicks. No questions asked. We do not offer refunds
-			for the remaining period, except for unintentional auto-renewals.
+			for the remaining period, except for unintentional auto-renewals. -->
 		</FAQs>
 	</div>
 </div>
