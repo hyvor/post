@@ -24,8 +24,10 @@
 	let sliderVal = $state(1);
 
 	let currentPlanDisplay = $derived(
-		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}m` : `${currentPlan / 25_000}k`
-	);
+	currentPlan >= 1_000_000
+		? `${currentPlan / 1_000_000}M`
+		: `${currentPlan / 1000}K`
+);
 
 	let currentPrice = $derived((currentPlans as any)[currentPlan] * (yearly ? 10 : 1));
 
@@ -69,7 +71,7 @@
 
 	<div class="email-selector">
 		<div class="min-max">
-			<span class="min"> 10k </span>
+			<span class="min"> 25k </span>
 			<div>{currentPlanDisplay}</div>
 			<span class="max"> 1M </span>
 		</div>
