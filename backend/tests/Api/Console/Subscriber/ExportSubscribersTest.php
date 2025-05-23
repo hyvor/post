@@ -36,7 +36,7 @@ class ExportSubscribersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('Export started', $json['message']);
+        $this->assertSame(SubscriberExportStatus::PENDING->value, $json['status']);
 
         $subscriberExport = $this->em->getRepository(SubscriberExport::class)->findOneBy
             (

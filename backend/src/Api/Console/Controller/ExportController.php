@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Object\SubscriberExportObject;
 use App\Entity\Newsletter;
+use App\Entity\SubscriberExport;
 use App\Service\Media\MediaService;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,8 @@ class ExportController extends AbstractController
     #[Route('/subscribers/export', methods: 'POST')]
     public function exportSubscribers(Newsletter $newsletter): JsonResponse
     {
-        $this->subscriberService->exportSubscribers($newsletter);
-        return $this->json(['message' => 'Export started']);
+        $subscriberExport = $this->subscriberService->exportSubscribers($newsletter);
+        return $this->json(new SubscriberExportObject($subscriberExport, null));
     }
 
     #[Route('/subscribers/export', methods: 'GET')]
