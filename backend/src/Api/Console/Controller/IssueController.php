@@ -44,7 +44,7 @@ class IssueController extends AbstractController
 
         $issues = $this
             ->issueService
-            ->getIssues($newsletter, $limit, $offset)
+            ->getIssues($newsletter, limit: $limit, offset: $offset)
             ->map(fn($subscriber) => new IssueObject($subscriber));
 
         return $this->json($issues);

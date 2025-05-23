@@ -2,9 +2,14 @@
 
 namespace App\Command\Dev;
 
+use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Service\Content\ContentService;
+use App\Service\EmailTemplate\EmailTemplateService;
+use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
 use App\Tests\Factory\DomainFactory;
+use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -27,7 +32,10 @@ class DevSeedCommand extends Command
 {
 
     public function __construct(
-        private KernelInterface $kernel
+        private KernelInterface $kernel,
+        private ContentService $contentService,
+        private EmailTemplateService $emailTemplateService,
+        private HtmlEmailTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
         parent::__construct();
     }
@@ -81,6 +89,14 @@ class DevSeedCommand extends Command
             'lists' => [$list1, $list2],
             'status' => SubscriberStatus::SUBSCRIBED
         ]);
+
+        $issue = IssueFactory::createOne([
+            'subject' => 'Content Style Guide',
+            'newsletter' => $newsletter,
+            'status' => IssueStatus::SENT,
+            'content' => $this->contentService->getJsonFromHtml($this->contentService->getDefaultContentStyleHtml())
+        ]);
+        $issue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($issue));
 
         DomainFactory::createOne([
             'user_id' => 1,

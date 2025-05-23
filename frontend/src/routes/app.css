@@ -4,6 +4,6 @@
 
 :root:not(.dark) {
     --accent-light: #e5f1f2;
-    --accent-lightest: #FDFFFF;
+    --accent-lightest: #f8fcff;
     --accent-light-mid: #f7fbff;
 }

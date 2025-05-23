@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { initNewsletter } from './newslettePageActions';
 	import { page } from '$app/state';
-	import { newsletterStore } from './newsletterPageStore';
+	import { issuesStore, newsletterStore } from './newsletterPageStore';
 	import NewsletterPage from './NewsletterPage.svelte';
 
 	let loading = $state(true);
@@ -13,6 +13,7 @@
 		initNewsletter(page.params.slug)
 			.then((res) => {
 				newsletterStore.set(res.newsletter);
+				issuesStore.set(res.issues);
 			})
 			.catch((err) => {
 				error = err.message;
