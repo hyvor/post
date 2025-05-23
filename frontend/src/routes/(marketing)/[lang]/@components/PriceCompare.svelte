@@ -1,95 +1,203 @@
-<script>
-	import FeatureSectionHead from "../@homepage/FeatureSectionHead.svelte";
+<script lang="ts">
+    import FeatureSectionHead from "../@homepage/FeatureSectionHead.svelte";
+
+	const prices = [
+		{ name: 'Hyvor Post', price: 35, color: '#729290' },
+    { name: 'Brevo', price: 68, color: '#df6c64' },
+		{ name: 'Beehiv', price: 109, color: '#df6c64' },
+    { name: 'Kit', price: 119, color: '#df6c64' },
+		{ name: 'Mailchimp', price: 266, color: '#df6c64' }
+	];
+
+	const maxPrice = Math.max(...prices.map(p => p.price));
 </script>
-<FeatureSectionHead
+
+
+<div class="wrap hds-container">
+  <FeatureSectionHead
     title="Hyvor Post vs Other Platforms"
     wrapStyle="margin-top:50px"
+    subtitle="Price for 100,000 emails per month"
 />
-<dl>
-    <dd class="percentage percentage-11"><span class="text">Hyvor Post 11%</span></dd>
-    <dd class="percentage percentage-49"><span class="text">Mailchimp 45%</span></dd>
-    <dd class="percentage percentage-16"><span class="text">Brevo 16%</span></dd>
-    <dd class="percentage percentage-2"><span class="text">Opera: 1.62%</span></dd>
-</dl>
+<div class="hds-container">
+  <!-- <div class="graph-container">
+    {#each prices as { name, price, color }}
+      <div class="row">
+        <div class="name">{name}</div>
+        <div class="bar-container">
+          <div
+            class="bar"
+            style="width: {((price / maxPrice) * 100) + 10}%; background-color: {color};"
+          >
+            <div class="price">${price}</div>
+          </div>
+        </div>
+        
+      </div>
+    {/each}
+  </div> -->
+  <div class="graph-container">
+    {#each prices as { name, price, color }}
+      <div class="row">
+        <div class="name">
+          <!-- <img class="logo" src={logo} alt={name + ' logo'} /> -->
+          {name}
+        </div>
+        <div class="bar-container">
+          <div
+            class="bar"
+            style="width:  {((price / maxPrice) * 100) + 10}%; background-color: {color};"
+          >
+            <div class="price">€{price}</div>
+          </div>
+        </div>
+      </div>
+    {/each}
+  </div>
+</div>
+</div>
+
+
+<!-- <style lang="scss">
+	.graph-container {
+		max-width: 640px;
+		margin: 2rem auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.name {
+		width: 120px;
+		font-weight: 600;
+	}
+
+	.bar-container {
+		flex: 1;
+		position: relative;
+		height: 36px;
+	}
+
+	.bar {
+		height: 100%;
+		border-radius: 5px;
+		display: inline-block;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	.price {
+		position: relative;
+		left: 12px;
+		top: 50%; 
+		transform: translateY(-50%);
+		font-weight: 600;
+		color: rgb(255, 255, 255);
+	}
+
+  /* mobile */
+  @media (max-width: 640px) {
+	.row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.name {
+		width: auto;
+		font-size: 0.95rem;
+	}
+
+	.bar-container {
+		width: 100%;
+	}
+}
+</style> -->
 
 <style lang="scss">
-    dl {
-  display: flex;
-  background-color: white;
-  flex-direction: column;
-  width: 100%;
-  max-width: 700px;
-  position: relative;
-  padding: 20px;
+.wrap {
+  padding-top: 40px;
+  // padding-bottom: 40px;
+}
+  .graph-container {
+	max-width: 640px;
+	margin: 2rem auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	font-family: system-ui, sans-serif;
+	padding: 0 1rem;
 }
 
-dt {
-  align-self: flex-start;
-  width: 100%;
-  font-weight: 700;
-  display: block;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: 700;
-  margin-bottom: 20px;
-  margin-left: 130px;
+.row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	// gap: 1rem;
 }
 
-.text {
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  height: 40px;
-  width: 130px;
-  background-color: white;
-  position: absolute;
-  left: 0;
-  justify-content: flex-end;
+.name {
+	width: 160px;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 600;
+	font-size: 1rem;
 }
 
-.percentage {
-  font-size: .8em;
-  line-height: 1;
-  text-transform: uppercase;
-  width: 100%;
-  height: 40px;
-  margin-left: 130px;
-//   background: repeating-linear-gradient(
-//   to right,
-//   #ddd,
-//   #ddd 1px,
-//   #fff 1px,
-//   #fff 5%
-// );
-  
-  &:after {
-    content: "";
-    display: block;
-    background-color: #3d9970;
-    width: 50px;
-    margin-bottom: 10px;
-    height: 90%;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: background-color .3s ease;
-    cursor: pointer;
+// .logo {
+// 	width: 24px;
+// 	height: 24px;
+// 	object-fit: contain;
+// }
+
+.bar-container {
+	flex: 1;
+	// background-color: #e5e7eb; /* light gray background to visualize bar space */
+	border-radius: 20px;
+	overflow: hidden;
+	height: 36px;
+	position: relative;
+}
+
+.bar {
+	height: 100%;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	padding-left: 12px;
+	color: white;
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+
+/* Mobile styles */
+@media (max-width: 640px) {
+	.row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.name {
+		width: auto;
+		font-size: 0.95rem;
+	}
+
+	.bar-container {
+		width: 100%;
+    border-radius: 20px !important;
+	}
+
+  .bar {
+    height: 36px;
+    border-radius: 20px !important;
   }
-  &:hover,
-  &:focus {
-    &:after {
-       background-color: #aaa; 
-    }
-  }
 }
 
-@for $i from 1 through 100 {
-  .percentage-#{$i} {
-    &:after {
-      $value: ($i * 1%);
-      width: $value;
-    }
-  }
-}
 </style>
-
