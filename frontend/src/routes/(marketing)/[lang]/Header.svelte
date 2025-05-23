@@ -3,7 +3,7 @@
 	import { Button } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { getMarketingI18n } from './locale';
+	import { getMarketingI18n } from './[lang]/locale';
 
 	let loggedIn = $state(false);
 
