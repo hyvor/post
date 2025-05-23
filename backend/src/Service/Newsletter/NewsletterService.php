@@ -193,8 +193,10 @@ class NewsletterService
         $currentMeta = $newsletter->getMeta();
 
         foreach (get_object_vars($updates) as $property => $value) {
-            $cased = new UnicodeString($property)->snake();
-            $currentMeta->{$cased} = $value;
+            if ($updates->isSet($property) === false) {
+                continue;
+            }
+            $currentMeta->{$property} = $value;
         }
 
         $newsletter->setMeta(clone $currentMeta);
