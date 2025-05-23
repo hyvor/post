@@ -5,9 +5,9 @@ namespace App\Api\Public\Controller\Template;
 use App\Api\Public\Input\RetrieveContentHtmlInput;
 use App\Api\Public\Input\TemplateRenderWithInput;
 use App\Service\Content\ContentService;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
-use App\Service\EmailTemplate\EmailTemplateService;
-use App\Service\EmailTemplate\EmailTemplateVariables;
+use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TemplateService;
+use App\Service\Template\TemplateVariables;
 use Hyvor\Internal\Http\Exceptions\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,8 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private HtmlEmailTemplateRenderer $renderer,
-        private EmailTemplateService $templateService,
+        private HtmlTemplateRenderer $renderer,
+        private TemplateService $templateService,
         private ContentService $contentService
     ) {
     }
@@ -27,7 +27,7 @@ class TemplateController extends AbstractController
     #[Route('/template/with', methods: 'POST')]
     public function renderWith(#[MapRequestPayload] TemplateRenderWithInput $input): JsonResponse
     {
-        $variables = new EmailTemplateVariables();
+        $variables = new TemplateVariables();
         $variablesInput = $input->variables;
         $variablesInput = json_decode($variablesInput, true);
 
@@ -50,7 +50,7 @@ class TemplateController extends AbstractController
     public function defaultTemplate(): JsonResponse
     {
         $rawTemplate = $this->templateService->readDefaultTemplate();
-        $defaults = new EmailTemplateVariables();
+        $defaults = new TemplateVariables();
 
         return new JsonResponse([
             'template' => $rawTemplate,

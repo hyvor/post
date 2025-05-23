@@ -14,7 +14,8 @@
 
 		style.textContent = `
 		    body {
-                padding: 60px 40px!important;
+                padding-top: 60px!important;
+                padding-bottom: 60px!important;
 		    }
 		`;
 		doc.body.appendChild(style);

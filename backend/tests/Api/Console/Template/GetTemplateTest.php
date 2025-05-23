@@ -5,14 +5,14 @@ namespace Api\Console\Template;
 use App\Api\Console\Controller\TemplateController;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Template;
-use App\Service\EmailTemplate\EmailTemplateService;
+use App\Service\Template\TemplateService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(TemplateController::class)]
-#[CoversClass(EmailTemplateService::class)]
+#[CoversClass(TemplateService::class)]
 #[CoversClass(TemplateObject::class)]
 #[CoversClass(Template::class)]
 class GetTemplateTest extends WebTestCase

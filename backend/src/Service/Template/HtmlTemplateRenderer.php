@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Service\EmailTemplate;
+namespace App\Service\Template;
 
 use App\Entity\Send;
 use App\Service\Content\ContentService;
 use App\Entity\Issue;
 use Twig\Environment;
 
-class HtmlEmailTemplateRenderer
+class HtmlTemplateRenderer
 {
 
     public function __construct(
         private Environment $twig,
         private ContentService $contentService,
-        private EmailTemplateService $emailTemplateService,
+        private TemplateService $emailTemplateService,
     ) {
     }
 
-    private function variablesFromIssue(Issue $issue): EmailTemplateVariables
+    private function variablesFromIssue(Issue $issue): TemplateVariables
     {
-        $variables = EmailTemplateVariables::fromNewsletter($issue->getNewsletter());
+        $variables = TemplateVariables::fromNewsletter($issue->getNewsletter());
         $variables->subject = (string)$issue->getSubject();
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT
@@ -36,7 +36,7 @@ class HtmlEmailTemplateRenderer
         return $this->render($template, $variables);
     }
 
-    private function variablesFromSend(Send $send): EmailTemplateVariables
+    private function variablesFromSend(Send $send): TemplateVariables
     {
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
@@ -53,7 +53,7 @@ class HtmlEmailTemplateRenderer
         return $this->render($template, $variables);
     }
 
-    public function render(string $template, EmailTemplateVariables $variables): string
+    public function render(string $template, TemplateVariables $variables): string
     {
         $template = $this->twig->createTemplate($template);
         return $template->render((array)$variables);
