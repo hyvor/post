@@ -1,42 +1,47 @@
 <script lang="ts">
+	import { getMarketingI18n } from "../locale";
+
+	const I18n = getMarketingI18n();
 
 	const features = [
 		{
-			title: 'Easy Installation',
+			title: I18n.t('easyInstallation'),
 			description:
-				'Seamlessly integrate embeds on any CMS or static site with our plugins or simple installation code.',
+				I18n.t('easyInstallationDescription'),
 			image: '/img/easy-install.svg'
 		},
 
 		{
-			title: 'Embeddable Newsletter Form',
+			title: I18n.t('embeddableNewsletterForm'),
 			description:
-				'Embeddable, customizable newsletter form to collect emails from your users on your website.',
+				I18n.t('embeddableNewsletterFormDescription'),
 			image: '/img/embed-newsletter-form.svg'
 		},
 
 		{
-			title: 'Multiple Segments',
+			title: I18n.t('multipleSegments'),
 			description:
-				'Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.',
+				I18n.t('multipleSegmentsDescription'),
 			image: '/img/multiple-segments.svg'
 		},
 
 		{
-			title: 'Comprehensive Analytics',
-			description: 'Send engaging newsletters to your subscribers. Track opens, clicks, and more.',
+			title: I18n.t('comprehensiveAnalytics'),
+			description: 
+				I18n.t('comprehensiveAnalyticsDescription'),
 			image: '/img/comprehensive-analytics.svg'
 		},
 		{
-			title: 'Custom Email Domain',
+			title: I18n.t('customEmailDomain'),
 			description:
-				'Boost credibility and brand recognition by sending newsletters from your own domain.',
+				I18n.t('customEmailDomainDescription'),
 			image: '/img/custom-domain.svg'
 		},
 
 		{
-			title: 'Customizable Templates',
-			description: 'Choose from a variety of templates and customize them to match your brand.',
+			title: I18n.t('customizableTemplates'),
+			description: 
+				I18n.t('customizableTemplatesDescription'),
 			image: '/img/custom-templates.svg'
 		}
 	];
