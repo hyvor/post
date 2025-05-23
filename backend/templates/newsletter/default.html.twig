@@ -20,15 +20,16 @@
             font-size: {{ font_size }};
             font-weight: {{ font_weight }};
             line-height: {{ font_line_height }};
-            background-color: {{ color_accent }}05
+            background-color: {{ color_background }};
+            color: {{ color_background_text }};
         }
 
         .content-box {
             width: 625px;
             max-width: 100%;
             margin: auto;
-            color: {{ font_color_on_box }};
-            background-color: {{ color_box_background }};
+            background-color: {{ color_box }};
+            color: {{ color_box_text }};
             border-radius: {{ box_radius }};
             box-shadow: {{ box_shadow }};
             border: {{ box_border }};
@@ -112,7 +113,7 @@
             display: inline-block;
             padding: 10px 20px;
             background-color: {{ color_accent }};
-            color: #fff;
+            color: {{ color_accent_text }};
             text-decoration: none;
             border-radius: 5px;
             font-weight: 600;
@@ -164,7 +165,6 @@
         padding: 25px 35px;
         font-size: 14px;
         text-align: center;
-        color: {{ font_color_on_background }};
         ">
     {{ address }}
 

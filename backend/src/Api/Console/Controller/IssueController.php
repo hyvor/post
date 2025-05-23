@@ -15,7 +15,7 @@ use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\Template\HtmlTemplateRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ class IssueController extends AbstractController
         private IssueService $issueService,
         private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private HtmlEmailTemplateRenderer $templateRenderer,
+        private HtmlTemplateRenderer $templateRenderer,
         private EmailSenderService $emailTransportService
     ) {
     }

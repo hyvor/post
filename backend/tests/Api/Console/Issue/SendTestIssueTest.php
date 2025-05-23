@@ -3,14 +3,14 @@
 namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
-#[CoversClass(HtmlEmailTemplateRenderer::class)]
+#[CoversClass(HtmlTemplateRenderer::class)]
 class SendTestIssueTest extends WebTestCase
 {
 

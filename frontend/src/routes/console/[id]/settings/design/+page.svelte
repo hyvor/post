@@ -6,19 +6,18 @@
 		ActionList,
 		ActionListItem,
 		Button,
-		toast,
-		confirm,
 		Slider,
-		TextInput
+		TextInput,
+		BoxShadowPicker
 	} from '@hyvor/design/components';
-	import { newsletterStore } from '../../../lib/stores/newsletterStore';
-	import { updateNewsletter } from '../../../lib/actions/newsletterActions';
-	import type { NewsletterMeta, Newsletter } from '../../../types';
+	import { newsletterEditingStore, newsletterStore } from '../../../lib/stores/newsletterStore';
+	import type { NewsletterMeta } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
-	import SaveDiscard from '../../@components/save/SaveDiscard.svelte';
 	import SettingsTop from '../@components/SettingsTop.svelte';
 	import EditTemplateModal from './EditTemplateModal.svelte';
+	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
+	import BoxBorder from './BoxBorder.svelte';
 
 	let hasChanges = false;
 	let showFontWeight = false;
@@ -65,49 +64,11 @@
 	}
 
 	// Create a reactive object with all template values
+	/** @deprecated */
 	let templateValues: Partial<NewsletterMeta> = getTemplateValues();
 
-	// Object used to track changes
-	let metaToSave: Partial<NewsletterMeta> = {};
-
 	function handleChange(key: keyof NewsletterMeta, value: string) {
-		metaToSave[key] = value as any;
-		templateValues[key] = value as any;
-		hasChanges = true;
-	}
-
-	async function saveChanges() {
-		try {
-			const currentNewsletter = $newsletterStore;
-			const updateData = {
-				...currentNewsletter,
-				...metaToSave
-			};
-			const updatedNewsletter: Newsletter = await updateNewsletter(updateData);
-			newsletterStore.set(updatedNewsletter);
-			metaToSave = {};
-			hasChanges = false;
-			toast.success('Changes saved successfully!');
-		} catch (error: any) {
-			toast.error('Failed to save changes: ' + error.message);
-		}
-	}
-
-	async function discardChanges() {
-		const confirmation = await confirm({
-			title: 'Discard changes',
-			content: 'Are you sure you want to discard the changes ?',
-			confirmText: 'Discard',
-			cancelText: 'Cancel',
-			danger: true
-		});
-
-		if (!confirmation) return;
-
-		metaToSave = {};
-		hasChanges = false;
-		// Reset template values to their original state
-		templateValues = getTemplateValues();
+		return;
 	}
 
 	const fontSizeValues = [12, 14, 16, 18, 20, 24, 28, 32];
@@ -148,14 +109,6 @@
 		handleChange('template_box_radius', radius);
 	}
 
-	function decodeBorderValue(border: string) {
-		const [width, , color] = border.split(' ');
-		return {
-			width: parseInt(width),
-			color: color
-		};
-	}
-
 	function encodeBorderValue(width: number, color: string) {
 		return `${width}px solid ${color}`;
 	}
@@ -179,37 +132,59 @@
 		{#snippet nested()}
 			<SplitControl label="Accent">
 				<ColorPicker
-					color={templateValues.template_color_accent ??
+					color={$newsletterEditingStore.template_color_accent ??
 						newsletterDefaults.TEMPLATE_COLOR_ACCENT}
-					on:input={(e: CustomEvent<string>) =>
-						handleChange('template_color_accent', e.detail)}
+					oninput={(val) => ($newsletterEditingStore.template_color_accent = val)}
 				/>
 			</SplitControl>
+			<SplitControl label="Accent Text">
+				<ColorPicker
+					color={$newsletterEditingStore.template_color_accent_text ??
+						newsletterDefaults.TEMPLATE_COLOR_ACCENT_TEXT}
+					oninput={(val) => ($newsletterEditingStore.template_color_accent_text = val)}
+				/>
+			</SplitControl>
+
 			<SplitControl label="Background">
 				<ColorPicker
-					color={templateValues.template_color_background ??
+					color={$newsletterEditingStore.template_color_background ??
 						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND}
-					on:input={(e: CustomEvent<string>) =>
-						handleChange('template_color_background', e.detail)}
+					oninput={(val) => ($newsletterEditingStore.template_color_background = val)}
 				/>
 			</SplitControl>
-			<SplitControl label="Box background">
+
+			<SplitControl label="Background Text">
 				<ColorPicker
-					color={templateValues.template_color_box_background ??
-						newsletterDefaults.TEMPLATE_COLOR_BOX_BACKGROUND}
-					on:input={(e: CustomEvent<string>) =>
-						handleChange('template_color_box_background', e.detail)}
+					color={$newsletterEditingStore.template_color_background_text ??
+						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND_TEXT}
+					oninput={(val) =>
+						($newsletterEditingStore.template_color_background_text = val)}
+				/>
+			</SplitControl>
+
+			<SplitControl label="Box">
+				<ColorPicker
+					color={$newsletterEditingStore.template_color_box ??
+						newsletterDefaults.TEMPLATE_COLOR_BOX}
+					oninput={(val) => ($newsletterEditingStore.template_color_box = val)}
+				/>
+			</SplitControl>
+			<SplitControl label="Box Text">
+				<ColorPicker
+					color={$newsletterEditingStore.template_color_box_text ??
+						newsletterDefaults.TEMPLATE_COLOR_BOX_TEXT}
+					oninput={(val) => ($newsletterEditingStore.template_color_box_text = val)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box shadow">
-				<ColorPicker
-					color={templateValues.template_box_shadow ??
+				<BoxShadowPicker
+					value={$newsletterEditingStore.template_box_shadow ??
 						newsletterDefaults.TEMPLATE_BOX_SHADOW}
-					on:input={(e: CustomEvent<string>) =>
-						handleChange('template_box_shadow', e.detail)}
+					oninput={(val) => ($newsletterEditingStore.template_box_shadow = val)}
 				/>
 			</SplitControl>
 			<SplitControl label="Box border">
+				<BoxBorder />
 				<div class="box-border-controls">
 					<Slider
 						min={0}
@@ -304,9 +279,26 @@
 	</SplitControl>
 </div>
 
-{#if hasChanges}
-	<SaveDiscard onsave={saveChanges} ondiscard={discardChanges} />
-{/if}
+<NewsletterSaveDiscard
+	keys={[
+		'template_color_accent',
+		'template_color_accent_text',
+		'template_color_background',
+		'template_color_background_text',
+		'template_color_box',
+		'template_color_box_text',
+		'template_box_shadow',
+		'template_box_border',
+		'template_font_size',
+		'template_font_family',
+		'template_font_weight',
+		'template_font_weight_heading',
+		'template_font_color_on_background',
+		'template_font_color_on_box',
+		'template_font_line_height',
+		'template_box_radius'
+	]}
+/>
 
 <EditTemplateModal bind:show={showEditTemplateModal} />
 

@@ -4,7 +4,7 @@ namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Entity\Issue;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Issue::class)]
 #[CoversClass(IssueController::class)]
-#[CoversClass(HtmlEmailTemplateRenderer::class)]
+#[CoversClass(HtmlTemplateRenderer::class)]
 class PreviewIssueTest extends WebTestCase
 {
     public function testPreviewIssue(): void

@@ -4,7 +4,7 @@ namespace App\Service\Issue;
 
 use App\Entity\Issue;
 use App\Entity\Send;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\Template\HtmlTemplateRenderer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -13,7 +13,7 @@ class EmailSenderService
 
     public function __construct(
         private MailerInterface $mailer,
-        private HtmlEmailTemplateRenderer $htmlEmailTemplateRenderer,
+        private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
     }
 

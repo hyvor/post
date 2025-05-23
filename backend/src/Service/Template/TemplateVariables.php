@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service\EmailTemplate;
+namespace App\Service\Template;
 
 // https://post.hyvor.com/docs/email-templates
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterDefaults;
 
-class EmailTemplateVariables
+class TemplateVariables
 {
 
     public function __construct(
@@ -31,16 +31,17 @@ class EmailTemplateVariables
 
         // colors in HEX format
         public string $color_accent = NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
+        public string $color_accent_text = NewsletterDefaults::TEMPLATE_COLOR_ACCENT_TEXT,
         public string $color_background = NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
-        public string $color_box_background = NewsletterDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
+        public string $color_background_text = NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND_TEXT,
+        public string $color_box = NewsletterDefaults::TEMPLATE_COLOR_BOX,
+        public string $color_box_text = NewsletterDefaults::TEMPLATE_COLOR_BOX_TEXT,
 
         // font
         public string $font_family = NewsletterDefaults::TEMPLATE_FONT_FAMILY,
         public string $font_size = NewsletterDefaults::TEMPLATE_FONT_SIZE,
         public string $font_weight = NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
         public string $font_weight_heading = NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
-        public string $font_color_on_background = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
-        public string $font_color_on_box = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
         public string $font_line_height = NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
         // Box radius
@@ -55,7 +56,7 @@ class EmailTemplateVariables
     {
         $meta = $newsletter->getMeta();
 
-        return new EmailTemplateVariables(
+        return new TemplateVariables(
             lang: 'en',
             subject: '',
             content: '',
@@ -69,20 +70,21 @@ class EmailTemplateVariables
             unsubscribe_text: $meta->unsubscribe_text ?? 'Unsubscribe',
 
             color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
-            color_background: $meta->color_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
-            color_box_background: $meta->color_box_background ?? NewsletterDefaults::TEMPLATE_COLOR_BOX_BACKGROUND,
+            color_accent_text: $meta->template_color_accent_text ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT_TEXT,
+            color_background: $meta->template_color_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_background_text: $meta->template_color_background_text ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND_TEXT,
+            color_box: $meta->template_color_box ?? NewsletterDefaults::TEMPLATE_COLOR_BOX,
+            color_box_text: $meta->template_color_box_text ?? NewsletterDefaults::TEMPLATE_COLOR_BOX_TEXT,
 
             font_family: $meta->font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
             font_size: $meta->font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
             font_weight: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
             font_weight_heading: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
-            font_color_on_background: $meta->font_color_on_background ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
-            font_color_on_box: $meta->font_color_on_box ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
             font_line_height: $meta->font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
-            box_radius: $meta->box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
-            box_shadow: $meta->box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
-            box_border: $meta->box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
+            box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
+            box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
+            box_border: $meta->template_box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
         );
     }
 

@@ -10,6 +10,8 @@ use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\VerifyDomainException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+// TODO: wrong bad request class
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -42,9 +44,10 @@ class DomainController extends AbstractController
         $domainInDb = $this->domainService->getDomainByDomainName($input->domain);
 
         if ($domainInDb) {
-            throw new BadRequestException($domainInDb->getUserId() === $user->id ?
-                'This domain is already registered' :
-                'This domain is already registered by another user'
+            throw new BadRequestException(
+                $domainInDb->getUserId() === $user->id ?
+                    'This domain is already registered' :
+                    'This domain is already registered by another user'
             );
         }
 

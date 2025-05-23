@@ -6,8 +6,8 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Content\ContentService;
-use App\Service\EmailTemplate\EmailTemplateService;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
+use App\Service\Template\TemplateService;
+use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
@@ -34,8 +34,8 @@ class DevSeedCommand extends Command
     public function __construct(
         private KernelInterface $kernel,
         private ContentService $contentService,
-        private EmailTemplateService $emailTemplateService,
-        private HtmlEmailTemplateRenderer $htmlEmailTemplateRenderer,
+        private TemplateService $emailTemplateService,
+        private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
         parent::__construct();
     }
