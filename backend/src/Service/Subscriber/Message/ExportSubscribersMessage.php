@@ -16,4 +16,4 @@ readonly class ExportSubscribersMessage
     {
         return $this->newsletterId;
     }
-} 
+}

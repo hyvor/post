@@ -11,6 +11,7 @@ enum MediaFolder: string
      * When importing. ex: a CSV file for subscribers
      */
     case IMPORT = 'import';
+    case EXPORT = 'export';
 
     /**
      * @return string[]
@@ -21,7 +22,7 @@ enum MediaFolder: string
 
         return match ($this) {
             self::ISSUE_IMAGES => $imageExtensions,
-            self::IMPORT => ['csv'],
+            self::IMPORT, self::EXPORT => ['csv'],
         };
     }
 
@@ -29,7 +30,7 @@ enum MediaFolder: string
     {
         return match ($this) {
             self::ISSUE_IMAGES => false,
-            self::IMPORT => true,
+            self::IMPORT, self::EXPORT => true,
         };
     }
 

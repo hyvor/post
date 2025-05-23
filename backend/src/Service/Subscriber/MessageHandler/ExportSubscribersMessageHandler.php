@@ -28,18 +28,18 @@ class ExportSubscribersMessageHandler
 
         $csvPath = $this->csvExporter->createFile($newsletter);
 
-        // Create an UploadedFile from the CSV file
         $file = new UploadedFile(
             $csvPath,
             'subscribers.csv',
             'text/csv',
+            null,
+            true
         );
 
-        // Upload the file using MediaService
         $this->mediaService->upload(
             $newsletter,
-            MediaFolder::IMPORT,
-            $file
+            MediaFolder::EXPORT,
+            $file,
         );
 
         // Clean up the temporary file
