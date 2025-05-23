@@ -3,12 +3,16 @@
 namespace App\Api\Public\Controller\NewsletterPage;
 
 use App\Api\Public\Input\Newsletter\NewsletterInitInput;
-use App\Api\Public\Object\NewsletterPage\IssueObject;
+use App\Api\Public\Object\NewsletterPage\IssueListObject;
 use App\Api\Public\Object\NewsletterPage\NewsletterObject;
+use App\Entity\Issue;
 use App\Entity\Newsletter;
+use App\Entity\Type\IssueStatus;
+use App\Service\Issue\IssueService;
 use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,8 +20,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class NewsletterController extends AbstractController
 {
 
+    const ISSUES_LIMIT = 25;
+
     public function __construct(
-        private NewsletterService $newsletterService
+        private NewsletterService $newsletterService,
+        private IssueService $issueService,
     ) {
     }
 
@@ -33,16 +40,23 @@ class NewsletterController extends AbstractController
 
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
-            'issues' => $this->getIssueObjects($newsletter)
+            'issues' => $this->getIssueListObjects($newsletter)
         ]);
     }
 
     /**
-     * @return array<IssueObject>
+     * @return array<IssueListObject>
      */
-    private function getIssueObjects(Newsletter $newsletter): array
+    private function getIssueListObjects(Newsletter $newsletter, int $offset = 0): array
     {
-        return [];
+        $issues = $this->issueService->getIssues(
+            $newsletter,
+            limit: self::ISSUES_LIMIT,
+            offset: $offset,
+            status: IssueStatus::SENT,
+        );
+
+        return $issues->map(fn(Issue $issue) => new IssueListObject($issue))->toArray();
     }
 
     #[Route('/newsletter-page/issues', methods: 'GET')]
@@ -53,6 +67,27 @@ class NewsletterController extends AbstractController
 
         return new JsonResponse([
             //
+        ]);
+    }
+
+    #[Route('/newsletter-page/issues/{uuid}', methods: 'GET')]
+    public function getIssueHtml(string $uuid): JsonResponse
+    {
+        $issue = $this->issueService->getIssueByUuid($uuid);
+
+        if ($issue === null) {
+            throw new UnprocessableEntityHttpException('Issue not found');
+        }
+
+        if ($issue->getStatus() !== IssueStatus::SENT) {
+            throw new UnprocessableEntityHttpException('Issue not sent');
+        }
+
+        $html = $issue->getHtml();
+
+        return new JsonResponse([
+            'subject' => $issue->getSubject(),
+            'html' => $html,
         ]);
     }
 

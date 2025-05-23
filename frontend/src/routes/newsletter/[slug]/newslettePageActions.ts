@@ -1,13 +1,13 @@
-import type { Issue, Newsletter } from "./newsletterPageTypes";
+import type { Issue, IssueList, Newsletter } from "./newsletterPageTypes";
 
 interface InitNewsletterResponse {
     newsletter: Newsletter
-    issues: Issue[]
+    issues: IssueList[]
 }
 
 
 async function call<T>(
-  endpoint: string,
+    endpoint: string,
     params: Record<string, any> = {},
 ): Promise<T> {
 
@@ -28,4 +28,8 @@ async function call<T>(
 
 export function initNewsletter(slug: string) {
     return call<InitNewsletterResponse>("/newsletter", { slug });
+}
+
+export function getIssueHtml(issueUuid: string) {
+    return call<Issue>("/issues/" + issueUuid);
 }
