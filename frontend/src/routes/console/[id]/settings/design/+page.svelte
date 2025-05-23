@@ -1,137 +1,38 @@
 <script lang="ts">
-	import {
-		ColorPicker,
-		SplitControl,
-		Button,
-		TextInput,
-		BoxShadowPicker
-	} from '@hyvor/design/components';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import { Button, ButtonGroup } from '@hyvor/design/components';
 	import SettingsTop from '../@components/SettingsTop.svelte';
 	import EditTemplateModal from './EditTemplateModal.svelte';
-	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
-	import BoxBorder from './BoxBorder.svelte';
-	import BoxRadius from './BoxRadius.svelte';
-	import FontSize from './FontSize.svelte';
-	import FontWeight from './FontWeight.svelte';
+	import ConfigComponent from './ConfigComponent.svelte';
+	import IconCodeSlash from '@hyvor/icons/IconCodeSlash';
+	import IconEye from '@hyvor/icons/IconEye';
+	import BasicPreviewModal from './modal/BasicPreviewModal.svelte';
 
 	let showEditTemplateModal = false;
-
-	const newsletterDefaults = getAppConfig().newsletter_defaults;
+	let showPreviewModal = false;
 </script>
 
 <SettingsTop>
-	<Button on:click={() => (showEditTemplateModal = true)}>Edit Template</Button>
+	<ButtonGroup>
+		<Button on:click={() => (showPreviewModal = true)}>
+			Preview Email
+			{#snippet end()}
+				<IconEye size={12} />
+			{/snippet}
+		</Button>
+		<Button on:click={() => (showEditTemplateModal = true)}>
+			Edit Template
+			{#snippet end()}
+				<IconCodeSlash />
+			{/snippet}
+		</Button>
+	</ButtonGroup>
 </SettingsTop>
+
 <div class="wrap">
-	<SplitControl label="Colors">
-		{#snippet nested()}
-			<SplitControl label="Accent">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_accent ??
-						newsletterDefaults.TEMPLATE_COLOR_ACCENT}
-					oninput={(val) => ($newsletterEditingStore.template_color_accent = val)}
-				/>
-			</SplitControl>
-			<SplitControl label="Accent Text">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_accent_text ??
-						newsletterDefaults.TEMPLATE_COLOR_ACCENT_TEXT}
-					oninput={(val) => ($newsletterEditingStore.template_color_accent_text = val)}
-				/>
-			</SplitControl>
-
-			<SplitControl label="Background">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_background ??
-						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND}
-					oninput={(val) => ($newsletterEditingStore.template_color_background = val)}
-				/>
-			</SplitControl>
-
-			<SplitControl label="Background Text">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_background_text ??
-						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND_TEXT}
-					oninput={(val) =>
-						($newsletterEditingStore.template_color_background_text = val)}
-				/>
-			</SplitControl>
-
-			<SplitControl label="Box">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_box ??
-						newsletterDefaults.TEMPLATE_COLOR_BOX}
-					oninput={(val) => ($newsletterEditingStore.template_color_box = val)}
-				/>
-			</SplitControl>
-			<SplitControl label="Box Text">
-				<ColorPicker
-					color={$newsletterEditingStore.template_color_box_text ??
-						newsletterDefaults.TEMPLATE_COLOR_BOX_TEXT}
-					oninput={(val) => ($newsletterEditingStore.template_color_box_text = val)}
-				/>
-			</SplitControl>
-			<SplitControl label="Box shadow">
-				<BoxShadowPicker
-					value={$newsletterEditingStore.template_box_shadow ??
-						newsletterDefaults.TEMPLATE_BOX_SHADOW}
-					oninput={(val) => ($newsletterEditingStore.template_box_shadow = val)}
-				/>
-			</SplitControl>
-			<SplitControl label="Box border">
-				<BoxBorder />
-			</SplitControl>
-			<SplitControl label="Box radius">
-				<BoxRadius />
-			</SplitControl>
-		{/snippet}
-	</SplitControl>
-	<SplitControl label="Fonts">
-		{#snippet nested()}
-			<SplitControl label="Font Size">
-				<FontSize />
-			</SplitControl>
-			<SplitControl label="Font Family">
-				<TextInput
-					value={$newsletterEditingStore.template_font_family ??
-						newsletterDefaults.TEMPLATE_FONT_FAMILY}
-					on:input={(e) =>
-						($newsletterEditingStore.template_font_family = e.target.value)}
-					block
-				/>
-			</SplitControl>
-			<SplitControl label="Font Weight">
-				<FontWeight />
-			</SplitControl>
-
-			<SplitControl label="Font Weight Heading">
-				<FontWeight heading />
-			</SplitControl>
-		{/snippet}
-	</SplitControl>
+	<ConfigComponent />
 </div>
 
-<NewsletterSaveDiscard
-	keys={[
-		'template_color_accent',
-		'template_color_accent_text',
-		'template_color_background',
-		'template_color_background_text',
-		'template_color_box',
-		'template_color_box_text',
-		'template_box_shadow',
-		'template_box_border',
-		'template_font_size',
-		'template_font_family',
-		'template_font_weight',
-		'template_font_weight_heading',
-		'template_font_line_height',
-		'template_box_radius'
-	]}
-/>
-
+<BasicPreviewModal bind:show={showPreviewModal} />
 <EditTemplateModal bind:show={showEditTemplateModal} />
 
 <style>
