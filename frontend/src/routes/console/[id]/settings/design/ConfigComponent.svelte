@@ -12,11 +12,21 @@
 	import BoxRadius from './BoxRadius.svelte';
 	import FontSize from './FontSize.svelte';
 	import FontWeight from './FontWeight.svelte';
+	import { setContext } from 'svelte';
+	import { saveDiscardBoxClassContextName } from '../../@components/save/save';
+
+	let {
+		onsave
+	}: {
+		onsave?: () => void;
+	} = $props();
 
 	const newsletterDefaults = getAppConfig().newsletter_defaults;
+
+	setContext(saveDiscardBoxClassContextName, 'config-component-wrap');
 </script>
 
-<div class="wrap">
+<div class="wrap config-component-wrap">
 	<SplitControl label="Colors">
 		{#snippet nested()}
 			<SplitControl label="Accent">
@@ -113,23 +123,24 @@
 			</SplitControl>
 		{/snippet}
 	</SplitControl>
-</div>
 
-<NewsletterSaveDiscard
-	keys={[
-		'template_color_accent',
-		'template_color_accent_text',
-		'template_color_background',
-		'template_color_background_text',
-		'template_color_box',
-		'template_color_box_text',
-		'template_box_shadow',
-		'template_box_border',
-		'template_font_size',
-		'template_font_family',
-		'template_font_weight',
-		'template_font_weight_heading',
-		'template_font_line_height',
-		'template_box_radius'
-	]}
-/>
+	<NewsletterSaveDiscard
+		keys={[
+			'template_color_accent',
+			'template_color_accent_text',
+			'template_color_background',
+			'template_color_background_text',
+			'template_color_box',
+			'template_color_box_text',
+			'template_box_shadow',
+			'template_box_border',
+			'template_font_size',
+			'template_font_family',
+			'template_font_weight',
+			'template_font_weight_heading',
+			'template_font_line_height',
+			'template_box_radius'
+		]}
+		{onsave}
+	/>
+</div>

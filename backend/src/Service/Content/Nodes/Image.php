@@ -24,12 +24,6 @@ class Image extends NodeType
         $attrs = <<<ATTR
             src="$src"
             alt="$alt"
-            style="
-                display: block;
-                margin: 30px auto;
-                max-width: 100%;
-                height: auto;
-            "
         ATTR;
 
         return "<img $attrs />";

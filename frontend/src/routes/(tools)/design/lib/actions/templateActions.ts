@@ -68,7 +68,7 @@ export function getTemplate() {
     });
 }
 
-export function previewTemplate(
+export function renderTemplate(
     // null to get project's template
     template: string | null = null
 ) {
