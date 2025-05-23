@@ -17,6 +17,7 @@
 	import SettingsTop from '../@components/SettingsTop.svelte';
 	import EditTemplateModal from './EditTemplateModal.svelte';
 	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
+	import BoxBorder from './BoxBorder.svelte';
 
 	let hasChanges = false;
 	let showFontWeight = false;
@@ -108,14 +109,6 @@
 		handleChange('template_box_radius', radius);
 	}
 
-	function decodeBorderValue(border: string) {
-		const [width, , color] = border.split(' ');
-		return {
-			width: parseInt(width),
-			color: color
-		};
-	}
-
 	function encodeBorderValue(width: number, color: string) {
 		return `${width}px solid ${color}`;
 	}
@@ -191,6 +184,7 @@
 				/>
 			</SplitControl>
 			<SplitControl label="Box border">
+				<BoxBorder />
 				<div class="box-border-controls">
 					<Slider
 						min={0}

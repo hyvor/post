@@ -82,9 +82,9 @@ class TemplateVariables
             font_weight_heading: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
             font_line_height: $meta->font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
-            box_radius: $meta->box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
+            box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
             box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
-            box_border: $meta->box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
+            box_border: $meta->template_box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
         );
     }
 
