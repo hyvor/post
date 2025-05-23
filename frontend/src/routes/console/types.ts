@@ -16,8 +16,11 @@ export interface AppConfig {
 
 		TEMPLATE_LANG: string;
 		TEMPLATE_COLOR_ACCENT: string;
+		TEMPLATE_COLOR_ACCENT_TEXT: string;
 		TEMPLATE_COLOR_BACKGROUND: string;
-		TEMPLATE_COLOR_BOX_BACKGROUND: string;
+		TEMPLATE_COLOR_BACKGROUND_TEXT: string;
+		TEMPLATE_COLOR_BOX: string;
+		TEMPLATE_COLOR_BOX_TEXT: string;
 		TEMPLATE_BOX_RADIUS: string;
 		TEMPLATE_BOX_SHADOW: string;
 		TEMPLATE_BOX_BORDER: string;
@@ -33,8 +36,11 @@ export interface AppConfig {
 
 export type NewsletterMeta = {
 	template_color_accent: string | null;
+	template_color_accent_text: string | null;
 	template_color_background: string | null;
-	template_color_box_background: string | null;
+	template_color_background_text: string | null;
+	template_color_box: string | null;
+	template_color_box_text: string | null;
 	template_box_shadow: string | null;
 	template_box_border: string | null;
 	template_font_family: string | null;
@@ -106,10 +112,10 @@ export type NewsletterList = {
 
 export type Newsletter = {
 	id: number,
+	slug: string,
 	uuid: string,
 	created_at: number,
 	name: string,
-	default_email_username: string
 } & NewsletterMeta;
 
 export interface SubscriberMetadataDefinition {

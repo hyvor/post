@@ -38,20 +38,21 @@ class NewsletterDefaults
 //            </p>
 //        HTML;
     public const TEMPLATE_COLOR_ACCENT = '#007bff';
+    public const TEMPLATE_COLOR_ACCENT_TEXT = '#ffffff';
     public const TEMPLATE_COLOR_BACKGROUND = '#f8f9fa';
-    public const TEMPLATE_COLOR_BOX_BACKGROUND = '#ffffff';
+    public const TEMPLATE_COLOR_BACKGROUND_TEXT = '#4a4a4a';
+    public const TEMPLATE_COLOR_BOX = '#ffffff';
+    public const TEMPLATE_COLOR_BOX_TEXT = '#000';
+
+    public const TEMPLATE_BOX_RADIUS = '20px';
+    public const TEMPLATE_BOX_SHADOW = '0px 0px 8px 0px #0000001a';
+    public const TEMPLATE_BOX_BORDER = '0px solid #e9ecef';
 
     public const TEMPLATE_FONT_FAMILY = "'SF Pro Display', -apple-system-headline, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'";
     public const TEMPLATE_FONT_SIZE = '16px';
     public const TEMPLATE_FONT_WEIGHT = 'normal';
     public const TEMPLATE_FONT_WEIGHT_HEADING = 'bold';
-    public const TEMPLATE_FONT_COLOR_ON_BACKGROUND = '#007bff';
-    public const TEMPLATE_FONT_COLOR_ON_BOX = '#333333';
     public const TEMPLATE_FONT_LINE_HEIGHT = '1.6';
-
-    public const TEMPLATE_BOX_RADIUS = '20px';
-    public const TEMPLATE_BOX_SHADOW = '0 0 8px rgba(0, 0, 0, 0.1)';
-    public const TEMPLATE_BOX_BORDER = '0px solid #e9ecef';
 
     /**
      * @return array<string, mixed>

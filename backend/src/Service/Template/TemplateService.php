@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Service\EmailTemplate;
+namespace App\Service\Template;
 
 use App\Entity\Newsletter;
 use App\Entity\Template;
-use App\Service\EmailTemplate\Dto\UpdateTemplateDto;
+use App\Service\Template\Dto\UpdateTemplateDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 
-class EmailTemplateService
+class TemplateService
 {
     public function __construct(
         private EntityManagerInterface $em,

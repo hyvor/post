@@ -7,10 +7,10 @@ use App\Api\Console\Input\Template\RenderTemplateInput;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterDefaults;
-use App\Service\EmailTemplate\Dto\UpdateTemplateDto;
-use App\Service\EmailTemplate\HtmlEmailTemplateRenderer;
-use App\Service\EmailTemplate\EmailTemplateService;
-use App\Service\EmailTemplate\EmailTemplateVariables;
+use App\Service\Template\Dto\UpdateTemplateDto;
+use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TemplateService;
+use App\Service\Template\TemplateVariables;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private EmailTemplateService $templateService,
-        private HtmlEmailTemplateRenderer $templateRenderer
+        private TemplateService $templateService,
+        private HtmlTemplateRenderer $templateRenderer
     ) {
     }
 
@@ -63,9 +63,10 @@ class TemplateController extends AbstractController
         Newsletter $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input
     ): JsonResponse {
+        // TODO: load from other methods
         $meta = $newsletter->getMeta();
 
-        $variables = new EmailTemplateVariables(
+        $variables = new TemplateVariables(
             lang: 'en',
             subject: 'Default subject',
             content: 'Default content',
@@ -81,7 +82,7 @@ class TemplateController extends AbstractController
 
             color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
             color_background: $meta->template_color_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
-            color_box_background: $meta->template_color_box_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
+            color_box: $meta->template_color_box_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
 
             font_family: $meta->template_font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
             font_size: $meta->template_font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
@@ -92,7 +93,7 @@ class TemplateController extends AbstractController
             font_line_height: $meta->template_font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
             box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
-            box_shadow: $meta->template_color_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
+            box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
             box_border: $meta->template_color_box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
         );
 
