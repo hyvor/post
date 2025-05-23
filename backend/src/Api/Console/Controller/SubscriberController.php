@@ -12,6 +12,7 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
+use App\Repository\SubscriberExportRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,8 @@ class SubscriberController extends AbstractController
 
     public function __construct(
         private SubscriberService $subscriberService,
-        private NewsletterListService $newsletterListService
+        private NewsletterListService $newsletterListService,
+        private SubscriberExportRepository $subscriberExportRepository
     ) {
     }
 
@@ -146,7 +148,7 @@ class SubscriberController extends AbstractController
     #[Route('/subscribers/export', methods: 'POST')]
     public function exportSubscribers(Newsletter $newsletter): JsonResponse
     {
-        $this->subscriberService->exportSubscribers($newsletter);
+        $subscriberExport = $this->subscriberService->exportSubscribers($newsletter);
         return $this->json(['message' => 'Export started']);
     }
 }

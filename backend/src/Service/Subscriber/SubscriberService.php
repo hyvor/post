@@ -2,10 +2,13 @@
 
 namespace App\Service\Subscriber;
 
+use App\Entity\Media;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\Subscriber;
+use App\Entity\SubscriberExport;
+use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
@@ -189,8 +192,40 @@ class SubscriberService
         $this->updateSubscriber($subscriber, $update);
     }
 
-    public function exportSubscribers(Newsletter $newsletter): void
+    public function exportSubscribers(Newsletter $newsletter): SubscriberExport
     {
-        $this->messageBus->dispatch(new ExportSubscribersMessage($newsletter->getId()));
+        // Create a new SubscriberExport entity
+        $subscriberExport = new SubscriberExport();
+        $subscriberExport->setCreatedAt($this->now());
+        $subscriberExport->setUpdatedAt($this->now());
+        $subscriberExport->setNewsletter($newsletter);
+        $subscriberExport->setStatus(SubscriberExportStatus::PENDING);
+
+        $this->em->persist($subscriberExport);
+        $this->em->flush();
+
+        $this->messageBus->dispatch(new ExportSubscribersMessage($subscriberExport->getId()));
+
+        return $subscriberExport;
+    }
+
+    public function markSubscriberExportAsFailed(
+        SubscriberExport $subscriberExport,
+        string $errorMessage
+    ): void {
+        $subscriberExport->setStatus(SubscriberExportStatus::FAILED);
+        $subscriberExport->setErrorMessage($errorMessage);
+        $this->em->persist($subscriberExport);
+        $this->em->flush();
+    }
+
+    public function markSubscriberExportAsCompleted(
+        SubscriberExport $subscriberExport,
+        Media $media
+    ): void {
+        $subscriberExport->setStatus(SubscriberExportStatus::COMPLETED);
+        $subscriberExport->setMedia($media);
+        $this->em->persist($subscriberExport);
+        $this->em->flush();
     }
 }
