@@ -18,28 +18,28 @@ function getConsoleApi() {
 
     const consoleBaseUrl = "/api/console/";
 
-    async function call<T>({ 
+    async function call<T>({
         endpoint,
         method,
         userApi = false,
         data = {},
         newsletterId: newsletterId,
         signal
-    }: CallOptions) : Promise<T> {
+    }: CallOptions): Promise<T> {
 
         let url = consoleBaseUrl + endpoint.replace(/^\//, '');
 
         if (method === 'get') {
-			url +=
-				'?' +
-				Object.entries(data)
-					.filter(([, val]) => val !== null && val !== undefined)
-					.map(([key, val]) => key + '=' + encodeURIComponent(val))
-					.join('&');
-		}
+            url +=
+                '?' +
+                Object.entries(data)
+                    .filter(([, val]) => val !== null && val !== undefined)
+                    .map(([key, val]) => key + '=' + encodeURIComponent(val))
+                    .join('&');
+        }
 
         const headers = {} as Record<string, string>;
-        
+
         if (!userApi) {
             const newsletter = get(newsletterStore);
             headers['X-Newsletter-Id'] = newsletter.id.toString();
@@ -50,8 +50,8 @@ function getConsoleApi() {
 
         if (!(data instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
-        }   
-        
+        }
+
 
         const options = {
             cache: 'no-cache',
@@ -77,6 +77,11 @@ function getConsoleApi() {
             toThrow.message = error;
             toThrow.code = e && e.code ? e.code : 500;
 
+
+            if (e.violations) {
+                toThrow.message = e.violations.map((v: any) => v.message).join(', ');
+            }
+
             throw toThrow;
         }
 
@@ -87,11 +92,11 @@ function getConsoleApi() {
 
     return {
         call,
-        get: async <T>(opt: ConsoleApiOptions) => call<T>({...opt, method: 'get'}),
-        post: async <T>(opt: ConsoleApiOptions) => call<T>({...opt, method: 'post'}),
-        patch: async <T>(opt: ConsoleApiOptions) => call<T>({...opt, method: 'patch'}),
-        put: async <T>(opt: ConsoleApiOptions) => call<T>({...opt, method: 'put'}),
-        delete: async <T>(opt: ConsoleApiOptions) => call<T>({...opt, method: 'delete'}),
+        get: async <T>(opt: ConsoleApiOptions) => call<T>({ ...opt, method: 'get' }),
+        post: async <T>(opt: ConsoleApiOptions) => call<T>({ ...opt, method: 'post' }),
+        patch: async <T>(opt: ConsoleApiOptions) => call<T>({ ...opt, method: 'patch' }),
+        put: async <T>(opt: ConsoleApiOptions) => call<T>({ ...opt, method: 'put' }),
+        delete: async <T>(opt: ConsoleApiOptions) => call<T>({ ...opt, method: 'delete' }),
     }
 
 }

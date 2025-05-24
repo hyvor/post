@@ -27,10 +27,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class ContentService
 {
 
-    public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        private string $projectDir,
-    ) {
+    public function __construct()
+    {
     }
 
     const DEFAULT_CONTENT = <<<JSON

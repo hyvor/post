@@ -7,7 +7,7 @@ interface PreviewResponse {
     html: string;
 }
 
-export function getDefaultTemplate() : Promise<TemplateResponse> {
+export function getDefaultTemplate(): Promise<TemplateResponse> {
     return fetch('api/public/template/default')
         .then((response) => {
             if (response.ok) {
@@ -15,11 +15,11 @@ export function getDefaultTemplate() : Promise<TemplateResponse> {
             }
             throw new Error('Failed to fetch default template');
         }
-    );
+        );
 }
 
-export function previewTemplateFromVariable (template: string, variables: string) {
-    return fetch('api/public/template/with', 
+export function previewTemplateFromVariable(template: string, variables: string) {
+    return fetch('api/public/template/with',
         {
             method: 'POST',
             headers: {
@@ -42,7 +42,7 @@ export function previewTemplateFromVariable (template: string, variables: string
 }
 
 export function retrieveContentHtml(content: string) {
-    return fetch('api/public/template/content', 
+    return fetch('api/public/template/content',
         {
             method: 'POST',
             headers: {
@@ -68,7 +68,10 @@ export function getTemplate() {
     });
 }
 
-export function previewTemplate(template: string) {
+export function renderTemplate(
+    // null to get project's template
+    template: string | null = null
+) {
     return consoleApi.post<PreviewResponse>({
         endpoint: 'templates/render',
         data: {

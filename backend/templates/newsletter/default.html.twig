@@ -13,11 +13,14 @@
             box-sizing: border-box;
         }
 
+        html {
+            font-size: {{ font_size }};
+        }
+
         body {
             margin: 0;
             padding: 20px;
             font-family: {{ font_family | raw }};
-            font-size: {{ font_size }};
             font-weight: {{ font_weight }};
             line-height: {{ font_line_height }};
             background-color: {{ color_background }};
@@ -74,7 +77,7 @@
         .content h5,
         .content h6 {
             margin: 0 0 20px;
-            font-weight: 600;
+            font-weight: {{ font_weight_heading }};
         }
 
         .content h1 {
@@ -107,6 +110,7 @@
 
         .content .button-wrap {
             text-align: center;
+            margin: 0 0 20px;
         }
 
         .content a.button {
@@ -137,6 +141,13 @@
 
         .content blockquote > *:last-child {
             margin-bottom: 0;
+        }
+
+        .content img {
+            max-width: 100%;
+            margin: 30px auto;
+            height: auto;
+            display: block;
         }
     </style>
 </head>

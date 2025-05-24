@@ -10,7 +10,6 @@ class UpdateNewsletterInput extends NewsletterObject
     use OptionalPropertyTrait;
 
     public string $name;
-    public string $default_email_username;
 
     public const UNUPDATABLE_PROPERTIES = [
         'id',
@@ -21,16 +20,28 @@ class UpdateNewsletterInput extends NewsletterObject
     {}
 
     /**
-     * @return array<string>
+     * @var string[]
      */
+    private array $setProperties = [];
+
+    public function set(string $property, mixed $value): void
+    {
+        assert(
+            property_exists($this, $property),
+            "Property $property does not exist in " . __CLASS__
+        );
+        $this->$property = $value;
+        $this->setProperties[] = $property;
+    }
+
+    public function isSet(string $property): bool
+    {
+        return in_array($property, $this->setProperties);
+    }
+
     public function getSetProperties(): array
     {
-        $properties = [];
-        foreach (get_object_vars($this) as $property => $value) {
-            if ($this->hasProperty($property) && !in_array($property, self::UNUPDATABLE_PROPERTIES)) {
-                $properties[] = $property;
-            }
-        }
-        return $properties;
+        return $this->setProperties;
     }
+
 }

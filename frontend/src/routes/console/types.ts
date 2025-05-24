@@ -47,8 +47,6 @@ export type NewsletterMeta = {
 	template_font_size: string | null;
 	template_font_weight: string | null;
 	template_font_weight_heading: string | null;
-	template_font_color_on_background: string | null;
-	template_font_color_on_box: string | null;
 	template_font_line_height: string | null;
 	template_box_radius: string | null;
 

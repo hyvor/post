@@ -5,7 +5,10 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Template\UpdateTemplateInput;
 use App\Api\Console\Input\Template\RenderTemplateInput;
 use App\Api\Console\Object\TemplateObject;
+use App\Entity\Issue;
 use App\Entity\Newsletter;
+use App\Service\Content\ContentDefaultStyle;
+use App\Service\Content\ContentService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Template\Dto\UpdateTemplateDto;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -20,7 +23,9 @@ class TemplateController extends AbstractController
 {
     public function __construct(
         private TemplateService $templateService,
-        private HtmlTemplateRenderer $templateRenderer
+        private HtmlTemplateRenderer $htmlTemplateRenderer,
+        private ContentService $contentService,
+        private ContentDefaultStyle $contentDefaultStyle,
     ) {
     }
 
@@ -63,41 +68,17 @@ class TemplateController extends AbstractController
         Newsletter $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input
     ): JsonResponse {
-        // TODO: load from other methods
-        $meta = $newsletter->getMeta();
+        $subject = 'Hyvor Post Default Email';
+        $defaultContentHtml = $this->contentDefaultStyle->html();
 
-        $variables = new TemplateVariables(
-            lang: 'en',
-            subject: 'Default subject',
-            content: 'Default content',
+        $variables = TemplateVariables::fromNewsletter($newsletter);
+        $variables->subject = $subject;
+        $variables->content = $defaultContentHtml;
 
-            logo: $meta->template_logo ?? '',
-            logo_alt: '',
-            brand: '',
-            brand_url: '',
+        $template = $input->template ?? $this->templateService->getTemplateStringFromNewsletter($newsletter);
 
-            address: '',
-            unsubscribe_url: '',
-            unsubscribe_text: '',
+        $html = $this->htmlTemplateRenderer->render($template, $variables);
 
-            color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
-            color_background: $meta->template_color_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
-            color_box: $meta->template_color_box_background ?? NewsletterDefaults::TEMPLATE_COLOR_BACKGROUND,
-
-            font_family: $meta->template_font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
-            font_size: $meta->template_font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
-            font_weight: $meta->template_font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
-            font_weight_heading: $meta->template_font_weight_heading ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
-            font_color_on_background: $meta->template_font_color_on_background ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
-            font_color_on_box: $meta->template_font_color_on_box ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
-            font_line_height: $meta->template_font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
-
-            box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
-            box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
-            box_border: $meta->template_color_box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
-        );
-
-        $html = $this->templateRenderer->render($input->template, $variables);
         return $this->json(['html' => $html]);
     }
 }

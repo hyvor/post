@@ -23,7 +23,7 @@
 	function findBox() {
 		if (!wrap) return null;
 
-		const single = wrap.closest(boxClass || '.hds-box');
+		const single = wrap.closest('.' + boxClass || '.hds-box');
 
 		if (single) {
 			return single;

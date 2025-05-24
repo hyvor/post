@@ -2,34 +2,34 @@
 
 namespace App\Service\Newsletter\Dto;
 
-use App\Util\OptionalPropertyTrait;
+use App\Entity\Meta\NewsletterMeta;
 
 /**
- * compared to NewsletterMeta, this is camelCase and does not have default values
+ * extends NewsletterMeta
+ * call ->set() to set a property
+ * in NewsletterService::updateNewsletterMeta() we check if the property is set with ->isSet()
  */
-class UpdateNewsletterMetaDto
+class UpdateNewsletterMetaDto extends NewsletterMeta
 {
-    use OptionalPropertyTrait;
 
-    public ?string $templateColorAccent;
-    public ?string $templateColorBackground;
-    public ?string $templateColorBoxBackground;
-    public ?string $templateColorBoxShadow;
-    public ?string $templateColorBoxBorder;
-    public ?string $templateFontFamily;
-    public ?string $templateFontSize;
-    public ?string $templateFontWeight;
-    public ?string $templateFontWeightHeading;
-    public ?string $templateFontColorOnBackground;
-    public ?string $templateFontColorOnBox;
-    public ?string $templateFontLineHeight;
-    public ?string $templateBoxRadius;
-    public ?string $templateLogo;
+    /**
+     * @var string[]
+     */
+    private array $setProperties = [];
 
-    // form
-    public ?string $formTitle;
-    public ?string $formDescription;
-    public ?string $formFooterText;
-    public ?string $formButtonText;
-    public ?string $formSuccessMessage;
+    public function set(string $property, mixed $value): void
+    {
+        assert(
+            property_exists($this, $property),
+            "Property $property does not exist in " . __CLASS__
+        );
+        $this->$property = $value;
+        $this->setProperties[] = $property;
+    }
+
+    public function isSet(string $property): bool
+    {
+        return in_array($property, $this->setProperties);
+    }
+
 }
