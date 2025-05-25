@@ -5,7 +5,7 @@ import { draftIssueEditingStore, draftIssueStore, draftPreviewKey } from "./draf
 import { updateIssue } from "../../../../lib/actions/issueActions";
 import { toast } from "@hyvor/design/components";
 
-export const debouncedUpdateDraftIssue = debounce(updateDraftIssue, 1000);
+export const debouncedUpdateDraftIssue = debounce(updateDraftIssue, 800);
 
 export function updateDraftIssue() {
 

@@ -12,21 +12,19 @@
 
 	let modal = $state(false);
 
-	function getAllAddresses() {
-		return [
-			$newsletterStore.slug + '@' + appConfig.app.default_email_domain,
-			...$sendingAddressesStore.map((address) => address.email)
-		];
-	}
+	let addresses = $derived([
+		$newsletterStore.slug + '@' + appConfig.app.default_email_domain,
+		...$sendingAddressesStore.map((address) => address.email)
+	]);
 </script>
 
 <SplitControl
-	label="From Email"
-	caption="This is the email address that will be shown as the sender"
+	label={I18n.t('console.issues.draft.fromEmail')}
+	caption={I18n.t('console.issues.draft.fromEmailCaption')}
 >
 	<div class="from-email">
 		<FormControl>
-			{#each getAllAddresses() as address}
+			{#each addresses as address}
 				<Radio
 					bind:group={$draftIssueEditingStore.from_email}
 					value={address}

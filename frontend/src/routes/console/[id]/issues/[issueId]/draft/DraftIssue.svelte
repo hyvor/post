@@ -111,8 +111,8 @@
 
 	<SplitControl label="Emails">
 		{#snippet nested()}
-			<FromName />
 			<FromEmail />
+			<FromName />
 			<ReplyToEmail />
 		{/snippet}
 	</SplitControl>
