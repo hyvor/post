@@ -1,6 +1,7 @@
 <script>
 	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
 	import { getMarketingI18n } from '../locale';
+	import TrialLink from './TrialLink.svelte';
 
 	const I18n = getMarketingI18n();
 </script>
@@ -8,7 +9,11 @@
 <div class="checks" {...$$restProps}>
 	<div class="check">
 		<IconCheckCircleFill />
-		{I18n.t('14DayFreeTrial')}
+		<div>
+			<I18n.T key="14DayFreeTrial" params={{ 
+				a: {component: TrialLink} 
+			}} />
+		</div>
 	</div>
 
 	<div class="check">

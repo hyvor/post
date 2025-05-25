@@ -1,9 +1,11 @@
 {
-	"simpleNewsletterPlatform": "Simple Newsletter Platform",
-	"newslettersForYourWebsite": "Newsletters for your website",
-	"installHyvorPost": "Install Hyvor Post",
+	"homepage": {
+		"heading": "Simple Newsletter Platform",
+		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!"
+	},
+	"cta": "Start Sending in Minutes",
 	"demo": "Demo",
-	"14DayFreeTrial": "14-Day Free Trial",
+	"14DayFreeTrial": "14-day free trial (<a>test emails only</a>)",
 	"noCreditCardRequired": "No credit card required",
 	"cancelAnytime": "Cancel anytime",
 	"readyToStartYourNewsletter": "Ready to start your newsletter?",
@@ -44,7 +46,3 @@
 		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals."
 	}
 }
-
-
-
-
