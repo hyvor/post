@@ -5,6 +5,7 @@ namespace App\Command\Dev;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Service\Content\ContentDefaultStyle;
 use App\Service\Content\ContentService;
 use App\Service\Template\TemplateService;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -33,7 +34,7 @@ class DevSeedCommand extends Command
 
     public function __construct(
         private KernelInterface $kernel,
-        private ContentService $contentService,
+        private ContentDefaultStyle $contentDefaultStyle,
         private TemplateService $emailTemplateService,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
@@ -94,7 +95,7 @@ class DevSeedCommand extends Command
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
             'status' => IssueStatus::SENT,
-            'content' => $this->contentService->getJsonFromHtml($this->contentService->getDefaultContentStyleHtml())
+            'content' => $this->contentDefaultStyle->json()
         ]);
         $issue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($issue));
 

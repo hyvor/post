@@ -5,7 +5,8 @@ import {
 	type List,
 	type Issue,
 	type UserRole,
-	type SubscriberMetadataDefinition
+	type SubscriberMetadataDefinition,
+	type SendingAddress
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
@@ -16,6 +17,7 @@ export const newsletterStatsStore = writable<NewsletterStats>();
 export const listStore = writable<List[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();
 export const issueStore = writable<Issue[]>([]);
+export const sendingAddressesStore = writable<SendingAddress[]>([]);
 
 export function setNewsletterStore(newsletter: Newsletter) {
 	newsletterStore.set(newsletter);

@@ -43,8 +43,10 @@ class SendingAddressController extends AbstractController
     #[Route('/sending-addresses', methods: 'GET')]
     public function getSendingAddresses(Request $request, Newsletter $newsletter): JsonResponse
     {
-        $sendingAddresses = $this->sendingAddressService->getSendingAddresses($newsletter)
-            ->map(fn($sendingAddress) => new SendingAddressObject($sendingAddress));
+        $sendingAddresses = array_map(
+            fn (SendingAddress $sendingAddress) => new SendingAddressObject($sendingAddress),
+            $this->sendingAddressService->getSendingAddresses($newsletter)
+        );
         return $this->json($sendingAddresses);
     }
 

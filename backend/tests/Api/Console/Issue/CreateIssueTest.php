@@ -29,7 +29,7 @@ class CreateIssueTest extends WebTestCase
         Clock::set(new MockClock('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'default_email_username' => 'thibault'
+            'slug' => 'thibault'
         ]);
 
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);

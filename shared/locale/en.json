@@ -30,7 +30,10 @@
             "createFirstIssue": "Create your first issue",
             "draft": {
                 "subject": "Subject",
-                "lists": "Lists"
+                "lists": "Lists",
+                "fromName": "From Name",
+                "fromEmail": "From Email",
+                "replyTo": "Reply To Email"
             }
         },
         "tools": {

@@ -4,6 +4,10 @@ export interface AppConfig {
 		instance: string;
 	};
 
+	app: {
+		default_email_domain: string;
+	};
+
 	newsletter_defaults: {
 		FORM_COLOR_LIGHT_TEXT: string;
 		FORM_COLOR_LIGHT_ACCENT: string;

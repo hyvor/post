@@ -77,6 +77,7 @@ class UpdateNewsletterTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
+        // TODO:
         $newsletter = NewsletterFactory::createOne([
             'default_email_username' => 'thibault@newsletter.com'
         ]);
@@ -102,7 +103,7 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertNotNull($newsletter);
         $this->assertSame('2025-02-21 00:00:00', $newsletter->getUpdatedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('UpdateName', $newsletter->getName());
-        $this->assertSame('thibault@gmail.com', $newsletter->getDefaultEmailUsername());
+        $this->assertSame('thibault@gmail.com', $newsletter->getSlug());
     }
 
     public function test_update_newsletter_email_username_taken(): void

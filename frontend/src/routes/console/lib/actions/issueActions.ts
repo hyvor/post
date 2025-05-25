@@ -29,16 +29,7 @@ export function getIssue(id: number) {
     });
 }
 
-type IssueUpdate = {
-	subject: string;
-	from_name: string;
-	from_email: string;
-	reply_to_email: string;
-	lists: number[];
-	content: string;
-};
-
-export function updateIssue(id: number, updates: IssueUpdate) {
+export function updateIssue(id: number, updates: Partial<Issue>) {
 	return consoleApi.patch<Issue>({
 		endpoint: 'issues/' + id,
 		data: updates
