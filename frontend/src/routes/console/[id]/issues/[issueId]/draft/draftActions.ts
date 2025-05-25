@@ -1,7 +1,7 @@
 import { debounce } from "$lib/helpers/debounce";
 import { get } from "svelte/store";
 import type { Issue } from "../../../../types";
-import { draftIssueEditingStore, draftIssueStore } from "./draftStore";
+import { draftIssueEditingStore, draftIssueStore, draftPreviewKey } from "./draftStore";
 import { updateIssue } from "../../../../lib/actions/issueActions";
 import { toast } from "@hyvor/design/components";
 
@@ -29,9 +29,20 @@ export function updateDraftIssue() {
         }
     }
 
+    const keys = Object.keys(changedFields) as (keyof Issue)[];
+    if (keys.length === 0) {
+        return;
+    }
+
+    const hasPreviewChanges = keys.some((key) => key === 'content' || key === 'lists' || key === 'subject');
+
     updateIssue(draftIssue.id, changedFields)
         .then((issue) => {
             draftIssueStore.set(issue);
+
+            if (hasPreviewChanges) {
+                draftPreviewKey.update((key) => key + 1);
+            }
         })
         .catch((err) => {
             toast.error("Error updating draft issue:", err);

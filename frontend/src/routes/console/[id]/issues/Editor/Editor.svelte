@@ -20,7 +20,6 @@
 	import IconQuote from '@hyvor/icons/IconQuote';
 	import AddLink from './AddLink.svelte';
 	import AddButton from './AddButton.svelte';
-	import { contentUpdateId } from '../[issueId]/issueStore';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 
 	interface Props {
@@ -256,7 +255,6 @@
 
 				if (tr.docChanged) {
 					ondocupdate(JSON.stringify(tr.doc.toJSON()));
-					contentUpdateId.update((id) => id + 1);
 				}
 			},
 			handleClick: (view: EditorView, pos: number, event: MouseEvent) => {

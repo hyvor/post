@@ -43,7 +43,7 @@ export function sendIssue(id: number) {
 }
 
 export function previewIssue(id: number) {
-	return consoleApi.get<{ html: string }>({
+	return consoleApi.get<{ html: string, sendable_subscribers_count: number }>({
 		endpoint: `issues/${id}/preview`
 	});
 }

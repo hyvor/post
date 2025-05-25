@@ -2,8 +2,6 @@
 	import { Button, SplitControl, TextInput, confirm, toast } from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
 	import { sendIssue, sendIssueTest } from '../../../../lib/actions/issueActions';
-	import { EMAIL_REGEX } from '../../../../lib/regex';
-	import Editor from '../../Editor/Editor.svelte';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount } from 'svelte';
@@ -26,29 +24,9 @@
 	let scrollTopEl = $state({} as HTMLDivElement);
 	let testEmail = $state('');
 
-	let contentDirty = false;
-	let previewKey = $state(0);
-	let previewInterval: ReturnType<typeof setInterval>;
-
 	onMount(() => {
-		previewInterval = setInterval(() => {
-			if (contentDirty) {
-				previewKey += 1;
-				contentDirty = false;
-			}
-		}, 10000);
+		return;
 	});
-
-	function updateReplyToEmail() {
-		replyToEmailError = '';
-
-		if (replyToEmail && !EMAIL_REGEX.test(replyToEmail)) {
-			replyToEmailError = 'Invalid email address';
-			return;
-		}
-
-		debouncedUpdate();
-	}
 
 	function validate(): boolean {
 		subjectError = '';
@@ -140,10 +118,7 @@
 	</SplitControl>
 
 	<Content />
-
-	{#key previewKey}
-		<Preview id={issue.id} />
-	{/key}
+	<Preview />
 
 	<SplitControl label="Send Test Email">
 		<div class="send-test">
@@ -178,9 +153,6 @@
 	}
 	.send-test :global(button) {
 		flex-shrink: 0;
-	}
-	.from-email :global(label) {
-		font-weight: normal !important;
 	}
 
 	@media (max-width: 992px) {
