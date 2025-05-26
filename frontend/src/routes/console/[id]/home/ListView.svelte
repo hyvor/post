@@ -17,7 +17,6 @@
 				<IconInfoCircle />
 			</div>
 		</Tooltip>
-
 		<CreateListButton />
 	</div>
 	<div class="rows">
