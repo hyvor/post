@@ -76,6 +76,6 @@
 	.list {
 		flex: 1;
 		overflow: auto;
-		padding-bottom: 20px;
+		padding: 20px 30px;
 	}
 </style>

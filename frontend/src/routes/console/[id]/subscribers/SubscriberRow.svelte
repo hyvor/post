@@ -16,11 +16,16 @@
 	import { listStore } from '../../lib/stores/newsletterStore';
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
+	import { getI18n } from '../../lib/i18n';
 
-	export let subscriber: Subscriber;
-	export let refreshList: () => void;
+	interface Props {
+		subscriber: Subscriber;
+		refreshList: () => void;
+	}
 
-	let editing = false;
+	let { subscriber, refreshList }: Props = $props();
+
+	let editing = $state(false);
 
 	async function onDelete() {
 		const confirmation = await confirm({
@@ -48,20 +53,26 @@
 			});
 	}
 
-	$: segmentsText = subscriber.list_ids
-		.map((s) => {
-			return $listStore.find((l) => l.id === s)?.name || 'Unknown';
-		})
-		.join(', ');
+	let segmentsText = $derived(
+		subscriber.list_ids
+			.map((s) => {
+				return $listStore.find((l) => l.id === s)?.name || 'Unknown';
+			})
+			.join(', ')
+	);
+
+	const I18n = getI18n();
 </script>
 
-<div class="subscriber">
+<button class="subscriber">
 	<div class="email-wrap">
 		<div class="email">{subscriber.email}</div>
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					{subscriber.list_ids.length} segments
+					{I18n.t('console.subscribers.listsCount', {
+						count: subscriber.list_ids.length
+					})}
 				</span>
 			</Tooltip>
 		</div>
@@ -82,9 +93,11 @@
 
 	<div class="source-wrap">
 		<div>
-			{subscriber.source.charAt(0).toUpperCase() + subscriber.source.slice(1)}
+			{I18n.t(('console.subscribers.source.' + subscriber.source) as any)}
 		</div>
-		<div class="tag">Source</div>
+		<div class="tag">
+			{I18n.t('console.subscribers.source.label')}
+		</div>
 	</div>
 
 	<div class="actions">
@@ -95,7 +108,7 @@
 			<IconTrash size={12} />
 		</IconButton>
 	</div>
-</div>
+</button>
 
 {#if editing}
 	<SubscriberEdit {subscriber} bind:show={editing} {refreshList} />
@@ -103,12 +116,15 @@
 
 <style>
 	.subscriber {
-		padding: 15px 30px;
+		padding: 15px 25px;
 		border-radius: var(--box-radius);
 		display: flex;
 		text-align: left;
 		width: 100%;
 		align-items: center;
+	}
+	.subscriber:hover {
+		background: var(--hover);
 	}
 	.email-wrap {
 		flex: 1;

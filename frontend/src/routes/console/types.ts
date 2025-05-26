@@ -150,7 +150,7 @@ export type List = {
 };
 
 export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
-export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
+export type NewsletterSubscriberSource = 'console' | 'form' | 'import';
 
 export type Subscriber = {
 	id: number;

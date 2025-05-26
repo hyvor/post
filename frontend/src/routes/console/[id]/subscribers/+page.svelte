@@ -195,7 +195,7 @@
 <style>
 	.top {
 		display: flex;
-		padding: 20px 25px;
+		padding: 20px 30px;
 		border-bottom: 1px solid var(--border);
 	}
 	.left {
