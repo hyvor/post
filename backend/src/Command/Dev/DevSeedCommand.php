@@ -89,6 +89,10 @@ class DevSeedCommand extends Command
             'lists' => [$list1, $list2],
             'status' => SubscriberStatus::SUBSCRIBED
         ]);
+        SubscriberFactory::createMany(30, [
+            'newsletter' => $newsletter,
+            'lists' => [$list1, $list2],
+        ]);
 
         $issue = IssueFactory::createOne([
             'subject' => 'Content Style Guide',

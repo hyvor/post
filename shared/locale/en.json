@@ -2,12 +2,15 @@
     "console": {
         "common": {
             "cancel": "Cancel",
+            "search": "Search",
             "copy": "Copy",
             "copied": "{value} copied",
             "cannotBeEmpty": "{field} cannot be empty",
             "created": "{field} created",
             "updated": "{field} updated",
-            "deleted": "{field} deleted"
+            "deleted": "{field} deleted",
+            "loadMore": "Load More",
+            "any": "Any"
         },
         "nav": {
             "domains": "Domains",
@@ -33,10 +36,22 @@
             "stats": {
                 "openRate": "Open Rate",
                 "clickRate": "Click Rate"
-            },
-            "lists": {
-                "title": "Lists",
-                "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
+            }
+        },
+        "lists": {
+            "lists": "Lists",
+            "list": "List",
+            "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
+        },
+        "subscribers": {
+            "addSubscribers": "Add Subscribers",
+            "emptyList": "No subscribers found",
+            "status": {
+                "label": "Status",
+                "all": "All",
+                "subscribed": "Subscribed",
+                "unsubscribed": "Unsubscribed",
+                "pending": "Pending"
             }
         },
         "issues": {
