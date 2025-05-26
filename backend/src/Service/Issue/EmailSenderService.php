@@ -4,6 +4,7 @@ namespace App\Service\Issue;
 
 use App\Entity\Issue;
 use App\Entity\Send;
+use App\Service\AppConfig;
 use App\Service\Template\HtmlTemplateRenderer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -14,6 +15,7 @@ class EmailSenderService
     public function __construct(
         private MailerInterface $mailer,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
+        private AppConfig $appConfig,
     ) {
     }
 
@@ -43,7 +45,7 @@ class EmailSenderService
         $email->getHeaders()
             ->addTextHeader('X-Newsletter-Send-ID', (string)$send?->getId())
             ->addTextHeader('X-Newsletter-Issue-ID', (string)$issue->getId())
-            ->addTextHeader('X-SES-CONFIGURATION-SET', 'newsletter')
+            ->addTextHeader('X-SES-CONFIGURATION-SET', $this->appConfig->getAwsSesNewsletterConfigurationSetName())
             // TODO: unsubscribe URL
             ->addTextHeader('List-Unsubscribe', '<https://post.hyvor.com>');
 

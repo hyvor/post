@@ -35,7 +35,6 @@ class DevSeedCommand extends Command
     public function __construct(
         private KernelInterface $kernel,
         private ContentDefaultStyle $contentDefaultStyle,
-        private TemplateService $emailTemplateService,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
         parent::__construct();
@@ -103,6 +102,12 @@ class DevSeedCommand extends Command
             'user_id' => 1,
             'domain' => 'example.com',
             'verified_in_ses' => true
+        ]);
+
+        DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'notverified.com',
+            'verified_in_ses' => false
         ]);
 
         $output->writeln('<info>Database seeded with test data.</info>');

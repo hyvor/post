@@ -1,5 +1,14 @@
 {
     "console": {
+        "common": {
+            "cancel": "Cancel",
+            "copy": "Copy",
+            "copied": "{value} copied",
+            "cannotBeEmpty": "{field} cannot be empty",
+            "created": "{field} created",
+            "updated": "{field} updated",
+            "deleted": "{field} deleted"
+        },
         "nav": {
             "domains": "Domains",
             "billing": "Billing",
@@ -9,20 +18,15 @@
             "tools": "Tools",
             "settings": "Settings"
         },
+        "domains": {
+            "addDomain": "Add Domain",
+            "firstDomain": "Add your first domain to use it to send emails"
+        },
         "billing": {
             "usage": {
                 "title": "Usage",
                 "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
             }
-        },
-        "common": {
-            "cancel": "Cancel",
-            "copy": "Copy",
-            "copied": "{value} copied",
-            "cannotBeEmpty": "{field} cannot be empty",
-            "created": "{field} created",
-            "updated": "{field} updated",
-            "deleted": "{field} deleted"
         },
         "issues": {
             "newIssue": "New Issue",
