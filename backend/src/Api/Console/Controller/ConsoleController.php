@@ -85,11 +85,7 @@ class ConsoleController extends AbstractController
             'sending_addresses' => array_map(fn($address) => new SendingAddressObject($address), $this->sendingAddressService->getSendingAddresses($newsletter)),
             'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
                 $subscriberMetadataDefinitions),
-            'stats' => new StatsObject(
-                $newsletterStats[0],
-                $newsletterStats[1],
-                $newsletterStats[2]
-            )
+            'stats' => $newsletterStats
         ]);
     }
 

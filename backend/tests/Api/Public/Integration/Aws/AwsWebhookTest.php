@@ -289,6 +289,7 @@ class AwsWebhookTest extends WebTestCase
         $this->assertNotNull($send->getFirstClickedAt());
         $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()->format('Y-m-d H:i:s'));
         $this->assertSame(1, $send->getClickCount());
+        $this->assertSame(1, $issue->getClickedSends());
     }
 
     public function test_click_second(): void
@@ -327,6 +328,8 @@ class AwsWebhookTest extends WebTestCase
         $this->assertSame(2, $send->getClickCount());
         $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-02-16 21:42:19', $send->getLastClickedAt()?->format('Y-m-d H:i:s'));
+
+        $this->assertSame(1, $issue->getClickedSends());
     }
 
     public function test_open_first(): void
@@ -362,6 +365,8 @@ class AwsWebhookTest extends WebTestCase
         $this->assertSame('2021-02-16 21:41:19', $send->getFirstOpenedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-02-16 21:41:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame(1, $send->getOpenCount());
+
+        $this->assertSame(1, $issue->getOpenedSends());
     }
 
     public function test_open_second(): void
@@ -400,6 +405,8 @@ class AwsWebhookTest extends WebTestCase
         $this->assertSame(2, $send->getOpenCount());
         $this->assertSame('2021-01-16 21:41:19', $send->getFirstOpenedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-02-16 21:42:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
+
+        $this->assertSame(1, $issue->getOpenedSends());
     }
 
     public function test_subscription(): void

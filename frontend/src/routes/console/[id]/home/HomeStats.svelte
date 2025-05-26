@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Button, Loader } from '@hyvor/design/components';
-	import type { NewsletterStats } from '../../types';
+	import { Loader } from '@hyvor/design/components';
 	import Stat from './Stat.svelte';
 	import { newsletterStatsStore, newsletterStore } from '../../lib/stores/newsletterStore';
 
