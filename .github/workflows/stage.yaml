@@ -1,0 +1,64 @@
+name: "Deploy to Staging"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to deploy"
+        required: false
+        default: "latest"
+
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: "Deploying ${{ github.event.inputs.tag }}"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Upload docker-compose.yaml and .env
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HYVOR_ORG_STAGING_SERVER_IP }}
+          username: root
+          key: ${{ secrets.HYVOR_ORG_STAGING_SSH_KEY }}
+          source: "meta/cloud/staging/compose.staging.yaml,meta/cloud/staging/.env.post.staging"
+          target: /root
+          overwrite: true
+          strip_components: 3
+
+      - name: Deploy to Cloud
+        uses: appleboy/ssh-action@master
+        env:
+          IMAGE_VERSION: ${{ github.event.inputs.tag || 'latest' }}
+          DOCKERHUB_USERNAME: ${{ secrets.HYVOR_ORG_DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.HYVOR_ORG_DOCKERHUB_TOKEN }}
+          ONE_PASSWORD_TOKEN: ${{ secrets.HYVOR_ORG_STAGING_ONE_PASSWORD_SERVICE_ACCOUNT_TOKEN }}
+        with:
+          host: ${{ secrets.HYVOR_ORG_STAGING_SERVER_IP }}
+          username: root
+          key: ${{ secrets.HYVOR_ORG_STAGING_SSH_KEY }}
+          envs: IMAGE_VERSION, DOCKERHUB_USERNAME, DOCKERHUB_TOKEN, ONE_PASSWORD_TOKEN, ENV_FILE
+          script: |
+            set -e
+            
+            # docker
+            echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            
+            # 1password
+            export OP_SERVICE_ACCOUNT_TOKEN=$ONE_PASSWORD_TOKEN
+            op user get --me
+            op inject --force --in-file .env.post.staging --out-file .env.post
+            
+            # docker-compose
+            cp docker-compose.staging.yaml docker-compose-hyvor-blogs.yaml
+            # fresh pull
+            docker pull $DOCKERHUB_USERNAME/blogs:$IMAGE_VERSION
+            # fresh up
+            docker compose -f docker-compose-hyvor-blogs.yaml down
+            docker compose -f docker-compose-hyvor-blogs.yaml up -d
