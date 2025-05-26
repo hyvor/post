@@ -178,6 +178,10 @@ export type Issue = {
 	scheduled_at: number | null;
 	sending_at: number | null;
 	sent_at: number | null;
+
+	total_sends: number;
+	opened_sends: number;
+	clicked_sends: number;
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';

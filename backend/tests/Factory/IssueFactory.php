@@ -33,6 +33,8 @@ final class IssueFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array
     {
+        $total = self::faker()->randomNumber() + 1;
+
         return [
             'uuid' => Uuid::v4(),
             'newsletter' => NewsletterFactory::new(),
@@ -65,9 +67,11 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'list_ids' => [],
-            'total_sends' => 1,
-            'ok_sends' => 0,
-            'failed_sends' => 0,
+            'total_sends' => $total,
+            'ok_sends' => self::faker()->randomNumber(),
+            'failed_sends' => self::faker()->randomNumber(),
+            'opened_sends' => min($total, self::faker()->randomNumber()),
+            'clicked_sends' => min($total, self::faker()->randomNumber()),
         ];
     }
 
