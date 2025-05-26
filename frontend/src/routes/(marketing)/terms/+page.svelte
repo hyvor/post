@@ -1,5 +1,7 @@
 <script>
 	import { Document } from '@hyvor/design/marketing';
+	import { getMarketingI18n } from '../[lang]/locale';
+	const I18n = getMarketingI18n();
 </script>
 
 <Document title="Terms of Service (Hyvor Post)" subtitle="Last updated: 2025-06-01">
@@ -19,7 +21,7 @@
 			<strong>Website Owners</strong>: Direct customers who embed Hyvor Post on their websites
 		</li>
 		<li>
-			<strong>End users</strong>: Users (members) who view and interact with Hyvor
+			<strong>End users</strong>: Users (newsletter subscribers) who view and interact with Hyvor
 			Post embeds.
 		</li>
 	</ul>
@@ -28,7 +30,7 @@
 
 	<hr />
 
-	<h2 id="website-eligibility">2. WEBSITE ELIGIBILITY</h2>
+	<h2 id="website-eligibility">2. ACCEPTABLE USE POLICY</h2>
 
 	<ul>
 		<li>
@@ -39,7 +41,7 @@
 			You must operate legally in their jurisdiction of origin and in France, as well as any
 			other applicable jurisdictions based on the website's audience.
 		</li>
-		<li>Your website or its content must not exploit or endanger children in any way.</li>
+		<li>Your newsletter or its content must not exploit or endanger children in any way.</li>
 		<li>Your website or its content must not promote pornography.</li>
 		<li>
 			Your website or its content must not promote violence, criminal acts, terrorist
@@ -50,10 +52,13 @@
 	<p>
 		Websites that fail to comply with these eligibility guidelines will be given a 7-day notice
 		before being banned from using the Service. For questions regarding eligibility, please
-		contact <a href="mailto:post.support@hyvor.com">talk.support@hyvor.com</a>.
+		contact <a href="mailto:post.support@hyvor.com">post.support@hyvor.com</a>.
 	</p>
 
 	<hr />
+
+	<h2>End user</h2> ()
+	<h2>users</h2>
 
 	<h2 id="newsletter">3. NEWSLETTER</h2>
 
@@ -64,7 +69,7 @@
 	</p>
 
 	<h3 id="newsletter-subscriber-consent">3.1 Subscriber Consent</h3>
-
+<!-- you have the right to undsubscribe at any time-->
 	<ul>
 		<li>
 			Website Owners must obtain clear and explicit consent from individuals before adding
@@ -86,13 +91,12 @@
 		</li>
 	</ul>
 
-	<h3 id="newsletter-content-sending">3.2 Content and Sending</h3>
+	<h3 id="newsletter-content-sending">3.2 Content and Sending Policy</h3>
 
 	<ul>
-		<li>Website Owners are solely responsible for the content of their newsletters.</li>
+		<li>User are solely responsible for the content of their newsletters.</li>
 		<li>
-			Newsletters must not contain any illegal, harmful, or offensive content as defined in
-			the <a href="#comment-content">Comment Content</a> section.
+			Newsletters must not contain any illegal, harmful, or offensive content.
 		</li>
 		<li>
 			Website Owners agree not to use the newsletter feature for spam, phishing, or any other
@@ -110,7 +114,7 @@
 
 	<hr />
 
-	<h2 id="hyvor-post-subscription">4. HYVOR Post SUBSCRIPTION</h2>
+	<h2 id="hyvor-post-subscription">4. HYVOR POST SUBSCRIPTION</h2>
 
 	<ul>
 		<li>
@@ -131,36 +135,8 @@
 
 	<ul>
 		<li>Hyvor Post offers a 14-day free trial for new users.</li>
+		<li>
+			The free trial allows you to explore all features of Hyvor Post without any limitations. But you only send test emails to verified email addresses.
 		<li>No payment information is required to start the free trial.</li>
-	</ul>
-
-	<h3 id="subscription-plans-and-pricing">4.2 Plans and Pricing</h3>
-
-	<ul>
-		<li>
-			Features and plans are described on our pricing page at <a href="/pricing"
-				>https://post.hyvor.com/pricing</a
-			>.
-		</li>
-		<li>All prices shown include applicable VAT charges.</li>
-		<li>Payments are processed by Paddle.com, which acts as the Merchant of Record.</li>
-	</ul>
-
-	<h3 id="subscription-payment-failure">4.4 Payment Failure</h3>
-
-	<ul>
-		<li>If your payment fails, you will receive an email notification.</li>
-		<li>We will attempt to charge your payment method 4 times over 14 days.</li>
-		<li>If all attempts fail, your subscription will be automatically canceled.</li>
-	</ul>
-
-	<h3 id="subscription-refunds">4.5 Refunds</h3>
-
-	<ul>
-		<li>We do not provide refunds except for unintentional auto-renewals.</li>
-		<li>
-			If you did not intend to renew your monthly or annual subscription, you must contact us
-			within 7 days to request a refund and cancel your subscription.
-		</li>
 	</ul>
 </Document>

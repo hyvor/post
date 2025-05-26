@@ -1,26 +1,31 @@
 <script>
 	import { Document } from '@hyvor/design/marketing';
 	import { Callout, Table, TableRow } from '@hyvor/design/components';
-	// import { IconCardChecklist } from '@hyvor/design/icons';
+	import IconCardChecklist  from '@hyvor/icons/IconCardChecklist';
 </script>
 
-<Document title="Privacy Policy (Hyvor Talk)" subtitle="Last Updated: 205-06-01">
+<Document title="Privacy Policy (Hyvor Post)" subtitle="Last Updated: 205-06-01">
 	<p>
 		This Privacy Policy extends the general privacy policy available at <a
 			href="https://hyvor.com/privacy">https://hyvor.com/privacy</a
-		>. It specifically addresses how Hyvor Talk collects, uses, and protects data.
+		>. It specifically addresses how Hyvor Post collects, uses, and protects data.
 	</p>
 
 	<Callout>
-		<!-- align bug -->
-		<span slot="icon" style="margin-top: 8px;display:inline-flex;align-items:center;">
-			<!-- <IconCardChecklist size={30} /> -->
-		</span>
-		<div slot="title">Non-binding Summary</div>
+		<!-- <span style="margin-top: 8px;display:inline-flex;align-items:center;"> -->
+		 {#snippet icon()}
+		 <div class="callout-icon">
+			<IconCardChecklist size={30} />
+		</div>
+		 {/snippet}
+		
+		 {#snippet title()}
+		<div class="title">Non-binding Summary</div>
+		{/snippet}
 
 		<ul>
 			<li>HYVOR is a privacy-focused company.</li>
-			<li>We only collect data necessary for the operation of Hyvor Talk.</li>
+			<li>We only collect data necessary for the operation of Hyvor Post.</li>
 			<li>
 				<strong>In embeds</strong> that you place on your website, no analytics, advertising,
 				or tracking scripts are used.
@@ -31,7 +36,7 @@
 			</li>
 			<li>
 				We only share your data with third parties when necessary for the operation of Hyvor
-				Talk. This includes email delivery, spam detection, and payment processing.
+				Post. This includes email delivery, spam detection, and payment processing.
 			</li>
 			<li>We never sell data to third parties.</li>
 		</ul>
@@ -60,7 +65,7 @@
 		<li>Collected if enabled by the website owner</li>
 		<li>Used for abuse prevention and spam detection</li>
 		<li>
-			For logged in users, recorded at the time of first action (comment, upvote, etc.) and
+			For logged in users, recorded at the time of first action (...todo) and
 			updated on each action.
 		</li>
 	</ul>
@@ -239,4 +244,26 @@
 		line-height: normal;
 		font-weight: 400;
 	}
+	.callout-icon {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		margin-right: 8px;
+		margin-top: 8px;display:inline-flex;align-items:center;
+	}
+
+	.title {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 8px;
+	}
+
+	.callout {
+		margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+	}
+
 </style>
