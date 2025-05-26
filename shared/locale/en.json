@@ -33,6 +33,10 @@
             "stats": {
                 "openRate": "Open Rate",
                 "clickRate": "Click Rate"
+            },
+            "lists": {
+                "title": "Lists",
+                "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
             }
         },
         "issues": {
