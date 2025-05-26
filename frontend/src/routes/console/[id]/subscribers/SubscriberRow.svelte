@@ -1,13 +1,5 @@
 <script lang="ts">
-	import {
-		Checkbox,
-		IconButton,
-		Modal,
-		SplitControl,
-		Tooltip,
-		confirm,
-		toast
-	} from '@hyvor/design/components';
+	import { Checkbox, IconButton, Tooltip, confirm, toast } from '@hyvor/design/components';
 	import type { Subscriber } from '../../types';
 	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconTrash from '@hyvor/icons/IconTrash';
@@ -65,6 +57,10 @@
 </script>
 
 <button class="subscriber">
+	<div class="checkbox">
+		<Checkbox />
+	</div>
+
 	<div class="email-wrap">
 		<div class="email">{subscriber.email}</div>
 		<div class="segments">
@@ -126,6 +122,11 @@
 	.subscriber:hover {
 		background: var(--hover);
 	}
+
+	.checkbox {
+		margin-right: 15px;
+	}
+
 	.email-wrap {
 		flex: 1;
 	}
