@@ -88,17 +88,6 @@
 			<div class="count">
 				{list.subscribers_count} Subscribers
 			</div>
-			<div
-				class="count-diff"
-				class:positive={list.subscribers_count_last_30d >= 0}
-				class:negative={list.subscribers_count_last_30d < 0}
-			>
-				{list.subscribers_count_last_30d >= 0
-					? '+'
-					: ''}{list.subscribers_count_last_30d.toLocaleString()}
-
-				<span class="last-30d-tag">30d</span>
-			</div>
 		</div>
 	</a>
 	<div class="actions">
@@ -154,19 +143,5 @@
 
 	.count {
 		font-weight: 600;
-	}
-	.count-diff {
-		font-size: 14px;
-	}
-
-	.count-diff.positive {
-		color: var(--green);
-	}
-	.count-diff.negative {
-		color: var(--red);
-	}
-	.last-30d-tag {
-		font-size: 12px;
-		color: var(--text-light);
 	}
 </style>

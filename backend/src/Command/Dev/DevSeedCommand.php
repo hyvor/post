@@ -94,13 +94,14 @@ class DevSeedCommand extends Command
             'lists' => [$list1, $list2],
         ]);
 
-        $issue = IssueFactory::createOne([
+        IssueFactory::createMany(30, ['newsletter' => $newsletter]);
+        $draftIssue = IssueFactory::createOne([
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
-            'status' => IssueStatus::SENT,
+            'status' => IssueStatus::DRAFT,
             'content' => $this->contentDefaultStyle->json()
         ]);
-        $issue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($issue));
+        $draftIssue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($draftIssue));
 
         DomainFactory::createOne([
             'user_id' => 1,
