@@ -128,10 +128,16 @@ export interface SubscriberMetadataDefinition {
 	type: 'text';
 }
 
+interface StatsType {
+	total: number;
+	last_30_days: number;
+}
+
 export interface NewsletterStats {
-	subscribers: { total: number; last_30d: number };
-	issues: { total: number; last_30d: number };
-	lists: { total: number; last_30d: number };
+	subscribers: StatsType;
+	issues: StatsType;
+	open_rate: StatsType;
+	click_rate: StatsType;
 }
 
 export type List = {

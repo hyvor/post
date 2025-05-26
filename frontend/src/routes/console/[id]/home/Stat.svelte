@@ -1,37 +1,54 @@
 <script lang="ts">
+	import { getI18n } from '../../lib/i18n';
 
-	export let href: string;
-	export let title: string;
-	export let counts: {
-		total: number;
-		last_30d: number;
-	};
-	export let enabled = true;
+	interface Props {
+		href?: string;
+		title: string;
+		counts: {
+			total: number;
+			last_30_days: number;
+		};
+		enabled?: boolean;
+		children?: import('svelte').Snippet;
+		percent?: boolean;
+	}
 
-	$: total = counts.total;
-	$: change = counts.last_30d;
+	let { href, title, counts, enabled = true, children, percent = false }: Props = $props();
 
+	let change = $derived(percent ? counts.last_30_days - counts.total : counts.last_30_days);
+
+	const I18n = getI18n();
 </script>
 
 <div class="stat">
 	<div class="title">
-		<a {href}>
+		{#if href}
+			<a {href}>
+				{title}
+			</a>
+		{:else}
 			{title}
-		</a>
+		{/if}
 	</div>
 	<div class="value-wrap">
 		{#if enabled}
-			<span class="value">{enabled ? total.toLocaleString() : '-'}</span>
+			<span class="value"
+				>{enabled ? counts.total.toLocaleString() : '-'}{#if percent}<span class="percent"
+						>%</span
+					>{/if}</span
+			>
 			{#if change !== null && enabled}
 				<span class="change" class:positive={change >= 0} class:negative={change < 0}>
-					{change >= 0 ? '+' : ''}{change.toLocaleString()}
-					<span class="last-30d-tag">30d</span>
+					{change >= 0 ? '+' : ''}{change.toLocaleString()}{#if percent}<span
+							class="percent">%</span
+						>{/if}
+					<span class="last-30d-tag">{I18n.t('console.billing.usage.30days')}</span>
 				</span>
 			{/if}
 		{/if}
-		{#if $$slots.default && !enabled}
+		{#if children && !enabled}
 			<div class="below">
-				<slot />
+				{@render children?.()}
 			</div>
 		{/if}
 	</div>
@@ -60,5 +77,10 @@
 	}
 	.below {
 		margin-top: 10px;
+	}
+
+	.percent {
+		font-size: 0.6em;
+		opacity: 0.5;
 	}
 </style>

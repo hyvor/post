@@ -25,7 +25,14 @@
         "billing": {
             "usage": {
                 "title": "Usage",
-                "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
+                "licenseDoesNotIncludeEmails": "Your current license does not include sending emails",
+                "30days": "30d"
+            }
+        },
+        "home": {
+            "stats": {
+                "openRate": "Open Rate",
+                "clickRate": "Click Rate"
             }
         },
         "issues": {
