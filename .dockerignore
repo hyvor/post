@@ -1,3 +1,5 @@
 backend/vendor
+backend/var
 frontend/.svelte-kit
 frontend/node_modules
+frontend/build
