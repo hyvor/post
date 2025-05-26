@@ -31,7 +31,7 @@ class ContentService
     {
     }
 
-    const DEFAULT_CONTENT = <<<JSON
+    const string DEFAULT_CONTENT = <<<JSON
 {
     "type": "doc"
 }
@@ -103,11 +103,6 @@ JSON;
                 new Code(),
             ]
         );
-    }
-
-    public function getDefaultContentStyleHtml(): string
-    {
-        return (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');
     }
 
 }

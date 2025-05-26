@@ -5,6 +5,7 @@ namespace App\Command\Dev;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Service\Content\ContentDefaultStyle;
 use App\Service\Content\ContentService;
 use App\Service\Template\TemplateService;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -33,8 +34,7 @@ class DevSeedCommand extends Command
 
     public function __construct(
         private KernelInterface $kernel,
-        private ContentService $contentService,
-        private TemplateService $emailTemplateService,
+        private ContentDefaultStyle $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
     ) {
         parent::__construct();
@@ -94,7 +94,7 @@ class DevSeedCommand extends Command
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
             'status' => IssueStatus::SENT,
-            'content' => $this->contentService->getJsonFromHtml($this->contentService->getDefaultContentStyleHtml())
+            'content' => $this->contentDefaultStyle->json()
         ]);
         $issue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($issue));
 
@@ -102,6 +102,12 @@ class DevSeedCommand extends Command
             'user_id' => 1,
             'domain' => 'example.com',
             'verified_in_ses' => true
+        ]);
+
+        DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'notverified.com',
+            'verified_in_ses' => false
         ]);
 
         $output->writeln('<info>Database seeded with test data.</info>');

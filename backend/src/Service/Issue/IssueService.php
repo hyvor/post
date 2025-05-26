@@ -121,6 +121,14 @@ class IssueService
             $issue->setFailedAt($updates->failedAt);
         }
 
+        if ($updates->hasProperty('openedSends')) {
+            $issue->setOpenedSends($updates->openedSends);
+        }
+
+        if ($updates->hasProperty('clickedSends')) {
+            $issue->setClickedSends($updates->clickedSends);
+        }
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);

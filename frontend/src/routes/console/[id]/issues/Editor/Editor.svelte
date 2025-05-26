@@ -8,31 +8,33 @@
 	import HeadingNodeView from './nodeview-heading';
 	import { IconButton, toast } from '@hyvor/design/components';
 	import { getPlugins } from './plugin';
-    import IconImage from '@hyvor/icons/IconImage';
-    import IconLink45deg from '@hyvor/icons/IconLink45deg';
-    import IconTypeBold from '@hyvor/icons/IconTypeBold';
-    import IconTypeItalic from '@hyvor/icons/IconTypeItalic';
-    import IconTypeUnderline from '@hyvor/icons/IconTypeUnderline';
-    import IconTypeStrikethrough from '@hyvor/icons/IconTypeStrikethrough';
-    import IconCode from '@hyvor/icons/IconCode';
-    import IconHr from '@hyvor/icons/IconHr';
-    import IconTypeH2 from '@hyvor/icons/IconTypeH2';
-    import IconQuote from '@hyvor/icons/IconQuote';
+	import IconImage from '@hyvor/icons/IconImage';
+	import IconLink45deg from '@hyvor/icons/IconLink45deg';
+	import IconTypeBold from '@hyvor/icons/IconTypeBold';
+	import IconTypeItalic from '@hyvor/icons/IconTypeItalic';
+	import IconTypeUnderline from '@hyvor/icons/IconTypeUnderline';
+	import IconTypeStrikethrough from '@hyvor/icons/IconTypeStrikethrough';
+	import IconCode from '@hyvor/icons/IconCode';
+	import IconHr from '@hyvor/icons/IconHr';
+	import IconTypeH2 from '@hyvor/icons/IconTypeH2';
+	import IconQuote from '@hyvor/icons/IconQuote';
 	import AddLink from './AddLink.svelte';
 	import AddButton from './AddButton.svelte';
-	import { contentUpdateId } from '../[issueId]/issueStore';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 
-	export let content: string | null = null;
-    export let docupdate: (doc: string) => void;
+	interface Props {
+		content?: string | null;
+		ondocupdate: (doc: string) => void;
+	}
 
-	let el: HTMLDivElement;
-	let view: EditorView;
+	let { content = null, ondocupdate }: Props = $props();
+
+	let el: HTMLDivElement = $state({} as HTMLDivElement);
+	let view: EditorView = $state({} as EditorView);
 
 	export const DEFAULT_EDITOR_JSON = '{"type": "doc", "content": [{"type": "paragraph"}]}';
 
-	let imageInput: HTMLInputElement;
-
+	let imageInput: HTMLInputElement = $state({} as HTMLInputElement);
 
 	function handleUpload() {
 		const files = imageInput.files;
@@ -50,7 +52,7 @@
 
 		const toastId = toast.loading('Uploading image...');
 
-        // TODO: Implement uploadImage function
+		// TODO: Implement uploadImage function
 		/*uploadImage(file)
 			.then((res) => {
 				const { state } = view;
@@ -70,11 +72,11 @@
 	}
 
 	let linkActive = false;
-	let boldActive = false;
-	let italicActive = false;
-	let underlineActive = false;
-	let strikethroughActive = false;
-	let codeActive = false;
+	let boldActive = $state(false);
+	let italicActive = $state(false);
+	let underlineActive = $state(false);
+	let strikethroughActive = $state(false);
+	let codeActive = $state(false);
 
 	function updateActiveStates() {
 		function isMarkActive(state: EditorState, type: MarkType): boolean {
@@ -99,9 +101,9 @@
 
 	function onHeadingToggle() {
 		const { state } = view;
-		const { $from, $to } = state.selection;
+		const sel = state.selection;
 
-		let range = $from.blockRange($to);
+		let range = sel.$from.blockRange(sel.$to);
 		if (!range) return;
 
 		const targetType = newsletterSchema.nodes.heading;
@@ -125,15 +127,14 @@
 		view.focus();
 	}
 
-
-	let addingButton = false;
-	let editingButton = false;
-	let editingButtonNode: any = null;
+	let addingButton = $state(false);
+	let editingButton = $state(false);
+	let editingButtonNode: any = $state(null);
 
 	function onButtonToggle() {
 		const { state } = view;
 		const { from, to } = state.selection;
-		
+
 		// Check if we're clicking on an existing button
 		const node = state.doc.nodeAt(from);
 		if (node && node.type === newsletterSchema.nodes.button) {
@@ -147,13 +148,13 @@
 	function onButtonAdd(text: string, href: string) {
 		const { state } = view;
 		const { from, to } = state.selection;
-		
+
 		// Create a button node with the provided attributes
 		const buttonNode = newsletterSchema.nodes.button.createAndFill({
 			href,
 			text
 		})!;
-		
+
 		// Replace the selected content with the button
 		const tr = state.tr.replaceWith(from, to, buttonNode);
 		view.dispatch(tr);
@@ -163,13 +164,13 @@
 	function onButtonEdit(text: string, href: string) {
 		const { state } = view;
 		const { from, to } = state.selection;
-		
+
 		// Update the button node with new attributes
 		const tr = state.tr.setNodeMarkup(from, undefined, {
 			href,
 			text
 		});
-		
+
 		view.dispatch(tr);
 		view.focus();
 	}
@@ -177,11 +178,10 @@
 	function addHr() {
 		const { state } = view;
 		const { schema, selection } = state;
-		const { $from } = selection;
 
 		const tr = state.tr;
 		const hr = schema.nodes.horizontal_rule.create();
-		tr.insert($from.pos, hr);
+		tr.insert(selection.$from.pos, hr);
 		view.dispatch(tr.scrollIntoView());
 	}
 
@@ -189,12 +189,12 @@
 		const { state } = view;
 
 		function isNodeActive(state: EditorState, type: NodeType): boolean {
-			const $from = state.selection.$from;
+			const selFrom = state.selection.$from;
 
 			let wrapperDepth;
-			let currentDepth = $from.depth;
+			let currentDepth = selFrom.depth;
 			while (currentDepth > 0) {
-				const currentNodeAtDepth = $from.node(currentDepth);
+				const currentNodeAtDepth = selFrom.node(currentDepth);
 
 				/* Previous versions used node.hasMarkup but that */
 				/* mandates deep equality on attrs. We just want to */
@@ -220,7 +220,7 @@
 		view.focus();
 	}
 
-	let addingLink = false;
+	let addingLink = $state(false);
 	function toggleLink() {
 		if (linkActive) {
 			onToggle('link');
@@ -229,7 +229,7 @@
 		}
 	}
 
-	function onLinkAdd( url: string) {
+	function onLinkAdd(url: string) {
 		toggleMark(newsletterSchema.marks.link, { href: url })(view.state, view.dispatch);
 		view.focus();
 		addingLink = false;
@@ -254,15 +254,13 @@
 				setTimeout(updateActiveStates, 0);
 
 				if (tr.docChanged) {
-					docupdate(JSON.stringify(tr.doc.toJSON()));
-
-					contentUpdateId.update((id) => id + 1);
+					ondocupdate(JSON.stringify(tr.doc.toJSON()));
 				}
 			},
 			handleClick: (view: EditorView, pos: number, event: MouseEvent) => {
 				// Get the node at the clicked position
 				const node = view.state.doc.nodeAt(pos);
-				
+
 				// If clicking on a button node, prevent default link behavior
 				if (node && node.type === newsletterSchema.nodes.button) {
 					event.preventDefault();
@@ -276,9 +274,9 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="wrap" on:click={() => view.focus()}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<div class="wrap" onclick={() => view.focus()}>
 	<div class="toolbar">
 		<div class="left">
 			<IconButton size="small" color="input" on:click={() => imageInput.click()}>
@@ -329,20 +327,10 @@
 			</IconButton>
 		</div>
 		<div class="right">
-			<IconButton
-				size="small"
-				color="input"
-				on:click={() => onButtonToggle()}
-				title="Button"
-			>
+			<IconButton size="small" color="input" on:click={() => onButtonToggle()} title="Button">
 				<IconBoxArrowInDown size={14} />
 			</IconButton>
-			<IconButton 
-				size="small"
-				color="input"
-				on:click={() => addHr()}
-				title="Horizontal Rule"
-			>
+			<IconButton size="small" color="input" on:click={() => addHr()} title="Horizontal Rule">
 				<IconHr size={14} />
 			</IconButton>
 			<IconButton
@@ -371,7 +359,7 @@
 	accept="image/*"
 	bind:this={imageInput}
 	style="display: none"
-	on:change={handleUpload}
+	onchange={handleUpload}
 />
 
 {#if addingLink}
@@ -383,10 +371,10 @@
 {/if}
 
 {#if editingButton}
-	<AddButton 
-		add={onButtonEdit} 
-		bind:show={editingButton} 
-		initialText={editingButtonNode?.attrs.text} 
+	<AddButton
+		add={onButtonEdit}
+		bind:show={editingButton}
+		initialText={editingButtonNode?.attrs.text}
 		initialHref={editingButtonNode?.attrs.href}
 		isEditing={true}
 	/>
@@ -411,7 +399,7 @@
 	}
 	.wrap :global(.ProseMirror) {
 		height: 100%;
-		
+
 		&:focus-visible {
 			outline: none;
 		}
@@ -503,7 +491,7 @@
 
 		:global(a) {
 			text-decoration: underline;
-			color: #0000EE;
+			color: #0000ee;
 		}
 
 		:global(img) {

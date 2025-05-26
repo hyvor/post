@@ -1,20 +1,5 @@
 {
     "console": {
-        "nav": {
-            "domains": "Domains",
-            "billing": "Billing",
-            "home": "Home",
-            "subscribers": "Subscribers",
-            "issues": "Issues",
-            "tools": "Tools",
-            "settings": "Settings"
-        },
-        "billing": {
-            "usage": {
-                "title": "Usage",
-                "licenseDoesNotIncludeEmails": "Your current license does not include sending emails"
-            }
-        },
         "common": {
             "cancel": "Cancel",
             "copy": "Copy",
@@ -24,13 +9,46 @@
             "updated": "{field} updated",
             "deleted": "{field} deleted"
         },
+        "nav": {
+            "domains": "Domains",
+            "billing": "Billing",
+            "home": "Home",
+            "subscribers": "Subscribers",
+            "issues": "Issues",
+            "tools": "Tools",
+            "settings": "Settings"
+        },
+        "domains": {
+            "addDomain": "Add Domain",
+            "firstDomain": "Add your first domain to use it to send emails"
+        },
+        "billing": {
+            "usage": {
+                "title": "Usage",
+                "licenseDoesNotIncludeEmails": "Your current license does not include sending emails",
+                "30days": "30d"
+            }
+        },
+        "home": {
+            "stats": {
+                "openRate": "Open Rate",
+                "clickRate": "Click Rate"
+            }
+        },
         "issues": {
             "newIssue": "New Issue",
             "noIssuesSent": "No issues sent yet",
             "createFirstIssue": "Create your first issue",
             "draft": {
                 "subject": "Subject",
-                "lists": "Lists"
+                "lists": "Lists",
+                "listsEmptyError": "Please select at least one list", 
+                "subscribersCount": "{count} subscribers",
+                "sendableSubscribersCount": "<b>{count} subscribers</b> will receive this issue",
+                "fromName": "From Name",
+                "fromEmail": "From Email",
+                "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",
+                "replyTo": "Reply To Email"
             }
         },
         "tools": {

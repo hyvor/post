@@ -24,12 +24,11 @@ class SendingAddressService
     }
 
     /**
-     * @return ArrayCollection<int, SendingAddress>
+     * @return array<int, SendingAddress>
      */
-    public function getSendingAddresses(Newsletter $newsletter): ArrayCollection
+    public function getSendingAddresses(Newsletter $newsletter): array
     {
-        $sendingEmails = $this->sendingEmailRepository->findBy(['newsletter' => $newsletter]);
-        return new ArrayCollection($sendingEmails);
+        return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter]);
     }
 
     public function getSendingAddressesCount(Newsletter $newsletter): int
@@ -107,7 +106,7 @@ class SendingAddressService
     {
         return sprintf(
             "%s@%s",
-            $newsletter->getDefaultEmailUsername(),
+            $newsletter->getSlug(),
             $this->appConfig->getDefaultEmailDomain()
         );
     }

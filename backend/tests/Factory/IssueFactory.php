@@ -65,7 +65,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'list_ids' => [],
-            'total_sends' => 0,
+            'total_sends' => 1,
             'ok_sends' => 0,
             'failed_sends' => 0,
         ];

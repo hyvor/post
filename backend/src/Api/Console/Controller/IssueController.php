@@ -178,10 +178,14 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]
-    public function previewIssue(Newsletter $newsletter, Issue $issue): JsonResponse
+    public function previewIssue(Issue $issue): JsonResponse
     {
         $preview = $this->templateRenderer->renderFromIssue($issue);
-        return $this->json(['html' => $preview]);
+
+        return $this->json([
+            'html' => $preview,
+            'sendable_subscribers_count' => $this->sendService->getSendableSubscribersCount($issue)
+        ]);
     }
 
     #[Route ('/issues/{id}/progress', methods: 'GET')]

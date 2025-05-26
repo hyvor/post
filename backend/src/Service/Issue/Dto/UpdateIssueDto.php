@@ -32,4 +32,7 @@ class UpdateIssueDto
 
     public int $failedSends;
     public string $error_private;
+
+    public int $openedSends;
+    public int $clickedSends;
 }

@@ -63,7 +63,17 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             ],
             content: (string)json_encode($data),
         );
-        return $this->client->getResponse();
+
+        $response = $this->client->getResponse();
+
+        if ($response->getStatusCode() === 500) {
+            throw new \Exception(
+                'API call failed with status code 500. ' .
+                'Response: ' . $response->getContent()
+            );
+        }
+
+        return $response;
     }
 
     /**

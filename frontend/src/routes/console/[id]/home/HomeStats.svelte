@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { Button, Loader } from '@hyvor/design/components';
-	import type { NewsletterStats } from '../../types';
+	import { Loader } from '@hyvor/design/components';
 	import Stat from './Stat.svelte';
 	import { newsletterStatsStore, newsletterStore } from '../../lib/stores/newsletterStore';
+	import { getI18n } from '../../lib/i18n';
+
+	const I18n = getI18n();
 
 	let loading = false;
 </script>
@@ -13,19 +15,24 @@
 	{:else}
 		<div class="stats">
 			<Stat
-				title="Subscribers"
+				title={I18n.t('console.nav.subscribers')}
 				counts={$newsletterStatsStore.subscribers}
 				href={`/console/${$newsletterStore.id}/subscribers`}
 			/>
 			<Stat
-				title="Issues"
+				title={I18n.t('console.nav.issues')}
 				counts={$newsletterStatsStore.issues}
 				href={`/console/${$newsletterStore.id}/issues`}
 			/>
 			<Stat
-				title="Lists"
-				counts={$newsletterStatsStore.lists}
-				href={`/console/${$newsletterStore.id}`}
+				title={I18n.t('console.home.stats.openRate')}
+				counts={$newsletterStatsStore.open_rate}
+				percent
+			/>
+			<Stat
+				title={I18n.t('console.home.stats.clickRate')}
+				counts={$newsletterStatsStore.click_rate}
+				percent
 			/>
 		</div>
 	{/if}

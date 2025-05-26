@@ -1,8 +1,17 @@
 <script lang="ts">
-	import { Button, IconButton, Modal, SplitControl, Tag, Tooltip, confirm, toast } from '@hyvor/design/components';
+	import {
+		Button,
+		IconButton,
+		Modal,
+		SplitControl,
+		Tag,
+		Tooltip,
+		confirm,
+		toast
+	} from '@hyvor/design/components';
 	import { deleteDomain, verifyDomain } from '../lib/actions/domainActions';
 	import type { Domain } from '../types';
-    import DnsRecordsModal from './DnsRecordsModal.svelte';
+	import DnsRecordsModal from './DnsRecordsModal.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
 
 	export let domain: Domain;
@@ -14,7 +23,7 @@
 	let verificationDebug: null | Record<string, string> = null;
 
 	function getVerificationStatusColor(verified: boolean) {
-		return verified ? 'green' : 'red';
+		return verified ? 'green' : 'orange';
 	}
 
 	async function handleDelete() {
@@ -23,7 +32,8 @@
 			content: 'Are you sure you want to delete this domain?',
 			confirmText: 'Delete',
 			cancelText: 'Cancel',
-			danger: true
+			danger: true,
+			autoClose: false
 		});
 
 		if (!confirmation) return;
@@ -53,8 +63,7 @@
 				if (res.domain.verified === false) {
 					verificationDebug = res.data.debug;
 					showVerificationDebug = true;
-				}
-				else {
+				} else {
 					toast.success('Verification Successful');
 					domain.verified_in_ses = true;
 				}
@@ -72,10 +81,10 @@
 	<div class="domain-info">
 		<div class="domain-name">{domain.domain}</div>
 		<div class="domain-status">
-			<Tag 
-				size="small" 
+			<Tag
+				size="small"
 				color={getVerificationStatusColor(domain.verified_in_ses)}
-				on:click={() => showVerificationDebug = true}
+				on:click={() => (showVerificationDebug = true)}
 				interactive={true}
 			>
 				{domain.verified_in_ses ? 'Verified' : 'Not Verified'}
@@ -83,36 +92,17 @@
 		</div>
 	</div>
 	<div class="domain-actions">
-		<Button
-			size="small"
-			color="input"
-			on:click={() => showDnsRecords = true}
-			{loading}
-		>
+		<Button size="small" color="input" on:click={() => (showDnsRecords = true)} {loading}>
 			View DNS Records
 		</Button>
 		{#if !domain.verified_in_ses}
-			<Button
-				size="small"
-				color="input"
-				on:click={handleVerify}
-				{loading}
-			>
+			<Button size="small" color="input" on:click={handleVerify} {loading}>
 				Verify Domain
 			</Button>
 		{/if}
-		<Tooltip
-			text="Delete Domain"
-		>
-			<IconButton
-			size="small"
-			color="red"
-			variant="fill-light"
-			on:click={handleDelete}
-		>
-				<IconTrash />
-			</IconButton>
-		</Tooltip>
+		<IconButton size="small" color="red" variant="fill-light" on:click={handleDelete}>
+			<IconTrash size={12} />
+		</IconButton>
 	</div>
 </div>
 
@@ -124,7 +114,9 @@
 		show={true}
 	>
 		<p>
-			Domain verification for <strong>{domain.domain}</strong> is {domain.verified_in_ses ? 'verified' : 'not verified'}.
+			Domain verification for <strong>{domain.domain}</strong> is {domain.verified_in_ses
+				? 'verified'
+				: 'not verified'}.
 			{#if !domain.verified_in_ses}
 				Please note that it may take up to 72 hours for the changes to take effect.
 			{/if}
@@ -144,7 +136,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		padding: 10px 15px;
+		padding: 10px 0;
 		border-bottom: 1px solid var(--hds-color-border);
 	}
 
@@ -167,4 +159,4 @@
 		display: flex;
 		gap: 5px;
 	}
-</style> 
+</style>
