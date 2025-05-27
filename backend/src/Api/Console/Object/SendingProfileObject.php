@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Object;
 
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 
 class SendingAddressObject
 {
@@ -11,7 +11,7 @@ class SendingAddressObject
     public bool $is_default;
     public DomainObject $domain;
 
-    public function __construct(SendingAddress $sendingAddress)
+    public function __construct(SendingProfile $sendingAddress)
     {
         $this->id = $sendingAddress->getId();
         $this->email = $sendingAddress->getEmail();

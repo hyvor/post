@@ -4,16 +4,16 @@ namespace App\Tests\Api\Console\SendingAddresses;
 
 use App\Api\Console\Controller\SendingAddressController;
 use App\Api\Console\Object\SendingAddressObject;
-use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingAddressService;
+use App\Entity\SendingProfile;
+use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SendingAddressFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SendingAddressController::class)]
-#[CoversClass(SendingAddressService::class)]
+#[CoversClass(SendingProfileService::class)]
 class DeleteSendingAddressTest extends WebTestCase
 {
     public function test_delete_sending_email(): void
@@ -24,7 +24,7 @@ class DeleteSendingAddressTest extends WebTestCase
             'verified_in_ses' => true,
         ]);
 
-        $sendingEmail = SendingAddressFactory::createOne([
+        $sendingEmail = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domain,
             'email' => 'test@hyvor.com',
@@ -41,7 +41,7 @@ class DeleteSendingAddressTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->getJson($response);
 
-        $repository = $this->em->getRepository(SendingAddress::class);
+        $repository = $this->em->getRepository(SendingProfile::class);
         $deletedSendingEmail = $repository->findOneBy(['id' => $id]);
         $this->assertNull($deletedSendingEmail);
     }

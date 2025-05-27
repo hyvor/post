@@ -2,13 +2,13 @@
 
 namespace App\Tests\Factory;
 
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SendingAddress>
+ * @extends PersistentProxyObjectFactory<SendingProfile>
  */
-final class SendingAddressFactory extends PersistentProxyObjectFactory
+final class SendingProfileFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -21,7 +21,7 @@ final class SendingAddressFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return SendingAddress::class;
+        return SendingProfile::class;
     }
 
     /**
@@ -34,8 +34,14 @@ final class SendingAddressFactory extends PersistentProxyObjectFactory
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'email' => self::faker()->email(),
+            'newsletter' => NewsletterFactory::createOne(),
+            'domain' => null,
             'is_default' => false,
+            'from_name' => self::faker()->name(),
+            'from_email' => self::faker()->email(),
+            'reply_to_email' => self::faker()->email(),
+            'brand_name' => self::faker()->company(),
+            'brand_logo' => self::faker()->imageUrl(640, 480, 'business', true, 'Brand Logo'),
         ];
     }
 

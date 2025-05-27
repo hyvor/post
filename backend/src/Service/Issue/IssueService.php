@@ -6,14 +6,14 @@ use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
 use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\SendingEmail\SendingAddressService;
+use App\Service\SendingEmail\SendingProfileService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -29,7 +29,7 @@ class IssueService
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
         private NewsletterListService $newsletterListService,
-        private SendingAddressService $sendingAddressService,
+        private SendingProfileService $sendingAddressService,
     ) {
     }
 

@@ -5,7 +5,7 @@ namespace App\Tests\Api\Console\SendingAddresses;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SendingAddressFactory;
+use App\Tests\Factory\SendingProfileFactory;
 
 class GetSendingAddressTest extends WebTestCase
 {
@@ -17,7 +17,7 @@ class GetSendingAddressTest extends WebTestCase
             'verified_in_ses' => true,
         ]);
 
-        $sendingAddress = SendingAddressFactory::createOne([
+        $sendingAddress = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domain,
             'email' => 'test@hyvor.com',

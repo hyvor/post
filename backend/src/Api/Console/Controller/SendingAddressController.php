@@ -8,10 +8,10 @@ use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Object\SendingAddressObject;
 use App\Entity\Domain;
 use App\Entity\Newsletter;
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 use App\Service\Domain\DomainService;
 use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
-use App\Service\SendingEmail\SendingAddressService;
+use App\Service\SendingEmail\SendingProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SendingAddressController extends AbstractController
 {
     public function __construct(
-        private SendingAddressService $sendingAddressService,
+        private SendingProfileService $sendingAddressService,
         private DomainService $domainService
     ) {
     }
@@ -44,7 +44,7 @@ class SendingAddressController extends AbstractController
     public function getSendingAddresses(Request $request, Newsletter $newsletter): JsonResponse
     {
         $sendingAddresses = array_map(
-            fn (SendingAddress $sendingAddress) => new SendingAddressObject($sendingAddress),
+            fn (SendingProfile $sendingAddress) => new SendingAddressObject($sendingAddress),
             $this->sendingAddressService->getSendingAddresses($newsletter)
         );
         return $this->json($sendingAddresses);
@@ -63,7 +63,7 @@ class SendingAddressController extends AbstractController
 
     #[Route('/sending-addresses/{id}', methods: 'PATCH')]
     public function updateSendingAddress(
-        SendingAddress $sendingAddress,
+        SendingProfile $sendingAddress,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
         Newsletter $newsletter
     ): JsonResponse {
@@ -85,7 +85,7 @@ class SendingAddressController extends AbstractController
 
     #[Route('/sending-addresses/{id}', methods: 'DELETE')]
     public function deleteSendingAddress(
-        SendingAddress $sendingAddress,
+        SendingProfile $sendingAddress,
         Newsletter $newsletter
     ): JsonResponse {
         $this->sendingAddressService->deleteSendingAddress($sendingAddress);

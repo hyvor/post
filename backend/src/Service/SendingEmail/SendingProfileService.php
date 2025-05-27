@@ -3,28 +3,28 @@
 namespace App\Service\SendingEmail;
 
 use App\Entity\Newsletter;
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 use App\Entity\Domain;
-use App\Repository\SendingAddressRepository;
+use App\Repository\SendingProfileRepository;
 use App\Service\AppConfig;
 use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 
-class SendingAddressService
+class SendingProfileService
 {
     use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SendingAddressRepository $sendingEmailRepository,
+        private SendingProfileRepository $sendingEmailRepository,
         private AppConfig $appConfig,
     ) {
     }
 
     /**
-     * @return array<int, SendingAddress>
+     * @return array<int, SendingProfile>
      */
     public function getSendingAddresses(Newsletter $newsletter): array
     {
@@ -36,9 +36,9 @@ class SendingAddressService
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
-    public function createSendingAddress(Newsletter $newsletter, Domain $customDomain, string $email): SendingAddress
+    public function createSendingAddress(Newsletter $newsletter, Domain $customDomain, string $email): SendingProfile
     {
-        $sendingAddress = new SendingAddress();
+        $sendingAddress = new SendingProfile();
         $sendingAddress->setNewsletter($newsletter);
         $sendingAddress->setDomain($customDomain);
         $sendingAddress->setEmail($email);
@@ -51,9 +51,9 @@ class SendingAddressService
     }
 
     public function updateSendingAddress(
-        SendingAddress $sendingAddress,
+        SendingProfile $sendingAddress,
         UpdateSendingAddressDto $updates
-    ): SendingAddress {
+    ): SendingProfile {
         if ($updates->hasProperty('email')) {
             $sendingAddress->setEmail($updates->email);
         }
@@ -83,7 +83,7 @@ class SendingAddressService
         return $sendingAddress;
     }
 
-    public function getCurrentDefaultSendingAddressOfNewsletter(Newsletter $newsletter): ?SendingAddress
+    public function getCurrentDefaultSendingAddressOfNewsletter(Newsletter $newsletter): ?SendingProfile
     {
         return $this->sendingEmailRepository->findOneBy([
             'newsletter' => $newsletter,
@@ -111,7 +111,7 @@ class SendingAddressService
         );
     }
 
-    public function deleteSendingAddress(SendingAddress $sendingAddress): void
+    public function deleteSendingAddress(SendingProfile $sendingAddress): void
     {
         $this->em->remove($sendingAddress);
         $this->em->flush();

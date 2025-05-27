@@ -4,17 +4,17 @@ namespace App\Tests\Api\Console\SendingAddresses;
 
 use App\Api\Console\Controller\SendingAddressController;
 use App\Api\Console\Object\SendingAddressObject;
-use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingAddressService;
+use App\Entity\SendingProfile;
+use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SendingAddressFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(SendingAddressController::class)]
 #[CoversClass(SendingAddressObject::class)]
-#[CoversClass(SendingAddressService::class)]
+#[CoversClass(SendingProfileService::class)]
 class CreateSendingAddressTest extends WebTestCase
 {
     public function test_create_sending_email(): void
@@ -43,8 +43,8 @@ class CreateSendingAddressTest extends WebTestCase
         $this->assertSame('thibault@hyvor.com', $json['email']);
         $this->assertSame(true, $json['is_default']);
 
-        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
+        $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
         $this->assertSame(true, $sendingEmail->isDefault());
     }
@@ -60,7 +60,7 @@ class CreateSendingAddressTest extends WebTestCase
             ]
         );
 
-        SendingAddressFactory::createOne([
+        SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domain
         ]);
@@ -78,8 +78,8 @@ class CreateSendingAddressTest extends WebTestCase
         $json = $this->getJson();
         $this->assertSame(false, $json['is_default']);
 
-        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
+        $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame(false, $sendingEmail->isDefault());
     }
 

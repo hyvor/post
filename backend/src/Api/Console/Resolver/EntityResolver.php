@@ -6,7 +6,7 @@ use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
-use App\Entity\SendingAddress;
+use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\User;
@@ -28,7 +28,7 @@ class EntityResolver implements ValueResolverInterface
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
         'domain' => Domain::class,
-        'sending-addresses' => SendingAddress::class,
+        'sending-addresses' => SendingProfile::class,
         'users' => User::class,
         'invites' => UserInvite::class,
     ];
