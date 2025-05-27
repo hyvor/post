@@ -85,6 +85,15 @@
         "tools": {
             "import": {
                 "title": "Import"
+            },
+
+            "export": {
+                "title": "Export",
+                "status": {
+                    "pending": "Pending",
+                    "completed": "Completed",
+                    "failed": "Failed"
+                }
             }
         },
         "settings": {

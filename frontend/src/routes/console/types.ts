@@ -1,5 +1,4 @@
 export interface AppConfig {
-
 	hyvor: {
 		instance: string;
 	};
@@ -113,11 +112,11 @@ export type NewsletterList = {
 };
 
 export type Newsletter = {
-	id: number,
-	slug: string,
-	uuid: string,
-	created_at: number,
-	name: string,
+	id: number;
+	slug: string;
+	uuid: string;
+	created_at: number;
+	name: string;
 } & NewsletterMeta;
 
 export interface SubscriberMetadataDefinition {
@@ -219,6 +218,16 @@ export type Domain = {
 	requested_by_current_website: boolean;
 };
 
+
+export type ExportStatus = 'pending' | 'completed' | 'failed';
+
+export type Export = {
+	id: number;
+	created_at: number;
+	status: ExportStatus;
+	url: string | null;
+	error_message: string | null;
+};
 
 export type SendingProfile = {
 	id: number,

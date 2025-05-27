@@ -3,6 +3,7 @@
 	import { NavLink } from '@hyvor/design/components';
 	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
+	import IconBoxArrowInUp from '@hyvor/icons/IconBoxArrowInUp';
 	import { getI18n } from '../../lib/i18n';
 
 	interface Props {
@@ -22,6 +23,13 @@
 				<IconBoxArrowInDown />
 			{/snippet}
 			{I18n.t('console.tools.import.title')}
+		</NavLink>
+
+		<NavLink href="{prefix}/export" active={page.url.pathname === prefix + '/export'}>
+			{#snippet start()}
+				<IconBoxArrowInUp />
+			{/snippet}
+			{I18n.t('console.tools.export.title')}
 		</NavLink>
 	</div>
 

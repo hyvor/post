@@ -35,11 +35,11 @@ class MediaService
     ): Media {
         $uuid = Uuid::v4();
         $originalName = $file->getClientOriginalName();
-        $extension = $file->guessExtension();
+        $extension = $file->getExtension();
 
-        if ($extension === null) {
-            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        }
+        // if ($extension === null) {
+        //     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        // }
 
         if (empty($extension)) {
             throw new MediaUploadException('Unable to determine file extension');
