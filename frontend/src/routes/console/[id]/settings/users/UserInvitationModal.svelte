@@ -13,7 +13,10 @@
 	import { toast } from '@hyvor/design/components';
 	import { inviteUser } from '../../../lib/actions/userActions';
 	import type { Invite } from '../../../types';
-	
+	import { getI18n } from '../../../lib/i18n';
+	const I = getI18n();
+
+
 	export let show: boolean;
 	export let refreshInvite: (i: Invite) => void
 
@@ -49,30 +52,31 @@
 </script>
 
 <Modal 
-    title="Invite New Admin"
+    title={I.t('console.settings.users.inviteNewAdmin')}
     bind:show
     footer={{
         cancel: {
-            text: 'Cancel',
+            text: I.t('console.common.cancel'),
         }, 
         confirm: {
-            text: 'Invite',
+            text: I.t('console.settings.users.invite'),
         }
     }}
 	on:confirm={handleInvite}
 >
 	<Callout type="info">
-		<div slot="title">HYVOR account required</div>
-		Ask your admin to
+		<div slot="title">{I.t('console.settings.users.hyvorAccRequired')}</div>
+		 {I.t('console.settings.users.askAdmin1')}
 		<a href="https://hyvor.com/signup" class="link" target="_blank" rel="noreferrer"
-			>create a HYVOR account</a
+			> {I.t('console.settings.users.askAdmin2') }
+			</a
 		>
-		before inviting.
+		{I.t('console.settings.users.askAdmin3')}
 	</Callout>
 
 	<SplitControl
-		label="Username or Email"
-		caption="Username or email of the admin's HYVOR account"
+		label={I.t('console.settings.users.username')}
+		caption={I.t('console.settings.users.usernameCaption')}
 	>
 		<TextInput bind:value={usernameOrEmail} block />
 	</SplitControl>
