@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingAddresses;
+namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingAddressController;
-use App\Api\Console\Object\SendingAddressObject;
+use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
@@ -12,9 +12,9 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingAddressController::class)]
+#[CoversClass(SendingProfileController::class)]
 #[CoversClass(SendingProfileService::class)]
-class DeleteSendingAddressTest extends WebTestCase
+class DeleteSendingProfileTest extends WebTestCase
 {
     public function test_delete_sending_email(): void
     {
@@ -35,7 +35,7 @@ class DeleteSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-addresses/' . $sendingEmail->getId()
+            '/sending-profiles/' . $sendingEmail->getId()
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -53,7 +53,7 @@ class DeleteSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-addresses/1'
+            '/sending-profiles/1'
         );
 
         $this->assertSame(404, $response->getStatusCode());

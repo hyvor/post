@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingAddresses;
+namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingAddressController;
-use App\Api\Console\Object\SendingAddressObject;
+use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
@@ -12,10 +12,10 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingAddressController::class)]
-#[CoversClass(SendingAddressObject::class)]
+#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
-class CreateSendingAddressTest extends WebTestCase
+class CreateSendingProfileTest extends WebTestCase
 {
     public function test_create_sending_email(): void
     {
@@ -31,7 +31,7 @@ class CreateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/sending-addresses',
+            '/sending-profiles',
             [
                 'email' => 'thibault@hyvor.com'
             ],
@@ -68,7 +68,7 @@ class CreateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/sending-addresses',
+            '/sending-profiles',
             [
                 'email' => 'thibault@hyvor.com'
             ],
@@ -90,7 +90,7 @@ class CreateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/sending-addresses',
+            '/sending-profiles',
             [
                 'email' => 'thibault@nonexistent.com'
             ],
@@ -112,7 +112,7 @@ class CreateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/sending-addresses',
+            '/sending-profiles',
             [
                 'email' => 'thibault@hyvor.com'
             ],

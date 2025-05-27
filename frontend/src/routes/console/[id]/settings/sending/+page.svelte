@@ -1,8 +1,8 @@
 <script lang="ts">
 import SettingsBody from '../@components/SettingsBody.svelte';
-import SendingAddresses from './SendingAddresses.svelte';
+import SendingProfilees from './SendingProfilees.svelte';
 </script>
 
 <SettingsBody>
-    <SendingAddresses />
+    <SendingProfilees />
 </SettingsBody>

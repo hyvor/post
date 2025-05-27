@@ -69,6 +69,8 @@ class DevSeedCommand extends Command
 
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
+            'domain' => null,
+            'from_email' => 'test@hvrpst.com'
         ]);
 
         SendingProfileFactory::createOne([

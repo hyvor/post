@@ -1,10 +1,10 @@
-import type { List, Newsletter, NewsletterStats, SendingAddress, SubscriberMetadataDefinition } from '../types';
+import type { List, Newsletter, NewsletterStats, SendingProfile, SubscriberMetadataDefinition } from '../types';
 import consoleApi from './consoleApi';
 import {
 	issueStore,
 	listStore,
 	newsletterStatsStore,
-	sendingAddressesStore,
+	sendingProfileesStore,
 	setNewsletterStore,
 	subscriberMetadataDefinitionStore
 } from './stores/newsletterStore';
@@ -14,7 +14,7 @@ interface NewsletterResponse {
 	stats: NewsletterStats;
 	lists: List[];
 	subscriber_metadata_definitions: SubscriberMetadataDefinition[];
-	sending_addresses: SendingAddress[];
+	sending_addresses: SendingProfile[];
 }
 
 // to prevent multiple requests for the same subdomain
@@ -37,7 +37,7 @@ export function loadNewsletter(newsletterId: string) {
 				newsletterStatsStore.set(res.stats);
 				listStore.set(res.lists);
 				subscriberMetadataDefinitionStore.set(res.subscriber_metadata_definitions);
-				sendingAddressesStore.set(res.sending_addresses);
+				sendingProfileesStore.set(res.sending_addresses);
 
 				issueStore.set([]);
 

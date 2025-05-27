@@ -219,7 +219,7 @@ export type Domain = {
 	requested_by_current_website: boolean;
 };
 
-export type SendingAddress = {
+export type SendingProfile = {
 	id: number,
 	email: string,
 	domain: Domain,

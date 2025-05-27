@@ -7,7 +7,7 @@ use App\Entity\SendingProfile;
 use App\Entity\Domain;
 use App\Repository\SendingProfileRepository;
 use App\Service\AppConfig;
-use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
+use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -26,64 +26,64 @@ class SendingProfileService
     /**
      * @return array<int, SendingProfile>
      */
-    public function getSendingAddresses(Newsletter $newsletter): array
+    public function getSendingProfiles(Newsletter $newsletter): array
     {
         return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter]);
     }
 
-    public function getSendingAddressesCount(Newsletter $newsletter): int
+    public function getSendingProfileesCount(Newsletter $newsletter): int
     {
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
-    public function createSendingAddress(Newsletter $newsletter, Domain $customDomain, string $email): SendingProfile
+    public function createSendingProfile(Newsletter $newsletter, Domain $customDomain, string $email): SendingProfile
     {
-        $sendingAddress = new SendingProfile();
-        $sendingAddress->setNewsletter($newsletter);
-        $sendingAddress->setDomain($customDomain);
-        $sendingAddress->setEmail($email);
-        $sendingAddress->setIsDefault($this->getSendingAddressesCount($newsletter) === 0);
-        $sendingAddress->setCreatedAt(new \DateTimeImmutable());
-        $sendingAddress->setUpdatedAt(new \DateTimeImmutable());
-        $this->em->persist($sendingAddress);
+        $sendingProfile = new SendingProfile();
+        $sendingProfile->setNewsletter($newsletter);
+        $sendingProfile->setDomain($customDomain);
+        $sendingProfile->setEmail($email);
+        $sendingProfile->setIsDefault($this->getSendingProfileesCount($newsletter) === 0);
+        $sendingProfile->setCreatedAt(new \DateTimeImmutable());
+        $sendingProfile->setUpdatedAt(new \DateTimeImmutable());
+        $this->em->persist($sendingProfile);
         $this->em->flush();
-        return $sendingAddress;
+        return $sendingProfile;
     }
 
-    public function updateSendingAddress(
-        SendingProfile $sendingAddress,
-        UpdateSendingAddressDto $updates
+    public function updateSendingProfile(
+        SendingProfile $sendingProfile,
+        UpdateSendingProfileDto $updates
     ): SendingProfile {
         if ($updates->hasProperty('email')) {
-            $sendingAddress->setEmail($updates->email);
+            $sendingProfile->setEmail($updates->email);
         }
 
         if ($updates->hasProperty('customDomain')) {
-            $sendingAddress->setDomain($updates->customDomain);
+            $sendingProfile->setDomain($updates->customDomain);
         }
 
         if ($updates->hasProperty('isDefault')) {
             // only true is supported
             assert($updates->isDefault === true);
-            $sendingAddress->setIsDefault($updates->isDefault);
+            $sendingProfile->setIsDefault($updates->isDefault);
 
-            $currentDefaultSendingAddress = $this->getCurrentDefaultSendingAddressOfNewsletter(
-                $sendingAddress->getNewsletter()
+            $currentDefaultSendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter(
+                $sendingProfile->getNewsletter()
             );
 
-            if ($currentDefaultSendingAddress) {
-                $currentDefaultSendingAddress->setIsDefault(false);
-                $currentDefaultSendingAddress->setUpdatedAt($this->now());
+            if ($currentDefaultSendingProfile) {
+                $currentDefaultSendingProfile->setIsDefault(false);
+                $currentDefaultSendingProfile->setUpdatedAt($this->now());
             }
         }
 
-        $sendingAddress->setUpdatedAt($this->now());
+        $sendingProfile->setUpdatedAt($this->now());
 
         $this->em->flush();
-        return $sendingAddress;
+        return $sendingProfile;
     }
 
-    public function getCurrentDefaultSendingAddressOfNewsletter(Newsletter $newsletter): ?SendingProfile
+    public function getCurrentDefaultSendingProfileOfNewsletter(Newsletter $newsletter): ?SendingProfile
     {
         return $this->sendingEmailRepository->findOneBy([
             'newsletter' => $newsletter,
@@ -93,10 +93,10 @@ class SendingProfileService
 
     public function getDefaultEmailAddressOfNewsletterWithFallback(Newsletter $newsletter): string
     {
-        $sendingAddress = $this->getCurrentDefaultSendingAddressOfNewsletter($newsletter);
+        $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
-        if ($sendingAddress) {
-            return $sendingAddress->getEmail();
+        if ($sendingProfile) {
+            return $sendingProfile->getEmail();
         }
 
         return $this->getFallbackAddressOfNewsletter($newsletter);
@@ -111,9 +111,9 @@ class SendingProfileService
         );
     }
 
-    public function deleteSendingAddress(SendingProfile $sendingAddress): void
+    public function deleteSendingProfile(SendingProfile $sendingProfile): void
     {
-        $this->em->remove($sendingAddress);
+        $this->em->remove($sendingProfile);
         $this->em->flush();
     }
 }

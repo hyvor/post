@@ -29,7 +29,7 @@ class IssueService
         private IssueRepository $issueRepository,
         private SendRepository $sendRepository,
         private NewsletterListService $newsletterListService,
-        private SendingProfileService $sendingAddressService,
+        private SendingProfileService $sendingProfileService,
     ) {
     }
 
@@ -42,7 +42,7 @@ class IssueService
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $this->sendingAddressService->getDefaultEmailAddressOfNewsletterWithFallback($newsletter);
+        $fromEmail = $this->sendingProfileService->getDefaultEmailAddressOfNewsletterWithFallback($newsletter);
 
         $issue = new Issue()
             ->setNewsletter($newsletter)

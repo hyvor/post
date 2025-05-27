@@ -4,25 +4,23 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\SendingEmail\CreateSendingEmailInput;
 use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
-use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Api\Console\Object\SendingAddressObject;
+use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Domain;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Service\Domain\DomainService;
-use App\Service\SendingEmail\Dto\UpdateSendingAddressDto;
+use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
 use App\Service\SendingEmail\SendingProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SendingAddressController extends AbstractController
+class SendingProfileController extends AbstractController
 {
     public function __construct(
-        private SendingProfileService $sendingAddressService,
+        private SendingProfileService $sendingProfileService,
         private DomainService $domainService
     ) {
     }
@@ -40,34 +38,34 @@ class SendingAddressController extends AbstractController
         return $domain;
     }
 
-    #[Route('/sending-addresses', methods: 'GET')]
-    public function getSendingAddresses(Request $request, Newsletter $newsletter): JsonResponse
+    #[Route('/sending-profiles', methods: 'GET')]
+    public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
-        $sendingAddresses = array_map(
-            fn (SendingProfile $sendingAddress) => new SendingAddressObject($sendingAddress),
-            $this->sendingAddressService->getSendingAddresses($newsletter)
+        $sendingProfilees = array_map(
+            fn (SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
+            $this->sendingProfileService->getSendingProfiles($newsletter)
         );
-        return $this->json($sendingAddresses);
+        return $this->json($sendingProfilees);
     }
 
-    #[Route('/sending-addresses', methods: 'POST')]
-    public function createSendingAddress(
+    #[Route('/sending-profiles', methods: 'POST')]
+    public function createSendingProfile(
         #[MapRequestPayload] CreateSendingEmailInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
         $domain = $this->getDomainFromEmail($input->email);
-        $sendingAddress = $this->sendingAddressService->createSendingAddress($newsletter, $domain, $input->email);
+        $sendingProfile = $this->sendingProfileService->createSendingProfile($newsletter, $domain, $input->email);
 
-        return $this->json(new SendingAddressObject($sendingAddress));
+        return $this->json(new SendingProfileObject($sendingProfile));
     }
 
-    #[Route('/sending-addresses/{id}', methods: 'PATCH')]
-    public function updateSendingAddress(
-        SendingProfile $sendingAddress,
+    #[Route('/sending-profiles/{id}', methods: 'PATCH')]
+    public function updateSendingProfile(
+        SendingProfile $sendingProfile,
         #[MapRequestPayload] UpdateSendingEmailInput $input,
         Newsletter $newsletter
     ): JsonResponse {
-        $updates = new UpdateSendingAddressDto();
+        $updates = new UpdateSendingProfileDto();
         if ($input->hasProperty('email')) {
             $domain = $this->getDomainFromEmail($input->email);
             $updates->customDomain = $domain;
@@ -78,17 +76,17 @@ class SendingAddressController extends AbstractController
             $updates->isDefault = $input->is_default;
         }
 
-        $sendingAddress = $this->sendingAddressService->updateSendingAddress($sendingAddress, $updates);
+        $sendingProfile = $this->sendingProfileService->updateSendingProfile($sendingProfile, $updates);
 
-        return $this->json(new SendingAddressObject($sendingAddress));
+        return $this->json(new SendingProfileObject($sendingProfile));
     }
 
-    #[Route('/sending-addresses/{id}', methods: 'DELETE')]
-    public function deleteSendingAddress(
-        SendingProfile $sendingAddress,
+    #[Route('/sending-profiles/{id}', methods: 'DELETE')]
+    public function deleteSendingProfile(
+        SendingProfile $sendingProfile,
         Newsletter $newsletter
     ): JsonResponse {
-        $this->sendingAddressService->deleteSendingAddress($sendingAddress);
+        $this->sendingProfileService->deleteSendingProfile($sendingProfile);
 
         return $this->json([]);
     }

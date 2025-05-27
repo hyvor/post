@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingAddresses;
+namespace App\Tests\Api\Console\SendingProfile;
 
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 
-class GetSendingAddressTest extends WebTestCase
+class GetSendingProfileTest extends WebTestCase
 {
     public function test_get_sending_email_test(): void
     {
@@ -17,7 +17,7 @@ class GetSendingAddressTest extends WebTestCase
             'verified_in_ses' => true,
         ]);
 
-        $sendingAddress = SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domain,
             'email' => 'test@hyvor.com',
@@ -26,14 +26,14 @@ class GetSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/sending-addresses'
+            '/sending-profiles'
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson($response);
         $this->assertCount(1, $json);
         $item = $json[0];
-        $this->assertSame($sendingAddress->getId(), $item['id']);
+        $this->assertSame($sendingProfile->getId(), $item['id']);
         $this->assertSame('test@hyvor.com', $item['email']);
         $this->assertSame($domain->getId(), $item['domain']['id']);
     }

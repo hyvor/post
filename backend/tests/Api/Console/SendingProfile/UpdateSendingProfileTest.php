@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingAddresses;
+namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingAddressController;
-use App\Api\Console\Object\SendingAddressObject;
+use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
@@ -14,10 +14,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
-#[CoversClass(SendingAddressController::class)]
-#[CoversClass(SendingAddressObject::class)]
+#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
-class UpdateSendingAddressTest extends WebTestCase
+class UpdateSendingProfileTest extends WebTestCase
 {
     public function test_update_sending_email(): void
     {
@@ -52,7 +52,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/sending-addresses/' . $sendingEmail->getId(),
+            '/sending-profiles/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
             ]
@@ -118,7 +118,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/sending-addresses/' . $sendingEmail2->getId(),
+            '/sending-profiles/' . $sendingEmail2->getId(),
             [
                 'is_default' => true,
             ]

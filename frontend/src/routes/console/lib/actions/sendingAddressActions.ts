@@ -1,24 +1,24 @@
 import consoleApi from "../consoleApi";
-import type { SendingAddress } from "../../types";
+import type { SendingProfile } from "../../types";
 
-export function getSendingAddresses() {
-    return consoleApi.get<SendingAddress[]>({
-        endpoint: 'sending-addresses',
+export function getSendingProfilees() {
+    return consoleApi.get<SendingProfile[]>({
+        endpoint: 'sending-profiles',
     });
 }
 
-export function createSendingAddress(email: string) {
-    return consoleApi.post<SendingAddress>({
-        endpoint: 'sending-addresses',
+export function createSendingProfile(email: string) {
+    return consoleApi.post<SendingProfile>({
+        endpoint: 'sending-profiles',
         data: {
             email,
         },
     });
 }
 
-export function updateSendingAddress(id: number, email: string, is_default?: boolean) {
-    return consoleApi.patch<SendingAddress>({
-        endpoint: `sending-addresses/${id}`,
+export function updateSendingProfile(id: number, email: string, is_default?: boolean) {
+    return consoleApi.patch<SendingProfile>({
+        endpoint: `sending-profiles/${id}`,
         data: {
             email,
             is_default,
@@ -26,8 +26,8 @@ export function updateSendingAddress(id: number, email: string, is_default?: boo
     });
 }
 
-export function deleteSendingAddress(id: number) {
+export function deleteSendingProfile(id: number) {
     return consoleApi.delete({
-        endpoint: `sending-addresses/${id}`,
+        endpoint: `sending-profiles/${id}`,
     });
 }
