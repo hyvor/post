@@ -46,7 +46,7 @@
             "draft": {
                 "subject": "Subject",
                 "lists": "Lists",
-                "listsEmptyError": "Please select at least one list", 
+                "listsEmptyError": "Please select at least one list",
                 "subscribersCount": "{count} subscribers",
                 "sendableSubscribersCount": "<b>{count} subscribers</b> will receive this issue",
                 "fromName": "From Name",
@@ -58,6 +58,15 @@
         "tools": {
             "import": {
                 "title": "Import"
+            },
+
+            "export": {
+                "title": "Export",
+                "status": {
+                    "pending": "Pending",
+                    "completed": "Completed",
+                    "failed": "Failed"
+                }
             }
         },
         "settings": {

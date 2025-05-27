@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\Type\SubscriberImportStatus;
+use App\Entity\Type\SubscriberExportStatus;
 use App\Repository\SubscriberExportRepository;
-use App\Repository\SubscriberImportRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriberExportRepository::class)]
-#[ORM\Table(name: 'subscriber_imports')]
-class SubscriberImport
+#[ORM\Table(name: 'subscriber_exports')]
+class SubscriberExport
 {
 
     #[ORM\Id]
@@ -23,21 +22,16 @@ class SubscriberImport
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'newsletters')]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private Newsletter $newsletter;
 
-    #[ORM\Column(length: 255)]
-    private string $filename;
+    #[ORM\OneToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Media $media = null;
 
-    #[ORM\Column(type: 'string', enumType: SubscriberImportStatus::class)]
-    private SubscriberImportStatus $status;
-
-    /**
-     * @var array<string, string>
-     */
-    #[ORM\Column(type: 'json')]
-    private array $fields = [];
+    #[ORM\Column(type: 'string', enumType: SubscriberExportStatus::class)]
+    private SubscriberExportStatus $status;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;
@@ -91,38 +85,26 @@ class SubscriberImport
         return $this;
     }
 
-    public function getFilename(): string
+    public function getMedia(): ?Media
     {
-        return $this->filename;
+        return $this->media;
     }
 
-    public function setFilename(string $filename): static
+    public function setMedia(Media $media): static
     {
-        $this->filename = $filename;
+        $this->media = $media;
 
         return $this;
     }
 
-    public function getStatus(): SubscriberImportStatus
+    public function getStatus(): SubscriberExportStatus
     {
         return $this->status;
     }
 
-    public function setStatus(SubscriberImportStatus $status): static
+    public function setStatus(SubscriberExportStatus $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getFields(): array
-    {
-        return $this->fields;
-    }
-
-    public function setFields(array $fields): static
-    {
-        $this->fields = $fields;
 
         return $this;
     }
