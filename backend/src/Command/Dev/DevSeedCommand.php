@@ -13,6 +13,7 @@ use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use App\Tests\Factory\UserFactory;
@@ -48,10 +49,42 @@ class DevSeedCommand extends Command
             return Command::FAILURE;
         }
 
+        $domainVerified = DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'example.com',
+            'verified_in_ses' => true
+        ]);
+
+        DomainFactory::createOne([
+            'user_id' => 1,
+            'domain' => 'notverified.com',
+            'verified_in_ses' => false
+        ]);
+
         $newsletter = NewsletterFactory::createOne([
             'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Newsletter',
             'slug' => 'test'
+        ]);
+
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'domain' => null,
+            'from_email' => 'test@hvrpst.com',
+            'is_system' => true,
+        ]);
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'domain' => $domainVerified,
+            'from_email' => 'supun@example.com',
+            'is_default' => true,
+        ]);
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'domain' => $domainVerified,
+            'from_email' => 'ishini@example.com',
+            'brand_logo' => "https://picsum.photos/150/40", // full logo
+            'brand_name' => null
         ]);
 
         SubscriberMetadataDefinitionFactory::createOne([
@@ -89,26 +122,19 @@ class DevSeedCommand extends Command
             'lists' => [$list1, $list2],
             'status' => SubscriberStatus::SUBSCRIBED
         ]);
+        SubscriberFactory::createMany(30, [
+            'newsletter' => $newsletter,
+            'lists' => [$list1, $list2],
+        ]);
 
-        $issue = IssueFactory::createOne([
+        IssueFactory::createMany(30, ['newsletter' => $newsletter]);
+        $draftIssue = IssueFactory::createOne([
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
-            'status' => IssueStatus::SENT,
+            'status' => IssueStatus::DRAFT,
             'content' => $this->contentDefaultStyle->json()
         ]);
-        $issue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($issue));
-
-        DomainFactory::createOne([
-            'user_id' => 1,
-            'domain' => 'example.com',
-            'verified_in_ses' => true
-        ]);
-
-        DomainFactory::createOne([
-            'user_id' => 1,
-            'domain' => 'notverified.com',
-            'verified_in_ses' => false
-        ]);
+        $draftIssue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($draftIssue));
 
         $output->writeln('<info>Database seeded with test data.</info>');
 

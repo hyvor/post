@@ -2,12 +2,20 @@
     "console": {
         "common": {
             "cancel": "Cancel",
+            "search": "Search",
             "copy": "Copy",
             "copied": "{value} copied",
             "cannotBeEmpty": "{field} cannot be empty",
             "created": "{field} created",
             "updated": "{field} updated",
-            "deleted": "{field} deleted"
+            "deleted": "{field} deleted",
+            "loadMore": "Load More",
+            "delete": "Delete",
+            "any": "Any",
+            "actionConfirm": {
+                "title": "Confirmation",
+                "content": "Are you sure you want to perform this action?"
+            }
         },
         "nav": {
             "domains": "Domains",
@@ -33,10 +41,29 @@
             "stats": {
                 "openRate": "Open Rate",
                 "clickRate": "Click Rate"
+            }
+        },
+        "lists": {
+            "lists": "Lists",
+            "list": "List",
+            "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
+        },
+        "subscribers": {
+            "addSubscribers": "Add Subscribers",
+            "emptyList": "No subscribers found",
+            "status": {
+                "label": "Status",
+                "all": "All",
+                "subscribed": "Subscribed",
+                "unsubscribed": "Unsubscribed",
+                "pending": "Pending"
             },
-            "lists": {
-                "title": "Lists",
-                "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
+            "listsCount": "{count} lists",
+            "source": {
+                "label": "Source",
+                "console": "Console",
+                "form": "Signup Form",
+                "import": "Imported"
             }
         },
         "issues": {
@@ -46,7 +73,7 @@
             "draft": {
                 "subject": "Subject",
                 "lists": "Lists",
-                "listsEmptyError": "Please select at least one list", 
+                "listsEmptyError": "Please select at least one list",
                 "subscribersCount": "{count} subscribers",
                 "sendableSubscribersCount": "<b>{count} subscribers</b> will receive this issue",
                 "fromName": "From Name",
@@ -62,6 +89,7 @@
         },
         "settings": {
             "form": {
+                "signupForm": "Signup Form",
                 "texts": "Texts",
                 "textsHtmlAllowed": "HTML is allowed",
                 "title": "Title",
@@ -93,6 +121,7 @@
                 "roundnessCaption": "Roundness of edges of the input, button, etc."
             },
             "newsletter": {
+                "title": "Newsletter",
                 "name": "Newsletter Name",
                 "sendingEmail": "Sending email",
                 "uuid": "Newsletter UUID",
@@ -101,8 +130,14 @@
                 "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
                 "deleted": "Newsletter deleted"
             },
+            "sendingProfiles": {
+                "title": "Sending Profiles",
+                "sendingProfile": "Sending Profile",
+                "deleteSendingProfile": "Delete Sending Profile"
+            },
             "metadata": {
                 "metadata": "Metadata",
+                "subscriberMetadata": "Subscriber Metadata",
                 "key": "Key",
                 "keyCaption": "Uniquely identifies the metadata",
                 "keyValdation": "Only {characters} are allowed",

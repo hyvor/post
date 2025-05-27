@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Tests\Api\Console\SendingAddresses;
+namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingAddressController;
-use App\Api\Console\Object\SendingAddressObject;
-use App\Entity\SendingAddress;
-use App\Service\SendingEmail\SendingAddressService;
+use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Object\SendingProfileObject;
+use App\Entity\SendingProfile;
+use App\Service\SendingEmail\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SendingAddressFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
-#[CoversClass(SendingAddressController::class)]
-#[CoversClass(SendingAddressObject::class)]
-#[CoversClass(SendingAddressService::class)]
-class UpdateSendingAddressTest extends WebTestCase
+#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfileObject::class)]
+#[CoversClass(SendingProfileService::class)]
+class UpdateSendingProfileTest extends WebTestCase
 {
     public function test_update_sending_email(): void
     {
@@ -41,7 +41,7 @@ class UpdateSendingAddressTest extends WebTestCase
             ]
         );
 
-        $sendingEmail = SendingAddressFactory::createOne(
+        $sendingEmail = SendingProfileFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
                 'newsletter' => $newsletter,
@@ -52,7 +52,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/sending-addresses/' . $sendingEmail->getId(),
+            '/sending-profiles/' . $sendingEmail->getId(),
             [
                 'email' => 'thibault@gmail.com',
             ]
@@ -66,11 +66,11 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertSame($domain2->getId(), $json['domain']['id']);
         $this->assertSame(false, $json['is_default']);
 
-        $sendingEmail = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingAddress::class, $sendingEmail);
+        $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
-        $this->assertSame(false, $sendingEmail->isDefault());
+        $this->assertSame(false, $sendingEmail->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 
@@ -97,7 +97,7 @@ class UpdateSendingAddressTest extends WebTestCase
         );
 
         // old default email
-        $sendingEmail1 = SendingAddressFactory::createOne(
+        $sendingEmail1 = SendingProfileFactory::createOne(
             [
                 'email' => 'thibault@hyvor.com',
                 'is_default' => true,
@@ -106,7 +106,7 @@ class UpdateSendingAddressTest extends WebTestCase
             ]
         );
 
-        $sendingEmail2 = SendingAddressFactory::createOne(
+        $sendingEmail2 = SendingProfileFactory::createOne(
             [
                 'email' => 'supun@hyvor.com',
                 'is_default' => false,
@@ -118,7 +118,7 @@ class UpdateSendingAddressTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/sending-addresses/' . $sendingEmail2->getId(),
+            '/sending-profiles/' . $sendingEmail2->getId(),
             [
                 'is_default' => true,
             ]
@@ -130,14 +130,14 @@ class UpdateSendingAddressTest extends WebTestCase
         $this->assertSame($sendingEmail2->getId(), $json['id']);
         $this->assertSame($sendingEmail2->getEmail(), $json['email']);
 
-        $sendingEmail1 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail1->getId()]);
-        $this->assertInstanceOf(SendingAddress::class, $sendingEmail1);
-        $this->assertSame(false, $sendingEmail1->isDefault());
+        $sendingEmail1 = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $sendingEmail1->getId()]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingEmail1);
+        $this->assertSame(false, $sendingEmail1->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail1->getUpdatedAt()->format('Y-m-d H:i:s'));
 
-        $sendingEmail2 = $this->em->getRepository(SendingAddress::class)->findOneBy(['id' => $sendingEmail2->getId()]);
-        $this->assertInstanceOf(SendingAddress::class, $sendingEmail2);
-        $this->assertSame(true, $sendingEmail2->isDefault());
+        $sendingEmail2 = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $sendingEmail2->getId()]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingEmail2);
+        $this->assertSame(true, $sendingEmail2->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail2->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 }

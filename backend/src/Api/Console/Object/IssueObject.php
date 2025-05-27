@@ -25,6 +25,10 @@ class IssueObject
     public ?int $sending_at;
     public ?int $sent_at;
 
+    public int $total_sends = 0;
+    public int $opened_sends = 0;
+    public int $clicked_sends = 0;
+
     public function __construct(Issue $issue)
     {
         $this->id = $issue->getId();
@@ -40,5 +44,9 @@ class IssueObject
         $this->scheduled_at = $issue->getScheduledAt()?->getTimestamp();
         $this->sending_at = $issue->getSendingAt()?->getTimestamp();
         $this->sent_at = $issue->getSentAt()?->getTimestamp();
+
+        $this->total_sends = $issue->getTotalSends();
+        $this->opened_sends = $issue->getOpenedSends();
+        $this->clicked_sends = $issue->getClickedSends();
     }
 }

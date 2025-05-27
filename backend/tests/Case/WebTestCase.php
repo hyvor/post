@@ -110,5 +110,17 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $logger;
     }
 
+    public function assertApiFailed(int $expectedStatus, string $expectedMessage): void
+    {
+
+        $response = $this->client->getResponse();
+        $this->assertSame($expectedStatus, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertArrayHasKey('message', $json);
+        $this->assertStringContainsString($expectedMessage, $json['message']);
+
+    }
+
 
 }

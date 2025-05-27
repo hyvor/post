@@ -36,12 +36,12 @@ class SubscriberController extends AbstractController
 
         $status = null;
         if ($request->query->has('status')) {
-            $status = $request->query->getString('status');
+            $status = SubscriberStatus::tryFrom($request->query->getString('status'));
         }
 
-        $list_id = null;
-        if ($request->query->has('list_id')) {
-            $list_id = $request->query->getInt('list_id');
+        $listId = null;
+        if ($request->query->has('listId')) {
+            $listId = $request->query->getInt('listId');
         }
 
         $search = null;
@@ -54,7 +54,7 @@ class SubscriberController extends AbstractController
             ->getSubscribers(
                 $newsletter,
                 $status,
-                $list_id,
+                $listId,
                 $search,
                 $limit,
                 $offset

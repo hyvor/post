@@ -13,12 +13,12 @@
 		ActionListItem
 	} from '@hyvor/design/components';
 	import {
-		getSendingAddresses,
-		createSendingAddress,
-		updateSendingAddress,
-		deleteSendingAddress
-	} from '../../../lib/actions/sendingAddressActions';
-	import type { SendingAddress } from '../../../types';
+		getSendingProfilees,
+		createSendingProfile,
+		updateSendingProfile,
+		deleteSendingProfile
+	} from '../../../lib/actions/sendingProfileActions';
+	import type { SendingProfile } from '../../../types';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 
 	interface Props {
@@ -28,7 +28,7 @@
 	let { updateContent = null }: Props = $props();
 
 	let loading = $state(true);
-	let sendingAddresses: SendingAddress[] = $state([]);
+	let sendingProfilees: SendingProfile[] = $state([]);
 	let error: string | null = null;
 
 	let newAddress = $state('');
@@ -37,9 +37,9 @@
 
 	function load() {
 		loading = true;
-		getSendingAddresses()
+		getSendingProfilees()
 			.then((data) => {
-				sendingAddresses = data;
+				sendingProfilees = data;
 			})
 			.catch((e) => {
 				error = e.message;
@@ -49,13 +49,13 @@
 			});
 	}
 
-	function addSendingAddress() {
+	function addSendingProfile() {
 		if (!newAddress.trim()) {
 			addError = 'Address is required.';
 			return;
 		}
 		addLoading = true;
-		createSendingAddress(newAddress.trim())
+		createSendingProfile(newAddress.trim())
 			.then(() => {
 				load();
 				toast.success('Sending address added');
@@ -79,7 +79,7 @@
 		});
 
 		if (!confirmation) return;
-		deleteSendingAddress(id)
+		deleteSendingProfile(id)
 			.then(() => {
 				load();
 				toast.success('Sending address deleted');
@@ -91,7 +91,7 @@
 	}
 
 	function setDefault(id: number) {
-		updateSendingAddress(id, sendingAddresses.find((a) => a.id === id)?.email || '', true)
+		updateSendingProfile(id, sendingProfilees.find((a) => a.id === id)?.email || '', true)
 			.then(() => {
 				load();
 				toast.success('Default sending address updated');
@@ -112,21 +112,21 @@
 			placeholder="Enter new sending address"
 			bind:value={newAddress}
 			on:keydown={(e) => {
-				if (e.key === 'Enter') addSendingAddress();
+				if (e.key === 'Enter') addSendingProfile();
 			}}
 			disabled={addLoading}
 			block
 		/>
-		<Button on:click={addSendingAddress} disabled={addLoading || !newAddress.trim()}>Add</Button
+		<Button on:click={addSendingProfile} disabled={addLoading || !newAddress.trim()}>Add</Button
 		>
 	</div>
 </SplitControl>
 {#if loading}
 	<Loader />
-{:else if sendingAddresses.length > 0}
+{:else if sendingProfilees.length > 0}
 	<SplitControl label="Sending address available">
 		<div class="sending-address-list">
-			{#each sendingAddresses as address}
+			{#each sendingProfilees as address}
 				<div class="sending-address-item">
 					<span class="sending-address-label">
 						{address.email}
