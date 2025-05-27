@@ -17,7 +17,7 @@
 	async function handleDelete(id: number) {
 		const confirmation = await confirm({
 			title: I.t('console.common.actionConfirm.title'),
-			content: I.t('console.common.actionConfirm.title'),
+			content: I.t('console.common.actionConfirm.content'),
 			confirmText: I.t('console.common.delete'),
 			cancelText: I.t('console.common.cancel'),
 			danger: true,
@@ -89,7 +89,7 @@
 
 	<div class="action">
 		{#if !profile.is_system}
-			<IconButton color="red" variant="fill-light" size="small">
+			<IconButton color="red" variant="fill-light" size="small" on:click={handleDelete}>
 				<IconTrash size={12} />
 			</IconButton>
 		{/if}
