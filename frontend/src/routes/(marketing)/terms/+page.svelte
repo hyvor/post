@@ -1,7 +1,5 @@
 <script>
 	import { Document } from '@hyvor/design/marketing';
-	import { getMarketingI18n } from '../[lang]/locale';
-	const I18n = getMarketingI18n();
 </script>
 
 <Document title="Terms of Service (Hyvor Post)" subtitle="Last updated: 2025-06-01">
@@ -14,129 +12,114 @@
 
 	<h2 id="apply">1. APPLICATION OF TERMS</h2>
 
-	<p>These Terms apply to all users of Hyvor Post (https://post.hyvor.com), including:</p>
+	<p>These Terms apply to all users of Hyvor Post (<a href="https://post.hyvor.com">https://post.hyvor.com</a>), including:</p>
 
 	<ul>
 		<li>
-			<strong>Website Owners</strong>: Direct customers who embed Hyvor Post on their websites
+			<strong>Users</strong>: Direct customers who use Hyvor Post for sending newsletters.
 		</li>
 		<li>
-			<strong>End users</strong>: Users (newsletter subscribers) who view and interact with Hyvor
-			Post embeds.
+			<strong>Subscribers</strong>: People (newsletter subscribers) who view and interact with Hyvor
+			Post newsletters.
 		</li>
 	</ul>
 
 	<p>By using Hyvor Post in any capacity, you agree to be bound by these Terms.</p>
-
 	<hr />
 
-	<h2 id="website-eligibility">2. ACCEPTABLE USE POLICY</h2>
+	<h2 id="description">2. DESCRIPTION OF SERVICE</h2>
+	<p>Hyvor Post is a newsletter platform that allows users to create, manage, and send email newsletters to subscribers. 
+		It is available at <a href="https://post.hyvor.com">https://post.hyvor.com</a>.</p>
 
-	<ul>
+	<hr>
+
+	<h2 id="eligibility">3. ELIGIBILITY</h2>
+<p>To use Hyvor Post, you must operate legally in their jurisdiction of origin and in France, as well as any other applicable jurisdictions based on the website's audience.</p>
+<p>The following content is strictly prohibited:
+</p>
+<ul>
+	<li>
+		Content that exploits or endangers children.
+	</li>
+	<li>Pornographic material.
+	</li>
+	<li>
+		Promotion of violence, terrorism, criminal acts, or human trafficking.
+	</li>
+</ul>
+<p>If a website or newsletter violates these guidelines, we reserve the right to suspend access, with or without notice depending on severity. In some cases, a 7-day notice may be provided. For questions about eligibility, contact <a href="mailto:post.support@hyvor.com">post.support@hyvor.com</a>.</p>
+
+	<h2 id="content-responsibility">4. CONTENT RESPONSIBILITY</h2>
+	<p>You are solely responsible for:</p>
+		<ul>
+			<li>The newsletter and content you publish;</li>
+			<li>Ensuring your content complies with applicable laws (e.g.GDPR);</li>
+			<li>Obtaining proper consent before sending emails to subscribers.</li>
+		</ul>
+		<p>We reserve the right to suspend or terminate accounts that send spam, unsolicited emails, or illegal content.</p>
+
+	<hr>
+
+	<h2 id="subscriber-consent">5. SUBSCRIBER CONSENT</h2>
+<ul>
 		<li>
-			You must be the owner of the website or have permission from the owner to embed Hyvor
-			Post.
+			Users must obtain clear and explicit consent from individuals before adding them to your
+			subscriber list.
 		</li>
-		<li>
-			You must operate legally in their jurisdiction of origin and in France, as well as any
-			other applicable jurisdictions based on the website's audience.
-		</li>
-		<li>Your newsletter or its content must not exploit or endanger children in any way.</li>
-		<li>Your website or its content must not promote pornography.</li>
-		<li>
-			Your website or its content must not promote violence, criminal acts, terrorist
-			activity, human trafficking, mass murder, or similar violent activities.
-		</li>
-	</ul>
-
-	<p>
-		Websites that fail to comply with these eligibility guidelines will be given a 7-day notice
-		before being banned from using the Service. For questions regarding eligibility, please
-		contact <a href="mailto:post.support@hyvor.com">post.support@hyvor.com</a>.
-	</p>
-
-	<hr />
-
-	<h2>End user</h2> ()
-	<h2>users</h2>
-
-	<h2 id="newsletter">3. NEWSLETTER</h2>
-
-	<p>
-		The newsletter feature allows Website Owners to collect subscriber information and send
-		emails to their subscribers. Use of this feature is subject to all applicable laws and
-		regulations, including but not limited to anti-spam and data protection laws.
-	</p>
-
-	<h3 id="newsletter-subscriber-consent">3.1 Subscriber Consent</h3>
-<!-- you have the right to undsubscribe at any time-->
-	<ul>
-		<li>
-			Website Owners must obtain clear and explicit consent from individuals before adding
-			them to any newsletter list.
-		</li>
-		<li>
+		<!-- <li>
 			The subscription process must clearly communicate the nature and frequency of the
 			newsletters.
-		</li>
+		</li> -->
 		<li>
-			Hyvor Post handles the unsubscription process for all newsletters. Website Owners must
-			not interfere with this process in any way, including but not limited to using custom
-			CSS to hide unsubscribe URLs, employing any tricks or techniques to obscure or disable
-			the unsubscribe functionality.
+			Hyvor Post manages the unsubscribe process automatically. 
+			You must not interfere with this process in any way, including hiding unsubscribe links via CSS or other methods.
 		</li>
-		<li>
-			Website Owners agree not to use purchased, rented, or third-party lists of email
-			addresses.
-		</li>
-	</ul>
+</ul>
 
-	<h3 id="newsletter-content-sending">3.2 Content and Sending Policy</h3>
+	<hr>
+	
+	<h2 id="subscriber-data">6. SUBSCRIBER DATA</h2>
+	<p>
+		You retain full ownership of your subscriber list. Hyvor Post does not claim rights to your data and will not use it for any purpose beyond delivering your newsletters.
+	</p>
+	<p>
+		If your account is canceled or terminated, you will have the option to export your subscriber data before permanent deletion.
+	</p>
+	<hr>
 
+	<h2 id="abuse">7. FAIR USE & ABUSE</h2>
+	<p>
+		You agree not to use Hyvor Post for any illegal, harmful, or abusive purposes. This includes, but is not limited to:
+	</p>
 	<ul>
-		<li>User are solely responsible for the content of their newsletters.</li>
-		<li>
-			Newsletters must not contain any illegal, harmful, or offensive content.
-		</li>
-		<li>
-			Website Owners agree not to use the newsletter feature for spam, phishing, or any other
-			malicious purposes.
-		</li>
-		<li>
-			Website Owners agree not to use the Services in any way that may cause Hyvor Post legal
-			liability or disrupt others' use of the Service.
-		</li>
-		<li>
-			Hyvor Post reserves the right to monitor newsletter usage for compliance with these
-			terms.
-		</li>
+		<li>Sending spam or unsolicited emails.</li>
+		<li>Using purchased, rented, or third-party email lists.</li>
+		<li>Engaging in phishing, scamming, or other malicious activities.</li>
+		<li>Attempting to bypass rate limits, headers, or filters.</li>
 	</ul>
+	<p>
+		Accounts violating these terms may be warned, suspended, or terminated at Hyvor Post's discretion.
+	</p>
+	<hr>
 
-	<hr />
+	<h2 id="Termination">8. TERMINATION</h2>
+	<p>We may suspend or terminate your access to Hyvor Post for violations of this policy, especially in cases of spam, abuse, or breach of legal obligations regarding email communications.</p>
 
-	<h2 id="hyvor-post-subscription">4. HYVOR POST SUBSCRIPTION</h2>
+	<hr>
 
-	<ul>
-		<li>
-			Hyvor Post is a subscription-based service. Website owners are required to pay the
-			applicable Fees to use the Service.
-		</li>
-		<li>
-			Fees are subject to change at any time. Changes will be communicated to Website Owners
-			via email or through the Service.
-		</li>
-		<li>
-			We offer monthly and yearly subscription options. You may upgrade or downgrade at any
-			time. Prices are prorated, and you will be billed immediately for any changes.
-		</li>
-	</ul>
+	<h2 id="overage">9. EMAIL USAGE LIMITS</h2>
+	<p>If you exceed the number of emails included in your plan, or are about to exceed it, sending issues will be paused until you upgrade your plan. 
+		You will be notified in advance through the dashboard.</p>
+	<hr>
 
-	<h3 id="subscription-free-trial">4.1 Free Trial</h3>
+	<h2 id="trial">10. FREE TRIAL</h2>
+	<p>
+		Hyvor Post offers a 14-day free trial period for new users. During the trial, you can explore all features of Hyvor Post, but you can only send test emails to verified email addresses. No payment information is required to start the free trial.
+	</p>
+	<hr>
+	<h2 id="changes">11. CHANGES TO TERMS</h2>
+	<p>
+		Hyvor Post reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting on the Hyvor Post website. Your continued use of the Service after changes constitutes your acceptance of the new Terms.
+	</p>
 
-	<ul>
-		<li>Hyvor Post offers a 14-day free trial for new users.</li>
-		<li>
-			The free trial allows you to explore all features of Hyvor Post without any limitations. But you only send test emails to verified email addresses.
-		<li>No payment information is required to start the free trial.</li>
-	</ul>
 </Document>

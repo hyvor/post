@@ -23,8 +23,8 @@
 				</FooterLinkList>
 
 				<FooterLinkList title="Legal">
-					<a href="/terms">Terms of Service</a>
-					<a href="/privacy">Privacy Policy</a>
+					<a href="/terms" target="_blank">Terms of Service</a>
+					<a href="/privacy" target="_blank">Privacy Policy</a>
 					<a href="https://hyvor.com/compliance" target="_blank">Compliance</a>
 				</FooterLinkList>
 
