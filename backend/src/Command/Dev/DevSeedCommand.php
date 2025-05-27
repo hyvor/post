@@ -70,13 +70,21 @@ class DevSeedCommand extends Command
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => null,
-            'from_email' => 'test@hvrpst.com'
+            'from_email' => 'test@hvrpst.com',
+            'is_system' => true,
         ]);
-
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domainVerified,
-            'from_email' => 'supun@example.com'
+            'from_email' => 'supun@example.com',
+            'is_default' => true,
+        ]);
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'domain' => $domainVerified,
+            'from_email' => 'ishini@example.com',
+            'brand_logo' => "https://picsum.photos/150/40", // full logo
+            'brand_name' => null
         ]);
 
         SubscriberMetadataDefinitionFactory::createOne([

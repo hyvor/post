@@ -36,13 +36,16 @@ class SendingProfile
     private string $reply_to_email;
 
     #[ORM\Column]
-    private string $brand_name;
+    private ?string $brand_name;
 
     #[ORM\Column]
-    private string $brand_logo;
+    private ?string $brand_logo;
 
     #[ORM\Column]
     private bool $is_default = false;
+
+    #[ORM\Column]
+    private bool $is_system = false;
 
     public function getId(): int
     {
@@ -140,31 +143,31 @@ class SendingProfile
         return $this;
     }
 
-    public function getBrandName(): string
+    public function getBrandName(): ?string
     {
         return $this->brand_name;
     }
 
-    public function setBrandName(string $brand_name): static
+    public function setBrandName(?string $brand_name): static
     {
         $this->brand_name = $brand_name;
 
         return $this;
     }
 
-    public function getBrandLogo(): string
+    public function getBrandLogo(): ?string
     {
         return $this->brand_logo;
     }
 
-    public function setBrandLogo(string $brandLogo): static
+    public function setBrandLogo(?string $brandLogo): static
     {
         $this->brand_logo = $brandLogo;
 
         return $this;
     }
 
-    public function isDefault(): bool
+    public function getIsDefault(): bool
     {
         return $this->is_default;
     }
@@ -175,4 +178,17 @@ class SendingProfile
 
         return $this;
     }
+
+    public function getIsSystem(): bool
+    {
+        return $this->is_system;
+    }
+
+    public function setIsSystem(bool $isSystem): static
+    {
+        $this->is_system = $isSystem;
+
+        return $this;
+    }
+
 }

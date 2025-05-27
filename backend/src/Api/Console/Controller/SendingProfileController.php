@@ -82,12 +82,21 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
-    public function deleteSendingProfile(
-        SendingProfile $sendingProfile,
-        Newsletter $newsletter
-    ): JsonResponse {
-        $this->sendingProfileService->deleteSendingProfile($sendingProfile);
+    public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
+    {
 
-        return $this->json([]);
+        if ($sendingProfile->getIsSystem()) {
+            throw new BadRequestHttpException("Cannot delete system sending profile");
+        }
+
+        $this->sendingProfileService->deleteSendingProfile($sendingProfile);
+        $sendingProfiles = $this->sendingProfileService->getSendingProfiles($sendingProfile->getNewsletter());
+
+        return $this->json(
+            array_map(
+                fn (SendingProfile $profile) => new SendingProfileObject($profile),
+                $sendingProfiles
+            )
+        );
     }
 }

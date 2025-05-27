@@ -17,7 +17,7 @@ export const newsletterStatsStore = writable<NewsletterStats>();
 export const listStore = writable<List[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();
 export const issueStore = writable<Issue[]>([]);
-export const sendingProfileesStore = writable<SendingProfile[]>([]);
+export const sendingProfilesStore = writable<SendingProfile[]>([]);
 
 export function setNewsletterStore(newsletter: Newsletter) {
 	newsletterStore.set(newsletter);

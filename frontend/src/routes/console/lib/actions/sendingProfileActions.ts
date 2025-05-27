@@ -27,7 +27,7 @@ export function updateSendingProfile(id: number, email: string, is_default?: boo
 }
 
 export function deleteSendingProfile(id: number) {
-    return consoleApi.delete({
+    return consoleApi.delete<SendingProfile[]>({
         endpoint: `sending-profiles/${id}`,
     });
 }

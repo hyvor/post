@@ -10,7 +10,12 @@
             "updated": "{field} updated",
             "deleted": "{field} deleted",
             "loadMore": "Load More",
-            "any": "Any"
+            "delete": "Delete",
+            "any": "Any",
+            "actionConfirm": {
+                "title": "Confirmation",
+                "content": "Are you sure you want to perform this action?"
+            }
         },
         "nav": {
             "domains": "Domains",
@@ -126,7 +131,9 @@
                 "deleted": "Newsletter deleted"
             },
             "sendingProfiles": {
-                "title": "Sending Profiles"
+                "title": "Sending Profiles",
+                "sendingProfile": "Sending Profile",
+                "deleteSendingProfile": "Delete Sending Profile"
             },
             "metadata": {
                 "metadata": "Metadata",

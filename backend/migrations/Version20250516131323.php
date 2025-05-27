@@ -27,6 +27,7 @@ final class Version20250516131323 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             domain_id BIGINT references domains(id) ON DELETE CASCADE,
+            is_system BOOLEAN DEFAULT FALSE NOT NULL,
             is_default BOOLEAN DEFAULT FALSE NOT NULL,
             from_email TEXT NOT NULL,
             from_name TEXT DEFAULT NULL,

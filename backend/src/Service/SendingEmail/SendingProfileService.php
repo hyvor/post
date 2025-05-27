@@ -28,7 +28,7 @@ class SendingProfileService
      */
     public function getSendingProfiles(Newsletter $newsletter): array
     {
-        return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter]);
+        return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
     }
 
     public function getSendingProfileesCount(Newsletter $newsletter): int
@@ -114,6 +114,20 @@ class SendingProfileService
     public function deleteSendingProfile(SendingProfile $sendingProfile): void
     {
         $this->em->remove($sendingProfile);
+
+        if ($sendingProfile->getIsDefault()) {
+            $profiles = $this->getSendingProfiles($sendingProfile->getNewsletter());
+
+            foreach ($profiles as $profile) {
+                if ($profile->getId() !== $sendingProfile->getId()) {
+                    $profile->setIsDefault(true);
+                    $profile->setUpdatedAt($this->now());
+                    $this->em->persist($profile);
+                    break;
+                }
+            }
+        }
+
         $this->em->flush();
     }
 }

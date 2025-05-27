@@ -219,9 +219,15 @@ export type Domain = {
 	requested_by_current_website: boolean;
 };
 
+
 export type SendingProfile = {
 	id: number,
-	email: string,
-	domain: Domain,
-	is_default: boolean,
+	created_at: number;
+	from_email: string;
+	from_name: string | null;
+	reply_to_email: string | null;
+	brand_name: string | null;
+	brand_logo: string | null;
+	is_default: boolean;
+	is_system: boolean;
 }

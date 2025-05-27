@@ -36,12 +36,13 @@ final class SendingProfileFactory extends PersistentProxyObjectFactory
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'newsletter' => NewsletterFactory::createOne(),
             'domain' => null,
+            'is_system' => false,
             'is_default' => false,
             'from_name' => self::faker()->name(),
             'from_email' => self::faker()->email(),
             'reply_to_email' => self::faker()->email(),
             'brand_name' => self::faker()->company(),
-            'brand_logo' => self::faker()->imageUrl(640, 480, 'business', true, 'Brand Logo'),
+            'brand_logo' => "https://picsum.photos/200"
         ];
     }
 

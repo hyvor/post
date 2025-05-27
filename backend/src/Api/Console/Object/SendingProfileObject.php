@@ -14,6 +14,7 @@ class SendingProfileObject
     public ?string $brand_name;
     public ?string $brand_logo;
     public bool $is_default;
+    public bool $is_system;
 
     public function __construct(SendingProfile $sendingProfile)
     {
@@ -24,6 +25,7 @@ class SendingProfileObject
         $this->reply_to_email = $sendingProfile->getReplyToEmail();
         $this->brand_name = $sendingProfile->getBrandName();
         $this->brand_logo = $sendingProfile->getBrandLogo();
-        $this->is_default = $sendingProfile->isDefault();
+        $this->is_default = $sendingProfile->getIsDefault();
+        $this->is_system = $sendingProfile->getIsSystem();
     }
 }

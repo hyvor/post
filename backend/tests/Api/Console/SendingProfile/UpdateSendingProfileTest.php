@@ -70,7 +70,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
-        $this->assertSame(false, $sendingEmail->isDefault());
+        $this->assertSame(false, $sendingEmail->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 
@@ -132,12 +132,12 @@ class UpdateSendingProfileTest extends WebTestCase
 
         $sendingEmail1 = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $sendingEmail1->getId()]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail1);
-        $this->assertSame(false, $sendingEmail1->isDefault());
+        $this->assertSame(false, $sendingEmail1->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail1->getUpdatedAt()->format('Y-m-d H:i:s'));
 
         $sendingEmail2 = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $sendingEmail2->getId()]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail2);
-        $this->assertSame(true, $sendingEmail2->isDefault());
+        $this->assertSame(true, $sendingEmail2->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail2->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 }

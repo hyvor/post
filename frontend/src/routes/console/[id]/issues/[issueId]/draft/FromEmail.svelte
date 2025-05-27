@@ -2,13 +2,13 @@
 	import { Button, FormControl, Modal, Radio, SplitControl } from '@hyvor/design/components';
 	import { getI18n } from '../../../../lib/i18n';
 	import { newsletterStore, sendingProfileesStore } from '../../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../../lib/stores/consoleStore';
+	import { getAsendingProfilesStore./../../lib/stores/consoleStore';
 	import { draftIssueEditingStore } from './draftStore';
 	import { debouncedUpdateDraftIssue } from './draftActions';
 	import SendingProfilees from '../../../settings/sending/SendingProfilees.svelte';
 
 	const I18n = getI18n();
-	const appConfig = getAppConfig();
+	const appConfig = getAppConfig();sendingProfilesStore
 
 	let modal = $state(false);
 

@@ -7,7 +7,7 @@ use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 
-class GetSendingProfileTest extends WebTestCase
+class GetSendingProfilesTest extends WebTestCase
 {
     public function test_get_sending_email_test(): void
     {
@@ -20,7 +20,7 @@ class GetSendingProfileTest extends WebTestCase
         $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domain,
-            'email' => 'test@hyvor.com',
+            'from_email' => 'test@hyvor.com',
         ]);
 
         $response = $this->consoleApi(
@@ -34,7 +34,6 @@ class GetSendingProfileTest extends WebTestCase
         $this->assertCount(1, $json);
         $item = $json[0];
         $this->assertSame($sendingProfile->getId(), $item['id']);
-        $this->assertSame('test@hyvor.com', $item['email']);
-        $this->assertSame($domain->getId(), $item['domain']['id']);
+        $this->assertSame('test@hyvor.com', $item['from_email']);
     }
 }

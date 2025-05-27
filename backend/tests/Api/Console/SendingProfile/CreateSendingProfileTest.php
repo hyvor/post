@@ -46,7 +46,7 @@ class CreateSendingProfileTest extends WebTestCase
         $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
-        $this->assertSame(true, $sendingEmail->isDefault());
+        $this->assertSame(true, $sendingEmail->getIsDefault());
     }
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
@@ -80,7 +80,7 @@ class CreateSendingProfileTest extends WebTestCase
 
         $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
-        $this->assertSame(false, $sendingEmail->isDefault());
+        $this->assertSame(false, $sendingEmail->getIsDefault());
     }
 
     public function test_create_sending_email_domain_not_found(): void
