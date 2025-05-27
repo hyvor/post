@@ -94,6 +94,10 @@
                     "completed": "Completed",
                     "failed": "Failed"
                 }
+            },
+
+            "media": {
+                "title": "Media"
             }
         },
         "settings": {

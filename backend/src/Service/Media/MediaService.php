@@ -26,6 +26,18 @@ class MediaService
     }
 
     /**
+     * @return array<Media>
+     */
+    public function getMedia(
+        Newsletter $newsletter
+    ): array 
+    {
+        return $this->em->getRepository(Media::class)->findBy([
+            'newsletter' => $newsletter
+        ]);
+    }
+
+    /**
      * @throws MediaUploadException
      */
     public function upload(

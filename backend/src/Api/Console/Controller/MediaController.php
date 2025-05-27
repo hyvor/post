@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints;
+use App\Entity\Media;
 
 class MediaController extends AbstractController
 {
@@ -25,6 +26,20 @@ class MediaController extends AbstractController
         private ValidatorInterface $validator,
         private MediaService $mediaService
     ) {
+    }
+
+    #[Route('/media', methods: 'GET')]
+    public function getMedia(
+        Newsletter $newsletter
+    ): JsonResponse 
+    {
+        $media = $this->mediaService->getMedia($newsletter);
+        return $this->json(
+            array_map(
+                fn(Media $m) => new MediaObject($m, $this->mediaService->getPublicUrl($m)), 
+                $media
+            )
+        );
     }
 
     #[Route('/media', methods: 'POST')]

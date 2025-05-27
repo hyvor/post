@@ -4,6 +4,7 @@
 	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 	import IconBoxArrowInUp from '@hyvor/icons/IconBoxArrowInUp';
+	import IconCardImage from '@hyvor/icons/IconCardImage';
 	import { getI18n } from '../../lib/i18n';
 
 	interface Props {
@@ -30,6 +31,13 @@
 				<IconBoxArrowInUp />
 			{/snippet}
 			{I18n.t('console.tools.export.title')}
+		</NavLink>
+
+		<NavLink href="{prefix}/media" active={page.url.pathname === prefix + '/media'}>
+			{#snippet start()}
+				<IconCardImage />
+			{/snippet}
+			{I18n.t('console.tools.media.title')}
 		</NavLink>
 	</div>
 
