@@ -6,57 +6,65 @@
 		<h1 class="title">Why Hyvor Post?</h1>
 	</div>
 	<p>
-		 <!-- tell users that this is a simple newsletter platform without any bullshit features (donot say bullshit, give idea in another way). Most of the tools are making users pay for features that they even dont use. Some times they find those newslettter tools hard to use, no simple UIs. tell them that we hyvor as a company also get fed up of using these newsletter platforms and that is why we built something like this. a simple newsletter platformn dedicated newsletter -->
-		We are tired of using complex newsletter platforms that are bloated with features we never use. We wanted a simple, easy-to-use platform that focuses on what really matters: sending newsletters. That's why we built Hyvor Post. It's a straightforward newsletter platform that allows you to create and send beautiful newsletters without the hassle.
-		We believe that newsletters should be simple and effective, not complicated and overwhelming. 
+		Hyvor Post is the third product we've built at Hyvor. Before this, we tried just about every newsletter platform out there — Solution 1, 2, 3… you name it.
 	</p>
 
 	<p>
-		That's why we designed Hyvor Post to be user-friendly and intuitive, so you can focus on what really matters: connecting with your audience.
-		We understand that many newsletter platforms are filled with unnecessary features that can make the experience frustrating. That's why we created Hyvor Post to be different. We wanted to build a platform that is dedicated to newsletters, without all the extra noise.
+		Here’s what we found:
+
+		One was too busy raising money (felt like finding help in a haystack).
+		Another lacked basic features we needed.
+		And almost all of them kept increasing prices — even for the most basic things like adding a team member.
+		So we decided to build our own.
+		A tool that does one thing — and does it really well:
+		Sending newsletters, simply.
 	</p>
 
 	<p>
-		With Hyvor Post, you can create stunning newsletters that are easy to read and engaging. We believe that newsletters should be a joy to create and share, not a chore. That's why we built Hyvor Post to be simple, effective, and enjoyable to use.
-		We are committed to providing a platform that is focused on your needs as a newsletter creator. We want to help you connect with your audience in a meaningful way, without the distractions of unnecessary features.
+		What makes it different? Most email platforms charge per subscriber, push you to upgrade for “premium” basics, and surprise you with extra fees.
+Not here. With Hyvor Post, you pay only based on how many emails you send. That’s it. No sneaky upgrades, no surprises.
 	</p>
 
-	<p>We are excited to share Hyvor Post with you and hope that it will make your newsletter experience better. We believe that newsletters should be simple, effective, and enjoyable to use, and we are committed to making that a reality with Hyvor Post.	
+	<p>
+		We don’t just say we care about privacy — we design around it.
+You own your email list. Everything is GDPR-compliant. No funny business.
+	</p>
+
+	<p>
+		We're a small, bootstrapped team that cares deeply about our users.
+You can always reach us directly — no support tickets lost in limbo.m
+	</p>
+
+	<p>
+
+If you’re tired of bloated tools, complicated pricing, or being just another number on a VC-backed platform,
+come join us. Let’s build something better, together.
+	</p>
+
+	<p>
+		Warmly,
+The Hyvor Team
 	</p>
 	
 </div>
 
 <style lang="scss">
 	.wrap {
-		margin-top: 9rem;
+		margin-top: 5rem;
 		margin-bottom: 9rem;
-		
+		margin-right: 9rem;
+		margin-left: 9rem;
 		padding: 32px 50px 0 50px;
-		
-		line-height: 30px;
-
-		// font-family: 'readexpro', sans-serif;
-		// font-weight: 400;
-		// font-style: normal;
-		// font-size: 20px;
-
-
-		position: relative;
+		font-style: normal;
+		font-size: 20px;
+		line-height: 32px;
+		// position: relative;
 	}
 
 	.head {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-
-		img {
-			position: absolute;
-			top: 0;
-			right: 0;
-			margin-top: 10px;
-			margin-right: 10px;
-			width: 150px;
-		}
 	}
 
 	.title {
@@ -68,14 +76,9 @@
 	}
 
 	p {
-		margin-top: 30px;
-		margin-bottom: 30px;
+		margin-top: 32px;
+		margin-bottom: 32px;
+		font-size: 20px;
 	}
-
-	// mobile responsive
-	@media (max-width: 600px) {
-		img {
-			position: inherit !important;
-		}
-	}
+	
 </style>

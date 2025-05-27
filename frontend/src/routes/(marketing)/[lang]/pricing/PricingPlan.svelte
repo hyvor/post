@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button, Slider } from '@hyvor/design/components';
 	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
+	import IconXCircle from '@hyvor/icons/IconXCircle';
 	import { getMarketingI18n } from '../locale';
 
 	const I18n = getMarketingI18n();
@@ -67,6 +68,18 @@
 				</div>
 			</div>
 		{/each}
+		{#if currentPlan === 25_000}
+			<div class="feature">
+				<div class ="red"><IconXCircle /> </div>
+				<div class="feature-text">Custom Email Domain</div>
+				<!-- {I18n.t('pricing.plan25kNote')} -->
+			</div>
+			{:else}
+			<div class="feature">
+				<IconCheckCircle />
+				<div class="feature-text">Custom Email Domain</div>
+			</div>
+		{/if}
 	</div>
 
 	<div class="email-selector">
@@ -136,6 +149,9 @@
 		color: var(--green);
 	}
 	
+	.red {
+		color: var(--red);
+	}
 	.feature-text {
 		flex: 1;
 	}
