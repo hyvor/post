@@ -8,6 +8,8 @@
 	import IconCardText from '@hyvor/icons/IconCardText';
 	import IconEnvelopeCheck from '@hyvor/icons/IconEnvelopeCheck';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
+	import IconSendArrowUp from '@hyvor/icons/IconSendArrowUp';
+	import { getI18n } from '../../lib/i18n';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -16,6 +18,8 @@
 	let { children }: Props = $props();
 
 	const prefix = `/console/${$newsletterStore.id}/settings`;
+
+	const I = getI18n();
 </script>
 
 <div class="settings">
@@ -24,7 +28,7 @@
 			{#snippet start()}
 				<IconCardText />
 			{/snippet}
-			Newsletter
+			{I.t('console.settings.newsletter.title')}
 		</NavLink>
 
 		<NavLink href="{prefix}/users" active={page.url.pathname === prefix + '/users'}>
@@ -32,6 +36,16 @@
 				<IconPeople />
 			{/snippet}
 			Users
+		</NavLink>
+
+		<NavLink
+			href="{prefix}/sending-profiles"
+			active={page.url.pathname === prefix + '/sending-profiles'}
+		>
+			{#snippet start()}
+				<IconSendArrowUp />
+			{/snippet}
+			{I.t('console.settings.sendingProfiles.title')}
 		</NavLink>
 
 		<div class="section-div"></div>
@@ -47,7 +61,7 @@
 			{#snippet start()}
 				<IconEnvelopeAt />
 			{/snippet}
-			Signup Form
+			{I.t('console.settings.form.signupForm')}
 		</NavLink>
 
 		<NavLink href="{prefix}/sending" active={page.url.pathname === prefix + '/sending'}>
@@ -61,7 +75,7 @@
 			{#snippet start()}
 				<IconDatabase />
 			{/snippet}
-			Subscriber Metadata
+			{I.t('console.settings.metadata.subscriberMetadata')}
 		</NavLink>
 
 		<div class="section-div"></div>

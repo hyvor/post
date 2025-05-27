@@ -149,7 +149,7 @@ export type List = {
 };
 
 export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
-export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
+export type NewsletterSubscriberSource = 'console' | 'form' | 'import';
 
 export type Subscriber = {
 	id: number;
@@ -177,6 +177,10 @@ export type Issue = {
 	scheduled_at: number | null;
 	sending_at: number | null;
 	sent_at: number | null;
+
+	total_sends: number;
+	opened_sends: number;
+	clicked_sends: number;
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';
@@ -214,12 +218,6 @@ export type Domain = {
 	requested_by_current_website: boolean;
 };
 
-export type SendingAddress = {
-	id: number;
-	email: string;
-	domain: Domain;
-	is_default: boolean;
-};
 
 export type ExportStatus = 'pending' | 'completed' | 'failed';
 
@@ -230,3 +228,15 @@ export type Export = {
 	url: string | null;
 	error_message: string | null;
 };
+
+export type SendingProfile = {
+	id: number,
+	created_at: number;
+	from_email: string;
+	from_name: string | null;
+	reply_to_email: string | null;
+	brand_name: string | null;
+	brand_logo: string | null;
+	is_default: boolean;
+	is_system: boolean;
+}

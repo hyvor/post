@@ -13,7 +13,7 @@
 	let loading = $state(true);
 	let hasMore = $state(true);
 	let loadingMore = $state(false);
-	const ISSUES_PER_PAGE = 50;
+	const ISSUES_PER_PAGE = 25;
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
@@ -50,15 +50,18 @@
 					size="small"
 				/>
 			</div>
-			{#each $issueStore as issue}
-				<IssueRow {issue} />
-			{/each}
-			<LoadButton
-				text={'Load more'}
-				loading={loadingMore}
-				show={hasMore}
-				on:click={() => load(true)}
-			/>
+
+			<div class="issues-list">
+				{#each $issueStore as issue}
+					<IssueRow {issue} />
+				{/each}
+				<LoadButton
+					text={'Load more'}
+					loading={loadingMore}
+					show={hasMore}
+					on:click={() => load(true)}
+				/>
+			</div>
 		{:else}
 			<div class="create-first">
 				<IconSend size={60} />
@@ -90,13 +93,15 @@
 		color: var(--text-light);
 	}
 	.issues {
-		margin-top: 15px;
-		padding: 20px 30px;
 		height: 100%;
 		overflow: auto;
+		display: flex;
+		flex-direction: column;
 	}
 	.issues-title {
 		font-weight: 600;
+		padding: 20px 30px;
+		border-bottom: 1px solid var(--border);
 		font-size: 22px;
 		margin-bottom: 15px;
 		text-align: center;
@@ -104,5 +109,12 @@
 		align-items: center;
 		justify-content: center;
 		gap: 10px;
+	}
+
+	.issues-list {
+		padding: 0 30px;
+		overflow: auto;
+		flex: 1;
+		padding-bottom: 20px;
 	}
 </style>

@@ -11,9 +11,9 @@
 
 <div id="list-view">
 	<div class="list-header">
-		<Tooltip text={I18n.t('console.home.lists.tooltip')}>
+		<Tooltip text={I18n.t('console.lists.tooltip')}>
 			<div class="left">
-				{I18n.t('console.home.lists.title')}
+				{I18n.t('console.lists.lists')}
 				<IconInfoCircle />
 			</div>
 		</Tooltip>

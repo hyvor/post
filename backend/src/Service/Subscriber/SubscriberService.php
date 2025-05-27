@@ -92,7 +92,7 @@ class SubscriberService
      */
     public function getSubscribers(
         Newsletter $newsletter,
-        ?string $status,
+        ?SubscriberStatus $status,
         ?int $listId,
         ?string $search,
         int $limit,
@@ -100,7 +100,9 @@ class SubscriberService
     ): ArrayCollection {
         $qb = $this->subscriberRepository->createQueryBuilder('s');
 
-        $qb->leftJoin('s.lists', 'l')
+        $qb
+            ->distinct()
+            ->leftJoin('s.lists', 'l')
             ->where('s.newsletter = :newsletter')
             ->setParameter('newsletter', $newsletter)
             ->orderBy('s.id', 'DESC')
@@ -108,14 +110,8 @@ class SubscriberService
             ->setFirstResult($offset);
 
         if ($status !== null) {
-            // Check if status is a valid SubscriberStatus
-            $subscriberStatus = SubscriberStatus::tryFrom($status);
-
-            if ($subscriberStatus === null) {
-                throw new InvalidArgumentException("Invalid subscriber status: $status");
-            }
             $qb->andWhere('s.status = :status')
-                ->setParameter('status', $subscriberStatus->value);
+                ->setParameter('status', $status->value);
         }
 
         if ($listId !== null) {
@@ -129,6 +125,7 @@ class SubscriberService
                 ->setParameter('search', '%' . $search . '%');
         }
 
+        // dd($qb->getQuery()->getSQL());
         /** @var Subscriber[] $results */
         $results = $qb->getQuery()->getResult();
 

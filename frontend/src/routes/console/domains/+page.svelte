@@ -43,7 +43,7 @@
 	.header {
 		display: flex;
 		align-items: center;
-		padding: 15px 35px;
+		padding: 20px 30px;
 		border-bottom: 1px solid var(--border);
 	}
 </style>

@@ -74,7 +74,7 @@
 	.domain-list {
 		display: flex;
 		flex-direction: column;
-		padding: 15px 35px;
+		padding: 20px 30px;
 		flex: 1;
 	}
 </style>
