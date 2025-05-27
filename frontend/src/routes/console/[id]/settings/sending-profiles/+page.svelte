@@ -5,11 +5,17 @@
 	import IconPlus from '@hyvor/icons/IconPlus';
 	import { sendingProfilesStore } from '../../../lib/stores/newsletterStore';
 	import SendingProfileRow from './SendingProfileRow.svelte';
+	import { getI18n } from '../../../lib/i18n';
+	import AddEditSendingProfileModal from './AddEditSendingProfileModal.svelte';
+
+	let creating = $state(false);
+
+	const I = getI18n();
 </script>
 
 <SettingsTop>
-	<Button>
-		Add Sending Profile
+	<Button on:click={() => (creating = true)}>
+		{I.t('console.settings.sendingProfiles.addSendingProfile')}
 		{#snippet end()}
 			<IconPlus />
 		{/snippet}
@@ -28,6 +34,8 @@
 		{/each}
 	</div>
 </SettingsBody>
+
+<AddEditSendingProfileModal bind:show={creating} />
 
 <style>
 	.help {
