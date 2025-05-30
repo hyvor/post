@@ -160,6 +160,14 @@ class SubscriberService
             $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
         }
 
+        if ($updates->hasProperty('metadata')) {
+            $metadata = $subscriber->getMetadata();
+            foreach ($updates->metadata as $key => $value) {
+                $metadata[$key] = $value;
+            }
+            $subscriber->setMetadata($metadata);
+        }
+
         $subscriber->setUpdatedAt($this->now());
 
         $this->em->persist($subscriber);
@@ -233,5 +241,13 @@ class SubscriberService
     {
         return $this->em->getRepository(SubscriberExport::class)
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
+    }
+
+    /**
+     * @arg array<string, mixed> $metadata
+     */
+    public function validateMetadata(array $metadata): bool
+    {
+        return true;
     }
 }

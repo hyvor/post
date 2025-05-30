@@ -25,4 +25,9 @@ class UpdateSubscriberInput
     public array $list_ids;
 
     public SubscriberStatus $status;
+
+    /**
+     * @var array<string, string>
+     */
+    public array $metadata;
 }

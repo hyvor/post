@@ -79,4 +79,14 @@ class SubscriberMetadataService
         $this->entityManager->flush();
     }
 
+    public function validateValueType(
+        SubscriberMetadataDefinition $metadataDefinition,
+        mixed $value
+    ): bool
+    {
+        return match ($metadataDefinition->getType()) {
+            SubscriberMetadataDefinitionType::TEXT => is_string($value),
+            default => false,
+        };
+    }
 }

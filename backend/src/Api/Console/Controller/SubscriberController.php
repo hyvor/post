@@ -12,6 +12,7 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,8 @@ class SubscriberController extends AbstractController
 
     public function __construct(
         private SubscriberService $subscriberService,
-        private NewsletterListService $newsletterListService
+        private NewsletterListService $newsletterListService,
+        private SubscriberMetadataService $subscriberMetadataService
     ) {
     }
 
@@ -130,6 +132,18 @@ class SubscriberController extends AbstractController
 
         if ($input->hasProperty('status')) {
             $updates->status = $input->status;
+        }
+
+        if ($input->hasProperty('metadata')) {
+            foreach ($input->metadata as $key => $value) {
+                $metaDef = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $key);
+                if ($metaDef === null)
+                    throw new UnprocessableEntityHttpException("Metadata definition with key \"{$key}\" not found");
+                if (!$this->subscriberMetadataService->validateValueType($metaDef, $value)) {
+                    throw new UnprocessableEntityHttpException("Value for metadata key {$key} is not valid");
+                }
+                $updates->metadata[$key] = $value;
+            }
         }
 
         $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
