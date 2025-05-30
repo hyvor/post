@@ -1,3 +1,48 @@
 {
-	"simpleNewsletterPlatform": "Simple Newsletter Platform"
+	"homepage": {
+		"heading": "Simple Newsletter Platform",
+		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!"
+	},
+	"cta": "Start Sending in Minutes",
+	"demo": "Demo",
+	"14DayFreeTrial": "14-day free trial (<a>test emails only</a>)",
+	"noCreditCardRequired": "No credit card required",
+	"cancelAnytime": "Cancel anytime",
+	"readyToStartYourNewsletter": "Ready to start your newsletter?",
+	"startYourNewsletter": "Start your newsletter",
+	"easyInstallation": "Easy Installation",
+	"easyInstallationDescription": "Seamlessly integrate embeds on any CMS or static site with our plugins or simple installation code.",
+	"embeddableNewsletterForm": "Embeddable Newsletter Form",
+	"embeddableNewsletterFormDescription": "Embeddable, customizable newsletter form to collect emails from your users on your website.",
+	"multipleSegments": "Multiple Segments",
+	"multipleSegmentsDescription": "Create multiple segments to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.",
+	"comprehensiveAnalytics": "Comprehensive Analytics",
+	"comprehensiveAnalyticsDescription": "Get detailed analytics on your newsletters, including open rates, click rates, and more.",
+	"customEmailDomain": "Custom Email Domain",
+	"customEmailDomainDescription": "Boost credibility and brand recognition by sending newsletters from your own domain.",
+	"customizableTemplates": "Customizable Templates",
+	"customizableTemplatesDescription": "Choose from a variety of templates and customize them to match your brand.",
+
+	"pricing": {
+		"simpleTransparentPricing": "Simple, Transparent Pricing",
+		"pricingBasedOnEmails": "You only pay for the features you use",
+		"monthly": "Monthly",
+		"yearly": "Yearly",
+		"2MonthsOff": "(2 months off)",
+		"vatIncluded": "All VAT charges are included in the price.",
+		"chooseYourPlan": "Choose your plan",
+		"monthlyEmail": "Monthly Emails",
+		"choosePlan": "Choose Plan",
+		"year": "year",
+		"month": "month",
+		"faqs": "FAQs",
+		"isThereATrial": "Is there a trial?",
+		"isThereATrialAnswer": "Yes, we offer a 14-days trial with all the features, except email custom domain. After the trial, you can choose to upgrade to a paid plan. Please contact us if you want to extend your trial.",
+		"whatHappensIfIExceedTheEmailsLimit": "What happens if I exceed the emails limit?",
+		"whatHappensIfIExceedTheEmailsLimitAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
+		"howDoPaymentsWork": "How do payments work?",
+		"howDoPaymentsWorkAnswer": "Payments are processed securely through our in-house billing system. We accept all major credit/debit cards. You can choose to pay monthly or annually.",
+		"canICancelAnytime": "Can I cancel anytime?",
+		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals."
+	}
 }

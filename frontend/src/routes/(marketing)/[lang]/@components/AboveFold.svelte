@@ -1,4 +1,3 @@
-<!-- TODO: <Demo /> Add he demo if possible - i guess it is--> 
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
 	import TrialChecks from './TrialChecks.svelte';
@@ -11,16 +10,18 @@
 <div class="hds-container above-fold">
 	<div class="left">
 
-		<h1>{I18n.t('simpleNewsletterPlatform')}</h1>
+		<h1>{I18n.t('homepage.heading')}</h1>
 
 		<h2>
-			Newsletters for your website
+			{I18n.t('homepage.subHeading')}
 		</h2>
 
 		<div class="buttons">
-			<Button as="a" href="/console?signup" size="large">Install Hyvor Post</Button>
-			<!-- <Demo /> Add he demo if possible - i guess it is--> 
-			<Button as="a" href="/console?signup" size="large" variant="outline">Demo</Button>
+			<Button as="a" href="/console?signup" size="large">{I18n.t('cta')}
+				{#snippet end()}
+					&rarr;
+				{/snippet}
+			</Button>
 		</div>
 
 		<div class="trial-checks">
@@ -61,10 +62,8 @@
 		font-size: 20px;
 		margin: 0;
 		padding-top: 15px;
-		display: flex;
-		align-items: center;
-		gap: 10px;
 		color: var(--text-light);
+		line-height: 1.5;
 	}
 
 	.buttons {

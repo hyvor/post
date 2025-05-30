@@ -63,7 +63,17 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             ],
             content: (string)json_encode($data),
         );
-        return $this->client->getResponse();
+
+        $response = $this->client->getResponse();
+
+        if ($response->getStatusCode() === 500) {
+            throw new \Exception(
+                'API call failed with status code 500. ' .
+                'Response: ' . $response->getContent()
+            );
+        }
+
+        return $response;
     }
 
     /**
@@ -98,6 +108,18 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $logger = $this->container->get('monolog.handler.test');
         $this->assertInstanceOf(TestHandler::class, $logger);
         return $logger;
+    }
+
+    public function assertApiFailed(int $expectedStatus, string $expectedMessage): void
+    {
+
+        $response = $this->client->getResponse();
+        $this->assertSame($expectedStatus, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertArrayHasKey('message', $json);
+        $this->assertStringContainsString($expectedMessage, $json['message']);
+
     }
 
 

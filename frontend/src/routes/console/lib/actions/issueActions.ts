@@ -29,16 +29,7 @@ export function getIssue(id: number) {
     });
 }
 
-type IssueUpdate = {
-	subject: string;
-	from_name: string;
-	from_email: string;
-	reply_to_email: string;
-	lists: number[];
-	content: string;
-};
-
-export function updateIssue(id: number, updates: IssueUpdate) {
+export function updateIssue(id: number, updates: Partial<Issue>) {
 	return consoleApi.patch<Issue>({
 		endpoint: 'issues/' + id,
 		data: updates
@@ -52,7 +43,7 @@ export function sendIssue(id: number) {
 }
 
 export function previewIssue(id: number) {
-	return consoleApi.get<{ html: string }>({
+	return consoleApi.get<{ html: string, sendable_subscribers_count: number }>({
 		endpoint: `issues/${id}/preview`
 	});
 }

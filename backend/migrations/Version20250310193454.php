@@ -54,6 +54,9 @@ final class Version20250310193454 extends AbstractMigration
         );
         SQL
         );
+
+        $this->addSql("CREATE INDEX idx_newsletter_id ON sends (newsletter_id)");
+        $this->addSql("CREATE INDEX idx_issue_id ON sends (issue_id)");
     }
 
     public function down(Schema $schema): void

@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Type\SubscriberImportStatus;
+use App\Repository\SubscriberExportRepository;
 use App\Repository\SubscriberImportRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SubscriberImportRepository::class)]
+#[ORM\Entity(repositoryClass: SubscriberExportRepository::class)]
 #[ORM\Table(name: 'subscriber_imports')]
 class SubscriberImport
 {

@@ -27,6 +27,9 @@ class HtmlTemplateRenderer
         return $variables;
     }
 
+    /**
+     * $issue needs newsletter, content, and subject at least.
+     */
     public function renderFromIssue(Issue $issue): string
     {
         $newsletter = $issue->getNewsletter();

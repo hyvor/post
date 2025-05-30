@@ -3,23 +3,26 @@
 	import DomainRow from './DomainRow.svelte';
 	import { getDomains } from '../lib/actions/domainActions';
 	import type { Domain } from '../types';
-	import { IconMessage } from '@hyvor/design/components';
+	import { IconMessage, Loader } from '@hyvor/design/components';
+	import { getI18n } from '../lib/i18n';
+	import IconDatabase from '@hyvor/icons/IconDatabase';
 
-	let domains: Domain[] = [];
-	let loading = false;
+	let domains: Domain[] = $state([]);
+	let loading = $state(false);
 	let isInitialLoad = true;
 	let checkInterval: number;
 	let currentInterval = 30 * 1000; // Start with 30 seconds
 	const MAX_INTERVAL = 3 * 60 * 1000; // Max 3 minutes
 
+	const I18n = getI18n();
+
 	export function refreshDomains(refresh = false) {
-		if (!refresh && isInitialLoad)
-			loading = true;
+		if (!refresh && isInitialLoad) loading = true;
 		getDomains()
 			.then((res) => {
 				domains = res;
 				// If all domains are verified, reset the interval
-				if (!res.some(domain => !domain.verified_in_ses)) {
+				if (!res.some((domain) => !domain.verified_in_ses)) {
 					currentInterval = 30 * 1000;
 				}
 			})
@@ -37,7 +40,7 @@
 
 		checkInterval = window.setInterval(() => {
 			// Only refresh if there are unverified domains
-			if (domains.some(domain => !domain.verified_in_ses)) {
+			if (domains.some((domain) => !domain.verified_in_ses)) {
 				refreshDomains();
 				currentInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
 			}
@@ -57,9 +60,9 @@
 
 <div class="domain-list">
 	{#if loading}
-		<div class="loading">Loading domains...</div>
+		<Loader full />
 	{:else if domains.length === 0}
-		<IconMessage empty message={"No domain"}/>
+		<IconMessage message={I18n.t('console.domains.firstDomain')} icon={IconDatabase} />
 	{:else}
 		{#each domains as domain (domain.id)}
 			<DomainRow {domain} onDelete={refreshDomains} />
@@ -71,14 +74,7 @@
 	.domain-list {
 		display: flex;
 		flex-direction: column;
-		background-color: var(--hds-color-background);
-		border-radius: var(--hds-border-radius);
-		border: 1px solid var(--hds-color-border);
+		padding: 20px 30px;
+		flex: 1;
 	}
-
-	.loading {
-		padding: 20px;
-		text-align: center;
-		color: var(--hds-color-text-light);
-	}
-</style> 
+</style>

@@ -63,8 +63,6 @@ class NewsletterMeta
     public ?string $form_dark_input_box_shadow = null;
     public ?string $form_dark_input_border = null;
     public ?int $form_dark_border_radius = null;
-
-
     public NewsletterFormDefaultColorPalette $form_default_color_palette = NewsletterFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;
 

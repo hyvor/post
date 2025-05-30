@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
+use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
 use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
@@ -57,25 +58,21 @@ class NewsletterController extends AbstractController
     #[Route('/newsletter', methods: 'PATCH')]
     public function updateNewsletter(
         Newsletter $newsletter,
-        #[MapRequestPayload] UpdateNewsletterInput $input
+        #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input
     ): JsonResponse {
         $updates = new UpdateNewsletterDto();
         if ($input->hasProperty('name')) {
             $updates->name = $input->name;
         }
-        if ($input->hasProperty('default_email_username')) {
-            if ($this->newsletterService->isUsernameTaken($input->default_email_username)) {
-                throw new BadRequestHttpException("Username is already taken");
-            }
-            $updates->defaultEmailUsername = $input->default_email_username;
-        }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();
         $properties = $input->getSetProperties();
+
         foreach ($properties as $property) {
-            $cased = new UnicodeString($property)->camel();
-            $updatesMeta->{$cased} = $input->{$property};
+            if (property_exists($updatesMeta, $property)) {
+                $updatesMeta->set($property, $input->{$property});
+            }
         }
 
         $newsletter = $this->newsletterService->updateNewsletterMeta($newsletter, $updatesMeta);

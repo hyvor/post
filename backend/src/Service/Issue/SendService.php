@@ -9,6 +9,7 @@ use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
+use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\Dto\UpdateSendDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +25,7 @@ class SendService
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
         private SendRepository $sendRepository,
+        private IssueService $issueService
     ) {
     }
 
@@ -158,7 +160,8 @@ class SendService
             $send->setDeliveredAt($updates->deliveredAt);
         }
 
-        if ($updates->hasProperty('firstClickedAt')) {
+        $hasFirstClickedAt = $updates->hasProperty('firstClickedAt');
+        if ($hasFirstClickedAt) {
             $send->setFirstClickedAt($updates->firstClickedAt);
         }
 
@@ -170,7 +173,8 @@ class SendService
             $send->setComplainedAt($updates->complainedAt);
         }
 
-        if ($updates->hasProperty('firstOpenedAt')) {
+        $hasFirstOpenedAt = $updates->hasProperty('firstOpenedAt');
+        if ($hasFirstOpenedAt) {
             $send->setFirstOpenedAt($updates->firstOpenedAt);
         }
 
@@ -197,7 +201,52 @@ class SendService
         $this->em->persist($send);
         $this->em->flush();
 
+        if ($hasFirstOpenedAt || $hasFirstClickedAt) {
+            $issue = $send->getIssue();
+            $issueUpdatesDto = new UpdateIssueDto();
+            if ($hasFirstOpenedAt) {
+                $issueUpdatesDto->openedSends = $this->getOpensOfIssue($issue);
+            }
+            if ($hasFirstClickedAt) {
+                $issueUpdatesDto->clickedSends = $this->getClicksOfIssue($issue);
+            }
+
+            $this->issueService->updateIssue($issue, $issueUpdatesDto);
+        }
+
         return $send;
+    }
+
+    public function getOpensOfIssue(Issue $issue): int
+    {
+        $query = <<<DQL
+        SELECT COUNT(s.id)
+        FROM App\Entity\Send s
+        WHERE
+            s.issue = :issue AND
+            s.first_opened_at IS NOT NULL
+        DQL;
+
+        $qb = $this->em->createQuery($query);
+        $qb->setParameter('issue', $issue);
+
+        return (int)$qb->getSingleScalarResult();
+    }
+
+    public function getClicksOfIssue(Issue $issue): int
+    {
+        $query = <<<DQL
+        SELECT COUNT(s.id)
+        FROM App\Entity\Send s
+        WHERE
+            s.issue = :issue AND
+            s.first_clicked_at IS NOT NULL
+        DQL;
+
+        $qb = $this->em->createQuery($query);
+        $qb->setParameter('issue', $issue);
+
+        return (int)$qb->getSingleScalarResult();
     }
 
     public function getSendsCountThisMonthOfUser(int $hyvorUserId): int

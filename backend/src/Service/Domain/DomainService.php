@@ -4,7 +4,6 @@ namespace App\Service\Domain;
 
 use App\Entity\Domain;
 use App\Service\Integration\Aws\AwsDomainService;
-use App\Service\Issue\EmailSenderService;
 use App\Service\UserInvite\EmailNotificationService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +11,6 @@ use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 
 class DomainService

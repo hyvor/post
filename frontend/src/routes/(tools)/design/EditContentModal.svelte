@@ -26,24 +26,24 @@
 	}
 </script>
 
-<Modal 
+<Modal
 	title="Edit content"
 	bind:show
 	footer={{
-        cancel: {
-            text: 'Cancel',
-        }, 
-        confirm: {
-            text: 'Update content',
-        }
-    }}
-    on:cancel={() => {
+		cancel: {
+			text: 'Cancel'
+		},
+		confirm: {
+			text: 'Update content'
+		}
+	}}
+	on:cancel={() => {
 		show = false;
 	}}
-    on:confirm={() => {
-        show = false;
+	on:confirm={() => {
+		show = false;
 		submitModal();
-    }}
+	}}
 >
-	<Editor {content} docupdate={(s: string) => content = s} />
+	<Editor {content} ondocupdate={(s: string) => (content = s)} />
 </Modal>

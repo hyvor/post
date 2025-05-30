@@ -12,7 +12,6 @@ class ListObject
     public string $name;
     public ?string $description;
     public int $subscribers_count;
-    public int $subscribers_count_last_30d;
 
     public function __construct(NewsletterList $newsletterList)
     {
@@ -21,7 +20,5 @@ class ListObject
         $this->name = $newsletterList->getName();
         $this->description = $newsletterList->getDescription();
         $this->subscribers_count = $newsletterList->getSubscribers()->count();
-        $this->subscribers_count_last_30d = $newsletterList->getSubscribers()->filter(fn($subscriber) =>
-            $subscriber->getCreatedAt()->getTimestamp() > strtotime('-30 days'))->count();
     }
 }

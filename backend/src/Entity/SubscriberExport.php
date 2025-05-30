@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Entity;
+
+use App\Entity\Type\SubscriberExportStatus;
+use App\Repository\SubscriberExportRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: SubscriberExportRepository::class)]
+#[ORM\Table(name: 'subscriber_exports')]
+class SubscriberExport
+{
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private int $id;
+
+    #[ORM\Column]
+    private \DateTimeImmutable $created_at;
+
+    #[ORM\Column]
+    private \DateTimeImmutable $updated_at;
+
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private Newsletter $newsletter;
+
+    #[ORM\OneToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Media $media = null;
+
+    #[ORM\Column(type: 'string', enumType: SubscriberExportStatus::class)]
+    private SubscriberExportStatus $status;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $error_message = null;
+
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getNewsletter(): Newsletter
+    {
+        return $this->newsletter;
+    }
+
+    public function setNewsletter(Newsletter $newsletter): static
+    {
+        $this->newsletter = $newsletter;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(Media $media): static
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    public function getStatus(): SubscriberExportStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(SubscriberExportStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->error_message;
+    }
+
+    public function setErrorMessage(?string $error_message): static
+    {
+        $this->error_message = $error_message;
+
+        return $this;
+    }
+
+}

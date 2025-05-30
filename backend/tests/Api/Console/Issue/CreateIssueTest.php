@@ -12,7 +12,7 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SendingAddressFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -29,7 +29,7 @@ class CreateIssueTest extends WebTestCase
         Clock::set(new MockClock('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'default_email_username' => 'thibault'
+            'slug' => 'thibault'
         ]);
 
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
@@ -73,7 +73,7 @@ class CreateIssueTest extends WebTestCase
             ]
         );
 
-        $sendingEmail = SendingAddressFactory::createOne([
+        $sendingEmail = SendingProfileFactory::createOne([
             'email' => 'thibault@hyvor.com',
             'newsletter' => $newsletter,
             'domain' => $domain,

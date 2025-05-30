@@ -76,11 +76,11 @@ class TemplateVariables
             color_box: $meta->template_color_box ?? NewsletterDefaults::TEMPLATE_COLOR_BOX,
             color_box_text: $meta->template_color_box_text ?? NewsletterDefaults::TEMPLATE_COLOR_BOX_TEXT,
 
-            font_family: $meta->font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
-            font_size: $meta->font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
-            font_weight: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
-            font_weight_heading: $meta->font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
-            font_line_height: $meta->font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
+            font_family: $meta->template_font_family ?? NewsletterDefaults::TEMPLATE_FONT_FAMILY,
+            font_size: $meta->template_font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
+            font_weight: $meta->template_font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
+            font_weight_heading: $meta->template_font_weight_heading ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_line_height: $meta->template_font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
             box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,
             box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,

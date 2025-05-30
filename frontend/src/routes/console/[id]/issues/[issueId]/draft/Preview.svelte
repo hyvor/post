@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onDestroy, onMount, tick } from 'svelte';
 	import {
 		Caption,
 		IconButton,
@@ -14,14 +13,15 @@
 	import { previewIssue } from '../../../../lib/actions/issueActions';
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 	import { consoleUrlWithNewsletter } from '../../../../lib/consoleUrl';
-	import { contentUpdateId } from '../issueStore';
+	import {
+		draftIssueEditingStore,
+		draftPreviewKey,
+		draftSendableSubscribersCountStore
+	} from './draftStore';
 
-	export let id: number;
-
-	let html = '';
-	let iframe: HTMLIFrameElement;
-	let reloading = false;
-	let unsubscribe: () => void;
+	let html = $state('');
+	let iframe: HTMLIFrameElement = $state({} as HTMLIFrameElement);
+	let reloading = $state(false);
 
 	function resizeIframe() {
 		if (!iframe) return;
@@ -37,10 +37,15 @@
 		// Don't fetch preview if the component is destroyed or issue is deleted
 		if (!iframe) return;
 
-		previewIssue(id)
+		previewIssue($draftIssueEditingStore.id)
 			.then((res) => {
 				html = res.html;
 				resizeIframe();
+
+				draftSendableSubscribersCountStore.set({
+					loading: false,
+					count: res.sendable_subscribers_count
+				});
 			})
 			.catch((e) => {
 				toast.error(e.message);
@@ -50,31 +55,15 @@
 			});
 	}
 
-	let contentUpdateTimeout: ReturnType<typeof setTimeout>;
+	let previewUpdateTimeout: ReturnType<typeof setTimeout>;
 
-	function listenToUpdates() {
-		unsubscribe = contentUpdateId.subscribe(() => {
-			if (contentUpdateTimeout) {
-				clearTimeout(contentUpdateTimeout);
-			}
-			contentUpdateTimeout = setTimeout(() => {
-				fetchPreview();
-			}, 5000);
-		});
-	}
-
-	onMount(() => {
-		fetchPreview();
-		listenToUpdates();
-	});
-
-	onDestroy(() => {
-		if (contentUpdateTimeout) {
-			clearTimeout(contentUpdateTimeout);
+	draftPreviewKey.subscribe((key) => {
+		if (previewUpdateTimeout) {
+			clearTimeout(previewUpdateTimeout);
 		}
-		if (unsubscribe) {
-			unsubscribe();
-		}
+		previewUpdateTimeout = setTimeout(fetchPreview, 1000);
+
+		return () => previewUpdateTimeout && clearTimeout(previewUpdateTimeout);
 	});
 </script>
 
@@ -87,14 +76,17 @@
 			</IconButton>
 		</Tooltip>
 	</Label>
-	<Caption slot="caption">
-		Settings:&nbsp;&nbsp;<Link
-			target="_blank"
-			href={consoleUrlWithNewsletter('/settings/notifications')}>Email branding</Link
-		>&nbsp;&nbsp;<Link target="_blank" href={consoleUrlWithNewsletter('/settings/appearance')}
-			>Styles & colors</Link
-		>
-	</Caption>
+	{#snippet caption()}
+		<Caption>
+			Settings:&nbsp;&nbsp;<Link
+				target="_blank"
+				href={consoleUrlWithNewsletter('/settings/notifications')}>Email branding</Link
+			>&nbsp;&nbsp;<Link
+				target="_blank"
+				href={consoleUrlWithNewsletter('/settings/appearance')}>Styles & colors</Link
+			>
+		</Caption>
+	{/snippet}
 	<div class="preview">
 		<iframe
 			srcdoc={html}
@@ -104,7 +96,7 @@
 			height={600}
 			width="100%"
 			bind:this={iframe}
-			on:load={resizeIframe}
+			onload={resizeIframe}
 		></iframe>
 
 		{#if reloading}
@@ -117,8 +109,6 @@
 
 <style>
 	.preview {
-		/* padding: 40px 20px;
-		background-color: #fafafa; */
 		border-radius: 20px;
 		max-height: 700px;
 		overflow: auto;

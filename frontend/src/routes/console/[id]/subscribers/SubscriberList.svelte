@@ -3,20 +3,25 @@
 	import SubscriberRow from './SubscriberRow.svelte';
 	import type { NewsletterSubscriberStatus, Subscriber } from '../../types';
 	import { getSubscribers } from '../../lib/actions/subscriberActions';
+	import { getI18n } from '../../lib/i18n';
 
-	export let status: NewsletterSubscriberStatus | null;
-	export let list_id: number | null;
-	export let search: string | null = null;
-	export let key: number; // just for forcing re-render
+	interface Props {
+		status: NewsletterSubscriberStatus | null;
+		list_id: number | null;
+		search?: string | null;
+		key: number; // just for forcing re-render
+	}
 
-	let loading = true;
-	let hasMore = true;
-	let loadingMore = false;
-	let error: null | string = null;
+	let { status, list_id, search = null, key = $bindable() }: Props = $props();
+
+	let loading = $state(true);
+	let hasMore = $state(true);
+	let loadingMore = $state(false);
+	let error: null | string = $state(null);
 
 	const SUBSCRIBERS_PER_PAGE = 25;
 
-	let subscribers: Subscriber[] = [];
+	let subscribers: Subscriber[] = $state([]);
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
@@ -35,9 +40,16 @@
 			});
 	}
 
-	$: {
-		status, key, search, list_id, load();
-	}
+	const I18n = getI18n();
+
+	$effect(() => {
+		status;
+		key;
+		search;
+		list_id;
+
+		load();
+	});
 </script>
 
 {#if loading}
@@ -45,20 +57,25 @@
 {:else if error}
 	<IconMessage error message={error} />
 {:else if subscribers.length === 0}
-	<IconMessage empty message={"No result"}/>
+	<IconMessage empty message={I18n.t('console.subscribers.emptyList')} />
 {:else}
 	<div class="list">
 		{#each subscribers as subscriber (subscriber.id)}
-			<SubscriberRow
-				subscriber={subscriber}
-				refreshList={() => key += 1}
-			/>
+			<SubscriberRow {subscriber} refreshList={() => (key += 1)} />
 		{/each}
+		<LoadButton
+			text={I18n.t('console.common.loadMore')}
+			loading={loadingMore}
+			show={hasMore}
+			on:click={() => load(true)}
+		/>
 	</div>
-	<LoadButton
-		text={"Load more"}
-		loading={loadingMore}
-		show={hasMore}
-		on:click={() => load(true)}
-	/>
 {/if}
+
+<style>
+	.list {
+		flex: 1;
+		overflow: auto;
+		padding: 20px 30px;
+	}
+</style>

@@ -1,7 +1,10 @@
 export interface AppConfig {
-
 	hyvor: {
 		instance: string;
+	};
+
+	app: {
+		default_email_domain: string;
 	};
 
 	newsletter_defaults: {
@@ -47,8 +50,6 @@ export type NewsletterMeta = {
 	template_font_size: string | null;
 	template_font_weight: string | null;
 	template_font_weight_heading: string | null;
-	template_font_color_on_background: string | null;
-	template_font_color_on_box: string | null;
 	template_font_line_height: string | null;
 	template_box_radius: string | null;
 
@@ -111,11 +112,11 @@ export type NewsletterList = {
 };
 
 export type Newsletter = {
-	id: number,
-	slug: string,
-	uuid: string,
-	created_at: number,
-	name: string,
+	id: number;
+	slug: string;
+	uuid: string;
+	created_at: number;
+	name: string;
 } & NewsletterMeta;
 
 export interface SubscriberMetadataDefinition {
@@ -126,10 +127,16 @@ export interface SubscriberMetadataDefinition {
 	type: 'text';
 }
 
+interface StatsType {
+	total: number;
+	last_30_days: number;
+}
+
 export interface NewsletterStats {
-	subscribers: { total: number; last_30d: number };
-	issues: { total: number; last_30d: number };
-	lists: { total: number; last_30d: number };
+	subscribers: StatsType;
+	issues: StatsType;
+	open_rate: StatsType;
+	click_rate: StatsType;
 }
 
 export type List = {
@@ -142,7 +149,7 @@ export type List = {
 };
 
 export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
-export type NewsletterSubscriberSource = 'manual' | 'api' | 'import';
+export type NewsletterSubscriberSource = 'console' | 'form' | 'import';
 
 export type Subscriber = {
 	id: number;
@@ -170,6 +177,10 @@ export type Issue = {
 	scheduled_at: number | null;
 	sending_at: number | null;
 	sent_at: number | null;
+
+	total_sends: number;
+	opened_sends: number;
+	clicked_sends: number;
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';
@@ -207,9 +218,25 @@ export type Domain = {
 	requested_by_current_website: boolean;
 };
 
-export type SendingAddress = {
+
+export type ExportStatus = 'pending' | 'completed' | 'failed';
+
+export type Export = {
+	id: number;
+	created_at: number;
+	status: ExportStatus;
+	url: string | null;
+	error_message: string | null;
+};
+
+export type SendingProfile = {
 	id: number,
-	email: string,
-	domain: Domain,
-	is_default: boolean,
+	created_at: number;
+	from_email: string;
+	from_name: string | null;
+	reply_to_email: string | null;
+	brand_name: string | null;
+	brand_logo: string | null;
+	is_default: boolean;
+	is_system: boolean;
 }

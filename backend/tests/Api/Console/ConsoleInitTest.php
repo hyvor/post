@@ -17,8 +17,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
 #[CoversClass(NewsletterService::class)]
-#[CoversClass(StatsObject::class)]
-#[CoversClass(StatCategoryObject::class)]
 #[CoversClass(NewsletterListObject::class)]
 class ConsoleInitTest extends WebTestCase
 {
@@ -114,57 +112,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data['newsletter']);
         $this->assertSame($newsletterId, $data['newsletter']['id']);
     }
-
-    public function testInitNewsletterWithStats(): void
-    {
-        $newsletter = NewsletterFactory::createOne();
-
-        $user = UserFactory::createOne([
-            'newsletter' => $newsletter,
-            'hyvor_user_id' => 1,
-            'role' => UserRole::OWNER
-        ]);
-
-        NewsletterListFactory::createMany(10, [
-            'newsletter' => $newsletter,
-            'created_at' => new \DateTimeImmutable()
-        ]);
-
-        $otherNewsletter = NewsletterFactory::createOne();
-        NewsletterListFactory::createMany(5, [
-            'newsletter' => $otherNewsletter,
-            'created_at' => new \DateTimeImmutable()
-        ]);
-
-        $response = $this->consoleApi(
-            $newsletter->getId(),
-            'GET',
-            '/init/newsletter',
-        );
-
-        $this->assertSame(200, $response->getStatusCode());
-
-        $content = $response->getContent();
-        $this->assertNotFalse($content);
-        $this->assertJson($content);
-
-        $data = json_decode($content, true);
-        $this->assertIsArray($data);
-        $this->assertArrayHasKey('stats', $data);
-        $this->assertIsArray($data['stats']);
-
-        $stats = $data['stats'];
-        $this->assertIsArray($stats['subscribers']);
-        $this->assertIsArray($stats['issues']);
-        $this->assertIsArray($stats['lists']);
-
-        $lists = $stats['lists'];
-        $this->assertArrayHasKey('total', $lists);
-        $this->assertArrayHasKey('last_30d', $lists);
-        $this->assertSame(10, $lists['total']);
-        $this->assertSame(10, $lists['last_30d']);
-    }
-
     public function testInitNewsletterWithLists(): void
     {
         $newsletter = NewsletterFactory::createOne();

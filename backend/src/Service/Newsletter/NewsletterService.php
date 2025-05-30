@@ -8,6 +8,8 @@ use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
+use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
@@ -126,65 +128,83 @@ class NewsletterService
     }
 
     /**
-     * @return list<StatCategoryObject>
+     * @return array<string, array{total: int, last_30_days: int}>
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {
-        $lists = (int)$this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
-            ->select('count(l.id)')
-            ->where('l.newsletter = :newsletter')
+
+        $subscribersQuery = $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.newsletter = :newsletter')
+            ->andWhere('s.status = :status')
             ->setParameter('newsletter', $newsletter)
+            ->setParameter('status', SubscriberStatus::SUBSCRIBED);
+
+        $subscribers = (int)$subscribersQuery->getQuery()->getSingleScalarResult();
+        $subscribersLast30d = (int) $subscribersQuery->andWhere('s.subscribed_at > :date')
+            ->setParameter('date', new \DateTimeImmutable()->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
 
-        $listsLast30d = (int)$this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
-            ->select('count(l.id)')
-            ->where('l.newsletter = :newsletter')
-            ->andWhere('l.deleted_at IS NULL')
-            ->andWhere('l.created_at > :date')
+        $issuesQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->where('i.newsletter = :newsletter')
+            ->andWhere('i.status = :status')
             ->setParameter('newsletter', $newsletter)
+            ->setParameter('status', IssueStatus::SENT);
+
+        $issues = (int)$issuesQuery->getQuery()->getSingleScalarResult();
+        $issuesLast30d = (int) $issuesQuery->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
 
-        $subscribers = (int)$this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
-            ->select('count(s.id)')
-            ->where('s.newsletter = :newsletter')
+        $openRateQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+            ->select('(sum(i.opened_sends) * 1.0) / (sum(i.total_sends) * 1.0) * 100')
+            ->where('i.newsletter = :newsletter')
+            ->andWhere('i.status = :status')
             ->setParameter('newsletter', $newsletter)
+            ->setParameter('status', IssueStatus::SENT);
+
+        $openRate = (float)$openRateQuery->getQuery()->getSingleScalarResult();
+        $openRate = round($openRate, 2);
+        $openRateLast30d = (float) $openRateQuery->andWhere('i.sent_at > :date')
+            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
+        $openRateLast30d = round($openRateLast30d, 2);
 
-        $subscribersLast30d = (int)$this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
-            ->select('count(s.id)')
-            ->where('s.newsletter = :newsletter')
-            ->andWhere('s.subscribed_at > :date')
+        $clickRateQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+            ->select('(sum(i.clicked_sends) * 1.0) / (sum(i.total_sends) * 1.0) * 100')
+            ->where('i.newsletter = :newsletter')
+            ->andWhere('i.status = :status')
             ->setParameter('newsletter', $newsletter)
+            ->setParameter('status', IssueStatus::SENT);
+
+        $clickRate = (float)$clickRateQuery->getQuery()->getSingleScalarResult();
+        $clickRate = round($clickRate, 2);
+        $clickRateLast30d = (int) $clickRateQuery->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
 
-        $issues = (int)$this->em->getRepository(Issue::class)->createQueryBuilder('s')
-            ->select('count(s.id)')
-            ->where('s.newsletter = :newsletter')
-            ->setParameter('newsletter', $newsletter)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-
-        $issuesLast30d = (int)$this->em->getRepository(Issue::class)->createQueryBuilder('s')
-            ->select('count(s.id)')
-            ->where('s.newsletter = :newsletter')
-            ->andWhere('s.created_at > :date')
-            ->setParameter('newsletter', $newsletter)
-            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        // TODO: return keyed values
         return [
-            new StatCategoryObject($subscribers, $subscribersLast30d),
-            new StatCategoryObject($issues, $issuesLast30d),
-            new StatCategoryObject($lists, $listsLast30d),
+            'subscribers' => [
+                'total' => $subscribers,
+                'last_30_days' => $subscribersLast30d,
+            ],
+            'issues' => [
+                'total' => $issues,
+                'last_30_days' => $issuesLast30d,
+            ],
+            'open_rate' => [
+                'total' => $openRate,
+                'last_30_days' => $openRateLast30d,
+            ],
+            'click_rate' => [
+                'total' => $clickRate,
+                'last_30_days' => $clickRateLast30d,
+            ],
         ];
     }
 
@@ -193,8 +213,10 @@ class NewsletterService
         $currentMeta = $newsletter->getMeta();
 
         foreach (get_object_vars($updates) as $property => $value) {
-            $cased = new UnicodeString($property)->snake();
-            $currentMeta->{$cased} = $value;
+            if ($updates->isSet($property) === false) {
+                continue;
+            }
+            $currentMeta->{$property} = $value;
         }
 
         $newsletter->setMeta(clone $currentMeta);
