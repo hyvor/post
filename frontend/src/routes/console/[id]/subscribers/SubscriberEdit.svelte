@@ -10,7 +10,7 @@
 		toast
 	} from '@hyvor/design/components';
 	import type { Subscriber } from '../../types';
-	import { listStore } from '../../lib/stores/newsletterStore';
+	import { listStore, subscriberMetadataDefinitionStore } from '../../lib/stores/newsletterStore';
 	import { updateSubscriber } from '../../lib/actions/subscriberActions';
 
 	export let subscriber: Subscriber;
@@ -20,6 +20,7 @@
 	let email = subscriber.email;
 	let status = subscriber.status;
 	let selectedList = subscriber.list_ids;
+	let metadata = { ...subscriber.metadata };
 
 	let emailError: null | string = null;
 
@@ -46,6 +47,10 @@
 
 		if (selectedList.sort().join(',') !== subscriber.list_ids.sort().join(',')) {
 			data.segments = selectedList;
+		}
+
+		if (JSON.stringify(metadata) !== JSON.stringify(subscriber.metadata)) {
+			data.metadata = metadata;
 		}
 
 		loading = true;
@@ -114,6 +119,26 @@
 			<Radio bind:group={status} value="pending">Pending</Radio>
 		</FormControl>
 	</SplitControl>
+
+	{#if $subscriberMetadataDefinitionStore.length > 0}
+		<SplitControl label="Metadata" caption="Custom fields for this subscriber">
+			{#snippet nested()}
+				{#each $subscriberMetadataDefinitionStore as definition}
+					<SplitControl label={definition.name}>
+					
+							<FormControl>
+								<TextInput
+									block
+									bind:value={metadata[definition.key]}
+									placeholder={`Enter ${definition.name.toLowerCase()}`}
+								/>
+							</FormControl>
+				
+					</SplitControl>
+				{/each}
+			{/snippet}
+		</SplitControl>
+	{/if}
 </Modal>
 
 <style>
