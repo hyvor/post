@@ -14,10 +14,10 @@
 
 	const I = getI18n();
 
-	async function handleDelete(id: number) {
+	async function handleDelete() {
 		const confirmation = await confirm({
-			title: I.t('console.common.actionConfirm.title'),
-			content: I.t('console.common.actionConfirm.title'),
+			title: I.t('console.settings.sendingProfiles.deleteSendingProfile'),
+			content: I.t('console.settings.sendingProfiles.deleteSendingProfileContent'),
 			confirmText: I.t('console.common.delete'),
 			cancelText: I.t('console.common.cancel'),
 			danger: true,
@@ -26,7 +26,9 @@
 
 		if (!confirmation) return;
 
-		deleteSendingProfile(id)
+		confirmation.loading();
+
+		deleteSendingProfile(profile.id)
 			.then((res) => {
 				sendingProfilesStore.set(res);
 
@@ -38,6 +40,9 @@
 			})
 			.catch((e) => {
 				toast.error(e.message);
+			})
+			.finally(() => {
+				confirmation.close();
 			});
 	}
 </script>
@@ -89,7 +94,7 @@
 
 	<div class="action">
 		{#if !profile.is_system}
-			<IconButton color="red" variant="fill-light" size="small">
+			<IconButton color="red" variant="fill-light" size="small" on:click={handleDelete}>
 				<IconTrash size={12} />
 			</IconButton>
 		{/if}
