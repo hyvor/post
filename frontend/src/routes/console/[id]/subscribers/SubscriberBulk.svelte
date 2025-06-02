@@ -1,10 +1,13 @@
 <script lang="ts">
-	import { Button, Link, Loader, toast } from '@hyvor/design/components';
+	import { Button, Link, Loader, toast, Dropdown, ActionList, ActionListItem, confirm } from '@hyvor/design/components';
 	import { getI18n } from '../../lib/i18n';
 	import { deleteSubscribers, updateSubscribersStatus } from '../../lib/actions/subscriberActions';
 	import { slide } from 'svelte/transition';
 	import { selectedSubscriberIds } from './subscriberStore';
 	import type { NewsletterSubscriberStatus } from '../../types';
+	import IconCaretDown from '@hyvor/icons/IconCaretDown';
+
+	const I18n = getI18n();
 
 	interface Props {
 		refreshList: () => void;
@@ -14,6 +17,21 @@
 	let { refreshList, onUpdateMetadata }: Props = $props();
 
 	let loading = false;
+	let showStatusDropdown = false;
+
+	async function handleDelete() {
+		const confirmation = await confirm({
+			title: I18n.t('console.subscribers.bulk.deleteTitle'),
+			content: I18n.t('console.subscribers.bulk.deleteConfirm'),
+			confirmText: I18n.t('console.common.delete'),
+			cancelText: I18n.t('console.common.cancel'),
+			danger: true
+		});
+
+		if (!confirmation) return;
+
+		handleBulkAction('delete');
+	}
 
 	function handleBulkAction(action: 'delete' | 'update_status', status?: NewsletterSubscriberStatus) {
 		loading = true;
@@ -52,11 +70,10 @@
 				})
 				.finally(() => {
 					loading = false;
+					showStatusDropdown = false;
 				});
 		}
 	}
-
-	const I18n = getI18n();
 </script>
 
 {#if $selectedSubscriberIds.length}
@@ -71,19 +88,33 @@
 				</Link>
 			</div>
 			<div class="actions">
-				<Button size="small" variant="fill-light" color="green" on:click={() => handleBulkAction('update_status', 'subscribed')}>
-					{I18n.t('console.subscribers.status.subscribed')}
-				</Button>
-				<Button size="small" variant="fill-light" color="orange" on:click={() => handleBulkAction('update_status', 'unsubscribed')}>
-					{I18n.t('console.subscribers.status.unsubscribed')}
-				</Button>
-				<Button size="small" variant="fill-light" color="gray" on:click={() => handleBulkAction('update_status', 'pending')}>
-					{I18n.t('console.subscribers.status.pending')}
-				</Button>
-				<Button size="small" variant="fill-light" color="blue" on:click={onUpdateMetadata}>
+				<Dropdown position="top" width={200}>
+					{#snippet trigger()}
+						<Button size="small" variant="fill-light">
+							{I18n.t('console.subscribers.status.subscribed')}
+							{#snippet end()}
+								<IconCaretDown size={12} />
+							{/snippet}
+						</Button>
+					{/snippet}
+					{#snippet content()}
+						<ActionList selection="single">
+							<ActionListItem on:click={() => handleBulkAction('update_status', 'subscribed')}>
+								{I18n.t('console.subscribers.status.subscribed')}
+							</ActionListItem>
+							<ActionListItem on:click={() => handleBulkAction('update_status', 'unsubscribed')}>
+								{I18n.t('console.subscribers.status.unsubscribed')}
+							</ActionListItem>
+							<ActionListItem on:click={() => handleBulkAction('update_status', 'pending')}>
+								{I18n.t('console.subscribers.status.pending')}
+							</ActionListItem>
+						</ActionList>
+					{/snippet}
+				</Dropdown>
+				<Button size="small" variant="fill-light" on:click={onUpdateMetadata}>
 					{I18n.t('console.settings.metadata.update')}
 				</Button>
-				<Button size="small" variant="fill-light" color="red" on:click={() => handleBulkAction('delete')}>
+				<Button size="small" variant="fill-light" color="red" on:click={handleDelete}>
 					{I18n.t('console.common.delete')}
 				</Button>
 			</div>
@@ -129,6 +160,7 @@
 		display: flex;
 		gap: 6px;
 		padding-left: 15px;
+		align-items: center;
 	}
 	.loader-wrap {
 		position: absolute;

@@ -69,6 +69,8 @@
                 "import": "Imported"
             },
             "bulk": {
+                "deleteConfirm": "Are you sure you want to delete these subscribers?",
+                "deleteTitle": "Delete Subscriber",
                 "deleteSuccess": "Subscribers deleted successfully",
                 "statusUpdateSuccess": "Subscribers status updated successfully",
                 "metadataUpdateSuccess": "Subscribers metadata updated successfully"
