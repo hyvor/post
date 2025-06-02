@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
@@ -17,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -155,5 +157,65 @@ class SubscriberController extends AbstractController
     {
         $this->subscriberService->deleteSubscriber($subscriber);
         return $this->json([]);
+    }
+
+    #[Route('/subscribers/bulk', methods: 'POST')]
+    public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
+    {
+        if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {
+            throw new UnprocessableEntityHttpException("Subscribers limit exceeded");
+        }
+
+        $subscribers = [];
+        // Validate that all subscriber IDs exist in the newsletter
+        foreach ($input->subscribers_ids as $subscriberId) {
+            $subscriber = $this->subscriberService->getSubscriberById($newsletter, $subscriberId);
+            if ($subscriber === null) {
+                throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
+            }
+            $subscribers[] = $subscriber;
+        }
+
+        if ($input->action == 'delete') {
+            foreach ($subscribers as $subscriber) {
+                $this->subscriberService->deleteSubscriber($subscriber);
+            }
+            return $this->json(['status' => 'success', 'message' => 'Subscribers deleted successfully']);
+        }
+
+        if ($input->action == 'status_change') {
+            if ($input->status == null)
+                throw new UnprocessableEntityHttpException("Status must be provided for status change action");
+            if (!SubscriberStatus::tryFrom($input->status)) {
+                throw new UnprocessableEntityHttpException("Invalid status provided");
+            }
+            foreach ($subscribers as $subscriber) {
+                $updates = new UpdateSubscriberDto();
+                $updates->status = SubscriberStatus::from($input->status);
+                $this->subscriberService->updateSubscriber($subscriber, $updates);
+            }
+            return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
+        }
+
+        if ($input->action == 'metadata_update') {
+            if ($input->metadata == null)
+                throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
+            foreach ($subscribers as $subscriber) {
+                $updates = new UpdateSubscriberDto();
+                foreach ($input->metadata as $key => $value) {
+                    $metaDef = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $key);
+                    if ($metaDef === null)
+                        throw new UnprocessableEntityHttpException("Metadata definition with key \"{$key}\" not found");
+                    if (!$this->subscriberMetadataService->validateValueType($metaDef, $value)) {
+                        throw new UnprocessableEntityHttpException("Value for metadata key {$key} is not valid");
+                    }
+                    $updates->metadata[$key] = $value;
+                }
+                $this->subscriberService->updateSubscriber($subscriber, $updates);
+            }
+            return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
+        }
+
+        throw new BadRequestHttpException("Unhandled action");
     }
 }

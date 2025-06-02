@@ -25,6 +25,8 @@ class SubscriberService
 
     use ClockAwareTrait;
 
+    public const BULK_SUBSCRIBER_LIMIT = 100;
+
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
@@ -243,11 +245,9 @@ class SubscriberService
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
     }
 
-    /**
-     * @arg array<string, mixed> $metadata
-     */
-    public function validateMetadata(array $metadata): bool
+    public function getSubscriberById(Newsletter $newsletter, int $id): ?Subscriber
     {
-        return true;
+        $subscriber = $this->subscriberRepository->findOneBy(['id' => $id, 'newsletter' => $newsletter]);
+        return $subscriber;
     }
 }
