@@ -15,6 +15,7 @@
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
 	import SubscriberBulk from './SubscriberBulk.svelte';
+	import SubscriberBulkMetadataModal from './SubscriberBulkMetadataModal.svelte';
 	import { listStore } from '../../lib/stores/newsletterStore';
 	import { onMount } from 'svelte';
 	import IconX from '@hyvor/icons/IconX';
@@ -35,6 +36,7 @@
 	let searchVal: string = $state('');
 	let search: string = $state('');
 	let addingManually = $state(false);
+	let showMetadataModal = $state(false);
 
 	function selectList(list: List) {
 		showList = false;
@@ -192,7 +194,14 @@
 		<AddSubscribers bind:show={addingManually} add={() => (key += 1)} />
 	{/if}
 
-	<SubscriberBulk refreshList={() => (key += 1)} />
+	<SubscriberBulk 
+		refreshList={() => (key += 1)} 
+		onUpdateMetadata={() => (showMetadataModal = true)} 
+	/>
+
+	{#if showMetadataModal}
+		<SubscriberBulkMetadataModal bind:show={showMetadataModal} refreshList={() => (key += 1)} />
+	{/if}
 </SingleBox>
 
 <style>

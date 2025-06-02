@@ -8,9 +8,10 @@
 
 	interface Props {
 		refreshList: () => void;
+		onUpdateMetadata: () => void;
 	}
 
-	let { refreshList }: Props = $props();
+	let { refreshList, onUpdateMetadata }: Props = $props();
 
 	let loading = false;
 	let success = false;
@@ -81,6 +82,9 @@
 				</Button>
 				<Button size="small" variant="fill-light" color="gray" on:click={() => handleBulkAction('update_status', 'pending')}>
 					{I18n.t('console.subscribers.status.pending')}
+				</Button>
+				<Button size="small" variant="fill-light" color="blue" on:click={onUpdateMetadata}>
+					{I18n.t('console.settings.metadata.update')}
 				</Button>
 				<Button size="small" variant="fill-light" color="red" on:click={() => handleBulkAction('delete')}>
 					{I18n.t('console.common.delete')}

@@ -63,3 +63,14 @@ export function updateSubscribersStatus(ids: number[], status: NewsletterSubscri
 		}
 	});
 }
+
+export function updateSubscribersMetadata(ids: number[], metadata: Record<string, string>) {
+	return consoleApi.post<Subscriber[]>({
+		endpoint: 'subscribers/bulk',
+		data: {
+			action: 'metadata_update',
+			subscribers_ids: ids,
+			metadata
+		}
+	});
+}
