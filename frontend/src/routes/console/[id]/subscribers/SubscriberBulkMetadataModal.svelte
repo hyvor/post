@@ -29,7 +29,7 @@
 
 		updateSubscribersMetadata(ids, metadata)
 			.then(() => {
-				toast.success('Subscribers metadata updated successfully');
+				toast.success(I18n.t('console.subscribers.bulk.metadataUpdateSuccess'));
 				show = false;
 				selectedSubscriberIds.set([]);
 				refreshList();
@@ -38,7 +38,7 @@
 				if (error instanceof Error) {
 					toast.error(error.message);
 				} else {
-					toast.error('An unknown error occurred');
+					toast.error(I18n.t('console.subscribers.bulk.metadataUpdateSuccess'));
 				}
 			})
 			.finally(() => {

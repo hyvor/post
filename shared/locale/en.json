@@ -67,6 +67,11 @@
                 "console": "Console",
                 "form": "Signup Form",
                 "import": "Imported"
+            },
+            "bulk": {
+                "deleteSuccess": "Subscribers deleted successfully",
+                "statusUpdateSuccess": "Subscribers status updated successfully",
+                "metadataUpdateSuccess": "Subscribers metadata updated successfully"
             }
         },
         "issues": {

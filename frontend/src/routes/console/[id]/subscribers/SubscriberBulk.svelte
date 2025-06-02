@@ -14,7 +14,6 @@
 	let { refreshList, onUpdateMetadata }: Props = $props();
 
 	let loading = false;
-	let success = false;
 
 	function handleBulkAction(action: 'delete' | 'update_status', status?: NewsletterSubscriberStatus) {
 		loading = true;
@@ -23,8 +22,7 @@
 		if (action === 'delete') {
 			deleteSubscribers(ids)
 				.then(() => {
-					toast.success('Subscribers deleted successfully');
-					success = true;
+					toast.success(I18n.t('console.subscribers.bulk.deleteSuccess'));
 					selectedSubscriberIds.set([]);
 					refreshList();
 				})
@@ -32,7 +30,7 @@
 					if (error instanceof Error) {
 						toast.error(error.message);
 					} else {
-						toast.error('An unknown error occurred');
+						toast.error(I18n.t('console.subscribers.bulk.deleteSuccess'));
 					}
 				})
 				.finally(() => {
@@ -41,8 +39,7 @@
 		} else if (action === 'update_status' && status) {
 			updateSubscribersStatus(ids, status)
 				.then(() => {
-					toast.success('Subscribers status updated successfully');
-					success = true;
+					toast.success(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
 					selectedSubscriberIds.set([]);
 					refreshList();
 				})
@@ -50,7 +47,7 @@
 					if (error instanceof Error) {
 						toast.error(error.message);
 					} else {
-						toast.error('An unknown error occurred');
+						toast.error(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
 					}
 				})
 				.finally(() => {
@@ -144,24 +141,6 @@
 		justify-content: center;
 		z-index: 1;
 		background-color: var(--accent-lightest);
-	}
-
-	.success {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 2;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--green);
-		background-color: var(--accent-lightest);
-	}
-	.success .message {
-		font-size: 14px;
-		color: var(--text);
 	}
 
 	@media (max-width: 992px) {
