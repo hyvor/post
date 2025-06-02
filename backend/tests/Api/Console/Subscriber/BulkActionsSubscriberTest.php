@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Subscriber::class)]
 class BulkActionsSubscriberTest extends WebTestCase
 {
+
     public function test_bulk_delete_subscribers(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -83,6 +84,57 @@ class BulkActionsSubscriberTest extends WebTestCase
         }
     }
 
+    public function test_bulk_status_update_status_not_provided(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscribers = SubscriberFactory::createMany(10, [
+            'newsletter' => $newsletter,
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $subscriberIds = array_map(fn(Subscriber $subscriber) => $subscriber->getId(), $subscribers);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers/bulk',
+            [
+                'subscribers_ids' => $subscriberIds,
+                'action' => 'status_change',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertStringContainsString('Status must be provided for status change action', (string) $response->getContent());
+    }
+
+    public function test_bulk_status_update_invalid_status(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscribers = SubscriberFactory::createMany(10, [
+            'newsletter' => $newsletter,
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $subscriberIds = array_map(fn(Subscriber $subscriber) => $subscriber->getId(), $subscribers);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers/bulk',
+            [
+                'subscribers_ids' => $subscriberIds,
+                'action' => 'status_change',
+                'status' => 'invalid_status',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertStringContainsString('Invalid status provided', (string) $response->getContent());
+    }
+
     public function test_bulk_metadata_update(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -127,6 +179,57 @@ class BulkActionsSubscriberTest extends WebTestCase
             $this->assertSame('test_source', $subscriber->getMetadata()['source'] ?? null, "Subscriber with ID $id should have updated source metadata.");
             $this->assertSame('test_campaign', $subscriber->getMetadata()['campaign'] ?? null, "Subscriber with ID $id should have updated campaign metadata.");
         }
+    }
+
+    public function test_bulk_metadata_update_metadata_not_provided(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscribers = SubscriberFactory::createMany(10, [
+            'newsletter' => $newsletter,
+        ]);
+
+        $subscriberIds = array_map(fn(Subscriber $subscriber) => $subscriber->getId(), $subscribers);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers/bulk',
+            [
+                'subscribers_ids' => $subscriberIds,
+                'action' => 'metadata_update',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertStringContainsString('Metadata must be provided for metadata update action', (string) $response->getContent());
+    }
+
+    public function test_bulk_metadata_update_metadata_not_found(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscribers = SubscriberFactory::createMany(10, [
+            'newsletter' => $newsletter,
+        ]);
+
+        $subscriberIds = array_map(fn(Subscriber $subscriber) => $subscriber->getId(), $subscribers);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers/bulk',
+            [
+                'subscribers_ids' => $subscriberIds,
+                'action' => 'metadata_update',
+                'metadata' => [
+                    'non_existent_key' => 'value',
+                ],
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertStringContainsString('Metadata definition with key non_existent_key not found', (string) $response->getContent());
     }
 
     public function test_bulk_action_invalid_subscriber_ids(): void
