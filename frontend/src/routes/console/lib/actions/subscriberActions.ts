@@ -42,3 +42,24 @@ export function updateSubscriber(id: number, data: Partial<Subscriber>) {
 		data
 	});
 }
+
+export function deleteSubscribers(ids: number[]) {
+	return consoleApi.post<Subscriber[]>({
+		endpoint: 'subscribers/bulk',
+		data: {
+			action: 'delete',
+			subscribers_ids: ids 
+		}
+	});
+}
+
+export function updateSubscribersStatus(ids: number[], status: NewsletterSubscriberStatus) {
+	return consoleApi.post<Subscriber[]>({
+		endpoint: 'subscribers/bulk',
+		data: {
+			action: 'status_change',
+			subscribers_ids: ids,
+			status
+		}
+	});
+}

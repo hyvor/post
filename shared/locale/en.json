@@ -61,7 +61,7 @@
                 "unsubscribed": "Unsubscribed",
                 "pending": "Pending"
             },
-            "listsCount": "{count} lists",
+            "count": "{count} subscribers",
             "source": {
                 "label": "Source",
                 "console": "Console",

@@ -14,6 +14,7 @@
 	import SingleBox from '../../@components/content/SingleBox.svelte';
 	import AddSubscribers from './AddSubscribers.svelte';
 	import SubscriberList from './SubscriberList.svelte';
+	import SubscriberBulk from './SubscriberBulk.svelte';
 	import { listStore } from '../../lib/stores/newsletterStore';
 	import { onMount } from 'svelte';
 	import IconX from '@hyvor/icons/IconX';
@@ -190,6 +191,8 @@
 	{#if addingManually}
 		<AddSubscribers bind:show={addingManually} add={() => (key += 1)} />
 	{/if}
+
+	<SubscriberBulk refreshList={() => (key += 1)} />
 </SingleBox>
 
 <style>

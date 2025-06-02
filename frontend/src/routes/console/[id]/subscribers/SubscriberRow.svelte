@@ -9,6 +9,7 @@
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
 	import { getI18n } from '../../lib/i18n';
+	import { selectedSubscriberIds } from './subscriberStore';
 
 	interface Props {
 		subscriber: Subscriber;
@@ -18,6 +19,15 @@
 	let { subscriber, refreshList }: Props = $props();
 
 	let editing = $state(false);
+	let isSelected = $derived($selectedSubscriberIds.includes(subscriber.id));
+
+	function toggleSelection() {
+		if (isSelected) {
+			selectedSubscriberIds.update((ids: number[]) => ids.filter((id: number) => id !== subscriber.id));
+		} else {
+			selectedSubscriberIds.update((ids: number[]) => [...ids, subscriber.id]);
+		}
+	}
 
 	async function onDelete() {
 		const confirmation = await confirm({
@@ -58,7 +68,7 @@
 
 <button class="subscriber">
 	<div class="checkbox">
-		<Checkbox />
+		<Checkbox checked={isSelected} on:change={toggleSelection} />
 	</div>
 
 	<div class="email-wrap">
@@ -66,7 +76,7 @@
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					{I18n.t('console.subscribers.listsCount', {
+					{I18n.t('console.subscribers.count', {
 						count: subscriber.list_ids.length
 					})}
 				</span>

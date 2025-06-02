@@ -13,7 +13,7 @@ class BulkActionSubscriberInput
     public array $subscribers_ids;
 
     #[Assert\NotBlank]
-    #[Assert\Choice(choices: ['delete', 'metadata_update', 'update_status'], message: 'Invalid action.')]
+    #[Assert\Choice(choices: ['delete', 'metadata_update', 'status_change'], message: 'Invalid action.')]
     public string $action;
 
     public ?string $status = null;
