@@ -170,4 +170,28 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $this->assertStringContainsString('Subscribers limit exceeded', (string) $response->getContent());
     }
+
+    public function test_bulk_action_invalid_action(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscribers = SubscriberFactory::createMany(10, [
+            'newsletter' => $newsletter,
+        ]);
+
+        $subscriberIds = array_map(fn(Subscriber $subscriber) => $subscriber->getId(), $subscribers);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers/bulk',
+            [
+                'subscribers_ids' => $subscriberIds,
+                'action' => 'invalid_action',
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertStringContainsString('Invalid action.', (string) $response->getContent());
+    }
 }
