@@ -35,7 +35,7 @@ class ConfirmSubscriptionTest extends WebTestCase
             '/subscriber/confirm?token=' . $token,
         );
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertResponseRedirects('https://post.hyvor.dev/newsletter/' . $newsletter->getSlug() . '/confirm');
     }
 
     public function test_confirm_subscription_with_invalid_token(): void
