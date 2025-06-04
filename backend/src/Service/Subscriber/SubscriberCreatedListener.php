@@ -40,15 +40,17 @@ final class SubscriberCreatedListener
 
         $token = $this->encryption->encrypt($data);
 
-        $variables = TemplateVariables::fromNewsletter($subscriber->getNewsletter());
-        $variables->subject = 'Confirm your subscription';
-
         $strings = $this->stringsFactory->create();
+
+        $variables = TemplateVariables::fromNewsletter($subscriber->getNewsletter());
+        $variables->subject = $strings->get('mail.subscriberConfirmation.subject', [
+            'projectName' => $subscriber->getNewsletter()->getName(),
+        ]);
 
         $variables->content = $this->mailTemplate->render('subscriber/subscriber_confirmation.html.twig', [
             'buttonUrl' => "https://post.hyvor.dev/api/public/subscriber/confirm?token=" . $token,
             'strings' => [
-                'buttonText' => "Confirm Subscription",
+                'buttonText' => $strings->get('mail.subscriberConfirmation.buttonText'),
             ]
         ]);
 
@@ -56,7 +58,9 @@ final class SubscriberCreatedListener
 
         $this->emailNotificationService->send(
             $subscriber->getEmail(),
-            'Confirm your subscription to ' . $subscriber->getNewsletter()->getName(),
+            $strings->get('mail.subscriberConfirmation.subject', [
+                'projectName' => $subscriber->getNewsletter()->getName(),
+            ]),
             $this->htmlTemplateRenderer->render($template, $variables)
         );
     }
