@@ -11,14 +11,18 @@ use App\Entity\SubscriberExport;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Event\Subscriber\CreateSubscriberEvent;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
+use App\Service\UserInvite\EmailNotificationService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\String\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 class SubscriberService
 {
@@ -29,6 +33,8 @@ class SubscriberService
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
         private MessageBusInterface $messageBus,
+        private EventDispatcherInterface $eventDispatcher,
+        private EmailNotificationService $emailNotificationService
     ) {
     }
 
@@ -77,6 +83,9 @@ class SubscriberService
 
         $this->em->persist($subscriber);
         $this->em->flush();
+
+        $event = new CreateSubscriberEvent($subscriber);
+        $this->eventDispatcher->dispatch($event, CreateSubscriberEvent::class);
 
         return $subscriber;
     }
