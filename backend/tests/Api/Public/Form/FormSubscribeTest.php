@@ -159,5 +159,4 @@ class FormSubscribeTest extends WebTestCase
         $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
-
 }

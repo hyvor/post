@@ -33,16 +33,17 @@ class SubscriberController extends AbstractController
             throw new BadRequestHttpException('Invalid confirmation token.');
         }
 
-        if ($data['expires_at'] < $this->now()->getTimestamp()) {
+        $subscriber = $this->subscriberService->getSubscriberById($data['subscriber_id']);
+        if (!$subscriber) {
+            throw new BadRequestHttpException('Invalid subscriber ID.');
+        }
+
+        if (new \DateTimeImmutable($data['expires_at'])->getTimestamp() < $this->now()->getTimestamp()) {
             throw new BadRequestHttpException(
                 'The confirmation link has expired. Please request a new confirmation link.'
             );
         }
 
-        $subscriber = $this->subscriberService->getSubscriberById($data['subscriber_id']);
-        if (!$subscriber) {
-            throw new BadRequestHttpException('Invalid subscriber ID.');
-        }
 
         $updates = new UpdateSubscriberDto();
         $updates->status = SubscriberStatus::SUBSCRIBED;
@@ -50,8 +51,7 @@ class SubscriberController extends AbstractController
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 
         return new JsonResponse([
-            'message' => 'Subscriber confirmed successfully.',
-            'subscriber_id' => $subscriber->getId(),
+            'message' => 'Subscriber confirmed successfully.'
         ]);
     }
 }
