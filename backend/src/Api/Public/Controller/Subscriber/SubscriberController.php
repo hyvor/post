@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Api\Public\Controller\Subscriber;
+
+use App\Entity\Type\SubscriberStatus;
+use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\SubscriberService;
+use Hyvor\Internal\Util\Crypt\Encryption;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Attribute\Route;
+
+class SubscriberController extends AbstractController
+{
+    use ClockAwareTrait;
+    public function __construct(
+        private SubscriberService $subscriberService,
+        private Encryption $encryption,
+    ) {
+    }
+
+    #[Route('/subscriber/confirm', methods: ['GET'])]
+    public function confirm(Request $request): JsonResponse
+    {
+        $token = $request->query->getString('token');
+
+        $data = $this->encryption->decrypt($token);
+
+        if (!$data || !is_array($data) || !isset($data['subscriber_id'], $data['expires_at'])) {
+            throw new BadRequestHttpException('Invalid confirmation token.');
+        }
+
+        if ($data['expires_at'] < $this->now()->getTimestamp()) {
+            throw new BadRequestHttpException(
+                'The confirmation link has expired. Please request a new confirmation link.'
+            );
+        }
+
+        $subscriber = $this->subscriberService->getSubscriberById($data['subscriber_id']);
+        if (!$subscriber) {
+            throw new BadRequestHttpException('Invalid subscriber ID.');
+        }
+
+        $updates = new UpdateSubscriberDto();
+        $updates->status = SubscriberStatus::SUBSCRIBED;
+
+        $this->subscriberService->updateSubscriber($subscriber, $updates);
+
+        return new JsonResponse([
+            'message' => 'Subscriber confirmed successfully.',
+            'subscriber_id' => $subscriber->getId(),
+        ]);
+    }
+}

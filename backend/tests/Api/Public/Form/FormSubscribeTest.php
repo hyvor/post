@@ -105,6 +105,10 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
         $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
@@ -149,6 +153,11 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
+
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 
 }

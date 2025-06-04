@@ -34,7 +34,6 @@ class SubscriberService
         private SubscriberRepository $subscriberRepository,
         private MessageBusInterface $messageBus,
         private EventDispatcherInterface $eventDispatcher,
-        private EmailNotificationService $emailNotificationService
     ) {
     }
 
@@ -174,6 +173,9 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
+        $event = new CreateSubscriberEvent($subscriber);
+        $this->eventDispatcher->dispatch($event, CreateSubscriberEvent::class);
+
         return $subscriber;
     }
 
@@ -242,5 +244,10 @@ class SubscriberService
     {
         return $this->em->getRepository(SubscriberExport::class)
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
+    }
+
+    public function getSubscriberById(int $id): ?Subscriber
+    {
+        return $this->subscriberRepository->find($id);
     }
 }

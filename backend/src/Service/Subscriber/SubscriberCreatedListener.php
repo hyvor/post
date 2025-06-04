@@ -2,6 +2,7 @@
 
 namespace App\Service\Subscriber;
 
+use App\Entity\Type\SubscriberStatus;
 use App\Event\Subscriber\CreateSubscriberEvent;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
@@ -33,8 +34,13 @@ final class SubscriberCreatedListener
     {
         $subscriber = $event->getSubscriber();
 
+        if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
+            // If the subscriber is not pending, we do not send a confirmation email.
+            return;
+        }
+
         $data = [
-            'subscriber_id' => 1,
+            'subscriber_id' => $subscriber->getId(),
             'expires_at' => $this->now()->add(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
