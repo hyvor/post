@@ -39,6 +39,7 @@ class SubscriberController extends AbstractController
             throw new BadRequestHttpException('Invalid subscriber ID.');
         }
 
+        assert(is_string($data['expires_at']));
         if (new \DateTimeImmutable($data['expires_at'])->getTimestamp() < $this->now()->getTimestamp()) {
             throw new BadRequestHttpException(
                 'The confirmation link has expired. Please request a new confirmation link.'
