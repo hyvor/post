@@ -136,14 +136,15 @@ class SubscriberController extends AbstractController
             $updates->status = $input->status;
         }
 
+        $metadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
+
         if ($input->hasProperty('metadata')) {
             foreach ($input->metadata as $key => $value) {
-                $metaDef = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $key);
+                $metaDef = array_find($metadataDefinitions, fn($def) => $def->getKey() === $key);
                 if ($metaDef === null)
                     throw new UnprocessableEntityHttpException("Metadata definition with key \"{$key}\" not found");
-                if (!$this->subscriberMetadataService->validateValueType($metaDef, $value)) {
+                if (!$this->subscriberMetadataService->validateValueType($metaDef, $value))
                     throw new UnprocessableEntityHttpException("Value for metadata key {$key} is not valid");
-                }
                 $updates->metadata[$key] = $value;
             }
         }
