@@ -5,10 +5,12 @@
 		ActionList,
 		ActionListItem,
 		TextInput,
-		IconButton
+		IconButton,
+		Loader,
+		IconMessage
 	} from '@hyvor/design/components';
 	import Selector from '../../@components/content/Selector.svelte';
-	import type { List, NewsletterSubscriberStatus } from '../../types';
+	import type { List, NewsletterSubscriberStatus, Subscriber } from '../../types';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 	import IconPlus from '@hyvor/icons/IconPlus';
 	import SingleBox from '../../@components/content/SingleBox.svelte';
@@ -16,11 +18,13 @@
 	import SubscriberList from './SubscriberList.svelte';
 	import SubscriberBulk from './SubscriberBulk.svelte';
 	import SubscriberBulkMetadataModal from './SubscriberBulkMetadataModal.svelte';
+	import SubscriberBulkStatusModal from './SubscriberBulkStatusModal.svelte';
 	import { listStore } from '../../lib/stores/newsletterStore';
 	import { onMount } from 'svelte';
 	import IconX from '@hyvor/icons/IconX';
 	import { getI18n } from '../../lib/i18n';
 	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
+	import { getSubscribers } from '../../lib/actions/subscriberActions';
 
 	let key = $state(1); // for re-rendering
 	let status: NewsletterSubscriberStatus | null = $state(null);
@@ -37,6 +41,15 @@
 	let search: string = $state('');
 	let addingManually = $state(false);
 	let showMetadataModal = $state(false);
+	let showStatusModal = $state(false);
+
+	let loading = $state(true);
+	let hasMore = $state(true);
+	let loadingMore = $state(false);
+	let error: null | string = $state(null);
+	let subscribers: Subscriber[] = $state([]);
+
+	const SUBSCRIBERS_PER_PAGE = 25;
 
 	function selectList(list: List) {
 		showList = false;
@@ -76,6 +89,45 @@
 				currentList = list;
 			}
 		}
+	});
+
+	function load(more = false) {
+		more ? (loadingMore = true) : (loading = true);
+
+		getSubscribers(status, currentList?.id || null, search === '' ? null : search, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
+			.then((data) => {
+				subscribers = more ? [...subscribers, ...data] : data;
+				hasMore = data.length === SUBSCRIBERS_PER_PAGE;
+			})
+			.catch((e) => {
+				error = e.message;
+			})
+			.finally(() => {
+				loading = false;
+				loadingMore = false;
+			});
+	}
+
+	function handleDelete(ids: number[]) {
+		subscribers = subscribers.filter(subscriber => !ids.includes(subscriber.id));
+	}
+
+	function handleStatusUpdate(ids: number[], status: NewsletterSubscriberStatus) {
+		subscribers = subscribers.map(subscriber => {
+			if (ids.includes(subscriber.id)) {
+				return { ...subscriber, status };
+			}
+			return subscriber;
+		});
+	}
+
+	$effect(() => {
+		status;
+		key;
+		search;
+		currentList;
+
+		load();
 	});
 </script>
 
@@ -186,8 +238,13 @@
 	<SubscriberList
 		{status}
 		{key}
-		list_id={currentList?.id || null}
-		search={search === '' ? null : search}
+		{subscribers}
+		{loading}
+		{loadingMore}
+		{hasMore}
+		{error}
+		onLoadMore={() => load(true)}
+		onDelete={handleDelete}
 	/>
 
 	{#if addingManually}
@@ -196,11 +253,21 @@
 
 	<SubscriberBulk 
 		refreshList={() => (key += 1)} 
-		onUpdateMetadata={() => (showMetadataModal = true)} 
+		onUpdateMetadata={() => (showMetadataModal = true)}
+		onUpdateStatus={() => (showStatusModal = true)}
+		onDelete={handleDelete}
+		{subscribers}
 	/>
 
 	{#if showMetadataModal}
-		<SubscriberBulkMetadataModal bind:show={showMetadataModal} refreshList={() => (key += 1)} />
+		<SubscriberBulkMetadataModal bind:show={showMetadataModal} />
+	{/if}
+
+	{#if showStatusModal}
+		<SubscriberBulkStatusModal
+			bind:show={showStatusModal}
+			onStatusUpdate={handleStatusUpdate}
+		/>
 	{/if}
 </SingleBox>
 

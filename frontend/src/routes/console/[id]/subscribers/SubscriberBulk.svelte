@@ -1,23 +1,35 @@
 <script lang="ts">
-	import { Button, Link, Loader, toast, Dropdown, ActionList, ActionListItem, confirm } from '@hyvor/design/components';
+	import { Button, Link, Loader, toast, confirm } from '@hyvor/design/components';
 	import { getI18n } from '../../lib/i18n';
-	import { deleteSubscribers, updateSubscribersStatus } from '../../lib/actions/subscriberActions';
+	import { deleteSubscribers } from '../../lib/actions/subscriberActions';
 	import { slide } from 'svelte/transition';
 	import { selectedSubscriberIds } from './subscriberStore';
-	import type { NewsletterSubscriberStatus } from '../../types';
-	import IconCaretDown from '@hyvor/icons/IconCaretDown';
+	import { color } from 'chart.js/helpers';
 
 	const I18n = getI18n();
+	const MAX_SELECTABLE_SUBSCRIBERS = 100;
 
 	interface Props {
 		refreshList: () => void;
 		onUpdateMetadata: () => void;
+		onUpdateStatus: () => void;
+		onDelete: (ids: number[]) => void;
+		subscribers: { id: number }[];
 	}
 
-	let { refreshList, onUpdateMetadata }: Props = $props();
+	let { onDelete, onUpdateMetadata, onUpdateStatus, subscribers }: Props = $props();
 
 	let loading = false;
-	let showStatusDropdown = false;
+
+	function handleSelectAll() {
+		const availableSubscribers = subscribers.slice(0, MAX_SELECTABLE_SUBSCRIBERS);
+		if (subscribers.length > MAX_SELECTABLE_SUBSCRIBERS) {
+			toast.warning(I18n.t('console.subscribers.bulk.selectAllWarning', {
+				count: MAX_SELECTABLE_SUBSCRIBERS
+			}));
+		}
+		selectedSubscriberIds.set(availableSubscribers.map(s => s.id));
+	}
 
 	async function handleDelete() {
 		const confirmation = await confirm({
@@ -30,49 +42,25 @@
 
 		if (!confirmation) return;
 
-		handleBulkAction('delete');
-	}
-
-	function handleBulkAction(action: 'delete' | 'update_status', status?: NewsletterSubscriberStatus) {
 		loading = true;
 		const ids = $selectedSubscriberIds;
 
-		if (action === 'delete') {
-			deleteSubscribers(ids)
-				.then(() => {
-					toast.success(I18n.t('console.subscribers.bulk.deleteSuccess'));
-					selectedSubscriberIds.set([]);
-					refreshList();
-				})
-				.catch((error: unknown) => {
-					if (error instanceof Error) {
-						toast.error(error.message);
-					} else {
-						toast.error(I18n.t('console.subscribers.bulk.deleteSuccess'));
-					}
-				})
-				.finally(() => {
-					loading = false;
-				});
-		} else if (action === 'update_status' && status) {
-			updateSubscribersStatus(ids, status)
-				.then(() => {
-					toast.success(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
-					selectedSubscriberIds.set([]);
-					refreshList();
-				})
-				.catch((error: unknown) => {
-					if (error instanceof Error) {
-						toast.error(error.message);
-					} else {
-						toast.error(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
-					}
-				})
-				.finally(() => {
-					loading = false;
-					showStatusDropdown = false;
-				});
-		}
+		deleteSubscribers(ids)
+			.then(() => {
+				toast.success(I18n.t('console.subscribers.bulk.deleteSuccess'));
+				onDelete(ids)
+				selectedSubscriberIds.set([]);
+			})
+			.catch((error: unknown) => {
+				if (error instanceof Error) {
+					toast.error(error.message);
+				} else {
+					toast.error(I18n.t('console.subscribers.bulk.deleteSuccess'));
+				}
+			})
+			.finally(() => {
+				loading = false;
+			});
 	}
 </script>
 
@@ -83,38 +71,23 @@
 				{I18n.t('console.subscribers.count', {
 					count: $selectedSubscriberIds.length
 				})}
-				<Link href="javascript:void()" on:click={() => selectedSubscriberIds.set([])}>
-					{I18n.t('console.common.cancel')}
-				</Link>
+				<div class="links">
+					<Link href="javascript:void()" on:click={handleSelectAll}>
+						Select All
+					</Link>
+					<Link href="javascript:void()" on:click={() => selectedSubscriberIds.set([])}>
+						{I18n.t('console.subscribers.bulk.deselect')}
+					</Link>
+				</div>
 			</div>
 			<div class="actions">
-				<Dropdown position="top" width={200}>
-					{#snippet trigger()}
-						<Button size="small" variant="fill-light">
-							{I18n.t('console.subscribers.status.subscribed')}
-							{#snippet end()}
-								<IconCaretDown size={12} />
-							{/snippet}
-						</Button>
-					{/snippet}
-					{#snippet content()}
-						<ActionList selection="single">
-							<ActionListItem on:click={() => handleBulkAction('update_status', 'subscribed')}>
-								{I18n.t('console.subscribers.status.subscribed')}
-							</ActionListItem>
-							<ActionListItem on:click={() => handleBulkAction('update_status', 'unsubscribed')}>
-								{I18n.t('console.subscribers.status.unsubscribed')}
-							</ActionListItem>
-							<ActionListItem on:click={() => handleBulkAction('update_status', 'pending')}>
-								{I18n.t('console.subscribers.status.pending')}
-							</ActionListItem>
-						</ActionList>
-					{/snippet}
-				</Dropdown>
-				<Button size="small" variant="fill-light" on:click={onUpdateMetadata}>
+				<Button size="small" color="input" on:click={onUpdateStatus}>
+					{I18n.t('console.subscribers.bulk.updateStatus')}
+				</Button>
+				<Button size="small" color="input" on:click={onUpdateMetadata}>
 					{I18n.t('console.settings.metadata.update')}
 				</Button>
-				<Button size="small" variant="fill-light" color="red" on:click={handleDelete}>
+				<Button size="small" color="red" variant="fill-light" on:click={handleDelete}>
 					{I18n.t('console.common.delete')}
 				</Button>
 			</div>
@@ -155,6 +128,13 @@
 		border-right: 1px solid var(--accent);
 		padding-right: 15px;
 		font-size: 14px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.links {
+		display: flex;
+		gap: 10px;
 	}
 	.actions {
 		display: flex;

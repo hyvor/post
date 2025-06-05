@@ -13,10 +13,9 @@
 
 	interface Props {
 		show: boolean;
-		refreshList: () => void;
 	}
 
-	let { show = $bindable(), refreshList }: Props = $props();
+	let { show = $bindable() }: Props = $props();
 
 	let loading = $state(false);
 	let metadata = $state<Record<string, string>>({});
@@ -32,7 +31,6 @@
 				toast.success(I18n.t('console.subscribers.bulk.metadataUpdateSuccess'));
 				show = false;
 				selectedSubscriberIds.set([]);
-				refreshList();
 			})
 			.catch((error: unknown) => {
 				if (error instanceof Error) {
