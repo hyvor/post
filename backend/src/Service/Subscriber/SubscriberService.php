@@ -250,4 +250,12 @@ class SubscriberService
         $subscriber = $this->subscriberRepository->findOneBy(['id' => $id, 'newsletter' => $newsletter]);
         return $subscriber;
     }
+
+    /**
+     * @return array<Subscriber>
+     */
+    public function getAllSubscribers(Newsletter $newsletter): array
+    {
+        return $this->subscriberRepository->findBy(['newsletter' => $newsletter], ['id' => 'DESC']);
+    }
 }

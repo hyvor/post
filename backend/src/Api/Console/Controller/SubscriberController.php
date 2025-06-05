@@ -168,9 +168,10 @@ class SubscriberController extends AbstractController
         }
 
         $subscribers = [];
+        $currentSubscribers = $this->subscriberService->getAllSubscribers($newsletter);
         // Validate that all subscriber IDs exist in the newsletter
         foreach ($input->subscribers_ids as $subscriberId) {
-            $subscriber = $this->subscriberService->getSubscriberById($newsletter, $subscriberId);
+            $subscriber = array_find($currentSubscribers, fn($s) => $s->getId() === $subscriberId);
             if ($subscriber === null) {
                 throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
             }
