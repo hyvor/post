@@ -282,6 +282,10 @@ class SendIssueTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame('would_exceed_limit', $json['message']);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertIsArray($json['data']);
+        $this->assertSame(10, $json['data']['limit']);
+        $this->assertSame(1, $json['data']['exceed_amount']);
     }
 
 }

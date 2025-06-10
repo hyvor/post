@@ -24,7 +24,8 @@
 	let scrollTopEl = $state({} as HTMLDivElement);
 	let testEmail = $state('');
 	let showLimitModal = $state(false);
-	let limitError = $state('');
+	let currentLimit = $state(0);
+	let exceedAmount = $state(0);
 	let subjectError = '';
 	let selectedSegmentsError = '';
 	let subject = '';
@@ -88,8 +89,10 @@
 					send(res);
 				})
 				.catch((e) => {
-					if (e.message?.includes('would_exceed_limit')) {
-						limitError = I18n.t('console.issues.draft.sendingLimitReached.message');
+				
+					if (e.message.includes('would_exceed_limit')) {
+						currentLimit = e.data.current_limit || 0;
+						exceedAmount = e.data.exceed_amount || 0;
 						showLimitModal = true;
 					} else {
 						toast.error('Failed to send newsletter: ' + e.message);
@@ -156,13 +159,22 @@
 		cancel: {
 			text: 'Close'
 		},
-		confirm: false
+		confirm: {
+			text: 'Upgrade',
+		}
 	}}
 	on:cancel={() => showLimitModal = false}
+	on:confirm={() => {
+		showLimitModal = false;
+		window.location.href = '/console/billing';
+	}}
 >
-	<div class="limit-error">
-		{limitError}
-	</div>
+	<p class="limit-error">
+		{I18n.t('console.issues.draft.sendingLimitReached.message', { 
+			currentLimit, 
+			exceedAmount 
+		})}
+	</p>
 </Modal>
 
 <style>

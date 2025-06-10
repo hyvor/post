@@ -128,6 +128,13 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/send', methods: 'POST')]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
+        return $this->json([
+            'message' => 'would_exceed_limit',
+            'data' => [
+                'limit' => 10,
+                'exceed_amount' => 2
+            ]
+        ], 422);
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
         }
@@ -158,9 +165,14 @@ class IssueController extends AbstractController
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfNewsletter($issue->getNewsletter());
-
         if ($sendCountThisMonth + $subscribersCount >= $license->emails)
-            throw new UnprocessableEntityHttpException("would_exceed_limit");
+            return $this->json([
+                'message' => 'would_exceed_limit',
+                'data' => [
+                    'limit' => $license->emails,
+                    'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount)
+                ]
+            ], 422);
 
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
