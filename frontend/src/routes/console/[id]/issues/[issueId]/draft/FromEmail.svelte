@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Button, FormControl, Modal, Radio, SplitControl } from '@hyvor/design/components';
 	import { getI18n } from '../../../../lib/i18n';
-	import { newsletterStore, sendingProfileesStore } from '../../../../lib/stores/newsletterStore';
-	import { getAsendingProfilesStore./../../lib/stores/consoleStore';
+	import { newsletterStore, sendingProfilesStore } from '../../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
 	import { draftIssueEditingStore } from './draftStore';
 	import { debouncedUpdateDraftIssue } from './draftActions';
-	import SendingProfilees from '../../../settings/sending/SendingProfilees.svelte';
 
 	const I18n = getI18n();
 	const appConfig = getAppConfig();sendingProfilesStore
@@ -14,7 +13,7 @@
 
 	let addresses = $derived([
 		$newsletterStore.slug + '@' + appConfig.app.default_email_domain,
-		...$sendingProfileesStore.map((address) => address.email)
+		...$sendingProfilesStore.map((address) => address.from_email)
 	]);
 </script>
 
@@ -41,5 +40,5 @@
 </SplitControl>
 
 <Modal bind:show={modal} title="Manage Sending Emails">
-	<SendingProfilees />
+	<SendingProfiles />
 </Modal>

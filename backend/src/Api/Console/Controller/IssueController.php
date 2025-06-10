@@ -16,10 +16,14 @@ use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Template\HtmlTemplateRenderer;
+use Hyvor\Internal\Billing\BillingInterface;
+use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,12 +31,15 @@ use Symfony\Component\Routing\Attribute\Route;
 class IssueController extends AbstractController
 {
 
+    use HasHyvorUser;
+
     public function __construct(
         private IssueService $issueService,
         private SendService $sendService,
         private NewsletterListService $newsletterListService,
         private HtmlTemplateRenderer $templateRenderer,
-        private EmailSenderService $emailTransportService
+        private EmailSenderService $emailTransportService,
+        private BillingInterface $billing,
     ) {
     }
 
@@ -144,6 +151,16 @@ class IssueController extends AbstractController
         if ($subscribersCount == 0) {
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
         }
+
+        $license = $this->billing->license($issue->getNewsletter()->getUserId(), $issue->getNewsletter()->getId());
+        if (!$license instanceof PostLicense) {
+            throw new UnprocessableEntityHttpException("Invalid license for sending issues.");
+        }
+
+        $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfNewsletter($issue->getNewsletter());
+
+        if ($sendCountThisMonth + $subscribersCount >= $license->emails)
+            throw new UnprocessableEntityHttpException("would_exceed_limit");
 
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;

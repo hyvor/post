@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, SplitControl, TextInput, confirm, toast } from '@hyvor/design/components';
+	import { Button, SplitControl, TextInput, confirm, toast, Modal } from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
 	import { sendIssue, sendIssueTest } from '../../../../lib/actions/issueActions';
 	import Preview from './Preview.svelte';
@@ -23,6 +23,12 @@
 
 	let scrollTopEl = $state({} as HTMLDivElement);
 	let testEmail = $state('');
+	let showLimitModal = $state(false);
+	let limitError = $state('');
+	let subjectError = '';
+	let selectedSegmentsError = '';
+	let subject = '';
+	let selectedLists = [];
 
 	onMount(() => {
 		return;
@@ -52,6 +58,14 @@
 		return ret;
 	}
 
+	const I18n = getI18n();
+	let init = $state(false);
+
+	onMount(() => {
+		initDraftStores(issue);
+		init = true;
+	});
+
 	async function onSend() {
 		if (!validate()) {
 			return;
@@ -74,7 +88,12 @@
 					send(res);
 				})
 				.catch((e) => {
-					toast.error('Failed to send newsletter: ' + e.message);
+					if (e.message?.includes('would_exceed_limit')) {
+						limitError = I18n.t('console.issues.draft.sendingLimitReached.message');
+						showLimitModal = true;
+					} else {
+						toast.error('Failed to send newsletter: ' + e.message);
+					}
 				})
 				.finally(() => {
 					confirmed.close();
@@ -93,14 +112,6 @@
 				toast.error('Failed to send test email: ' + e.message, { id: toastId });
 			});
 	}
-
-	const I18n = getI18n();
-	let init = $state(false);
-
-	onMount(() => {
-		initDraftStores(issue);
-		init = true;
-	});
 </script>
 
 <div bind:this={scrollTopEl}></div>
@@ -138,6 +149,22 @@
 	</div>
 {/if}
 
+<Modal
+	bind:show={showLimitModal}
+	title={I18n.t('console.issues.draft.sendingLimitReached.title')}
+	footer={{
+		cancel: {
+			text: 'Close'
+		},
+		confirm: false
+	}}
+	on:cancel={() => showLimitModal = false}
+>
+	<div class="limit-error">
+		{limitError}
+	</div>
+</Modal>
+
 <style>
 	.send {
 		padding: 30px;
@@ -153,6 +180,12 @@
 	}
 	.send-test :global(button) {
 		flex-shrink: 0;
+	}
+	.limit-error {
+		padding: 20px;
+		text-align: center;
+		font-size: 16px;
+		line-height: 1.5;
 	}
 
 	@media (max-width: 992px) {
