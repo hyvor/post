@@ -6,7 +6,7 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount } from 'svelte';
 	import { getI18n } from '../../../../lib/i18n';
-	import { initDraftStores } from './draftStore';
+	import { draftIssueEditingStore, initDraftStores } from './draftStore';
 	import Subject from './Subject.svelte';
 	import Lists from './Lists.svelte';
 	import FromName from './FromName.svelte';
@@ -45,12 +45,12 @@
 			scrollTopEl.scrollIntoView({ behavior: 'smooth' });
 		}
 
-		if (subject.trim() === '') {
+		if (!$draftIssueEditingStore.subject || $draftIssueEditingStore.subject.trim() === '') {
 			subjectError = 'Subject is required';
 			hasError();
 		}
 
-		if (selectedLists.length === 0) {
+		if ($draftIssueEditingStore.lists.length === 0) {
 			selectedSegmentsError = 'At least one segment is required';
 			hasError();
 		}
