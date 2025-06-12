@@ -101,7 +101,7 @@ class SubscriberService
             ->where($qb->expr()->in('s.id', ':ids'))
             ->setParameter('ids', $ids);
 
-        $res = $qb->getQuery()->execute();
+        $qb->getQuery()->execute();
     }
 
     /**
@@ -191,6 +191,23 @@ class SubscriberService
         $this->em->flush();
 
         return $subscriber;
+    }
+
+    /**
+     * @param array<Subscriber> $subscribers
+     */
+    public function updateSubscribersStatus(array $subscribers, SubscriberStatus $status): void
+    {
+        $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->update(Subscriber::class, 's')
+            ->set('s.status', ':status')
+            ->where($qb->expr()->in('s.id', ':ids'))
+            ->setParameter('status', $status->value)
+            ->setParameter('ids', $ids);
+
+        $qb->getQuery()->execute();
     }
 
     public function getSubscriberByEmail(Newsletter $newsletter, string $email): ?Subscriber

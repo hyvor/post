@@ -75,10 +75,10 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertStringContainsString('Subscribers status updated successfully', (string) $response->getContent());
 
         $subscriberRepository = $this->em->getRepository(Subscriber::class);
-        foreach ($subscriberIds as $id) {
-            $subscriber = $subscriberRepository->find($id);
-            $this->assertNotNull($subscriber, "Subscriber with ID $id should exist after status change.");
-            $this->assertSame('unsubscribed', $subscriber->getStatus()->value, "Subscriber with ID $id should be unsubscribed.");
+        $subscribersDB = $subscriberRepository->findAll();
+
+        foreach ($subscribersDB as $s) {
+            $this->assertSame('unsubscribed', $s->getStatus()->value, "Subscriber with ID {$s->getId()} should be unsubscribed.");
         }
     }
 

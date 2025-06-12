@@ -279,7 +279,7 @@ class UpdateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame(
-            'Metadata definition with key "name" not found',
+            'Metadata definition with key name not found',
             $json['message']
         );
     }

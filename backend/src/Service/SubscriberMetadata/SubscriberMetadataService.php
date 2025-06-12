@@ -89,4 +89,20 @@ class SubscriberMetadataService
             default => false,
         };
     }
+
+    /**
+     * @param array<string, mixed> $metadata
+     */
+    public function validateMetadata(Newsletter $newsletter, array $metadata): bool
+    {
+        foreach ($metadata as $key => $value) {
+            $metaDef = $this->getMetadataDefinitionByKey($newsletter, $key);
+            if ($metaDef === null)
+                throw new \Exception("Metadata definition with key {$key} not found");
+            if (!$this->validateValueType($metaDef, $value)) {
+                throw new \Exception("Value for metadata key {$key} is not valid");
+            }
+        }
+        return true;
+    }
 }

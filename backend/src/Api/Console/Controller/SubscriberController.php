@@ -139,14 +139,12 @@ class SubscriberController extends AbstractController
         $metadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
         if ($input->hasProperty('metadata')) {
-            foreach ($input->metadata as $key => $value) {
-                $metaDef = array_find($metadataDefinitions, fn($def) => $def->getKey() === $key);
-                if ($metaDef === null)
-                    throw new UnprocessableEntityHttpException("Metadata definition with key \"{$key}\" not found");
-                if (!$this->subscriberMetadataService->validateValueType($metaDef, $value))
-                    throw new UnprocessableEntityHttpException("Value for metadata key {$key} is not valid");
-                $updates->metadata[$key] = $value;
+            try {
+                $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
+            } catch (\Exception $e) {
+                throw new UnprocessableEntityHttpException($e->getMessage());
             }
+            $updates->metadata = $input->metadata;
         }
 
         $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
@@ -189,11 +187,8 @@ class SubscriberController extends AbstractController
             if (!SubscriberStatus::tryFrom($input->status)) {
                 throw new UnprocessableEntityHttpException("Invalid status provided");
             }
-            foreach ($subscribers as $subscriber) {
-                $updates = new UpdateSubscriberDto();
-                $updates->status = SubscriberStatus::from($input->status);
-                $this->subscriberService->updateSubscriber($subscriber, $updates);
-            }
+            $status = SubscriberStatus::from($input->status);
+            $this->subscriberService->updateSubscribersStatus($subscribers, $status);
             return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
         }
 
@@ -202,15 +197,12 @@ class SubscriberController extends AbstractController
                 throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
             foreach ($subscribers as $subscriber) {
                 $updates = new UpdateSubscriberDto();
-                foreach ($input->metadata as $key => $value) {
-                    $metaDef = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $key);
-                    if ($metaDef === null)
-                        throw new UnprocessableEntityHttpException("Metadata definition with key {$key} not found");
-                    if (!$this->subscriberMetadataService->validateValueType($metaDef, $value)) {
-                        throw new UnprocessableEntityHttpException("Value for metadata key {$key} is not valid");
-                    }
-                    $updates->metadata[$key] = $value;
+                try {
+                    $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
+                } catch (\Exception $e) {
+                    throw new UnprocessableEntityHttpException($e->getMessage());
                 }
+                $updates->metadata = $input->metadata;
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
             return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
