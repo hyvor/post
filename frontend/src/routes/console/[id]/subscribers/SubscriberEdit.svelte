@@ -15,7 +15,7 @@
 
 	export let subscriber: Subscriber;
 	export let show = false;
-	export let refreshList: () => void;
+	export let handleUpdate: (subscriber: Subscriber) => void;
 
 	let email = subscriber.email;
 	let status = subscriber.status;
@@ -60,7 +60,7 @@
 			.then((res) => {
 				toast.success('Subscriber updated successfully');
 				show = false;
-				refreshList();
+				handleUpdate(res);
 			})
 			.catch((err) => {
 				if (err.message === 'email_taken') {

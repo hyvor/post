@@ -13,10 +13,11 @@
 
 	interface Props {
 		subscriber: Subscriber;
-		refreshList: () => void;
+		handleDelete: (ids: number[]) => void;
+		handleUpdate: (subscriber: Subscriber) => void;
 	}
 
-	let { subscriber, refreshList }: Props = $props();
+	let { subscriber, handleDelete, handleUpdate }: Props = $props();
 
 	let editing = $state(false);
 	let isSelected = $derived($selectedSubscriberIds.includes(subscriber.id));
@@ -45,7 +46,7 @@
 		deleteSubscriber(subscriber.id)
 			.then(() => {
 				toast.success('Subscriber deleted successfully');
-				refreshList();
+				handleDelete([subscriber.id]);
 			})
 			.catch((err) => {
 				toast.error(err.message);
@@ -117,7 +118,11 @@
 </button>
 
 {#if editing}
-	<SubscriberEdit {subscriber} bind:show={editing} {refreshList} />
+	<SubscriberEdit
+		bind:show={editing} 
+		{subscriber}
+		handleUpdate={handleUpdate}
+	/>
 {/if}
 
 <style>

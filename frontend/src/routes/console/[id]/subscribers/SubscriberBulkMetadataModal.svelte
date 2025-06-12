@@ -61,17 +61,19 @@
 >
 	{#if $subscriberMetadataDefinitionStore.length > 0}
 		<SplitControl label="Metadata" caption="Custom fields for selected subscribers">
-			{#each $subscriberMetadataDefinitionStore as definition}
-				<SplitControl label={definition.name}>
-					<FormControl>
-						<TextInput
-							block
-							bind:value={metadata[definition.key]}
-							placeholder={`Enter ${definition.name.toLowerCase()}`}
-						/>
-					</FormControl>
-				</SplitControl>
-			{/each}
+			{#snippet nested()}
+				{#each $subscriberMetadataDefinitionStore as definition}
+					<SplitControl label={definition.name}>
+						<FormControl>
+							<TextInput
+								block
+								bind:value={metadata[definition.key]}
+								placeholder={`Enter ${definition.name.toLowerCase()}`}
+							/>
+						</FormControl>
+					</SplitControl>
+				{/each}
+			{/snippet}
 		</SplitControl>
 	{:else}
 		<div class="no-metadata">

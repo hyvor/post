@@ -112,6 +112,10 @@
 		subscribers = subscribers.filter(subscriber => !ids.includes(subscriber.id));
 	}
 
+	function handleUpdate(subscriber: Subscriber) {
+		subscribers = subscribers.map(s => (s.id === subscriber.id ? subscriber : s));
+	}
+
 	function handleStatusUpdate(ids: number[], status: NewsletterSubscriberStatus) {
 		subscribers = subscribers.map(subscriber => {
 			if (ids.includes(subscriber.id)) {
@@ -245,14 +249,14 @@
 		{error}
 		onLoadMore={() => load(true)}
 		onDelete={handleDelete}
+		onUpdate={handleUpdate}
 	/>
 
 	{#if addingManually}
 		<AddSubscribers bind:show={addingManually} add={() => (key += 1)} />
 	{/if}
 
-	<SubscriberBulk 
-		refreshList={() => (key += 1)} 
+	<SubscriberBulk
 		onUpdateMetadata={() => (showMetadataModal = true)}
 		onUpdateStatus={() => (showStatusModal = true)}
 		onDelete={handleDelete}

@@ -14,9 +14,10 @@
 		error: string | null;
 		onLoadMore: () => void;
 		onDelete: (ids: number[]) => void;
+		onUpdate: (subscriber: Subscriber) => void;
 	}
 
-	let { status, key, subscribers, loading, loadingMore, hasMore, error, onLoadMore, onDelete }: Props = $props();
+	let { status, key, subscribers, loading, loadingMore, hasMore, error, onLoadMore, onDelete, onUpdate }: Props = $props();
 
 	const I18n = getI18n();
 </script>
@@ -31,8 +32,9 @@
 	<div class="list">
 		{#each subscribers as subscriber (subscriber.id)}
 			<SubscriberRow 
-				{subscriber} 
-				refreshList={() => onDelete([subscriber.id])} 
+				{subscriber}
+				handleDelete={onDelete}
+				handleUpdate={onUpdate}
 			/>
 		{/each}
 		<LoadButton

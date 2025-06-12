@@ -10,7 +10,6 @@
 	const MAX_SELECTABLE_SUBSCRIBERS = 100;
 
 	interface Props {
-		refreshList: () => void;
 		onUpdateMetadata: () => void;
 		onUpdateStatus: () => void;
 		onDelete: (ids: number[]) => void;
@@ -73,7 +72,7 @@
 				})}
 				<div class="links">
 					<Link href="javascript:void()" on:click={handleSelectAll}>
-						Select All
+						{I18n.t('console.subscribers.bulk.selectAll')}
 					</Link>
 					<Link href="javascript:void()" on:click={() => selectedSubscriberIds.set([])}>
 						{I18n.t('console.subscribers.bulk.deselect')}
