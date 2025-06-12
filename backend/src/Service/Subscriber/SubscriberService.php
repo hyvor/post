@@ -90,6 +90,21 @@ class SubscriberService
     }
 
     /**
+     * @param array<Subscriber> $subscribers
+     */
+    public function deleteSubscribers(array $subscribers): void
+    {
+        $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete(Subscriber::class, 's')
+            ->where($qb->expr()->in('s.id', ':ids'))
+            ->setParameter('ids', $ids);
+
+        $res = $qb->getQuery()->execute();
+    }
+
+    /**
      * @return ArrayCollection<int, Subscriber>
      */
     public function getSubscribers(

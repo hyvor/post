@@ -44,10 +44,8 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertStringContainsString('Subscribers deleted successfully', (string) $response->getContent());
 
         $subscriberRepository = $this->em->getRepository(Subscriber::class);
-        foreach ($subscriberIds as $id) {
-            $subscriber = $subscriberRepository->find($id);
-            $this->assertNull($subscriber, "Subscriber with ID $id should be deleted.");
-        }
+        $subscribers = $subscriberRepository->findAll();
+        $this->assertCount(0, $subscribers, 'All subscribers should be deleted after bulk delete action.');
     }
 
     public function test_bulk_status_update(): void

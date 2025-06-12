@@ -179,9 +179,7 @@ class SubscriberController extends AbstractController
         }
 
         if ($input->action == 'delete') {
-            foreach ($subscribers as $subscriber) {
-                $this->subscriberService->deleteSubscriber($subscriber);
-            }
+            $this->subscriberService->deleteSubscribers($subscribers);
             return $this->json(['status' => 'success', 'message' => 'Subscribers deleted successfully']);
         }
 
