@@ -5,10 +5,11 @@ namespace App\Api\Public\Controller\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
+use Hyvor\Internal\Component\InstanceUrlResolver;
+use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -20,6 +21,8 @@ class SubscriberController extends AbstractController
     public function __construct(
         private SubscriberService $subscriberService,
         private Encryption $encryption,
+        private InstanceUrlResolver $instanceUrlResolver,
+        private InternalConfig $internalConfig
     ) {
     }
 
@@ -51,6 +54,6 @@ class SubscriberController extends AbstractController
 
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 
-        return $this->redirect('https://post.hyvor.dev/newsletter/' . $subscriber->getNewsletter()->getSlug() . '/confirm?token=' . $token);
+        return $this->redirect($this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . '/newsletter/' . $subscriber->getNewsletter()->getSlug() . '/confirm?token=' . $token);
     }
 }
