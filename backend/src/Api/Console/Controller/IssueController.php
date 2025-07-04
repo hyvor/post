@@ -128,13 +128,6 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/send', methods: 'POST')]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
-        return $this->json([
-            'message' => 'would_exceed_limit',
-            'data' => [
-                'limit' => 10,
-                'exceed_amount' => 2
-            ]
-        ], 422);
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
         }
