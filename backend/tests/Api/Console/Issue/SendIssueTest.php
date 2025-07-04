@@ -192,9 +192,15 @@ class SendIssueTest extends WebTestCase
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'list_ids' => [$list->getId()],
-            'content' => "content"
+            'list_ids' => [$list->getId()]
         ]);
+
+        $internalConfig = $this->getContainer()->get(InternalConfig::class);
+        $licence = new PostLicense(emails: 10);
+
+        $billing = new BillingFake($internalConfig, license: $licence);
+
+        $this->getContainer()->set(BillingInterface::class, $billing);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -203,7 +209,6 @@ class SendIssueTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-
         $json = $this->getJson();
         $this->assertSame($issue->getId(), $json['id']);
         $this->assertSame('sending', $json['status']);
