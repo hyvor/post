@@ -1,19 +1,15 @@
 <script lang="ts">
 	import {
 		SplitControl,
-		Loader,
 		TextInput,
 		Callout,
-		Button,
 		Modal,
-		InputGroup,
-		Radio
-
 	} from '@hyvor/design/components';
 	import { toast } from '@hyvor/design/components';
 	import { inviteUser } from '../../../lib/actions/userActions';
 	import type { Invite } from '../../../types';
 	import {getI18n} from "../../../lib/i18n";
+	import CreateAccountLink from './CreateAccountLink.svelte';
 	export let show: boolean;
 	export let refreshInvite: (i: Invite) => void
 
@@ -65,13 +61,11 @@
 >
 	<Callout type="info">
 		<div slot="title">{I.t('console.settings.users.hyvorAccRequired')}</div>
-        {I.t('console.settings.users.askAdmin1')}
-		<a href="https://hyvor.com/signup" class="link" target="_blank" rel="noreferrer"
-			>
-            {I.t('console.settings.users.askAdmin2')}
-        </a
-		>
-        {I.t('console.settings.users.askAdmin3')}
+
+        <I.T key='console.settings.users.askAdmin' params={{
+            a: {component: CreateAccountLink }
+        }} />
+
 	</Callout>
 
 	<SplitControl
