@@ -15,6 +15,7 @@
             "deleteField": "Delete {field}",
             "delete": "Delete",
             "any": "Any",
+            "save": "Save",
             "actionConfirm": {
                 "title": "Confirmation",
                 "content": "Are you sure you want to perform this action?"
@@ -61,12 +62,24 @@
                 "unsubscribed": "Unsubscribed",
                 "pending": "Pending"
             },
-            "listsCount": "{count} lists",
+            "count": "{count} subscribers",
             "source": {
                 "label": "Source",
                 "console": "Console",
                 "form": "Signup Form",
                 "import": "Imported"
+            },
+            "bulk": {
+                "deselect": "Deselect",
+                "deleteConfirm": "Are you sure you want to delete these subscribers?",
+                "deleteTitle": "Delete Subscriber",
+                "deleteSuccess": "Subscribers deleted successfully",
+                "statusUpdateTitle": "Update Status",
+                "statusUpdateConfirm": "Are you sure you want to change the status to {status}?",
+                "statusUpdateSuccess": "Subscribers status updated successfully",
+                "metadataUpdateSuccess": "Subscribers metadata updated successfully",
+                "updateStatus": "Update Status",
+                "selectAllWarning": "You can only select up to {count} subscribers at once"
             }
         },
         "issues": {

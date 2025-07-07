@@ -12,6 +12,7 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
+use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -200,5 +201,93 @@ class UpdateSubscriberTest extends WebTestCase
             'Subscriber with email ' . $subscriber2->getEmail() . ' already exists',
             $this->getJson()['message']
         );
+    }
+
+    public function test_update_subscriber_metadata(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $metadata = SubscriberMetadataDefinitionFactory::createOne([
+            'key'=> 'name',
+            'name' => 'Name',
+            'newsletter' => $newsletter,
+        ]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::UNSUBSCRIBED,
+        ]);
+
+        $metaUpdate = [
+            'name' => 'Thibault',
+        ];
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'PATCH',
+            '/subscribers/' . $subscriber->getId(),
+            [
+                'email' => 'new@email.com',
+                'list_ids' => [$list1->getId(), $list2->getId()],
+                'status' => 'subscribed',
+                'metadata' => $metaUpdate
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $subscriber);
+        $this->assertSame($subscriber->getMetadata(), $metaUpdate);
+    }
+
+    public function test_update_subscriber_metadata_invalid_name(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::UNSUBSCRIBED,
+        ]);
+
+        $metadata = SubscriberMetadataDefinitionFactory::createOne([
+            'key' => 'age',
+            'name' => 'Age',
+            'newsletter' => $newsletter,
+        ]);
+
+
+        $metaUpdate = [
+            'name' => 'Thibault',
+        ];
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'PATCH',
+            '/subscribers/' . $subscriber->getId(),
+            [
+                'metadata' => $metaUpdate,
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame(
+            'Metadata definition with key name not found',
+            $json['message']
+        );
+    }
+
+
+    public function test_update_subscriber_metadata_invalid_type(): void
+    {
+        // TODO: Implement this test when other metadata types are implemented
+        $this->markTestSkipped();
     }
 }

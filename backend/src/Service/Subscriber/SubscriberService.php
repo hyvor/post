@@ -29,6 +29,8 @@ class SubscriberService
 
     use ClockAwareTrait;
 
+    public const BULK_SUBSCRIBER_LIMIT = 100;
+
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
@@ -93,6 +95,21 @@ class SubscriberService
     {
         $this->em->remove($subscriber);
         $this->em->flush();
+    }
+
+    /**
+     * @param array<Subscriber> $subscribers
+     */
+    public function deleteSubscribers(array $subscribers): void
+    {
+        $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete(Subscriber::class, 's')
+            ->where($qb->expr()->in('s.id', ':ids'))
+            ->setParameter('ids', $ids);
+
+        $qb->getQuery()->execute();
     }
 
     /**
@@ -168,6 +185,14 @@ class SubscriberService
             $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
         }
 
+        if ($updates->hasProperty('metadata')) {
+            $metadata = $subscriber->getMetadata();
+            foreach ($updates->metadata as $key => $value) {
+                $metadata[$key] = $value;
+            }
+            $subscriber->setMetadata($metadata);
+        }
+
         $subscriber->setUpdatedAt($this->now());
 
         $this->em->persist($subscriber);
@@ -177,6 +202,23 @@ class SubscriberService
         $this->eventDispatcher->dispatch($event, CreateSubscriberEvent::class);
 
         return $subscriber;
+    }
+
+    /**
+     * @param array<Subscriber> $subscribers
+     */
+    public function updateSubscribersStatus(array $subscribers, SubscriberStatus $status): void
+    {
+        $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->update(Subscriber::class, 's')
+            ->set('s.status', ':status')
+            ->where($qb->expr()->in('s.id', ':ids'))
+            ->setParameter('status', $status->value)
+            ->setParameter('ids', $ids);
+
+        $qb->getQuery()->execute();
     }
 
     public function getSubscriberByEmail(Newsletter $newsletter, string $email): ?Subscriber
@@ -249,5 +291,14 @@ class SubscriberService
     public function getSubscriberById(int $id): ?Subscriber
     {
         return $this->subscriberRepository->find($id);
+    }
+
+    /**
+     * @return array<Subscriber>
+     */
+    public function getAllSubscribers(Newsletter $newsletter): array
+    {
+        // TODO: limit, offset needed
+        return $this->subscriberRepository->findBy(['newsletter' => $newsletter], ['id' => 'DESC']);
     }
 }
