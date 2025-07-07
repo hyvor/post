@@ -5,6 +5,7 @@ namespace App\Tests\Case;
 use App\Entity\Newsletter;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Util\Crypt\Encryption;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
@@ -21,6 +22,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
     protected Container $container;
+    protected Encryption $encryption;
 
     protected function setUp(): void
     {
@@ -33,6 +35,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         /** @var EntityManagerInterface $em */
         $em = $this->container->get(EntityManagerInterface::class);
         $this->em = $em;
+
+        $encryption = $this->container->get(Encryption::class);
+        $this->assertInstanceOf(Encryption::class, $encryption);
+        $this->encryption = $encryption;
     }
 
     /**

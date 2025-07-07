@@ -44,5 +44,14 @@
 		"howDoPaymentsWorkAnswer": "Payments are processed securely through our in-house billing system. We accept all major credit/debit cards. You can choose to pay monthly or annually.",
 		"canICancelAnytime": "Can I cancel anytime?",
 		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals."
+	},
+
+	"newsletter": {
+		"confirmation": {
+			"error": "Error",
+			"invalidLink": "Invalid confirmation link",
+			"success": "Subscription Confirmed!",
+			"successMessage": "Thank you for confirming your subscription. You will now receive our newsletters."
+		}
 	}
 }

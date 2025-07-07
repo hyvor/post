@@ -191,6 +191,10 @@
         "domainVerification": {
             "subject": "Your domain {domain} is verified",
             "text": "Your domain {domain} is verified. You can now use it with your Hyvor Post projects."
+        },
+        "subscriberConfirmation": {
+            "subject": "Confirm your subscription to {projectName}",
+            "buttonText": "Confirm Subscription"
         }
     }
 }
