@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
@@ -12,10 +13,12 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -24,7 +27,8 @@ class SubscriberController extends AbstractController
 
     public function __construct(
         private SubscriberService $subscriberService,
-        private NewsletterListService $newsletterListService
+        private NewsletterListService $newsletterListService,
+        private SubscriberMetadataService $subscriberMetadataService
     ) {
     }
 
@@ -132,6 +136,17 @@ class SubscriberController extends AbstractController
             $updates->status = $input->status;
         }
 
+        $metadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
+
+        if ($input->hasProperty('metadata')) {
+            try {
+                $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
+            } catch (\Exception $e) {
+                throw new UnprocessableEntityHttpException($e->getMessage());
+            }
+            $updates->metadata = $input->metadata;
+        }
+
         $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
         return $this->json(new SubscriberObject($subscriber));
     }
@@ -141,5 +156,58 @@ class SubscriberController extends AbstractController
     {
         $this->subscriberService->deleteSubscriber($subscriber);
         return $this->json([]);
+    }
+
+    #[Route('/subscribers/bulk', methods: 'POST')]
+    public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
+    {
+        if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {
+            throw new UnprocessableEntityHttpException("Subscribers limit exceeded");
+        }
+
+        $subscribers = [];
+        $currentSubscribers = $this->subscriberService->getAllSubscribers($newsletter);
+        // Validate that all subscriber IDs exist in the newsletter
+        foreach ($input->subscribers_ids as $subscriberId) {
+            $subscriber = array_find($currentSubscribers, fn($s) => $s->getId() === $subscriberId);
+            if ($subscriber === null) {
+                throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
+            }
+            $subscribers[] = $subscriber;
+        }
+
+        if ($input->action == 'delete') {
+            $this->subscriberService->deleteSubscribers($subscribers);
+            return $this->json(['status' => 'success', 'message' => 'Subscribers deleted successfully']);
+        }
+
+        if ($input->action == 'status_change') {
+            if ($input->status == null)
+                throw new UnprocessableEntityHttpException("Status must be provided for status change action");
+            if (!SubscriberStatus::tryFrom($input->status)) {
+                throw new UnprocessableEntityHttpException("Invalid status provided");
+            }
+            $status = SubscriberStatus::from($input->status);
+            $this->subscriberService->updateSubscribersStatus($subscribers, $status);
+            return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
+        }
+
+        if ($input->action == 'metadata_update') {
+            if ($input->metadata == null)
+                throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
+            foreach ($subscribers as $subscriber) {
+                $updates = new UpdateSubscriberDto();
+                try {
+                    $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
+                } catch (\Exception $e) {
+                    throw new UnprocessableEntityHttpException($e->getMessage());
+                }
+                $updates->metadata = $input->metadata;
+                $this->subscriberService->updateSubscriber($subscriber, $updates);
+            }
+            return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
+        }
+
+        throw new BadRequestHttpException("Unhandled action");
     }
 }
