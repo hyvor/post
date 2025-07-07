@@ -95,7 +95,11 @@
                 "fromName": "From Name",
                 "fromEmail": "From Email",
                 "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",
-                "replyTo": "Reply To Email"
+                "replyTo": "Reply To Email",
+                "sendingLimitReached": {
+                    "title": "Sending Limit Reached",
+                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
+                }
             }
         },
         "tools": {
