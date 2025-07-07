@@ -7,7 +7,9 @@
 	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteInvite, inviteUser } from '../../../lib/actions/userActions';
+    import {getI18n} from "../../../lib/i18n";
 
+    const I = getI18n();
 	export let invite: Invite;
     export let refreshInviteDelete: (i: Invite) => void;
 
@@ -18,7 +20,7 @@
 			const timeSinceLastResend = Date.now() - lastResentTime;
 			if (timeSinceLastResend < 1000 * 60) {
 				// 1 minute
-				return toast.error('Please wait a minute before resending an invite');
+				return toast.error(I.t('console.settings.users.waitBeforeResend'));
 			}
 		}
 		lastResentTime = Date.now();
@@ -30,7 +32,7 @@
 
 		try {
 			const invite = await inviteUser(inviteData);
-            toast.success('Invitation resent');
+            toast.success(I.t('console.settings.users.resendInviteSuccess'));
 		} catch (e: any) {
 			toast.error(e.message);
 		}
@@ -38,10 +40,10 @@
 
 	async function handleDelete() {
 		const confirmation = await confirm({
-			title: 'Delete invite',
-			content: 'Are you sure you want to delete this invite?',
-			confirmText: 'Delete',
-			cancelText: 'Cancel',
+			title: I.t('console.settings.users.deleteInviteTitle'),
+			content: I.t('console.settings.users.deleteInviteContent'),
+			confirmText: I.t('console.common.delete'),
+			cancelText: I.t('console.common.cancel'),
 			danger: true
 		});
 

@@ -16,16 +16,16 @@
 	import { newsletterRoleStore, newsletterStore } from '../../../lib/stores/newsletterStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteUser } from '../../../lib/actions/userActions';
-
+    import {getI18n} from "../../../lib/i18n";
 	export let refreshUserDelete: (u: User) => void;
 	export let user: User;
-
+    const I = getI18n();
 	async function handleRemove() {
 		const confirmation = await confirm({
-			title: 'Remove Admin',
-			content: 'Are you sure you want to remove this admin?',
-			confirmText: 'Yes',
-			cancelText: 'Cancel',
+			title: I.t('console.settings.users.removeAdminTitle'),
+			content: I.t('console.settings.users.removeAdminContent'),
+			confirmText: I.t('console.common.yes'),
+			cancelText: I.t('console.common.cancel'),
 			danger: true
 		});
 		if (!confirmation) return;
@@ -34,7 +34,7 @@
 
 		deleteUser(user.id)
 			.then(() => {
-				toast.success('User deleted successfully');
+				toast.success(I.t('console.settings.users.removeAdminSuccess'));
 				refreshUserDelete(user);
 			})
 			.catch((err) => {

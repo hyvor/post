@@ -8,11 +8,12 @@
 	import InviteRow from './InviteRow.svelte';
 	import UserRow from './UserRow.svelte';
 	import UserInvitationModal from './UserInvitationModal.svelte';
+    import {getI18n} from "../../../lib/i18n";
 
 	let loading = true;
 	let users: User[] = [];
 	let invites: Invite[] = [];
-
+    const I = getI18n();
 	function load() {
 		getNewsletterUsers()
 			.then((data) => {
@@ -43,7 +44,7 @@
 
 <TopBar>
 	<Button on:click={() => (inviterOpen = true)}>
-		Add User
+        {I.t('console.settings.users.add')}
 		{#snippet end()}
 			<IconPlus />
 		{/snippet}

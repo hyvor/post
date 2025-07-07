@@ -14,6 +14,7 @@
             "updateField": "Update {field}",
             "deleteField": "Delete {field}",
             "delete": "Delete",
+            "yes": "Yes",
             "any": "Any",
             "save": "Save",
             "actionConfirm": {
@@ -179,7 +180,29 @@
                 "update": "Update Metadata",
                 "delete": "Delete Metadata",
                 "deleteContent": "Are you sure you want to delete this metadata? This metadata will be removed from all subscribers. This action cannot be undone."
+            },
+
+            "users": {
+                "title": "Users",
+                "add": "Add User",
+                "invite": "Invite",
+                "inviteUser": "Invite User",
+                "inviteNewAdmin": "Invite New Admin",
+                "usernameEmailRequired": "Username or email is required",
+                "inviteSent": "Invitation sent",
+                "hyvorAccRequired": "Hyvor Account Required",
+                "askAdmin": "Ask your admin to <a>create a HYVOR account</a> before inviting.",
+                "username": "Username or Email",
+                "usernameCaption": "Username or email of the admin's HYVOR account",
+                "waitBeforeResend": "Please wait a minute before resending an invite",
+                "resendInviteSuccess": "Invitation resent",
+                "deleteInviteTitle": "Delete Invite",
+                "deleteInviteContent": "Are you sure you want to delete this invite?",
+                "removeAdminTitle": "Remove Admin",
+                "removeAdminContent": "Are you sure you want to remove this admin?",
+                "removeAdminSuccess": "User removed successfully"
             }
+
         }
     },
     "mail": {
