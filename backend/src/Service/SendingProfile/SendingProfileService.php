@@ -31,7 +31,7 @@ class SendingProfileService
         return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
     }
 
-    public function getSendingProfileesCount(Newsletter $newsletter): int
+    public function getSendingProfilesCount(Newsletter $newsletter): int
     {
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
@@ -56,7 +56,7 @@ class SendingProfileService
         $sendingProfile->setReplyToEmail($replyToEmail);
         $sendingProfile->setBrandName($brandName);
         $sendingProfile->setBrandLogo($brandLogo);
-        $sendingProfile->setIsDefault($this->getSendingProfileesCount($newsletter) === 0);
+        $sendingProfile->setIsDefault($this->getSendingProfilesCount($newsletter) === 0);
 
         $this->em->persist($sendingProfile);
         $this->em->flush();

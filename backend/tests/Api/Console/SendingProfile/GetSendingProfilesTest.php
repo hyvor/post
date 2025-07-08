@@ -4,6 +4,8 @@ namespace App\Tests\Api\Console\SendingProfile;
 
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
+use App\Entity\Newsletter;
+use App\Entity\SendingProfile;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -49,5 +51,33 @@ class GetSendingProfilesTest extends WebTestCase
         $item = $json[0];
         $this->assertSame($sendingProfile->getId(), $item['id']);
         $this->assertSame('test@hyvor.com', $item['from_email']);
+    }
+
+    public function test_get_system_profile(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $sendingProfile = SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'from_email' => null,
+            'from_name' => null,
+            'reply_to_email' => null,
+            'brand_name' => null,
+            'brand_logo' => null,
+            'is_system' => true
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'GET',
+            '/sending-profiles'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson($response);
+        $this->assertCount(1, $json);
+        $item = $json[0];
+        $this->assertSame($sendingProfile->getId(), $item['id']);
+        $this->assertSame('system@email.com', $item['from_email']);
+        $this->assertTrue($item['is_system']);
     }
 }
