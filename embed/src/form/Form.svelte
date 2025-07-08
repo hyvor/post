@@ -3,17 +3,17 @@
     import Skeleton from "./Skeleton.svelte";
     import { fade, slide } from "svelte/transition";
     import { apiFromInstance } from "./api";
-    import type { List, Palette, Project } from "./types";
+    import type { List, Palette, Newsletter } from "./types";
     import Switch from "./Switch.svelte";
     import Message from "./Message.svelte";
 
     interface Props {
-        projectUuid: string;
+        newsletterUuid: string;
         instance: string;
         shadowRoot: ShadowRoot;
     }
 
-    let { projectUuid, instance, shadowRoot }: Props = $props();
+    let { newsletterUuid, instance, shadowRoot }: Props = $props();
     let email = $state("");
     let selectedListsIds: number[] = $state([]);
     let loading = $state(true);
@@ -22,26 +22,26 @@
     let subscribingSuccess = $state(false);
     let subscribingError = $state("");
 
-    let project: Project = $state({} as Project);
+    let newsletter: Newsletter = $state({} as Newsletter);
     let lists: List[] = $state([]);
     let palette = $state({} as Palette);
 
     const api = apiFromInstance(instance);
 
     interface InitResponse {
-        project: Project;
+        newsletter: Newsletter;
         lists: List[];
     }
 
     onMount(() => {
         api<InitResponse>("/init", {
-            project_uuid: projectUuid,
+            newsletter_uuid: newsletterUuid,
         })
             .then((response) => {
-                project = response.project;
+                newsletter = response.newsletter;
                 lists = response.lists;
                 selectedListsIds = lists.map((list) => list.id);
-                palette = project.palette_light;
+                palette = newsletter.palette_light;
 
                 setCustomCss();
             })
@@ -61,7 +61,7 @@
         subscribingError = "";
 
         api<InitResponse>("/subscribe", {
-            project_uuid: projectUuid,
+            newsletter_uuid: newsletterUuid,
             email,
             list_ids: selectedListsIds,
         })
@@ -81,18 +81,18 @@
     }
 
     function setCustomCss() {
-        if (project.form.custom_css) {
+        if (newsletter.form.custom_css) {
             const style = document.createElement("style");
-            style.textContent = project.form.custom_css;
+            style.textContent = newsletter.form.custom_css;
             shadowRoot.appendChild(style);
         }
     }
 
     export function setPalette(type: "light" | "dark") {
         if (type === "dark") {
-            palette = project.palette_dark;
+            palette = newsletter.palette_dark;
         } else {
-            palette = project.palette_light;
+            palette = newsletter.palette_light;
         }
     }
 
@@ -139,17 +139,17 @@
         <div
             class="title"
             transition:fade={firstElementsAnimation}
-            class:hidden={!project.form.title}
+            class:hidden={!newsletter.form.title}
         >
-            {@html project.form.title}
+            {@html newsletter.form.title}
         </div>
 
         <div
             class="description"
             transition:fade={firstElementsAnimation}
-            class:hidden={!project.form.description}
+            class:hidden={!newsletter.form.description}
         >
-            {@html project.form.description}
+            {@html newsletter.form.description}
         </div>
 
         <div
@@ -180,13 +180,13 @@
                 bind:value={email}
             />
             <button type="submit" disabled={subscribing}>
-                {project.form.button_text || "Subscribe"}
+                {newsletter.form.button_text || "Subscribe"}
             </button>
         </form>
 
         {#if subscribingSuccess}
             <Message
-                message={project.form.success_message ||
+                message={newsletter.form.success_message ||
                     "Thank you for subscribing!"}
                 type="success"
             />
@@ -197,9 +197,9 @@
         {/if}
 
         <div transition:slide={laterElementsAnimation}>
-            {#if project.form.footer_text}
+            {#if newsletter.form.footer_text}
                 <div class="footer">
-                    {@html project.form.footer_text}
+                    {@html newsletter.form.footer_text}
                 </div>
             {/if}
         </div>

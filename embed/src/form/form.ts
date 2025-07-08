@@ -12,16 +12,16 @@ class HyvorPostForm extends HTMLElement {
     }
 
     connectedCallback() {
-        const projectUuid = this.getAttribute("project");
+        const newsletterUuid = this.getAttribute("newsletter");
 
-        if (!projectUuid) {
+        if (!newsletterUuid) {
             throw new Error('project-uuid is required for Hyvor Post form.');
         }
 
         this.form = mount(Form, {
             target: this.shadowRoot!,
             props: {
-                projectUuid,
+                newsletterUuid,
                 instance: this.getAttribute("instance") || "https://post.hyvor.com",
                 shadowRoot: this.shadowRoot!,
             }
