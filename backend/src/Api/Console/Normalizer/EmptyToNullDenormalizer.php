@@ -3,14 +3,17 @@
 namespace App\Api\Console\Normalizer;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 
-class EmptyToNullNormalizer implements DenormalizerInterface
+class EmptyToNullDenormalizer implements DenormalizerInterface
 {
 
     public function __construct(
-        #[Autowire(service: 'serializer.denormalizer.array')]
-        private readonly DenormalizerInterface $denormalizer,
+        #[Autowire(service: 'serializer.normalizer.object')]
+        private readonly ObjectNormalizer $normalizer
     )
     {
     }
@@ -20,21 +23,14 @@ class EmptyToNullNormalizer implements DenormalizerInterface
         string $type,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|\ArrayObject|null {
+    ): mixed {
 
-        if (!is_array($data)) {
-            return $data;
-        }
+        $value = $this->normalizer->denormalize($data, $type, $format, $context);
 
-        foreach ($data as $key => $value) {
-            if (is_string($value) && trim($value) === '') {
-                $data[$key] = null;
-            } elseif (is_array($value)) {
-                $data[$key] = $this->denormalize($value, $type, $format, $context);
-            }
-        }
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
+        dd($classMetadataFactory->getMetadataFor($value));
 
-        return $this->denormalizer->denormalize($data, $type, $format, $context);
+        return $data;
 
     }
 
@@ -45,7 +41,7 @@ class EmptyToNullNormalizer implements DenormalizerInterface
         array $context = []
     ): bool
     {
-        dump($data);
+        dump($context);
 //        $classReflection = new \ReflectionClass($data);
 //        dump($classReflection->getAttributes(NormalizeEmptyToNull::class));
         return true;
