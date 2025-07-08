@@ -27,13 +27,13 @@ class SendingProfile
     private ?Domain $domain;
 
     #[ORM\Column]
-    private string $from_name;
-
-    #[ORM\Column]
     private string $from_email;
 
     #[ORM\Column]
-    private string $reply_to_email;
+    private ?string $from_name;
+
+    #[ORM\Column]
+    private ?string $reply_to_email;
 
     #[ORM\Column]
     private ?string $brand_name;
@@ -107,19 +107,19 @@ class SendingProfile
         return $this;
     }
 
-    public function getFromName(): string
+    public function getFromName(): ?string
     {
         return $this->from_name;
     }
 
-    public function setFromName(string $from_name): static
+    public function setFromName(?string $from_name): static
     {
         $this->from_name = $from_name;
 
         return $this;
     }
 
-    public function getFromEmail(): string
+    public function getFromEmail(): ?string
     {
         return $this->from_email;
     }
@@ -131,12 +131,12 @@ class SendingProfile
         return $this;
     }
 
-    public function getReplyToEmail(): string
+    public function getReplyToEmail(): ?string
     {
         return $this->reply_to_email;
     }
 
-    public function setReplyToEmail(string $reply_to_email): static
+    public function setReplyToEmail(?string $reply_to_email): static
     {
         $this->reply_to_email = $reply_to_email;
 
@@ -148,7 +148,7 @@ class SendingProfile
         return $this->brand_name;
     }
 
-    public function setBrandName(string $brand_name): static
+    public function setBrandName(?string $brand_name): static
     {
         $this->brand_name = $brand_name;
 

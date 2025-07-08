@@ -58,10 +58,10 @@ class SendingProfileController extends AbstractController
             $newsletter,
             $domain,
             $input->from_email,
-            $input->from_name ?? null,
-            $input->reply_to_email ?? null,
-            $input->brand_name ?? null,
-            $input->brand_logo ?? null
+            $input->from_name,
+            $input->reply_to_email,
+            $input->brand_name,
+            $input->brand_logo
         );
 
         return $this->json(new SendingProfileObject($sendingProfile));

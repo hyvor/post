@@ -7,7 +7,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CreateSendingProfileInput
 {
 
-
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
@@ -15,17 +14,17 @@ class CreateSendingProfileInput
 
     #[Assert\Length(max: 255)]
     #[Assert\Type('string')]
-    public string $from_name;
+    public ?string $from_name = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Email]
-    public string $reply_to_email;
+    public ?string $reply_to_email = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Type('string')]
-    public string $brand_name;
+    public ?string $brand_name = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Length(max: 1024)]
     #[Assert\Url]
-    public string $brand_logo;
+    public ?string $brand_logo = null;
 }

@@ -47,20 +47,20 @@ class SendingProfileService
     ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
+        $sendingProfile->setCreatedAt($this->now());
+        $sendingProfile->setUpdatedAt($this->now());
         $sendingProfile->setNewsletter($newsletter);
         $sendingProfile->setDomain($customDomain);
         $sendingProfile->setFromEmail($fromEmail);
-        $sendingProfile->setFromName($fromName) ?? $newsletter->getName();
-        $sendingProfile->setReplyToEmail($replyToEmail) ?? $fromEmail;
-        $sendingProfile->setBrandName($brandName) ?? $newsletter->getName();
-        if ($brandLogo) {
-            $sendingProfile->setBrandLogo($brandLogo);
-        }
+        $sendingProfile->setFromName($fromName);
+        $sendingProfile->setReplyToEmail($replyToEmail);
+        $sendingProfile->setBrandName($brandName);
+        $sendingProfile->setBrandLogo($brandLogo);
         $sendingProfile->setIsDefault($this->getSendingProfileesCount($newsletter) === 0);
-        $sendingProfile->setCreatedAt(new \DateTimeImmutable());
-        $sendingProfile->setUpdatedAt(new \DateTimeImmutable());
+
         $this->em->persist($sendingProfile);
         $this->em->flush();
+
         return $sendingProfile;
     }
 

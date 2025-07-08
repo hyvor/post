@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SendingProfileService::class)]
 class CreateSendingProfileTest extends WebTestCase
 {
-    public function test_create_sending_email(): void
+    public function test_create_sending_profile(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
@@ -33,19 +33,21 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => ''
             ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
 
-        $this->assertSame('thibault@hyvor.com', $json['email']);
+        $this->assertSame('thibault@hyvor.com', $json['from_email']);
         $this->assertSame(true, $json['is_default']);
 
         $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
-        $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
+        $this->assertSame('thibault@hyvor.com', $sendingEmail->getFromEmail());
+        $this->assertNull($sendingEmail->getFromName());
         $this->assertSame(true, $sendingEmail->getIsDefault());
     }
 
