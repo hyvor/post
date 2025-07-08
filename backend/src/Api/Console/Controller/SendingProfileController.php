@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\SendingEmail\CreateSendingEmailInput;
+use App\Api\Console\Input\SendingEmail\CreateSendingProfileInput;
 use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Domain;
@@ -41,20 +41,28 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles', methods: 'GET')]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
-        $sendingProfilees = array_map(
+        $sendingProfiles = array_map(
             fn (SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
             $this->sendingProfileService->getSendingProfiles($newsletter)
         );
-        return $this->json($sendingProfilees);
+        return $this->json($sendingProfiles);
     }
 
     #[Route('/sending-profiles', methods: 'POST')]
     public function createSendingProfile(
-        #[MapRequestPayload] CreateSendingEmailInput $input,
-        Newsletter $newsletter,
+        #[MapRequestPayload] CreateSendingProfileInput $input,
+        Newsletter                                     $newsletter,
     ): JsonResponse {
-        $domain = $this->getDomainFromEmail($input->email);
-        $sendingProfile = $this->sendingProfileService->createSendingProfile($newsletter, $domain, $input->email);
+        $domain = $this->getDomainFromEmail($input->from_email);
+        $sendingProfile = $this->sendingProfileService->createSendingProfile(
+            $newsletter,
+            $domain,
+            $input->from_email,
+            $input->from_name ?? null,
+            $input->reply_to_email ?? null,
+            $input->brand_name ?? null,
+            $input->brand_logo ?? null
+        );
 
         return $this->json(new SendingProfileObject($sendingProfile));
     }
@@ -65,11 +73,28 @@ class SendingProfileController extends AbstractController
         #[MapRequestPayload] UpdateSendingEmailInput $input,
         Newsletter $newsletter
     ): JsonResponse {
+
         $updates = new UpdateSendingProfileDto();
-        if ($input->hasProperty('email')) {
-            $domain = $this->getDomainFromEmail($input->email);
+        if ($input->hasProperty('from_email')) {
+            $domain = $this->getDomainFromEmail($input->from_email);
             $updates->customDomain = $domain;
-            $updates->email = $input->email;
+            $updates->fromEmail = $input->from_email;
+        }
+
+        if ($input->hasProperty('from_name')) {
+            $updates->fromName = $input->from_name;
+        }
+
+        if ($input->hasProperty('reply_to_email')) {
+            $updates->replyToEmail = $input->reply_to_email;
+        }
+
+        if ($input->hasProperty('brand_name')) {
+            $updates->brandName = $input->brand_name;
+        }
+
+        if ($input->hasProperty('brand_logo')) {
+            $updates->brandLogo = $input->brand_logo;
         }
 
         if ($input->hasProperty('is_default')) {

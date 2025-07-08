@@ -2,34 +2,30 @@
 
 namespace App\Api\Console\Input\SendingEmail;
 
-use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-class UpdateSendingEmailInput
+class CreateSendingProfileInput
 {
-    use OptionalPropertyTrait;
 
+
+    #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     public string $from_email;
 
     #[Assert\Length(max: 255)]
     #[Assert\Type('string')]
-    public ?string $from_name;
+    public string $from_name;
 
     #[Assert\Length(max: 255)]
     #[Assert\Email]
-    public ?string $reply_to_email;
+    public string $reply_to_email;
 
     #[Assert\Length(max: 255)]
     #[Assert\Type('string')]
-    public ?string $brand_name;
+    public string $brand_name;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url]
     public string $brand_logo;
-
-    #[Assert\IsTrue]
-    public bool $is_default;
 }

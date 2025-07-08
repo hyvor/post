@@ -240,3 +240,14 @@ export type SendingProfile = {
 	is_default: boolean;
 	is_system: boolean;
 }
+
+export type MediaFolder = 'issue_images' | 'newsletter_images' | 'import' | 'export';
+
+export type Media = {
+	id: number;
+	created_at: number;
+	folder: MediaFolder;
+	url: string;
+	extension: string;
+	size: number;
+}

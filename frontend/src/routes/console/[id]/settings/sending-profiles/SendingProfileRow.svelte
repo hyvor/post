@@ -5,6 +5,8 @@
 	import { getI18n } from '../../../lib/i18n';
 	import { sendingProfilesStore } from '../../../lib/stores/newsletterStore';
 	import { deleteSendingProfile } from '../../../lib/actions/sendingProfileActions';
+	import IconPencil from '@hyvor/icons/IconPencil';
+	import AddEditSendingProfileModal from './AddEditSendingProfileModal.svelte';
 
 	interface Props {
 		profile: SendingProfile;
@@ -13,6 +15,7 @@
 	let { profile }: Props = $props();
 
 	const I = getI18n();
+	let editing = $state(false);
 
 	async function handleDelete() {
 		const confirmation = await confirm({
@@ -93,6 +96,9 @@
 	</div>
 
 	<div class="action">
+		<IconButton color="gray" variant="fill-light" size="small" on:click={() => (editing = true)}>
+			<IconPencil size={12} />
+		</IconButton>
 		{#if !profile.is_system}
 			<IconButton color="red" variant="fill-light" size="small" on:click={handleDelete}>
 				<IconTrash size={12} />
@@ -100,6 +106,8 @@
 		{/if}
 	</div>
 </div>
+
+<AddEditSendingProfileModal {profile} bind:show={editing} />
 
 <style>
 	.profile {

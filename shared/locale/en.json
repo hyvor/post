@@ -13,6 +13,8 @@
             "createField": "Create {field}",
             "updateField": "Update {field}",
             "deleteField": "Delete {field}",
+            "create": "Create",
+            "update": "Update",
             "delete": "Delete",
             "any": "Any",
             "actionConfirm": {

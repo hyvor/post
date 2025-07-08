@@ -11,6 +11,10 @@
 	let creating = $state(false);
 
 	const I = getI18n();
+
+	$effect(() => {
+		console.log('creating', creating);
+	})
 </script>
 
 <SettingsTop>

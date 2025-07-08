@@ -9,9 +9,11 @@ class UpdateSendingProfileDto
 {
     use OptionalPropertyTrait;
 
-    public string $email;
-
+    public string $fromEmail;
+    public ?string $fromName = null;
+    public ?string $replyToEmail = null;
+    public ?string $brandName = null;
+    public ?string $brandLogo = null;
     public Domain $customDomain;
-
     public bool $isDefault;
 }

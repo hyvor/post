@@ -36,12 +36,26 @@ class SendingProfileService
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
-    public function createSendingProfile(Newsletter $newsletter, Domain $customDomain, string $email): SendingProfile
+    public function createSendingProfile(
+        Newsletter $newsletter,
+        Domain $customDomain,
+        string $fromEmail,
+        ?string $fromName = null,
+        ?string $replyToEmail = null,
+        ?string $brandName = null,
+        ?string $brandLogo = null
+    ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
         $sendingProfile->setNewsletter($newsletter);
         $sendingProfile->setDomain($customDomain);
-        $sendingProfile->setEmail($email);
+        $sendingProfile->setFromEmail($fromEmail);
+        $sendingProfile->setFromName($fromName) ?? $newsletter->getName();
+        $sendingProfile->setReplyToEmail($replyToEmail) ?? $fromEmail;
+        $sendingProfile->setBrandName($brandName) ?? $newsletter->getName();
+        if ($brandLogo) {
+            $sendingProfile->setBrandLogo($brandLogo);
+        }
         $sendingProfile->setIsDefault($this->getSendingProfileesCount($newsletter) === 0);
         $sendingProfile->setCreatedAt(new \DateTimeImmutable());
         $sendingProfile->setUpdatedAt(new \DateTimeImmutable());
@@ -54,8 +68,24 @@ class SendingProfileService
         SendingProfile $sendingProfile,
         UpdateSendingProfileDto $updates
     ): SendingProfile {
-        if ($updates->hasProperty('email')) {
-            $sendingProfile->setEmail($updates->email);
+        if ($updates->hasProperty('fromEmail')) {
+            $sendingProfile->setFromEmail($updates->fromEmail);
+        }
+
+        if ($updates->hasProperty('fromName')) {
+            $sendingProfile->setFromName($updates->fromName);
+        }
+
+        if ($updates->hasProperty('replyToEmail')) {
+            $sendingProfile->setReplyToEmail($updates->replyToEmail);
+        }
+
+        if ($updates->hasProperty('brandName')) {
+            $sendingProfile->setBrandName($updates->brandName);
+        }
+
+        if ($updates->hasProperty('brandLogo')) {
+            $sendingProfile->setBrandLogo($updates->brandLogo);
         }
 
         if ($updates->hasProperty('customDomain')) {

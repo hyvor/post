@@ -148,7 +148,7 @@ class SendingProfile
         return $this->brand_name;
     }
 
-    public function setBrandName(?string $brand_name): static
+    public function setBrandName(string $brand_name): static
     {
         $this->brand_name = $brand_name;
 
@@ -157,7 +157,7 @@ class SendingProfile
 
     public function getBrandLogo(): ?string
     {
-        return $this->brand_logo;
+        return $this->brand_logo ?? null;
     }
 
     public function setBrandLogo(?string $brandLogo): static
