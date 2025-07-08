@@ -14,7 +14,9 @@
             "updateField": "Update {field}",
             "deleteField": "Delete {field}",
             "delete": "Delete",
+            "yes": "Yes",
             "any": "Any",
+            "save": "Save",
             "actionConfirm": {
                 "title": "Confirmation",
                 "content": "Are you sure you want to perform this action?"
@@ -61,12 +63,24 @@
                 "unsubscribed": "Unsubscribed",
                 "pending": "Pending"
             },
-            "listsCount": "{count} lists",
+            "count": "{count} subscribers",
             "source": {
                 "label": "Source",
                 "console": "Console",
                 "form": "Signup Form",
                 "import": "Imported"
+            },
+            "bulk": {
+                "deselect": "Deselect",
+                "deleteConfirm": "Are you sure you want to delete these subscribers?",
+                "deleteTitle": "Delete Subscriber",
+                "deleteSuccess": "Subscribers deleted successfully",
+                "statusUpdateTitle": "Update Status",
+                "statusUpdateConfirm": "Are you sure you want to change the status to {status}?",
+                "statusUpdateSuccess": "Subscribers status updated successfully",
+                "metadataUpdateSuccess": "Subscribers metadata updated successfully",
+                "updateStatus": "Update Status",
+                "selectAllWarning": "You can only select up to {count} subscribers at once"
             }
         },
         "issues": {
@@ -82,7 +96,11 @@
                 "fromName": "From Name",
                 "fromEmail": "From Email",
                 "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",
-                "replyTo": "Reply To Email"
+                "replyTo": "Reply To Email",
+                "sendingLimitReached": {
+                    "title": "Sending Limit Reached",
+                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
+                }
             }
         },
         "tools": {
@@ -162,7 +180,29 @@
                 "update": "Update Metadata",
                 "delete": "Delete Metadata",
                 "deleteContent": "Are you sure you want to delete this metadata? This metadata will be removed from all subscribers. This action cannot be undone."
+            },
+
+            "users": {
+                "title": "Users",
+                "add": "Add User",
+                "invite": "Invite",
+                "inviteUser": "Invite User",
+                "inviteNewAdmin": "Invite New Admin",
+                "usernameEmailRequired": "Username or email is required",
+                "inviteSent": "Invitation sent",
+                "hyvorAccRequired": "Hyvor Account Required",
+                "askAdmin": "Ask your admin to <a>create a HYVOR account</a> before inviting.",
+                "username": "Username or Email",
+                "usernameCaption": "Username or email of the admin's HYVOR account",
+                "waitBeforeResend": "Please wait a minute before resending an invite",
+                "resendInviteSuccess": "Invitation resent",
+                "deleteInviteTitle": "Delete Invite",
+                "deleteInviteContent": "Are you sure you want to delete this invite?",
+                "removeAdminTitle": "Remove Admin",
+                "removeAdminContent": "Are you sure you want to remove this admin?",
+                "removeAdminSuccess": "User removed successfully"
             }
+
         }
     },
     "mail": {
@@ -178,6 +218,10 @@
         "domainVerification": {
             "subject": "Your domain {domain} is verified",
             "text": "Your domain {domain} is verified. You can now use it with your Hyvor Post projects."
+        },
+        "subscriberConfirmation": {
+            "subject": "Confirm your subscription to {projectName}",
+            "buttonText": "Confirm Subscription"
         }
     }
 }

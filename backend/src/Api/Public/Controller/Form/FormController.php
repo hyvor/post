@@ -94,9 +94,9 @@ class FormController extends AbstractController
         $email = $input->email;
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
 
-        if ($subscriber) {
+        if ($subscriber && $subscriber->getStatus() === SubscriberStatus::UNSUBSCRIBED) {
             $update = new UpdateSubscriberDto();
-            $update->status = SubscriberStatus::SUBSCRIBED;
+            $update->status = SubscriberStatus::PENDING;
             $update->lists = $lists;
 
             $this->subscriberService->updateSubscriber(
@@ -108,7 +108,7 @@ class FormController extends AbstractController
                 $newsletter,
                 $email,
                 $lists,
-                SubscriberStatus::SUBSCRIBED,
+                SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
                 $ip,
                 $this->now(),

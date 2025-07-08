@@ -19,6 +19,11 @@ class SubscriberObject
     public ?int $subscribed_at;
     public ?int $unsubscribed_at;
 
+    /**
+     * @var array<string, string>
+     */
+    public array $metadata;
+
     public function __construct(Subscriber $subscriber)
     {
         $this->id = $subscriber->getId();
@@ -29,6 +34,7 @@ class SubscriberObject
         $this->subscribe_ip = $subscriber->getSubscribeIp();
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
         $this->unsubscribed_at = $subscriber->getUnsubscribedAt()?->getTimestamp();
+        $this->metadata = $subscriber->getMetadata();
     }
 
 }

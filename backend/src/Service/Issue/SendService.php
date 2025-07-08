@@ -3,6 +3,7 @@
 namespace App\Service\Issue;
 
 use App\Entity\Issue;
+use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\Type\SendStatus;
@@ -267,18 +268,19 @@ class SendService
         return (int)$qb->getSingleScalarResult();
     }
 
-    public function getSendsCountThisMonthOfNewsletter(int $newsletterId): int
+    public function getSendsCountThisMonthOfNewsletter(Newsletter $newsletter): int
     {
         $query = <<<DQL
         SELECT COUNT(s.id)
         FROM App\Entity\Send s
         WHERE
-            s.newsletter_id = :newsletterId AND
-            s.created_at >= :startOfMonth
+            s.newsletter = :newsletter AND
+            s.created_at >= :startOfMonth AND
+            s.status != 'failed'
         DQL;
 
         $qb = $this->em->createQuery($query);
-        $qb->setParameter('newsletterId', $newsletterId);
+        $qb->setParameter('newsletter', $newsletter);
         $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
 
         return (int)$qb->getSingleScalarResult();
@@ -327,5 +329,4 @@ class SendService
 
         return $formattedResults;
     }
-
 }

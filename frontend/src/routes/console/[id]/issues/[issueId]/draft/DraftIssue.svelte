@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button, SplitControl, TextInput, confirm, toast } from '@hyvor/design/components';
+	import { Button, SplitControl, TextInput, confirm, toast, Modal } from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
 	import { sendIssue, sendIssueTest } from '../../../../lib/actions/issueActions';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount } from 'svelte';
 	import { getI18n } from '../../../../lib/i18n';
-	import { initDraftStores } from './draftStore';
+	import { draftIssueEditingStore, initDraftStores } from './draftStore';
 	import Subject from './Subject.svelte';
 	import Lists from './Lists.svelte';
 	import FromName from './FromName.svelte';
@@ -23,6 +23,13 @@
 
 	let scrollTopEl = $state({} as HTMLDivElement);
 	let testEmail = $state('');
+	let showLimitModal = $state(false);
+	let currentLimit = $state(0);
+	let exceedAmount = $state(0);
+	let subjectError = '';
+	let selectedSegmentsError = '';
+	let subject = '';
+	let selectedLists = [];
 
 	onMount(() => {
 		return;
@@ -39,18 +46,26 @@
 			scrollTopEl.scrollIntoView({ behavior: 'smooth' });
 		}
 
-		if (subject.trim() === '') {
+		if (!$draftIssueEditingStore.subject || $draftIssueEditingStore.subject.trim() === '') {
 			subjectError = 'Subject is required';
 			hasError();
 		}
 
-		if (selectedLists.length === 0) {
+		if ($draftIssueEditingStore.lists.length === 0) {
 			selectedSegmentsError = 'At least one segment is required';
 			hasError();
 		}
 
 		return ret;
 	}
+
+	const I18n = getI18n();
+	let init = $state(false);
+
+	onMount(() => {
+		initDraftStores(issue);
+		init = true;
+	});
 
 	async function onSend() {
 		if (!validate()) {
@@ -74,7 +89,14 @@
 					send(res);
 				})
 				.catch((e) => {
-					toast.error('Failed to send newsletter: ' + e.message);
+				
+					if (e.message.includes('would_exceed_limit')) {
+						currentLimit = e.data.current_limit || 0;
+						exceedAmount = e.data.exceed_amount || 0;
+						showLimitModal = true;
+					} else {
+						toast.error('Failed to send newsletter: ' + e.message);
+					}
 				})
 				.finally(() => {
 					confirmed.close();
@@ -93,14 +115,6 @@
 				toast.error('Failed to send test email: ' + e.message, { id: toastId });
 			});
 	}
-
-	const I18n = getI18n();
-	let init = $state(false);
-
-	onMount(() => {
-		initDraftStores(issue);
-		init = true;
-	});
 </script>
 
 <div bind:this={scrollTopEl}></div>
@@ -138,6 +152,31 @@
 	</div>
 {/if}
 
+<Modal
+	bind:show={showLimitModal}
+	title={I18n.t('console.issues.draft.sendingLimitReached.title')}
+	footer={{
+		cancel: {
+			text: 'Close'
+		},
+		confirm: {
+			text: 'Upgrade',
+		}
+	}}
+	on:cancel={() => showLimitModal = false}
+	on:confirm={() => {
+		showLimitModal = false;
+		window.location.href = '/console/billing';
+	}}
+>
+	<p class="limit-error">
+		{I18n.t('console.issues.draft.sendingLimitReached.message', { 
+			currentLimit, 
+			exceedAmount 
+		})}
+	</p>
+</Modal>
+
 <style>
 	.send {
 		padding: 30px;
@@ -153,6 +192,12 @@
 	}
 	.send-test :global(button) {
 		flex-shrink: 0;
+	}
+	.limit-error {
+		padding: 20px;
+		text-align: center;
+		font-size: 16px;
+		line-height: 1.5;
 	}
 
 	@media (max-width: 992px) {

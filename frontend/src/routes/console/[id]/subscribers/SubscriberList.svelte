@@ -2,54 +2,24 @@
 	import { IconMessage, LoadButton, Loader } from '@hyvor/design/components';
 	import SubscriberRow from './SubscriberRow.svelte';
 	import type { NewsletterSubscriberStatus, Subscriber } from '../../types';
-	import { getSubscribers } from '../../lib/actions/subscriberActions';
 	import { getI18n } from '../../lib/i18n';
 
 	interface Props {
 		status: NewsletterSubscriberStatus | null;
-		list_id: number | null;
-		search?: string | null;
-		key: number; // just for forcing re-render
+		key: number;
+		subscribers: Subscriber[];
+		loading: boolean;
+		loadingMore: boolean;
+		hasMore: boolean;
+		error: string | null;
+		onLoadMore: () => void;
+		onDelete: (ids: number[]) => void;
+		onUpdate: (subscriber: Subscriber) => void;
 	}
 
-	let { status, list_id, search = null, key = $bindable() }: Props = $props();
-
-	let loading = $state(true);
-	let hasMore = $state(true);
-	let loadingMore = $state(false);
-	let error: null | string = $state(null);
-
-	const SUBSCRIBERS_PER_PAGE = 25;
-
-	let subscribers: Subscriber[] = $state([]);
-
-	function load(more = false) {
-		more ? (loadingMore = true) : (loading = true);
-
-		getSubscribers(status, list_id, search, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
-			.then((data) => {
-				subscribers = more ? [...subscribers, ...data] : data;
-				hasMore = data.length === SUBSCRIBERS_PER_PAGE;
-			})
-			.catch((e) => {
-				error = e.message;
-			})
-			.finally(() => {
-				loading = false;
-				loadingMore = false;
-			});
-	}
+	let { status, key, subscribers, loading, loadingMore, hasMore, error, onLoadMore, onDelete, onUpdate }: Props = $props();
 
 	const I18n = getI18n();
-
-	$effect(() => {
-		status;
-		key;
-		search;
-		list_id;
-
-		load();
-	});
 </script>
 
 {#if loading}
@@ -61,13 +31,17 @@
 {:else}
 	<div class="list">
 		{#each subscribers as subscriber (subscriber.id)}
-			<SubscriberRow {subscriber} refreshList={() => (key += 1)} />
+			<SubscriberRow 
+				{subscriber}
+				handleDelete={onDelete}
+				handleUpdate={onUpdate}
+			/>
 		{/each}
 		<LoadButton
 			text={I18n.t('console.common.loadMore')}
 			loading={loadingMore}
 			show={hasMore}
-			on:click={() => load(true)}
+			on:click={onLoadMore}
 		/>
 	</div>
 {/if}

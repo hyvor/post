@@ -1,4 +1,4 @@
-export interface Project {
+export interface Newsletter {
     id: number;
 
     form: {
