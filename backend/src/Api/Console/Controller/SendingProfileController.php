@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\SendingEmail\CreateSendingProfileInput;
-use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
+use App\Api\Console\Input\SendingEmail\UpdateSendingProfileInput;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Domain;
 use App\Entity\Newsletter;
@@ -51,7 +51,7 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles', methods: 'POST')]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
-        Newsletter                                     $newsletter,
+        Newsletter $newsletter,
     ): JsonResponse {
         $domain = $this->getDomainFromEmail($input->from_email);
         $sendingProfile = $this->sendingProfileService->createSendingProfile(
@@ -70,7 +70,7 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     public function updateSendingProfile(
         SendingProfile $sendingProfile,
-        #[MapRequestPayload] UpdateSendingEmailInput $input
+        #[MapRequestPayload] UpdateSendingProfileInput $input
     ): JsonResponse {
 
         $updates = new UpdateSendingProfileDto();

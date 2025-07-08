@@ -48,10 +48,10 @@
 
 			const changes = {
 				from_email: fromEmail,
-				from_name: fromName,
-				reply_to_email: replyToEmail,
-				brand_name: brandName,
-				brand_logo: brandLogo
+				from_name: fromName === '' ? null : fromName,
+				reply_to_email: replyToEmail === '' ? null : replyToEmail,
+				brand_name: brandName === '' ? null : brandName,
+				brand_logo: brandLogo === '' ? null : brandLogo
 			};
 
 			const params = Object.fromEntries(
@@ -167,10 +167,5 @@
 				brandLogo = url || '';
 			}}
 		/>
-		<!-- <TextInput
-			placeholder="https://hyvor.com/api/public/logo/post.svg"
-			bind:value={brandLogo}
-			block
-		/> -->
 	</SplitControl>
 </Modal>

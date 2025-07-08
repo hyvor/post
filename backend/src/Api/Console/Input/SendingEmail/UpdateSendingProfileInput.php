@@ -6,7 +6,7 @@ use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-class UpdateSendingEmailInput
+class UpdateSendingProfileInput
 {
     use OptionalPropertyTrait;
 
@@ -27,8 +27,8 @@ class UpdateSendingEmailInput
     public ?string $brand_name;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    public string $brand_logo;
+    #[Assert\Type('string')]
+    public ?string $brand_logo;
 
     #[Assert\IsTrue]
     public bool $is_default;
