@@ -21,7 +21,7 @@ class CreateSendingProfileTest extends WebTestCase
     {
         $newsletter = NewsletterFactory::createOne();
 
-        $domain = DomainFactory::createOne([
+        DomainFactory::createOne([
                 'domain' => 'hyvor.com',
                 'verified_in_ses' => true,
                 'user_id' => 1
@@ -34,7 +34,10 @@ class CreateSendingProfileTest extends WebTestCase
             '/sending-profiles',
             [
                 'from_email' => 'thibault@hyvor.com',
-                'from_name' => ''
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
 
@@ -44,11 +47,11 @@ class CreateSendingProfileTest extends WebTestCase
         $this->assertSame('thibault@hyvor.com', $json['from_email']);
         $this->assertSame(true, $json['is_default']);
 
-        $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
-        $this->assertSame('thibault@hyvor.com', $sendingEmail->getFromEmail());
-        $this->assertNull($sendingEmail->getFromName());
-        $this->assertSame(true, $sendingEmail->getIsDefault());
+        $sendingProfile = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingProfile);
+        $this->assertSame('thibault@hyvor.com', $sendingProfile->getFromEmail());
+        $this->assertNull($sendingProfile->getFromName());
+        $this->assertSame(true, $sendingProfile->getIsDefault());
     }
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
@@ -72,7 +75,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
 
@@ -85,7 +92,7 @@ class CreateSendingProfileTest extends WebTestCase
         $this->assertSame(false, $sendingEmail->getIsDefault());
     }
 
-    public function test_create_sending_email_domain_not_found(): void
+    public function test_create_sending_profile_domain_not_found(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
@@ -94,7 +101,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@nonexistent.com'
+                'from_email' => 'thibault@nonexistent.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
@@ -103,10 +114,10 @@ class CreateSendingProfileTest extends WebTestCase
         $this->assertSame('Domain not found', $json['message']);
     }
 
-    public function test_create_sending_email_domain_not_verified(): void
+    public function test_create_sending_profile_domain_not_verified(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        $domain = DomainFactory::createOne([
+        DomainFactory::createOne([
             'domain' => 'hyvor.com',
             'verified_in_ses' => false,
             'user_id' => 1
@@ -116,7 +127,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());

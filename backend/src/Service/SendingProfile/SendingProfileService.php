@@ -117,7 +117,7 @@ class SendingProfileService
     {
         return $this->sendingEmailRepository->findOneBy([
             'newsletter' => $newsletter,
-            'isDefault' => true
+            'is_default' => true
         ]);
     }
 
@@ -126,7 +126,7 @@ class SendingProfileService
         $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         if ($sendingProfile) {
-            return $sendingProfile->getEmail();
+            return $sendingProfile->getFromEmail();
         }
 
         return $this->getFallbackAddressOfNewsletter($newsletter);

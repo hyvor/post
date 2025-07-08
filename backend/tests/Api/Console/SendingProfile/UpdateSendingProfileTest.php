@@ -19,7 +19,7 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(SendingProfileService::class)]
 class UpdateSendingProfileTest extends WebTestCase
 {
-    public function test_update_sending_email(): void
+    public function test_update_sending_profile(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
@@ -43,7 +43,7 @@ class UpdateSendingProfileTest extends WebTestCase
 
         $sendingEmail = SendingProfileFactory::createOne(
             [
-                'email' => 'thibault@hyvor.com',
+                'from_email' => 'thibault@hyvor.com',
                 'newsletter' => $newsletter,
                 'domain' => $domain1
             ]
@@ -54,27 +54,27 @@ class UpdateSendingProfileTest extends WebTestCase
             'PATCH',
             '/sending-profiles/' . $sendingEmail->getId(),
             [
-                'email' => 'thibault@gmail.com',
+                'from_email' => 'thibault@gmail.com',
+                'brand_name' => 'Hyvor Post',
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-
-        $this->assertSame('thibault@gmail.com', $json['email']);
-        $this->assertIsArray($json['domain']);
-        $this->assertSame($domain2->getId(), $json['domain']['id']);
+        $this->assertSame('thibault@gmail.com', $json['from_email']);
+        $this->assertSame('Hyvor Post', $json['brand_name']);
         $this->assertSame(false, $json['is_default']);
 
         $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
-        $this->assertSame('thibault@gmail.com', $sendingEmail->getEmail());
+        $this->assertSame('thibault@gmail.com', $sendingEmail->getFromEmail());
+        $this->assertSame('Hyvor Post', $sendingEmail->getBrandName());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
         $this->assertSame(false, $sendingEmail->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
     }
 
-    public function test_update_default_sending_address(): void
+    public function test_update_default_sending_profile(): void
     {
         Clock::set(new MockClock('2025-02-21'));
 
@@ -99,7 +99,7 @@ class UpdateSendingProfileTest extends WebTestCase
         // old default email
         $sendingEmail1 = SendingProfileFactory::createOne(
             [
-                'email' => 'thibault@hyvor.com',
+                'from_email' => 'thibault@hyvor.com',
                 'is_default' => true,
                 'newsletter' => $newsletter,
                 'domain' => $domain1
@@ -108,7 +108,7 @@ class UpdateSendingProfileTest extends WebTestCase
 
         $sendingEmail2 = SendingProfileFactory::createOne(
             [
-                'email' => 'supun@hyvor.com',
+                'from_email' => 'supun@hyvor.com',
                 'is_default' => false,
                 'newsletter' => $newsletter,
                 'domain' => $domain2
@@ -128,7 +128,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $json = $this->getJson();
         $this->assertSame(true, $json['is_default']);
         $this->assertSame($sendingEmail2->getId(), $json['id']);
-        $this->assertSame($sendingEmail2->getEmail(), $json['email']);
+        $this->assertSame($sendingEmail2->getFromEmail(), $json['from_email']);
 
         $sendingEmail1 = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $sendingEmail1->getId()]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail1);
