@@ -2,8 +2,10 @@
 
 namespace App\Api\Console\Input\SendingEmail;
 
+use App\Api\Console\Normalizer\NormalizeEmptyToNull;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[NormalizeEmptyToNull]
 class CreateSendingProfileInput
 {
 
