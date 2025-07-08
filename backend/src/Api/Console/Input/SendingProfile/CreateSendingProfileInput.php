@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Console\Input\SendingEmail;
+namespace App\Api\Console\Input\SendingProfile;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

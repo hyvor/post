@@ -5,7 +5,7 @@ namespace App\Tests\Api\Console\SendingProfile;
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;

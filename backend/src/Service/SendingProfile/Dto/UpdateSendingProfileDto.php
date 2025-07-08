@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\SendingEmail\Dto;
+namespace App\Service\SendingProfile\Dto;
 
 use App\Entity\Domain;
 use App\Util\OptionalPropertyTrait;

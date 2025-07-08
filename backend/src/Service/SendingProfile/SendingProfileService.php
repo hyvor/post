@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service\SendingEmail;
+namespace App\Service\SendingProfile;
 
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Entity\Domain;
 use App\Repository\SendingProfileRepository;
 use App\Service\AppConfig;
-use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;

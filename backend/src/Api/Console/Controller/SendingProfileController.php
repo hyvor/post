@@ -2,15 +2,15 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\SendingEmail\CreateSendingProfileInput;
-use App\Api\Console\Input\SendingEmail\UpdateSendingProfileInput;
+use App\Api\Console\Input\SendingProfile\CreateSendingProfileInput;
+use App\Api\Console\Input\SendingProfile\UpdateSendingProfileInput;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Domain;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Service\Domain\DomainService;
-use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
+use App\Service\SendingProfile\SendingProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
