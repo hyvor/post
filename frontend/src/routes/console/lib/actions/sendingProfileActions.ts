@@ -7,26 +7,21 @@ export function getSendingProfilees() {
     });
 }
 
-export function createSendingProfile(
-    from_email: string,
-    from_name?: string | null,
-    reply_to_email?: string | null,
-    brand_name?: string | null,
-    brand_logo?: string | null
-): Promise<SendingProfile> {
-    return consoleApi.post<SendingProfile>({
-        endpoint: 'sending-profiles',
-        data: {
-            from_email,
-            from_name,
-            reply_to_email,
-            brand_name,
-            brand_logo
-        }
-    });
+export interface createSendingProfileParams {
+    from_email: string;
+    from_name: string | null;
+    reply_to_email: string | null;
+    brand_name: string | null;
+    brand_logo: string | null;
+}
+export function createSendingProfile(params: createSendingProfileParams): Promise<SendingProfile> {
+	return consoleApi.post<SendingProfile>({
+		endpoint: 'sending-profiles',
+		data: params
+	});
 }
 
-export interface UpdateSendingProfileData {
+export interface UpdateSendingProfileParams {
     from_email?: string;
     from_name?: string;
     reply_to_email?: string;
@@ -36,7 +31,7 @@ export interface UpdateSendingProfileData {
 }
 export function updateSendingProfile(
     id: number,
-    params: UpdateSendingProfileData
+    params: UpdateSendingProfileParams
 ): Promise<SendingProfile> {
     return consoleApi.patch<SendingProfile>({
         endpoint: `sending-profiles/${id}`,

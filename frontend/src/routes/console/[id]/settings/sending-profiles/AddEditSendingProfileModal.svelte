@@ -2,7 +2,7 @@
 	import { Modal, SplitControl, TextInput, toast } from '@hyvor/design/components';
 	import type { SendingProfile } from '../../../types';
 	import { getI18n } from '../../../lib/i18n';
-	import { createSendingProfile, updateSendingProfile, type UpdateSendingProfileData } from '../../../lib/actions/sendingProfileActions';
+	import { createSendingProfile, updateSendingProfile, type createSendingProfileParams } from '../../../lib/actions/sendingProfileActions';
 	import { sendingProfilesStore } from '../../../lib/stores/newsletterStore';
 	import ImageUploader from '../../../@components/utils/ImageUploader.svelte';
 
@@ -55,10 +55,12 @@
 			};
 
 			const params = Object.fromEntries(
-			Object.entries(changes).filter(
-				([key, value]) => value !== profile[key as keyof typeof profile]
-			)
+				Object.entries(changes).filter(
+					([key, value]) => value !== profile[key as keyof typeof profile]
+				)
 			);
+
+			console.log('params', params);
 
 			updateSendingProfile(profile.id, params).then((res) => {
 				toast.success(
@@ -76,13 +78,13 @@
 				loading = false;
 			})
 		} else {
-			createSendingProfile(
-				fromEmail,
-				fromName,
-				replyToEmail,
-				brandName,
-				brandLogo
-			).then((res) => {
+			createSendingProfile({
+				from_email: fromEmail,
+				from_name: fromName === '' ? null : fromName,
+				reply_to_email: replyToEmail === '' ? null : replyToEmail,
+				brand_name: brandName === '' ? null : brandName,
+				brand_logo: brandLogo === '' ? null : brandLogo
+			}).then((res) => {
 				toast.success(
 					I.t('console.common.created', {
 						field: sendingProfile

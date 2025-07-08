@@ -107,6 +107,18 @@ class SendingProfile
         return $this;
     }
 
+    public function getFromEmail(): string
+    {
+        return $this->from_email;
+    }
+
+    public function setFromEmail(string $from_email): static
+    {
+        $this->from_email = $from_email;
+
+        return $this;
+    }
+
     public function getFromName(): ?string
     {
         return $this->from_name;
@@ -115,18 +127,6 @@ class SendingProfile
     public function setFromName(?string $from_name): static
     {
         $this->from_name = $from_name;
-
-        return $this;
-    }
-
-    public function getFromEmail(): ?string
-    {
-        return $this->from_email;
-    }
-
-    public function setFromEmail(string $from_email): static
-    {
-        $this->from_email = $from_email;
 
         return $this;
     }

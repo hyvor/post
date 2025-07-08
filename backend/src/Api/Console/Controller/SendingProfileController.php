@@ -70,8 +70,7 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     public function updateSendingProfile(
         SendingProfile $sendingProfile,
-        #[MapRequestPayload] UpdateSendingEmailInput $input,
-        Newsletter $newsletter
+        #[MapRequestPayload] UpdateSendingEmailInput $input
     ): JsonResponse {
 
         $updates = new UpdateSendingProfileDto();
