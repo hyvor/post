@@ -5,6 +5,7 @@ namespace App\Service\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Event\Subscriber\CreateSubscriberEvent;
 use App\Service\Content\ContentService;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;
@@ -16,6 +17,8 @@ use Hyvor\Internal\Util\Crypt\Encryption;
 use Hyvor\Internal\Util\Transfer\Encryptable;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 #[AsEventListener]
@@ -24,6 +27,8 @@ final class SubscriberCreatedListener
     use ClockAwareTrait;
 
     public function __construct(
+        private MailerInterface $mailer,
+        private SendingProfileService $sendingProfileService,
         private EmailNotificationService $emailNotificationService,
         private Encryption $encryption,
         private ContentService $contentService,
@@ -55,7 +60,7 @@ final class SubscriberCreatedListener
 
         $strings = $this->stringsFactory->create();
 
-        $subject = $strings->get('mail.subscriberConfirmation.subject');
+        $heading = $strings->get('mail.subscriberConfirmation.heading');
 
         $variables = TemplateVariables::fromNewsletter($newsletter);
 
@@ -99,15 +104,18 @@ final class SubscriberCreatedListener
             ],
         ]);
 
-        $variables->subject = $subject;
+        $variables->subject = $heading;
         $variables->content = $this->contentService->getHtmlFromJson($content);
 
-        $template = $this->templateService->getTemplateStringFromNewsletter($subscriber->getNewsletter());
+        $template = $this->templateService->getTemplateStringFromNewsletter($newsletter);
 
-        $this->emailNotificationService->send(
-            $subscriber->getEmail(),
-            $subject,
-            $this->htmlTemplateRenderer->render($template, $variables)
-        );
+        $email = new Email();
+        $this->sendingProfileService->setSendingProfileToEmail($email, $newsletter);
+
+        $email->to($subscriber->getEmail())
+            ->html($this->htmlTemplateRenderer->render($template, $variables))
+            ->subject($heading . ' to ' . $newsletter->getName());
+
+        $this->mailer->send($email);
     }
 }
