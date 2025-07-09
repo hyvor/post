@@ -180,9 +180,11 @@
         ">
     {{ address }}
 
-    <div>
-        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
-    </div>
+    {% if unsubscribe_url %}
+        <div>
+            <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
+        </div>
+    {% endif %}
 </div>
 
 </body>
