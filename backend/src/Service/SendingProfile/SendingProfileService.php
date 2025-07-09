@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service\SendingEmail;
+namespace App\Service\SendingProfile;
 
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Entity\Domain;
 use App\Repository\SendingProfileRepository;
 use App\Service\AppConfig;
-use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -31,22 +31,36 @@ class SendingProfileService
         return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
     }
 
-    public function getSendingProfileesCount(Newsletter $newsletter): int
+    public function getSendingProfilesCount(Newsletter $newsletter): int
     {
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
-    public function createSendingProfile(Newsletter $newsletter, Domain $customDomain, string $email): SendingProfile
+    public function createSendingProfile(
+        Newsletter $newsletter,
+        Domain $customDomain,
+        string $fromEmail,
+        ?string $fromName = null,
+        ?string $replyToEmail = null,
+        ?string $brandName = null,
+        ?string $brandLogo = null
+    ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
+        $sendingProfile->setCreatedAt($this->now());
+        $sendingProfile->setUpdatedAt($this->now());
         $sendingProfile->setNewsletter($newsletter);
         $sendingProfile->setDomain($customDomain);
-        $sendingProfile->setEmail($email);
-        $sendingProfile->setIsDefault($this->getSendingProfileesCount($newsletter) === 0);
-        $sendingProfile->setCreatedAt(new \DateTimeImmutable());
-        $sendingProfile->setUpdatedAt(new \DateTimeImmutable());
+        $sendingProfile->setFromEmail($fromEmail);
+        $sendingProfile->setFromName($fromName);
+        $sendingProfile->setReplyToEmail($replyToEmail);
+        $sendingProfile->setBrandName($brandName);
+        $sendingProfile->setBrandLogo($brandLogo);
+        $sendingProfile->setIsDefault($this->getSendingProfilesCount($newsletter) === 0);
+
         $this->em->persist($sendingProfile);
         $this->em->flush();
+
         return $sendingProfile;
     }
 
@@ -54,8 +68,24 @@ class SendingProfileService
         SendingProfile $sendingProfile,
         UpdateSendingProfileDto $updates
     ): SendingProfile {
-        if ($updates->hasProperty('email')) {
-            $sendingProfile->setEmail($updates->email);
+        if ($updates->hasProperty('fromEmail')) {
+            $sendingProfile->setFromEmail($updates->fromEmail);
+        }
+
+        if ($updates->hasProperty('fromName')) {
+            $sendingProfile->setFromName($updates->fromName);
+        }
+
+        if ($updates->hasProperty('replyToEmail')) {
+            $sendingProfile->setReplyToEmail($updates->replyToEmail);
+        }
+
+        if ($updates->hasProperty('brandName')) {
+            $sendingProfile->setBrandName($updates->brandName);
+        }
+
+        if ($updates->hasProperty('brandLogo')) {
+            $sendingProfile->setBrandLogo($updates->brandLogo);
         }
 
         if ($updates->hasProperty('customDomain')) {
@@ -87,7 +117,7 @@ class SendingProfileService
     {
         return $this->sendingEmailRepository->findOneBy([
             'newsletter' => $newsletter,
-            'isDefault' => true
+            'is_default' => true
         ]);
     }
 
@@ -96,7 +126,7 @@ class SendingProfileService
         $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         if ($sendingProfile) {
-            return $sendingProfile->getEmail();
+            return $sendingProfile->getFromEmail();
         }
 
         return $this->getFallbackAddressOfNewsletter($newsletter);

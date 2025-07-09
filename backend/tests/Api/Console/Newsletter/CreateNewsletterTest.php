@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\Newsletter;
 use App\Api\Console\Controller\NewsletterController;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
+use App\Entity\SendingProfile;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Repository\NewsletterRepository;
@@ -29,7 +30,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletters',
+            '/newsletter',
             [
                 'name' => 'Valid Newsletter Name'
             ]
@@ -54,6 +55,12 @@ class CreateNewsletterTest extends WebTestCase
         $users = $userRepository->findBy(['newsletter' => $newsletter]);
         $this->assertSame(UserRole::OWNER, $users[0]->getRole());
         $this->assertCount(1, $users);
+
+        $sendingProfileRepository = $this->em->getRepository(SendingProfile::class);
+        $sendingProfiles = $sendingProfileRepository->findBy(['newsletter' => $newsletter]);
+        $this->assertCount(1, $sendingProfiles);
+        $this->assertNull($sendingProfiles[0]->getFromEmail());
+        $this->assertTrue($sendingProfiles[0]->getIsSystem());
     }
 
     public function testCreateNewsletterInvalid(): void
@@ -62,7 +69,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletters',
+            '/newsletter',
             [
                 'name' => $long_string
             ]

@@ -64,13 +64,6 @@
 			{I.t('console.settings.form.signupForm')}
 		</NavLink>
 
-		<NavLink href="{prefix}/sending" active={page.url.pathname === prefix + '/sending'}>
-			{#snippet start()}
-				<IconEnvelopeCheck />
-			{/snippet}
-			Sending Email Addresses
-		</NavLink>
-
 		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>
 			{#snippet start()}
 				<IconDatabase />

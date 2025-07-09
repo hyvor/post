@@ -7,6 +7,7 @@ use App\Entity\Issue;
 use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
+use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
@@ -40,26 +41,33 @@ class NewsletterService
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
-            ->setDefaultEmailUsername($slugger->slug($name))
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
+            ->setSlug($slugger->slug($name))
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now());
 
         $user = new User()
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now())
             ->setHyvorUserId($userId)
             ->setNewsletter($newsletter)
             ->setRole(UserRole::OWNER);
 
         $list = new NewsletterList()
             ->setName('Default List')
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now())
             ->setNewsletter($newsletter);
+
+        $sendingProfile = new SendingProfile()
+            ->setCreatedAt($this->now())
+            ->setUpdatedAt($this->now())
+            ->setNewsletter($newsletter)
+            ->setIsSystem(true);
 
         $this->em->persist($user);
         $this->em->persist($newsletter);
         $this->em->persist($list);
+        $this->em->persist($sendingProfile);
         $this->em->flush();
 
         return $newsletter;
@@ -247,7 +255,7 @@ class NewsletterService
 
     public function isUsernameTaken(string $username): bool
     {
-        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['default_email_username' => $username]);
+        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $username]);
         return $newsletter !== null;
     }
 }

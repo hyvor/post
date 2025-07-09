@@ -13,7 +13,7 @@ use App\Repository\IssueRepository;
 use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\SendingProfileService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;

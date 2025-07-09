@@ -33,7 +33,7 @@ class MediaController extends AbstractController
         Request $request,
         #[MapRequestPayload] MediaUploadInput $input
     ): JsonResponse {
-        $file = $request->files->get('file');
+        $file = $request->files->get(key: 'file');
         $folder = $input->folder;
 
         $constraint = new Constraints\File(

@@ -37,9 +37,9 @@ class MediaService
         $originalName = $file->getClientOriginalName();
         $extension = $file->getExtension();
 
-        // if ($extension === null) {
-        //     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        // }
+        if (empty($extension)) {
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        }
 
         if (empty($extension)) {
             throw new MediaUploadException('Unable to determine file extension');
@@ -68,6 +68,7 @@ class MediaService
                 $stream
             );
         } catch (FilesystemException $e) {
+            dd($e->getMessage());
             throw new MediaUploadException('Unable to upload file', previous: $e);
         } finally {
             fclose($stream);

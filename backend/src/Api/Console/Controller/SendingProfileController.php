@@ -2,15 +2,15 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Input\SendingEmail\CreateSendingEmailInput;
-use App\Api\Console\Input\SendingEmail\UpdateSendingEmailInput;
+use App\Api\Console\Input\SendingProfile\CreateSendingProfileInput;
+use App\Api\Console\Input\SendingProfile\UpdateSendingProfileInput;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Domain;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Service\Domain\DomainService;
-use App\Service\SendingEmail\Dto\UpdateSendingProfileDto;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
+use App\Service\SendingProfile\SendingProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -41,20 +41,28 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles', methods: 'GET')]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
-        $sendingProfilees = array_map(
+        $sendingProfiles = array_map(
             fn (SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
             $this->sendingProfileService->getSendingProfiles($newsletter)
         );
-        return $this->json($sendingProfilees);
+        return $this->json($sendingProfiles);
     }
 
     #[Route('/sending-profiles', methods: 'POST')]
     public function createSendingProfile(
-        #[MapRequestPayload] CreateSendingEmailInput $input,
+        #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
-        $domain = $this->getDomainFromEmail($input->email);
-        $sendingProfile = $this->sendingProfileService->createSendingProfile($newsletter, $domain, $input->email);
+        $domain = $this->getDomainFromEmail($input->from_email);
+        $sendingProfile = $this->sendingProfileService->createSendingProfile(
+            $newsletter,
+            $domain,
+            $input->from_email,
+            $input->from_name,
+            $input->reply_to_email,
+            $input->brand_name,
+            $input->brand_logo
+        );
 
         return $this->json(new SendingProfileObject($sendingProfile));
     }
@@ -62,14 +70,30 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     public function updateSendingProfile(
         SendingProfile $sendingProfile,
-        #[MapRequestPayload] UpdateSendingEmailInput $input,
-        Newsletter $newsletter
+        #[MapRequestPayload] UpdateSendingProfileInput $input
     ): JsonResponse {
+
         $updates = new UpdateSendingProfileDto();
-        if ($input->hasProperty('email')) {
-            $domain = $this->getDomainFromEmail($input->email);
+        if ($input->hasProperty('from_email')) {
+            $domain = $this->getDomainFromEmail($input->from_email);
             $updates->customDomain = $domain;
-            $updates->email = $input->email;
+            $updates->fromEmail = $input->from_email;
+        }
+
+        if ($input->hasProperty('from_name')) {
+            $updates->fromName = $input->from_name;
+        }
+
+        if ($input->hasProperty('reply_to_email')) {
+            $updates->replyToEmail = $input->reply_to_email;
+        }
+
+        if ($input->hasProperty('brand_name')) {
+            $updates->brandName = $input->brand_name;
+        }
+
+        if ($input->hasProperty('brand_logo')) {
+            $updates->brandLogo = $input->brand_logo;
         }
 
         if ($input->hasProperty('is_default')) {

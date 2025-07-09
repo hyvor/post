@@ -15,7 +15,7 @@ use App\Repository\ListRepository;
 use App\Service\AppConfig;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\InternalConfig;

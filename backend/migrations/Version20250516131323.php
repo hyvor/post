@@ -29,7 +29,7 @@ final class Version20250516131323 extends AbstractMigration
             domain_id BIGINT references domains(id) ON DELETE CASCADE,
             is_system BOOLEAN DEFAULT FALSE NOT NULL,
             is_default BOOLEAN DEFAULT FALSE NOT NULL,
-            from_email TEXT NOT NULL,
+            from_email TEXT DEFAULT NULL,
             from_name TEXT DEFAULT NULL,
             reply_to_email TEXT DEFAULT NULL,
             brand_name TEXT DEFAULT NULL,
