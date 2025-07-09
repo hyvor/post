@@ -187,7 +187,7 @@
         {#if subscribingSuccess}
             <Message
                 message={newsletter.form.success_message ||
-                    "Thank you for subscribing!"}
+                    "Thank you for subscribing! Please check your email to confirm your subscription."}
                 type="success"
             />
         {/if}
