@@ -28,7 +28,7 @@ class Newsletter
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
-    private ?int $user_id = null;
+    private int $user_id;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -96,7 +96,7 @@ class Newsletter
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): int
     {
         return $this->user_id;
     }

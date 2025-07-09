@@ -159,6 +159,7 @@ export type Subscriber = {
 	source: NewsletterSubscriberSource;
 	subscribed_at: number;
 	unsubscribed_at: number | null;
+	metadata: Record<string, string>;
 };
 
 export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'failed' | 'sent';

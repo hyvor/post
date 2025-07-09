@@ -24,4 +24,9 @@ class UpdateSubscriberDto
 
     public ?string $unsubscribedReason;
 
+    /**
+     * @var array<string, string>
+     */
+    public array $metadata;
+
 }

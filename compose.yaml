@@ -15,7 +15,7 @@ services:
       - ./shared:/app/shared
     labels:
       traefik.enable: true
-      traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.dev`)
+      traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.localhost`)
       traefik.http.routers.hyvor-post-frontend.entrypoints: https
       traefik.http.routers.hyvor-post-frontend.tls: true
       traefik.http.routers.hyvor-post-frontend.middlewares: vite-retry@file
@@ -38,7 +38,7 @@ services:
     labels:
       traefik.enable: true
       # backend
-      traefik.http.routers.hyvor-post-backend.rule: Host(`post.hyvor.dev`) && PathPrefix(`/api`)
+      traefik.http.routers.hyvor-post-backend.rule: Host(`post.hyvor.localhost`) && PathPrefix(`/api`)
       traefik.http.routers.hyvor-post-backend.entrypoints: https
       traefik.http.routers.hyvor-post-backend.tls: true
       traefik.http.routers.hyvor-post-backend.service: hyvor-post-backend

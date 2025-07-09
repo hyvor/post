@@ -95,16 +95,20 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], $json['list_ids']);
-        $this->assertSame('subscribed', $json['status']);
+        $this->assertSame('pending', $json['status']);
         $this->assertSame($date->getTimestamp(), $json['subscribed_at']);
         $this->assertSame(null, $json['unsubscribed_at']);
 
         $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertNotNull($subscriber);
-        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
         $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
@@ -141,14 +145,18 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], $json['list_ids']);
-        $this->assertSame('subscribed', $json['status']);
+        $this->assertSame('pending', $json['status']);
 
         $subscriber->_refresh();
-        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame([
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
-    }
 
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
+    }
 }

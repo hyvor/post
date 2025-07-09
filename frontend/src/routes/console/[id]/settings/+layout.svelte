@@ -35,7 +35,7 @@
 			{#snippet start()}
 				<IconPeople />
 			{/snippet}
-			Users
+            {I.t('console.settings.users.title')}
 		</NavLink>
 
 		<NavLink

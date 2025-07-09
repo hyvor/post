@@ -9,15 +9,26 @@
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
 	import { getI18n } from '../../lib/i18n';
+	import { selectedSubscriberIds } from './subscriberStore';
 
 	interface Props {
 		subscriber: Subscriber;
-		refreshList: () => void;
+		handleDelete: (ids: number[]) => void;
+		handleUpdate: (subscriber: Subscriber) => void;
 	}
 
-	let { subscriber, refreshList }: Props = $props();
+	let { subscriber, handleDelete, handleUpdate }: Props = $props();
 
 	let editing = $state(false);
+	let isSelected = $derived($selectedSubscriberIds.includes(subscriber.id));
+
+	function toggleSelection() {
+		if (isSelected) {
+			selectedSubscriberIds.update((ids: number[]) => ids.filter((id: number) => id !== subscriber.id));
+		} else {
+			selectedSubscriberIds.update((ids: number[]) => [...ids, subscriber.id]);
+		}
+	}
 
 	async function onDelete() {
 		const confirmation = await confirm({
@@ -35,7 +46,7 @@
 		deleteSubscriber(subscriber.id)
 			.then(() => {
 				toast.success('Subscriber deleted successfully');
-				refreshList();
+				handleDelete([subscriber.id]);
 			})
 			.catch((err) => {
 				toast.error(err.message);
@@ -58,7 +69,7 @@
 
 <button class="subscriber">
 	<div class="checkbox">
-		<Checkbox />
+		<Checkbox checked={isSelected} on:change={toggleSelection} />
 	</div>
 
 	<div class="email-wrap">
@@ -66,7 +77,7 @@
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					{I18n.t('console.subscribers.listsCount', {
+					{I18n.t('console.subscribers.count', {
 						count: subscriber.list_ids.length
 					})}
 				</span>
@@ -107,7 +118,11 @@
 </button>
 
 {#if editing}
-	<SubscriberEdit {subscriber} bind:show={editing} {refreshList} />
+	<SubscriberEdit
+		bind:show={editing} 
+		{subscriber}
+		handleUpdate={handleUpdate}
+	/>
 {/if}
 
 <style>
