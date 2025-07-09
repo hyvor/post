@@ -11,12 +11,19 @@ class Button extends NodeType
     public string $name = 'button';
     public ?string $content = 'text';
     public string $group = 'block';
+    public string $attrs = ButtonAttrs::class;
 
     public function toHtml(Node $node, string $children): string
     {
         /** @var string $href */
         $href = $node->attr('href');
-        return "<p class=\"button-wrap\"><a href=\"$href\" target=\"_blank\" class=\"button\">$children</a></p>";
+        /** @var string $text */
+        $text = $node->attr('text');
+
+        if (empty($text)) {
+            $text = $children;
+        }
+        return "<p class=\"button-wrap\"><a href=\"$href\" target=\"_blank\" class=\"button\">$text</a></p>";
     }
 
     public function fromHtml(): array
