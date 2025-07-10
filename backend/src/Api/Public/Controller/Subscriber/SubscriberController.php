@@ -39,7 +39,7 @@ class SubscriberController extends AbstractController
 
         $subscriber = $this->subscriberService->getSubscriberById($data['subscriber_id']);
         if (!$subscriber) {
-            throw new BadRequestHttpException('Invalid subscriber ID.');
+            throw new BadRequestHttpException('Subscriber not found.');
         }
 
         assert(is_string($data['expires_at']));

@@ -3,6 +3,7 @@
 namespace App\Api\Public\Controller\NewsletterPage;
 
 use App\Api\Public\Input\Newsletter\NewsletterInitInput;
+use App\Api\Public\Object\Form\Newsletter\PaletteObject;
 use App\Api\Public\Object\NewsletterPage\IssueListObject;
 use App\Api\Public\Object\NewsletterPage\NewsletterObject;
 use App\Entity\Issue;
@@ -12,7 +13,6 @@ use App\Service\Issue\IssueService;
 use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -38,9 +38,13 @@ class NewsletterController extends AbstractController
             throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
+        $meta = $newsletter->getMeta();
+
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
-            'issues' => $this->getIssueListObjects($newsletter)
+            'issues' => $this->getIssueListObjects($newsletter),
+            'palette_light' => new PaletteObject($meta, 'light'),
+            'palette_dark' => new PaletteObject($meta, 'dark')
         ]);
     }
 
