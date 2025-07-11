@@ -23,7 +23,7 @@
 </script>
 
 <Header logo='/img/logo.png' subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
-	{#snippet center()}
+	<!-- {#snippet center()}
 		<div class="center">
 			<Button
 				as="a"
@@ -42,16 +42,18 @@
 				Docs
 			</Button>
 		</div>
-	{/snippet}
+	{/snippet} -->
 
 	{#snippet end()}
 		<div class="end">
-			{#if loggedIn}
+			<!-- {#if loggedIn}
 				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
 			{:else}
 				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
-			{/if}
+			{/if} -->
+			<!-- join the waitlist -->
+			<Button as="a" size="small" href="#waitlist">Join the waitlist</Button>
 		</div>
 	{/snippet}
 </Header>

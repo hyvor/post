@@ -1,5 +1,6 @@
 <script>
 	import AboveFold from './@components/AboveFold.svelte';
+	import FaqComingSoon from './@components/FaqComingSoon.svelte';
 	import Letter from './@components/Letter.svelte';
 	import TrialSignUp from './@components/TrialSignUp.svelte';
 	import AllFeatures from './@homepage/AllFeatures.svelte';
@@ -13,9 +14,8 @@
 </svelte:head>
 
 <AboveFold />
-<div class ="letter-wrapper hds-container">
-	<Letter />	
-</div>
+	<Letter />
 <!-- <StartStep /> -->
 <AllFeatures />
 <TrialSignUp />
+<FaqComingSoon />

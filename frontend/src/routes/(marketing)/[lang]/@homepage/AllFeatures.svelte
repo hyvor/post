@@ -63,10 +63,10 @@
 
 <style>
 	.feature-wrapper {
-		margin: 140px auto;
+		margin: 80px auto;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
-		gap: 2.4rem;
+		gap: 45px;
 	}
 
 	.feature {
@@ -74,6 +74,7 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
+		gap: 15px;
 	}
 
 	.feature-content {
@@ -84,13 +85,13 @@
 	}
 
 	.title {
-		font-size: 1.2rem;
+		font-size: 22px;
 		font-weight: 600;
 	}
 
 	.desc {
 		margin-top: 10px;
-		font-size: 1rem;
+		font-size: 18px;
 		color: var(--text-light);
 		width: 100%;
 	}

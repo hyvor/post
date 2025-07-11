@@ -10,23 +10,38 @@
 <div class="hds-container above-fold">
 	<div class="left">
 
-		<h1>{I18n.t('homepage.heading')}</h1>
+		<h1 id="waitlist">
+			<!-- {I18n.t('homepage.heading')} -->
+			 Hyvor Post
+		</h1>
 
 		<h2>
-			{I18n.t('homepage.subHeading')}
+			Privacy-first, simple newsletter platform
+			<!-- {I18n.t('homepage.subHeading')} -->
 		</h2>
 
+		<div class="coming-soon">
+			Coming soon 🚀
+		</div>
+
 		<div class="buttons">
-			<Button as="a" href="/console?signup" size="large">{I18n.t('cta')}
+			<!-- <Button as="a" href="/console?signup" size="large">{I18n.t('cta')}
 				{#snippet end()}
 					&rarr;
 				{/snippet}
-			</Button>
+			</Button> -->
+			<!-- <Button as="a" href="/console?signup" size="large">Join the waitlist
+				{#snippet end()}
+					&rarr;
+				{/snippet}
+			</Button> -->
+			<script async src="https://talk.hyvor.com/embed/newsletter.js" type="module"></script>
+			<hyvor-talk-newsletter website-id="13652"></hyvor-talk-newsletter>
 		</div>
 
-		<div class="trial-checks">
+		<!-- <div class="trial-checks">
 			<TrialChecks />
-		</div>
+		</div> -->
 	</div>
 
 	<div class="right">
@@ -53,23 +68,30 @@
 
 	h1 {
 		margin: 0;
-		font-size: 40px;
+		font-size: 50px;
 		margin-bottom: 10px;
 	}
 
 	h2 {
 		font-weight: normal;
-		font-size: 20px;
+		font-size: 30px;
 		margin: 0;
-		padding-top: 15px;
 		color: var(--text-light);
 		line-height: 1.5;
+	}
+
+	.coming-soon {
+		font-size: 24px;
+		font-weight: 600;
+		margin-top: 35px;
+		padding-top: 35px;
+		border-top: 1px solid #eee;
 	}
 
 	.buttons {
 		display: flex;
 		gap: 10px;
-		margin-top: 30px;
+		margin-top: 10px;
 	}
 
 	 .trial-checks {
