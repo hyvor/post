@@ -85,7 +85,7 @@ class TemplateController extends AbstractController
 
         $strings = $this->stringsFactory->create();
 
-        $subject = $strings->get('mail.subscriberConfirmation.subject');
+        $subject = $strings->get('mail.subscriberConfirmation.heading');
 
         $newsletter = $subscriber->getNewsletter();
 
