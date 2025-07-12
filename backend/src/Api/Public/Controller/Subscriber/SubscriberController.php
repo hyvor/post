@@ -10,6 +10,7 @@ use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,7 +28,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscriber/confirm', methods: ['GET'])]
-    public function confirm(Request $request): RedirectResponse
+    public function confirm(Request $request): JsonResponse
     {
         $token = $request->query->getString('token');
 
@@ -54,6 +55,6 @@ class SubscriberController extends AbstractController
 
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 
-        return $this->redirect($this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . '/newsletter/' . $subscriber->getNewsletter()->getSlug() . '/confirm?token=' . $token);
+        return new JsonResponse();
     }
 }
