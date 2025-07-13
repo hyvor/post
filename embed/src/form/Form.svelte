@@ -65,7 +65,7 @@
             email,
             list_ids: selectedListsIds,
         })
-            .then((response) => {
+            .then(() => {
                 subscribingSuccess = true;
                 setTimeout(() => {
                     subscribingSuccess = false;
@@ -86,6 +86,17 @@
             style.textContent = newsletter.form.custom_css;
             shadowRoot.appendChild(style);
         }
+    }
+
+    function handleListSwitch(listId: number) {
+        return (event: Event) => {
+            const checkbox = event.target as HTMLInputElement;
+            if (checkbox.checked) {
+                selectedListsIds.push(listId);
+            } else {
+                selectedListsIds = selectedListsIds.filter((id) => id !== listId);
+            }
+        };
     }
 
     export function setPalette(type: "light" | "dark") {
@@ -163,7 +174,7 @@
                         <div class="list-name">{list.name}</div>
                         <div class="list-description">{list.description}</div>
                     </div>
-                    <Switch checked={true} />
+                    <Switch checked={true} onchange={handleListSwitch(list.id)}/>
                 </label>
             {/each}
         </div>
