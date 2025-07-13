@@ -67,7 +67,7 @@
 
 <SplitControl label={i18n.t('console.settings.form.colorsUi')}>
 	{#snippet nested()}
-		<TabNav active={palette}>
+		<TabNav bind:active={palette}>
 			<TabNavItem name="light">{i18n.t('console.settings.form.paletteLight')}</TabNavItem>
 			<TabNavItem name="dark">{i18n.t('console.settings.form.paletteDark')}</TabNavItem>
 		</TabNav>
