@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -116,6 +117,18 @@ class FormController extends AbstractController
         }
 
         return new JsonResponse(new FormSubscriberObject($subscriber));
+    }
+
+    #[Route('/form/render', methods: 'GET')]
+    public function renderForm(): Response
+    {
+        $response = <<<HTML
+            <hyvor-post-form newsletter="c9cb3415-eb28-4a43-932c-550675675852"
+            instance="https://post.hyvor.localhost"></hyvor-post-form>
+            <script type="module" src="https://hyvorpost.localhost/dev/dev.ts"></script>
+        HTML;
+
+        return new Response($response);
     }
 
 }
