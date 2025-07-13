@@ -118,7 +118,7 @@ FORM
     color: var(--hp-text-light);
 }
 
-/* .form .message {
+.form .message {
     margin-top: 1rem;
     padding: 10px 23px;
     border-radius: var(--hp-border-radius);
@@ -136,4 +136,4 @@ FORM
 .form .message.error {
     background-color: #ab2525;
     color: #fff;
-} */
+}
