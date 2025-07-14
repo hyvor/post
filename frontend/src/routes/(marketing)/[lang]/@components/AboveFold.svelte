@@ -26,7 +26,7 @@
 		<div class="coming-soon">Coming soon 🚀</div>
 
 		<div class="buttons">
-			<!-- <Button as="a" href="/console?signup" size="large">{I18n.t('cta')}
+			<!-- <Button as="a" href="/console?signup" size="large">{I18n.t('homepage.cta')}
 				{#snippet end()}
 					&rarr;
 				{/snippet}

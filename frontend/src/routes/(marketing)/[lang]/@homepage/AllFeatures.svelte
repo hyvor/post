@@ -5,43 +5,43 @@
 
 	const features = [
 		{
-			title: I18n.t('customizableTemplates'),
-			description: I18n.t('customizableTemplatesDescription'),
+			title: I18n.t('homepage.customizableTemplates'),
+			description: I18n.t('homepage.customizableTemplatesDescription'),
 			image: '/img/custom-templates.svg'
 		},
 		{
-			title: I18n.t('embeddableNewsletterForm'),
-			description: I18n.t('embeddableNewsletterFormDescription'),
+			title: I18n.t('homepage.embeddableNewsletterForm'),
+			description: I18n.t('homepage.embeddableNewsletterFormDescription'),
 			image: '/img/embed-newsletter-form.svg'
 		},
 		{
-			title: I18n.t('listMngmt'),
-			description: I18n.t('listMngmtDescription'),
+			title: I18n.t('homepage.listMngmt'),
+			description: I18n.t('homepage.listMngmtDescription'),
 			image: '/img/multiple-segments.svg'
 		},
 		{
-			title: I18n.t('customSendingDomain'),
-			description: I18n.t('customSendingDomainDescription'),
+			title: I18n.t('homepage.customSendingDomain'),
+			description: I18n.t('homepage.customSendingDomainDescription'),
 			image: '/img/custom-domain.svg'
 		},
 		{
-			title: I18n.t('apiWebhooks'),
-			description: I18n.t('apiWebhooksDescription'),
+			title: I18n.t('homepage.apiWebhooks'),
+			description: I18n.t('homepage.apiWebhooksDescription'),
 			image: '/img/api-webhooks.svg'
 		},
 		{
-			title: I18n.t('teamCollaboration'),
-			description: I18n.t('teamCollaborationDescription'),
+			title: I18n.t('homepage.teamCollaboration'),
+			description: I18n.t('homepage.teamCollaborationDescription'),
 			image: '/img/team-collaboration.svg'
 		},
 		{
-			title: I18n.t('automation'),
-			description: I18n.t('automationDescription'),
+			title: I18n.t('homepage.automation'),
+			description: I18n.t('homepage.automationDescription'),
 			image: '/img/automation.svg'
 		},
 		{
-			title: I18n.t('migration'),
-			description: I18n.t('migrationDescription'),
+			title: I18n.t('homepage.migration'),
+			description: I18n.t('homepage.migrationDescription'),
 			image: '/img/migration.svg'
 		}
 	];
