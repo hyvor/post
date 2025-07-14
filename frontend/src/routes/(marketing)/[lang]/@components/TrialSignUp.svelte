@@ -11,7 +11,7 @@
 	}
 
 	// let { title = I18n.t('readyToStartYourNewsletter'), ...rest }: Props = $props();
-	let { title = 'Ready explore Hyvor Post?', ...rest }: Props = $props();
+	let { title = I18n.t('comingSoon.readytoExplore'), ...rest }: Props = $props();
 </script>
 
 <div class="wrap" {...rest}>
@@ -22,7 +22,8 @@
 
 		<div class="button-wrap">
 			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('startYourNewsletter')}</Button> -->
-			 <Button as="a" size="large" href="#waitlist">Join the waitlist</Button>
+			<Button as="a" size="large" href="#waitlist">{I18n.t('comingSoon.joinWaitlist')}</Button
+			>
 		</div>
 
 		<!-- <div class="trial-checks">

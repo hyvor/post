@@ -3,7 +3,10 @@
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 	import IconBarChart from '@hyvor/icons/IconBarChart';
 	import IconCheck from '@hyvor/icons/IconCheck';
+	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 </script>
+
+<FeatureSectionHead title="Frequently Asked Questions" subtitle="Find answers to your questions" />
 
 <div class="faq-accordion hds-container">
 	<DetailsSummary

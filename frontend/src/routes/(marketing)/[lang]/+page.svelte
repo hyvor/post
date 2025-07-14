@@ -14,8 +14,8 @@
 </svelte:head>
 
 <AboveFold />
-	<Letter />
+<Letter />
 <!-- <StartStep /> -->
 <AllFeatures />
-<TrialSignUp />
 <FaqComingSoon />
+<TrialSignUp />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet, Component } from 'svelte';
-	import { slide } from 'svelte/transition';
+	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 
 	interface Props {
 		summary: string | Snippet;

@@ -22,27 +22,27 @@
 	});
 </script>
 
-<Header logo='/img/logo.png' subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
-	<!-- {#snippet center()}
+<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
+	{#snippet center()}
 		<div class="center">
 			<Button
 				as="a"
 				size="small"
-				href="/{I18n.getLocale()}/pricing"
+				href="/{I18n.getLocale()}/{I18n.t('pricing.name')}"
 				variant={$page.url.pathname === '/pricing' ? 'fill-light' : 'invisible'}
 			>
-				Pricing
+				{I18n.t('pricing.name')}
 			</Button>
-			<Button
+			<!-- <Button
 				as="a"
 				size="small"
 				href="/docs"
 				variant={$page.url.pathname.startsWith('/docs') ? 'fill-light' : 'invisible'}
 			>
 				Docs
-			</Button>
+			</Button> -->
 		</div>
-	{/snippet} -->
+	{/snippet}
 
 	{#snippet end()}
 		<div class="end">
@@ -53,7 +53,9 @@
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
 			{/if} -->
 			<!-- join the waitlist -->
-			<Button as="a" size="small" href="#waitlist">Join the waitlist</Button>
+			<Button as="a" size="small" href="#waitlist">
+				{I18n.t('comingSoon.joinWaitlist')}
+			</Button>
 		</div>
 	{/snippet}
 </Header>

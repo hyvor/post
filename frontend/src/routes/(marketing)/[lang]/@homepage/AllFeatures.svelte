@@ -1,48 +1,48 @@
 <script lang="ts">
-	import { getMarketingI18n } from "../locale";
+	import { getMarketingI18n } from '../locale';
 
 	const I18n = getMarketingI18n();
 
 	const features = [
 		{
-			title: I18n.t('easyInstallation'),
-			description:
-				I18n.t('easyInstallationDescription'),
-			image: '/img/easy-install.svg'
+			title: I18n.t('customizableTemplates'),
+			description: I18n.t('customizableTemplatesDescription'),
+			image: '/img/custom-templates.svg'
 		},
-
 		{
 			title: I18n.t('embeddableNewsletterForm'),
-			description:
-				I18n.t('embeddableNewsletterFormDescription'),
+			description: I18n.t('embeddableNewsletterFormDescription'),
 			image: '/img/embed-newsletter-form.svg'
 		},
-
 		{
-			title: I18n.t('multipleSegments'),
-			description:
-				I18n.t('multipleSegmentsDescription'),
+			title: I18n.t('listMngmt'),
+			description: I18n.t('listMngmtDescription'),
 			image: '/img/multiple-segments.svg'
 		},
-
 		{
-			title: I18n.t('comprehensiveAnalytics'),
-			description: 
-				I18n.t('comprehensiveAnalyticsDescription'),
-			image: '/img/comprehensive-analytics.svg'
-		},
-		{
-			title: I18n.t('customEmailDomain'),
-			description:
-				I18n.t('customEmailDomainDescription'),
+			title: I18n.t('customSendingDomain'),
+			description: I18n.t('customSendingDomainDescription'),
 			image: '/img/custom-domain.svg'
 		},
-
 		{
-			title: I18n.t('customizableTemplates'),
-			description: 
-				I18n.t('customizableTemplatesDescription'),
-			image: '/img/custom-templates.svg'
+			title: I18n.t('apiWebhooks'),
+			description: I18n.t('apiWebhooksDescription'),
+			image: '/img/api-webhooks.svg'
+		},
+		{
+			title: I18n.t('teamCollaboration'),
+			description: I18n.t('teamCollaborationDescription'),
+			image: '/img/team-collaboration.svg'
+		},
+		{
+			title: I18n.t('automation'),
+			description: I18n.t('automationDescription'),
+			image: '/img/automation.svg'
+		},
+		{
+			title: I18n.t('migration'),
+			description: I18n.t('migrationDescription'),
+			image: '/img/migration.svg'
 		}
 	];
 </script>
@@ -63,7 +63,7 @@
 
 <style>
 	.feature-wrapper {
-		margin: 80px auto;
+		margin: 50px auto;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 		gap: 45px;
@@ -85,13 +85,13 @@
 	}
 
 	.title {
-		font-size: 22px;
+		font-size: 20px;
 		font-weight: 600;
 	}
 
 	.desc {
 		margin-top: 10px;
-		font-size: 18px;
+		font-size: 17px;
 		color: var(--text-light);
 		width: 100%;
 	}

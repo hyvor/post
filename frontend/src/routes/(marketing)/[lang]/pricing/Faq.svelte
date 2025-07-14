@@ -1,24 +1,14 @@
 <script>
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
-    import IconBarChart from '@hyvor/icons/IconBarChart';
-    import IconWallet from '@hyvor/icons/IconWallet';
-    import IconBoxArrowRight from '@hyvor/icons/IconBoxArrowRight';
-    import FAQs from '../@components/FAQs.svelte'
+	import IconBarChart from '@hyvor/icons/IconBarChart';
+	import IconWallet from '@hyvor/icons/IconWallet';
+	import IconBoxArrowRight from '@hyvor/icons/IconBoxArrowRight';
+	import FAQs from '../@components/FAQs.svelte';
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 	import { getMarketingI18n } from '../locale';
 
-	const I18n = getMarketingI18n()
+	const I18n = getMarketingI18n();
 </script>
-
-<!-- "faqs": "FAQs",
-		"isThereATrial": "Is there a trial?",
-		"isThereATrialAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
-		"whatHappensIfIExceedTheEmailsLimit": "What happens if I exceed the emails limit?",
-		"whatHappensIfIExceedTheEmailsLimitAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
-		"howDoPaymentsWork": "How do payments work?",
-		"howDoPaymentsWorkAnswer": "Payments are processed securely through our in-house billing system. We accept all major credit/debit cards. You can choose to pay monthly or annually.",
-		"canICancelAnytime": "Can I cancel anytime?",
-		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals." -->
 
 <div class="wrap hds-container">
 	<FeatureSectionHead title={I18n.t('pricing.faqs')} />

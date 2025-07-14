@@ -9,20 +9,21 @@
 
 <div class="hds-container above-fold">
 	<div class="left">
-
 		<h1 id="waitlist">
 			<!-- {I18n.t('homepage.heading')} -->
-			 Hyvor Post
+
+			<!-- Hyvor Post -->
+			{I18n.t('comingSoon.heading')}
 		</h1>
 
 		<h2>
-			Privacy-first, simple newsletter platform
+			<!-- Privacy-first, simple newsletter platform -->
+			{I18n.t('comingSoon.subHeading')}
+
 			<!-- {I18n.t('homepage.subHeading')} -->
 		</h2>
 
-		<div class="coming-soon">
-			Coming soon 🚀
-		</div>
+		<div class="coming-soon">Coming soon 🚀</div>
 
 		<div class="buttons">
 			<!-- <Button as="a" href="/console?signup" size="large">{I18n.t('cta')}
@@ -45,25 +46,23 @@
 	</div>
 
 	<div class="right">
-		<MainGraphic />	
+		<MainGraphic />
 	</div>
 </div>
 
 <style>
-
 	.above-fold {
 		padding-top: 75px;
 		display: flex;
 	}
 
 	.left {
-			width: 50%;
+		width: 50%;
 	}
 
 	.right {
 		width: 50%;
 		padding-left: 25px;
-		
 	}
 
 	h1 {
@@ -94,10 +93,10 @@
 		margin-top: 10px;
 	}
 
-	 .trial-checks {
-	 	margin-top: 25px;
-	 	margin-left: 5px;
-	 }
+	.trial-checks {
+		margin-top: 25px;
+		margin-left: 5px;
+	}
 
 	@media (max-width: 992px) {
 		.above-fold {

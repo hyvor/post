@@ -25,10 +25,8 @@
 	let sliderVal = $state(1);
 
 	let currentPlanDisplay = $derived(
-	currentPlan >= 1_000_000
-		? `${currentPlan / 1_000_000}M`
-		: `${currentPlan / 1000}K`
-);
+		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}M` : `${currentPlan / 1000}K`
+	);
 
 	let currentPrice = $derived((currentPlans as any)[currentPlan] * (yearly ? 10 : 1));
 
@@ -41,13 +39,9 @@
 	}
 	function getFeatures() {
 		return [
-			'lorem ipsum',
-			'dolor sit amet',
-			'consectetur adipiscing elit',
-			'sed do eiusmod tempor',
-			'incididunt ut labore et dolore magna aliqua',
-			'ut enim ad minim veniam',
-			'quis nostrud exercitation ullamco laboris'
+			I18n.t('pricing.featureList.unlimitedTeam'),
+			I18n.t('pricing.featureList.emailAndChatSupport'),
+			I18n.t('pricing.featureList.customizableTemplates')
 		];
 	}
 
@@ -70,14 +64,14 @@
 		{/each}
 		{#if currentPlan === 25_000}
 			<div class="feature">
-				<div class ="red"><IconXCircle /> </div>
-				<div class="feature-text">Custom Email Domain</div>
+				<div class="red"><IconXCircle /></div>
+				<div class="feature-text">{I18n.t('pricing.featureList.customEmailDomain')}</div>
 				<!-- {I18n.t('pricing.plan25kNote')} -->
 			</div>
-			{:else}
+		{:else}
 			<div class="feature">
 				<IconCheckCircle />
-				<div class="feature-text">Custom Email Domain</div>
+				<div class="feature-text">{I18n.t('pricing.featureList.customEmailDomain')}</div>
 			</div>
 		{/if}
 	</div>
@@ -95,7 +89,9 @@
 	<div class="price">
 		<div class="price-display">
 			<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-				>/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
+				>/{yearly
+					? I18n.t('pricing.year')
+					: I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
 			>
 		</div>
 	</div>
@@ -148,7 +144,7 @@
 	.feature :global(svg) {
 		color: var(--green);
 	}
-	
+
 	.red {
 		color: var(--red);
 	}

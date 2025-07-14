@@ -1,33 +1,37 @@
 <script lang="ts">
+	import { getMarketingI18n } from '../locale';
+
+	const I18n = getMarketingI18n();
 </script>
 
 <div class="hds-container">
-<div class="wrap" id="letter">
-	<div class="head">
-		<h1 class="title">Why Hyvor Post?</h1>
+	<div class="wrap" id="letter">
+		<div class="head">
+			<h1 class="title">{I18n.t('whyHyvorPost')}</h1>
+		</div>
+
+		<p>
+			{I18n.t('letter.s1')},
+			<strong>{I18n.t('letter.s1Desc')}</strong>.
+		</p>
+
+		<p>
+			{I18n.t('letter.p1')}
+		</p>
+
+		<p>
+			{I18n.t('letter.p2')}
+		</p>
+
+		<p>
+			{I18n.t('letter.s2')},
+			<strong>{I18n.t('letter.s2Desc')}</strong>.
+		</p>
+
+		<p>
+			{I18n.t('letter.p3')}
+		</p>
 	</div>
-	
-	<p>
-		First, <strong>Privacy</strong>.
-	</p>
-
-	<p>
-		Pretty much every newsletter platform in the market comes with tracking options including open tracking and click tracking. These are all designed to collect data on user behavior, often without explicit consent. Some platforms even go as far as to track where the user opened the email from, what device they used, and even their IP address. They undermine the very essence of privacy, which is a fundamental right.
-	</p>
-
-	<p>
-		Hyvor Post, by design, does not include any tracking features. You can confidently send newsletters without invading your readers' privacy. Your readers can confidently subscribe to your newsletters without worrying about being tracked.
-	</p>
-
-	<p>
-		Second, <strong>Simplicity</strong>.
-	</p>
-
-	<p>
-		Most our alternatives are bloated with features that you may never use. They often come with complex interfaces, making it difficult to focus on what really matters: your content. Hyvor Post is designed to be simple and straightforward. You can completely focus on writing and sending!
-	</p>
-	
-</div>
 </div>
 
 <style lang="scss">
@@ -63,5 +67,4 @@
 	.highlight {
 		text-decoration: underline;
 	}
-	
 </style>
