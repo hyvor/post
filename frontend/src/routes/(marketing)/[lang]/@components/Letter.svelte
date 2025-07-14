@@ -7,29 +7,29 @@
 <div class="hds-container">
 	<div class="wrap" id="letter">
 		<div class="head">
-			<h1 class="title">{I18n.t('whyHyvorPost')}</h1>
+			<h1 class="title">{I18n.t('homepage.whyHyvorPost')}</h1>
 		</div>
 
 		<p>
-			{I18n.t('letter.s1')},
-			<strong>{I18n.t('letter.s1Desc')}</strong>.
+			{I18n.t('homepage.letter.s1')},
+			<strong>{I18n.t('homepage.letter.s1Desc')}</strong>.
 		</p>
 
 		<p>
-			{I18n.t('letter.p1')}
+			{I18n.t('homepage.letter.p1')}
 		</p>
 
 		<p>
-			{I18n.t('letter.p2')}
+			{I18n.t('homepage.letter.p2')}
 		</p>
 
 		<p>
-			{I18n.t('letter.s2')},
-			<strong>{I18n.t('letter.s2Desc')}</strong>.
+			{I18n.t('homepage.letter.s2')},
+			<strong>{I18n.t('homepage.letter.s2Desc')}</strong>.
 		</p>
 
 		<p>
-			{I18n.t('letter.p3')}
+			{I18n.t('homepage.letter.p3')}
 		</p>
 	</div>
 </div>

@@ -10,20 +10,23 @@
 	<div class="check">
 		<IconCheckCircleFill />
 		<div>
-			<I18n.T key="14DayFreeTrial" params={{ 
-				a: {component: TrialLink} 
-			}} />
+			<I18n.T
+				key="homepage.14DayFreeTrial"
+				params={{
+					a: { component: TrialLink }
+				}}
+			/>
 		</div>
 	</div>
 
 	<div class="check">
 		<IconCheckCircleFill />
-		{I18n.t('noCreditCardRequired')}
+		{I18n.t('homepage.noCreditCardRequired')}
 	</div>
 
 	<div class="check">
 		<IconCheckCircleFill />
-		{I18n.t('cancelAnytime')}
+		{I18n.t('homepage.cancelAnytime')}
 	</div>
 </div>
 

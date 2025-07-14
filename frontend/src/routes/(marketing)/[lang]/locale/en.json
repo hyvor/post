@@ -1,16 +1,8 @@
 {
 	"homepage": {
 		"heading": "Simple Newsletter Platform",
-		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!"
-	},
-	"comingSoon":{
-		"heading": "Hyvor Post",
-		"subHeading": "Privacy-first, simple newsletter platform",
-		"joinWaitlist": "Join the waitlist",
-		"readytoExplore": "Ready to explore Hyvor Post?"
-	},
-
-	"whyHyvorPost": "Why Hyvor Post?",
+		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!",
+		"whyHyvorPost": "Why Hyvor Post?",
 		"letter": {
 			"s1": "First",
 			"s1Desc": "Privacy",
@@ -19,32 +11,39 @@
 			"s2": "Second",
 			"s2Desc": "Simplicity",
 			"p3": "Most our alternatives are bloated with features that you may never use. They often come with complex interfaces, making it difficult to focus on what really matters: your content. Hyvor Post is designed to be simple and straightforward. You can completely focus on writing and sending!"
-		}, 
-	"cta": "Start Sending in Minutes",
-	"demo": "Demo",
-	"14DayFreeTrial": "14-day free trial (<a>test emails only</a>)",
-	"noCreditCardRequired": "No credit card required",
-	"cancelAnytime": "Cancel anytime",
-	"readyToStartYourNewsletter": "Ready to start your newsletter?",
-	"startYourNewsletter": "Start your newsletter",
-	"embeddableNewsletterForm": "Embeddable Newsletter Form",
-	"embeddableNewsletterFormDescription": "Embeddable, customizable newsletter form to collect emails from your users on your website.",
-	"listMngmt": "Multiple lists management",
-	"listMngmtDescription": "Create multiple lists to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.",
-	"customSendingDomain": "Custom Sending Domain",
-	"customSendingDomainDescription": "Boost credibility and brand recognition by sending newsletters from your own domain.",
-	"customizableTemplates": "Customizable Email Templates",
-	"customizableTemplatesDescription": "Choose from a variety of templates and customize them to match your brand.",
-	"apiWebhooks": "API & Webhooks",
-	"apiWebhooksDescription": "Integrate with your existing systems using our API and webhooks for real-time updates.",
-	"teamCollaboration": "Team Collaboration",
-	"teamCollaborationDescription": "Collaborate with your team members to manage newsletters, subscribers, and campaigns efficiently.",
-	"automation": "Automation (Coming Soon)",
-	"automationDescription": "Automate your email campaigns with triggers, sequences, and personalized content.",
-	"migration": "Migration Assistance",
-	"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
+		},
+		"cta": "Start Sending in Minutes",
+		"demo": "Demo",
+		"14DayFreeTrial": "14-day free trial (<a>test emails only</a>)",
+		"noCreditCardRequired": "No credit card required",
+		"cancelAnytime": "Cancel anytime",
+		"readyToStartYourNewsletter": "Ready to start your newsletter?",
+		"startYourNewsletter": "Start your newsletter",
+		"embeddableNewsletterForm": "Embeddable Newsletter Form",
+		"embeddableNewsletterFormDescription": "Embeddable, customizable newsletter form to collect emails from your users on your website.",
+		"listMngmt": "Multiple lists management",
+		"listMngmtDescription": "Create multiple lists to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.",
+		"customSendingDomain": "Custom Sending Domain",
+		"customSendingDomainDescription": "Boost credibility and brand recognition by sending newsletters from your own domain.",
+		"customizableTemplates": "Customizable Email Templates",
+		"customizableTemplatesDescription": "Choose from a variety of templates and customize them to match your brand.",
+		"apiWebhooks": "API & Webhooks",
+		"apiWebhooksDescription": "Integrate with your existing systems using our API and webhooks for real-time updates.",
+		"teamCollaboration": "Team Collaboration",
+		"teamCollaborationDescription": "Collaborate with your team members to manage newsletters, subscribers, and campaigns efficiently.",
+		"automation": "Automation (Coming Soon)",
+		"automationDescription": "Automate your email campaigns with triggers, sequences, and personalized content.",
+		"migration": "Migration Assistance",
+		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms."
+	},
+	"comingSoon": {
+		"heading": "Hyvor Post",
+		"subHeading": "Privacy-first, simple newsletter platform",
+		"joinWaitlist": "Join the waitlist",
+		"readytoExplore": "Ready to explore Hyvor Post?"
+	},
 
-	"pricing":  {
+	"pricing": {
 		"name": "Pricing",
 		"simpleTransparentPricing": "Simple, Transparent Pricing",
 		"pricingBasedOnEmails": "You only pay for the features you use",
@@ -69,10 +68,10 @@
 		"priceCompare": "Hyvor Post vs. Other Platforms",
 		"priceCompareDescription": "Price for 100,000 emails per month",
 		"featureList": {
-			"unlimitedTeam":"Unlimited team members",
-			"customEmailDomain":"Custom Email Domain",
-			"emailAndChatSupport":"Email & Chat Support",
-			"customizableTemplates":"Customizable templates"
+			"unlimitedTeam": "Unlimited team members",
+			"customEmailDomain": "Custom Email Domain",
+			"emailAndChatSupport": "Email & Chat Support",
+			"customizableTemplates": "Customizable templates"
 		}
 	},
 
