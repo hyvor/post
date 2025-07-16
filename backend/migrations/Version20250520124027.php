@@ -27,7 +27,7 @@ final class Version20250520124027 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
-            filename VARCHAR(255) NOT NULL UNIQUE,
+            media_id BIGINT NOT NULL references media(id) ON DELETE CASCADE,
             status subscriber_import_status NOT NULL DEFAULT 'requires_input',
             fields JSONB,
             error_message TEXT

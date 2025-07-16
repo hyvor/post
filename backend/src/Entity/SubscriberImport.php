@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Type\SubscriberImportStatus;
-use App\Repository\SubscriberExportRepository;
 use App\Repository\SubscriberImportRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SubscriberExportRepository::class)]
+#[ORM\Entity(repositoryClass: SubscriberImportRepository::class)]
 #[ORM\Table(name: 'subscriber_imports')]
 class SubscriberImport
 {
@@ -27,8 +26,9 @@ class SubscriberImport
     #[ORM\JoinColumn(nullable: false)]
     private Newsletter $newsletter;
 
-    #[ORM\Column(length: 255)]
-    private string $filename;
+    #[ORM\OneToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private Media $media;
 
     #[ORM\Column(type: 'string', enumType: SubscriberImportStatus::class)]
     private SubscriberImportStatus $status;
@@ -91,14 +91,14 @@ class SubscriberImport
         return $this;
     }
 
-    public function getFilename(): string
+    public function getMedia(): Media
     {
-        return $this->filename;
+        return $this->media;
     }
 
-    public function setFilename(string $filename): static
+    public function setMedia(Media $media): static
     {
-        $this->filename = $filename;
+        $this->media = $media;
 
         return $this;
     }
