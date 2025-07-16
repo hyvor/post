@@ -62,7 +62,10 @@ class ImportController extends AbstractController
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
-        return new JsonResponse($this->importService->getFields($csv));
+        $fields = $this->importService->getFields($csv);
+        $this->importService->createSubscriberImport($csv);
+
+        return new JsonResponse($fields);
     }
 
     #[Route('/subscribers/import', methods: 'POST')]

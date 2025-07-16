@@ -36,6 +36,11 @@ class ImportService
             throw new ImportException("Could not read CSV headers.");
         }
 
+        return $headers;
+    }
+
+    public function createSubscriberImport(Media $media): SubscriberImport
+    {
         $subscriberImport = new SubscriberImport();
         $subscriberImport->setNewsletter($media->getNewsletter());
         $subscriberImport->setMedia($media);
@@ -46,7 +51,6 @@ class ImportService
         $this->em->persist($subscriberImport);
         $this->em->flush();
 
-        return $headers;
+        return $subscriberImport;
     }
-
 }
