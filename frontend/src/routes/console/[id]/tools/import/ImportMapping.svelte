@@ -14,15 +14,14 @@
 
     interface Props {
         show: boolean;
+        fields: string[]
     }
 
-    let { show = $bindable(true) }: Props = $props();
+    let { show = $bindable(true), fields = $bindable([]) }: Props = $props();
 
-    const csvColumns = ['email_address', 'segments', 'first_name', 'last_name', 'custom_field_1', 'custom_field_2'];
-    let filteredCsvColumns = $derived.by(() =>
-        csvColumns.filter(col => col.toLowerCase().includes(search.toLowerCase()))
+    let filteredFields = $derived.by(() =>
+        fields.filter(col => col.toLowerCase().includes(search.toLowerCase()))
     );
-    type ColumnKey = typeof csvColumns[number];
 
     const mapKeys = ['email', 'lists', ...$subscriberMetadataDefinitionStore.map(col => col.key)] as const;
     type MapKey = typeof mapKeys[number];
@@ -108,11 +107,11 @@
             </TextInput>
 
             <ActionList>
-                {#each filteredCsvColumns as csvColumn}
+                {#each filteredFields as filteredColumn}
                     <ActionListItem
-                        on:click={() => handleSelect('email', csvColumn) }
+                        on:click={() => handleSelect('email', filteredColumn) }
                     >
-                        {csvColumn}
+                        {filteredColumn}
                     </ActionListItem>
                 {/each}
             </ActionList>
@@ -151,11 +150,11 @@
             </TextInput>
 
             <ActionList>
-                {#each filteredCsvColumns as csvColumn}
+                {#each filteredFields as filteredColumn}
                     <ActionListItem
-                        on:click={() => handleSelect('lists', csvColumn) }
+                        on:click={() => handleSelect('lists', filteredColumn) }
                     >
-                        {csvColumn}
+                        {filteredColumn}
                     </ActionListItem>
                 {/each}
             </ActionList>
@@ -195,11 +194,11 @@
                 </TextInput>
 
                 <ActionList>
-                    {#each filteredCsvColumns as csvColumn}
+                    {#each filteredFields as filteredColumn}
                         <ActionListItem
-                            on:click={() => handleSelect(column.key, csvColumn) }
+                            on:click={() => handleSelect(column.key, filteredColumn) }
                         >
-                            {csvColumn}
+                            {filteredColumn}
                         </ActionListItem>
                     {/each}
                 </ActionList>
