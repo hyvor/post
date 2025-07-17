@@ -11,13 +11,15 @@
     import IconX from '@hyvor/icons/IconX';
     import {subscriberMetadataDefinitionStore} from "../../../lib/stores/newsletterStore";
     import Selector from "../../../@components/content/Selector.svelte";
+    import {subscriberImport} from "../../../lib/actions/importActions";
 
     interface Props {
         show: boolean;
+        importId: number
         fields: string[]
     }
 
-    let { show = $bindable(true), fields = $bindable([]) }: Props = $props();
+    let { show = $bindable(true), importId, fields }: Props = $props();
 
     let filteredFields = $derived.by(() =>
         fields.filter(col => col.toLowerCase().includes(search.toLowerCase()))
@@ -52,6 +54,7 @@
 
     function handleImport() {
         // TODO
+        subscriberImport(importId, updates);
         console.log('Importing with updates:', updates);
 
         toast.success('Import will begin shortly.');

@@ -252,3 +252,8 @@ export type Media = {
 	extension: string;
 	size: number;
 }
+
+export type ImportField = {
+    import_id: number;
+    fields: string[];
+}

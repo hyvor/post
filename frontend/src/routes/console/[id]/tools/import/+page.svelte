@@ -7,6 +7,7 @@
     let uploading = $state(false);
     let mapping = $state(false);
     let fileInput: HTMLInputElement | undefined = $state();
+    let importId: number | undefined = $state();
     let fields: string[] = $state([]);
 
     function submitFile() {
@@ -30,7 +31,8 @@
         uploadCsv(importFile)
             .then((res) => {
                 toast.success('File uploaded successfully', {id: toastId});
-                fields = res;
+                importId = res.import_id;
+                fields = res.fields;
                 mapping = true;
             })
             .catch((err) => {
@@ -65,7 +67,7 @@
         <IconMessage empty message="No imports found" />
 	</SplitControl>
 
-    <ImportMapping bind:show={mapping} bind:fields />
+    <ImportMapping bind:show={mapping} importId={importId} fields={fields} />
 </SettingsBody>
 
 <style>
