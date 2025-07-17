@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { Component } from "svelte";
-    interface Props {
-        icon: Component;
-        q: string;
-        children?: import('svelte').Snippet;
-    }
+	import type { Component } from 'svelte';
+	interface Props {
+		icon: Component;
+		q: string;
+		children?: import('svelte').Snippet;
+	}
 
-    let { icon, q, children }: Props = $props();
+	let { icon, q, children }: Props = $props();
 
-    const SvelteComponent = $derived(icon);
+	const SvelteComponent = $derived(icon);
 </script>
 
 <div class="faq">
