@@ -70,10 +70,8 @@ class CsvParser extends ParserAbstract
                 email: $email,
                 lists: $fieldMapping['lists'] && isset($item[$fieldMapping['lists']]) ? json_decode($item[$fieldMapping['lists']], true) ?? [] : [],
                 status: SubscriberStatus::SUBSCRIBED,
-                subscribedAt: null,
-                subscribeIp: null,
-//                subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
-//                subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
+                subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
+                subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
             );
         }
 

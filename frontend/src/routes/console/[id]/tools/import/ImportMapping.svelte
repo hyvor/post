@@ -25,7 +25,7 @@
         fields.filter(col => col.toLowerCase().includes(search.toLowerCase()))
     );
 
-    const mapKeys = ['email', 'lists', ...$subscriberMetadataDefinitionStore.map(col => col.key)] as const;
+    const mapKeys = ['email', 'lists', 'subscribed_at', 'subscribe_ip' , ...$subscriberMetadataDefinitionStore.map(col => col.key)] as const;
     type MapKey = typeof mapKeys[number];
 
     let updates: Record<MapKey, string | null> = $state(
@@ -156,6 +156,92 @@
                 {#each filteredFields as filteredColumn}
                     <ActionListItem
                         on:click={() => handleSelect('lists', filteredColumn) }
+                    >
+                        {filteredColumn}
+                    </ActionListItem>
+                {/each}
+            </ActionList>
+        </Selector>
+    </SplitControl>
+
+    <SplitControl label="Subscribed at">
+        <Selector
+            name={updates.subscribed_at ? '' : 'Not mapped'}
+            value={updates.subscribed_at ?? undefined}
+            width={300}
+            bind:show={showSelector.subscribed_at}
+            isSelected={updates.subscribed_at !== null}
+            handleDeselectClick={() => handleSelect('subscribed_at', null)}
+        >
+            <TextInput
+                bind:value={search}
+                type="text"
+                placeholder="Subscribed at"
+                autoFocus={true}
+                on:keydown={searchActions.onKeydown}
+                block
+            >
+                {#snippet end()}
+                    {#if search.trim() !== ''}
+                        <IconButton
+                            variant="invisible"
+                            color="gray"
+                            size={16}
+                            on:click={searchActions.onClear}
+                        >
+                            <IconX size={12} />
+                        </IconButton>
+                    {/if}
+                {/snippet}
+            </TextInput>
+
+            <ActionList>
+                {#each filteredFields as filteredColumn}
+                    <ActionListItem
+                        on:click={() => handleSelect('subscribed_at', filteredColumn) }
+                    >
+                        {filteredColumn}
+                    </ActionListItem>
+                {/each}
+            </ActionList>
+        </Selector>
+    </SplitControl>
+
+    <SplitControl label="Subscribe IP">
+        <Selector
+            name={updates.subscribe_ip ? '' : 'Not mapped'}
+            value={updates.subscribe_ip ?? undefined}
+            width={300}
+            bind:show={showSelector.subscribe_ip}
+            isSelected={updates.subscribe_ip !== null}
+            handleDeselectClick={() => handleSelect('subscribe_ip', null)}
+        >
+            <TextInput
+                bind:value={search}
+                type="text"
+                placeholder="Subscribe IP"
+                autoFocus={true}
+                on:keydown={searchActions.onKeydown}
+                block
+            >
+                {#snippet end()}
+                    {#if search.trim() !== ''}
+                        <IconButton
+                            variant="invisible"
+                            color="gray"
+                            size={16}
+                            on:click={searchActions.onClear}
+                        >
+                            <IconX size={12} />
+                        </IconButton>
+                    {/if}
+                {/snippet}
+            </TextInput>
+
+            <ActionList>
+                {#each filteredFields as filteredColumn}
+                    <ActionListItem
+                        on:click={() => handleSelect('subscribe_ip', filteredColumn) }
                     >
                         {filteredColumn}
                     </ActionListItem>
