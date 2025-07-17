@@ -79,16 +79,12 @@ class ImportController extends AbstractController
 
     #[Route('/import/{id}', methods: 'POST')]
     public function import(
-        Newsletter $newsletter,
         SubscriberImport $subscriberImport,
-        int $id, // TODO: use EntityResolver
         #[MapRequestPayload] ImportInput $input
     ): JsonResponse
     {
-        $subscriberImport = $this->importService->getPendingImportOfNewsletter($newsletter, $id);
-
-        if ($subscriberImport === null) {
-            throw new UnprocessableEntityHttpException('No pending import found.');
+        if ($subscriberImport->getStatus() !== SubscriberImportStatus::REQUIRES_INPUT) {
+            throw new UnprocessableEntityHttpException('Import is not in pending status.');
         }
 
         $updates = new UpdateSubscriberImportDto();
