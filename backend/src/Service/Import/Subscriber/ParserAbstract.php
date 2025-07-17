@@ -2,6 +2,7 @@
 
 namespace App\Service\Import\Subscriber;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 abstract class ParserAbstract
@@ -19,6 +20,8 @@ abstract class ParserAbstract
 
     public function __construct()
     {
+        $this->errors = new ArrayCollection();
+        $this->warnings = new ArrayCollection();
     }
 
     public function error(string $message): void

@@ -9,6 +9,7 @@ use App\Entity\Type\MediaFolder;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
+use App\Service\Import\Message\ImportSubscribersMessage;
 use App\Service\Media\MediaService;
 use App\Service\Media\MediaUploadException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
@@ -27,7 +29,8 @@ class ImportController extends AbstractController
     public function __construct(
         private ValidatorInterface $validator,
         private MediaService $mediaService,
-        private ImportService $importService
+        private ImportService $importService,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -95,8 +98,9 @@ class ImportController extends AbstractController
             $updates
         );
 
-        dd($subscriberImport);
-        return new JsonResponse('Import subscribers from csv');
+        $this->messageBus->dispatch(new ImportSubscribersMessage($subscriberImport->getId()));
+
+        return new JsonResponse();
     }
 
     #[Route('/subscribers/import', methods: 'GET')]
