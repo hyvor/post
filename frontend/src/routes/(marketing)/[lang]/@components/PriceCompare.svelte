@@ -4,10 +4,10 @@
 
 	const prices = [
 		{ name: 'Hyvor Post', price: 35, color: '#729290' },
-		{ name: 'Brevo', price: 68, color: '#df6c64' },
-		{ name: 'Beehiv', price: 109, color: '#df6c64' },
-		{ name: 'Kit', price: 119, color: '#df6c64' },
-		{ name: 'Mailchimp', price: 266, color: '#df6c64' }
+		{ name: 'Brevo', price: 68, color: '#767676' },
+		{ name: 'Beehiv', price: 109, color: '#767676' },
+		{ name: 'Kit', price: 119, color: '#767676' },
+		{ name: 'Mailchimp', price: 266, color: '#767676' }
 	];
 
 	const maxPrice = Math.max(...prices.map((p) => p.price));
@@ -21,27 +21,10 @@
 		subtitle={I18n.t('pricing.priceCompareDescription')}
 	/>
 	<div class="hds-container">
-		<!-- <div class="graph-container">
-    {#each prices as { name, price, color }}
-      <div class="row">
-        <div class="name">{name}</div>
-        <div class="bar-container">
-          <div
-            class="bar"
-            style="width: {((price / maxPrice) * 100) + 10}%; background-color: {color};"
-          >
-            <div class="price">${price}</div>
-          </div>
-        </div>
-        
-      </div>
-    {/each}
-  </div> -->
 		<div class="graph-container">
 			{#each prices as { name, price, color }}
 				<div class="row">
 					<div class="name">
-						<!-- <img class="logo" src={logo} alt={name + ' logo'} /> -->
 						{name}
 					</div>
 					<div class="bar-container">
@@ -89,12 +72,6 @@
 		font-weight: 600;
 		font-size: 1rem;
 	}
-
-	// .logo {
-	// 	width: 24px;
-	// 	height: 24px;
-	// 	object-fit: contain;
-	// }
 
 	.bar-container {
 		flex: 1;

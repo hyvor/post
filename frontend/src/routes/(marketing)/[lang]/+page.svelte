@@ -1,6 +1,7 @@
 <script>
 	import AboveFold from './@components/AboveFold.svelte';
-	import FaqComingSoon from './@components/FaqComingSoon.svelte';
+	import FaqHome from './@components/FaqHome.svelte';
+	import FaqComingSoon from './@components/FaqHome.svelte';
 	import Letter from './@components/Letter.svelte';
 	import TrialSignUp from './@components/TrialSignUp.svelte';
 	import AllFeatures from './@homepage/AllFeatures.svelte';
@@ -17,5 +18,5 @@
 <Letter />
 <!-- <StartStep /> -->
 <AllFeatures />
-<FaqComingSoon />
+<FaqHome />
 <TrialSignUp />

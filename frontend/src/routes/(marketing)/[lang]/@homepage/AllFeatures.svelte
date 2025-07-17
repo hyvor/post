@@ -5,14 +5,14 @@
 
 	const features = [
 		{
-			title: I18n.t('homepage.customizableTemplates'),
-			description: I18n.t('homepage.customizableTemplatesDescription'),
-			image: '/img/custom-templates.svg'
-		},
-		{
 			title: I18n.t('homepage.embeddableNewsletterForm'),
 			description: I18n.t('homepage.embeddableNewsletterFormDescription'),
 			image: '/img/embed-newsletter-form.svg'
+		},
+		{
+			title: I18n.t('homepage.customizableTemplates'),
+			description: I18n.t('homepage.customizableTemplatesDescription'),
+			image: '/img/custom-templates.svg'
 		},
 		{
 			title: I18n.t('homepage.listMngmt'),
@@ -63,7 +63,7 @@
 
 <style>
 	.feature-wrapper {
-		margin: 50px auto;
+		margin: 70px auto;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 		gap: 45px;

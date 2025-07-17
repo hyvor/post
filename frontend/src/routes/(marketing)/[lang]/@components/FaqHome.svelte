@@ -6,7 +6,11 @@
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 </script>
 
-<FeatureSectionHead title="Frequently Asked Questions" subtitle="Find answers to your questions" />
+<FeatureSectionHead
+	title="Frequently Asked Questions"
+	subtitle="Find answers to your questions"
+	wrapStyle="padding: 30px 0 0 0"
+/>
 
 <div class="faq-accordion hds-container">
 	<DetailsSummary
@@ -26,10 +30,11 @@
 
 <style>
 	.faq-accordion {
-		margin: 20px auto;
+		margin: 40px auto;
 		max-width: 800px;
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+		padding: 0 0 80px 0;
 	}
 </style>

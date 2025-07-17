@@ -53,6 +53,7 @@
 		"2MonthsOff": "(2 mois de réduction)",
 		"vatIncluded": "Tous les frais de TVA sont inclus dans le prix.",
 		"chooseYourPlan": "Choisissez votre plan",
+		"enterprise": "Entreprise",
 		"monthlyEmail": "E-mails mensuels",
 		"choosePlan": "Choisir le plan",
 		"year": "an",
@@ -68,11 +69,14 @@
 		"canICancelAnytimeAnswer": "Oui, tous les abonnements sont autogérés. Vous pouvez changer de plan ou annuler votre abonnement à tout moment en quelques clics. Pas de questions posées. Nous n'offrons pas de remboursements pour la période restante, sauf pour les renouvellements automatiques non intentionnels.",
 		"priceCompare": "Hyvor Post vs. Autres plateformes",
 		"priceCompareDescription": "Prix pour 100 000 e-mails par mois",
+		"contactUs": "Contactez-nous",
+		"learnMore": "En savoir plus",
 		"featureList": {
 			"unlimitedTeam": "Membres d'équipe illimités",
 			"customEmailDomain": "Domaine d'e-mail personnalisé",
 			"emailAndChatSupport": "Support par e-mail et chat",
-			"customizableTemplates": "Modèles personnalisables"
+			"customizableTemplates": "Modèles personnalisables",
+			"noBranding": "Pas de marque"
 		}
 	},
 

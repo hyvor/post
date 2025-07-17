@@ -52,6 +52,7 @@
 		"2MonthsOff": "(2 months off)",
 		"vatIncluded": "All VAT charges are included in the price.",
 		"chooseYourPlan": "Choose your plan",
+		"enterprise": "Enterprise",
 		"monthlyEmail": "Monthly Emails",
 		"choosePlan": "Choose Plan",
 		"year": "year",
@@ -67,11 +68,14 @@
 		"canICancelAnytimeAnswer": "Yes, all subscriptions are self-managed. You can change your plan or cancel your subscription at any time in a few clicks. No questions asked. We do not offer refunds for the remaining period, except for unintentional auto-renewals.",
 		"priceCompare": "Hyvor Post vs. Other Platforms",
 		"priceCompareDescription": "Price for 100,000 emails per month",
+		"contactUs": "Contact Us",
+		"learnMore": "Learn More",
 		"featureList": {
 			"unlimitedTeam": "Unlimited team members",
 			"customEmailDomain": "Custom Email Domain",
 			"emailAndChatSupport": "Email & Chat Support",
-			"customizableTemplates": "Customizable templates"
+			"customizableTemplates": "Customizable templates",
+			"noBranding": "No Branding"
 		}
 	},
 

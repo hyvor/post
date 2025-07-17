@@ -8,10 +8,11 @@
 
 	interface Props {
 		yearly?: boolean;
-		currency: string;
+		currency?: string;
+		enterprise?: boolean;
 	}
 
-	let { yearly = false, currency }: Props = $props();
+	let { yearly = false, currency, enterprise = false }: Props = $props();
 
 	const plans = {
 		25_000: 10,
@@ -24,8 +25,15 @@
 	let currentPlan = $state(25_000);
 	let sliderVal = $state(1);
 
+	// let currentPlanDisplay = $derived(
+	// 	currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}M` : `${currentPlan / 1000}K`
+	// );
 	let currentPlanDisplay = $derived(
-		currentPlan >= 1_000_000 ? `${currentPlan / 1_000_000}M` : `${currentPlan / 1000}K`
+		enterprise
+			? '1M+'
+			: currentPlan >= 1_000_000
+				? `${currentPlan / 1_000_000}M`
+				: `${currentPlan / 1000}K`
 	);
 
 	let currentPrice = $derived((currentPlans as any)[currentPlan] * (yearly ? 10 : 1));
@@ -34,14 +42,30 @@
 		sliderVal = event.detail;
 
 		const keys = Object.keys(currentPlans);
-		const key = keys[sliderVal - 1];
-		currentPlan = parseInt(key);
+		if (sliderVal > keys.length) {
+			currentPlan = 0; // dummy value
+			enterprise = true;
+		} else {
+			const key = keys[sliderVal - 1];
+			currentPlan = parseInt(key);
+			enterprise = false;
+		}
 	}
 	function getFeatures() {
+		if (enterprise) {
+			return [
+				'All features included in other plans',
+				'SAML SSO for teams',
+				'Custom SLA',
+				'Dedicated Support via Slack',
+				'Custom Onboarding'
+			];
+		}
 		return [
 			I18n.t('pricing.featureList.unlimitedTeam'),
 			I18n.t('pricing.featureList.emailAndChatSupport'),
-			I18n.t('pricing.featureList.customizableTemplates')
+			I18n.t('pricing.featureList.customizableTemplates'),
+			I18n.t('pricing.featureList.customEmailDomain')
 		];
 	}
 
@@ -51,7 +75,11 @@
 </script>
 
 <div class="wrap hds-box">
-	<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
+	{#if enterprise}
+		<div class="name">Enterprise</div>
+	{:else}
+		<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
+	{/if}
 
 	<div class="features">
 		{#each features as feature}
@@ -62,17 +90,24 @@
 				</div>
 			</div>
 		{/each}
-		{#if currentPlan === 25_000}
-			<div class="feature">
-				<div class="red"><IconXCircle /></div>
-				<div class="feature-text">{I18n.t('pricing.featureList.customEmailDomain')}</div>
-				<!-- {I18n.t('pricing.plan25kNote')} -->
-			</div>
-		{:else}
-			<div class="feature">
-				<IconCheckCircle />
-				<div class="feature-text">{I18n.t('pricing.featureList.customEmailDomain')}</div>
-			</div>
+
+		{#if !enterprise}
+			{#if currentPlan === 25_000}
+				<div class="feature">
+					<IconXCircle style="color: var(--text-light);" />
+					<div class="feature-text">
+						{I18n.t('pricing.featureList.noBranding')}
+					</div>
+					<!-- {I18n.t('pricing.plan25kNote')} -->
+				</div>
+			{:else}
+				<div class="feature">
+					<IconCheckCircle />
+					<div class="feature-text">
+						{I18n.t('pricing.featureList.noBranding')}
+					</div>
+				</div>
+			{/if}
 		{/if}
 	</div>
 
@@ -80,28 +115,65 @@
 		<div class="min-max">
 			<span class="min"> 25k </span>
 			<div>{currentPlanDisplay}</div>
-			<span class="max"> 1M </span>
+			<span class="max"> 1M+ </span>
 		</div>
-		<Slider min={1} max={4} step={1} value={sliderVal} on:change={onSliderChange} />
+		<Slider min={1} max={5} step={1} value={sliderVal} on:change={onSliderChange} />
 		<div class="amount">{I18n.t('pricing.monthlyEmail')}</div>
 	</div>
 
-	<div class="price">
+	<div class="card-footer">
+		<div class="price">
+			{#if !enterprise}
+				<span class="price-amount">{currency}{currentPrice}</span>
+				<span class="price-period">
+					/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}
+					{#if currentPrice === 10}*{/if}</span
+				>
+			{:else}
+				<span class="price-amount">Custom Pricing</span>
+			{/if}
+		</div>
+
+		<div class="button-wrap">
+			{#if !enterprise}
+				<Button size="large" {target} as="a" href={url}
+					>{I18n.t('pricing.choosePlan')}</Button
+				>
+			{:else}
+				<Button size="large" {target} as="a" href="https://hyvor.com/enterprise"
+					>Contact Us</Button
+				>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<!-- <div class="price">
 		<div class="price-display">
-			<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-				>/{yearly
-					? I18n.t('pricing.year')
-					: I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
-			>
+			{#if !enterprise}
+				<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
+					>/{yearly
+						? I18n.t('pricing.year')
+						: I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
+				>
+			{:else}
+				<span class="price-amount">Contact Us</span>
+			{/if}
 		</div>
 	</div>
 
 	<div class="button-wrap">
-		<Button size="large" {target} as="a" href={url}>{I18n.t('pricing.choosePlan')}</Button>
-	</div>
-</div>
+		{#if !enterprise}
+			<Button size="large" {target} as="a" href={url}>{I18n.t('pricing.choosePlan')}</Button>
+		{:else}
+			<Button size="large" {target} as="a" href={url}>
+				
+				Learn More
+			</Button>
+		{/if}
+	</div> -->
 
-<style lang="scss">
+<style>
 	.wrap {
 		flex: 1;
 		display: flex;
@@ -120,10 +192,6 @@
 		text-align: center;
 		background-color: #fafafa;
 	}
-	.price-display {
-		font-weight: 600;
-		font-size: 28px;
-	}
 	.price-period {
 		font-size: 18px;
 		font-weight: normal;
@@ -133,6 +201,7 @@
 	.features {
 		margin: 0 auto;
 		padding: 20px 30px;
+		min-height: 220px;
 	}
 	.feature {
 		display: flex;
@@ -143,10 +212,6 @@
 
 	.feature :global(svg) {
 		color: var(--green);
-	}
-
-	.red {
-		color: var(--red);
 	}
 	.feature-text {
 		flex: 1;
@@ -187,5 +252,17 @@
 	}
 	.email-selector :global(.tip) {
 		display: none !important;
+	}
+
+	.card-footer {
+		text-align: center;
+		margin-top: auto;
+	}
+
+	.price {
+		margin-bottom: 15px;
+		color: black;
+		font-weight: 600;
+		font-size: 28px;
 	}
 </style>

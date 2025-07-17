@@ -42,10 +42,10 @@
 
 <style>
 	details {
-		border: 1px solid #eee;
+		border: 1px solid var(--accent-light);
 		border-radius: 20px;
 		overflow: hidden;
-		background-color: var(--box-background);
+		background-color: var(--accent-lightest);
 	}
 	summary {
 		padding: 15px 20px;
@@ -55,8 +55,8 @@
 		-webkit-appearance: none;
 	}
 	details[open] summary {
-		background-color: var(--hover);
-		border-bottom: 1px solid #eee;
+		background-color: var(--accent-light);
+		border-bottom: 1px solid var(--accent-light);
 	}
 	summary:before {
 		content: '';

@@ -34,13 +34,12 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	.wrap {
 		font-style: normal;
 		font-size: 20px;
 		line-height: 32px;
-		padding: 90px 0;
-		// position: relative;
+		padding: 90px 0 30px 0;
 	}
 
 	.head {
