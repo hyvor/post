@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Import\Subscriber;
+namespace App\Service\Import\Dto;
 
 use App\Entity\Type\SubscriberStatus;
 

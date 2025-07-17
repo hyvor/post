@@ -2,14 +2,13 @@
 
 namespace App\Service\Import\MessageHandler;
 
-use App\Entity\Subscriber;
 use App\Entity\NewsletterList;
-use App\Entity\Type\SubscriberSource;
-use App\Service\Import\Subscriber\ImportingSubscriberDto;
+use App\Entity\Subscriber;
 use App\Entity\SubscriberImport;
+use App\Entity\Type\SubscriberSource;
 use App\Service\Import\Message\ImportSubscribersMessage;
-use App\Service\Import\Subscriber\CsvParser;
-use App\Service\Media\MediaService;
+use App\Service\Import\Parser\CsvParser;
+use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -20,7 +19,8 @@ class ImportSubscribersMessageHandler
     use ClockAwareTrait;
     public function __construct(
         private EntityManagerInterface $em,
-        private MediaService $mediaService
+        private NewsletterListService $newsletterListService,
+        private CsvParser $parser
     ) {
     }
 
@@ -29,10 +29,10 @@ class ImportSubscribersMessageHandler
         $subscriberImport = $this->em->getRepository(SubscriberImport::class)->find($message->getSubscriberImportId());
         assert($subscriberImport !== null);
 
-        $parser = new CsvParser($subscriberImport, $this->mediaService);
-        $subscribers = $parser->parse(); // TODO: handle ParserException
+        $subscribers = $this->parser->parse($subscriberImport);
 
         $newsletter = $subscriberImport->getNewsletter();
+        $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
 
         foreach ($subscribers as $dto) {
             $subscriber = new Subscriber();
@@ -44,14 +44,15 @@ class ImportSubscribersMessageHandler
             $subscriber->setSource(SubscriberSource::IMPORT);
             $subscriber->setCreatedAt($this->now());
             $subscriber->setUpdatedAt($this->now());
-            // Add lists
+
             foreach ($dto->lists as $listId) {
-                // TODO: get all lists before
-                $list = $this->em->getRepository(NewsletterList::class)->find($listId);
-                if ($list) {
-                    $subscriber->addList($list);
+                $list = $lists->findFirst(fn($key, $l) => $l->getId() === $listId);
+                if ($list === null) {
+                    continue;
                 }
+                $subscriber->addList($list);
             }
+
             $this->em->persist($subscriber);
         }
         $this->em->flush();

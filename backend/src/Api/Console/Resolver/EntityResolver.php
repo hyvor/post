@@ -8,6 +8,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
+use App\Entity\SubscriberImport;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\User;
 use App\Entity\UserInvite;
@@ -31,6 +32,7 @@ class EntityResolver implements ValueResolverInterface
         'sending-profiles' => SendingProfile::class,
         'users' => User::class,
         'invites' => UserInvite::class,
+        'import' => SubscriberImport::class,
     ];
 
     public function __construct(

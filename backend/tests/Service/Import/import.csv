@@ -1,4 +1,4 @@
-﻿email,lists,name,address
+email,lists,name,address
 john@hyvor.com,"[1,2]",John,john_addr
 jane@hyvor.com,[1],Jane,jane_addr
 doe@hyvor.com,[2],Doe,doe_addr

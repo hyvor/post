@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service\Import\Subscriber;
+namespace App\Service\Import\Parser;
 
-use App\Entity\Media;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\Import\Dto\ImportingSubscriberDto;
 use App\Service\Media\MediaService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\Collection;
 class CsvParser extends ParserAbstract
 {
     public function __construct(
-        private SubscriberImport $subscriberImport, // TODO: move this to parse()
         private MediaService $mediaService
     )
     {
@@ -23,10 +22,10 @@ class CsvParser extends ParserAbstract
      * @return Collection<int, ImportingSubscriberDto>
      * @throws ParserException
      */
-    public function parse(): Collection
+    public function parse(SubscriberImport $subscriberImport): Collection
     {
-        $fieldMapping = $this->subscriberImport->getFields();
-        $stream = $this->mediaService->getMediaStream($this->subscriberImport->getMedia()); // handle error
+        $fieldMapping = $subscriberImport->getFields();
+        $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia()); // handle error
 
         if (!is_resource($stream)) {
             throw new ParserException('Unable to read media stream.');
@@ -67,22 +66,19 @@ class CsvParser extends ParserAbstract
                 continue;
             }
 
-            try {
-                $subscribers[] = new ImportingSubscriberDto(
-                    email: $email,
-                    lists: $fieldMapping['lists'] && $item[$fieldMapping['lists']] ?? [],
-                    status: SubscriberStatus::SUBSCRIBED,
-                    subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
-                    subscribeIp: $fieldMapping['subscribe_ip'] && $item[$fieldMapping['subscribe_ip']] ?? null,
-                );
-            } catch (\Exception $e) {
-                $this->warning("Skipping row $rowIndex. Error: " . $e->getMessage());
-            }
+            $subscribers[] = new ImportingSubscriberDto(
+                email: $email,
+                lists: $fieldMapping['lists'] && isset($item[$fieldMapping['lists']]) ? json_decode($item[$fieldMapping['lists']], true) ?? [] : [],
+                status: SubscriberStatus::SUBSCRIBED,
+                subscribedAt: null,
+                subscribeIp: null,
+//                subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
+//                subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
+            );
         }
 
         fclose($stream);
 
         return new ArrayCollection($subscribers);
     }
-
 }

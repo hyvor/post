@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Object\SubscriberImportFieldObject;
 use App\Entity\Newsletter;
+use App\Entity\SubscriberImport;
 use App\Entity\Type\MediaFolder;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Dto\UpdateSubscriberImportDto;
@@ -34,7 +35,7 @@ class ImportController extends AbstractController
     ) {
     }
 
-    #[Route('/subscribers/import/upload', methods: 'POST')]
+    #[Route('/import/upload', methods: 'POST')]
     public function upload(
         Newsletter $newsletter,
         Request $request,
@@ -76,9 +77,10 @@ class ImportController extends AbstractController
         return new JsonResponse(new SubscriberImportFieldObject($import, $fields));
     }
 
-    #[Route('/subscribers/import/{id}', methods: 'POST')]
+    #[Route('/import/{id}', methods: 'POST')]
     public function import(
         Newsletter $newsletter,
+        SubscriberImport $subscriberImport,
         int $id, // TODO: use EntityResolver
         #[MapRequestPayload] ImportInput $input
     ): JsonResponse
@@ -103,7 +105,7 @@ class ImportController extends AbstractController
         return new JsonResponse();
     }
 
-    #[Route('/subscribers/import', methods: 'GET')]
+    #[Route('/import', methods: 'GET')]
     public function listImports(): JsonResponse
     {
         // TODO

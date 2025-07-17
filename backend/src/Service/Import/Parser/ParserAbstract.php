@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Service\Import\Subscriber;
+namespace App\Service\Import\Parser;
 
+use App\Entity\SubscriberImport;
+use App\Service\Import\Dto\ImportingSubscriberDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -16,7 +18,7 @@ abstract class ParserAbstract
     /**
      * @return Collection<int, ImportingSubscriberDto>
      */
-    abstract public function parse(): Collection;
+    abstract public function parse(SubscriberImport $subscriberImport): Collection;
 
     public function __construct()
     {

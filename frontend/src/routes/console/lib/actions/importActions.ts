@@ -6,14 +6,14 @@ export function uploadCsv(file: File | Blob) {
     formData.append('file', file);
 
     return consoleApi.post<ImportField>({
-        endpoint: "subscribers/import/upload",
+        endpoint: "import/upload",
         data: formData,
     })
 }
 
 export function subscriberImport(importId: number, mapping: Record<string, string | null>) {
     return consoleApi.post<void>({
-        endpoint: `subscribers/import/${importId}`,
+        endpoint: `import/${importId}`,
         data: { mapping },
     });
 }

@@ -2,6 +2,7 @@
 
 namespace App\Tests\MessageHandler\Import;
 
+use App\Entity\Subscriber;
 use App\Entity\Type\MediaFolder;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Message\ImportSubscribersMessage;
@@ -10,7 +11,6 @@ use App\Service\Media\MediaService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberImportFactory;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -23,7 +23,7 @@ class ImportSubscribersMessageHandleTest extends KernelTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $file = new UploadedFile(
-            __DIR__ . '/import.csv',
+            dirname(__DIR__, 2) . '/Service/Import/import.csv',
             'import.csv',
             mimeType: "text/csv",
         );
@@ -40,7 +40,6 @@ class ImportSubscribersMessageHandleTest extends KernelTestCase
             'media' => $media,
             'status' => SubscriberImportStatus::IMPORTING,
             'fields' => [
-                "name" => 'name',
                 "email" => "email",
                 "lists" => "lists"
             ],
@@ -51,7 +50,10 @@ class ImportSubscribersMessageHandleTest extends KernelTestCase
 
         $this->transport()->throwExceptions()->process();
 
-
-
+        $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(['newsletter' => $newsletter->_real()]);
+        $this->assertCount(3, $importedSubscribers, 'Expected 3 subscribers to be imported');
+        $this->assertSame('john@hyvor.com', $importedSubscribers[0]->getEmail(), 'First subscriber email should match');
+        $this->assertSame('jane@hyvor.com', $importedSubscribers[1]->getEmail(), 'First subscriber email should match');
+        $this->assertSame('doe@hyvor.com', $importedSubscribers[2]->getEmail(), 'First subscriber email should match');
     }
 }
