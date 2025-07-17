@@ -20,7 +20,7 @@ class ImportSubscribersMessageHandler
     use ClockAwareTrait;
     public function __construct(
         private EntityManagerInterface $em,
-        private MediaService $mediaService,
+        private MediaService $mediaService
     ) {
     }
 
@@ -30,12 +30,11 @@ class ImportSubscribersMessageHandler
         assert($subscriberImport !== null);
 
         $parser = new CsvParser($subscriberImport, $this->mediaService);
-        $subscribers = $parser->parse();
+        $subscribers = $parser->parse(); // TODO: handle ParserException
 
         $newsletter = $subscriberImport->getNewsletter();
 
         foreach ($subscribers as $dto) {
-            assert($dto instanceof ImportingSubscriberDto);
             $subscriber = new Subscriber();
             $subscriber->setNewsletter($newsletter);
             $subscriber->setEmail($dto->email);
@@ -47,6 +46,7 @@ class ImportSubscribersMessageHandler
             $subscriber->setUpdatedAt($this->now());
             // Add lists
             foreach ($dto->lists as $listId) {
+                // TODO: get all lists before
                 $list = $this->em->getRepository(NewsletterList::class)->find($listId);
                 if ($list) {
                     $subscriber->addList($list);

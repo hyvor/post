@@ -79,7 +79,7 @@ class ImportController extends AbstractController
     #[Route('/subscribers/import/{id}', methods: 'POST')]
     public function import(
         Newsletter $newsletter,
-        int $id,
+        int $id, // TODO: use EntityResolver
         #[MapRequestPayload] ImportInput $input
     ): JsonResponse
     {

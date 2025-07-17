@@ -33,10 +33,10 @@ final class SubscriberImportFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
-            'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'newsletter' => NewsletterFactory::createOne(),
             'media' => MediaFactory::createOne(),
+            'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'status' => SubscriberImportStatus::REQUIRES_INPUT,
             'fields' => null,
             'error_message' => null,

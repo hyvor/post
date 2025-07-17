@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
 class CsvParser extends ParserAbstract
 {
     public function __construct(
-        private SubscriberImport $subscriberImport,
+        private SubscriberImport $subscriberImport, // TODO: move this to parse()
         private MediaService $mediaService
     )
     {
@@ -26,7 +26,7 @@ class CsvParser extends ParserAbstract
     public function parse(): Collection
     {
         $fieldMapping = $this->subscriberImport->getFields();
-        $stream = $this->mediaService->getMediaStream($this->subscriberImport->getMedia());
+        $stream = $this->mediaService->getMediaStream($this->subscriberImport->getMedia()); // handle error
 
         if (!is_resource($stream)) {
             throw new ParserException('Unable to read media stream.');
