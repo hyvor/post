@@ -6,13 +6,15 @@ use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Import\Dto\ImportingSubscriberDto;
 use App\Service\Media\MediaService;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class CsvParser extends ParserAbstract
 {
     public function __construct(
-        private MediaService $mediaService
+        private MediaService $mediaService,
+        private SubscriberMetadataService $subscriberMetadataService,
     )
     {
         parent::__construct();
@@ -25,6 +27,10 @@ class CsvParser extends ParserAbstract
     public function parse(SubscriberImport $subscriberImport): Collection
     {
         $fieldMapping = $subscriberImport->getFields();
+        $metaFields = $this->getMetadataFields($fieldMapping);
+        $metaKeys = array_map(fn($meta) => $meta->getKey(), $this->subscriberMetadataService->getMetadataDefinitions($subscriberImport->getNewsletter()));
+
+
         $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia()); // handle error
 
         if (!is_resource($stream)) {
@@ -36,6 +42,7 @@ class CsvParser extends ParserAbstract
             fclose($stream);
             throw new ParserException('CSV header row missing or invalid.');
         }
+        $headers = array_filter($headers, fn($h) => $h !== null && $h !== '');
 
         $subscribers = [];
         $rowIndex = 1;
@@ -49,7 +56,7 @@ class CsvParser extends ParserAbstract
             }
 
             $item = array_combine($headers, $row);
-            if (!is_array($item)) {
+            if (!is_array($item)) {         // @phpstan-ignore-line
                 $this->warning("Skipping row $rowIndex. Failed to map headers.");
                 continue;
             }
@@ -66,12 +73,28 @@ class CsvParser extends ParserAbstract
                 continue;
             }
 
+            $lists = [];
+            if ($fieldMapping['lists'] !== null && isset($item[$fieldMapping['lists']])) {
+                /** @var int[] $lists */
+                $lists = json_decode($item[$fieldMapping['lists']], true) ?? [];
+            }
+
+            $metadata = [];
+            if (!empty($metaFields)) {
+                foreach ($metaFields as $key => $value) {
+                    if (in_array($key, $metaKeys, true) && $item[$value] !== null) {
+                        $metadata[$key] = $item[$value];
+                    }
+                }
+            }
+
             $subscribers[] = new ImportingSubscriberDto(
                 email: $email,
-                lists: $fieldMapping['lists'] && isset($item[$fieldMapping['lists']]) ? json_decode($item[$fieldMapping['lists']], true) ?? [] : [],
+                lists: $lists,
                 status: SubscriberStatus::SUBSCRIBED,
                 subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
                 subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
+                metadata: $metadata
             );
         }
 

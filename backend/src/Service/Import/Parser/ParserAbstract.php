@@ -20,6 +20,8 @@ abstract class ParserAbstract
      */
     abstract public function parse(SubscriberImport $subscriberImport): Collection;
 
+    protected const NON_METADATA_FIELDS = ['email', 'lists', 'subscribed_at', 'subscribe_ip'];
+
     public function __construct()
     {
         $this->errors = new ArrayCollection();
@@ -46,6 +48,19 @@ abstract class ParserAbstract
     public function getWarnings(): Collection
     {
         return $this->warnings;
+    }
+
+    /**
+     * @param array<string, string|null> $fieldMapping
+     * @return array<string, string>
+     */
+    protected function getMetadataFields(array $fieldMapping): array
+    {
+        return array_filter(
+            $fieldMapping,
+            fn($value, $key) => !in_array($key, static::NON_METADATA_FIELDS, true) && $value !== null,
+            ARRAY_FILTER_USE_BOTH
+        );
     }
 
 }

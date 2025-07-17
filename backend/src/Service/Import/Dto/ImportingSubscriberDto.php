@@ -14,6 +14,8 @@ class ImportingSubscriberDto
         public SubscriberStatus $status,
         public ?\DateTimeImmutable $subscribedAt,
         public ?string $subscribeIp = null,
+        /** @var array<string, string> $metadata */
+        public ?array $metadata = []
     ) {
     }
 

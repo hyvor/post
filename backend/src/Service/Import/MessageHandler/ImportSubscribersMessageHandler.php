@@ -41,6 +41,7 @@ class ImportSubscribersMessageHandler
             $subscriber->setStatus($dto->status);
             $subscriber->setSubscribedAt($dto->subscribedAt ?? $this->now());
             $subscriber->setSubscribeIp($dto->subscribeIp);
+            $subscriber->setMetadata($dto->metadata);
             $subscriber->setSource(SubscriberSource::IMPORT);
             $subscriber->setCreatedAt($this->now());
             $subscriber->setUpdatedAt($this->now());
