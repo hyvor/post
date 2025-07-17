@@ -3,8 +3,10 @@
 namespace App\Service\Import;
 
 use App\Entity\Media;
+use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
+use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Media\MediaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -52,5 +54,35 @@ class ImportService
         $this->em->flush();
 
         return $subscriberImport;
+    }
+
+    public function updateSubscriberImport(SubscriberImport $subscriberImport, UpdateSubscriberImportDto $updates): SubscriberImport
+    {
+        if ($updates->hasProperty('status')) {
+            $subscriberImport->setStatus($updates->status);
+        }
+        if ($updates->hasProperty('fields')) {
+            $subscriberImport->setFields($updates->fields);
+        }
+        if ($updates->hasProperty('errorMessage')) {
+            $subscriberImport->setErrorMessage($updates->errorMessage);
+        }
+        $subscriberImport->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriberImport);
+        $this->em->flush();
+
+        return $subscriberImport;
+    }
+
+    public function getPendingImportOfNewsletter(Newsletter $newsletter, int $id): ?SubscriberImport
+    {
+        return $this->em
+            ->getRepository(SubscriberImport::class)
+            ->findOneBy([
+                'id' => $id,
+                'newsletter' => $newsletter,
+                'status' => SubscriberImportStatus::REQUIRES_INPUT,
+            ]);
     }
 }

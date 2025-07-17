@@ -34,10 +34,10 @@ class SubscriberImport
     private SubscriberImportStatus $status;
 
     /**
-     * @var array<string, string>
+     * @var array<string, string> | null
      */
     #[ORM\Column(type: 'json')]
-    private array $fields = [];
+    private ?array $fields = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;

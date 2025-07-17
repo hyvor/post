@@ -2,8 +2,12 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Input\Import\ImportInput;
+use App\Api\Console\Object\SubscriberImportFieldObject;
 use App\Entity\Newsletter;
 use App\Entity\Type\MediaFolder;
+use App\Entity\Type\SubscriberImportStatus;
+use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
 use App\Service\Media\MediaService;
 use App\Service\Media\MediaUploadException;
@@ -11,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,7 +58,7 @@ class ImportController extends AbstractController
         assert($file instanceof UploadedFile);
 
         try {
-            $csv = $this->mediaService->upload(
+            $upload = $this->mediaService->upload(
                 $newsletter,
                 $folder,
                 $file
@@ -62,16 +67,35 @@ class ImportController extends AbstractController
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
-        $fields = $this->importService->getFields($csv);
-        $this->importService->createSubscriberImport($csv);
+        $fields = $this->importService->getFields($upload);
+        $import = $this->importService->createSubscriberImport($upload);
 
-        return new JsonResponse($fields);
+        return new JsonResponse(new SubscriberImportFieldObject($import, $fields));
     }
 
-    #[Route('/subscribers/import', methods: 'POST')]
-    public function import(): JsonResponse
+    #[Route('/subscribers/import/{id}', methods: 'POST')]
+    public function import(
+        Newsletter $newsletter,
+        int $id,
+        #[MapRequestPayload] ImportInput $input
+    ): JsonResponse
     {
-        // TODO
+        $subscriberImport = $this->importService->getPendingImportOfNewsletter($newsletter, $id);
+
+        if ($subscriberImport === null) {
+            throw new UnprocessableEntityHttpException('No pending import found.');
+        }
+
+        $updates = new UpdateSubscriberImportDto();
+        $updates->status = SubscriberImportStatus::IMPORTING;
+        $updates->fields = $input->mapping;
+
+        $subscriberImport = $this->importService->updateSubscriberImport(
+            $subscriberImport,
+            $updates
+        );
+
+        dd($subscriberImport);
         return new JsonResponse('Import subscribers from csv');
     }
 
