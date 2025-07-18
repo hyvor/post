@@ -4,7 +4,6 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Object\SubscriberExportObject;
 use App\Entity\Newsletter;
-use App\Entity\SubscriberExport;
 use App\Service\Media\MediaService;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -21,7 +21,7 @@ class ImportService
     ) {}
 
     /**
-     * @return array<int, string>
+     * @return string[]
      */
     public function getFields(Media $media): array
     {
@@ -75,14 +75,22 @@ class ImportService
         return $subscriberImport;
     }
 
-    public function getPendingImportOfNewsletter(Newsletter $newsletter, int $id): ?SubscriberImport
+    /**
+     * @return SubscriberImport[]
+     */
+    public function getSubscriberImports(Newsletter $newsletter, int $limit = 30, int $offset = 0): array
     {
-        return $this->em
-            ->getRepository(SubscriberImport::class)
-            ->findOneBy([
-                'id' => $id,
-                'newsletter' => $newsletter,
-                'status' => SubscriberImportStatus::REQUIRES_INPUT,
-            ]);
+        $qb = $this->em->getRepository(SubscriberImport::class)
+            ->createQueryBuilder('si')
+            ->where('si.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
+            ->orderBy('si.created_at', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        /** @var SubscriberImport[] $results */
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
     }
 }

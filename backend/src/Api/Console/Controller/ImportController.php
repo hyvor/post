@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Object\SubscriberImportFieldObject;
+use App\Api\Console\Object\SubscriberImportObject;
 use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\MediaFolder;
@@ -102,9 +103,18 @@ class ImportController extends AbstractController
     }
 
     #[Route('/import', methods: 'GET')]
-    public function listImports(): JsonResponse
+    public function listImports(Newsletter $newsletter, Request $request): JsonResponse
     {
-        // TODO
-        return new JsonResponse('List imports');
+        $limit = $request->query->getInt('limit', 30);
+        $offset = $request->query->getInt('offset', 0);
+
+        $imports = $this->importService->getSubscriberImports($newsletter, $limit, $offset);
+        $importObjects = array_map(function (SubscriberImport $import) {
+            return new SubscriberImportObject(
+                $import,
+                $this->mediaService->getPublicUrl($import->getMedia())
+            );
+        }, $imports);
+        return new JsonResponse($importObjects);
     }
 }

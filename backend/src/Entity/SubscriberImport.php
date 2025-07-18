@@ -34,7 +34,7 @@ class SubscriberImport
     private SubscriberImportStatus $status;
 
     /**
-     * @var array<string, string> | null
+     * @var array<string, string|null> | null
      */
     #[ORM\Column(type: 'json')]
     private ?array $fields = null;
@@ -115,12 +115,18 @@ class SubscriberImport
         return $this;
     }
 
-    public function getFields(): array
+    /**
+     * @return array<string, string|null> | null
+     */
+    public function getFields(): ?array
     {
         return $this->fields;
     }
 
-    public function setFields(array $fields): static
+    /**
+     * @param array<string, string|null> | null $fields
+     */
+    public function setFields(?array $fields): static
     {
         $this->fields = $fields;
 

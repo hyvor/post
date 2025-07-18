@@ -9,7 +9,7 @@ class UpdateSubscriberImportDto
 {
     use OptionalPropertyTrait;
 
-    public ?SubscriberImportStatus $status;
+    public SubscriberImportStatus $status;
 
     /**
      * @var array<string, string|null>
