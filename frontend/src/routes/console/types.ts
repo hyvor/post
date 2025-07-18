@@ -253,6 +253,17 @@ export type Media = {
 	size: number;
 }
 
+export type ImportStatus = 'requires_input' | 'importing' | 'failed' | 'completed';
+
+export type Import = {
+    id: number;
+    created_at: number;
+    csv_url: string;
+    status: ImportStatus;
+    fields: Record<string, string|null> | null;
+    error_message: string | null;
+}
+
 export type ImportField = {
     import_id: number;
     fields: string[];

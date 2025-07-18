@@ -107,7 +107,13 @@
         },
         "tools": {
             "import": {
-                "title": "Import"
+                "title": "Import",
+                "status": {
+                    "requires_input": "Requires Input",
+                    "importing": "Importing",
+                    "completed": "Completed",
+                    "failed": "Failed"
+                }
             },
 
             "export": {
