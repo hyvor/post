@@ -34,7 +34,10 @@
 		"automation": "Automation (Coming Soon)",
 		"automationDescription": "Automate your email campaigns with triggers, sequences, and personalized content.",
 		"migration": "Migration Assistance",
-		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms."
+		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
+		"faqs": "Frequently Asked Questions",
+		"faqsDescription": "Have questions? Find answers to your questions."
+
 	},
 	"comingSoon": {
 		"heading": "Hyvor Post",
@@ -75,8 +78,16 @@
 			"customEmailDomain": "Custom Email Domain",
 			"emailAndChatSupport": "Email & Chat Support",
 			"customizableTemplates": "Customizable templates",
-			"noBranding": "No Branding"
-		}
+			"noBranding": "No Branding",
+			"allFeaturesIncluded": "All features included in other plans",
+			"samlSso": "SAML SSO for teams",
+			"customSla": "Custom SLA",
+			"dedicatedSupport": "Dedicated Support via Slack",
+			"customOnboarding": "Custom Onboarding"
+		},
+		"pricesAsOfJuly2025": "Pricing comparing as of 2025-07-20"
+		
+		
 	},
 
 	"newsletter": {

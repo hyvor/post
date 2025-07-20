@@ -22,7 +22,9 @@
 
 		<div class="button-wrap">
 			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('homepage.startYourNewsletter')}</Button> -->
-			<Button as="a" size="large" href="#waitlist">{I18n.t('comingSoon.joinWaitlist')}</Button>
+			<Button as="a" size="large" href={`/${I18n.getLocale()}#waitlist`}
+				>{I18n.t('comingSoon.joinWaitlist')}</Button
+			>
 		</div>
 
 		<!-- <div class="trial-checks">

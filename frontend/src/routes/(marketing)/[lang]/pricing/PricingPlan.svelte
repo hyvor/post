@@ -54,11 +54,11 @@
 	function getFeatures() {
 		if (enterprise) {
 			return [
-				'All features included in other plans',
-				'SAML SSO for teams',
-				'Custom SLA',
-				'Dedicated Support via Slack',
-				'Custom Onboarding'
+				I18n.t('pricing.featureList.allFeaturesIncluded'),
+				I18n.t('pricing.featureList.samlSso'),
+				I18n.t('pricing.featureList.customSla'),
+				I18n.t('pricing.featureList.dedicatedSupport'),
+				I18n.t('pricing.featureList.customOnboarding')
 			];
 		}
 		return [
@@ -69,20 +69,16 @@
 		];
 	}
 
-	const features = getFeatures();
+	let features = $derived(getFeatures());
 	const url = '/console/billing';
 	const target = '_blank';
 </script>
 
 <div class="wrap hds-box">
-	{#if enterprise}
-		<div class="name">Enterprise</div>
-	{:else}
-		<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
-	{/if}
+	<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
 
 	<div class="features">
-		{#each features as feature}
+		{#each getFeatures() as feature}
 			<div class="feature">
 				<IconCheckCircle />
 				<div class="feature-text">
@@ -147,31 +143,6 @@
 		</div>
 	</div>
 </div>
-
-<!-- <div class="price">
-		<div class="price-display">
-			{#if !enterprise}
-				<span class="price-amount">{currency}{currentPrice}</span><span class="price-period"
-					>/{yearly
-						? I18n.t('pricing.year')
-						: I18n.t('pricing.month')}{#if currentPrice === 10}*{/if}</span
-				>
-			{:else}
-				<span class="price-amount">Contact Us</span>
-			{/if}
-		</div>
-	</div>
-
-	<div class="button-wrap">
-		{#if !enterprise}
-			<Button size="large" {target} as="a" href={url}>{I18n.t('pricing.choosePlan')}</Button>
-		{:else}
-			<Button size="large" {target} as="a" href={url}>
-				
-				Learn More
-			</Button>
-		{/if}
-	</div> -->
 
 <style>
 	.wrap {

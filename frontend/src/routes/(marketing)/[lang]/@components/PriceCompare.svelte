@@ -17,7 +17,7 @@
 <div class="wrap hds-container">
 	<FeatureSectionHead
 		title={I18n.t('pricing.priceCompare')}
-		wrapStyle="margin-top:50px"
+		wrapStyle="margin-top:50px; padding-bottom: 20px;"
 		subtitle={I18n.t('pricing.priceCompareDescription')}
 	/>
 	<div class="hds-container">
@@ -40,19 +40,25 @@
 			{/each}
 		</div>
 	</div>
+
+	<div class="disclaimers">
+		<div>
+			<!-- pricing comparing as of 2025-07-20 -->
+			{I18n.t('pricing.pricesAsOfJuly2025')}
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
 	.wrap {
 		padding-top: 40px;
-		// padding-bottom: 40px;
 	}
 	.graph-container {
 		max-width: 640px;
 		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 1.5rem;
 		font-family: system-ui, sans-serif;
 		padding: 0 1rem;
 	}
@@ -61,7 +67,6 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		// gap: 1rem;
 	}
 
 	.name {
@@ -91,6 +96,17 @@
 		color: white;
 		font-weight: 600;
 		font-size: 0.9rem;
+	}
+
+	.disclaimers {
+		text-align: center;
+		color: var(--text-light);
+		font-size: 0.9rem;
+		margin-top: 1rem;
+	}
+
+	.wrap :global(h2) {
+		font-size: 30px;
 	}
 
 	/* Mobile styles */

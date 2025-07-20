@@ -34,7 +34,9 @@
 		"automation": "Automatisation (Bientôt disponible)",
 		"automationDescription": "Automatisez vos campagnes d'e-mails avec des déclencheurs, des séquences et du contenu personnalisé.",
 		"migration": "Assistance à la migration",
-		"migrationDescription": "Vous êtes occupé à gérer la migration ? Nous pouvons vous aider à migrer vos abonnés et campagnes existants depuis d'autres plateformes."
+		"migrationDescription": "Vous êtes occupé à gérer la migration ? Nous pouvons vous aider à migrer vos abonnés et campagnes existants depuis d'autres plateformes.",
+		"faqs": "Foire aux questions",
+		"faqsDescription": "Vous avez des questions ? Trouvez des réponses à vos questions."
 	},
 
 	"comingSoon": {
@@ -76,8 +78,14 @@
 			"customEmailDomain": "Domaine d'e-mail personnalisé",
 			"emailAndChatSupport": "Support par e-mail et chat",
 			"customizableTemplates": "Modèles personnalisables",
-			"noBranding": "Pas de marque"
-		}
+			"noBranding": "Pas de marque",
+			"allFeaturesIncluded": "Toutes les fonctionnalités incluses dans les autres plans",
+			"samlSso": "SAML SSO pour les équipes",
+			"customSla": "SLA personnalisé",
+			"dedicatedSupport": "Support dédié via Slack",
+			"customOnboarding": "Intégration personnalisée"
+		},
+		"pricesAsOfJuly2025": "Tarification comparée au 20 juillet 2025"
 	},
 
 	"newsletter": {

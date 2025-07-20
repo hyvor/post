@@ -28,12 +28,10 @@
 			<Button
 				as="a"
 				size="small"
-<<<<<<< HEAD
 				href={`/${I18n.getLocale()}/pricing`}
-=======
-				href="/{I18n.getLocale()}/pricing"
->>>>>>> ce3ca470bcaeb27f96ac88a0cdde3d3472e72139
-				variant={$page.url.pathname === '/pricing' ? 'fill-light' : 'invisible'}
+				variant={$page.url.pathname === `/${I18n.getLocale()}/pricing`
+					? 'fill-light'
+					: 'invisible'}
 			>
 				{I18n.t('pricing.name')}
 			</Button>

@@ -4,11 +4,13 @@
 	import IconBarChart from '@hyvor/icons/IconBarChart';
 	import IconCheck from '@hyvor/icons/IconCheck';
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
+	import { getMarketingI18n } from '../locale';
+	const I18n = getMarketingI18n();
 </script>
 
 <FeatureSectionHead
-	title="Frequently Asked Questions"
-	subtitle="Find answers to your questions"
+	title={I18n.t('homepage.faqs')}
+	subtitle={I18n.t('homepage.faqsDescription')}
 	wrapStyle="padding: 30px 0 0 0"
 />
 
