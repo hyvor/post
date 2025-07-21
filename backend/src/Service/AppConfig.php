@@ -27,6 +27,14 @@ readonly class AppConfig
         #[Autowire('%env(string:SES_NEWSLETTER_CONFIGURATION_SET_NAME)%')]
         private string $awsSesNewsletterConfigurationSetName,
 
+        /**
+         * Hyvor Relay configuration
+         */
+        #[Autowire('%env(string:RELAY_URL)%')]
+        private string $relayUrl,
+
+        #[Autowire('%env(string:RELAY_API_KEY)%')]
+        private string $relayApiKey,
     ) {
     }
 
@@ -58,6 +66,16 @@ readonly class AppConfig
     public function getAwsSesNewsletterConfigurationSetName(): string
     {
         return $this->awsSesNewsletterConfigurationSetName;
+    }
+
+    public function getRelayUrl(): string
+    {
+        return $this->relayUrl;
+    }
+
+    public function getRelayApiKey(): string
+    {
+        return $this->relayApiKey;
     }
 
 }
