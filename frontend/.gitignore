@@ -9,6 +9,7 @@ node_modules
 /.svelte-kit
 /build
 /src/design
+/src/richtext
 
 # OS
 .DS_Store
