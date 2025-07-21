@@ -80,7 +80,7 @@
 		{:else if error}
 			<IconMessage error message={error} />
 		{:else}
-			<div class="top">
+			<!-- <div class="top">
 				<div class="left">
 					<Button
 						size="small"
@@ -105,7 +105,7 @@
 					{/if}
 					<IssueStatusTag status={issue.status} size="large" />
 				</div>
-			</div>
+			</div> -->
 			<div class="content">
 				{#if issue.status === 'draft'}
 					<DraftIssue {issue} send={onSendingStart} />
@@ -122,7 +122,6 @@
 <style>
 	.wrap {
 		flex: 1;
-		padding: 30px 35px;
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
@@ -131,6 +130,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		min-height: 0;
 	}
 	.top {
 		display: flex;
