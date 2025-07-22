@@ -24,7 +24,6 @@ COPY shared /app/shared
 ###################################################
 FROM frontend-base AS frontend-dev
 RUN npm install
-RUN if [ -d "src/design" ]; then cd src/design && npm link && cd ../.. && npm link @hyvor/design; fi
 CMD ["npm", "run", "dev"]
 
 ###################################################

@@ -1,18 +1,27 @@
 <script lang="ts">
-	import { Button, SplitControl, TextInput, confirm, toast, Modal } from '@hyvor/design/components';
+	import {
+		Button,
+		SplitControl,
+		TextInput,
+		confirm,
+		toast,
+		Modal
+	} from '@hyvor/design/components';
 	import type { Issue } from '../../../../types';
 	import { sendIssue, sendIssueTest } from '../../../../lib/actions/issueActions';
 	import Preview from './Preview.svelte';
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount } from 'svelte';
 	import { getI18n } from '../../../../lib/i18n';
-	import { draftIssueEditingStore, initDraftStores } from './draftStore';
+	import { draftIssueEditingStore, draftStepStore, initDraftStores } from './draftStore';
 	import Subject from './Subject.svelte';
-	import Lists from './Lists.svelte';
 	import FromName from './FromName.svelte';
 	import FromEmail from './FromEmail.svelte';
 	import ReplyToEmail from './ReplyToEmail.svelte';
-	import Content from './Content.svelte';
+	import Content from './content/Content.svelte';
+	import ContentView from './content/ContentView.svelte';
+	import Steps from './Steps.svelte';
+	import Audience from './audience/Audience.svelte';
 
 	interface Props {
 		issue: Issue;
@@ -89,7 +98,6 @@
 					send(res);
 				})
 				.catch((e) => {
-				
 					if (e.message.includes('would_exceed_limit')) {
 						currentLimit = e.data.current_limit || 0;
 						exceedAmount = e.data.exceed_amount || 0;
@@ -120,8 +128,16 @@
 <div bind:this={scrollTopEl}></div>
 
 {#if init}
-	<Subject />
-	<Lists />
+	<div class="draft-wrap">
+		{#if $draftStepStore === 'content'}
+			<ContentView />
+		{:else if $draftStepStore === 'audience'}
+			<Audience />
+		{/if}
+
+		<Steps />
+	</div>
+	<!--
 
 	<SplitControl label="Emails">
 		{#snippet nested()}
@@ -149,7 +165,7 @@
 				<IconSend />
 			{/snippet}
 		</Button>
-	</div>
+	</div> -->
 {/if}
 
 <Modal
@@ -160,24 +176,32 @@
 			text: 'Close'
 		},
 		confirm: {
-			text: 'Upgrade',
+			text: 'Upgrade'
 		}
 	}}
-	on:cancel={() => showLimitModal = false}
+	on:cancel={() => (showLimitModal = false)}
 	on:confirm={() => {
 		showLimitModal = false;
 		window.location.href = '/console/billing';
 	}}
 >
 	<p class="limit-error">
-		{I18n.t('console.issues.draft.sendingLimitReached.message', { 
-			currentLimit, 
-			exceedAmount 
+		{I18n.t('console.issues.draft.sendingLimitReached.message', {
+			currentLimit,
+			exceedAmount
 		})}
 	</p>
 </Modal>
 
 <style>
+	.draft-wrap {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		height: 100%;
+		overflow: hidden;
+	}
+
 	.send {
 		padding: 30px;
 		text-align: center;

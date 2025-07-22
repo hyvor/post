@@ -15,3 +15,6 @@ export function initDraftStores(issue: Issue) {
     draftIssueStore.set(issue);
     draftIssueEditingStore.set({ ...issue });
 }
+
+export type StepKey = 'content' | 'audience';
+export const draftStepStore = writable<StepKey>('content');
