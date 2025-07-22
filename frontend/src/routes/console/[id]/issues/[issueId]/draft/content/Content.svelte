@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Editor from '../../Editor/Editor.svelte';
-	import { draftIssueEditingStore } from './draftStore';
-	import { debouncedUpdateDraftIssue } from './draftActions';
+	import Editor from '../../../Editor/Editor.svelte';
+	import { draftIssueEditingStore } from '../draftStore';
+	import { debouncedUpdateDraftIssue } from '../draftActions';
 
 	function onContentDocUpdate(doc: string) {
 		$draftIssueEditingStore.content = doc;

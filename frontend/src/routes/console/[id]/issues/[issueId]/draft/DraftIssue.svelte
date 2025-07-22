@@ -13,14 +13,15 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import { onMount } from 'svelte';
 	import { getI18n } from '../../../../lib/i18n';
-	import { draftIssueEditingStore, initDraftStores } from './draftStore';
+	import { draftIssueEditingStore, draftStepStore, initDraftStores } from './draftStore';
 	import Subject from './Subject.svelte';
-	import Lists from './Lists.svelte';
 	import FromName from './FromName.svelte';
 	import FromEmail from './FromEmail.svelte';
 	import ReplyToEmail from './ReplyToEmail.svelte';
-	import Content from './Content.svelte';
+	import Content from './content/Content.svelte';
 	import ContentView from './content/ContentView.svelte';
+	import Steps from './Steps.svelte';
+	import Audience from './audience/Audience.svelte';
 
 	interface Props {
 		issue: Issue;
@@ -128,11 +129,15 @@
 
 {#if init}
 	<div class="draft-wrap">
-		<ContentView />
-		<div class="bottom">THIS IS THE BOTTOM</div>
+		{#if $draftStepStore === 'content'}
+			<ContentView />
+		{:else if $draftStepStore === 'audience'}
+			<Audience />
+		{/if}
+
+		<Steps />
 	</div>
-	<!-- <Subject />
-	<Lists />
+	<!--
 
 	<SplitControl label="Emails">
 		{#snippet nested()}
@@ -195,11 +200,6 @@
 		flex: 1;
 		height: 100%;
 		overflow: hidden;
-	}
-
-	.bottom {
-		border-top: 1px solid var(--border);
-		padding: 20px;
 	}
 
 	.send {
