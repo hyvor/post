@@ -11,8 +11,7 @@
 		</div>
 
 		<p>
-			{I18n.t('homepage.letter.s1')},
-			<strong>{I18n.t('homepage.letter.s1Desc')}</strong>.
+			<I18n.T key="homepage.letter.s1" params={{ strong: { element: 'strong' } }} />
 		</p>
 
 		<p>

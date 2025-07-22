@@ -2,11 +2,12 @@
 	import type { Snippet, Component } from 'svelte';
 	interface Props {
 		summary: string | Snippet;
-		content: string | Snippet;
+		content?: string;
+		children?: Snippet;
 		icon?: Component;
 	}
 
-	let { summary, content, icon }: Props = $props();
+	let { summary, content, children, icon }: Props = $props();
 
 	const Icon = icon;
 
@@ -32,15 +33,15 @@
 	<div class="content">
 		{#if typeof content === 'string'}
 			{content}
-		{:else}
-			{@render content()}
+		{:else if children}
+			{@render children()}
 		{/if}
 	</div>
 </details>
 
 <style>
 	details {
-		border: 1px solid var(--accent-light);
+		border: 2px solid var(--accent-light);
 		border-radius: 20px;
 		overflow: hidden;
 		background-color: var(--accent-lightest);
@@ -50,7 +51,6 @@
 		border-radius: 20px 20px 0 0;
 		cursor: pointer;
 		width: 100%;
-		-webkit-appearance: none;
 	}
 	details[open] summary {
 		background-color: var(--accent-light);
@@ -96,5 +96,9 @@
 		display: inline-block;
 		margin-right: 10px;
 		vertical-align: middle;
+	}
+
+	.content {
+		line-height: 1.5;
 	}
 </style>

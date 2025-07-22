@@ -4,13 +4,12 @@
 		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!",
 		"whyHyvorPost": "Why Hyvor Post?",
 		"letter": {
-			"s1": "First",
-			"s1Desc": "Privacy",
-			"p1": "Pretty much every newsletter platform in the market comes with tracking options including open tracking and click tracking. These are all designed to collect data on user behavior, often without explicit consent. Some platforms even go as far as to track where the user opened the email from, what device they used, and even their IP address. They undermine the very essence of privacy, which is a fundamental right.",
-			"p2": "Hyvor Post, by design, does not include any tracking features. You can confidently send newsletters without invading your readers' privacy. Your readers can confidently subscribe to your newsletters without worrying about being tracked.",
+			"s1": "First, <strong>Privacy</strong>.",
+			"p1": "Most newsletter platforms today track and profile your readers by default. They collect data on who opened your emails, what links they clicked, and sometimes even where they opened the email from. They undermine the very essence of privacy.",
+			"p2": "Hyvor Post, by design, does not include any tracking features. You can confidently send newsletters without invading your readers' privacy. Your readers can confidently subscribe to your newsletters without worrying about being watched.",
 			"s2": "Second",
 			"s2Desc": "Simplicity",
-			"p3": "Most our alternatives are bloated with features that you may never use. They often come with complex interfaces, making it difficult to focus on what really matters: your content. Hyvor Post is designed to be simple and straightforward. You can completely focus on writing and sending!"
+			"p3": "Many platforms are overloaded with features you'll never need. They often come with complex interfaces, making it difficult to focus on what really matters: your content. Hyvor Post is designed to be refreshingly simple and straightforward. You can fully focus on writing and sending awesome newsletters!"
 		},
 		"cta": "Start Sending in Minutes",
 		"demo": "Demo",
@@ -36,7 +35,7 @@
 		"migration": "Migration Assistance",
 		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
 		"faqs": "Frequently Asked Questions",
-		"faqsDescription": "Have questions? Find answers to your questions."
+		"faqsDescription": "We will answer some of the most common questions about Hyvor Post. Feel free to contact our team anytime."
 
 	},
 	"comingSoon": {
