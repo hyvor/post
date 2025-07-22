@@ -25,6 +25,7 @@
             }
         },
         "nav": {
+            "approve": "Approval",
             "domains": "Domains",
             "billing": "Billing",
             "home": "Home",
@@ -32,6 +33,26 @@
             "issues": "Issues",
             "tools": "Tools",
             "settings": "Settings"
+        },
+        "approve": {
+            "required": "Required",
+            "preferred": "Preferred",
+            "companyName": "Company Name",
+            "country": "Country",
+            "website": "Website",
+            "socialLinks": "Social Media Links",
+            "typeOfContent": "Type of Content",
+            "typeOfContentCaption": "What type of content do you plan to have on your newsletter?",
+            "frequency": "Frequency of Emails",
+            "frequencyCaption": "How often do you plan to send emails?",
+            "frequencyPlaceholder": "100,000 emails/month",
+            "emailList": "Existing Email List",
+            "emailListCaption": "Do you already have an email list? If yes, how did you obtain it?",
+            "sample": "Sample Email",
+            "sampleCaption": "Link to a sample email or past newsletter",
+            "whyPost": "Why Hyvor Post?",
+            "whyPostCaption": "Why did you choose Hyvor Post?",
+            "submit": "Submit for Approval"
         },
         "domains": {
             "addDomain": "Add Domain",

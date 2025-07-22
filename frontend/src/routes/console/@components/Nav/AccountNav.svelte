@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
+	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
 	import NavItem from './NavItem.svelte';
 	import { getI18n } from '../../lib/i18n';
 
@@ -11,6 +12,12 @@
 
 <div class="wrap hds-box">
 	<div class="nav-links">
+        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}">
+            <NavItem>
+                <IconClipboardCheck slot="icon" />
+                <span slot="text">{I18n.t('console.nav.approve')}</span>
+            </NavItem>
+        </NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
 			<NavItem>
 				<IconDatabase slot="icon" />
