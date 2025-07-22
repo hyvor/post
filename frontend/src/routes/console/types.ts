@@ -252,3 +252,18 @@ export type Media = {
 	extension: string;
 	size: number;
 }
+
+export type Approval = {
+    is_approved: boolean;
+    id: number | null;
+    created_at: number | null;
+    company_name: string | null;
+    country: string | null;
+    website: string | null;
+    social_links: string | null;
+    type_of_content: string | null;
+    frequency: string | null;
+    existing_list: string | null;
+    sample: string | null;
+    why_post: string | null;
+}
