@@ -55,7 +55,7 @@
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
 			{/if} -->
 			<!-- join the waitlist -->
-			<Button as="a" size="small" href="#waitlist">
+			<Button as="a" size="small" href="/#waitlist">
 				{I18n.t('comingSoon.joinWaitlist')}
 			</Button>
 		</div>
