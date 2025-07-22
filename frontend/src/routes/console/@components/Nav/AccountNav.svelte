@@ -20,12 +20,14 @@
                 <span slot="text">{I18n.t('console.nav.approve')}</span>
             </NavItem>
             {#snippet end()}
-                <Tag size="x-small" color="green">
-                    Approved
-                    {#snippet end()}
-                        <IconCheckCircle size={10}/>
-                    {/snippet}
-                </Tag>
+                {#if $approvalStore.is_approved}
+                    <Tag size="x-small" color="green">
+                        Approved
+                        {#snippet end()}
+                            <IconCheckCircle size={10}/>
+                        {/snippet}
+                    </Tag>
+                {/if}
             {/snippet}
         </NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
