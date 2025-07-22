@@ -53,10 +53,14 @@
             "whyPost": "Why Hyvor Post?",
             "whyPostCaption": "Why did you choose Hyvor Post?",
             "submit": "Submit for Approval",
+            "update": "Update Info",
             "companyNameRequired": "Company name is required",
             "countryRequired": "Country is required",
             "websiteRequired": "Website is required",
-            "websiteInvalid": "Website URL is invalid"
+            "websiteInvalid": "Website URL is invalid",
+            "submittedForApproval": "Your information has been submitted for approval.",
+            "updatedInfo": "Your information has been updated.",
+            "error": "An error occurred while submitting your information. Please try again."
         },
         "domains": {
             "addDomain": "Add Domain",

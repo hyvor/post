@@ -1,9 +1,10 @@
 <script lang="ts">
-    import {SplitControl, Textarea, TextInput, Button, toast} from "@hyvor/design/components";
-    import {getI18n} from "../../lib/i18n";
-    import {createApproval} from "../../lib/actions/approvalActions";
-    import {approvalStore} from "../../lib/stores/consoleStore";
-    import type {Approval} from "../../types";
+    import { SplitControl, Textarea, TextInput, Button, toast, Callout } from "@hyvor/design/components";
+    import IconBell from "@hyvor/icons/IconBell";
+    import { getI18n } from "../../lib/i18n";
+    import { createApproval, updateApproval } from "../../lib/actions/approvalActions";
+    import { approvalStore } from "../../lib/stores/consoleStore";
+    import type { Approval } from "../../types";
 
     const I18n = getI18n();
 
@@ -50,22 +51,76 @@
             return;
         }
 
-        createApproval({
-            company_name: companyName,
-            country: country,
-            website: website,
-            social_links: socialLinks,
-            type_of_content: typeOfContent,
-            frequency: frequency,
-            existing_list: existingList,
-            sample: sample,
-            why_post: whyPost
-        })
-            .then(() => {
-                toast.success('Submitted');
-            });
+        if (approval.id) {
+            updateApproval(approval.id, {
+                company_name: companyName !== approval.company_name ? companyName : null,
+                country: country !== approval.country ? country : null,
+                website: website !== approval.website ? website : null,
+                social_links: socialLinks !== approval.social_links ? socialLinks : null,
+                type_of_content: typeOfContent !== approval.type_of_content ? typeOfContent : null,
+                frequency: frequency !== approval.frequency ? frequency : null,
+                existing_list: existingList !== approval.existing_list ? existingList : null,
+                sample: sample !== approval.sample ? sample : null,
+                why_post: whyPost !== approval.why_post ? whyPost : null
+            })
+                .then((res) => {
+                    approvalStore.set(res);
+                    toast.success(I18n.t("console.approve.updatedInfo"));
+                })
+                .catch(() => {
+                    toast.error(I18n.t("console.approve.error"));
+                });
+        } else {
+            createApproval({
+                company_name: companyName,
+                country: country,
+                website: website,
+                social_links: socialLinks,
+                type_of_content: typeOfContent,
+                frequency: frequency,
+                existing_list: existingList,
+                sample: sample,
+                why_post: whyPost
+            })
+                .then((res) => {
+                    approvalStore.set(res);
+                    toast.success(I18n.t("console.approve.submittedForApproval"));
+                })
+                .catch(() => {
+                    toast.error(I18n.t("console.approve.error"));
+                });
+        }
     }
+
+    let isUpdating: boolean = $state(false);
+
+    $effect(() => {
+        isUpdating = !!(approval.id) && (
+            companyName !== approval.company_name
+            || country !== approval.country
+            || website !== approval.website
+            || socialLinks !== (approval.social_links ?? "")
+            || typeOfContent !== (approval.type_of_content ?? "")
+            || frequency !== (approval.frequency ?? "")
+            || existingList !== (approval.existing_list ?? "")
+            || sample !== (approval.sample ?? "")
+            || whyPost !== (approval.why_post ?? "")
+        )
+    });
+
 </script>
+
+{#if approval.id && !approval.is_approved}
+    <Callout
+        type="info"
+    >
+        {#snippet icon()}
+            <IconBell />
+        {/snippet}
+        You have already submitted your approval request. If you want to update your information,
+        please edit and resubmit. Your request will be reviewed within 24 hours.
+    </Callout>
+{/if}
 
 <SplitControl label={I18n.t("console.approve.companyName")} caption={`(${I18n.t("console.approve.required")})`}>
     <TextInput
@@ -136,8 +191,9 @@
     <Button
         size="medium"
         on:click={onSubmit}
+        disabled={!isUpdating}
     >
-        {I18n.t("console.approve.submit")}
+        {approval.id ? I18n.t("console.approve.update") : I18n.t("console.approve.submit")}
     </Button>
 </div>
 
