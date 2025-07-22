@@ -71,7 +71,8 @@
                 "title": "Usage",
                 "licenseDoesNotIncludeEmails": "Your current license does not include sending emails",
                 "30days": "30d"
-            }
+            },
+            "approvalRequired": "Your account must be approved to create a subscription."
         },
         "home": {
             "stats": {

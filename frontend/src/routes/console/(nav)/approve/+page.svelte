@@ -1,12 +1,17 @@
 <script lang="ts">
-
-import SingleBox from "../../@components/content/SingleBox.svelte";
-import ApprovalForm from "./ApprovalForm.svelte";
+    import SingleBox from "../../@components/content/SingleBox.svelte";
+	import { approvalStore } from "../../lib/stores/consoleStore";
+    import ApprovalForm from "./ApprovalForm.svelte";
+    import Approved from "./Approved.svelte";
 </script>
 
 <SingleBox>
     <div class="content">
-        <ApprovalForm />
+        {#if $approvalStore.is_approved}
+            <Approved />
+        {:else}
+            <ApprovalForm />
+        {/if}
     </div>
 </SingleBox>
 

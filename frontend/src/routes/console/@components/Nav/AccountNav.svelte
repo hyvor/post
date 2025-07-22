@@ -1,22 +1,32 @@
 <script lang="ts">
-	import { NavLink } from '@hyvor/design/components';
+	import { NavLink, Tag } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
+	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
 	import NavItem from './NavItem.svelte';
 	import { getI18n } from '../../lib/i18n';
+    import {approvalStore} from "../../lib/stores/consoleStore";
 
 	const I18n = getI18n();
 </script>
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}">
+        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}" disabled={$approvalStore.is_approved}>
             <NavItem>
                 <IconClipboardCheck slot="icon" />
                 <span slot="text">{I18n.t('console.nav.approve')}</span>
             </NavItem>
+            {#snippet end()}
+                <Tag size="x-small" color="green">
+                    Approved
+                    {#snippet end()}
+                        <IconCheckCircle size={10}/>
+                    {/snippet}
+                </Tag>
+            {/snippet}
         </NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
 			<NavItem>
@@ -24,7 +34,7 @@
 				<span slot="text">{I18n.t('console.nav.domains')}</span>
 			</NavItem>
 		</NavLink>
-		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'}>
+		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'} disabled={!$approvalStore.is_approved}>
 			<NavItem>
 				<IconCoin slot="icon" />
 				<span slot="text">{I18n.t('console.nav.billing')}</span>
