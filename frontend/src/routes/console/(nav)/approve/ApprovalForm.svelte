@@ -2,18 +2,22 @@
     import {SplitControl, Textarea, TextInput, Button, toast} from "@hyvor/design/components";
     import {getI18n} from "../../lib/i18n";
     import {createApproval} from "../../lib/actions/approvalActions";
+    import {approvalStore} from "../../lib/stores/consoleStore";
+    import type {Approval} from "../../types";
 
     const I18n = getI18n();
 
-    let companyName: string = $state("");
-    let country: string = $state("");
-    let website: string = $state("");
-    let socialLinks: string = $state("");
-    let typeOfContent: string = $state("");
-    let frequency: string = $state("");
-    let existingList: string = $state("");
-    let sample: string = $state("");
-    let whyPost: string = $state("");
+    let approval: Approval = $state($approvalStore);
+
+    let companyName: string = $state(approval.company_name || "");
+    let country: string = $state(approval.country || "");
+    let website: string = $state(approval.website || "");
+    let socialLinks: string = $state(approval.social_links || "");
+    let typeOfContent: string = $state(approval.type_of_content || "");
+    let frequency: string = $state(approval.frequency || "");
+    let existingList: string = $state(approval.existing_list || "");
+    let sample: string = $state(approval.sample || "");
+    let whyPost: string = $state(approval.why_post || "");
 
     let error: string | undefined = $state(undefined);
 

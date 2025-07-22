@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Object\ApprovalObject;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -13,6 +14,7 @@ use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
 use App\Repository\ListRepository;
 use App\Service\AppConfig;
+use App\Service\Approval\ApprovalService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
@@ -35,7 +37,8 @@ class ConsoleController extends AbstractController
         private InternalConfig $internalConfig,
         private AppConfig $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
-        private SendingProfileService $sendingProfileService
+        private SendingProfileService $sendingProfileService,
+        private ApprovalService $approvalService
     ) {
     }
 
@@ -63,6 +66,7 @@ class ConsoleController extends AbstractController
                 // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
+            'approval' => new ApprovalObject($this->approvalService->getApprovalOfUser($user)),
         ]);
     }
 
