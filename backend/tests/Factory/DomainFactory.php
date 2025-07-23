@@ -35,8 +35,8 @@ final class DomainFactory extends PersistentProxyObjectFactory
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'verified_in_ses' => false,
-            'dkim_public_key' => self::faker()->text(),
-            'dkim_private_key' => self::faker()->text(),
+            'dkim_host' => self::faker()->domainName(),
+            'dkim_txt_value' => self::faker()->text(),
             'domain' => self::faker()->domainName(),
             'user_id' => self::faker()->randomNumber(),
         ];

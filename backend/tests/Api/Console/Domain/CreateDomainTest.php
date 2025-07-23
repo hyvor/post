@@ -8,6 +8,7 @@ use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
 use App\Service\Domain\DomainService;
 use App\Service\Integration\Aws\SesService;
+use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -20,6 +21,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(DomainController::class)]
 #[CoversClass(DomainService::class)]
@@ -28,30 +33,31 @@ use Symfony\Component\Clock\MockClock;
 class CreateDomainTest extends WebTestCase
 {
 
-    private function mockCreateEmailIdentity(): void
+    private function mockHttpClient(): void
     {
-        $sesV2ClientMock = $this->createMock(SesV2Client::class);
-        $sesV2ClientMock->method('__call')->with(
-            'createEmailIdentity',
-            $this->callback(function ($args) {
-                $input = $args[0];
+        $callback = function ($method, $url, $options): JsonMockResponse {
 
-                $this->assertSame('hyvor.com', $input['EmailIdentity']);
-                $this->assertSame('hyvor-post', $input['DkimSigningAttributes']['DomainSigningSelector']);
-                $this->assertIsString($input['DkimSigningAttributes']['DomainSigningPrivateKey']);
+            $this->assertSame('POST', $method);
+            $this->assertSame('https://relay.hyvor.com/api/console/domains', $url);
+            $this->assertSame('{"domain":"hyvor.com"}', $options['body']);
+            $this->assertContains('Content-Type: application/json', $options['headers']);
+            $this->assertContains('Authorization: Bearer test-relay-key', $options['headers']);
 
-                return true;
-            })
-        );
+            return new JsonMockResponse([
+                'id' => 1,
+                'domain' => 'hyvor.com',
+                'dkim_selector' => 'rly2025',
+                'dkim_txt_value' => 'v=DKIM1; k=rsa; p=...',
+            ]);
+        };
 
-        $sesServiceMock = $this->createMock(SesService::class);
-        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
-        $this->container->set(SesService::class, $sesServiceMock);
+        $httpClient = new MockHttpClient($callback);
+        $this->container->set(HttpClientInterface::class, $httpClient);
     }
 
     public function test_create_domain(): void
     {
-        $this->mockCreateEmailIdentity();
+        $this->mockHttpClient();
 
         Clock::set(new MockClock('2025-02-21'));
 
@@ -80,7 +86,7 @@ class CreateDomainTest extends WebTestCase
 
     public function test_create_domain_invalid(): void
     {
-        $this->mockCreateEmailIdentity();
+        $this->mockHttpClient();
 
         Clock::set(new MockClock('2025-02-21'));
 
@@ -107,7 +113,7 @@ class CreateDomainTest extends WebTestCase
     #[TestWith([true])]
     public function test_create_domain_already_exists(bool $current): void
     {
-        $this->mockCreateEmailIdentity();
+        $this->mockHttpClient();
 
         Clock::set(new MockClock('2025-02-21'));
 
@@ -138,13 +144,9 @@ class CreateDomainTest extends WebTestCase
 
     public function test_error_on_aws_call_fails_and_logs(): void
     {
-        $sesV2ClientMock = $this->createMock(SesV2Client::class);
-        $sesV2ClientMock->method('__call')
-            ->willThrowException(new AwsException('Bad API key', new Command('CreateEmailIdentity')));
 
-        $sesServiceMock = $this->createMock(SesService::class);
-        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
-        $this->container->set(SesService::class, $sesServiceMock);
+        $httpClient = new MockHttpClient(new MockResponse(info: ['error' => 'host unreachable']));
+        $this->container->set(HttpClientInterface::class, $httpClient);
 
         $response = $this->consoleApi(
             null,
@@ -161,11 +163,11 @@ class CreateDomainTest extends WebTestCase
 
         // logging
         $testLogger = $this->getTestLogger();
-        $this->assertTrue($testLogger->hasCriticalThatContains('Failed to create email domain in AWS SES'));
+        $this->assertTrue($testLogger->hasCriticalThatContains('Failed to create email domain in Hyvor Relay'));
         $record = new ArrayCollection($testLogger->getRecords())
-            ->findFirst(fn($index, $record) => $record->message === 'Failed to create email domain in AWS SES');
+            ->findFirst(fn($index, $record) => $record->message === 'Failed to create email domain in Hyvor Relay');
         $this->assertNotNull($record);
         $this->assertSame('hyvor.com', $record->context['domain']);
-        $this->assertInstanceOf(AwsException::class, $record->context['error']);
+        $this->assertInstanceOf(RelayApiException::class, $record->context['error']);
     }
 }

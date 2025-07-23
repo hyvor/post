@@ -32,9 +32,9 @@ class DomainObject
         $this->id = $domain->getId();
         $this->created_at = $domain->getCreatedAt()->getTimestamp();
         $this->domain = $domain->getDomain();
-        $this->dkim_public_key = $domain->getDkimPublicKey();
+        $this->dkim_public_key = $domain->getDkimTxtvalue();
         $this->dkim_txt_name = DomainService::DKIM_SELECTOR . '._domainkey.' . $domain->getDomain();
-        $this->dkim_txt_value = DomainService::getDkimTxtValue($domain->getDkimPublicKey());
+        $this->dkim_txt_value = DomainService::getDkimTxtValue($domain->getDkimTxtvalue());
         $this->verified_in_ses = $domain->isVerifiedInSes();
     }
 }

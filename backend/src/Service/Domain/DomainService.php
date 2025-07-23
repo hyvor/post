@@ -4,6 +4,8 @@ namespace App\Service\Domain;
 
 use App\Entity\Domain;
 use App\Service\Integration\Aws\AwsDomainService;
+use App\Service\Integration\Relay\Exception\RelayApiException;
+use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\UserInvite\EmailNotificationService;
 use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,7 @@ class DomainService
         private LoggerInterface $logger,
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
+        private RelayApiClient $relayApiClient
     ) {
     }
 
@@ -74,27 +77,11 @@ class DomainService
      */
     public function createDomain(string $domain, int $userId): Domain
     {
-        $privateKey = openssl_pkey_new([
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA
-        ]);
-        assert($privateKey !== false);
-
-        openssl_pkey_export($privateKey, $privateKeyString);
-
-        $details = openssl_pkey_get_details($privateKey);
-        assert($details !== false);
-
-        $publicKey = $details['key'];
 
         try {
-            $this->awsDomainService->createAwsDomain(
-                $domain,
-                self::cleanKey($privateKeyString),
-                self::DKIM_SELECTOR
-            );
-        } catch (AwsException $e) {
-            $this->logger->critical('Failed to create email domain in AWS SES', [
+            $response = $this->relayApiClient->createDomain($domain);
+        } catch (RelayApiException $e) {
+            $this->logger->critical('Failed to create email domain in Hyvor Relay', [
                 'domain' => $domain,
                 'error' => $e,
             ]);
@@ -106,8 +93,8 @@ class DomainService
         $domainEntity->setUserId($userId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
-        $domainEntity->setDkimPublicKey(self::cleanKey($publicKey));
-        $domainEntity->setDkimPrivateKey(self::cleanKey($privateKeyString));
+        $domainEntity->setDkimHost($response->dkim_host);
+        $domainEntity->setDkimTxtvalue($response->dkim_txt_value);
         $this->em->persist($domainEntity);
         $this->em->flush();
 
