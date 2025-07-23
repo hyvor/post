@@ -70,7 +70,7 @@ readonly class AppConfig
 
     public function getRelayUrl(): string
     {
-        return $this->relayUrl;
+        return rtrim($this->relayUrl, '/');
     }
 
     public function getRelayApiKey(): string
