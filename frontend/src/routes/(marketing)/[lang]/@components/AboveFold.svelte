@@ -128,13 +128,17 @@
 			max-width: 100%;
 		}
 		.buttons {
-			justify-content: center;
+			justify-content: center !important;
 		}
 
 		.trial-checks {
 			margin-left: 0;
 			display: flex;
 			justify-content: center;
+		}
+
+		:global(.hds-container) {
+			width: 100% !important;
 		}
 	}
 </style>

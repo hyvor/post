@@ -56,4 +56,10 @@
 		gap: 20px;
 		padding: 0 0 80px 0;
 	}
+
+	@media (max-width: 600px) {
+		.faq-accordion {
+			padding: 0 20px 80px 20px;
+		}
+	}
 </style>
