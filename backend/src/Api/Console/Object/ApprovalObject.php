@@ -3,28 +3,13 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Approval;
+use App\Entity\Type\ApprovalStatus;
 
 class ApprovalObject
 {
-
-//export type Approval = {
-//is_approved: boolean;
-//id: number | null;
-//created_at: number | null;
-//company_name: string | null;
-//country: string | null;
-//website: string | null;
-//social_links: string | null;
-//type_of_content: string | null;
-//frequency: string | null;
-//existing_list: string | null;
-//sample: string | null;
-//why_post: string | null;
-//}
-
-    public bool $is_approved;
     public ?int $id = null;
     public ?int $created_at = null;
+    public ApprovalStatus $status;
     public ?string $company_name = null;
     public ?string $country = null;
     public ?string $website = null;
@@ -37,28 +22,23 @@ class ApprovalObject
 
     public function __construct(Approval $approval)
     {
-        $this->is_approved = $approval->isApproved();
 
-        if (!$this->is_approved) {
+        $this->id = $approval->getId();
+        $this->created_at = $approval->getCreatedAt()->getTimestamp();
+        $this->status = $approval->getStatus();
+        $this->company_name = $approval->getCompanyName();
+        $this->country = $approval->getCountry();
+        $this->website = $approval->getWebsite();
+        $this->social_links = $approval->getSocialLinks();
 
-            $this->id = $approval->getId();
-            $this->created_at = $approval->getCreatedAt()->getTimestamp();
-            $this->company_name = $approval->getCompanyName();
-            $this->country = $approval->getCountry();
-            $this->website = $approval->getWebsite();
-            $this->social_links = $approval->getSocialLinks();
+        $otherInfo = $approval->getOtherInfo();
 
-            $otherInfo = $approval->getOtherInfo();
-
-            if ($otherInfo) {
-                $this->type_of_content = $otherInfo['type_of_content'] ?? null;
-                $this->frequency = $otherInfo['frequency'] ?? null;
-                $this->existing_list = $otherInfo['existing_list'] ?? null;
-                $this->sample = $otherInfo['sample'] ?? null;
-                $this->why_post = $otherInfo['why_post'] ?? null;
-            }
+        if ($otherInfo) {
+            $this->type_of_content = $otherInfo['type_of_content'] ?? null;
+            $this->frequency = $otherInfo['frequency'] ?? null;
+            $this->existing_list = $otherInfo['existing_list'] ?? null;
+            $this->sample = $otherInfo['sample'] ?? null;
+            $this->why_post = $otherInfo['why_post'] ?? null;
         }
     }
-
-
 }

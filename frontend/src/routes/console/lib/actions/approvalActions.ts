@@ -1,5 +1,11 @@
 import consoleApi from "../consoleApi";
-import type {Approval} from "../../types";
+import type { Approval } from "../../types";
+
+export function getApproval() {
+    return consoleApi.get<Approval>({
+        endpoint: 'approvals',
+    });
+}
 
 interface CreateApprovalParam {
     company_name: string;

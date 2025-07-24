@@ -253,10 +253,12 @@ export type Media = {
 	size: number;
 }
 
+export type ApprovalStatus = 'pending' | 'reviewing' | 'approved' | 'rejected';
+
 export type Approval = {
-    is_approved: boolean;
     id: number | null;
     created_at: number | null;
+    status: ApprovalStatus;
     company_name: string | null;
     country: string | null;
     website: string | null;

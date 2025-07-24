@@ -3,6 +3,7 @@
 namespace App\Service\Approval;
 
 use App\Entity\Approval;
+use App\Entity\Type\ApprovalStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -21,10 +22,10 @@ class ApprovalService
         return $this->em->getRepository(Approval::class)
             ->findOneBy(['user_id' => $user->id]);
     }
-    public function isUserApproved(AuthUser $user): bool
+    public function isUserApproved(AuthUser $user): ApprovalStatus
     {
         $approval = $this->getApprovalOfUser($user);
-        return $approval !== null && $approval->isApproved();
+        return $approval === null ? ApprovalStatus::PENDING : $approval->getStatus();
     }
 
     public function createApproval(
@@ -59,7 +60,7 @@ class ApprovalService
 
         $approval = new Approval();
         $approval->setUserId($userId)
-            ->setIsApproved(false)
+            ->setStatus(ApprovalStatus::REVIEWING)
             ->setCompanyName($companyName)
             ->setCountry($country)
             ->setWebsite($website)

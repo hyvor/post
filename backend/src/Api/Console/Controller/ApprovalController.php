@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Object\ApprovalObject;
+use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,19 @@ class ApprovalController extends AbstractController
     ) {
     }
 
+    #[Route('/approvals', methods: 'GET')]
+    public function getApproval(): JsonResponse
+    {
+        $user = $this->getHyvorUser();
+        $approval = $this->approvalService->getApprovalOfUser($user);
+
+        if ($approval === null) {
+            throw new UnprocessableEntityHttpException('No approval found for user');
+        }
+
+        return new JsonResponse(new ApprovalObject($approval));
+    }
+    
     #[Route('/approvals', methods: 'POST')]
     public function approve(
         #[MapRequestPayload] CreateApprovalInput $input
@@ -28,7 +42,7 @@ class ApprovalController extends AbstractController
     {
         $user = $this->getHyvorUser();
 
-        if ($this->approvalService->isUserApproved($user)) {
+        if ($this->approvalService->isUserApproved($user) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('User already approved');
         }
 

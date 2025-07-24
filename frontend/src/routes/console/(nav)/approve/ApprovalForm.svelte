@@ -110,7 +110,7 @@
 
 </script>
 
-{#if approval.id && !approval.is_approved}
+{#if approval.id && approval.status === "reviewing"}
     <Callout
         type="info"
     >

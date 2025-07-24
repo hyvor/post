@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\ApprovalStatus;
 use App\Repository\ApprovalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,8 +24,8 @@ class Approval
     #[ORM\Column]
     private int $user_id;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $is_approved;
+    #[ORM\Column(nullable: false, enumType: ApprovalStatus::class)]
+    private ApprovalStatus $status;
     #[ORM\Column(length: 255)]
     private string $company_name;
 
@@ -92,16 +93,16 @@ class Approval
         return $this->user_id;
     }
 
-    public function setIsApproved(bool $is_approved): static
+    public function setStatus(ApprovalStatus $status): static
     {
-        $this->is_approved = $is_approved;
+        $this->status = $status;
 
         return $this;
     }
 
-    public function isApproved(): bool
+    public function getStatus(): ApprovalStatus
     {
-        return $this->is_approved;
+        return $this->status;
     }
 
     public function setCompanyName(string $company_name): static

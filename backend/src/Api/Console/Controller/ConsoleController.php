@@ -12,6 +12,7 @@ use App\Api\Console\Object\SendingProfileObject;
 use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
+use App\Entity\Type\ApprovalStatus;
 use App\Repository\ListRepository;
 use App\Service\AppConfig;
 use App\Service\Approval\ApprovalService;
@@ -53,6 +54,7 @@ class ConsoleController extends AbstractController
             fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
             $newslettersUsers
         );
+        $userApproval = $this->approvalService->getApprovalOfUser($user);
 
         return new JsonResponse([
             'newsletters' => $newsletters,
@@ -66,7 +68,7 @@ class ConsoleController extends AbstractController
                 // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
-            'approval' => new ApprovalObject($this->approvalService->getApprovalOfUser($user)),
+            'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
         ]);
     }
 

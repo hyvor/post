@@ -8,12 +8,12 @@
 	} from '@hyvor/design/components';
 	import en from '../../../../shared/locale/en.json';
 	import fr from '../../../../shared/locale/fr.json';
-    import type {AppConfig, Approval, NewsletterList} from './types';
+    import type {AppConfig, ApprovalStatus, NewsletterList} from './types';
 
 	import { onMount } from 'svelte';
 	import consoleApi from './lib/consoleApi';
 	import { page } from '$app/stores';
-    import {setAppConfig, getAppConfig, approvalStore} from './lib/stores/consoleStore';
+    import {setAppConfig, getAppConfig, approvalStore, userApprovalStatusStore} from './lib/stores/consoleStore';
 	import { newsletterRoleStore, newsletterStore } from './lib/stores/newsletterStore';
 	import { userNewslettersStore } from './lib/stores/userNewslettersStore';
 
@@ -26,7 +26,7 @@
 	interface InitResponse {
 		config: AppConfig;
 		newsletters: NewsletterList[];
-        approval: Approval;
+        user_approval: ApprovalStatus;
 	}
 
 	let isLoading = $state(true);
@@ -46,7 +46,7 @@
 					newsletterRoleStore.set(res.newsletters[0].role);
 				}
 
-                approvalStore.set(res.approval);
+                userApprovalStatusStore.set(res.user_approval);
 
 				isLoading = false;
 			})

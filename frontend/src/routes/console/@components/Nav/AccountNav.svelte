@@ -7,27 +7,21 @@
 	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
 	import NavItem from './NavItem.svelte';
 	import { getI18n } from '../../lib/i18n';
-    import {approvalStore} from "../../lib/stores/consoleStore";
+    import { userApprovalStatusStore } from "../../lib/stores/consoleStore";
+    import ApprovalStatusTag from "./ApprovalStatusTag.svelte";
 
 	const I18n = getI18n();
 </script>
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}" disabled={$approvalStore.is_approved}>
+        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}" disabled={$userApprovalStatusStore === 'approved'}>
             <NavItem>
                 <IconClipboardCheck slot="icon" />
                 <span slot="text">{I18n.t('console.nav.approve')}</span>
             </NavItem>
             {#snippet end()}
-                {#if $approvalStore.is_approved}
-                    <Tag size="x-small" color="green">
-                        Approved
-                        {#snippet end()}
-                            <IconCheckCircle size={10}/>
-                        {/snippet}
-                    </Tag>
-                {/if}
+                <ApprovalStatusTag status={$userApprovalStatusStore} />
             {/snippet}
         </NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
@@ -36,7 +30,7 @@
 				<span slot="text">{I18n.t('console.nav.domains')}</span>
 			</NavItem>
 		</NavLink>
-		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'} disabled={!$approvalStore.is_approved}>
+		<NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'} disabled={$userApprovalStatusStore !== 'approved'}>
 			<NavItem>
 				<IconCoin slot="icon" />
 				<span slot="text">{I18n.t('console.nav.billing')}</span>
