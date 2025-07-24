@@ -30,8 +30,9 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
 
         $this->container = static::getContainer();
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
-
+        if ($this->shouldEnableAuthFake()) {
+            AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        }
         /** @var EntityManagerInterface $em */
         $em = $this->container->get(EntityManagerInterface::class);
         $this->em = $em;
@@ -39,6 +40,11 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $encryption = $this->container->get(Encryption::class);
         $this->assertInstanceOf(Encryption::class, $encryption);
         $this->encryption = $encryption;
+    }
+
+    protected function shouldEnableAuthFake(): bool
+    {
+        return true;
     }
 
     /**
