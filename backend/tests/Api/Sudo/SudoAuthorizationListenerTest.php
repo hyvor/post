@@ -8,15 +8,10 @@ use App\Tests\Factory\SudoUserFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 #[CoversClass(SudoAuthorizationListener::class)]
 class SudoAuthorizationListenerTest extends WebTestCase
 {
-
     protected function shouldEnableAuthFake(): bool
     {
         return false;
