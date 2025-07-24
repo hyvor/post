@@ -256,12 +256,12 @@ export type Media = {
 export type ApprovalStatus = 'pending' | 'reviewing' | 'approved' | 'rejected';
 
 export type Approval = {
-    id: number | null;
-    created_at: number | null;
+    id: number;
+    created_at: number;
     status: ApprovalStatus;
-    company_name: string | null;
-    country: string | null;
-    website: string | null;
+    company_name: string;
+    country: string;
+    website: string;
     social_links: string | null;
     type_of_content: string | null;
     frequency: string | null;

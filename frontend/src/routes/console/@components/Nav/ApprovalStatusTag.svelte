@@ -8,12 +8,12 @@
 
     interface Props {
         status: ApprovalStatus;
+        size?: 'x-small' | 'small' | 'medium' | 'large';
+        iconSize?: number;
     }
 
-    let { status }: Props = $props();
+    let { status, size = 'x-small', iconSize = 10 }: Props = $props();
 
-    // let color: 'blue' | 'orange' | 'green' | 'red';
-    // let text: string;
     let color = $state<'blue' | 'orange' | 'green' | 'red'>('blue');
     let text = $state<string|undefined>(undefined);
 
@@ -34,17 +34,17 @@
     });
 </script>
 
-<Tag {color} size="x-small">
+<Tag {color} {size}>
     {text}
     {#snippet end()}
         {#if status === 'pending'}
-            <IconExclamationCircle size={10} />
+            <IconExclamationCircle size={iconSize} />
         {:else if status === 'reviewing'}
-            <IconHourglassSplit size={10} />
+            <IconHourglassSplit size={iconSize} />
         {:else if status === 'approved'}
-            <IconCheckCircle size={10} />
+            <IconCheckCircle size={iconSize} />
         {:else if status === 'rejected'}
-            <IconXCircle size={10} />
+            <IconXCircle size={iconSize} />
         {/if}
     {/snippet}
 </Tag>

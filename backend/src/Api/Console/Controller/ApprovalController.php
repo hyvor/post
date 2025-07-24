@@ -34,7 +34,7 @@ class ApprovalController extends AbstractController
 
         return new JsonResponse(new ApprovalObject($approval));
     }
-    
+
     #[Route('/approvals', methods: 'POST')]
     public function approve(
         #[MapRequestPayload] CreateApprovalInput $input
@@ -42,7 +42,7 @@ class ApprovalController extends AbstractController
     {
         $user = $this->getHyvorUser();
 
-        if ($this->approvalService->isUserApproved($user) === ApprovalStatus::APPROVED) {
+        if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('User already approved');
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Console\Object;
+namespace App\Api\Sudo\Object;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
@@ -9,6 +9,7 @@ class ApprovalObject
 {
     public int $id;
     public int $created_at;
+    public int $user_id;
     public ApprovalStatus $status;
     public string $company_name;
     public string $country;
@@ -25,6 +26,7 @@ class ApprovalObject
 
         $this->id = $approval->getId();
         $this->created_at = $approval->getCreatedAt()->getTimestamp();
+        $this->user_id = $approval->getUserId();
         $this->status = $approval->getStatus();
         $this->company_name = $approval->getCompanyName();
         $this->country = $approval->getCountry();

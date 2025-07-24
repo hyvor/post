@@ -17,12 +17,27 @@ class ApprovalService
     ) {
     }
 
+    /**
+     * @return Approval[]
+     */
+    public function getApprovals(): array
+    {
+        return $this->em->getRepository(Approval::class)
+            ->findBy([], ['id' => 'DESC']);
+    }
+
+    public function getApporvalById(int $id): ?Approval
+    {
+        return $this->em->getRepository(Approval::class)
+            ->findOneBy(['id' => $id]);
+    }
+
     public function getApprovalOfUser(AuthUser $user): ?Approval
     {
         return $this->em->getRepository(Approval::class)
             ->findOneBy(['user_id' => $user->id]);
     }
-    public function isUserApproved(AuthUser $user): ApprovalStatus
+    public function getApprovalStatusOfUser(AuthUser $user): ApprovalStatus
     {
         $approval = $this->getApprovalOfUser($user);
         return $approval === null ? ApprovalStatus::PENDING : $approval->getStatus();
@@ -69,6 +84,15 @@ class ApprovalService
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
+        $this->em->persist($approval);
+        $this->em->flush();
+
+        return $approval;
+    }
+
+    public function updateStatusById(Approval $approval, ApprovalStatus $status): Approval
+    {
+        $approval->setStatus($status);
         $this->em->persist($approval);
         $this->em->flush();
 
