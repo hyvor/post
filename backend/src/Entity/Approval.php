@@ -22,6 +22,7 @@ class Approval
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
+    #[ORM\OneToOne(targetEntity: User::class)]
     private int $user_id;
 
     #[ORM\Column(nullable: false, enumType: ApprovalStatus::class)]

@@ -31,7 +31,6 @@ class ApprovalController extends AbstractController
         if ($approval === null) {
             throw new UnprocessableEntityHttpException('No approval found for user');
         }
-
         return new JsonResponse(new ApprovalObject($approval));
     }
 
@@ -43,7 +42,11 @@ class ApprovalController extends AbstractController
         $user = $this->getHyvorUser();
 
         if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
-            throw new UnprocessableEntityHttpException('User already approved');
+            throw new UnprocessableEntityHttpException('Account already approved');
+        }
+
+        if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::REJECTED) {
+            throw new UnprocessableEntityHttpException('Account already rejected');
         }
 
         $approval = $this->approvalService->createApproval(

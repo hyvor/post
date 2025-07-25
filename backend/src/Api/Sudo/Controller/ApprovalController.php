@@ -22,10 +22,12 @@ class ApprovalController extends AbstractController
     #[Route('/approvals', methods: ['GET'])]
     public function getApprovals(): JsonResponse
     {
-        return new JsonResponse(array_map(
-            fn($approval) => get_object_vars(new ApprovalObject($approval)),
-            $this->approvalService->getApprovals()
-        ));
+        return new JsonResponse(
+            array_map(
+                fn($approval) => new ApprovalObject($approval),
+                $this->approvalService->getApprovals()
+            )
+        );
     }
 
     #[Route('/approvals/{id}', methods: ['POST'])]
@@ -35,7 +37,7 @@ class ApprovalController extends AbstractController
         $approval = $this->approvalService->getApporvalById($id);
 
         if ($approval === null) {
-            throw new UnprocessableEntityHttpException('Approval not found');
+            throw new UnprocessableEntityHttpException('Approval request not found');
         }
 
         $this->approvalService->updateStatusById(
