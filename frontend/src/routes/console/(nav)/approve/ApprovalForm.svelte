@@ -3,22 +3,22 @@
     import IconBell from "@hyvor/icons/IconBell";
     import { getI18n } from "../../lib/i18n";
     import { createApproval, updateApproval } from "../../lib/actions/approvalActions";
-    import { approvalStore } from "../../lib/stores/consoleStore";
+    import { approvalStore, userApprovalStatusStore } from "../../lib/stores/consoleStore";
     import type { Approval } from "../../types";
 
     const I18n = getI18n();
 
     let approval: Approval = $state($approvalStore);
 
-    let companyName: string = $state(approval.company_name || "");
-    let country: string = $state(approval.country || "");
-    let website: string = $state(approval.website || "");
-    let socialLinks: string = $state(approval.social_links || "");
-    let typeOfContent: string = $state(approval.type_of_content || "");
-    let frequency: string = $state(approval.frequency || "");
-    let existingList: string = $state(approval.existing_list || "");
-    let sample: string = $state(approval.sample || "");
-    let whyPost: string = $state(approval.why_post || "");
+    let companyName: string = $state(approval?.company_name || "");
+    let country: string = $state(approval?.country || "");
+    let website: string = $state(approval?.website || "");
+    let socialLinks: string = $state(approval?.social_links || "");
+    let typeOfContent: string = $state(approval?.type_of_content || "");
+    let frequency: string = $state(approval?.frequency || "");
+    let existingList: string = $state(approval?.existing_list || "");
+    let sample: string = $state(approval?.sample || "");
+    let whyPost: string = $state(approval?.why_post || "");
 
     let error: string | undefined = $state(undefined);
 
@@ -51,7 +51,7 @@
             return;
         }
 
-        if (approval.id) {
+        if (approval) {
             updateApproval(approval.id, {
                 company_name: companyName !== approval.company_name ? companyName : null,
                 country: country !== approval.country ? country : null,
@@ -63,8 +63,8 @@
                 sample: sample !== approval.sample ? sample : null,
                 why_post: whyPost !== approval.why_post ? whyPost : null
             })
-                .then((res) => {
-                    approvalStore.set(res);
+                .then((data) => {
+                    approvalStore.set(data);
                     toast.success(I18n.t("console.approve.updatedInfo"));
                 })
                 .catch(() => {
@@ -82,8 +82,9 @@
                 sample: sample,
                 why_post: whyPost
             })
-                .then((res) => {
-                    approvalStore.set(res);
+                .then((data) => {
+                    approvalStore.set(data);
+                    userApprovalStatusStore.set(data.status);
                     toast.success(I18n.t("console.approve.submittedForApproval"));
                 })
                 .catch(() => {
@@ -95,7 +96,7 @@
     let isUpdating: boolean = $state(false);
 
     $effect(() => {
-        isUpdating = !!(approval.id) && (
+        isUpdating = !!(approval) && (
             companyName !== approval.company_name
             || country !== approval.country
             || website !== approval.website
@@ -110,15 +111,14 @@
 
 </script>
 
-{#if approval.id && approval.status === "reviewing"}
+{#if $approvalStore?.status === "reviewing"}
     <Callout
         type="info"
     >
         {#snippet icon()}
             <IconBell />
         {/snippet}
-        You have already submitted your approval request. If you want to update your information,
-        please edit and resubmit. Your request will be reviewed within 24 hours.
+        {I18n.t("console.approve.reviewNotice")}
     </Callout>
 {/if}
 
@@ -191,9 +191,9 @@
     <Button
         size="medium"
         on:click={onSubmit}
-        disabled={!isUpdating}
+        disabled={$approvalStore && !isUpdating}
     >
-        {approval.id ? I18n.t("console.approve.update") : I18n.t("console.approve.submit")}
+        {$approvalStore ? I18n.t("console.approve.update") : I18n.t("console.approve.submit")}
     </Button>
 </div>
 

@@ -7,10 +7,11 @@
     import { getApproval } from "../../lib/actions/approvalActions";
     import { toast, Loader } from "@hyvor/design/components";
 
-    let loading = $state(true);
+    let loading = $state(false);
 
     onMount(() => {
         if ($userApprovalStatusStore !== 'pending') {
+            loading = true;
             getApproval()
                 .then((res) => {
                     approvalStore.set(res);

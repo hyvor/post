@@ -60,7 +60,8 @@
             "websiteInvalid": "Website URL is invalid",
             "submittedForApproval": "Your information has been submitted for approval.",
             "updatedInfo": "Your information has been updated.",
-            "error": "An error occurred while submitting your information. Please try again."
+            "error": "An error occurred while submitting your information. Please try again.",
+            "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours."
         },
         "domains": {
             "addDomain": "Add Domain",
