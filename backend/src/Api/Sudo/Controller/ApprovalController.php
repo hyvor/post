@@ -4,6 +4,7 @@ namespace App\Api\Sudo\Controller;
 
 use App\Api\Sudo\Input\Approval\ApproveInput;
 use App\Api\Sudo\Object\ApprovalObject;
+use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

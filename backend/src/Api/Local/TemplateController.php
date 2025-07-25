@@ -8,10 +8,12 @@ use App\Service\Content\ContentService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateVariables;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Environment;
 
 /**
  * @codeCoverageIgnore
@@ -25,6 +27,8 @@ class TemplateController extends AbstractController
         private ContentService $contentService,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
+        private readonly Environment $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
     ) {
     }
 
@@ -48,4 +52,22 @@ class TemplateController extends AbstractController
         return new Response($html);
     }
 
+    #[Route('/template/approval', methods: 'GET')]
+    public function approvalTemplate(): Response
+    {
+        $strings = $this->stringsFactory->create();
+
+        $mail = $this->mailTemplate->render('mail/approval.html.twig', [
+                'component' => 'post',
+                'strings' => [
+                    'greeting' => $strings->get('mail.common.greeting', ['name' => "User"]),
+                    'subject' => $strings->get('mail.approval.subject', ['status' => "approved"]),
+                    'body' => $strings->get('mail.approval.bodyApproved'),
+                    'reason' => $strings->get('mail.approval.reason', ['reason' => 'public note']),
+                    'footerText' => $strings->get('mail.approval.footerText'),
+                ]
+            ]
+        );
+        return new Response($mail);
+    }
 }

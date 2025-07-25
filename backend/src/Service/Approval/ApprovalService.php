@@ -4,9 +4,13 @@ namespace App\Service\Approval;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
+use App\Service\UserInvite\EmailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Twig\Environment;
 
 class ApprovalService
 {
@@ -14,6 +18,10 @@ class ApprovalService
 
     public function __construct(
         private EntityManagerInterface $em,
+        private AuthInterface $auth,
+        private readonly Environment $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
+        private EmailNotificationService $emailNotificationService,
     ) {
     }
 
@@ -100,9 +108,52 @@ class ApprovalService
         $approval->setStatus($status);
         $approval->setPublicNote($public_note);
         $approval->setPrivateNote($private_note);
+
+        $user = $this->auth->fromId($approval->getUserId());
+        assert($user instanceof AuthUser);
+
+        $this->sendApprovalMail($approval, $status, $user);
+
         $this->em->persist($approval);
         $this->em->flush();
 
         return $approval;
+    }
+
+    private function sendApprovalMail(Approval $approval, ApprovalStatus $status, AuthUser $user): void
+    {
+        $strings = $this->stringsFactory->create();
+        $subject = $strings->get('mail.approval.subject', ['status' => $status->value]);
+        $content = [
+            'greeting' => $strings->get('mail.common.greeting', ['name' => $user->name]),
+            'subject' => $subject,
+            'footerText' => $strings->get('mail.approval.footerText'),
+        ];
+
+        if ($status === ApprovalStatus::APPROVED) {
+
+            $content['body'] = $strings->get('mail.approval.bodyApproved');
+
+        } elseif ($status === ApprovalStatus::REJECTED) {
+
+            $content['body'] = $strings->get('mail.approval.bodyRejected');
+
+            if ($approval->getPublicNote()) {
+                $content['reason'] = $strings->get('mail.approval.reason', ['reason' => $approval->getPublicNote()]);
+            }
+        } else {
+            return;
+        }
+        $mail = $this->mailTemplate->render('mail/approval.html.twig', [
+                'component' => 'post',
+                'strings' => $content
+            ]
+        );
+
+        $this->emailNotificationService->send(
+            $user->email,
+            $subject,
+            $mail
+        );
     }
 }
