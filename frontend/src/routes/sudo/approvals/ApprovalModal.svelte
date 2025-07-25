@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {Modal, SplitControl, Textarea, TextInput} from "@hyvor/design/components";
+    import {Divider, Modal, SplitControl, Textarea, TextInput} from "@hyvor/design/components";
     import type {Approval} from "../types";
 
     interface Props {
         show: boolean;
         approval: Approval;
-        onApprove: (id: number) => void;
-        onReject: (id: number) => void;
+        onApprove: (approval: Approval) => void;
+        onReject: (approval: Approval) => void;
     }
 
     let { show = $bindable(), approval, onApprove, onReject }: Props = $props();
@@ -17,8 +17,8 @@
 <Modal
     bind:show
     title="Approval Details"
-    on:confirm={ () => onApprove(approval.id) }
-    on:cancel={ () => onReject(approval.id) }
+    on:confirm={ () => onApprove(approval) }
+    on:cancel={ () => onReject(approval) }
     footer={{
         confirm: {
             text: 'Approve'
@@ -27,7 +27,6 @@
             text: 'Reject',
         }
     }}
-    autoClose={true}
 >
     <div class="content">
         <SplitControl label="Company name">
@@ -99,6 +98,22 @@
         <Textarea
             bind:value={approval.why_post}
             disabled
+            block
+        />
+        </SplitControl>
+
+        <Divider color={"var(--accent-light)"} margin={10} />
+
+        <SplitControl label="Public Note">
+        <Textarea
+            bind:value={approval.public_note}
+            block
+        />
+        </SplitControl>
+
+        <SplitControl label="Private Note">
+        <Textarea
+            bind:value={approval.private_note}
             block
         />
         </SplitControl>

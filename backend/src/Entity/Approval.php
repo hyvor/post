@@ -44,6 +44,12 @@ class Approval
     #[ORM\Column(type: 'json')]
     private ?array $other_info;
 
+    #[ORM\Column(length: 255)]
+    private ?string $public_note;
+
+    #[ORM\Column(length: 255)]
+    private ?string $private_note;
+
 
     public function setId(int $id): static
     {
@@ -171,5 +177,27 @@ class Approval
         return $this->other_info;
     }
 
+    public function setPublicNote(?string $public_note): static
+    {
+        $this->public_note = $public_note;
 
+        return $this;
+    }
+
+    public function getPublicNote(): ?string
+    {
+        return $this->public_note;
+    }
+
+    public function setPrivateNote(?string $private_note): static
+    {
+        $this->private_note = $private_note;
+
+        return $this;
+    }
+
+    public function getPrivateNote(): ?string
+    {
+        return $this->private_note;
+    }
 }

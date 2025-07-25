@@ -90,9 +90,16 @@ class ApprovalService
         return $approval;
     }
 
-    public function updateStatusById(Approval $approval, ApprovalStatus $status): Approval
+    public function updateStatusById(
+        Approval $approval,
+        ApprovalStatus $status,
+        ?string $public_note,
+        ?string $private_note
+    ): Approval
     {
         $approval->setStatus($status);
+        $approval->setPublicNote($public_note);
+        $approval->setPrivateNote($private_note);
         $this->em->persist($approval);
         $this->em->flush();
 

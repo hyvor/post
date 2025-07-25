@@ -37,7 +37,12 @@ class ApprovalController extends AbstractController
             throw new UnprocessableEntityHttpException('Approval not found');
         }
 
-        $this->approvalService->updateStatusById($approval, $input->status);
+        $this->approvalService->updateStatusById(
+            $approval,
+            $input->status,
+            $input->public_note,
+            $input->private_note
+        );
 
         return new JsonResponse();
     }

@@ -10,4 +10,7 @@ class ApproveInput
     #[Assert\NotBlank]
     public ApprovalStatus $status;
 
+    public ?string $public_note = null;
+
+    public ?string $private_note = null;
 }

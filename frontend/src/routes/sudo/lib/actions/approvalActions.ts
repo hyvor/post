@@ -18,14 +18,16 @@ export function getApprovals(
 }
 
 export function approve(
-    id: number,
+    approval: Approval,
     status: ApprovalStatus,
 ) {
     return sudoApi.post<void>({
-        endpoint: `approvals/${id}`,
+        endpoint: `approvals/${approval.id}`,
         data: {
-            id,
-            status
+            id: approval.id,
+            status: status,
+            public_note: approval.public_note || null,
+            private_note: approval.private_note || null
         }
     })
 }

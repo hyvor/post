@@ -14,4 +14,6 @@ export type Approval = {
     existing_list: string | null;
     sample: string | null;
     why_post: string | null;
+    public_note: string | null;
+    private_note: string | null;
 }

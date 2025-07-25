@@ -33,8 +33,8 @@
             });
     }
 
-    function handleApproveOrReject(id: number, action: 'approved' | 'rejected') {
-        approve(id, action)
+    function handleApproveOrReject(approval: Approval, action: 'approved' | 'rejected') {
+        approve(approval, action)
             .then(() => {
                 toast.success("Approval status updated");
             })
@@ -52,25 +52,23 @@
         selectingApproval = approval;
     }
 
-    async function onApprove(id: number) {
+    async function onApprove(approval: Approval) {
         const confirmation = await confirm({
             title: 'Confirm approval',
             content: 'Are you sure you want to approve this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(id, 'approved');
-            console.log("Approved: ", id)
+            handleApproveOrReject(approval, 'approved');
         }
     }
 
-    async function onReject(id: number) {
+    async function onReject(approval: Approval) {
         const confirmation = await confirm({
             title: 'Confirm rejection',
             content: 'Are you sure you want to reject this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(id, 'rejected');
-            console.log("Rejected: ", id)
+            handleApproveOrReject(approval, 'rejected');
         }
     }
 

@@ -31,7 +31,9 @@ final class Version20250722122134 extends AbstractMigration
                 country VARCHAR(255) NOT NULL,
                 website TEXT NOT NULL,
                 social_links TEXT,
-                other_info JSONB
+                other_info JSONB,
+                public_note VARCHAR(255),
+                private_note VARCHAR(255)
             )
         SQL
         );

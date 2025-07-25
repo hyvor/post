@@ -20,6 +20,8 @@ class ApprovalObject
     public ?string $existing_list = null;
     public ?string $sample = null;
     public ?string $why_post = null;
+    public ?string $public_note = null;
+    public ?string $private_note = null;
 
     public function __construct(Approval $approval)
     {
@@ -42,5 +44,8 @@ class ApprovalObject
             $this->sample = $otherInfo['sample'] ?? null;
             $this->why_post = $otherInfo['why_post'] ?? null;
         }
+
+        $this->public_note = $approval->getPublicNote();
+        $this->private_note = $approval->getPrivateNote();
     }
 }
