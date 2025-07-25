@@ -43,7 +43,12 @@ interface UpdateApprovalParam {
 
 export function updateApproval(id: number, param: UpdateApprovalParam) {
 
-    const sanitizedParam = sanitizeParams(param)
+    const filteredParam = Object.fromEntries(
+        Object.entries(param)
+            .filter(([, value]) => value !== null)
+    );
+
+    const sanitizedParam = sanitizeParams(filteredParam);
 
     return consoleApi.post<Approval>({
         endpoint: `approvals/${id}`,
@@ -51,7 +56,7 @@ export function updateApproval(id: number, param: UpdateApprovalParam) {
     });
 }
 
-function sanitizeParams(params: CreateApprovalParam | UpdateApprovalParam) {
+function sanitizeParams(params: CreateApprovalParam | Partial<UpdateApprovalParam>) {
     return Object.fromEntries(
         Object.entries(params).map(([key, value]) => [key, value === '' ? null : value])
     );

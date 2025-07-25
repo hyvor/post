@@ -57,12 +57,12 @@
                 company_name: companyName !== approval.company_name ? companyName : null,
                 country: country !== approval.country ? country : null,
                 website: website !== approval.website ? website : null,
-                social_links: socialLinks !== approval.social_links ? socialLinks : null,
-                type_of_content: typeOfContent !== approval.type_of_content ? typeOfContent : null,
-                frequency: frequency !== approval.frequency ? frequency : null,
-                existing_list: existingList !== approval.existing_list ? existingList : null,
-                sample: sample !== approval.sample ? sample : null,
-                why_post: whyPost !== approval.why_post ? whyPost : null
+                social_links: socialLinks !== (approval.social_links ?? '') ? socialLinks : null,
+                type_of_content: typeOfContent !== (approval.type_of_content ?? '') ? typeOfContent : null,
+                frequency: frequency !== (approval.frequency ?? '') ? frequency : null,
+                existing_list: existingList !== (approval.existing_list ?? '') ? existingList : null,
+                sample: sample !== (approval.sample ?? '') ? sample : null,
+                why_post: whyPost !== (approval.why_post ?? '') ? whyPost : null
             })
                 .then((data) => {
                     approvalStore.set(data);

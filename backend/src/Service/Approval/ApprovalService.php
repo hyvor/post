@@ -4,6 +4,7 @@ namespace App\Service\Approval;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
+use App\Service\Approval\Dto\UpdateApprovalDto;
 use App\Service\UserInvite\EmailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -98,7 +99,79 @@ class ApprovalService
         return $approval;
     }
 
-    public function updateStatusById(
+    public function updateApproval(
+        Approval $approval,
+        UpdateApprovalDto $updates
+    ): Approval {
+        if ($updates->hasProperty('companyName')) {
+            $approval->setCompanyName($updates->companyName);
+        }
+
+        if ($updates->hasProperty('country')) {
+            $approval->setCountry($updates->country);
+        }
+
+        if ($updates->hasProperty('website')) {
+            $approval->setWebsite($updates->website);
+        }
+
+        if ($updates->hasProperty('socialLinks')) {
+            $approval->setSocialLinks($updates->socialLinks);
+        }
+
+        $otherInfo = $approval->getOtherInfo() ?? [];
+
+        if ($updates->hasProperty('typeOfContent')) {
+            if ($updates->typeOfContent === null) {
+                unset($otherInfo['type_of_content']);
+            } else {
+                $otherInfo['type_of_content'] = $updates->typeOfContent;
+            }
+        }
+
+        if ($updates->hasProperty('frequency')) {
+            if ($updates->frequency === null) {
+                unset($otherInfo['frequency']);
+            } else {
+                $otherInfo['frequency'] = $updates->frequency;
+            }
+        }
+
+        if ($updates->hasProperty('existingList')) {
+            if ($updates->existingList === null) {
+                unset($otherInfo['existing_list']);
+            } else {
+                $otherInfo['existing_list'] = $updates->existingList;
+            }
+        }
+
+        if ($updates->hasProperty('sample')) {
+            if ($updates->sample === null) {
+                unset($otherInfo['sample']);
+            } else {
+                $otherInfo['sample'] = $updates->sample;
+            }
+        }
+
+        if ($updates->hasProperty('whyPost')) {
+            if ($updates->whyPost === null) {
+                unset($otherInfo['why_post']);
+            } else {
+                $otherInfo['why_post'] = $updates->whyPost;
+            }
+        }
+
+        $approval->setOtherInfo(count($otherInfo) !== 0 ? $otherInfo : null);
+
+        $approval->setUpdatedAt($this->now());
+
+        $this->em->persist($approval);
+        $this->em->flush();
+
+        return $approval;
+    }
+
+    public function changeStatus(
         Approval $approval,
         ApprovalStatus $status,
         ?string $public_note,
