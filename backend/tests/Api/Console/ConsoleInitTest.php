@@ -6,6 +6,7 @@ use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
+use App\Entity\Type\ApprovalStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
@@ -75,11 +76,15 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('newsletters', $data);
         $this->assertIsArray($data['newsletters']);
+        dd($data['newsletters']);
         $this->assertSame(11, count($data['newsletters']));
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
         $this->assertArrayHasKey('newsletter_defaults', $config);
+
+        $this->assertArrayHasKey('user_approval', $data);
+        $this->assertSame(ApprovalStatus::PENDING->value, $data['user_approval']);
     }
 
     public function testInitNewsletter(): void
