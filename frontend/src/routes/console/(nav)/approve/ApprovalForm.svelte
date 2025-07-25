@@ -1,6 +1,7 @@
 <script lang="ts">
     import { SplitControl, Textarea, TextInput, Button, toast, Callout } from "@hyvor/design/components";
     import IconBell from "@hyvor/icons/IconBell";
+    import IconExclamationCircle from "@hyvor/icons/IconExclamationCircle";
     import { getI18n } from "../../lib/i18n";
     import { createApproval, updateApproval } from "../../lib/actions/approvalActions";
     import { approvalStore, userApprovalStatusStore } from "../../lib/stores/consoleStore";
@@ -109,6 +110,11 @@
         )
     });
 
+    let readOnly: boolean = $state(false);
+
+    $effect(() => {
+        readOnly = !!(approval) && approval.status === "rejected";
+    });
 </script>
 
 {#if $approvalStore?.status === "reviewing"}
@@ -120,11 +126,21 @@
         {/snippet}
         {I18n.t("console.approve.reviewNotice")}
     </Callout>
+{:else if $approvalStore?.status === "rejected"}
+    <Callout
+        type="warning"
+    >
+        {#snippet icon()}
+            <IconExclamationCircle />
+        {/snippet}
+        {I18n.t("console.approve.rejectNotice")}
+    </Callout>
 {/if}
 
 <SplitControl label={I18n.t("console.approve.companyName")} caption={`(${I18n.t("console.approve.required")})`}>
     <TextInput
         bind:value={companyName}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -132,6 +148,7 @@
 <SplitControl label={I18n.t("console.approve.country")} caption={`(${I18n.t("console.approve.required")})`}>
     <TextInput
         bind:value={country}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -140,6 +157,7 @@
     <TextInput
         type="url"
         bind:value={website}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -147,6 +165,7 @@
 <SplitControl label={I18n.t("console.approve.socialLinks")} caption={`(${I18n.t("console.approve.preferred")})`}>
     <Textarea
         bind:value={socialLinks}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -154,6 +173,7 @@
 <SplitControl label={I18n.t("console.approve.typeOfContent")} caption={I18n.t("console.approve.typeOfContentCaption")}>
     <TextInput
         bind:value={typeOfContent}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -162,6 +182,7 @@
     <TextInput
         placeholder={I18n.t("console.approve.frequencyPlaceholder")}
         bind:value={frequency}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -169,6 +190,7 @@
 <SplitControl label={I18n.t("console.approve.existingList")} caption={I18n.t("console.approve.existingListCaption")}>
     <Textarea
         bind:value={existingList}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -176,6 +198,7 @@
 <SplitControl label={I18n.t("console.approve.sample")} caption={I18n.t("console.approve.sampleCaption")}>
     <TextInput
         bind:value={sample}
+        disabled={readOnly}
         block
     />
 </SplitControl>
@@ -183,6 +206,7 @@
 <SplitControl label={I18n.t("console.approve.whyPost")} caption={I18n.t("console.approve.whyPostCaption")}>
     <Textarea
         bind:value={whyPost}
+        disabled={readOnly}
         block
     />
 </SplitControl>

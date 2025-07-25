@@ -28,6 +28,7 @@
             "approve": "Approval",
             "domains": "Domains",
             "billing": "Billing",
+            "billingTooltip": "Your account must be approved to access billing",
             "home": "Home",
             "subscribers": "Subscribers",
             "issues": "Issues",
@@ -61,7 +62,8 @@
             "submittedForApproval": "Your information has been submitted for approval.",
             "updatedInfo": "Your information has been updated.",
             "error": "An error occurred while submitting your information. Please try again.",
-            "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours."
+            "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours.",
+            "rejectNotice": "Your approval request has been rejected. Please contact support for any further clarifications."
         },
         "domains": {
             "addDomain": "Add Domain",
@@ -261,7 +263,7 @@
             "bodyApproved": "We’re happy to inform you that your Hyvor Post account has been approved. Now you can create subscriptions and start sending emails via Hyvor Post.",
             "bodyRejected": "We regret to inform you that your Hyvor Post account approval request has been rejected.",
             "footerText": "If you have any questions or need assistance, please don't hesitate to contact our support team by replying to this email.",
-            "reason": "Reject Reason: {reason}"
+            "reason": "Reject reason: {reason}"
         }
     }
 }
