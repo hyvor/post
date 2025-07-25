@@ -35,6 +35,51 @@ class ApproveTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame(ApprovalStatus::APPROVED, $approval->getStatus());
+        $this->assertSame('Looks good!', $approval->getPublicNote());
+        $this->assertSame('Approved by admin', $approval->getPrivateNote());
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, 'Your Hyvor Post account has been approved');
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'We’re happy to inform you that your Hyvor Post account has been approved.'
+        );
+    }
+
+    public function test_reject(): void
+    {
+        $approval = ApprovalFactory::createOne([
+            'user_id' => 1,
+            'status' => ApprovalStatus::REVIEWING,
+        ]);
+
+        $response = $this->sudoApi(
+            'POST',
+            "/approvals/{$approval->getId()}",
+            [
+                'status' => ApprovalStatus::REJECTED,
+                'public_note' => 'Not suitable for our platform.',
+                'private_note' => 'Rejected by admin',
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(ApprovalStatus::REJECTED, $approval->getStatus());
+        $this->assertSame('Not suitable for our platform.', $approval->getPublicNote());
+        $this->assertSame('Rejected by admin', $approval->getPrivateNote());
+
+        $email = $this->getMailerMessage();
+        $this->assertNotNull($email);
+        $this->assertEmailSubjectContains($email, 'Your Hyvor Post account has been rejected');
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'We regret to inform you that your Hyvor Post account approval request has been rejected.'
+        );
+        $this->assertEmailHtmlBodyContains(
+            $email,
+            'Reject Reason: Not suitable for our platform.'
+        );
     }
 
     public function test_approval_not_found(): void
