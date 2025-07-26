@@ -142,7 +142,7 @@
 		{I18n.t('console.approve.reviewNotice')}
 	</Callout>
 {:else if $approvalStore?.status === 'rejected'}
-	<Callout type="warning">
+	<Callout type="danger">
 		{#snippet icon()}
 			<IconXCircle />
 		{/snippet}

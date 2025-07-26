@@ -16,6 +16,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
+use App\Tests\Factory\SudoUserFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -48,6 +49,10 @@ class DevSeedCommand extends Command
             $output->writeln('<error>This command can only be run in the dev and test environments.</error>');
             return Command::FAILURE;
         }
+
+        SudoUserFactory::createOne([
+            'user_id' => 1
+        ]);
 
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,

@@ -261,7 +261,7 @@
         },
         "approval": {
             "subject": "Your Hyvor Post account has been {status}",
-            "bodyApproved": "We’re happy to inform you that your Hyvor Post account has been approved. Now you can create subscriptions and start sending emails via Hyvor Post.",
+            "bodyApproved": "We're happy to inform you that your Hyvor Post account has been approved. Now you can upgrade your account to a paid plan and start sending emails via Hyvor Post.",
             "bodyRejected": "We regret to inform you that your Hyvor Post account approval request has been rejected.",
             "footerText": "If you have any questions or need assistance, please don't hesitate to contact our support team by replying to this email.",
             "reason": "Reject reason: {reason}"
