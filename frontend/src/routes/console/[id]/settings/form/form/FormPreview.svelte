@@ -10,7 +10,7 @@
 	let { id }: Props = $props();
 
 	function getSrc() {
-		return `/api/public/form/render`;
+		return `/api/public/form/render?id=${id}`;
 	}
 
 	$effect(() => {

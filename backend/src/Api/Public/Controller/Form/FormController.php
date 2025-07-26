@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
+use App\Api\Public\Input\Form\FormRenderInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
@@ -119,12 +120,22 @@ class FormController extends AbstractController
     }
 
     #[Route('/form/render', methods: 'GET')]
-    public function renderForm(): Response
+    public function renderForm(
+        #[MapRequestPayload] FormRenderInput $input,
+    ): Response
     {
+        $newsletter = $this->newsletterService->getNewsletterById(intval($input->id));
+
+        if (!$newsletter) {
+            throw new UnprocessableEntityHttpException('Newsletter not found');
+        }
+
+        $instance = $input->instance ?? 'https://post.hyvor.localhost';
+
         $response = <<<HTML
-            <hyvor-post-form newsletter="c9cb3415-eb28-4a43-932c-550675675852"
-            instance="https://post.hyvor.localhost"></hyvor-post-form>
-            <script type="module" src="https://hyvorpost.localhost/dev/dev.ts"></script>
+            <hyvor-post-form newsletter={$newsletter->getUuid()}
+            instance={$instance}></hyvor-post-form>
+            <script type="module" src="{$instance}/dev/dev.ts"></script>
         HTML;
 
         return new Response($response);
