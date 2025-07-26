@@ -164,8 +164,8 @@ class DomainService
     public function deleteDomain(Domain $domain): void
     {
         try {
-            $this->awsDomainService->deleteAwsDomain($domain->getDomain());
-        } catch (AwsException $e) {
+            $this->relayApiClient->deleteDomain($domain->getDomain());
+        } catch (RelayApiException $e) {
             $this->logger->critical('Failed to delete email domain in AWS SES', [
                 'domain' => $domain,
                 'error' => $e,

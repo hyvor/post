@@ -5,6 +5,7 @@ namespace App\Service\Integration\Relay;
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\Response\CreateDomainResponse;
+use App\Service\Integration\Relay\Response\DeleteDomainResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
@@ -65,6 +66,21 @@ class RelayApiClient
             'POST',
             '/domains',
             CreateDomainResponse::class,
+            [
+                'domain' => $domain
+            ]
+        );
+    }
+
+    /**
+     * @throws RelayApiException
+     */
+    public function deleteDomain(string $domain): DeleteDomainResponse
+    {
+        return $this->callApi(
+            'DELETE',
+            '/domains',
+            DeleteDomainResponse::class,
             [
                 'domain' => $domain
             ]
