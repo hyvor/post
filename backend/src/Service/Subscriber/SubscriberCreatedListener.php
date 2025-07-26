@@ -88,7 +88,7 @@ final class SubscriberCreatedListener
                 [
                     'type' => 'button',
                     'attrs' => [
-                        'href' => $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . "/api/public/subscriber/confirm?token=" . $token,
+                        'href' => $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . "/newsletter/" . $newsletter->getSlug() . "/confirm?token=" . $token,
                         'text' => $strings->get('mail.subscriberConfirmation.buttonText'),
                     ],
                 ],
