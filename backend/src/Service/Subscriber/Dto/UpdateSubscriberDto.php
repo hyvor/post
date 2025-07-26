@@ -20,6 +20,8 @@ class UpdateSubscriberDto
 
     public SubscriberStatus $status;
 
+    public ?\DateTimeImmutable $subscribedAt;
+
     public \DateTimeImmutable $unsubscribedAt;
 
     public ?string $unsubscribedReason;

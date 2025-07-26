@@ -52,6 +52,7 @@ class SubscriberController extends AbstractController
 
         $updates = new UpdateSubscriberDto();
         $updates->status = SubscriberStatus::SUBSCRIBED;
+        $updates->subscribedAt = $this->now();
 
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 

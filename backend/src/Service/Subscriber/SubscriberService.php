@@ -177,6 +177,10 @@ class SubscriberService
             }
         }
 
+        if ($updates->hasProperty('subscribedAt')) {
+            $subscriber->setSubscribedAt($updates->subscribedAt);
+        }
+
         if ($updates->hasProperty('unsubscribedAt')) {
             $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
         }

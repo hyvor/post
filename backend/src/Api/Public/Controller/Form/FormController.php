@@ -111,8 +111,7 @@ class FormController extends AbstractController
                 $lists,
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
-                $ip,
-                subscribedAt: $this->now(),
+                $ip
             );
         }
 
