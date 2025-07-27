@@ -32,7 +32,7 @@ class EntityResolver implements ValueResolverInterface
         'sending-profiles' => SendingProfile::class,
         'users' => User::class,
         'invites' => UserInvite::class,
-        'import' => SubscriberImport::class,
+        'imports' => SubscriberImport::class,
     ];
 
     public function __construct(

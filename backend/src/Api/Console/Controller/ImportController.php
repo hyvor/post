@@ -36,7 +36,7 @@ class ImportController extends AbstractController
     ) {
     }
 
-    #[Route('/import/upload', methods: 'POST')]
+    #[Route('/imports/upload', methods: 'POST')]
     public function upload(
         Newsletter $newsletter,
         Request $request,
@@ -78,7 +78,7 @@ class ImportController extends AbstractController
         return new JsonResponse(new SubscriberImportFieldObject($import, $fields));
     }
 
-    #[Route('/import/{id}', methods: 'POST')]
+    #[Route('/imports/{id}', methods: 'POST')]
     public function import(
         SubscriberImport $subscriberImport,
         #[MapRequestPayload] ImportInput $input
@@ -102,7 +102,7 @@ class ImportController extends AbstractController
         return new JsonResponse();
     }
 
-    #[Route('/import', methods: 'GET')]
+    #[Route('/imports', methods: 'GET')]
     public function listImports(Newsletter $newsletter, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 30);
@@ -110,10 +110,7 @@ class ImportController extends AbstractController
 
         $imports = $this->importService->getSubscriberImports($newsletter, $limit, $offset);
         $importObjects = array_map(function (SubscriberImport $import) {
-            return new SubscriberImportObject(
-                $import,
-                $this->mediaService->getPublicUrl($import->getMedia())
-            );
+            return new SubscriberImportObject($import);
         }, $imports);
         return new JsonResponse($importObjects);
     }

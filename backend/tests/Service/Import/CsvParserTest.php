@@ -66,13 +66,13 @@ class CsvParserTest extends KernelTestCase
 
         $subscribers = $parser->parse($subscriberImport);
 
-        $this->assertCount(3, $subscribers, 'Expected 3 subscribers to be parsed');
-        $this->assertInstanceOf(ImportingSubscriberDto::class, $subscribers[0], 'Subscribers should be a ImportingSubscriberDto');;
-        $this->assertSame('john@hyvor.com', $subscribers[0]->email, 'Subscriber email should match');
-        $this->assertSame([1,2], $subscribers[0]->lists, 'Subscriber lists should match');
-        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscribers[0]->status, 'Subscriber status should match');
-        $this->assertSame('2024-10-03 10:45:00', $subscribers[0]->subscribedAt?->format('Y-m-d H:i:s'), 'Subscriber subscribed at should match');
-        $this->assertSame('192.168.1.1', $subscribers[0]->subscribeIp, 'Subscriber subscribe IP should match');
-        $this->assertSame(['name' => 'John', 'address' => 'john_addr'], $subscribers[0]->metadata, 'Subscriber metadata name should match');
+        $this->assertCount(3, $subscribers);
+        $this->assertInstanceOf(ImportingSubscriberDto::class, $subscribers[0]);
+        $this->assertSame('john@hyvor.com', $subscribers[0]->email);
+        $this->assertSame([1,2], $subscribers[0]->lists);
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscribers[0]->status);
+        $this->assertSame('2024-10-03 10:45:00', $subscribers[0]->subscribedAt?->format('Y-m-d H:i:s'));
+        $this->assertSame('192.168.1.1', $subscribers[0]->subscribeIp);
+        $this->assertSame(['name' => 'John', 'address' => 'john_addr'], $subscribers[0]->metadata);
     }
 }

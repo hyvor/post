@@ -7,21 +7,21 @@ export function uploadCsv(file: File | Blob) {
     formData.append('file', file);
 
     return consoleApi.post<ImportField>({
-        endpoint: "import/upload",
+        endpoint: "imports/upload",
         data: formData,
     })
 }
 
 export function subscriberImport(importId: number, mapping: Record<string, string | null>) {
     return consoleApi.post<void>({
-        endpoint: `import/${importId}`,
+        endpoint: `imports/${importId}`,
         data: { mapping },
     });
 }
 
 export function getImports(offset: number = 0) {
     return consoleApi.get<Import[]>({
-        endpoint: "import",
+        endpoint: "imports",
         data: {
             limit: IMPORTS_PER_PAGE,
             offset
