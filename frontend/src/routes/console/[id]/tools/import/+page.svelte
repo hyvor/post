@@ -120,14 +120,6 @@
                                 language="json"
                             />
                         </div>
-                        <div class="import-column">
-                            <Button size="small" color="input" as="a" href={importItem.csv_url} target="_blank">
-                                View CSV
-                                {#snippet end()}
-                                    <IconBoxArrowUpRight size={14} />
-                                {/snippet}
-                            </Button>
-                        </div>
                         <div class="import-error">
                             {#if importItem.error_message}
                                 {importItem.error_message}
