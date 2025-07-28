@@ -32,7 +32,7 @@ class UpdateApprovalTest extends WebTestCase
 
         $response = $this->consoleApi(
             null,
-            'POST',
+            'PATCH',
             "/approvals/{$approval->getId()}",
             [
                 'company_name' => 'New Company',
@@ -82,7 +82,7 @@ class UpdateApprovalTest extends WebTestCase
 
         $response = $this->consoleApi(
             null,
-            'POST',
+            'PATCH',
             "/approvals/{$approval->getId()}",
             [
                 'company_name' => 'New Company',
@@ -102,7 +102,7 @@ class UpdateApprovalTest extends WebTestCase
     {
         $response = $this->consoleApi(
             null,
-            'POST',
+            'PATCH',
             '/approvals/999999',
             [
                 'company_name' => 'New Company',
