@@ -18,6 +18,7 @@
 		draftPreviewKey,
 		draftSendableSubscribersCountStore
 	} from './draftStore';
+	import { onMount } from 'svelte';
 
 	let html = $state('');
 	let iframe: HTMLIFrameElement = $state({} as HTMLIFrameElement);
@@ -36,6 +37,8 @@
 	function fetchPreview() {
 		// Don't fetch preview if the component is destroyed or issue is deleted
 		if (!iframe) return;
+
+		reloading = true;
 
 		previewIssue($draftIssueEditingStore.id)
 			.then((res) => {
@@ -65,9 +68,11 @@
 
 		return () => previewUpdateTimeout && clearTimeout(previewUpdateTimeout);
 	});
+
+	onMount(fetchPreview);
 </script>
 
-<SplitControl column>
+<!-- <SplitControl column>
 	<Label>
 		Preview
 		<Tooltip text="Refresh preview">
@@ -87,32 +92,35 @@
 			>
 		</Caption>
 	{/snippet}
-	<div class="preview">
-		<iframe
-			srcdoc={html}
-			title="Issue preview"
-			frameborder="0"
-			scrolling="no"
-			height={600}
-			width="100%"
-			bind:this={iframe}
-			onload={resizeIframe}
-		></iframe>
+</SplitControl> -->
 
-		{#if reloading}
-			<div class="loader" transition:fade>
-				<Loader size="large" />
-			</div>
-		{/if}
-	</div>
-</SplitControl>
+<div class="preview">
+	<iframe
+		srcdoc={html}
+		title="Issue preview"
+		frameborder="0"
+		scrolling="no"
+		height={600}
+		width="100%"
+		bind:this={iframe}
+		onload={resizeIframe}
+	></iframe>
+
+	{#if reloading}
+		<div class="loader" transition:fade>
+			<Loader size="large" colorTrack="transparent" />
+		</div>
+	{/if}
+</div>
 
 <style>
 	.preview {
-		border-radius: 20px;
-		max-height: 700px;
+		height: 100%;
 		overflow: auto;
 		position: relative;
+		flex: 1;
+		width: 50%;
+		border-left: 1px solid var(--border);
 	}
 	.loader {
 		position: absolute;
@@ -124,6 +132,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: rgba(0, 0, 0, 0.1);
+		background-color: rgba(0, 0, 0, 0.04);
 	}
 </style>

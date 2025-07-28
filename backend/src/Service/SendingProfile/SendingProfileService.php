@@ -11,6 +11,8 @@ use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class SendingProfileService
 {
@@ -129,10 +131,10 @@ class SendingProfileService
             return $sendingProfile->getFromEmail();
         }
 
-        return $this->getFallbackAddressOfNewsletter($newsletter);
+        return $this->getSystemAddressOfNewsletter($newsletter);
     }
 
-    public function getFallbackAddressOfNewsletter(Newsletter $newsletter): string
+    public function getSystemAddressOfNewsletter(Newsletter $newsletter): string
     {
         return sprintf(
             "%s@%s",
@@ -159,5 +161,21 @@ class SendingProfileService
         }
 
         $this->em->flush();
+    }
+
+    public function setSendingProfileToEmail(Email $email, Newsletter $newsletter): Email
+    {
+        $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
+
+        $from = $sendingProfile->getFromEmail() ?? $this->getSystemAddressOfNewsletter($newsletter);
+        $fromName = $sendingProfile->getFromName() ?? $newsletter->getName();
+        $replyTo = $sendingProfile->getReplyToEmail() ?? $from;
+
+        return $email
+            ->from(new Address(
+                $from,
+                $fromName
+            ))
+            ->replyTo($replyTo);
     }
 }

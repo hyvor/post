@@ -1,6 +1,7 @@
 <script>
 	import { Modal } from '@hyvor/design/components';
 	import FormSettings from './FormSettings.svelte';
+	import FormPreview from './form/FormPreview.svelte';
 
 	let { preview = $bindable(false) } = $props();
 </script>
@@ -12,7 +13,9 @@
 				<FormSettings />
 			</div>
 
-			<div class="preview"></div>
+			<div class="preview">
+				<FormPreview id={1} />
+			</div>
 		</div>
 	</Modal>
 </div>

@@ -10,7 +10,8 @@
 		[key: string]: any;
 	}
 
-	let { title = I18n.t('readyToStartYourNewsletter'), ...rest }: Props = $props();
+	// let { title = I18n.t('homepage.readyToStartYourNewsletter'), ...rest }: Props = $props();
+	let { title = I18n.t('comingSoon.readytoExplore'), ...rest }: Props = $props();
 </script>
 
 <div class="wrap" {...rest}>
@@ -20,12 +21,15 @@
 		</h3>
 
 		<div class="button-wrap">
-			<Button as="a" size="large" href="/console?signup">{I18n.t('startYourNewsletter')}</Button>
+			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('homepage.startYourNewsletter')}</Button> -->
+			<Button as="a" size="large" href={`/${I18n.getLocale()}#waitlist`}
+				>{I18n.t('comingSoon.joinWaitlist')}</Button
+			>
 		</div>
 
-		<div class="trial-checks">
+		<!-- <div class="trial-checks">
 			<TrialChecks style="display:flex;justify-content:space-around" />
-		</div>
+		</div> -->
 	</div>
 </div>
 

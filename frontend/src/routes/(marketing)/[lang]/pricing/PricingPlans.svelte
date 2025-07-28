@@ -21,7 +21,9 @@
 			on:click={() => (yearly = true)}
 			color="input"
 			size="small"
-			variant={!yearly ? 'invisible' : 'fill'}>{I18n.t('pricing.yearly')}<span class="off">{I18n.t('pricing.2MonthsOff')}</span></Button
+			variant={!yearly ? 'invisible' : 'fill'}
+			>{I18n.t('pricing.yearly')}<span class="off">{I18n.t('pricing.2MonthsOff')}</span
+			></Button
 		>
 	</div>
 </div>
@@ -39,7 +41,7 @@
 		display: flex;
 		gap: 15px;
 		padding-top: 20px;
-		width: 600px;
+		width: 450px;
 		max-width: 100%;
 	}
 

@@ -22,36 +22,42 @@
 	});
 </script>
 
-<Header logo='/img/logo.png' subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
+<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
 	{#snippet center()}
 		<div class="center">
 			<Button
 				as="a"
 				size="small"
-				href="/{I18n.getLocale()}/pricing"
-				variant={$page.url.pathname === '/pricing' ? 'fill-light' : 'invisible'}
+				href={`/${I18n.getLocale()}/pricing`}
+				variant={$page.url.pathname === `/${I18n.getLocale()}/pricing`
+					? 'fill-light'
+					: 'invisible'}
 			>
-				Pricing
+				{I18n.t('pricing.name')}
 			</Button>
-			<Button
+			<!-- <Button
 				as="a"
 				size="small"
 				href="/docs"
 				variant={$page.url.pathname.startsWith('/docs') ? 'fill-light' : 'invisible'}
 			>
 				Docs
-			</Button>
+			</Button> -->
 		</div>
 	{/snippet}
 
 	{#snippet end()}
 		<div class="end">
-			{#if loggedIn}
+			<!-- {#if loggedIn}
 				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
 			{:else}
 				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
-			{/if}
+			{/if} -->
+			<!-- join the waitlist -->
+			<Button as="a" size="small" href="/#waitlist">
+				{I18n.t('comingSoon.joinWaitlist')}
+			</Button>
 		</div>
 	{/snippet}
 </Header>

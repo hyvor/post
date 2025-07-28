@@ -6,8 +6,6 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Content\ContentDefaultStyle;
-use App\Service\Content\ContentService;
-use App\Service\Template\TemplateService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\IssueFactory;

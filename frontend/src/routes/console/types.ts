@@ -17,6 +17,15 @@ export interface AppConfig {
 		FORM_LIGHT_INPUT_BORDER: string;
 		FORM_LIGHT_BORDER_RADIUS: string;
 
+		FORM_COLOR_DARK_TEXT: string;
+		FORM_COLOR_DARK_ACCENT: string;
+		FORM_COLOR_DARK_ACCENT_TEXT: string;
+		FORM_COLOR_DARK_INPUT: string;
+		FORM_COLOR_DARK_INPUT_TEXT: string;
+		FORM_DARK_INPUT_BOX_SHADOW: string;
+		FORM_DARK_INPUT_BORDER: string;
+		FORM_DARK_BORDER_RADIUS: string;
+
 		TEMPLATE_LANG: string;
 		TEMPLATE_COLOR_ACCENT: string;
 		TEMPLATE_COLOR_ACCENT_TEXT: string;
@@ -271,4 +280,20 @@ export type Approval = {
     public_note: string | null;
     approved_at: number | null;
     rejected_at: number | null;
+}
+
+export type ImportStatus = 'requires_input' | 'importing' | 'failed' | 'completed';
+
+export type Import = {
+    id: number;
+    created_at: number;
+    status: ImportStatus;
+    fields: Record<string, string|null> | null;
+    imported_subscribers: number | null;
+    error_message: string | null;
+}
+
+export type ImportField = {
+    import_id: number;
+    fields: string[];
 }

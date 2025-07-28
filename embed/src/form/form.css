@@ -7,8 +7,6 @@ FORM
     margin: 0 auto;
     max-width: 100%;
     color: var(--hp-text);
-
-    --hp-accent-light: #dedede;
 }
 
 .form * {
@@ -34,7 +32,7 @@ FORM
 .form .description {
     margin-top: -0.8rem;
     font-size: 16px;
-    color: #666;
+    color: var(--hp-text-light);
     margin-bottom: 1.2rem;
 }
 
@@ -87,11 +85,11 @@ FORM
     cursor: not-allowed;
 }
 
-.form .success-message {
+/* .form .success-message {
     margin-top: 1rem;
     font-size: 16px;
     color: #666;
-}
+} */
 
 .form .lists {
     margin-bottom: 1.2rem;
@@ -100,7 +98,7 @@ FORM
 .form .footer {
     padding-top: 1rem;
     font-size: 14px;
-    color: #666;
+    color: var(--hp-text-light);
 }
 
 .form .list {

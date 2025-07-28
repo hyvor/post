@@ -17,12 +17,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
 class DomainController extends AbstractController
 {
-
-    use HasHyvorUser;
 
     public function __construct(
         private DomainService $domainService

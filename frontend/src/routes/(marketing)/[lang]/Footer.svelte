@@ -16,17 +16,17 @@
 	{#snippet center()}
 		<div>
 			<div class="row first">
-				<FooterLinkList title="Hyvor Post">
+				<!-- <FooterLinkList title="Hyvor Post">
 					<a href="/console">Console</a>
 					<a href="/{I18n.getLocale()}/pricing">Pricing</a>
 					<a href="/docs">Docs</a>
-				</FooterLinkList>
+				</FooterLinkList> -->
 
-				<FooterLinkList title="Legal">
+				<!-- <FooterLinkList title="Legal">
 					<a href="/terms" target="_blank">Terms of Service</a>
 					<a href="/privacy" target="_blank">Privacy Policy</a>
 					<a href="https://hyvor.com/compliance" target="_blank">Compliance</a>
-				</FooterLinkList>
+				</FooterLinkList> -->
 
 				<FooterLinkList title="HYVOR">
 					<a href="https://hyvor.com" target="_blank">hyvor.com</a>

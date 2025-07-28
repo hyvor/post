@@ -56,6 +56,18 @@ class ConfirmSubscriptionTest extends WebTestCase
         $this->assertSame('Invalid confirmation token.', $json['message']);
     }
 
+    public function test_invalid_token(): void
+    {
+        $response = $this->publicApi(
+            'GET',
+            '/subscriber/confirm?token=test',
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('Invalid confirmation token.', $json['message']);
+    }
+
     public function test_confirm_subscription_with_expired_token(): void
     {
         $newsletter = NewsletterFactory::createOne();
