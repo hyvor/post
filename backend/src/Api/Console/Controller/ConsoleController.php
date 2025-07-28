@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Object\ApprovalObject;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
 use App\Api\Console\Object\SendingProfileObject;
-use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
 use App\Entity\Type\ApprovalStatus;
@@ -22,6 +20,7 @@ use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +28,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
 {
-
     public function __construct(
         private NewsletterService $newsletterService,
         private ListRepository $listRepository,
@@ -39,6 +37,7 @@ class ConsoleController extends AbstractController
         private SendingProfileService $sendingProfileService,
         private ApprovalService $approvalService,
         private AuthInterface $auth, // TODO: this should be done in the listener
+        private BillingInterface $billing
     ) {
     }
 
@@ -68,6 +67,7 @@ class ConsoleController extends AbstractController
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
             'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
+            // 'license' => $this->billing->license($user->id, null)
         ]);
     }
 

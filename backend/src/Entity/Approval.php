@@ -37,19 +37,19 @@ class Approval
     private string $website;
 
     #[ORM\Column(type: 'text')]
-    private ?string $social_links;
+    private ?string $social_links = null;
 
     /**
      * @var array<string, string>|null
      */
     #[ORM\Column(type: 'json')]
-    private ?array $other_info;
+    private ?array $other_info = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $public_note;
+    private ?string $public_note = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $private_note;
+    private ?string $private_note = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $approved_at = null;

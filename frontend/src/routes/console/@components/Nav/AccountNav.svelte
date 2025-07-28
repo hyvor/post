@@ -4,46 +4,48 @@
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
-	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
-    import IconExclamationCircle from '@hyvor/icons/IconExclamationCircle';
 	import NavItem from './NavItem.svelte';
 	import { getI18n } from '../../lib/i18n';
-    import { userApprovalStatusStore } from "../../lib/stores/consoleStore";
-    import ApprovalStatusTag from "./ApprovalStatusTag.svelte";
+	import { userApprovalStatusStore } from '../../lib/stores/consoleStore';
+	import ApprovalStatusTag from './ApprovalStatusTag.svelte';
 
 	const I18n = getI18n();
 </script>
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}">
-            <NavItem>
-                <IconClipboardCheck slot="icon" />
-                <span slot="text">{I18n.t('console.nav.approve')}</span>
-            </NavItem>
-            {#snippet end()}
-                <ApprovalStatusTag status={$userApprovalStatusStore} />
-            {/snippet}
-        </NavLink>
+		<NavLink href="/console/approve" active={$page.url.pathname === '/console/approve'}>
+			<NavItem>
+				<IconClipboardCheck slot="icon" />
+				<span slot="text">{I18n.t('console.nav.approve')}</span>
+			</NavItem>
+			{#snippet end()}
+				<ApprovalStatusTag status={$userApprovalStatusStore} />
+			{/snippet}
+		</NavLink>
 		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
 			<NavItem>
 				<IconDatabase slot="icon" />
 				<span slot="text">{I18n.t('console.nav.domains')}</span>
 			</NavItem>
 		</NavLink>
-        <Tooltip
-            text={I18n.t('console.nav.billingTooltip')}
-            position="right"
-            disabled={$userApprovalStatusStore === 'approved'}
-        >
-            <NavLink href="/console/billing" active={$page.url.pathname === '/console/billing'} disabled={$userApprovalStatusStore !== 'approved'}>
-                <NavItem>
-                    <IconCoin slot="icon" />
-                    <span slot="text">{I18n.t('console.nav.billing')}</span>
-                </NavItem>
-            </NavLink>
-        </Tooltip>
-    </div>
+		<Tooltip
+			text={I18n.t('console.nav.billingTooltip')}
+			position="right"
+			disabled={$userApprovalStatusStore === 'approved'}
+		>
+			<NavLink
+				href="/console/billing"
+				active={$page.url.pathname === '/console/billing'}
+				disabled={$userApprovalStatusStore !== 'approved'}
+			>
+				<NavItem>
+					<IconCoin slot="icon" />
+					<span slot="text">{I18n.t('console.nav.billing')}</span>
+				</NavItem>
+			</NavLink>
+		</Tooltip>
+	</div>
 </div>
 
 <style lang="scss">
@@ -54,6 +56,14 @@
 
 	.nav-links :global(a.active) {
 		background-color: var(--accent-light-mid);
+	}
+
+	.nav-links :global(.tooltip-wrap) {
+		display: flex;
+	}
+
+	.nav-links :global(a) {
+		width: 100%;
 	}
 
 	@media (max-width: 992px) {
