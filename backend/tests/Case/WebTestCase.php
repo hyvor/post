@@ -3,6 +3,7 @@
 namespace App\Tests\Case;
 
 use App\Entity\Newsletter;
+use App\Tests\Factory\SudoUserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Util\Crypt\Encryption;
@@ -30,8 +31,9 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
 
         $this->container = static::getContainer();
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
-
+        if ($this->shouldEnableAuthFake()) {
+            AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        }
         /** @var EntityManagerInterface $em */
         $em = $this->container->get(EntityManagerInterface::class);
         $this->em = $em;
@@ -39,6 +41,11 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $encryption = $this->container->get(Encryption::class);
         $this->assertInstanceOf(Encryption::class, $encryption);
         $this->encryption = $encryption;
+    }
+
+    protected function shouldEnableAuthFake(): bool
+    {
+        return true;
     }
 
     /**
@@ -107,6 +114,39 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             content: (string)json_encode($data)
         );
         return $this->client->getResponse();
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $server
+     */
+    public function sudoApi(
+        string $method,
+        string $uri,
+        array $data = [],
+        array $server = [],
+    ): Response {
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
+
+        $this->client->request(
+            $method,
+            '/api/sudo' . $uri,
+            server: array_merge([
+                'CONTENT_TYPE' => 'application/json',
+            ], $server),
+            content: (string)json_encode($data),
+        );
+
+        $response = $this->client->getResponse();
+
+        if ($response->getStatusCode() === 500) {
+            throw new \Exception(
+                'API call failed with status code 500. ' .
+                'Response: ' . $response->getContent()
+            );
+        }
+
+        return $response;
     }
 
     public function getTestLogger(): TestHandler

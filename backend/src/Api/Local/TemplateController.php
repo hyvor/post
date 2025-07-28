@@ -37,12 +37,12 @@ class TemplateController extends AbstractController
         private ContentService $contentService,
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
+        private readonly Environment $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
         private EmailNotificationService $emailNotificationService,
         private Encryption $encryption,
         private TemplateService $templateService,
         private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
         private InstanceUrlResolver $instanceUrlResolver,
         private InternalConfig $internalConfig,
     ) {
@@ -67,6 +67,26 @@ class TemplateController extends AbstractController
 
         return new Response($html);
     }
+
+    #[Route('/template/approval', methods: 'GET')]
+    public function approvalTemplate(): Response
+    {
+        $strings = $this->stringsFactory->create();
+
+        $mail = $this->mailTemplate->render('mail/approval.html.twig', [
+                'component' => 'post',
+                'strings' => [
+                    'greeting' => $strings->get('mail.common.greeting', ['name' => "User"]),
+                    'subject' => $strings->get('mail.approval.subject', ['status' => "approved"]),
+                    'body' => $strings->get('mail.approval.bodyApproved'),
+                    'reason' => $strings->get('mail.approval.reason', ['reason' => 'public note']),
+                    'footerText' => $strings->get('mail.approval.footerText'),
+                ]
+            ]
+        );
+        return new Response($mail);
+    }
+
 
     #[Route('/template/confirm-subscription', methods: 'GET')]
     public function confirmSubscriptionTemplate(): Response

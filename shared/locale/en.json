@@ -25,13 +25,52 @@
             }
         },
         "nav": {
+            "approve": "Approval",
             "domains": "Domains",
             "billing": "Billing",
+            "billingTooltip": "Your account must be approved to access billing",
             "home": "Home",
             "subscribers": "Subscribers",
             "issues": "Issues",
             "tools": "Tools",
             "settings": "Settings"
+        },
+        "approve": {
+            "required": "Required",
+            "preferred": "Preferred",
+            "companyName": "Company Name",
+            "country": "Country",
+            "website": "Website",
+            "socialLinks": "Social Media Links",
+            "typeOfContent": "Type of Content",
+            "typeOfContentCaption": "What type of content do you plan to have on your newsletter?",
+            "typeOfContentPlaceholder": "Weekly insights about tech, AI, and startups",
+            "frequency": "Issues per Month",
+            "frequencyCaption": "How many newsletter issues do you plan to send per month?",
+            "frequencyPlaceholder": "10 issues/month",
+            "existingList": "Existing Email List",
+            "existingListCaption": "Do you already have an email list that you wish to import? If yes, how did you obtain it? How many subscribers are there?",
+            "sample": "Sample Email",
+            "sampleCaption": "Link to a sample email or past newsletter archive, if available.",
+            "whyPost": "Why Hyvor Post?",
+            "whyPostCaption": "Completely optional. Our team would love to know why you chose Hyvor Post.",
+            "checkbox1": "I agree that Hyvor Post <strong>does not allow</strong> sending <strong>unsolicited emails</strong> or <strong>cold emails</strong>, and every subscriber must have opted in to receive emails.",
+            "checkbox2": "I agree to the <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink> of Hyvor Post.",
+            "submit": "Submit for Approval",
+            "update": "Update Info",
+            "companyNameRequired": "Company name is required",
+            "countryRequired": "Country is required",
+            "websiteRequired": "Website is required",
+            "websiteInvalid": "Website URL is invalid",
+            "checkboxRequired": "You must agree to the terms and conditions",
+            "submittedForApproval": "Your information has been submitted for approval.",
+            "updatedInfo": "Your information has been updated.",
+            "error": "An error occurred while submitting your information. Please try again.",
+            "pendingNotice": "Your account must be approved by our team before sending newsletters. Please fill out the following form, and we will review it within 24 hours.",
+            "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours.",
+            "rejectNotice": "Your approval request has been rejected. Please contact support for any further clarifications.",
+            "rejectReason": "Reject reason: {reason}",
+            "approvedNotice": "Your account has been approved on {date}"
         },
         "domains": {
             "addDomain": "Add Domain",
@@ -42,7 +81,8 @@
                 "title": "Usage",
                 "licenseDoesNotIncludeEmails": "Your current license does not include sending emails",
                 "30days": "30d"
-            }
+            },
+            "approvalRequired": "Your account must be approved to create a subscription."
         },
         "home": {
             "stats": {
@@ -219,7 +259,8 @@
     },
     "mail": {
         "common": {
-            "greeting": "Hello {name},"
+            "greeting": "Hello {name} \uD83D\uDC4B,",
+            "regards": "Best regards,"
         },
         "userInvite": {
             "subject": "You have been invited to join {projectName}",
@@ -234,6 +275,13 @@
         "subscriberConfirmation": {
             "heading": "Confirm your subscription",
             "buttonText": "Confirm Subscription"
+        },
+        "approval": {
+            "subject": "Your Hyvor Post account has been {status}",
+            "bodyApproved": "We're happy to inform you that your Hyvor Post account has been approved. Now you can upgrade your account to a paid plan and start sending emails via Hyvor Post.",
+            "bodyRejected": "We regret to inform you that your Hyvor Post account approval request has been rejected.",
+            "footerText": "If you have any questions or need assistance, please don't hesitate to contact our support team by replying to this email.",
+            "reason": "Reject reason: {reason}"
         }
     }
 }

@@ -8,17 +8,19 @@ use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
 use App\Api\Console\Object\SendingProfileObject;
-use App\Api\Console\Object\StatsObject;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
+use App\Entity\Type\ApprovalStatus;
 use App\Repository\ListRepository;
 use App\Service\AppConfig;
+use App\Service\Approval\ApprovalService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +28,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
 {
-
     public function __construct(
         private NewsletterService $newsletterService,
         private ListRepository $listRepository,
@@ -34,7 +35,9 @@ class ConsoleController extends AbstractController
         private AppConfig $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
         private SendingProfileService $sendingProfileService,
+        private ApprovalService $approvalService,
         private AuthInterface $auth, // TODO: this should be done in the listener
+        private BillingInterface $billing
     ) {
     }
 
@@ -49,6 +52,7 @@ class ConsoleController extends AbstractController
             fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
             $newslettersUsers
         );
+        $userApproval = $this->approvalService->getApprovalOfUser($user);
 
         return new JsonResponse([
             'newsletters' => $newsletters,
@@ -62,6 +66,8 @@ class ConsoleController extends AbstractController
                 // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
+            'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
+            // 'license' => $this->billing->license($user->id, null)
         ]);
     }
 
