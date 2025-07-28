@@ -85,7 +85,7 @@ class CsvParser extends ParserAbstract
 
             $lists = [];
             if ($fieldMapping['lists'] !== null && isset($item[$fieldMapping['lists']])) {
-                /** @var int[] $lists */
+                /** @var string[] $lists */
                 $lists = json_decode($item[$fieldMapping['lists']], true) ?? [];
             }
 

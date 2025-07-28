@@ -9,7 +9,7 @@ class ImportingSubscriberDto
 
     public function __construct(
         public string $email,
-        /** @var int[] $lists */
+        /** @var string[] $lists */
         public array $lists,
         public SubscriberStatus $status,
         public ?\DateTimeImmutable $subscribedAt,

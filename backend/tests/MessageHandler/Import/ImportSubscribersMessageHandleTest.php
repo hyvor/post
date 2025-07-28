@@ -10,6 +10,7 @@ use App\Service\Import\MessageHandler\ImportSubscribersMessageHandler;
 use App\Service\Media\MediaService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberImportFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -35,6 +36,16 @@ class ImportSubscribersMessageHandleTest extends KernelTestCase
             $file,
         );
 
+        NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+            'name' => 'List 1',
+        ]);
+
+        NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+            'name' => 'List 2',
+        ]);
+
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
             'media' => $media,
@@ -51,9 +62,13 @@ class ImportSubscribersMessageHandleTest extends KernelTestCase
         $this->transport()->throwExceptions()->process();
 
         $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(['newsletter' => $newsletter->_real()]);
-        $this->assertCount(3, $importedSubscribers, 'Expected 3 subscribers to be imported');
-        $this->assertSame('john@hyvor.com', $importedSubscribers[0]->getEmail(), 'First subscriber email should match');
-        $this->assertSame('jane@hyvor.com', $importedSubscribers[1]->getEmail(), 'First subscriber email should match');
-        $this->assertSame('doe@hyvor.com', $importedSubscribers[2]->getEmail(), 'First subscriber email should match');
+
+        $this->assertCount(3, $importedSubscribers);
+        $this->assertSame('john@hyvor.com', $importedSubscribers[0]->getEmail());
+        $this->assertSame(2, count($importedSubscribers[0]->getLists()));
+        $this->assertSame('jane@hyvor.com', $importedSubscribers[1]->getEmail());
+        $this->assertSame(1, count($importedSubscribers[1]->getLists()));
+        $this->assertSame('doe@hyvor.com', $importedSubscribers[2]->getEmail());
+        $this->assertSame(1, count($importedSubscribers[2]->getLists()));
     }
 }

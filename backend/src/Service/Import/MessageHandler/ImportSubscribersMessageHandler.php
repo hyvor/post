@@ -47,8 +47,8 @@ class ImportSubscribersMessageHandler
                 if (count($dto->lists) === 0) {
                     $subscriberLists = $lists;
                 } else {
-                    foreach ($dto->lists as $listId) {
-                        $list = $lists->findFirst(fn($key, $l) => $l->getId() === $listId);
+                    foreach ($dto->lists as $listName) {
+                        $list = $lists->findFirst(fn($key, $l) => $l->getName() === $listName);
                         if ($list === null) {
                             continue;
                         }

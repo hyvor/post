@@ -1,4 +1,4 @@
 email,lists,subscribed at,subscribe ip,name,address
-john@hyvor.com,"[1,2]",2024-10-03 10:45:00,192.168.1.1,John,john_addr
-jane@hyvor.com,[1],2024-10-03 10:45:00,192.168.1.1,Jane,jane_addr
-doe@hyvor.com,[2],2024-10-03 10:45:00,192.168.1.1,Doe,doe_addr
+john@hyvor.com,"[""List 1"", ""List 2"", ""List 3""]",2024-10-03 10:45:00,192.168.1.1,John,john_addr
+jane@hyvor.com,"[""List 1""]",2024-10-03 10:45:00,192.168.1.1,Jane,jane_addr
+doe@hyvor.com,"[""List 2""]",2024-10-03 10:45:00,192.168.1.1,Doe,doe_addr

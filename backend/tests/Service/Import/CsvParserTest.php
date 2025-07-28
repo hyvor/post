@@ -12,6 +12,7 @@ use App\Service\Import\Parser\ParserAbstract;
 use App\Service\Media\MediaService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberImportFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -38,6 +39,16 @@ class CsvParserTest extends KernelTestCase
             MediaFolder::IMPORT,
             $file,
         );
+
+        NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+            'name' => 'List 1',
+        ]);
+
+        NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+            'name' => 'List 2',
+        ]);
 
         SubscriberMetadataDefinitionFactory::createOne([
             'newsletter' => $newsletter,
@@ -69,7 +80,7 @@ class CsvParserTest extends KernelTestCase
         $this->assertCount(3, $subscribers);
         $this->assertInstanceOf(ImportingSubscriberDto::class, $subscribers[0]);
         $this->assertSame('john@hyvor.com', $subscribers[0]->email);
-        $this->assertSame([1,2], $subscribers[0]->lists);
+        $this->assertSame(["List 1","List 2","List 3"], $subscribers[0]->lists);
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscribers[0]->status);
         $this->assertSame('2024-10-03 10:45:00', $subscribers[0]->subscribedAt?->format('Y-m-d H:i:s'));
         $this->assertSame('192.168.1.1', $subscribers[0]->subscribeIp);
