@@ -66,7 +66,7 @@ class ApprovalController extends AbstractController
         return new JsonResponse(new ApprovalObject($approval));
     }
 
-    #[Route('/approvals/{id}', methods: 'POST')]
+    #[Route('/approvals/{id}', methods: 'PATCH')]
     public function updateApproval(
         string $id,
         #[MapRequestPayload] UpdateApprovalInput $input

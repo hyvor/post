@@ -50,7 +50,7 @@ export function updateApproval(id: number, param: UpdateApprovalParam) {
 
     const sanitizedParam = sanitizeParams(filteredParam);
 
-    return consoleApi.post<Approval>({
+    return consoleApi.patch<Approval>({
         endpoint: `approvals/${id}`,
         data: sanitizedParam,
     });
