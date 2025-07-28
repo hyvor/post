@@ -9,4 +9,7 @@ bin/console app:dev:reset --seed
 
 # seed only
 bin/console app:dev:seed
+
+# consume message bus
+bin/console messenger:consume async
 ```

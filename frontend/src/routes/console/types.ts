@@ -261,3 +261,19 @@ export type Media = {
 	extension: string;
 	size: number;
 }
+
+export type ImportStatus = 'requires_input' | 'importing' | 'failed' | 'completed';
+
+export type Import = {
+    id: number;
+    created_at: number;
+    status: ImportStatus;
+    fields: Record<string, string|null> | null;
+    imported_subscribers: number | null;
+    error_message: string | null;
+}
+
+export type ImportField = {
+    import_id: number;
+    fields: string[];
+}

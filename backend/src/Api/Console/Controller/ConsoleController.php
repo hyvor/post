@@ -17,9 +17,9 @@ use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\InternalConfig;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,22 +27,21 @@ use Symfony\Component\Routing\Attribute\Route;
 class ConsoleController extends AbstractController
 {
 
-    use HasHyvorUser;
-
     public function __construct(
         private NewsletterService $newsletterService,
         private ListRepository $listRepository,
         private InternalConfig $internalConfig,
         private AppConfig $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
-        private SendingProfileService $sendingProfileService
+        private SendingProfileService $sendingProfileService,
+        private AuthInterface $auth, // TODO: this should be done in the listener
     ) {
     }
 
     #[Route('/init', methods: 'GET')]
     public function initConsole(): JsonResponse
     {
-        $user = $this->getUser();
+        $user = $this->auth->check('');
         assert($user instanceof AuthUser);
 
         $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);

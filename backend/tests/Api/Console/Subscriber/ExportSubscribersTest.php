@@ -31,7 +31,7 @@ class ExportSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/subscribers/export'
+            '/export'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -68,7 +68,7 @@ class ExportSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/subscribers/export'
+            '/export'
         );
 
         $this->assertSame(200, $response->getStatusCode());

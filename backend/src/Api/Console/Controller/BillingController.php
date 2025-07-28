@@ -4,7 +4,6 @@ namespace App\Api\Console\Controller;
 
 use App\Service\Issue\SendService;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,8 +11,6 @@ use Hyvor\Internal\Billing\BillingInterface;
 
 class BillingController extends AbstractController
 {
-
-    use HasHyvorUser;
 
     public function __construct(
         private SendService $sendService
