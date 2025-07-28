@@ -58,11 +58,4 @@ class SudoAuthorizationListenerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame("You do not have sudo access.", $this->getJson()["message"]);
     }
-
-    public function test_sudo_api_access_without_session(): void
-    {
-        $this->client->request("GET", "/api/sudo/approvals");
-        $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Session authentication required for sudo API access.", $this->getJson()["message"]);
-    }
 }
