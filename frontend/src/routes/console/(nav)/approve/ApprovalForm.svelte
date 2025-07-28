@@ -231,15 +231,15 @@
 	<Textarea bind:value={whyPost} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
-{#if !approval}
+{#if !$approvalStore}
     <div class="checkboxes">
-        <Checkbox checked={checkbox1}>
+        <Checkbox bind:checked={checkbox1}>
             <I18n.T
                 key="console.approve.checkbox1"
                 params={{strong: {element: 'strong'}}}
             />
         </Checkbox>
-        <Checkbox checked={checkbox2}>
+        <Checkbox bind:checked={checkbox2}>
             <I18n.T
                 key="console.approve.checkbox2"
                 params={{

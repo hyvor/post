@@ -6,12 +6,12 @@
     import ApprovalRow from "./ApprovalRow.svelte";
     import {ITEMS_PER_PAGE} from "../lib/generalActions";
     import ApprovalModal from "./ApprovalModal.svelte";
+    import {approvalStore} from "../lib/stores/sudoStore";
 
     let loading = $state(true);
     let hasMore = $state(true);
     let loadingMore = $state(false);
     let error: null | string = $state(null);
-    let approvals: Approval[] = $state([]);
 
     let showModal = $state(false);
     let selectingApproval: Approval | undefined = $state(undefined);
@@ -19,9 +19,13 @@
     function load(more = false) {
         more ? (loadingMore = true) : (loading = true);
 
-        getApprovals(null, ITEMS_PER_PAGE, more ? approvals.length : 0)
+        getApprovals(null, ITEMS_PER_PAGE, more ? $approvalStore.length : 0)
             .then((data) => {
-                approvals = more ? [...approvals, ...data] : data;
+                if (more) {
+                    approvalStore.update(approvals => [...approvals, ...data]);
+                } else {
+                    approvalStore.set(data);
+                }
                 hasMore = data.length === ITEMS_PER_PAGE;
             })
             .catch((e) => {
@@ -35,15 +39,21 @@
 
     function handleApproveOrReject(approval: Approval, action: 'approved' | 'rejected') {
         approve(approval, action)
-            .then(() => {
+            .then((data) => {
                 toast.success("Approval status updated");
+                approvalStore.update(approvals => {
+                    const index = approvals.findIndex(a => a.id === approval.id);
+                    if (index !== -1) {
+                        approvals[index] = {...approvals[index], ...data};
+                    }
+                    return approvals;
+                });
             })
             .catch((e) => {
                 toast.error("Failed to approve: ", e.message);
             })
             .finally(() => {
                 showModal = false;
-                window.location.reload();
             });
     }
 
@@ -82,11 +92,11 @@
     <Loader full />
 {:else if error}
     <IconMessage error message={error} />
-{:else if approvals.length === 0}
+{:else if $approvalStore.length === 0}
     <IconMessage empty message="No approvals found" />
 {:else}
     <div class="list">
-        {#each approvals as approval (approval.id)}
+        {#each $approvalStore as approval (approval.id)}
             <ApprovalRow {approval} {handleSelect} />
         {/each}
         <LoadButton

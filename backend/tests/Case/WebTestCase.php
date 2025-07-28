@@ -128,11 +128,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     ): Response {
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
 
-        SudoUserFactory::createOne([
-            'user_id' => 1,
-        ]);
-
-
         $this->client->request(
             $method,
             '/api/sudo' . $uri,

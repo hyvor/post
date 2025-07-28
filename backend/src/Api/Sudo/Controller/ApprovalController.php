@@ -3,6 +3,7 @@
 namespace App\Api\Sudo\Controller;
 
 use App\Api\Sudo\Input\Approval\ApproveInput;
+use App\Api\Sudo\Input\Approval\GetApprovalsInput;
 use App\Api\Sudo\Object\ApprovalObject;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
@@ -20,12 +21,17 @@ class ApprovalController extends AbstractController
     ) {}
 
     #[Route('/approvals', methods: ['GET'])]
-    public function getApprovals(): JsonResponse
+    public function getApprovals(
+        Request $request,
+    ): JsonResponse
     {
+        $limit = $request->query->getInt('limit', 50);
+        $offset = $request->query->getInt('offset', 0);
+
         return new JsonResponse(
             array_map(
                 fn($approval) => new ApprovalObject($approval),
-                $this->approvalService->getApprovals()
+                $this->approvalService->getApprovals(limit: $limit, offset: $offset)
             )
         );
     }
@@ -40,13 +46,13 @@ class ApprovalController extends AbstractController
             throw new UnprocessableEntityHttpException('Approval request not found');
         }
 
-        $this->approvalService->changeStatus(
+        $approval = $this->approvalService->changeStatus(
             $approval,
             $input->status,
             $input->public_note,
             $input->private_note
         );
 
-        return new JsonResponse();
+        return new JsonResponse(new ApprovalObject($approval));
     }
 }

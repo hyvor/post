@@ -34,6 +34,14 @@ class ApproveTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('id', $data);
+        $this->assertSame($approval->getId(), $data['id']);
+
         $this->assertSame(ApprovalStatus::APPROVED, $approval->getStatus());
         $this->assertSame('Looks good!', $approval->getPublicNote());
         $this->assertSame('Approved by admin', $approval->getPrivateNote());
@@ -43,7 +51,7 @@ class ApproveTest extends WebTestCase
         $this->assertEmailSubjectContains($email, 'Your Hyvor Post account has been approved');
         $this->assertEmailHtmlBodyContains(
             $email,
-            'We’re happy to inform you that your Hyvor Post account has been approved.'
+            "Hyvor Post account has been approved. Now you can upgrade your account"
         );
     }
 
@@ -65,6 +73,13 @@ class ApproveTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('id', $data);
+        $this->assertSame($approval->getId(), $data['id']);
         $this->assertSame(ApprovalStatus::REJECTED, $approval->getStatus());
         $this->assertSame('Not suitable for our platform.', $approval->getPublicNote());
         $this->assertSame('Rejected by admin', $approval->getPrivateNote());
@@ -78,7 +93,7 @@ class ApproveTest extends WebTestCase
         );
         $this->assertEmailHtmlBodyContains(
             $email,
-            'Reject Reason: Not suitable for our platform.'
+            'Reject reason: Not suitable for our platform.'
         );
     }
 

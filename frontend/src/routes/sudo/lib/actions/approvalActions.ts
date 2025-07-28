@@ -21,7 +21,7 @@ export function approve(
     approval: Approval,
     status: ApprovalStatus,
 ) {
-    return sudoApi.post<void>({
+    return sudoApi.post<Approval>({
         endpoint: `approvals/${approval.id}`,
         data: {
             id: approval.id,
