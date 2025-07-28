@@ -10,6 +10,8 @@
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import IconSendArrowUp from '@hyvor/icons/IconSendArrowUp';
 	import { getI18n } from '../../lib/i18n';
+	import { setContext } from 'svelte';
+	import { saveDiscardBoxClassContextName } from '../@components/save/save';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -18,6 +20,8 @@
 	let { children }: Props = $props();
 
 	const prefix = `/console/${$newsletterStore.id}/settings`;
+
+	setContext(saveDiscardBoxClassContextName, 'settings-content');
 
 	const I = getI18n();
 </script>
@@ -35,7 +39,7 @@
 			{#snippet start()}
 				<IconPeople />
 			{/snippet}
-            {I.t('console.settings.users.title')}
+			{I.t('console.settings.users.title')}
 		</NavLink>
 
 		<NavLink
@@ -74,7 +78,7 @@
 		<div class="section-div"></div>
 	</div>
 
-	<div class="content hds-box">
+	<div class="content hds-box settings-content">
 		{@render children?.()}
 	</div>
 </div>
