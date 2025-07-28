@@ -114,6 +114,9 @@
                     "completed": "Completed",
                     "failed": "Failed"
                 },
+                "showFields": "Show Fields",
+                "mappedFields": "Mapped Fields",
+                "notMapped": "Not Mapped",
                 "importedCount": "Imported {count} subscribers"
             },
 

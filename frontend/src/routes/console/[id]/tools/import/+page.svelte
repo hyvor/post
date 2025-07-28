@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Button, IconMessage, Loader, SplitControl, CodeBlock, toast, LoadButton } from '@hyvor/design/components';
+    import { Button, IconMessage, Loader, SplitControl, CodeBlock, toast, LoadButton } from '@hyvor/design/components';
     import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 	import SettingsBody from '../../settings/@components/SettingsBody.svelte';
     import ImportMapping from "./ImportMapping.svelte";
@@ -9,6 +9,7 @@
     import type {Import} from "../../../types";
     import ImportStatusBadge from "./ImportStatusBadge.svelte";
     import {getI18n} from "../../../lib/i18n";
+    import ImportFieldMapModal from "./ImportFieldMapModal.svelte";
 
     let loading = $state(false);
     let hasMore = $state(false);
@@ -20,6 +21,9 @@
     let fileInput: HTMLInputElement | undefined = $state();
     let importId: number | undefined = $state();
     let fields: string[] = $state([]);
+
+    let showFields = $state(false);
+    let fieldMap = $state<Record<string, string|null>>({});
 
     const I18n = getI18n();
 
@@ -72,6 +76,12 @@
                 loading = false;
             });
     }
+
+    function showFieldsOf(importItem: Import) {
+        fieldMap = importItem.fields || {};
+        showFields = true;
+    }
+
     onMount(() => {
         loadImports();
     })
@@ -115,10 +125,14 @@
                             <ImportStatusBadge status={importItem.status} />
                         </div>
                         <div class="import-fields">
-                            <CodeBlock
-                                code={JSON.stringify(importItem.fields)}
-                                language="json"
-                            />
+                            <Button
+                                size="small"
+                                color="input"
+                                on:click={() => showFieldsOf(importItem)}
+                                disabled={importItem.status === 'requires_input'}
+                            >
+                                {I18n.t('console.tools.import.showFields')}
+                            </Button>
                         </div>
                         <div class="import-error">
                             {#if importItem.status === 'failed' && importItem.error_message}
@@ -142,6 +156,9 @@
     {#if importId}
         <ImportMapping bind:show={mapping} importId={importId} fields={fields} />
     {/if}
+
+    <ImportFieldMapModal bind:show={showFields} bind:fieldMap={fieldMap} />
+
 </SettingsBody>
 
 <style>
@@ -170,18 +187,17 @@
     .import-info {
         display: flex;
         flex-direction: column;
-    }
-    .import-status {
-        width: 130px;
-    }
-    .import-fields {
-        width: 350px;
+        width: 170px;
     }
     .import-date {
         font-size: 13px;
         color: var(--text-light);
     }
+    .import-status,
+    .import-fields {
+        width: 160px;
+    }
     .import-error {
-        width: 180px;
+        flex: 1;
     }
 </style>
