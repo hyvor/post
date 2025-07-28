@@ -30,11 +30,20 @@ class ApprovalService
     /**
      * @return Approval[]
      */
-    public function getApprovals(int $limit = 50, int $offset = 0): array
+    public function getApprovals(?int $userId = null, ?ApprovalStatus $status = null , int $limit = 50, int $offset = 0): array
     {
+        $criteria = [];
+
+        if ($userId !== null) {
+            $criteria['user_id'] = $userId;
+        }
+        if ($status !== null) {
+            $criteria['status'] = $status;
+        }
+
         return $this->em->getRepository(Approval::class)
             ->findBy(
-                [],
+                $criteria,
                 ['id' => 'DESC'],
                 $limit,
                 $offset

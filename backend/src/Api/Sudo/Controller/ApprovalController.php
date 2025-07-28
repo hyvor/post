@@ -25,13 +25,15 @@ class ApprovalController extends AbstractController
         Request $request,
     ): JsonResponse
     {
+        $userId = $request->query->has('user_id') ? $request->query->getInt('user_id') : null;
+        $status = $request->query->has('status') ? ApprovalStatus::from($request->query->getString('status')) : null;
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
         return new JsonResponse(
             array_map(
                 fn($approval) => new ApprovalObject($approval),
-                $this->approvalService->getApprovals(limit: $limit, offset: $offset)
+                $this->approvalService->getApprovals($userId, $status, limit: $limit, offset: $offset)
             )
         );
     }
