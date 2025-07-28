@@ -4,7 +4,6 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\UserInvite\InviteUserInput;
 use App\Api\Console\Object\UserInviteObject;
-use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
@@ -13,7 +12,6 @@ use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,8 +21,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
-
-    use HasHyvorUser;
 
     public function __construct(
         private AuthInterface $auth,

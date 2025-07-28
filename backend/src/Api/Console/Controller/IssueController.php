@@ -18,7 +18,6 @@ use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Template\HtmlTemplateRenderer;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +29,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class IssueController extends AbstractController
 {
-
-    use HasHyvorUser;
 
     public function __construct(
         private IssueService $issueService,

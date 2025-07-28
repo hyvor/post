@@ -25,8 +25,6 @@ abstract class ParserAbstract
 
     public function __construct()
     {
-        ini_set('memory_limit', '150M');
-
         $this->errors = new ArrayCollection();
         $this->warnings = new ArrayCollection();
     }

@@ -17,12 +17,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
 class NewsletterController extends AbstractController
 {
-    use HasHyvorUser;
-
     public function __construct(
         private NewsletterService $newsletterService
     ) {
