@@ -42,13 +42,18 @@ class ImportSubscribersMessageHandler
             foreach ($subscribers as $dto) {
 
                 $subscriberLists = [];
-                foreach ($dto->lists as $listId) {
-                    $list = $lists->findFirst(fn($key, $l) => $l->getId() === $listId);
-                    if ($list === null) {
-                        continue;
-                    }
-                    if (!in_array($list, $subscriberLists, true)) {
-                        $subscriberLists[] = $list;
+
+                if (count($dto->lists) === 0) {
+                    $subscriberLists = $lists;
+                } else {
+                    foreach ($dto->lists as $listId) {
+                        $list = $lists->findFirst(fn($key, $l) => $l->getId() === $listId);
+                        if ($list === null) {
+                            continue;
+                        }
+                        if (!in_array($list, $subscriberLists, true)) {
+                            $subscriberLists[] = $list;
+                        }
                     }
                 }
 
@@ -61,6 +66,7 @@ class ImportSubscribersMessageHandler
                         :subscribe_ip, :source, :metadata, :created_at, :updated_at
                     )
                     ON CONFLICT (email) DO NOTHING
+                    RETURNING id
                 SQL;
 
                 $params = [
@@ -75,7 +81,25 @@ class ImportSubscribersMessageHandler
                     'updated_at' => $this->now()->format('Y-m-d H:i:s'),
                 ];
 
-                $this->em->getConnection()->executeStatement($query, $params);
+                $subscriberId = $this->em->getConnection()->fetchOne($query, $params);
+
+                if ($subscriberId && count($subscriberLists) > 0) {
+
+                    $placeholders = [];
+                    $params = ['subscriber_id' => $subscriberId];
+
+                    foreach ($subscriberLists as $i => $list) {
+                        $placeholders[] = "(:list_id_$i, :subscriber_id)";
+                        $params["list_id_$i"] = $list->getId();
+                    }
+
+                    $sql = sprintf(
+                        'INSERT INTO list_subscriber (list_id, subscriber_id) VALUES %s',
+                        implode(', ', $placeholders)
+                    );
+
+                    $this->em->getConnection()->executeStatement($sql, $params);
+                }
             }
 
             $subscriberImport->setStatus(SubscriberImportStatus::COMPLETED);
