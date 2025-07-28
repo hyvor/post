@@ -5,13 +5,11 @@ namespace App\Api\Public\Controller\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
-use Hyvor\Internal\Component\InstanceUrlResolver;
-use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Util\Crypt\Encryption;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,8 +20,6 @@ class SubscriberController extends AbstractController
     public function __construct(
         private SubscriberService $subscriberService,
         private Encryption $encryption,
-        private InstanceUrlResolver $instanceUrlResolver,
-        private InternalConfig $internalConfig
     ) {
     }
 
@@ -32,7 +28,11 @@ class SubscriberController extends AbstractController
     {
         $token = $request->query->getString('token');
 
-        $data = $this->encryption->decrypt($token);
+        try {
+            $data = $this->encryption->decrypt($token);
+        } catch (DecryptException) {
+            throw new BadRequestHttpException('Invalid confirmation token.');
+        }
 
         if (!$data || !is_array($data) || !isset($data['subscriber_id'], $data['expires_at'])) {
             throw new BadRequestHttpException('Invalid confirmation token.');
