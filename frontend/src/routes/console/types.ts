@@ -260,6 +260,7 @@ export type Import = {
     created_at: number;
     status: ImportStatus;
     fields: Record<string, string|null> | null;
+    imported_subscribers: number | null;
     error_message: string | null;
 }
 

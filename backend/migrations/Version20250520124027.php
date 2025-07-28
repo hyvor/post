@@ -30,6 +30,7 @@ final class Version20250520124027 extends AbstractMigration
             media_id BIGINT NOT NULL references media(id) ON DELETE CASCADE,
             status subscriber_import_status NOT NULL DEFAULT 'requires_input',
             fields JSONB,
+            imported_subscribers INTEGER,
             error_message TEXT
         );
         SQL

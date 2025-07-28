@@ -12,6 +12,7 @@ class SubscriberImportObject
     public SubscriberImportStatus $status;
     /** @var array<string, string | null> | null */
     public ?array $fields = null;
+    public ?int $imported_subscribers = null;
     public ?string $error_message = null;
 
 
@@ -21,6 +22,7 @@ class SubscriberImportObject
         $this->created_at = $import->getCreatedAt()->getTimestamp();
         $this->status = $import->getStatus();
         $this->fields = $import->getFields();
+        $this->imported_subscribers = $import->getImportedSubscribers();
         $this->error_message = $import->getErrorMessage();
     }
 }

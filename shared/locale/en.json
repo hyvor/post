@@ -113,7 +113,8 @@
                     "importing": "Importing",
                     "completed": "Completed",
                     "failed": "Failed"
-                }
+                },
+                "importedCount": "Imported {count} subscribers"
             },
 
             "export": {

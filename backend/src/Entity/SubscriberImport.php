@@ -39,6 +39,9 @@ class SubscriberImport
     #[ORM\Column(type: 'json')]
     private ?array $fields = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $imported_subscribers = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;
 
@@ -129,6 +132,18 @@ class SubscriberImport
     public function setFields(?array $fields): static
     {
         $this->fields = $fields;
+
+        return $this;
+    }
+
+    public function getImportedSubscribers(): ?int
+    {
+        return $this->imported_subscribers;
+    }
+
+    public function setImportedSubscribers(?int $imported_subscribers): static
+    {
+        $this->imported_subscribers = $imported_subscribers;
 
         return $this;
     }

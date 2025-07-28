@@ -5,6 +5,7 @@ namespace App\Service\Import\Parser;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Import\Dto\ImportingSubscriberDto;
+use App\Service\Media\MediaReadException;
 use App\Service\Media\MediaService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,11 +28,20 @@ class CsvParser extends ParserAbstract
     public function parse(SubscriberImport $subscriberImport): Collection
     {
         $fieldMapping = $subscriberImport->getFields();
+
+        if ($fieldMapping === null) {
+            throw new ParserException('Field mapping not set.');
+        }
+
         $metaFields = $this->getMetadataFields($fieldMapping);
         $metaKeys = array_map(fn($meta) => $meta->getKey(), $this->subscriberMetadataService->getMetadataDefinitions($subscriberImport->getNewsletter()));
 
 
-        $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia()); // handle error
+        try {
+            $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia());
+        } catch (MediaReadException $e) {
+            throw new ParserException('Failed to read media stream: ' . $e->getMessage(), previous: $e);
+        }
 
         if (!is_resource($stream)) {
             throw new ParserException('Unable to read media stream.');

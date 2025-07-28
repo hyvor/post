@@ -121,8 +121,10 @@
                             />
                         </div>
                         <div class="import-error">
-                            {#if importItem.error_message}
+                            {#if importItem.status === 'failed' && importItem.error_message}
                                 {importItem.error_message}
+                            {:else if importItem.status === 'completed' && importItem.imported_subscribers}
+                                {I18n.t('console.tools.import.importedCount', {count: importItem.imported_subscribers})}
                             {/if}
                         </div>
                     </div>

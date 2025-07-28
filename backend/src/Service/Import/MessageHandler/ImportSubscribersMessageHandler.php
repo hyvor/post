@@ -39,6 +39,7 @@ class ImportSubscribersMessageHandler
             $newsletter = $subscriberImport->getNewsletter();
             $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
 
+            $importedCount = 0;
             foreach ($subscribers as $dto) {
 
                 $subscriberLists = [];
@@ -100,9 +101,12 @@ class ImportSubscribersMessageHandler
 
                     $this->em->getConnection()->executeStatement($sql, $params);
                 }
+
+                $importedCount++;
             }
 
             $subscriberImport->setStatus(SubscriberImportStatus::COMPLETED);
+            $subscriberImport->setImportedSubscribers($importedCount);
             $subscriberImport->setUpdatedAt($this->now());
             $this->em->persist($subscriberImport);
 
