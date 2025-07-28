@@ -76,7 +76,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('newsletters', $data);
         $this->assertIsArray($data['newsletters']);
-        dd($data['newsletters']);
         $this->assertSame(11, count($data['newsletters']));
 
         $this->assertArrayHasKey('config', $data);
