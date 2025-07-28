@@ -52,19 +52,13 @@
         <div><code>string</code></div>
         <div>Yes</div>
     </TableRow>
-<!--
-Lists
-Subscribed At
-Subscribe IP
-Subscriber Metadata
--->
     <TableRow>
         <div>Lists</div>
         <div>
-            An array of list ids that subscriber should be subscribed to. If unmapped, user
+            An array of list names that subscriber should be subscribed to. If unmapped, user
             will be subscribed to all lists.
         </div>
-        <div><code>number[]</code></div>
+        <div><code>string[]</code></div>
         <div>No</div>
     </TableRow>
     <TableRow>
