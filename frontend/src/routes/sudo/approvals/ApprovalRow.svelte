@@ -33,7 +33,7 @@
     <div class="user">
         <Button
             as="a"
-            href={`https://hyvor.com/sudo/core/users/${approval.user_id}/approvals/${approval.id}`}
+            href={`https://hyvor.com/sudo/core/users/${approval.user_id}`}
             target="_blank"
             size="small"
             color="input"

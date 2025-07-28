@@ -16,4 +16,6 @@ export type Approval = {
     why_post: string | null;
     public_note: string | null;
     private_note: string | null;
+    approved_at: number | null;
+    rejected_at: number | null;
 }

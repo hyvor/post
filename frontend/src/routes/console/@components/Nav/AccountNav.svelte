@@ -16,7 +16,7 @@
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}" disabled={$userApprovalStatusStore === 'approved'}>
+        <NavLink href="/console/approve" active="{$page.url.pathname === '/console/approve'}">
             <NavItem>
                 <IconClipboardCheck slot="icon" />
                 <span slot="text">{I18n.t('console.nav.approve')}</span>

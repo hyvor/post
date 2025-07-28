@@ -268,4 +268,6 @@ export type Approval = {
     existing_list: string | null;
     sample: string | null;
     why_post: string | null;
+    approved_at: number | null;
+    rejected_at: number | null;
 }
