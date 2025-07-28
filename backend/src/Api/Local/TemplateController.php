@@ -43,8 +43,6 @@ class TemplateController extends AbstractController
         private Encryption $encryption,
         private TemplateService $templateService,
         private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
         private InstanceUrlResolver $instanceUrlResolver,
         private InternalConfig $internalConfig,
     ) {
@@ -88,8 +86,8 @@ class TemplateController extends AbstractController
         );
         return new Response($mail);
     }
-  
-  
+
+
     #[Route('/template/confirm-subscription', methods: 'GET')]
     public function confirmSubscriptionTemplate(): Response
     {

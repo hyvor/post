@@ -37,6 +37,7 @@
             target="_blank"
             size="small"
             color="input"
+            on:click={(e) => e.stopPropagation()}
             >
             User ID: {approval.user_id}
         </Button>
