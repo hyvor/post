@@ -19,6 +19,8 @@ class ApprovalObject
     public ?string $existing_list = null;
     public ?string $sample = null;
     public ?string $why_post = null;
+    public ?int $approved_at = null;
+    public ?int $rejected_at = null;
 
     public function __construct(Approval $approval)
     {
@@ -40,5 +42,8 @@ class ApprovalObject
             $this->sample = $otherInfo['sample'] ?? null;
             $this->why_post = $otherInfo['why_post'] ?? null;
         }
+
+        $this->approved_at = $approval->getApprovedAt()?->getTimestamp();
+        $this->rejected_at = $approval->getRejectedAt()?->getTimestamp();
     }
 }

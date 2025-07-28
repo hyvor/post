@@ -22,7 +22,8 @@ class ApprovalObject
     public ?string $why_post = null;
     public ?string $public_note = null;
     public ?string $private_note = null;
-
+    public ?int $approved_at = null;
+    public ?int $rejected_at = null;
     public function __construct(Approval $approval)
     {
 
@@ -47,5 +48,7 @@ class ApprovalObject
 
         $this->public_note = $approval->getPublicNote();
         $this->private_note = $approval->getPrivateNote();
+        $this->approved_at = $approval->getApprovedAt()?->getTimestamp();
+        $this->rejected_at = $approval->getRejectedAt()?->getTimestamp();
     }
 }

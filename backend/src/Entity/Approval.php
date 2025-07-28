@@ -51,6 +51,12 @@ class Approval
     #[ORM\Column(length: 255)]
     private ?string $private_note;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $approved_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $rejected_at = null;
+
 
     public function setId(int $id): static
     {
@@ -200,5 +206,29 @@ class Approval
     public function getPrivateNote(): ?string
     {
         return $this->private_note;
+    }
+
+    public function setApprovedAt(?\DateTimeImmutable $approved_at): static
+    {
+        $this->approved_at = $approved_at;
+
+        return $this;
+    }
+
+    public function getApprovedAt(): ?\DateTimeImmutable
+    {
+        return $this->approved_at;
+    }
+
+    public function setRejectedAt(?\DateTimeImmutable $rejected_at): static
+    {
+        $this->rejected_at = $rejected_at;
+
+        return $this;
+    }
+
+    public function getRejectedAt(): ?\DateTimeImmutable
+    {
+        return $this->rejected_at;
     }
 }

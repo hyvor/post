@@ -11,6 +11,7 @@ use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Twig\Environment;
 
 class ApprovalService
@@ -182,8 +183,18 @@ class ApprovalService
         $approval->setPublicNote($public_note);
         $approval->setPrivateNote($private_note);
 
+        if ($status === ApprovalStatus::APPROVED) {
+            $approval->setApprovedAt($this->now());
+        }
+
+        if ($status === ApprovalStatus::REJECTED) {
+            $approval->setRejectedAt($this->now());
+        }
+
         $user = $this->auth->fromId($approval->getUserId());
-        assert($user instanceof AuthUser);
+        if (!$user) {
+            throw new HttpException(422, "User not found");
+        }
 
         $this->sendApprovalMail($approval, $status, $user);
 
