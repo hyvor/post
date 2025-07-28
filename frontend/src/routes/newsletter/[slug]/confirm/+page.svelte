@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Loader } from '@hyvor/design/components';
+	import Notice from './Notice.svelte';
 
-    let isLoading = $state(true);
+    let isLoading = $state(false);
     let error = $state<string | null>(null);
-    let success = $state(false);
 
     onMount(async () => {
         const url = new URL(window.location.href);
@@ -28,8 +28,6 @@
                 const data = await response.json();
                 throw new Error(data.message);
             }
-
-            success = true;
         } catch (e) {
             error = e instanceof Error ? e.message : 'An unexpected error occurred';
         } finally {
@@ -44,30 +42,33 @@
             <Loader full size="large" />
         </div>
     {:else if error}
-        <div class="error">
-            <h2>Error</h2>
-            <p>{error}</p>
-        </div>
-    {:else if success}
-        <div class="success">
-            <h2>Subscription Confirmed!</h2>
-            <p>Thank you for confirming your subscription. You will now receive our newsletters.</p>
-        </div>
+        <Notice 
+            heading="An error occured"
+            message={error}
+        />
+    {:else}
+        <Notice 
+            heading="Subscription Confirmed!"
+            message="Thank you for confirming your subscription to <strong>Test Newsletter</strong>!
+                    You will start receiving the latest updates straight to your inbox.
+                    Stay tuned!"
+        />
     {/if}
 </div>
 
+
 <style>
     .container {
-        max-width: 600px;
-        margin: 2rem auto;
-        padding: 2rem;
+        width: 700px;
+        margin: 0 auto;
+        max-width: 100%;
+        padding: 40px 0;
         text-align: center;
     }
-
     .loader-wrap {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
-	}
-</style> 
+    }
+</style>

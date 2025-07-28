@@ -1,8 +1,10 @@
-import type { Issue, IssueList, Newsletter } from "./newsletterPageTypes";
+import type { Issue, IssueList, Newsletter, Palette } from "./newsletterPageTypes";
 
 interface InitNewsletterResponse {
     newsletter: Newsletter
     issues: IssueList[]
+    palette_light: Palette
+    palette_dark: Palette
 }
 
 

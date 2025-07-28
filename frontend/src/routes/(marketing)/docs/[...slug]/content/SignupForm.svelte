@@ -39,3 +39,10 @@
 </p>
 
 <h2 id="attributes">Form Attributes</h2>
+
+<h2 id="double-opt-in">Double Opt-In</h2>
+
+<p>
+    By default, the signup form uses double opt-in. Subscribers are added to your lists only after
+    they confirm their subscription via the email they receive.
+</p>

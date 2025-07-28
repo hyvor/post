@@ -222,7 +222,7 @@
             "text": "Your domain {domain} is verified. You can now use it with your Hyvor Post projects."
         },
         "subscriberConfirmation": {
-            "subject": "Confirm your subscription to {projectName}",
+            "heading": "Confirm your subscription",
             "buttonText": "Confirm Subscription"
         }
     }
