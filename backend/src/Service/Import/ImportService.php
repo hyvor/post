@@ -38,7 +38,7 @@ class ImportService
             throw new ImportException("Could not read CSV headers.");
         }
 
-        return $headers;
+        return array_values(array_filter($headers, fn($h) => $h !== null));
     }
 
     public function createSubscriberImport(Media $media): SubscriberImport
