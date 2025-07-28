@@ -111,15 +111,13 @@
 
     {#snippet footer() }
         <div class="footer-buttons">
-
-        <Button color="red" on:click={ () => onReject(approval) }>
-            Reject
-        </Button>
-        <Button on:click={ () => onApprove(approval) }>
-            Approve
-        </Button>
+            <Button color="red" on:click={ () => onReject(approval) }>
+                Reject
+            </Button>
+            <Button on:click={ () => onApprove(approval) }>
+                Approve
+            </Button>
         </div>
-
     {/snippet}
 </Modal>
 
