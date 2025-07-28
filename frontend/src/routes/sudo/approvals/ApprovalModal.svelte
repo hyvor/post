@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Divider, Modal, SplitControl, Textarea, TextInput} from "@hyvor/design/components";
+    import {Divider, Modal, SplitControl, Textarea, TextInput, Button} from "@hyvor/design/components";
     import type {Approval} from "../types";
 
     interface Props {
@@ -17,16 +17,6 @@
 <Modal
     bind:show
     title="Approval Details"
-    on:confirm={ () => onApprove(approval) }
-    on:cancel={ () => onReject(approval) }
-    footer={{
-        confirm: {
-            text: 'Approve'
-        },
-        cancel: {
-            text: 'Reject',
-        }
-    }}
 >
     <div class="content">
         <SplitControl label="Company name">
@@ -118,11 +108,28 @@
         />
         </SplitControl>
     </div>
+
+    {#snippet footer() }
+        <div class="footer-buttons">
+
+        <Button color="red" on:click={ () => onReject(approval) }>
+            Reject
+        </Button>
+        <Button on:click={ () => onApprove(approval) }>
+            Approve
+        </Button>
+        </div>
+
+    {/snippet}
 </Modal>
 
 <style>
     .content {
         height: 70vh;
         overflow-y: auto;
+    }
+    .footer-buttons {
+        display: flex;
+        gap: 6px;
     }
 </style>
