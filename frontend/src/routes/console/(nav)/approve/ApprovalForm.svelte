@@ -153,6 +153,13 @@
 			<IconXCircle />
 		{/snippet}
 		{I18n.t('console.approve.rejectNotice')}
+        {#if $approvalStore?.public_note}
+            <p>
+                <strong>
+                    {I18n.t('console.approve.rejectReason', {reason: $approvalStore?.public_note})}
+                </strong>
+            </p>
+        {/if}
 	</Callout>
 {/if}
 
@@ -193,7 +200,7 @@
         maxLength={1024}
 		disabled={readOnly}
 		block
-		placeholder={I18n.t('console.approve.typeOfContentPlaceholder')}
+		placeholder={readOnly ? '' : I18n.t('console.approve.typeOfContentPlaceholder')}
 	/>
 </SplitControl>
 
@@ -202,7 +209,7 @@
 	caption={I18n.t('console.approve.frequencyCaption')}
 >
 	<TextInput
-		placeholder={I18n.t('console.approve.frequencyPlaceholder')}
+		placeholder={readOnly ? '' : I18n.t('console.approve.frequencyPlaceholder')}
         maxLength={1024}
 		bind:value={frequency}
 		disabled={readOnly}

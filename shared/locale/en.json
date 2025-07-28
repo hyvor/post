@@ -69,6 +69,7 @@
             "pendingNotice": "Your account must be approved by our team before sending newsletters. Please fill out the following form, and we will review it within 24 hours.",
             "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours.",
             "rejectNotice": "Your approval request has been rejected. Please contact support for any further clarifications.",
+            "rejectReason": "Reject reason: {reason}",
             "approvedNotice": "Your account has been approved on {date}"
         },
         "domains": {

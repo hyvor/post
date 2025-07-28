@@ -19,6 +19,7 @@ class ApprovalObject
     public ?string $existing_list = null;
     public ?string $sample = null;
     public ?string $why_post = null;
+    public ?string $public_note = null;
     public ?int $approved_at = null;
     public ?int $rejected_at = null;
 
@@ -43,6 +44,7 @@ class ApprovalObject
             $this->why_post = $otherInfo['why_post'] ?? null;
         }
 
+        $this->public_note = $approval->getPublicNote();
         $this->approved_at = $approval->getApprovedAt()?->getTimestamp();
         $this->rejected_at = $approval->getRejectedAt()?->getTimestamp();
     }
