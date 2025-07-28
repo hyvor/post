@@ -3,7 +3,7 @@
     import type {Approval} from "../types";
     import ApprovalStatusTag from "../../console/@components/Nav/ApprovalStatusTag.svelte";
     import FriendlyDate from "../../console/@components/utils/FriendlyDate.svelte";
-
+    import { configStore } from "../lib/stores/sudoStore";
     interface Props {
         approval: Approval;
         handleSelect: (approval: Approval) => void;
@@ -33,7 +33,7 @@
     <div class="user">
         <Button
             as="a"
-            href={`https://hyvor.com/sudo/core/users/${approval.user_id}`}
+            href={`${$configStore.hyvor.instance}/sudo/core/users/${approval.user_id}`}
             target="_blank"
             size="small"
             color="input"

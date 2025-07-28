@@ -1,3 +1,9 @@
+export interface SudoConfig {
+    hyvor: {
+        instance: string;
+    }
+}
+
 export type ApprovalStatus = 'pending' | 'reviewing' | 'approved' | 'rejected';
 
 export type Approval = {
