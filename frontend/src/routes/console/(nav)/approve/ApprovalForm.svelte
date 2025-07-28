@@ -29,6 +29,8 @@
 	let existingList: string = $state(approval?.existing_list || '');
 	let sample: string = $state(approval?.sample || '');
 	let whyPost: string = $state(approval?.why_post || '');
+    let checkbox1: boolean = $state(false);
+    let checkbox2: boolean = $state(false);
 
 	let error: string | undefined = $state(undefined);
 
@@ -51,8 +53,12 @@
 			error = I18n.t('console.approve.websiteInvalid');
 			return false;
 		}
-		return true;
-	}
+        if (!checkbox1 || !checkbox2) {
+            error = I18n.t('console.approve.checkboxRequired');
+            return false;
+        }
+        return true;
+    }
 
 	function onSubmit() {
 		if (!validate() && error) {
@@ -154,28 +160,28 @@
 	label={I18n.t('console.approve.companyName')}
 	caption={`(${I18n.t('console.approve.required')})`}
 >
-	<TextInput bind:value={companyName} disabled={readOnly} block />
+	<TextInput bind:value={companyName} maxLength={255} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
 	label={I18n.t('console.approve.country')}
 	caption={`(${I18n.t('console.approve.required')})`}
 >
-	<TextInput bind:value={country} disabled={readOnly} block />
+	<TextInput bind:value={country} maxLength={255} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
 	label={I18n.t('console.approve.website')}
 	caption={`(${I18n.t('console.approve.required')})`}
 >
-	<TextInput type="url" bind:value={website} disabled={readOnly} block />
+	<TextInput type="url" bind:value={website} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
 	label={I18n.t('console.approve.socialLinks')}
 	caption={`(${I18n.t('console.approve.preferred')})`}
 >
-	<Textarea bind:value={socialLinks} disabled={readOnly} block />
+	<Textarea bind:value={socialLinks} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
@@ -184,9 +190,10 @@
 >
 	<TextInput
 		bind:value={typeOfContent}
+        maxLength={1024}
 		disabled={readOnly}
 		block
-		placeholder="Weekly insights about tech, AI, and startups"
+		placeholder={I18n.t('console.approve.typeOfContentPlaceholder')}
 	/>
 </SplitControl>
 
@@ -196,6 +203,7 @@
 >
 	<TextInput
 		placeholder={I18n.t('console.approve.frequencyPlaceholder')}
+        maxLength={1024}
 		bind:value={frequency}
 		disabled={readOnly}
 		block
@@ -206,35 +214,56 @@
 	label={I18n.t('console.approve.existingList')}
 	caption={I18n.t('console.approve.existingListCaption')}
 >
-	<Textarea bind:value={existingList} disabled={readOnly} block />
+	<Textarea bind:value={existingList} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
 	label={I18n.t('console.approve.sample')}
 	caption={I18n.t('console.approve.sampleCaption')}
 >
-	<TextInput bind:value={sample} disabled={readOnly} block />
+	<TextInput bind:value={sample} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
 <SplitControl
 	label={I18n.t('console.approve.whyPost')}
 	caption={I18n.t('console.approve.whyPostCaption')}
 >
-	<Textarea bind:value={whyPost} disabled={readOnly} block />
+	<Textarea bind:value={whyPost} maxLength={1024} disabled={readOnly} block />
 </SplitControl>
 
-<div class="checkboxes">
-	<Checkbox>
-		I agree that Hyvor Post <strong>does not allow</strong> sending
-		<strong>unsolicited emails</strong> or <strong>cold emails</strong>, and every subscriber
-		must have opted in to receive emails.
-	</Checkbox>
-	<Checkbox>
-		I agree to the <a class="hds-link" href="/terms" target="_blank">Terms of Service</a>
-		and
-		<a class="hds-link" href="/privacy" target="_blank">Privacy Policy</a> of Hyvor Post.
-	</Checkbox>
-</div>
+{#if !approval}
+    <div class="checkboxes">
+        <Checkbox checked={checkbox1}>
+            <I18n.T
+                key="console.approve.checkbox1"
+                params={{strong: {element: 'strong'}}}
+            />
+        </Checkbox>
+        <Checkbox checked={checkbox2}>
+            <I18n.T
+                key="console.approve.checkbox2"
+                params={{
+                    termsLink: {
+                        element: 'a',
+                        props: {
+                            href: '/terms',
+                            target: '_blank',
+                            class: 'hds-link'
+                        }
+                    },
+                    privacyLink: {
+                        element: 'a',
+                        props: {
+                            href: '/privacy',
+                            target: '_blank',
+                            class: 'hds-link'
+                        }
+                    }
+                }}
+            />
+        </Checkbox>
+    </div>
+{/if}
 
 <div class="submit">
 	<Button size="medium" on:click={onSubmit} disabled={$approvalStore && !isUpdating}>
