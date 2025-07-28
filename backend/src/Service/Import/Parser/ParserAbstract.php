@@ -20,10 +20,13 @@ abstract class ParserAbstract
      */
     abstract public function parse(SubscriberImport $subscriberImport): Collection;
 
-    protected const NON_METADATA_FIELDS = ['email', 'lists', 'subscribed_at', 'subscribe_ip'];
+    /** @var string[]  */
+    protected const array NON_METADATA_FIELDS = ['email', 'lists', 'subscribed_at', 'subscribe_ip'];
 
     public function __construct()
     {
+        ini_set('memory_limit', '150M');
+
         $this->errors = new ArrayCollection();
         $this->warnings = new ArrayCollection();
     }
