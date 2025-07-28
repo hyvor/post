@@ -226,6 +226,7 @@ class ApprovalService
             'greeting' => $strings->get('mail.common.greeting', ['name' => $user->name]),
             'subject' => $subject,
             'footerText' => $strings->get('mail.approval.footerText'),
+            'regards' => $strings->get('mail.common.regards'),
         ];
 
         if ($status === ApprovalStatus::APPROVED) {

@@ -259,7 +259,8 @@
     },
     "mail": {
         "common": {
-            "greeting": "Hello {name} \uD83D\uDC4B,"
+            "greeting": "Hello {name} \uD83D\uDC4B,",
+            "regards": "Best regards,"
         },
         "userInvite": {
             "subject": "You have been invited to join {projectName}",
