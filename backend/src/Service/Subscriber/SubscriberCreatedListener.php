@@ -97,7 +97,7 @@ final class SubscriberCreatedListener
                     'content' => [
                         [
                             'type' => 'text',
-                            'text' => 'If you did not request or expect this invitation, you can safely ignore this email.',
+                            'text' => 'This link will expire in 24 hours. If you did not request or expect this invitation, you can safely ignore this email.',
                         ],
                     ],
                 ],
