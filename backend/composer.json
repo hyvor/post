@@ -34,6 +34,7 @@
         "symfony/monolog-bundle": "^3.10",
         "symfony/rate-limiter": "7.2.*",
         "symfony/runtime": "7.2.*",
+        "symfony/scheduler": "7.2.*",
         "symfony/serializer": "7.2.*",
         "symfony/string": "7.2.*",
         "symfony/twig-bundle": "7.2.*",
