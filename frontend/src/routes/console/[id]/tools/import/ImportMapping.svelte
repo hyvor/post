@@ -25,7 +25,7 @@
         fields.filter(col => col.toLowerCase().includes(search.toLowerCase()))
     );
 
-    const mapKeys = ['email', 'lists', 'subscribed_at', 'subscribe_ip' , ...$subscriberMetadataDefinitionStore.map(col => col.key)] as const;
+    const mapKeys = ['email', 'lists', 'subscribed_at', 'subscribe_ip', ...$subscriberMetadataDefinitionStore.map(col => `metadata_${col.key}`)] as const;
     type MapKey = typeof mapKeys[number];
 
     let updates: Record<MapKey, string | null> = $state(
@@ -57,7 +57,7 @@
         subscriberImport(importId, updates)
             .then((data) => {
                 toast.success('Import will begin shortly.');
-                importStore.update(imports => [...imports, data]);
+                importStore.update(imports => [data, ...imports]);
             })
             .catch(() => {
                 toast.error('Error while initializing the import.');
@@ -270,14 +270,14 @@
         </SplitControl>
 
         {#each $subscriberMetadataDefinitionStore as column}
-            <SplitControl label={column.name}>
+            <SplitControl label={"Metadata: " + column.name}>
                 <Selector
-                    name={updates[column.key] ? '' : 'Not mapped'}
-                    value={updates[column.key] ?? undefined}
+                    name={updates[`metadata_${column.key}`] ? '' : 'Not mapped'}
+                    value={updates[`metadata_${column.key}`] ?? undefined}
                     width={300}
-                    bind:show={showSelector[column.key]}
-                    isSelected={updates[column.key] !== null}
-                    handleDeselectClick={() => handleSelect(column.key, null)}
+                    bind:show={showSelector[`metadata_${column.key}`]}
+                    isSelected={updates[`metadata_${column.key}`] !== null}
+                    handleDeselectClick={() => handleSelect(`metadata_${column.key}`, null)}
                 >
                     <div class="search-bar">
                         <TextInput
@@ -306,7 +306,7 @@
                         <div class="action-list">
                             {#each filteredFields as filteredColumn}
                                 <ActionListItem
-                                    on:click={() => handleSelect(column.key, filteredColumn) }
+                                    on:click={() => handleSelect(`metadata_${column.key}`, filteredColumn) }
                                 >
                                     {filteredColumn}
                                 </ActionListItem>
