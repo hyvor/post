@@ -8,7 +8,8 @@ use App\Api\Console\Object\ApprovalObject;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Service\Approval\Dto\UpdateApprovalDto;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -17,17 +18,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ApprovalController extends AbstractController
 {
-    use HasHyvorUser;
 
     public function __construct(
-        private ApprovalService $approvalService
+        private ApprovalService $approvalService,
+            private AuthInterface $auth // TODO: this should be done in the listener
+
     ) {
     }
 
     #[Route('/approvals', methods: 'GET')]
     public function getApproval(): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
+
         $approval = $this->approvalService->getApprovalOfUser($user);
 
         if ($approval === null) {
@@ -41,7 +45,8 @@ class ApprovalController extends AbstractController
         #[MapRequestPayload] CreateApprovalInput $input
     ): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
 
         if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('Account already approved');
@@ -73,7 +78,8 @@ class ApprovalController extends AbstractController
     ): JsonResponse
     {
         $id = intval($id);
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
 
         $approval = $this->approvalService->getApporvalById($id);
 
