@@ -25,6 +25,16 @@ class ClearPendingSubscribersMessageHandlerTest extends KernelTestCase
             'status' => SubscriberStatus::PENDING
         ]);
 
+        $s3 = SubscriberFactory::createOne([
+            'created_at' => new \DateTimeImmutable('-50 hours'),
+            'status' => SubscriberStatus::SUBSCRIBED
+        ]);
+
+        $s4 = SubscriberFactory::createOne([
+            'created_at' => new \DateTimeImmutable('-10 hours'),
+            'status' => SubscriberStatus::SUBSCRIBED
+        ]);
+
         $transport = $this->transport('scheduler');
         $transport->send(new ClearPendingSubscribersMessage());
         $transport->throwExceptions()->process();
@@ -32,5 +42,7 @@ class ClearPendingSubscribersMessageHandlerTest extends KernelTestCase
         $repository = $this->em->getRepository(Subscriber::class);
         $this->assertNull($repository->find($s1->getId()));
         $this->assertNotNull($repository->find($s2->getId()));
+        $this->assertNotNull($repository->find($s3->getId()));
+        $this->assertNotNull($repository->find($s4->getId()));
     }
 }
