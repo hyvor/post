@@ -13,7 +13,7 @@ export function uploadCsv(file: File | Blob) {
 }
 
 export function subscriberImport(importId: number, mapping: Record<string, string | null>) {
-    return consoleApi.post<void>({
+    return consoleApi.post<Import>({
         endpoint: `imports/${importId}`,
         data: { mapping },
     });

@@ -16,17 +16,23 @@
     bind:show
     title={I18n.t('console.tools.import.mappedFields')}
 >
-
-    {#each Object.entries(fieldMap) as [key, value]}
-        <SplitControl label={key}>
-            <TextInput
-                value={value ? value : I18n.t('console.tools.import.notMapped')}
-                disabled
-                block
-                style={value ? '' : 'color: var(--text-light);'}
-            />
-        </SplitControl>
-    {/each}
-
+    <div class="field-modal-wrap">
+        {#each Object.entries(fieldMap) as [key, value]}
+            <SplitControl label={key}>
+                <TextInput
+                    value={value ? value : I18n.t('console.tools.import.notMapped')}
+                    disabled
+                    block
+                    style={value ? '' : 'color: var(--text-light);'}
+                />
+            </SplitControl>
+        {/each}
+    </div>
 </Modal>
 
+<style>
+    .field-modal-wrap {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+</style>

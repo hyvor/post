@@ -99,7 +99,7 @@ class ImportController extends AbstractController
 
         $this->messageBus->dispatch(new ImportSubscribersMessage($subscriberImport->getId()));
 
-        return new JsonResponse();
+        return new JsonResponse(new SubscriberImportObject($subscriberImport));
     }
 
     #[Route('/imports', methods: 'GET')]
