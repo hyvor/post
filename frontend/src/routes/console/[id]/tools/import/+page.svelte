@@ -51,11 +51,18 @@
 		const toastId = toast.loading('Uploading file...');
 
 		uploadCsv(importFile)
-			.then((res) => {
+			.then((data) => {
 				toast.info('File uploaded, map the fields to start the import', { id: toastId });
-				importId = res.import_id;
-				fields = res.fields;
-				mapping = true;
+                importStore.update(imports => {
+                    const index = imports.findIndex(i => i.id === data.id);
+                    if (index !== -1) {
+                        imports[index] = { ...imports[index], ...data };
+                    } else {
+                        imports = [data, ...imports];
+                    }
+                    return imports;
+                });
+                showFieldMappingModalOf(data)
 			})
 			.catch((err) => {
 				toast.error(`Error uploading file: ${err.message}`, { id: toastId });
@@ -89,6 +96,12 @@
 		showFields = true;
 	}
 
+    function showFieldMappingModalOf(importItem: Import) {
+        importId = importItem.id;
+        fields = importItem.csv_fields || [];
+        mapping = true;
+    }
+
 	onMount(() => {
 		loadImports();
 	});
@@ -121,7 +134,7 @@
 		{:else}
 			<div class="imports">
 				{#each $importStore as importItem (importItem.id)}
-					<ImportRow {importItem} {showFieldsOf} />
+					<ImportRow {importItem} {showFieldsOf} {showFieldMappingModalOf}/>
 				{/each}
 			</div>
 			<LoadButton

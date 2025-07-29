@@ -289,11 +289,7 @@ export type Import = {
     created_at: number;
     status: ImportStatus;
     fields: Record<string, string|null> | null;
+    csv_fields: string[] | null;
     imported_subscribers: number | null;
     error_message: string | null;
-}
-
-export type ImportField = {
-    import_id: number;
-    fields: string[];
 }

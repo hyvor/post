@@ -8,14 +8,18 @@
     interface Props {
         importItem: Import;
         showFieldsOf: (importItem: Import) => void;
+        showFieldMappingModalOf: (importItem: Import) => void;
     }
 
-    let { importItem, showFieldsOf }: Props = $props();
+    let { importItem, showFieldsOf, showFieldMappingModalOf }: Props = $props();
 
     const I18n = getI18n();
 </script>
 
-<div class="import-item">
+<button
+    class={`import-item ${importItem.status !== 'requires_input' ? 'import-item-disabled' : ''}`}
+    onclick={ () => importItem.status === 'requires_input' && showFieldMappingModalOf(importItem)}
+>
     <div class="import-info">
         <div class="import-name">Import #{importItem.id}</div>
         <div class="import-date">
@@ -44,7 +48,7 @@
             })}
         {/if}
     </div>
-</div>
+</button>
 
 <style>
     .import-item {
@@ -53,7 +57,14 @@
         align-items: center;
         padding: 15px;
         background-color: var(--bg-light);
-        border-radius: 8px;
+        border-radius: var(--box-radius);
+        text-align: left;
+    }
+    .import-item:hover {
+        background: var(--hover);
+    }
+    .import-item-disabled {
+        cursor: default;
     }
     .import-info {
         display: flex;

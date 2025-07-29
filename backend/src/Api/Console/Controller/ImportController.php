@@ -3,7 +3,6 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Input\Import\ImportInput;
-use App\Api\Console\Object\SubscriberImportFieldObject;
 use App\Api\Console\Object\SubscriberImportObject;
 use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
@@ -73,9 +72,9 @@ class ImportController extends AbstractController
         }
 
         $fields = $this->importService->getFields($upload);
-        $import = $this->importService->createSubscriberImport($upload);
+        $import = $this->importService->createSubscriberImport($upload, $fields);
 
-        return new JsonResponse(new SubscriberImportFieldObject($import, $fields));
+        return new JsonResponse(new SubscriberImportObject($import));
     }
 
     #[Route('/imports/{id}', methods: 'POST')]

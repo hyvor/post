@@ -39,6 +39,12 @@ class SubscriberImport
     #[ORM\Column(type: 'json')]
     private ?array $fields = null;
 
+    /**
+     * @var array<int, string> | null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $csv_fields = null;
+
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $imported_subscribers = null;
 
@@ -132,6 +138,24 @@ class SubscriberImport
     public function setFields(?array $fields): static
     {
         $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * @return array<int, string> | null
+     */
+    public function getCsvFields(): ?array
+    {
+        return $this->csv_fields;
+    }
+
+    /**
+     * @param array<int, string> | null $csv_fields
+     */
+    public function setCsvFields(?array $csv_fields): static
+    {
+        $this->csv_fields = $csv_fields;
 
         return $this;
     }

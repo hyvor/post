@@ -35,6 +35,8 @@
         Object.fromEntries(mapKeys.map(key => [key, false]))
     );
 
+    let loading: boolean = $state(false);
+
     let search = $state('');
     const searchActions = {
         onKeydown: (e: KeyboardEvent) => {
@@ -53,16 +55,25 @@
     }
 
     function handleImport() {
-        // TODO
+        loading = true;
         subscriberImport(importId, updates)
             .then((data) => {
                 toast.success('Import will begin shortly.');
-                importStore.update(imports => [data, ...imports]);
+                importStore.update(imports => {
+                    const index = imports.findIndex(i => i.id === data.id);
+                    if (index !== -1) {
+                        imports[index] = { ...imports[index], ...data };
+                    } else {
+                        imports = [data, ...imports];
+                    }
+                    return imports;
+                });
             })
             .catch(() => {
                 toast.error('Error while initializing the import.');
             })
             .finally(() => {
+                loading = false;
                 show = false;
             });
     }
@@ -72,15 +83,16 @@
 <Modal
     bind:show
     title="Import mapping"
-    closeOnOutsideClick={false}
-    closeOnEscape={false}
     footer={{
         confirm: {
-            text: 'Import'
+            text: 'Import',
+            props: {
+                disabled: loading || updates.email === null
+            }
         }
     }}
+    loading={loading}
     on:confirm={handleImport}
-    on:cancel={ () => toast.error('Import cancelled.') }
 >
     <div class="modal-wrap">
         Select the columns from your CSV file that you want to map to the fields in our system. <strong>A mapping for the Email field is required</strong>. You may leave other fields unmapped if you don't want to import them.
