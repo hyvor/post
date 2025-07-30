@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[CoversClass(ImportSubscribersMessageHandler::class)]
 #[CoversClass(ImportSubscribersMessage::class)]
-class ImportSubscribersMessageHandleTest extends KernelTestCase
+class ImportSubscribersMessageHandlerTest extends KernelTestCase
 {
     public function test_import_subscribers(): void
     {
