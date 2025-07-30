@@ -58,4 +58,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '%env(AWS_BUCKET)%',
             '%kernel.project_dir%/var/uploads',
         ]);
+
+    // ================ NON-SHARED SERVICES =================
+    $services->set(CsvParser::class)
+        ->share(false);
 };
