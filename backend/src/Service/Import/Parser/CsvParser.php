@@ -10,7 +10,9 @@ use App\Service\Media\MediaService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 
+#[Exclude]
 class CsvParser extends ParserAbstract
 {
     public function __construct(

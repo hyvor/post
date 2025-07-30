@@ -8,6 +8,7 @@ use App\Entity\Type\SubscriberSource;
 use App\Service\Import\Message\ImportSubscribersMessage;
 use App\Service\Import\Parser\CsvParser;
 use App\Service\Import\Parser\ParserException;
+use App\Service\Import\Parser\ParserFactory;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,8 +24,7 @@ class ImportSubscribersMessageHandler
     public function __construct(
         private EntityManagerInterface $em,
         private NewsletterListService $newsletterListService,
-        #[AutowireServiceClosure('App\Service\Import\Parser\CsvParser')]
-        private \Closure $parserCallable,
+        private ParserFactory $parserFactory,
         private ManagerRegistry $registry,
         private LoggerInterface $logger,
     ) {
@@ -37,7 +37,7 @@ class ImportSubscribersMessageHandler
         $subscriberImport = $this->em->getRepository(SubscriberImport::class)->find($message->getSubscriberImportId());
         assert($subscriberImport !== null);
 
-        $parser = ($this->parserCallable)();
+        $parser = $this->parserFactory->csv();
 
         try {
             $this->em->beginTransaction();

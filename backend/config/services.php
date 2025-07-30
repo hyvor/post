@@ -5,8 +5,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Service\Media\FilesystemFactory;
-use App\Service\Import\Parser\CsvParser;
-use Aws\AwsClient;
 use Aws\S3\S3Client;
 use League\Flysystem\Filesystem;
 

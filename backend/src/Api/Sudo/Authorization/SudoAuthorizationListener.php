@@ -32,8 +32,6 @@ class SudoAuthorizationListener
         $request = $event->getRequest();
 
         $sessionCookie = $request->cookies->get(Auth::HYVOR_SESSION_COOKIE_NAME);
-        assert($sessionCookie !== null);
-
         $user = $this->auth->check((string)$sessionCookie);
 
         if ($user === false) {
