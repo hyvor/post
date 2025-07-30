@@ -41,11 +41,15 @@ class ImportService
         return array_values(array_filter($headers, fn($h) => $h !== null));
     }
 
-    public function createSubscriberImport(Media $media): SubscriberImport
+    /**
+     * @param array<int, string>|null $csv_fields
+     */
+    public function createSubscriberImport(Media $media, ?array $csv_fields = null): SubscriberImport
     {
         $subscriberImport = new SubscriberImport();
         $subscriberImport->setNewsletter($media->getNewsletter());
         $subscriberImport->setMedia($media);
+        $subscriberImport->setCsvFields($csv_fields);
         $subscriberImport->setStatus(SubscriberImportStatus::REQUIRES_INPUT);
         $subscriberImport->setCreatedAt($this->now());
         $subscriberImport->setUpdatedAt($this->now());

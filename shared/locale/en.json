@@ -156,6 +156,8 @@
                 },
                 "showFields": "Show Fields",
                 "mappedFields": "Mapped Fields",
+                "seeWarnings": "See Warnings",
+                "importWarnings": "Import Warnings",
                 "notMapped": "Not Mapped",
                 "importedCount": "Imported {count} subscribers"
             },

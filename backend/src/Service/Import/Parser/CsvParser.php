@@ -90,10 +90,13 @@ class CsvParser extends ParserAbstract
             }
 
             $metadata = [];
-            if (!empty($metaFields)) {
+            if (count($metaFields) > 0) {
                 foreach ($metaFields as $key => $value) {
-                    if (in_array($key, $metaKeys, true) && $item[$value] !== null) {
-                        $metadata[$key] = $item[$value];
+                    if (str_starts_with($key, 'metadata_')) {
+                        $key = substr($key, 9);
+                        if (in_array($key, $metaKeys, true) && $item[$value] !== null) {
+                            $metadata[$key] = $item[$value];
+                        }
                     }
                 }
             }

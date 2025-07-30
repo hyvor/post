@@ -39,8 +39,17 @@ class SubscriberImport
     #[ORM\Column(type: 'json')]
     private ?array $fields = null;
 
+    /**
+     * @var array<int, string> | null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $csv_fields = null;
+
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $imported_subscribers = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $warnings = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;
@@ -136,6 +145,24 @@ class SubscriberImport
         return $this;
     }
 
+    /**
+     * @return array<int, string> | null
+     */
+    public function getCsvFields(): ?array
+    {
+        return $this->csv_fields;
+    }
+
+    /**
+     * @param array<int, string> | null $csv_fields
+     */
+    public function setCsvFields(?array $csv_fields): static
+    {
+        $this->csv_fields = $csv_fields;
+
+        return $this;
+    }
+
     public function getImportedSubscribers(): ?int
     {
         return $this->imported_subscribers;
@@ -144,6 +171,18 @@ class SubscriberImport
     public function setImportedSubscribers(?int $imported_subscribers): static
     {
         $this->imported_subscribers = $imported_subscribers;
+
+        return $this;
+    }
+
+    public function getWarnings(): ?string
+    {
+        return $this->warnings;
+    }
+
+    public function setWarnings(?string $warnings): static
+    {
+        $this->warnings = $warnings;
 
         return $this;
     }

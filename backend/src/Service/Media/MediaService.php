@@ -68,7 +68,6 @@ class MediaService
                 $stream
             );
         } catch (FilesystemException $e) {
-            dd($e->getMessage());
             throw new MediaUploadException('Unable to upload file', previous: $e);
         } finally {
             fclose($stream);
@@ -78,6 +77,19 @@ class MediaService
         $this->em->flush();
 
         return $media;
+    }
+
+    public function delete(Media $media): void
+    {
+        $path = $this->getUploadPath($media);
+        try {
+            $this->filesystem->delete($path);
+        } catch (FilesystemException $e) {
+            throw new MediaDeleteException('Unable to delete media', previous: $e);
+        }
+
+        $this->em->remove($media);
+        $this->em->flush();
     }
 
     public function getUploadPath(Media $media): string

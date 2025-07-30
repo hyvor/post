@@ -1,19 +1,19 @@
 import consoleApi from "../consoleApi";
-import type {Import, ImportField} from "../../types";
+import type {Import} from "../../types";
 
 export const IMPORTS_PER_PAGE = 30;
 export function uploadCsv(file: File | Blob) {
     const formData = new FormData();
     formData.append('file', file);
 
-    return consoleApi.post<ImportField>({
+    return consoleApi.post<Import>({
         endpoint: "imports/upload",
         data: formData,
     })
 }
 
 export function subscriberImport(importId: number, mapping: Record<string, string | null>) {
-    return consoleApi.post<void>({
+    return consoleApi.post<Import>({
         endpoint: `imports/${importId}`,
         data: { mapping },
     });
