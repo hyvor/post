@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service\Subscriber;
+namespace App\Tests\MessageHandler\Subscriber;
 
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
