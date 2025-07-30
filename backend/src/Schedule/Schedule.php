@@ -2,6 +2,7 @@
 
 namespace App\Schedule;
 
+use App\Service\Import\Message\DeleteImportedCsvMessage;
 use App\Service\Subscriber\Message\ClearPendingSubscribersMessage;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
@@ -21,6 +22,7 @@ class Schedule implements ScheduleProviderInterface
     {
         return new SymfonySchedule()
             ->add(RecurringMessage::every('1 day', new ClearPendingSubscribersMessage))
+            ->add(RecurringMessage::every('1 day', new DeleteImportedCsvMessage))
             ->lock($this->lockFactory->createLock('schedule'));
     }
 }
