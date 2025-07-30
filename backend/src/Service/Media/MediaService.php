@@ -79,6 +79,9 @@ class MediaService
         return $media;
     }
 
+    /**
+     * @throws MediaDeleteException
+     */
     public function delete(Media $media): void
     {
         $path = $this->getUploadPath($media);

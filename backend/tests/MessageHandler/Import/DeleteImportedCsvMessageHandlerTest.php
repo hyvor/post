@@ -160,8 +160,8 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
 
         $transport = $this->transport('scheduler_default');
         $transport->send(new DeleteImportedCsvMessage());
+        $this->em->clear();
         $transport->throwExceptions()->process();
-
 
         $this->assertNull($mediaService->getMediaByUuid($oldMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($oldPendingMedia->getUuid()));
