@@ -6,13 +6,13 @@ use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Service\Import\Message\ImportSubscribersMessage;
-use App\Service\Import\Parser\CsvParser;
 use App\Service\Import\Parser\ParserException;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\AutowireServiceClosure;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -22,7 +22,8 @@ class ImportSubscribersMessageHandler
     public function __construct(
         private EntityManagerInterface $em,
         private NewsletterListService $newsletterListService,
-        private CsvParser $parser,
+        #[AutowireServiceClosure('App\Service\Import\Parser\CsvParser')]
+        private \Closure $parserCallable,
         private ManagerRegistry $registry,
         private LoggerInterface $logger,
     ) {
@@ -41,6 +42,7 @@ class ImportSubscribersMessageHandler
             $this->em->commit();
         }
         catch (\Exception $e) {
+            $this->em->rollback();
             $this->registry->resetManager();
 
             $subscriberImport = $this->em->find(SubscriberImport::class, $message->getSubscriberImportId());
@@ -72,7 +74,12 @@ class ImportSubscribersMessageHandler
 
     private function import(SubscriberImport $subscriberImport): void
     {
-        $subscribers = $this->parser->parse($subscriberImport);
+        $parser = ($this->parserCallable)();
+        try {
+            $subscribers = $parser->parse($subscriberImport);
+        } catch (ParserException $e) {
+            throw $e;
+        }
 
         $newsletter = $subscriberImport->getNewsletter();
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
@@ -146,7 +153,7 @@ class ImportSubscribersMessageHandler
         $subscriberImport->setStatus(SubscriberImportStatus::COMPLETED);
         $subscriberImport->setImportedSubscribers($importedCount);
         $subscriberImport->setUpdatedAt($this->now());
-        $warnings = $this->parser->getWarnings()->toArray();
+        $warnings = $parser->getWarnings()->toArray();
         $subscriberImport->setErrorMessage(count($warnings) > 0 ? implode("\n", $warnings) : null);
         $this->em->persist($subscriberImport);
 
