@@ -15,6 +15,7 @@ class SubscriberImportObject
     /** @var array<int, string> | null */
     public ?array $csv_fields = null;
     public ?int $imported_subscribers = null;
+    public ?string $warnings = null;
     public ?string $error_message = null;
 
 
@@ -26,6 +27,7 @@ class SubscriberImportObject
         $this->fields = $import->getFields();
         $this->csv_fields = $import->getCsvFields();
         $this->imported_subscribers = $import->getImportedSubscribers();
+        $this->warnings = $import->getWarnings();
         $this->error_message = $import->getErrorMessage();
     }
 }

@@ -32,6 +32,7 @@ final class Version20250520124027 extends AbstractMigration
             fields JSONB,
             csv_fields JSONB,
             imported_subscribers INTEGER,
+            warnings TEXT,
             error_message TEXT
         );
         SQL

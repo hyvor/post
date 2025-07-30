@@ -36,7 +36,11 @@ abstract class ParserAbstract
 
     public function warning(string $message): void
     {
+        if ($this->warnings->count() > 1) {
+            throw new ParserException('Too many warnings.');
+        }
         $this->warnings->add($message);
+
     }
 
     /** @return Collection<int, string> */

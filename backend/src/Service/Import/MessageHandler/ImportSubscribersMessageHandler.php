@@ -6,6 +6,7 @@ use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Service\Import\Message\ImportSubscribersMessage;
+use App\Service\Import\Parser\CsvParser;
 use App\Service\Import\Parser\ParserException;
 use App\Service\NewsletterList\NewsletterListService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,9 +37,11 @@ class ImportSubscribersMessageHandler
         $subscriberImport = $this->em->getRepository(SubscriberImport::class)->find($message->getSubscriberImportId());
         assert($subscriberImport !== null);
 
+        $parser = ($this->parserCallable)();
+
         try {
             $this->em->beginTransaction();
-            $this->import($subscriberImport);
+            $this->import($subscriberImport, $parser);
             $this->em->commit();
         }
         catch (\Exception $e) {
@@ -50,6 +53,8 @@ class ImportSubscribersMessageHandler
 
             $subscriberImport->setStatus(SubscriberImportStatus::FAILED);
             $subscriberImport->setUpdatedAt($this->now());
+            $warnings = $parser->getWarnings()->toArray();
+            $subscriberImport->setWarnings(count($warnings) > 0 ? implode("\n", $warnings) : null);
 
             if ($e instanceof ParserException) {
                 $subscriberImport->setErrorMessage('Error parsing CSV. ' . $e->getMessage());
@@ -72,14 +77,9 @@ class ImportSubscribersMessageHandler
         }
     }
 
-    private function import(SubscriberImport $subscriberImport): void
+    private function import(SubscriberImport $subscriberImport, CsvParser $parser): void
     {
-        $parser = ($this->parserCallable)();
-        try {
-            $subscribers = $parser->parse($subscriberImport);
-        } catch (ParserException $e) {
-            throw $e;
-        }
+        $subscribers = $parser->parse($subscriberImport);
 
         $newsletter = $subscriberImport->getNewsletter();
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
@@ -154,7 +154,7 @@ class ImportSubscribersMessageHandler
         $subscriberImport->setImportedSubscribers($importedCount);
         $subscriberImport->setUpdatedAt($this->now());
         $warnings = $parser->getWarnings()->toArray();
-        $subscriberImport->setErrorMessage(count($warnings) > 0 ? implode("\n", $warnings) : null);
+        $subscriberImport->setWarnings(count($warnings) > 0 ? implode("\n", $warnings) : null);
         $this->em->persist($subscriberImport);
 
         $this->em->flush();

@@ -49,6 +49,9 @@ class SubscriberImport
     private ?int $imported_subscribers = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $warnings = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;
 
 
@@ -168,6 +171,18 @@ class SubscriberImport
     public function setImportedSubscribers(?int $imported_subscribers): static
     {
         $this->imported_subscribers = $imported_subscribers;
+
+        return $this;
+    }
+
+    public function getWarnings(): ?string
+    {
+        return $this->warnings;
+    }
+
+    public function setWarnings(?string $warnings): static
+    {
+        $this->warnings = $warnings;
 
         return $this;
     }
