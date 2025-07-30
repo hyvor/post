@@ -14,3 +14,4 @@ when@test:
         messenger:
             transports:
                 async: 'test://'
+                scheduler_default: 'test://'
