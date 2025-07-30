@@ -143,6 +143,7 @@
             --hp-input-border: {palette.input_border};
             --hp-border-radius: {palette.border_radius}px;
 
+            --hp-accent-light: color-mix(in srgb, var(--hp-accent), transparent 90%);
             --hp-text-light: color-mix(in srgb, var(--hp-text), transparent 50%);
             --hp-link: var(--hp-accent);
         "
