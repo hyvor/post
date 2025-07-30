@@ -14,6 +14,7 @@
 	import type { Import } from '../../../types';
 	import { getI18n } from '../../../lib/i18n';
 	import ImportFieldMapModal from './ImportFieldMapModal.svelte';
+    import WarningsModal from './WarningsModal.svelte';
     import ImportRow from "./ImportRow.svelte";
     import { importStore } from '../../../lib/stores/newsletterStore';
 
@@ -29,6 +30,9 @@
 
 	let showFields = $state(false);
 	let fieldMap = $state<Record<string, string | null>>({});
+
+    let showWarnings = $state(false);
+    let warnings: string | null = $state(null);
 
 	const I18n = getI18n();
 
@@ -102,6 +106,11 @@
         mapping = true;
     }
 
+    function showWarningsOf(importItem: Import) {
+        warnings = importItem.warnings;
+        showWarnings = true;
+    }
+
 	onMount(() => {
 		loadImports();
 	});
@@ -134,7 +143,7 @@
 		{:else}
 			<div class="imports">
 				{#each $importStore as importItem (importItem.id)}
-					<ImportRow {importItem} {showFieldsOf} {showFieldMappingModalOf}/>
+					<ImportRow {importItem} {showFieldsOf} {showFieldMappingModalOf} {showWarningsOf} />
 				{/each}
 			</div>
 			<LoadButton
@@ -151,6 +160,7 @@
 	{/if}
 
 	<ImportFieldMapModal bind:show={showFields} bind:fieldMap />
+    <WarningsModal bind:show={showWarnings} bind:warnings />
 </SettingsBody>
 
 <style>

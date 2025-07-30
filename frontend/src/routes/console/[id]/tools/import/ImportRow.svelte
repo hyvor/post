@@ -3,15 +3,17 @@
     import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
     import ImportStatusBadge from './ImportStatusBadge.svelte';
     import type {Import} from "../../../types";
+	import IconExclamationTriangle from "@hyvor/icons/IconExclamationTriangle";
     import { getI18n } from '../../../lib/i18n';
 
     interface Props {
         importItem: Import;
         showFieldsOf: (importItem: Import) => void;
         showFieldMappingModalOf: (importItem: Import) => void;
+        showWarningsOf: (importItem: Import) => void;
     }
 
-    let { importItem, showFieldsOf, showFieldMappingModalOf }: Props = $props();
+    let { importItem, showFieldsOf, showFieldMappingModalOf, showWarningsOf }: Props = $props();
 
     const I18n = getI18n();
 </script>
@@ -40,13 +42,29 @@
         </Button>
     </div>
     <div class="import-error">
-        {#if importItem.status === 'failed' && importItem.error_message}
-            {importItem.error_message}
-        {:else if importItem.status === 'completed' && importItem.imported_subscribers}
-            {I18n.t('console.tools.import.importedCount', {
-                count: importItem.imported_subscribers
-            })}
-        {/if}
+        <div class="warning">
+            {#if importItem.warnings && importItem.warnings.length > 0}
+                <Button
+                    size="x-small"
+                    color="red"
+                    on:click={() => showWarningsOf(importItem)}
+                >
+                    {#snippet start()}
+                        <IconExclamationTriangle />
+                    {/snippet}
+                    {I18n.t('console.tools.import.seeWarnings')}
+                </Button>
+            {/if}
+        </div>
+        <div class="message">
+            {#if importItem.status === 'failed' && importItem.error_message}
+                {importItem.error_message}
+            {:else if importItem.status === 'completed' && importItem.imported_subscribers}
+                {I18n.t('console.tools.import.importedCount', {
+                    count: importItem.imported_subscribers
+                })}
+            {/if}
+        </div>
     </div>
 </button>
 
@@ -69,19 +87,31 @@
     .import-info {
         display: flex;
         flex-direction: column;
-        width: 170px;
+        width: 45%;
     }
     .import-date {
         font-size: 13px;
         color: var(--text-light);
     }
-    .import-status,
+    .import-status {
+        width: 40%;
+    }
     .import-fields {
-        width: 160px;
+        width: 35%;
     }
     .import-error {
-        flex: 1;
-        text-align: right;
+        display: flex;
+        align-items: center;
         font-size: 14px;
+        gap: 12px;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .warning {
+        flex-shrink: 0;
+    }
+    .message {
+        text-align: right;
+        flex-grow: 1;
     }
 </style>

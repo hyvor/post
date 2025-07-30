@@ -291,5 +291,6 @@ export type Import = {
     fields: Record<string, string|null> | null;
     csv_fields: string[] | null;
     imported_subscribers: number | null;
+    warnings: string | null;
     error_message: string | null;
 }
