@@ -165,7 +165,7 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
 
         $this->assertNull($mediaService->getMediaByUuid($oldMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($oldPendingMedia->getUuid()));
-//        $this->assertNull($mediaService->getMediaByUuid($oldFailedMedia->getUuid()));
+        $this->assertNull($mediaService->getMediaByUuid($oldFailedMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentPendingMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentFailedMedia->getUuid()));
@@ -175,7 +175,7 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
 
         $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($oldMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($oldPendingMedia)));
-//        $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($oldFailedMedia)));
+        $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($oldFailedMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentPendingMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentFailedMedia)));
