@@ -12,9 +12,10 @@ class ScheduleTest extends KernelTestCase
 {
     public function test_schedule(): void
     {
-        $schedule = new Schedule();
+        $schedule = $this->container->get(Schedule::class);
+        assert($schedule instanceof Schedule);
         $s = $schedule->getSchedule();
         $messages = $s->getRecurringMessages();
-        $this->assertCount(1, $messages);
+        $this->assertCount(2, $messages);
     }
 }
