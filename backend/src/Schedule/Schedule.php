@@ -9,7 +9,7 @@ use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule as SymfonySchedule;
 use Symfony\Component\Scheduler\ScheduleProviderInterface;
 
-#[AsSchedule(name: 'global')]
+#[AsSchedule()]
 class Schedule implements ScheduleProviderInterface
 {
     public function __construct(
@@ -21,6 +21,6 @@ class Schedule implements ScheduleProviderInterface
     {
         return new SymfonySchedule()
             ->add(RecurringMessage::every('1 day', new ClearPendingSubscribersMessage))
-            ->lock($this->lockFactory->createLock('clear_pending_subscribers'));
+            ->lock($this->lockFactory->createLock('schedule'));
     }
 }
