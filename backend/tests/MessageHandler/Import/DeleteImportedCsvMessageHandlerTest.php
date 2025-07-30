@@ -53,6 +53,18 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
             $content,
         );
 
+        $oldFailedMedia = MediaFactory::createOne([
+            'newsletter' => $newsletter,
+            'folder' => MediaFolder::IMPORT,
+            'created_at' => new \DateTimeImmutable('-8 days'),
+            'extension' => 'txt',
+            'size' => strlen($content),
+        ]);
+        $filesystem->write(
+            $mediaService->getUploadPath($oldFailedMedia),
+            $content,
+        );
+
         $recentMedia = MediaFactory::createOne([
             'newsletter' => $newsletter,
             'folder' => MediaFolder::IMPORT,
@@ -74,6 +86,18 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
         ]);
         $filesystem->write(
             $mediaService->getUploadPath($recentPendingMedia),
+            $content,
+        );
+
+        $recentFailedMedia = MediaFactory::createOne([
+            'newsletter' => $newsletter,
+            'folder' => MediaFolder::IMPORT,
+            'created_at' => new \DateTimeImmutable('-2 days'),
+            'extension' => 'txt',
+            'size' => strlen($content),
+        ]);
+        $filesystem->write(
+            $mediaService->getUploadPath($recentFailedMedia),
             $content,
         );
 
@@ -113,6 +137,11 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
             'created_at' => new \DateTimeImmutable('-8 days'),
         ]);
         SubscriberImportFactory::createOne([
+            'media' => $oldFailedMedia,
+            'status' => SubscriberImportStatus::FAILED,
+            'created_at' => new \DateTimeImmutable('-8 days'),
+        ]);
+        SubscriberImportFactory::createOne([
             'media' => $recentMedia,
             'status' => SubscriberImportStatus::COMPLETED,
             'created_at' => new \DateTimeImmutable('-2 days'),
@@ -120,6 +149,11 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
         SubscriberImportFactory::createOne([
             'media' => $recentPendingMedia,
             'status' => SubscriberImportStatus::REQUIRES_INPUT,
+            'created_at' => new \DateTimeImmutable('-2 days'),
+        ]);
+        SubscriberImportFactory::createOne([
+            'media' => $recentFailedMedia,
+            'status' => SubscriberImportStatus::FAILED,
             'created_at' => new \DateTimeImmutable('-2 days'),
         ]);
 
@@ -131,16 +165,20 @@ class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
 
         $this->assertNull($mediaService->getMediaByUuid($oldMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($oldPendingMedia->getUuid()));
+//        $this->assertNull($mediaService->getMediaByUuid($oldFailedMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentPendingMedia->getUuid()));
+        $this->assertNotNull($mediaService->getMediaByUuid($recentFailedMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($oldOtherFolderMedia->getUuid()));
         $this->assertNotNull($mediaService->getMediaByUuid($recentOtherFolderMedia->getUuid()));
 
 
         $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($oldMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($oldPendingMedia)));
+//        $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($oldFailedMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentPendingMedia)));
+        $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentFailedMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($oldOtherFolderMedia)));
         $this->assertTrue($filesystem->fileExists($mediaService->getUploadPath($recentOtherFolderMedia)));
     }
