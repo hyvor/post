@@ -13,7 +13,7 @@
 
     <div class="issues hds-box">
         {#each $issuesStore as issue}
-            <a class="issue" href={`/newsletter/${$newsletterStore.slug}/${issue.uuid}`}>
+            <a class="issue" href={`/issue/${issue.uuid}`}>
                 <div class="subject">
                     {issue.subject}
                 </div>

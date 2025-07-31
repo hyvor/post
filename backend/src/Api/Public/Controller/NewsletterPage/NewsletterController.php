@@ -24,14 +24,16 @@ class NewsletterController extends AbstractController
 
     public function __construct(
         private NewsletterService $newsletterService,
-        private IssueService $issueService,
-    ) {
+        private IssueService      $issueService,
+    )
+    {
     }
 
-    #[Route('/newsletter-page/newsletter', methods: 'GET')]
+    #[Route('/archive/newsletter', methods: 'GET')]
     public function getNewsletter(
         #[MapQueryString] NewsletterInitInput $input,
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $newsletter = $this->newsletterService->getNewsletterBySlug($input->slug);
 
         if ($newsletter === null) {
@@ -63,10 +65,11 @@ class NewsletterController extends AbstractController
         return $issues->map(fn(Issue $issue) => new IssueListObject($issue))->toArray();
     }
 
-    #[Route('/newsletter-page/issues', methods: 'GET')]
+    #[Route('/archive/issues', methods: 'GET')]
     public function getIssues(
         #[MapQueryString] NewsletterInitInput $input,
-    ): JsonResponse {
+    ): JsonResponse
+    {
         //
 
         return new JsonResponse([
@@ -74,7 +77,7 @@ class NewsletterController extends AbstractController
         ]);
     }
 
-    #[Route('/newsletter-page/issues/{uuid}', methods: 'GET')]
+    #[Route('/archive/issues/{uuid}', methods: 'GET')]
     public function getIssueHtml(string $uuid): JsonResponse
     {
         $issue = $this->issueService->getIssueByUuid($uuid);

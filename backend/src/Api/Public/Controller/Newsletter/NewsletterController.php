@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class NewsletterController extends AbstractController
 {
 
-    #[Route('/archive/newsletter', methods: 'GET')]
+    #[Route('/newsletter', methods: 'GET')]
     public function getNewsletter(): JsonResponse
     {
         return new JsonResponse();
