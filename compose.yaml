@@ -24,7 +24,7 @@ services:
     networks:
       - hyvor-network
 
-    profiles: [dev]
+    profiles: [ dev ]
 
   hyvor-post-backend:
     container_name: hyvor-post-backend
@@ -46,7 +46,7 @@ services:
       traefik.http.services.hyvor-post-backend.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [dev]
+    profiles: [ dev ]
     healthcheck:
       test: ls
       disable: true
@@ -69,7 +69,30 @@ services:
       traefik.http.services.hyvor-post-embed.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [dev]
+    profiles: [ dev ]
+
+  hyvor-post-archive:
+    container_name: hyvor-post-archive
+    build:
+      context: .
+      target: archive-dev
+    volumes:
+      - ./archive/src:/app/archive/src
+      - ./archive/static:/app/archive/static
+      - ./archive/vite.config.ts:/app/archive/vite.config.ts
+      - ./archive/package.json:/app/archive/package.json
+      - ./archive/package-lock.json:/app/archive/package-lock.json
+      - ./archive/tsconfig.json:/app/archive/tsconfig.json
+      - ./archive/svelte.config.js:/app/archive/svelte.config.js
+    labels:
+      traefik.enable: true
+      traefik.http.routers.hyvor-post-archive.rule: Host(test.archive.localhost`)
+      traefik.http.routers.hyvor-post-archive.entrypoints: http
+      traefik.http.routers.hyvor-post-archive.tls: true
+      traefik.http.services.hyvor-post-archive.loadbalancer.server.port: 80
+    networks:
+      - hyvor-network
+    profiles: [ dev ]
 
 networks:
   hyvor-network:
