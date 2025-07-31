@@ -86,9 +86,8 @@ services:
       - ./archive/svelte.config.js:/app/archive/svelte.config.js
     labels:
       traefik.enable: true
-      traefik.http.routers.hyvor-post-archive.rule: Host(test.archive.localhost`)
+      traefik.http.routers.hyvor-post-archive.rule: HostRegexp(`^.+\.hyvorpost\.localhost$`)
       traefik.http.routers.hyvor-post-archive.entrypoints: http
-      traefik.http.routers.hyvor-post-archive.tls: true
       traefik.http.services.hyvor-post-archive.loadbalancer.server.port: 80
     networks:
       - hyvor-network

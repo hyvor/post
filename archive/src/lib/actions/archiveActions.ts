@@ -10,7 +10,7 @@ interface InitNewsletterResponse {
 
 export function initNewsletter(slug: string) {
     return publicApi.get<InitNewsletterResponse>({
-        endpoint: "/newsletter",
+        endpoint: "/archive/newsletter",
         data: {slug}
     });
 }

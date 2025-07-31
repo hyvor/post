@@ -23,17 +23,17 @@
         console.log('Archive layout mounted');
         subdomainStore.set(data.subdomain)
         loading = false;
-        // initNewsletter($subdomainStore)
-		// 	.then((res) => {
-		// 		newsletterStore.set(res.newsletter);
-		// 		issuesStore.set(res.issues);
-		// 		lightPalette = res.palette_light;
-		// 		darkPalette = res.palette_dark;
-		// 		loading = false;
-		// 	})
-		// 	.catch((err) => {
-		// 		toast.error(err.message);
-		// 	});
+        initNewsletter($subdomainStore)
+			.then((res) => {
+				newsletterStore.set(res.newsletter);
+				issuesStore.set(res.issues);
+				lightPalette = res.palette_light;
+				darkPalette = res.palette_dark;
+				loading = false;
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			});
 	});
 
 </script>
