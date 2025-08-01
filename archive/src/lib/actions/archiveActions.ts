@@ -1,13 +1,10 @@
 import type {Issue, IssueList, Newsletter, Palette} from '../types';
 import publicApi from "$lib/publicApi";
-import {subdomainStore} from "$lib/archiveStore";
-import {get} from "svelte/store";
 
 interface InitNewsletterResponse {
     newsletter: Newsletter
     issues: IssueList[]
-    palette_light: Palette
-    palette_dark: Palette
+    palette: Palette
 }
 
 export function initNewsletter(slug: string) {

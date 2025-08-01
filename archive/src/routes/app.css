@@ -1,0 +1,5 @@
+body {
+    font-family: var(--hp-font-family);
+    font-size: var(--hp-font-size);
+    font-weight: var(--hp-font-weight);
+}

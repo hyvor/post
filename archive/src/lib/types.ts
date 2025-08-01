@@ -17,12 +17,20 @@ export interface Issue {
 }
 
 export interface Palette {
-    text: string;
     accent: string;
     accent_text: string;
-    input: string;
-    input_text: string;
-    input_box_shadow: string;
-    input_border: string;
-    border_radius: number;
+    background: string;
+    background_text: string;
+    box: string;
+    box_text: string;
+
+    box_radius: string;
+    box_shadow: string;
+    box_border: string;
+
+    font_family: string;
+    font_size: string;
+    font_weight: string;
+    font_weight_heading: string;
+    font_line_height: string;
 }
