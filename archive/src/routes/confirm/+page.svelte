@@ -13,7 +13,7 @@
 
         if (!token) {
             error = 'Invalid confirmation link';
-            isLoading = false;
+            // isLoading = false;
             return;
         }
 
@@ -30,7 +30,12 @@
 <div class="container">
     <div class="inner-container hds-box">
         {#if isLoading}
-            <Loader block/>
+            <Loader
+                color="var(--hp-box-text)"
+                block
+            >
+                Confirming your subscription...
+            </Loader>
         {:else if error}
             <Notice
                 heading="An error occurred"
@@ -65,6 +70,7 @@
     .inner-container {
         padding: 20px 0;
         min-height: 364px;
+        color: var(--hp-box-text);
         background-color: var(--hp-box);
         box-shadow: var(--hp-box-shadow);
         border: var(--hp-box-border);
