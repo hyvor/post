@@ -2,4 +2,6 @@ body {
     font-family: var(--hp-font-family);
     font-size: var(--hp-font-size);
     font-weight: var(--hp-font-weight);
+
+    --hp-box-text-light: color-mix(in srgb, var(--hp-box-text), transparent 50%);
 }

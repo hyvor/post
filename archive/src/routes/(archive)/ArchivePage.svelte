@@ -1,5 +1,6 @@
 <script>
     import {issuesStore, newsletterStore} from '$lib/archiveStore';
+    import ReadableDate from "../@components/ReadableDate.svelte";
 </script>
 
 <div class="container">
@@ -18,7 +19,7 @@
                     {issue.subject}
                 </div>
                 <div class="sent-at">
-                    {issue.sent_at}
+                    <ReadableDate time={issue.sent_at}/>
                 </div>
             </a>
         {/each}
@@ -27,6 +28,7 @@
 
 <style>
     .container {
+        color: var(--hp-box-text);
         width: 700px;
         margin: 0 auto;
         max-width: 100%;
@@ -34,11 +36,26 @@
 
     .header {
         padding: 20px 0;
-        font-size: 20px;
-        font-weight: 600;
+        font-size: 1.25em;
+        font-weight: var(--hp-font-weight-heading);
+    }
+
+    .issues {
+        padding: 20px;
     }
 
     .issue {
+        padding: 15px;
         display: block;
+        border-radius: var(--hp-box-radius);
+    }
+
+    .issue:hover {
+        background-color: color-mix(in srgb, var(--hp-box), #000000 5%);
+    }
+
+    .sent-at {
+        color: var(--hp-box-text-light);
+        font-size: 0.8em
     }
 </style>
