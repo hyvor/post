@@ -20,9 +20,7 @@
 	let darkPalette = $state({} as Palette);
 
 	onMount(() => {
-        console.log('Archive layout mounted');
         subdomainStore.set(data.subdomain)
-        loading = false;
         initNewsletter($subdomainStore)
 			.then((res) => {
 				newsletterStore.set(res.newsletter);
@@ -44,7 +42,7 @@
 	</div>
 {:else}
 	<div
-	class="newsletter-page"
+	class="archive-wrap"
 	style="
 		--hp-text-light: {lightPalette.text};
 		--hp-accent-light: {lightPalette.accent};
