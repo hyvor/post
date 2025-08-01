@@ -4,7 +4,7 @@
     import {confirm} from '$lib/actions/confirmActions';
     import Notice from "./Notice.svelte";
 
-    let isLoading = $state(false);
+    let isLoading = $state(true);
     let error = $state<string | null>(null);
 
     onMount(async () => {
@@ -28,39 +28,46 @@
 </script>
 
 <div class="container">
-    {#if isLoading}
-        <div class="loader-wrap">
-            <Loader full size="large"/>
-        </div>
-    {:else if error}
-        <Notice
-            heading="An error occurred"
-            message={error}
-        />
-    {:else}
-        <Notice
-            heading="Subscription Confirmed!"
-            message="Thank you for confirming your subscription to <strong>Test Newsletter</strong>!
+    <div class="inner-container hds-box">
+        {#if isLoading}
+            <Loader block/>
+        {:else if error}
+            <Notice
+                heading="An error occurred"
+                message={error}
+                isError={true}
+            />
+        {:else}
+            <Notice
+                heading="Subscription Confirmed!"
+                message="Thank you for confirming your subscription to <strong>Test Newsletter</strong>!
                     You will start receiving the latest updates straight to your inbox.
                     Stay tuned!"
-        />
-    {/if}
+            />
+        {/if}
+    </div>
 </div>
 
 
 <style>
     .container {
-        width: 700px;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 650px;
+        margin: auto;
         max-width: 100%;
         padding: 40px 0;
         text-align: center;
+        height: 100vh;
     }
 
-    .loader-wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+    .inner-container {
+        padding: 20px 0;
+        min-height: 364px;
+        background-color: var(--hp-box);
+        box-shadow: var(--hp-box-shadow);
+        border: var(--hp-box-border);
+        border-radius: var(--hp-box-radius);
     }
 </style>

@@ -1,40 +1,42 @@
 <script lang="ts">
-	import Icon from "./Icon.svelte";
+    // import Icon from "./Icon.svelte";
+    import {Button, IconMessage} from "@hyvor/design/components";
+    import IconEvelopeCheck from "@hyvor/icons/IconEnvelopeCheck";
+    import IconExclamationOctagon from "@hyvor/icons/IconExclamationOctagon";
 
     interface Props {
-		heading: string;
-		message: string;
-	}
+        heading: string;
+        message: string;
+        isError?: boolean;
+    }
 
-    let { heading, message }: Props = $props();
-    
+    let {heading, message, isError = false}: Props = $props();
+
 </script>
 
-<div class="inner-container hds-box">
-    <div class="icon">
-        <Icon />
-    </div>
-    <div class="message">
+<IconMessage
+    icon={isError ? IconExclamationOctagon : IconEvelopeCheck}
+    iconColor="var(--hp-box-text)"
+>
+    <div class="message-wrap">
         <h2>{heading}</h2>
         <p>
             {@html message}
         </p>
+        {#if !isError}
+            <Button
+                style="background-color: var(--hp-accent); color: var(--hp-accent-text);"
+                as="a"
+                href="/"
+            >
+                Show Archives
+            </Button>
+        {/if}
     </div>
-</div>
+</IconMessage>
 
 <style>
-    .inner-container {
-        padding: 20px 0;
-    }
-    .icon {
-        width: 50%;
-        height: 50%;
-        margin: 0 auto;
-    }
-    .message {
-        width: 70%;
-        margin: 0 auto;
-        margin-top: -10px;
-        margin-bottom: 30px;
+    .message-wrap {
+        color: var(--hp-box-text);
     }
 </style>
