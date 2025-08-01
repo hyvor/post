@@ -25,6 +25,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
-        "@hyvor/design": "^1.1.13"
+        "@hyvor/design": "^1.1.13",
+        "dayjs": "^1.11.13"
     }
 }
