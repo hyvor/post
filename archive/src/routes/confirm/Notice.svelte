@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import Icon from "./Icon.svelte";
     import {Button, IconMessage} from "@hyvor/design/components";
     import IconEvelopeCheck from "@hyvor/icons/IconEnvelopeCheck";
     import IconExclamationOctagon from "@hyvor/icons/IconExclamationOctagon";
