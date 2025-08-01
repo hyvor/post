@@ -38,7 +38,9 @@
         <Loader full size="large"/>
     </div>
 {:else}
-    {@render children?.()}
+    <div class="outer-wrap">
+        {@render children?.()}
+    </div>
 {/if}
 
 <style>
@@ -46,6 +48,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 100vh;
+    }
+
+    .outer-wrap {
+        background-color: var(--hp-background);
         height: 100vh;
     }
 </style>

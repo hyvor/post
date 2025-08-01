@@ -42,6 +42,10 @@
 
     .issues {
         padding: 20px;
+        background-color: var(--hp-box);
+        box-shadow: var(--hp-box-shadow);
+        border: var(--hp-box-border);
+        border-radius: var(--hp-box-radius);
     }
 
     .issue {
