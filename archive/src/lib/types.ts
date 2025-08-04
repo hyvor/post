@@ -16,6 +16,13 @@ export interface Issue {
     html: string;
 }
 
+export interface List {
+    id: number;
+    created_at: number;
+    name: string;
+    description: string | null;
+}
+
 export interface Palette {
     accent: string;
     accent_text: string;

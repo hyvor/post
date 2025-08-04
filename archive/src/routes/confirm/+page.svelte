@@ -41,12 +41,12 @@
                     Confirming your subscription...
                 </Loader>
             </div>
-            <!--{:else if error}-->
-            <!--    <Notice-->
-            <!--        heading="An error occurred"-->
-            <!--        message={error}-->
-            <!--        icon={IconExclamationOctagon}-->
-            <!--    />-->
+        {:else if error}
+            <Notice
+                heading="An error occurred"
+                message={error}
+                icon={IconExclamationOctagon}
+            />
         {:else}
             <Notice
                 heading="Subscription Confirmed!"
@@ -71,7 +71,6 @@
         width: 650px;
         margin: auto;
         max-width: 100%;
-        /*padding: 40px 0;*/
         text-align: center;
         height: 100vh;
     }

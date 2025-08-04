@@ -6,11 +6,13 @@ use App\Api\Public\Input\Newsletter\NewsletterInitInput;
 use App\Api\Public\Object\Archive\TemplatePaletteObject;
 use App\Api\Public\Object\Archive\IssueListObject;
 use App\Api\Public\Object\Archive\NewsletterObject;
+use App\Api\Public\Object\Form\FormListObject;
 use App\Entity\Issue;
 use App\Entity\Newsletter;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\IssueService;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\NewsletterList\NewsletterListService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -23,8 +25,9 @@ class ArchiveController extends AbstractController
     const ISSUES_LIMIT = 25;
 
     public function __construct(
-        private NewsletterService $newsletterService,
-        private IssueService      $issueService,
+        private NewsletterService     $newsletterService,
+        private IssueService          $issueService,
+        private NewsletterListService $newsletterListService,
     )
     {
     }
@@ -40,10 +43,12 @@ class ArchiveController extends AbstractController
             throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
+        $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
 
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
             'issues' => $this->getIssueListObjects($newsletter),
+            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
             'palette' => new TemplatePaletteObject($newsletter->getMeta())
         ]);
     }

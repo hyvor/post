@@ -1,9 +1,10 @@
-import type {Issue, IssueList, Newsletter, Palette} from '../types';
+import type {Issue, IssueList, Newsletter, List, Palette} from '../types';
 import publicApi from "$lib/publicApi";
 
 interface InitNewsletterResponse {
     newsletter: Newsletter
     issues: IssueList[]
+    lists: List[]
     palette: Palette
 }
 
