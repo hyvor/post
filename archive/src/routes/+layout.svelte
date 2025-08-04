@@ -2,8 +2,8 @@
     import './app.css';
     import {onMount} from 'svelte';
     import {initNewsletter} from '$lib/actions/archiveActions';
-    import {subdomainStore, issuesStore, newsletterStore} from '$lib/archiveStore';
-    import {Loader, toast} from '@hyvor/design/components';
+    import {subdomainStore, issuesStore, newsletterStore, listsStore} from '$lib/archiveStore';
+    import Loader from './@components/Loader.svelte';
     import type {Palette} from '$lib/types';
     import type {LayoutProps} from "../../.svelte-kit/types/src/routes/$types";
 
@@ -24,11 +24,12 @@
             .then((res) => {
                 newsletterStore.set(res.newsletter);
                 issuesStore.set(res.issues);
+                listsStore.set(res.lists);
                 setPaletteVars(res.palette);
                 loading = false;
             })
             .catch((err) => {
-                toast.error(err.message);
+                console.error(err.message);
             });
     });
 </script>
