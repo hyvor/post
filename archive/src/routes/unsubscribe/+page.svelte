@@ -9,17 +9,20 @@
     import {unsubscribe} from "$lib/actions/subscriptionActions";
 
     let isLoading = $state(true);
-    let error = $state<string | null>(null);
+    let error = $state<string | undefined>(undefined);
+    let token: string | undefined = $state(undefined);
 
     onMount(async () => {
         const url = new URL(window.location.href);
-        const token = url.searchParams.get('token');
+        const param = url.searchParams.get('token');
 
-        if (!token) {
+        if (!param) {
             error = 'Invalid unsubscription link';
             isLoading = false;
             return;
         }
+
+        token = param;
 
         unsubscribe(token)
             .then((data) => {
@@ -59,7 +62,7 @@
                     If this was a mistake, you can easily resubscribe below. Thank you."
                 icon={IconEnvelopeSlash}
             >
-                <Resubscribe lists={$listsStore}/>
+                <Resubscribe lists={$listsStore} {token} bind:error/>
             </Notice>
         {/if}
     </div>

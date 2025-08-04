@@ -6,11 +6,13 @@ use App\Entity\Issue;
 use App\Entity\Newsletter;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Content\ContentService;
+use App\Service\Newsletter\NewsletterService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;
 use App\Service\UserInvite\EmailNotificationService;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Component\InstanceUrlResolver;
@@ -32,20 +34,22 @@ class TemplateController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private HtmlTemplateRenderer $renderer,
-        private EntityManagerInterface $em,
-        private ContentService $contentService,
+        private HtmlTemplateRenderer     $renderer,
+        private EntityManagerInterface   $em,
+        private ContentService           $contentService,
         #[Autowire('%kernel.project_dir%')]
-        private string $projectDir,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
+        private string                   $projectDir,
+        private readonly Environment     $mailTemplate,
+        private readonly StringsFactory  $stringsFactory,
         private EmailNotificationService $emailNotificationService,
-        private Encryption $encryption,
-        private TemplateService $templateService,
-        private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private InstanceUrlResolver $instanceUrlResolver,
-        private InternalConfig $internalConfig,
-    ) {
+        private Encryption               $encryption,
+        private TemplateService          $templateService,
+        private HtmlTemplateRenderer     $htmlTemplateRenderer,
+        private InstanceUrlResolver      $instanceUrlResolver,
+        private InternalConfig           $internalConfig,
+        private NewsletterService        $newsletterService,
+    )
+    {
     }
 
     #[Route('/template/basic', methods: 'GET')]
@@ -156,6 +160,18 @@ class TemplateController extends AbstractController
         $template = $this->templateService->getTemplateStringFromNewsletter($subscriber->getNewsletter());
 
         return new Response($this->htmlTemplateRenderer->render($template, $variables));
+    }
+
+    #[Route('temp/unsubscribe-link', methods: 'GET')]
+    public function getUnsubscribeLink(): Response
+    {
+        $newsletter = $this->em->getRepository(Newsletter::class)->find(1);
+
+        $send = SendFactory::createOne([
+            'newsletter' => $newsletter
+        ]);
+
+        return new Response($this->newsletterService->getArchiveUrl($send->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId()));
     }
 
 }

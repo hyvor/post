@@ -3,14 +3,17 @@
     import type {List} from "$lib/types";
     import Switch from "./Switch.svelte";
     import Button from "../@components/Button.svelte";
+    import {resubscribe} from "$lib/actions/subscriptionActions";
 
     interface Props {
         lists: List[]
+        token: string | undefined
+        error: string | undefined
     }
 
-    let {lists}: Props = $props();
+    let {lists, token, error = $bindable()}: Props = $props();
 
-    let selectedListsIds: number[] = $state([]);
+    let selectedListsIds: number[] = $state(lists.map((list) => list.id));
 
     function handleListSwitch(listId: number) {
         return (event: Event) => {
@@ -29,6 +32,13 @@
 
     function handleDeselectAll() {
         selectedListsIds = [];
+    }
+
+    function handleSave() {
+        resubscribe(selectedListsIds, token)
+            .catch((e) => {
+                error = e.message || 'An unexpected error occurred';
+            });
     }
 </script>
 
@@ -70,7 +80,10 @@
         </Button>
     </div>
 
-    <Button size="small">
+    <Button
+        size="small"
+        onclick={handleSave}
+    >
         Save preferences
     </Button>
 </div>
