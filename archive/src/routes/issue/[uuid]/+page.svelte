@@ -3,7 +3,7 @@
     import {getIssueHtml} from '$lib/actions/archiveActions';
     import {page} from '$app/state';
     import type {Issue} from '$lib/types';
-    import {Button} from '@hyvor/design/components';
+    import Button from '../../@components/Button.svelte';
 
     let issue = $state({} as Issue);
     let iframeEl: HTMLIFrameElement | null = null;
