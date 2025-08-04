@@ -16,8 +16,8 @@
         full = false,
         padding = $bindable('medium'),
         size = $bindable('medium'),
-        color = $bindable('var(--accent)'),
-        colorTrack = $bindable('var(--accent-lightest)'),
+        color = $bindable('var(--hp-accent)'),
+        colorTrack = $bindable('var(--hp-accent-lightest)'),
         children,
         ...rest
     }: Props = $props();
