@@ -2,6 +2,8 @@
     interface Props {
         as?: 'button' | 'a';
         size?: 'x-small' | 'small' | 'medium' | 'large';
+        color?: string;
+        backgroundColor?: string;
         block?: boolean;
         align?: 'start' | 'center';
         button?: any;
@@ -27,6 +29,8 @@
     let {
         as = 'button',
         size = 'medium',
+        color = 'var(--hp-accent-text)',
+        backgroundColor = 'var(--hp-accent)',
         block = false,
         align = 'center',
         button = $bindable({} as HTMLButtonElement | HTMLAnchorElement),
@@ -54,6 +58,7 @@
     this={as}
     class="button {size} {align}"
     class:block
+    style="color: {color}; background-color: {backgroundColor};"
 
     onkeyup={onkeyup}
     onkeydown={onkeydown}
@@ -207,8 +212,6 @@
     }
 
     .button {
-        background-color: var(--hp-accent);
-        color: var(--hp-accent-text);
         transition: 0.2s box-shadow;
         --local-hover-shadow-color: var(--hp-accent-light);
     }

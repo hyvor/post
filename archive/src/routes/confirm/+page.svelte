@@ -1,8 +1,11 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import {Loader} from '@hyvor/design/components';
     import {confirm} from '$lib/actions/confirmActions';
-    import Notice from "./Notice.svelte";
+    import Loader from '../@components/Loader.svelte';
+    import Notice from "../@components/Notice.svelte";
+    import IconEnvelopeCheck from "@hyvor/icons/IconEnvelopeCheck";
+    import IconExclamationOctagon from "@hyvor/icons/IconExclamationOctagon";
+    import {newsletterStore} from "$lib/archiveStore";
 
     let isLoading = $state(true);
     let error = $state<string | null>(null);
@@ -13,7 +16,7 @@
 
         if (!token) {
             error = 'Invalid confirmation link';
-            // isLoading = false;
+            isLoading = false;
             return;
         }
 
@@ -30,24 +33,30 @@
 <div class="container">
     <div class="inner-container hds-box">
         {#if isLoading}
-            <Loader
-                color="var(--hp-box-text)"
-                block
-            >
-                Confirming your subscription...
-            </Loader>
-        {:else if error}
-            <Notice
-                heading="An error occurred"
-                message={error}
-                isError={true}
-            />
+            <div class="loader-wrap">
+                <Loader
+                    color="var(--hp-box-text)"
+                    block
+                >
+                    Confirming your subscription...
+                </Loader>
+            </div>
+            <!--{:else if error}-->
+            <!--    <Notice-->
+            <!--        heading="An error occurred"-->
+            <!--        message={error}-->
+            <!--        icon={IconExclamationOctagon}-->
+            <!--    />-->
         {:else}
             <Notice
                 heading="Subscription Confirmed!"
-                message="Thank you for confirming your subscription to <strong>Test Newsletter</strong>!
+                message="Thank you for confirming your subscription to <strong>{$newsletterStore.name}</strong>!
                     You will start receiving the latest updates straight to your inbox.
                     Stay tuned!"
+                icon={IconEnvelopeCheck}
+                button
+                buttonText="Show Archives"
+                buttonLink="/"
             />
         {/if}
     </div>
@@ -62,18 +71,21 @@
         width: 650px;
         margin: auto;
         max-width: 100%;
-        padding: 40px 0;
+        /*padding: 40px 0;*/
         text-align: center;
         height: 100vh;
     }
 
     .inner-container {
-        padding: 20px 0;
-        min-height: 364px;
+        min-height: 409px;
         color: var(--hp-box-text);
         background-color: var(--hp-box);
         box-shadow: var(--hp-box-shadow);
         border: var(--hp-box-border);
         border-radius: var(--hp-box-radius);
+    }
+
+    .loader-wrap {
+        height: 350px;
     }
 </style>
