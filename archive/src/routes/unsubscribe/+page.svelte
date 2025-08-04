@@ -6,13 +6,31 @@
     import IconExclamationOctagon from "@hyvor/icons/IconExclamationOctagon";
     import {newsletterStore, listsStore} from "$lib/archiveStore";
     import Resubscribe from "./Resubscribe.svelte";
+    import {unsubscribe} from "$lib/actions/subscriptionActions";
 
     let isLoading = $state(true);
     let error = $state<string | null>(null);
 
     onMount(async () => {
-        isLoading = false;
-        return;
+        const url = new URL(window.location.href);
+        const token = url.searchParams.get('token');
+
+        if (!token) {
+            error = 'Invalid unsubscription link';
+            isLoading = false;
+            return;
+        }
+
+        unsubscribe(token)
+            .then((data) => {
+                listsStore.set(data.lists);
+            })
+            .catch((e) => {
+                error = e.message || 'An unexpected error occurred';
+            })
+            .finally(() => {
+                isLoading = false;
+            });
     });
 </script>
 

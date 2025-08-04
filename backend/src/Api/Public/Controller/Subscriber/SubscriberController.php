@@ -2,7 +2,10 @@
 
 namespace App\Api\Public\Controller\Subscriber;
 
+use App\Api\Public\Object\Form\FormListObject;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\Issue\SendService;
+use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\SubscriberService;
 use Hyvor\Internal\Util\Crypt\Encryption;
@@ -17,10 +20,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class SubscriberController extends AbstractController
 {
     use ClockAwareTrait;
+
     public function __construct(
-        private SubscriberService $subscriberService,
-        private Encryption $encryption,
-    ) {
+        private SubscriberService     $subscriberService,
+        private SendService           $sendService,
+        private NewsletterListService $newsletterListService,
+        private Encryption            $encryption,
+    )
+    {
     }
 
     #[Route('/subscriber/confirm', methods: ['GET'])]
@@ -57,5 +64,35 @@ class SubscriberController extends AbstractController
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 
         return new JsonResponse();
+    }
+
+    #[Route('/subscriber/unsubscribe', methods: ['GET'])]
+    public function unsubscribe(Request $request): JsonResponse
+    {
+        $token = $request->query->getString('token');
+
+        try {
+            $sendId = $this->encryption->decrypt($token);
+        } catch (DecryptException) {
+            throw new BadRequestHttpException('Invalid unsubscribe token.');
+        }
+
+        if (!$sendId || !is_int($sendId)) {
+            throw new BadRequestHttpException('Invalid unsubscribe token.');
+        }
+
+        $send = $this->sendService->getSendById($sendId);
+
+        if (!$send) {
+            throw new BadRequestHttpException('Newsletter send not found.');
+        }
+
+        $this->subscriberService->unsubscribeBySend($send);
+
+        $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
+
+        return new JsonResponse([
+            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
+        ]);
     }
 }

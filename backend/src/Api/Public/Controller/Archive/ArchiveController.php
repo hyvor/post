@@ -25,9 +25,8 @@ class ArchiveController extends AbstractController
     const ISSUES_LIMIT = 25;
 
     public function __construct(
-        private NewsletterService     $newsletterService,
-        private IssueService          $issueService,
-        private NewsletterListService $newsletterListService,
+        private NewsletterService $newsletterService,
+        private IssueService      $issueService,
     )
     {
     }
@@ -43,12 +42,9 @@ class ArchiveController extends AbstractController
             throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
-        $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
-
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
             'issues' => $this->getIssueListObjects($newsletter),
-            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
             'palette' => new TemplatePaletteObject($newsletter->getMeta())
         ]);
     }
@@ -100,5 +96,4 @@ class ArchiveController extends AbstractController
             'html' => $html,
         ]);
     }
-
 }

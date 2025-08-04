@@ -1,6 +1,6 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import {confirm} from '$lib/actions/confirmActions';
+    import {confirm} from '$lib/actions/subscriptionActions';
     import Loader from '../@components/Loader.svelte';
     import Notice from "../@components/Notice.svelte";
     import IconEnvelopeCheck from "@hyvor/icons/IconEnvelopeCheck";

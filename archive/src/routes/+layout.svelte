@@ -24,7 +24,6 @@
             .then((res) => {
                 newsletterStore.set(res.newsletter);
                 issuesStore.set(res.issues);
-                listsStore.set(res.lists);
                 setPaletteVars(res.palette);
                 loading = false;
             })

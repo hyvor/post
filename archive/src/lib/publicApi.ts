@@ -10,7 +10,7 @@ interface CallOptions extends PublicApiOptions {
 
 function getPublicApi() {
 
-    const publicApiBaseUrl = "https://post.hyvor.localhost/api/public/archive/";
+    const publicApiBaseUrl = "https://post.hyvor.localhost/api/public/";
 
     async function call<T>({
                                endpoint,

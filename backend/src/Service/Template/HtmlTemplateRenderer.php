@@ -5,16 +5,21 @@ namespace App\Service\Template;
 use App\Entity\Send;
 use App\Service\Content\ContentService;
 use App\Entity\Issue;
+use App\Service\Newsletter\NewsletterService;
+use Hyvor\Internal\Util\Crypt\Encryption;
 use Twig\Environment;
 
 class HtmlTemplateRenderer
 {
 
     public function __construct(
-        private Environment $twig,
-        private ContentService $contentService,
-        private TemplateService $emailTemplateService,
-    ) {
+        private Environment       $twig,
+        private ContentService    $contentService,
+        private TemplateService   $emailTemplateService,
+        private Encryption        $encryption,
+        private NewsletterService $newsletterService
+    )
+    {
     }
 
     private function variablesFromIssue(Issue $issue): TemplateVariables
@@ -44,7 +49,7 @@ class HtmlTemplateRenderer
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
         // TODO: unsubscribe URL
-        $variables->unsubscribe_url = 'https://post.hyvor.com/mypage/unsubscribe/' . $send->getId();
+        $variables->unsubscribe_url = 'https://' . $this->newsletterService->getArchiveUrl($issue->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId());
         return $variables;
     }
 
