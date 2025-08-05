@@ -19,10 +19,11 @@ class SendingProfileService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em,
+        private EntityManagerInterface   $em,
         private SendingProfileRepository $sendingEmailRepository,
-        private AppConfig $appConfig,
-    ) {
+        private AppConfig                $appConfig,
+    )
+    {
     }
 
     /**
@@ -40,12 +41,12 @@ class SendingProfileService
 
     public function createSendingProfile(
         Newsletter $newsletter,
-        Domain $customDomain,
-        string $fromEmail,
-        ?string $fromName = null,
-        ?string $replyToEmail = null,
-        ?string $brandName = null,
-        ?string $brandLogo = null
+        Domain     $customDomain,
+        string     $fromEmail,
+        ?string    $fromName = null,
+        ?string    $replyToEmail = null,
+        ?string    $brandName = null,
+        ?string    $brandLogo = null
     ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
@@ -67,9 +68,10 @@ class SendingProfileService
     }
 
     public function updateSendingProfile(
-        SendingProfile $sendingProfile,
+        SendingProfile          $sendingProfile,
         UpdateSendingProfileDto $updates
-    ): SendingProfile {
+    ): SendingProfile
+    {
         if ($updates->hasProperty('fromEmail')) {
             $sendingProfile->setFromEmail($updates->fromEmail);
         }
@@ -127,7 +129,7 @@ class SendingProfileService
     {
         $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
-        if ($sendingProfile) {
+        if ($sendingProfile && $sendingProfile->getFromEmail()) {
             return $sendingProfile->getFromEmail();
         }
 
@@ -167,9 +169,9 @@ class SendingProfileService
     {
         $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
-        $from = $sendingProfile->getFromEmail() ?? $this->getSystemAddressOfNewsletter($newsletter);
-        $fromName = $sendingProfile->getFromName() ?? $newsletter->getName();
-        $replyTo = $sendingProfile->getReplyToEmail() ?? $from;
+        $from = $sendingProfile?->getFromEmail() ?? $this->getSystemAddressOfNewsletter($newsletter);
+        $fromName = $sendingProfile?->getFromName() ?? $newsletter->getName();
+        $replyTo = $sendingProfile?->getReplyToEmail() ?? $from;
 
         return $email
             ->from(new Address(

@@ -48,8 +48,7 @@ class HtmlTemplateRenderer
     {
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
-        // TODO: unsubscribe URL
-        $variables->unsubscribe_url = 'https://' . $this->newsletterService->getArchiveUrl($issue->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId());
+        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send);
         return $variables;
     }
 
@@ -67,4 +66,8 @@ class HtmlTemplateRenderer
         return $template->render((array)$variables);
     }
 
+    private function getArchiveUnsubscribeUrl(Send $send): string
+    {
+        return $this->newsletterService->getArchiveUrl($send->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId());
+    }
 }

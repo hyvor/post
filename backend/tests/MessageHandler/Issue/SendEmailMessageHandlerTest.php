@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
+use Symfony\Component\Mime\Email;
 
 #[CoversClass(SendEmailMessageHandler::class)]
 #[CoversClass(SendEmailMessage::class)]
@@ -49,6 +50,9 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
             'subject' => 'First Newsletter Issue!',
+            'ok_sends' => 0,
+            'failed_sends' => 0,
+            'total_sends' => 1,
         ]);
 
         $send = SendFactory::createOne([
@@ -59,7 +63,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
 
-        $this->transport()->throwExceptions()->process();
+        $this->transport('async')->throwExceptions()->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->find($send->getId());
@@ -69,17 +73,21 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $this->assertEmailCount(1);
 
+        /** @var Email $email */
         $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, 'First Newsletter Issue!');
+        $header = $email->getHeaders()->get('List-Unsubscribe');
+        $this->assertNotNull($header);
+        $this->assertStringStartsWith('<https://post.hyvor.com/api/public/subscriber/unsubscribe?token=', $header->getBodyAsString());
+        $this->assertEmailHeaderSame($email, 'List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
 
         // Test checkCompletion method
         $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame($issueDB->getOkSends(), 1);
-        $this->assertSame($issueDB->getStatus(), IssueStatus::SENT);
+        $this->assertSame(1, $issueDB->getOkSends());
+        $this->assertSame(IssueStatus::SENT, $issueDB->getStatus());
         $this->assertSame("2025-02-21 00:00:00", $issueDB->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
@@ -105,6 +113,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
+            'failed_sends' => 0
         ]);
 
         $send = SendFactory::createOne([
@@ -123,7 +132,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->container->set(EmailSenderService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
-        $this->transport()->process();
+        $this->transport('async')->process();
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->find($send->getId());
@@ -149,7 +158,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job_increase_attempts(
         int $attempt,
         int $delaySeconds,
-    ): void {
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
@@ -185,14 +195,14 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->container->set(EmailSenderService::class, $emailTransportMock);
 
         // Not throwing exceptions to test the failure
-        $this->transport()->process(1);
+        $this->transport('async')->process(1);
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->find($send->getId());
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::PENDING, $send->getStatus());
 
-        $envelope = $this->transport()->queue()->first();
+        $envelope = $this->transport('async')->queue()->first();
         $delay = $envelope->last(DelayStamp::class)?->getDelay();
         $this->assertSame($delaySeconds * 1000, $delay);
         $message = $envelope->getMessage();
