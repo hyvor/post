@@ -72,6 +72,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
         $this->assertEmailSubjectContains($email, 'First Newsletter Issue!');
+        $this->assertEmailHeaderSame($email, 'List-Unsubscribe', '<https://post.hyvor.com/api/public/subscriber/unsubscribe?token=' . $this->encryption->encrypt($send->getId()) . '>');
+        $this->assertEmailHeaderSame($email, 'List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
@@ -149,7 +151,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job_increase_attempts(
         int $attempt,
         int $delaySeconds,
-    ): void {
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
 
         $list = NewsletterListFactory::createOne([
