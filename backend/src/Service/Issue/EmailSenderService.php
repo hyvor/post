@@ -34,8 +34,8 @@ class EmailSenderService
         ?string $email = null,
     ): void
     {
-        $toEmail ??= $send?->getEmail();
-        assert(is_string($email));
+        $toEmail = $email ?? $send?->getEmail();
+        assert(is_string($toEmail));
 
         $html = $send ?
             $this->htmlEmailTemplateRenderer->renderFromSend($send) :
@@ -56,7 +56,6 @@ class EmailSenderService
             ->addTextHeader('X-Newsletter-Send-ID', (string)$send?->getId())
             ->addTextHeader('X-Newsletter-Issue-ID', (string)$issue->getId())
             ->addTextHeader('X-SES-CONFIGURATION-SET', $this->appConfig->getAwsSesNewsletterConfigurationSetName())
-            // TODO: unsubscribe URL
             ->addTextHeader('List-Unsubscribe', "<$unsubscribeUrl>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
