@@ -3,6 +3,7 @@
 namespace App\Api\Public\Controller\Subscriber;
 
 use App\Api\Public\Input\Subscriber\ResubscribeInput;
+use App\Api\Public\Input\Subscriber\UnsubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\SendService;
@@ -69,13 +70,13 @@ class SubscriberController extends AbstractController
         return new JsonResponse();
     }
 
-    #[Route('/subscriber/unsubscribe', methods: ['GET'])]
-    public function unsubscribe(Request $request): JsonResponse
+    #[Route('/subscriber/unsubscribe', methods: ['POST'])]
+    public function unsubscribe(
+        #[MapRequestPayload] UnsubscribeInput $input
+    ): JsonResponse
     {
-        $token = $request->query->getString('token');
-
         try {
-            $sendId = $this->encryption->decrypt($token);
+            $sendId = $this->encryption->decrypt($input->token);
         } catch (DecryptException) {
             throw new BadRequestHttpException('Invalid unsubscribe token.');
         }
@@ -102,7 +103,7 @@ class SubscriberController extends AbstractController
     #[Route('/subscriber/resubscribe', methods: ['PATCH'])]
     public function resubscribe(
         #[MapRequestPayload] ResubscribeInput $input,
-    )
+    ): JsonResponse
     {
         try {
             $sendId = $this->encryption->decrypt($input->token);

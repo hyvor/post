@@ -22,9 +22,13 @@ class UnsubscribeTest extends WebTestCase
         $token = $this->encryption->encrypt($send->getId());
 
         $response = $this->publicApi(
-            'GET',
-            '/subscriber/unsubscribe?token=' . $token,
+            'POST',
+            '/subscriber/unsubscribe',
+            [
+                'token' => $token,
+            ]
         );
+
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
@@ -36,8 +40,11 @@ class UnsubscribeTest extends WebTestCase
     public function test_unsubscribe_with_invalid_token(): void
     {
         $response = $this->publicApi(
-            'GET',
-            '/subscriber/unsubscribe?token=invalidtoken',
+            'POST',
+            '/subscriber/unsubscribe',
+            [
+                'token' => 'invalidtoken',
+            ]
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -50,8 +57,11 @@ class UnsubscribeTest extends WebTestCase
         $token = $this->encryption->encrypt(99999); // Assuming this ID does not exist
 
         $response = $this->publicApi(
-            'GET',
-            '/subscriber/unsubscribe?token=' . $token,
+            'POST',
+            '/subscriber/unsubscribe',
+            [
+                'token' => $token,
+            ]
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -64,8 +74,11 @@ class UnsubscribeTest extends WebTestCase
         $token = $this->encryption->encrypt(['not' => 'an integer']);
 
         $response = $this->publicApi(
-            'GET',
-            '/subscriber/unsubscribe?token=' . $token,
+            'POST',
+            '/subscriber/unsubscribe',
+            [
+                'token' => $token,
+            ]
         );
 
         $this->assertSame(400, $response->getStatusCode());
