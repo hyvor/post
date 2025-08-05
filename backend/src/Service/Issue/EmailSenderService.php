@@ -48,17 +48,20 @@ class EmailSenderService
             ->html($html)
             ->subject((string)$issue->getSubject());
 
-        $unsubscribeUrl = $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent())
-            . '/api/public/subscriber/unsubscribe?token='
-            . $this->encryption->encrypt($send?->getId());
-
         $email->getHeaders()
             ->addTextHeader('X-Newsletter-Send-ID', (string)$send?->getId())
             ->addTextHeader('X-Newsletter-Issue-ID', (string)$issue->getId())
             ->addTextHeader('X-SES-CONFIGURATION-SET', $this->appConfig->getAwsSesNewsletterConfigurationSetName())
-            ->addTextHeader('List-Unsubscribe', "<$unsubscribeUrl>")
+            ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
         $this->mailer->send($email);
+    }
+
+    private function unsubscribeApiUrl(?Send $send): string
+    {
+        return $this->appConfig->getUrlApp()
+            . '/api/public/subscriber/unsubscribe?token='
+            . $this->encryption->encrypt($send?->getId());
     }
 }

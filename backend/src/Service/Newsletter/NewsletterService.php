@@ -18,6 +18,7 @@ use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -265,6 +266,7 @@ class NewsletterService
 
     public function getArchiveUrl(Newsletter $newsletter): string
     {
-        return $newsletter->getSlug() . '.' . $this->config->getDefaultEmailDomain();
+        $urlArchive = Request::create($this->config->getUrlArchive());
+        return $urlArchive->getScheme() . $newsletter->getSlug() . '.' . $urlArchive->getHost();
     }
 }
