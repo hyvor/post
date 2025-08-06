@@ -15,7 +15,7 @@ class RelayApiClient
 {
 
     public function __construct(
-        private AppConfig $appConfig,
+        private AppConfig           $appConfig,
         private HttpClientInterface $httpClient,
         private SerializerInterface $serializer
     )
@@ -33,8 +33,9 @@ class RelayApiClient
         string $method,
         string $endpoint,
         string $classToDeserialize,
-        array $data = [],
-    ) {
+        array  $data = [],
+    )
+    {
 
         try {
             $response = $this->httpClient->request(
@@ -48,9 +49,14 @@ class RelayApiClient
                 ]
             );
 
+            if ($response->getStatusCode() !== 200) {
+                $json = $response->toArray(false);
+                throw new RelayApiException($json['message'] ?? 'Unknown error');
+            }
+
             return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
 
-        } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
+        } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
             throw new RelayApiException($e->getMessage());
         }
 
