@@ -5,8 +5,10 @@ namespace App\Service\Issue;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Service\AppConfig;
+use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TextTemplateRenderer;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Util\Crypt\Encryption;
@@ -17,9 +19,11 @@ class EmailSenderService
 {
 
     public function __construct(
-        private MailerInterface       $mailer,
+//        private MailerInterface       $mailer,
+        private RelayApiClient        $relayApiClient,
         private SendingProfileService $sendingProfileService,
         private HtmlTemplateRenderer  $htmlEmailTemplateRenderer,
+        private TextTemplateRenderer  $textEmailTemplateRenderer,
         private AppConfig             $appConfig,
         private Encryption            $encryption
     )
@@ -39,11 +43,16 @@ class EmailSenderService
             $this->htmlEmailTemplateRenderer->renderFromSend($send) :
             $this->htmlEmailTemplateRenderer->renderFromIssue($issue);
 
+        $text = $send ?
+            $this->textEmailTemplateRenderer->renderFromSend($send) :
+            $this->textEmailTemplateRenderer->renderFromIssue($issue);
+
         $email = new Email();
         $this->sendingProfileService->setSendingProfileToEmail($email, $issue->getNewsletter());
 
         $email->to($toEmail)
             ->html($html)
+            ->text($text)
             ->subject((string)$issue->getSubject());
 
         $email->getHeaders()
@@ -53,7 +62,8 @@ class EmailSenderService
             ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
-        $this->mailer->send($email);
+        $this->relayApiClient->sendEmail($email);
+//        $this->mailer->send($email);
     }
 
     private function unsubscribeApiUrl(?Send $send): string

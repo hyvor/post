@@ -5,6 +5,8 @@ namespace App\Service\Integration\Relay;
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\Response\CreateDomainResponse;
+use App\Service\Integration\Relay\Response\SendEmailResponse;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
@@ -36,7 +38,6 @@ class RelayApiClient
         array  $data = [],
     )
     {
-
         try {
             $response = $this->httpClient->request(
                 $method,
@@ -77,4 +78,43 @@ class RelayApiClient
         );
     }
 
+    public function sendEmail(Email $email): SendEmailResponse
+    {
+        $additionalHeaders = [];
+
+        foreach ($email->getHeaders()->all() as $header) {
+            $name = $header->getName();
+            if (
+                strtolower($name) === 'from'
+                || strtolower($name) === 'to'
+                || strtolower($name) === 'subject'
+                || strtolower($name) === 'reply-to'     // TODO: Remove once Relay bug-fix is deployed
+            ) {
+                continue;
+            }
+            $additionalHeaders[$header->getName()] = $header->getBodyAsString();
+        }
+
+        return $this->callApi(
+            'POST',
+            '/sends',
+            SendEmailResponse::class,
+            [
+                "from" => [
+                    "name" => $email->getFrom()[0]->getName(),
+                    "email" => "testing@nadil.relay.hyvorstaging.com"
+//                    "email" => $email->getFrom()[0]->getAddress()
+                ],
+                "to" => [
+                    "name" => $email->getTo()[0]->getName(),
+                    "email" => $email->getTo()[0]->getAddress()
+//                    "email" => "98o1onday2@mrotzis.com"
+                ],
+                "subject" => $email->getSubject(),
+                "body_html" => $email->getHtmlBody(),
+                "body_text" => $email->getTextBody(),
+                "headers" => $additionalHeaders,
+            ]
+        );
+    }
 }
