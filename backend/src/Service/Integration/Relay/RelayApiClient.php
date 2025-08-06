@@ -15,6 +15,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RelayApiClient
 {
+    const int MAX_ATTEMPTS = 3;
+    /** @var int[] $BACKOFF */
+    const array BACKOFF = [1, 2, 5];
 
     public function __construct(
         private AppConfig           $appConfig,
@@ -40,30 +43,38 @@ class RelayApiClient
         array  $headers = []
     )
     {
-        try {
-            $response = $this->httpClient->request(
-                $method,
-                $this->appConfig->getRelayUrl() . '/api/console/' . ltrim($endpoint, '/'),
-                [
-                    'headers' => array_merge(
-                        [
-                            'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
-                        ],
-                        $headers
-                    ),
-                    'json' => $data,
-                ]
-            );
+        $attempts = 0;
 
-            if ($response->getStatusCode() !== 200) {
-                $json = $response->toArray(false);
-                throw new RelayApiException($json['message'] ?? 'Unknown error');
+        while (true) {
+            try {
+                $response = $this->httpClient->request(
+                    $method,
+                    $this->appConfig->getRelayUrl() . '/api/console/' . ltrim($endpoint, '/'),
+                    [
+                        'headers' => array_merge(
+                            [
+                                'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
+                            ],
+                            $headers
+                        ),
+                        'json' => $data,
+                    ]
+                );
+
+                if ($response->getStatusCode() !== 200) {
+                    $json = $response->toArray(false);
+                    throw new RelayApiException($json['message'] ?? 'Unknown error');
+                }
+
+                return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
+
+            } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
+                $attempts++;
+                if ($attempts >= self::MAX_ATTEMPTS) {
+                    throw new RelayApiException($e->getMessage());
+                }
+                sleep(self::BACKOFF[$attempts - 1]);
             }
-
-            return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
-
-        } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
-            throw new RelayApiException($e->getMessage());
         }
     }
 
