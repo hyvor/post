@@ -47,23 +47,22 @@ class EmailSenderService
             $this->textEmailTemplateRenderer->renderFromSend($send) :
             $this->textEmailTemplateRenderer->renderFromIssue($issue);
 
-        $email = new Email();
-        $this->sendingProfileService->setSendingProfileToEmail($email, $issue->getNewsletter());
+        $emailObject = new Email();
+        $this->sendingProfileService->setSendingProfileToEmail($emailObject, $issue->getNewsletter());
 
-        $email->to($toEmail)
+        $emailObject->to($toEmail)
             ->html($html)
             ->text($text)
             ->subject((string)$issue->getSubject());
 
-        $email->getHeaders()
+        $emailObject->getHeaders()
             ->addTextHeader('X-Newsletter-Send-ID', (string)$send?->getId())
             ->addTextHeader('X-Newsletter-Issue-ID', (string)$issue->getId())
-            ->addTextHeader('X-SES-CONFIGURATION-SET', $this->appConfig->getAwsSesNewsletterConfigurationSetName())
             ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
-        $this->relayApiClient->sendEmail($email);
-//        $this->mailer->send($email);
+        $this->relayApiClient->sendEmail($emailObject, $send?->getId());
+//        $this->mailer->send($emailObject);
     }
 
     private function unsubscribeApiUrl(?Send $send): string

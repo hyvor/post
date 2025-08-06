@@ -28,6 +28,7 @@ class RelayApiClient
      * @template T of object
      * @param class-string<T> $classToDeserialize
      * @param array<string, mixed> $data
+     * @param array<string, mixed> $headers
      * @return T
      * @throws RelayApiException
      */
@@ -36,6 +37,7 @@ class RelayApiClient
         string $endpoint,
         string $classToDeserialize,
         array  $data = [],
+        array  $headers = []
     )
     {
         try {
@@ -43,9 +45,12 @@ class RelayApiClient
                 $method,
                 $this->appConfig->getRelayUrl() . '/api/console/' . ltrim($endpoint, '/'),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
-                    ],
+                    'headers' => array_merge(
+                        [
+                            'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
+                        ],
+                        $headers
+                    ),
                     'json' => $data,
                 ]
             );
@@ -60,7 +65,6 @@ class RelayApiClient
         } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
             throw new RelayApiException($e->getMessage());
         }
-
     }
 
     /**
@@ -78,7 +82,7 @@ class RelayApiClient
         );
     }
 
-    public function sendEmail(Email $email): SendEmailResponse
+    public function sendEmail(Email $email, ?int $idempotencyKey = null): SendEmailResponse
     {
         $additionalHeaders = [];
 
@@ -114,6 +118,9 @@ class RelayApiClient
                 "body_html" => $email->getHtmlBody(),
                 "body_text" => $email->getTextBody(),
                 "headers" => $additionalHeaders,
+            ],
+            [
+                'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
             ]
         );
     }
