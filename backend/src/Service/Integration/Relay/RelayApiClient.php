@@ -43,7 +43,7 @@ class RelayApiClient
         string $classToDeserialize,
         array  $data = [],
         array  $headers = [],
-        bool   $isEmailSend = false
+        bool   $isSendEmail = false
     )
     {
         $attempts = 0;
@@ -71,8 +71,8 @@ class RelayApiClient
                 }
 
                 $attempts++;
-                $backoff = $isEmailSend ? self::EMAIL_BACKOFF : self::BACKOFF;
                 $json = $response->toArray(false);
+                $backoff = $isSendEmail ? self::EMAIL_BACKOFF : self::BACKOFF;
 
                 if ($attempts >= self::MAX_ATTEMPTS) {
                     throw new RelayApiException($json['message'] ?? 'Unknown error');
@@ -149,7 +149,7 @@ class RelayApiClient
             [
                 'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
             ],
-            isEmailSend: true
+            isSendEmail: true
         );
     }
 }
