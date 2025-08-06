@@ -9,7 +9,7 @@ use App\Service\Content\ContentService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariables;
+use App\Service\Template\TemplateVariableService;
 use App\Service\UserInvite\EmailNotificationService;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
@@ -34,20 +34,20 @@ class TemplateController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private HtmlTemplateRenderer     $renderer,
-        private EntityManagerInterface   $em,
-        private ContentService           $contentService,
+        private HtmlTemplateRenderer    $renderer,
+        private EntityManagerInterface  $em,
+        private ContentService          $contentService,
         #[Autowire('%kernel.project_dir%')]
-        private string                   $projectDir,
-        private readonly Environment     $mailTemplate,
-        private readonly StringsFactory  $stringsFactory,
-        private EmailNotificationService $emailNotificationService,
-        private Encryption               $encryption,
-        private TemplateService          $templateService,
-        private HtmlTemplateRenderer     $htmlTemplateRenderer,
-        private InstanceUrlResolver      $instanceUrlResolver,
-        private InternalConfig           $internalConfig,
-        private NewsletterService        $newsletterService,
+        private string                  $projectDir,
+        private readonly Environment    $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
+        private Encryption              $encryption,
+        private TemplateService         $templateService,
+        private TemplateVariableService $templateVariableService,
+        private HtmlTemplateRenderer    $htmlTemplateRenderer,
+        private InstanceUrlResolver     $instanceUrlResolver,
+        private InternalConfig          $internalConfig,
+        private NewsletterService       $newsletterService,
     )
     {
     }
@@ -113,7 +113,7 @@ class TemplateController extends AbstractController
 
         $newsletter = $subscriber->getNewsletter();
 
-        $variables = TemplateVariables::fromNewsletter($newsletter);
+        $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
 
         $variables->subject = $subject;
         $content = (string)json_encode([

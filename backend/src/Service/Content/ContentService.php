@@ -66,6 +66,12 @@ JSON;
         return $document->toHtml();
     }
 
+    public function getTextFromJson(string $content): string
+    {
+        $document = Document::fromJson($this->getSchema(), $content);
+        return $document->toText();
+    }
+
     public function getJsonFromHtml(string $html, bool $sanitize = true): string
     {
         return $this->getDocumentFromHtml($html, $sanitize)->toJson();
@@ -73,8 +79,9 @@ JSON;
 
     public function getDocumentFromHtml(
         string $html,
-        bool $sanitize = true
-    ): Node {
+        bool   $sanitize = true
+    ): Node
+    {
         $schema = $this->getSchema();
         $parser = HtmlParser::fromSchema($schema);
         return $parser->parse($html, sanitize: $sanitize);

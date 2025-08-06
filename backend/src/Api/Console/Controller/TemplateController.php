@@ -14,6 +14,7 @@ use App\Service\Template\Dto\UpdateTemplateDto;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariables;
+use App\Service\Template\TemplateVariableService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -22,11 +23,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private TemplateService $templateService,
-        private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private ContentService $contentService,
-        private ContentDefaultStyle $contentDefaultStyle,
-    ) {
+        private TemplateService         $templateService,
+        private TemplateVariableService $templateVariableService,
+        private HtmlTemplateRenderer    $htmlTemplateRenderer,
+        private ContentDefaultStyle     $contentDefaultStyle,
+    )
+    {
     }
 
     #[Route('/templates', methods: 'GET')]
@@ -46,9 +48,10 @@ class TemplateController extends AbstractController
 
     #[Route('/templates/update', methods: 'POST')]
     public function updateTemplate(
-        Newsletter $newsletter,
+        Newsletter                               $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $templateString = $input->template ?? $this->templateService->readDefaultTemplate();
 
         $template = $this->templateService->getTemplate($newsletter);
@@ -65,13 +68,14 @@ class TemplateController extends AbstractController
 
     #[Route('/templates/render', methods: 'POST')]
     public function renderTemplate(
-        Newsletter $newsletter,
+        Newsletter                               $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $subject = 'Hyvor Post Default Email';
         $defaultContentHtml = $this->contentDefaultStyle->html();
 
-        $variables = TemplateVariables::fromNewsletter($newsletter);
+        $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
         $variables->subject = $subject;
         $variables->content = $defaultContentHtml;
 
