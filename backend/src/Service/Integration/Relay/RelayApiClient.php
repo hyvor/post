@@ -27,7 +27,7 @@ class RelayApiClient
         private AppConfig           $appConfig,
         private HttpClientInterface $httpClient,
         private SerializerInterface $serializer,
-        private LoggerInterface $logger,
+        private LoggerInterface     $logger,
     )
     {
     }
