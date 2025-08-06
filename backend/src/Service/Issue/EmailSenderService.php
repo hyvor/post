@@ -5,6 +5,7 @@ namespace App\Service\Issue;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Service\AppConfig;
+use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -30,6 +31,9 @@ class EmailSenderService
     {
     }
 
+    /**
+     * @throws RelayApiException
+     */
     public function send(
         Issue   $issue,
         ?Send   $send = null,

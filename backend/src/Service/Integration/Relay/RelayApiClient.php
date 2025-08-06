@@ -6,12 +6,14 @@ use App\Service\AppConfig;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\Response\CreateDomainResponse;
 use App\Service\Integration\Relay\Response\SendEmailResponse;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class RelayApiClient
 {
@@ -24,7 +26,8 @@ class RelayApiClient
     public function __construct(
         private AppConfig           $appConfig,
         private HttpClientInterface $httpClient,
-        private SerializerInterface $serializer
+        private SerializerInterface $serializer,
+        private LoggerInterface $logger,
     )
     {
     }
@@ -34,6 +37,7 @@ class RelayApiClient
      * @param class-string<T> $classToDeserialize
      * @param array<string, mixed> $data
      * @param array<string, mixed> $headers
+     * @param int[] $backoffSeconds
      * @return T
      * @throws RelayApiException
      */
@@ -43,7 +47,7 @@ class RelayApiClient
         string $classToDeserialize,
         array  $data = [],
         array  $headers = [],
-        bool   $isSendEmail = false
+        array  $backoffSeconds = self::BACKOFF
     )
     {
         $attempts = 0;
@@ -54,6 +58,7 @@ class RelayApiClient
                     $method,
                     $this->appConfig->getRelayUrl() . '/api/console/' . ltrim($endpoint, '/'),
                     [
+                        'max_redirects' => 3,
                         'headers' => array_merge(
                             [
                                 'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
@@ -70,27 +75,48 @@ class RelayApiClient
                     return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
                 }
 
+            } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
+
+                $this->logger->error(
+                    'Relay API call failed',
+                    [
+                        'method' => $method,
+                        'endpoint' => $endpoint,
+                        'data' => $data,
+                        'headers' => $headers,
+                        'exception' => $e,
+                    ]
+                );
+
+                $errorMessage = isset($response) ? $this->getErrorMessageFromResponse($response) : 'Unknown error';
+
                 $attempts++;
-                $json = $response->toArray(false);
-                $backoff = $isSendEmail ? self::EMAIL_BACKOFF : self::BACKOFF;
-
                 if ($attempts >= self::MAX_ATTEMPTS) {
-                    throw new RelayApiException($json['message'] ?? 'Unknown error');
+                    throw new RelayApiException('Max attempts reached, last error: ' . $errorMessage);
                 }
 
-                if ($statusCode === 429) {
-                    $waitTime = $response->getHeaders()['X-RateLimit-Reset'][0] ?? null;
-                    $sleepTime = is_numeric($waitTime) ? (int)$waitTime : $backoff[$attempts - 1];
-                    sleep($sleepTime);
-                } elseif ($statusCode >= 500 && $statusCode < 600) {
-                    sleep($backoff[$attempts - 1]);
-                } else {
-                    throw new RelayApiException($json['message'] ?? 'Unknown error');
+                if (
+                    $e instanceof HttpExceptionInterface &&
+                    $e->getCode() >= 300 &&
+                    $e->getCode() < 500 &&
+                    $e->getCode() !== 429
+                ) {
+                    throw new RelayApiException($errorMessage);
                 }
 
-            } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
-                throw new RelayApiException($e->getMessage());
+                sleep($backoffSeconds[$attempts - 1]);
             }
+        }
+    }
+
+    private function getErrorMessageFromResponse(ResponseInterface $response): string
+    {
+        $defaultError = 'Unknown error';
+        try {
+            $data = $response->toArray(false);
+            return $data['message'] ?? $defaultError;
+        } catch (DecodingExceptionInterface) {
+            return $defaultError;
         }
     }
 
@@ -109,6 +135,9 @@ class RelayApiClient
         );
     }
 
+    /**
+     * @throws RelayApiException
+     */
     public function sendEmail(Email $email, ?int $idempotencyKey = null): SendEmailResponse
     {
         $additionalHeaders = [];
@@ -149,7 +178,7 @@ class RelayApiClient
             [
                 'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
             ],
-            isSendEmail: true
+            backoffSeconds: self::EMAIL_BACKOFF
         );
     }
 }
