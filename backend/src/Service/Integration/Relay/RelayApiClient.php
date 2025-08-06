@@ -148,7 +148,8 @@ class RelayApiClient
             ],
             [
                 'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
-            ]
+            ],
+            isEmailSend: true
         );
     }
 }
