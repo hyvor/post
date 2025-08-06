@@ -18,6 +18,8 @@ class RelayApiClient
     const int MAX_ATTEMPTS = 3;
     /** @var int[] $BACKOFF */
     const array BACKOFF = [1, 2, 5];
+    /** @var int[] $EMAIL_BACKOFF */
+    const array EMAIL_BACKOFF = [5, 15, 30];
 
     public function __construct(
         private AppConfig           $appConfig,
@@ -40,7 +42,8 @@ class RelayApiClient
         string $endpoint,
         string $classToDeserialize,
         array  $data = [],
-        array  $headers = []
+        array  $headers = [],
+        bool   $isEmailSend = false
     )
     {
         $attempts = 0;
@@ -61,19 +64,32 @@ class RelayApiClient
                     ]
                 );
 
-                if ($response->getStatusCode() !== 200) {
-                    $json = $response->toArray(false);
+                $statusCode = $response->getStatusCode();
+
+                if ($statusCode >= 200 && $statusCode < 300) {
+                    return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
+                }
+
+                $attempts++;
+                $backoff = $isEmailSend ? self::EMAIL_BACKOFF : self::BACKOFF;
+                $json = $response->toArray(false);
+
+                if ($attempts >= self::MAX_ATTEMPTS) {
                     throw new RelayApiException($json['message'] ?? 'Unknown error');
                 }
 
-                return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
+                if ($statusCode === 429) {
+                    $waitTime = $response->getHeaders()['X-RateLimit-Reset'][0] ?? null;
+                    $sleepTime = is_numeric($waitTime) ? (int)$waitTime : $backoff[$attempts - 1];
+                    sleep($sleepTime);
+                } elseif ($statusCode >= 500 && $statusCode < 600) {
+                    sleep($backoff[$attempts - 1]);
+                } else {
+                    throw new RelayApiException($json['message'] ?? 'Unknown error');
+                }
 
             } catch (TransportExceptionInterface|HttpExceptionInterface|DecodingExceptionInterface $e) {
-                $attempts++;
-                if ($attempts >= self::MAX_ATTEMPTS) {
-                    throw new RelayApiException($e->getMessage());
-                }
-                sleep(self::BACKOFF[$attempts - 1]);
+                throw new RelayApiException($e->getMessage());
             }
         }
     }
