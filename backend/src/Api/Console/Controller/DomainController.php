@@ -9,6 +9,8 @@ use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\VerifyDomainException;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 // TODO: wrong bad request class
@@ -22,14 +24,17 @@ class DomainController extends AbstractController
 {
 
     public function __construct(
-        private DomainService $domainService
-    ) {
+        private DomainService $domainService,
+        private AuthInterface $auth, // TODO: this should be done in the listener
+    )
+    {
     }
 
     #[Route('/domains', methods: 'GET')]
     public function getDomains(): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
         $domains = $this->domainService->getDomainsByUserId($user->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
@@ -37,7 +42,8 @@ class DomainController extends AbstractController
     #[Route('/domains', methods: 'POST')]
     public function createDomain(#[MapRequestPayload] CreateDomainInput $input): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
         $domainInDb = $this->domainService->getDomainByDomainName($input->domain);
 
         if ($domainInDb) {
@@ -66,7 +72,8 @@ class DomainController extends AbstractController
             throw new BadRequestException('Domain not found');
         }
 
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');
         }
@@ -95,7 +102,8 @@ class DomainController extends AbstractController
             throw new BadRequestException('Domain not found');
         }
 
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');
         }

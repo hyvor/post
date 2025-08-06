@@ -21,8 +21,6 @@ class EmailSenderService
         private SendingProfileService $sendingProfileService,
         private HtmlTemplateRenderer  $htmlEmailTemplateRenderer,
         private AppConfig             $appConfig,
-        private InternalConfig        $internalConfig,
-        private InstanceUrlResolver   $instanceUrlResolver,
         private Encryption            $encryption
     )
     {
