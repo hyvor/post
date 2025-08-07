@@ -160,13 +160,11 @@ class RelayApiClient
             [
                 "from" => [
                     "name" => $email->getFrom()[0]->getName(),
-                    "email" => "testing@nadil.relay.hyvorstaging.com"
-//                    "email" => $email->getFrom()[0]->getAddress()
+                    "email" => $email->getFrom()[0]->getAddress()
                 ],
                 "to" => [
                     "name" => $email->getTo()[0]->getName(),
                     "email" => $email->getTo()[0]->getAddress()
-//                    "email" => "98o1onday2@mrotzis.com"
                 ],
                 "subject" => $email->getSubject(),
                 "body_html" => $email->getHtmlBody(),
