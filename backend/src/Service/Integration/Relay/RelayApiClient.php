@@ -69,11 +69,7 @@ class RelayApiClient
                     ]
                 );
 
-                $statusCode = $response->getStatusCode();
-
-                if ($statusCode >= 200 && $statusCode < 300) {
-                    return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
-                }
+                return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
 
             } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
 
@@ -117,6 +113,8 @@ class RelayApiClient
             return $data['message'] ?? $defaultError;
         } catch (DecodingExceptionInterface) {
             return $defaultError;
+        } catch (TransportExceptionInterface $e) {
+            return $e->getMessage();
         }
     }
 
