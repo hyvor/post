@@ -118,10 +118,7 @@
 
     .email {
         font-weight: 600;
-        width: 50%;
-        word-break: break-word;
         overflow-wrap: anywhere;
-
     }
 
     .name {
