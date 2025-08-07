@@ -28,9 +28,11 @@ final class Version20250423175042 extends AbstractMigration
             dkim_host TEXT NOT NULL,
             dkim_txt_value TEXT NOT NULL,
             user_id BIGINT NOT NULL,
-            verified_in_ses BOOLEAN DEFAULT FALSE
+            relay_id BIGINT NOT NULL,
+            verified_in_relay BOOLEAN DEFAULT FALSE
         );
-        SQL);
+        SQL
+        );
     }
 
     public function down(Schema $schema): void
