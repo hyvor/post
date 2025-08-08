@@ -112,4 +112,27 @@ class ResubscribeTest extends WebTestCase
         $this->assertIsString($json['message']);
         $this->assertStringContainsString('List with id', $json['message']);
     }
+
+    public function test_resubscribe_with_no_list_ids(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $send = SendFactory::createOne([
+            'newsletter' => $newsletter,
+        ]);
+        $token = $this->encryption->encrypt($send->getId());
+
+        $response = $this->publicApi(
+            'PATCH',
+            '/subscriber/resubscribe',
+            [
+                'list_ids' => [],
+                'token' => $token,
+            ]
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertStringContainsString('At least one list must be provided.', $json['message']);
+    }
 }
