@@ -53,7 +53,7 @@
 </div>
 
 <div class="popup hds-box">
-    <Button as="a">Go back to the newsletter</Button>
+    <Button as="a" href="/">Go back to the newsletter</Button>
 </div>
 
 <style>
