@@ -78,7 +78,7 @@ class DomainController extends AbstractController
             throw new BadRequestException('You are not the owner of this domain');
         }
 
-        if ($domain->isVerifiedInSes()) {
+        if ($domain->isVerifiedInRelay()) {
             throw new UnprocessableEntityHttpException('Domain already verified');
         }
 

@@ -5,7 +5,9 @@ namespace App\Service\Integration\Relay;
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\Response\CreateDomainResponse;
+use App\Service\Integration\Relay\Response\DeleteDomainResponse;
 use App\Service\Integration\Relay\Response\SendEmailResponse;
+use App\Service\Integration\Relay\Response\VerifyDomainResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -127,6 +129,33 @@ class RelayApiClient
             'POST',
             '/domains',
             CreateDomainResponse::class,
+            [
+                'domain' => $domain
+            ]
+        );
+    }
+
+    /**
+     * @throws RelayApiException
+     */
+    public function verifyDomain(int $id): VerifyDomainResponse
+    {
+        return $this->callApi(
+            'POST',
+            "/domains/{$id}/verify",
+            VerifyDomainResponse::class,
+        );
+    }
+
+    /**
+     * @throws RelayApiException
+     */
+    public function deleteDomain(string $domain): void
+    {
+        $this->callApi(
+            'DELETE',
+            '/domains',
+            DeleteDomainResponse::class,
             [
                 'domain' => $domain
             ]
