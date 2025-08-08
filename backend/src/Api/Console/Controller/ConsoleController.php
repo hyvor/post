@@ -29,16 +29,17 @@ use Symfony\Component\Routing\Attribute\Route;
 class ConsoleController extends AbstractController
 {
     public function __construct(
-        private NewsletterService $newsletterService,
-        private ListRepository $listRepository,
-        private InternalConfig $internalConfig,
-        private AppConfig $appConfig,
+        private NewsletterService         $newsletterService,
+        private ListRepository            $listRepository,
+        private InternalConfig            $internalConfig,
+        private AppConfig                 $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
-        private SendingProfileService $sendingProfileService,
-        private ApprovalService $approvalService,
-        private AuthInterface $auth, // TODO: this should be done in the listener
-        private BillingInterface $billing
-    ) {
+        private SendingProfileService     $sendingProfileService,
+        private ApprovalService           $approvalService,
+        private AuthInterface             $auth, // TODO: this should be done in the listener
+        private BillingInterface          $billing
+    )
+    {
     }
 
     #[Route('/init', methods: 'GET')]
@@ -62,6 +63,7 @@ class ConsoleController extends AbstractController
                 ],
                 'app' => [
                     'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
+                    'archive_url' => $this->newsletterService->getArchiveUrl($newslettersUsers[0]['newsletter'])
                 ],
                 // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),

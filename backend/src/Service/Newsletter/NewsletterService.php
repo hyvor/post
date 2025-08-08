@@ -267,6 +267,6 @@ class NewsletterService
     public function getArchiveUrl(Newsletter $newsletter): string
     {
         $urlArchive = Request::create($this->config->getUrlArchive());
-        return $urlArchive->getScheme() . $newsletter->getSlug() . '.' . $urlArchive->getHost();
+        return $urlArchive->getScheme() . '://' . $newsletter->getSlug() . '.' . $urlArchive->getHost();
     }
 }
