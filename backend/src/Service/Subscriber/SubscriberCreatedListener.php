@@ -8,8 +8,7 @@ use App\Service\Content\ContentService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariables;
-use App\Service\UserInvite\EmailNotificationService;
+use App\Service\Template\TemplateVariableService;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -27,18 +26,18 @@ final class SubscriberCreatedListener
     use ClockAwareTrait;
 
     public function __construct(
-        private MailerInterface $mailer,
-        private SendingProfileService $sendingProfileService,
-        private EmailNotificationService $emailNotificationService,
-        private Encryption $encryption,
-        private ContentService $contentService,
-        private TemplateService $templateService,
-        private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private readonly Environment $mailTemplate,
+        private MailerInterface         $mailer,
+        private SendingProfileService   $sendingProfileService,
+        private Encryption              $encryption,
+        private ContentService          $contentService,
+        private TemplateService         $templateService,
+        private TemplateVariableService $templateVariableService,
+        private HtmlTemplateRenderer    $htmlTemplateRenderer,
         private readonly StringsFactory $stringsFactory,
-        private InstanceUrlResolver $instanceUrlResolver,
-        private InternalConfig $internalConfig,
-    ) {
+        private InstanceUrlResolver     $instanceUrlResolver,
+        private InternalConfig          $internalConfig,
+    )
+    {
     }
 
     public function __invoke(CreateSubscriberEvent $event): void
@@ -62,7 +61,7 @@ final class SubscriberCreatedListener
 
         $heading = $strings->get('mail.subscriberConfirmation.heading');
 
-        $variables = TemplateVariables::fromNewsletter($newsletter);
+        $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
 
         $content = (string)json_encode([
             'type' => 'doc',

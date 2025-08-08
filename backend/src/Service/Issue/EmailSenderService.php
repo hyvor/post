@@ -5,8 +5,11 @@ namespace App\Service\Issue;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Service\AppConfig;
+use App\Service\Integration\Relay\Exception\RelayApiException;
+use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TextTemplateRenderer;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Util\Crypt\Encryption;
@@ -17,17 +20,20 @@ class EmailSenderService
 {
 
     public function __construct(
-        private MailerInterface       $mailer,
+//        private MailerInterface       $mailer,
+        private RelayApiClient        $relayApiClient,
         private SendingProfileService $sendingProfileService,
         private HtmlTemplateRenderer  $htmlEmailTemplateRenderer,
+        private TextTemplateRenderer  $textEmailTemplateRenderer,
         private AppConfig             $appConfig,
-        private InternalConfig        $internalConfig,
-        private InstanceUrlResolver   $instanceUrlResolver,
         private Encryption            $encryption
     )
     {
     }
 
+    /**
+     * @throws RelayApiException
+     */
     public function send(
         Issue   $issue,
         ?Send   $send = null,
@@ -41,21 +47,26 @@ class EmailSenderService
             $this->htmlEmailTemplateRenderer->renderFromSend($send) :
             $this->htmlEmailTemplateRenderer->renderFromIssue($issue);
 
-        $email = new Email();
-        $this->sendingProfileService->setSendingProfileToEmail($email, $issue->getNewsletter());
+        $text = $send ?
+            $this->textEmailTemplateRenderer->renderFromSend($send) :
+            $this->textEmailTemplateRenderer->renderFromIssue($issue);
 
-        $email->to($toEmail)
+        $emailObject = new Email();
+        $this->sendingProfileService->setSendingProfileToEmail($emailObject, $issue->getNewsletter());
+
+        $emailObject->to($toEmail)
             ->html($html)
+            ->text($text)
             ->subject((string)$issue->getSubject());
 
-        $email->getHeaders()
+        $emailObject->getHeaders()
             ->addTextHeader('X-Newsletter-Send-ID', (string)$send?->getId())
             ->addTextHeader('X-Newsletter-Issue-ID', (string)$issue->getId())
-            ->addTextHeader('X-SES-CONFIGURATION-SET', $this->appConfig->getAwsSesNewsletterConfigurationSetName())
             ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
-        $this->mailer->send($email);
+        $this->relayApiClient->sendEmail($emailObject, $send?->getId());
+//        $this->mailer->send($emailObject);
     }
 
     private function unsubscribeApiUrl(?Send $send): string

@@ -13,23 +13,11 @@ class HtmlTemplateRenderer
 {
 
     public function __construct(
-        private Environment       $twig,
-        private ContentService    $contentService,
-        private TemplateService   $emailTemplateService,
-        private Encryption        $encryption,
-        private NewsletterService $newsletterService
+        private Environment             $twig,
+        private TemplateService         $emailTemplateService,
+        private TemplateVariableService $templateVariableService,
     )
     {
-    }
-
-    private function variablesFromIssue(Issue $issue): TemplateVariables
-    {
-        $variables = TemplateVariables::fromNewsletter($issue->getNewsletter());
-        $variables->subject = (string)$issue->getSubject();
-        $variables->content = $this->contentService->getHtmlFromJson(
-            $issue->getContent() ?? ContentService::DEFAULT_CONTENT
-        );
-        return $variables;
     }
 
     /**
@@ -38,23 +26,15 @@ class HtmlTemplateRenderer
     public function renderFromIssue(Issue $issue): string
     {
         $newsletter = $issue->getNewsletter();
-        $variables = $this->variablesFromIssue($issue);
+        $variables = $this->templateVariableService->variablesFromIssue($issue);
         $template = $this->emailTemplateService->getTemplateStringFromNewsletter($newsletter);
 
         return $this->render($template, $variables);
     }
 
-    private function variablesFromSend(Send $send): TemplateVariables
-    {
-        $issue = $send->getIssue();
-        $variables = $this->variablesFromIssue($issue);
-        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send);
-        return $variables;
-    }
-
     public function renderFromSend(Send $send): string
     {
-        $variables = $this->variablesFromSend($send);
+        $variables = $this->templateVariableService->variablesFromSend($send);
         $template = $this->emailTemplateService->getTemplateStringFromNewsletter($send->getIssue()->getNewsletter());
 
         return $this->render($template, $variables);
@@ -64,10 +44,5 @@ class HtmlTemplateRenderer
     {
         $template = $this->twig->createTemplate($template);
         return $template->render((array)$variables);
-    }
-
-    private function getArchiveUnsubscribeUrl(Send $send): string
-    {
-        return $this->newsletterService->getArchiveUrl($send->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId());
     }
 }

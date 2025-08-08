@@ -34,7 +34,10 @@ class Domain
     private int $user_id;
 
     #[ORM\Column]
-    private bool $verified_in_ses = false;
+    private int $relay_id;
+
+    #[ORM\Column]
+    private bool $verified_in_relay = false;
 
     public function getId(): int
     {
@@ -120,14 +123,26 @@ class Domain
         return $this;
     }
 
-    public function isVerifiedInSes(): bool
+    public function getRelayId(): int
     {
-        return $this->verified_in_ses;
+        return $this->relay_id;
     }
 
-    public function setVerifiedInSes(bool $verified_in_ses): static
+    public function setRelayId(int $relay_id): static
     {
-        $this->verified_in_ses = $verified_in_ses;
+        $this->relay_id = $relay_id;
+
+        return $this;
+    }
+
+    public function isVerifiedInRelay(): bool
+    {
+        return $this->verified_in_relay;
+    }
+
+    public function setVerifiedInRelay(bool $verified_in_relay): static
+    {
+        $this->verified_in_relay = $verified_in_relay;
 
         return $this;
     }

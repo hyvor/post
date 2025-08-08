@@ -10,6 +10,8 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -21,14 +23,17 @@ use Symfony\Component\String\UnicodeString;
 class NewsletterController extends AbstractController
 {
     public function __construct(
-        private NewsletterService $newsletterService
-    ) {
+        private NewsletterService $newsletterService,
+        private AuthInterface     $auth, // TODO: this should be done in the listener
+    )
+    {
     }
 
     #[Route('/newsletter', methods: 'POST')]
     public function createNewsletter(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = $this->auth->check('');
+        assert($user instanceof AuthUser);
 
         $slugger = new AsciiSlugger();
         while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
@@ -54,9 +59,10 @@ class NewsletterController extends AbstractController
 
     #[Route('/newsletter', methods: 'PATCH')]
     public function updateNewsletter(
-        Newsletter $newsletter,
+        Newsletter                                                                                 $newsletter,
         #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $updates = new UpdateNewsletterDto();
         if ($input->hasProperty('name')) {
             $updates->name = $input->name;
