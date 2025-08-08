@@ -2,6 +2,7 @@
 
 namespace App\Tests\Api\Public\Subscriber;
 
+use App\Entity\Type\SubscriberStatus;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
@@ -18,6 +19,7 @@ class UnsubscribeTest extends WebTestCase
         $send = SendFactory::createOne([
             'newsletter' => $newsletter,
         ]);
+        $subscriber = $send->getSubscriber();
 
         $token = $this->encryption->encrypt($send->getId());
 
@@ -35,6 +37,9 @@ class UnsubscribeTest extends WebTestCase
         $this->assertNotFalse($json);
         $this->assertIsArray($json['lists']);
         $this->assertCount(5, $json['lists']);
+
+        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
+        $this->assertNotNull($subscriber->getUnsubscribedAt());
     }
 
     public function test_unsubscribe_with_invalid_token(): void
