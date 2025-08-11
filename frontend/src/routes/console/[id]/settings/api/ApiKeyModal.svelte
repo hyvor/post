@@ -130,8 +130,8 @@
     }
 
     const isEditing = $derived(!!editingApiKey);
-    const modalTitle = $derived(isEditing ? I18n.t('console.common.editField') : I18n.t('console.common.createField'));
-    const confirmText = $derived(isEditing ? I18n.t('console.common.updateField') : I18n.t('console.common.createField'));
+    const modalTitle = $derived(isEditing ? I18n.t('console.common.editField', {field: I18n.t('console.settings.api.apiKey')}) : I18n.t('console.common.createField', {field: I18n.t('console.settings.api.apiKey')}));
+    const confirmText = $derived(isEditing ? I18n.t('console.common.updateField', {field: I18n.t('console.settings.api.apiKey')}) : I18n.t('console.common.createField', {field: I18n.t('console.settings.api.apiKey')}));
 </script>
 
 <Modal
@@ -207,7 +207,8 @@
         </SplitControl>
 
         {#if isEditing}
-            <SplitControl label={I18n.t('console.common.status')} caption={I18n.t('console.common.statusCaption')}>
+            <SplitControl label={I18n.t('console.settings.api.status')}
+                          caption={I18n.t('console.settings.api.statusCaption')}>
                 <Switch bind:checked={isEnabled} disabled={loading}>
                     {isEnabled ? I18n.t('console.settings.api.enabled') : I18n.t('console.settings.api.disabled') }
                 </Switch>

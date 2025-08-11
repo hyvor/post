@@ -68,7 +68,7 @@
     async function handleDeleteApiKey(apiKey: ApiKey) {
         const confirmed = await confirm({
             title: I18n.t('console.settings.api.apiKey'),
-            content: I18n.t('console.common.deleteKey', {name: apiKey.name}),
+            content: I18n.t('console.settings.api.deleteKey', {name: apiKey.name}),
             confirmText: I18n.t('console.common.delete'),
             cancelText: I18n.t('console.common.cancel'),
             danger: true
