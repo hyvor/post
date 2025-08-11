@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Resolver;
 
+use App\Entity\ApiKey;
 use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
@@ -33,12 +34,14 @@ class EntityResolver implements ValueResolverInterface
         'users' => User::class,
         'invites' => UserInvite::class,
         'imports' => SubscriberImport::class,
+        'api-keys' => ApiKey::class,
     ];
 
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterResolver $newsletterResolver,
-    ) {
+        private NewsletterResolver     $newsletterResolver,
+    )
+    {
     }
 
     /**
