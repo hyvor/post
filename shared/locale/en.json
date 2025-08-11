@@ -2,6 +2,7 @@
     "console": {
         "common": {
             "cancel": "Cancel",
+            "close": "Close",
             "search": "Search",
             "copy": "Copy",
             "copied": "{value} copied",
@@ -13,6 +14,8 @@
             "createField": "Create {field}",
             "updateField": "Update {field}",
             "deleteField": "Delete {field}",
+            "editField": "Edit {field}",
+            "failedToLoadField": "Failed to load {field}",
             "create": "Create",
             "update": "Update",
             "delete": "Delete",
@@ -22,7 +25,9 @@
             "actionConfirm": {
                 "title": "Confirmation",
                 "content": "Are you sure you want to perform this action?"
-            }
+            },
+            "selectAll": "Select All",
+            "deselectAll": "Deselect All"
         },
         "nav": {
             "approve": "Approval",
@@ -221,7 +226,29 @@
                 "deleteSendingProfileContent": "Are you sure you want to delete this sending profile?"
             },
             "api": {
-                "title": "API Keys"
+                "apiKey": "API Key",
+                "title": "API Keys",
+                "deleteKey": "Are you sure you want to delete the API key {name}?",
+                "newKey": "Your new API key",
+                "warningNotice": "<strong>Important:</strong> This is the only time you'll see this API key. Make sure to copy it and store it securely.",
+                "name": "Name",
+                "nameCaption": "A descriptive name to identify this API key",
+                "namePlaceholder": "Enter API key name",
+                "scopes": "Scopes",
+                "scopesCaption": "Select what actions this API key can perform",
+                "noKeys": "No API keys configured",
+                "nameRequired": "Name is required",
+                "nameCharLimit": "Name must be less than 255 characters",
+                "scopesRequired": "At least one scope is required",
+                "status": "Status",
+                "statusCaption": "Enable or disable this API key",
+                "enabled": "Enabled",
+                "disabled": "Disabled",
+                "failedAction": "Failed to {action} API key",
+                "create": "create",
+                "update": "update",
+                "lastUsed": "Last Used",
+                "neverUsed": "Never Used"
             },
             "metadata": {
                 "metadata": "Metadata",

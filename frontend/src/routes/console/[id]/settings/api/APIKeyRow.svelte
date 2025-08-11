@@ -4,6 +4,7 @@
     import IconPencil from '@hyvor/icons/IconPencil';
     import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
     import type {ApiKey} from '../../../types';
+    import {getI18n} from '../../../lib/i18n';
 
     interface Props {
         apiKey: ApiKey;
@@ -24,6 +25,7 @@
     }
 
     const displayScopes = $derived(getDisplayScopes(apiKey.scopes));
+    const I18n = getI18n();
 
 </script>
 
@@ -57,9 +59,9 @@
         <div class="api-key-meta">
             <span>Created: <RelativeTime unix={apiKey.created_at}/></span>
             {#if apiKey.last_accessed_at}
-                <span>Last used: <RelativeTime unix={apiKey.last_accessed_at}/></span>
+                <span>{I18n.t('console.settings.api.lastUsed')}: <RelativeTime unix={apiKey.last_accessed_at}/></span>
             {:else}
-                <span>Never used</span>
+                <span>{I18n.t('console.settings.api.neverUsed')}</span>
             {/if}
         </div>
     </div>

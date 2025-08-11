@@ -19,6 +19,7 @@
     import {getApiKeys, deleteApiKey} from '../../../lib/actions/apiKeyActions';
     import {copyAndToast} from "$lib/helpers/copy";
     import {onMount} from 'svelte';
+    import {getI18n} from '../../../lib/i18n';
 
     let apiKeys: ApiKey[] = $state([]);
     let loading = $state(true);
@@ -26,6 +27,8 @@
     let showApiKeyModal = $state(false);
     let newApiKey: ApiKey | null = $state(null);
     let editingApiKey: ApiKey | null = $state(null);
+
+    const I18n = getI18n();
 
     onMount(() => {
         loadApiKeys();
@@ -38,8 +41,8 @@
                 apiKeys = keys;
             })
             .catch((error) => {
-                console.error('Failed to load API keys:', error);
-                toast.error('Failed to load API keys');
+                console.error(I18n.t('console.common.failedToLoadField', {field: I18n.t('console.settings.api.apiKey')}) + ':', error);
+                toast.error(I18n.t('console.common.failedToLoadField'));
             })
             .finally(() => {
                 loading = false;
@@ -64,10 +67,10 @@
 
     async function handleDeleteApiKey(apiKey: ApiKey) {
         const confirmed = await confirm({
-            title: 'Delete API key',
-            content: `Are you sure you want to delete the API key "${apiKey.name}"?`,
-            confirmText: 'Delete',
-            cancelText: 'Cancel',
+            title: I18n.t('console.settings.api.apiKey'),
+            content: I18n.t('console.common.deleteKey', {name: apiKey.name}),
+            confirmText: I18n.t('console.common.delete'),
+            cancelText: I18n.t('console.common.cancel'),
             danger: true
         });
 
@@ -75,11 +78,11 @@
             deleteApiKey(apiKey.id)
                 .then(() => {
                     loadApiKeys();
-                    toast.success('API key deleted');
+                    toast.success(I18n.t('console.common.deleted', {field: I18n.t('console.settings.api.apiKey')}));
                 })
                 .catch((error) => {
-                    console.error('Failed to delete API key:', error);
-                    toast.error('Failed to delete API key');
+                    console.error(I18n.t('console.common.failedToLoadField', {field: I18n.t('console.settings.api.apiKey')}) + ':', error);
+                    toast.error(I18n.t('console.common.failedToLoadField', {field: I18n.t('console.settings.api.apiKey')}));
                 });
         }
     }
@@ -96,7 +99,7 @@
     <div class="top">
         <Button variant="fill" on:click={() => (showCreateModal = true)}>
             <IconPlus size={16}/>
-            Create API Key
+            {I18n.t('console.common.createField', {field: I18n.t('console.settings.api.apiKey')})}
         </Button>
     </div>
 
@@ -126,41 +129,42 @@
 <!-- Show New API Key Modal -->
 {#if showApiKeyModal && newApiKey}
     <Modal
-        title="Your New API Key"
+        title={I18n.t('console.settings.api.newKey')}
         bind:show={showApiKeyModal}
         size="medium"
         footer={{
 			cancel: {
-				text: 'Close'
+				text: I18n.t('console.common.close')
 			},
 			confirm: false
 		}}
     >
         <div class="modal-content">
             <div class="warning-box">
-                <strong>Important:</strong> This is the only time you'll see this API key. Make sure to copy
-                it and store it securely.
+                <I18n.T key="console.settings.api.warningNotice" params={{
+                    strong: { element: 'strong' }
+                }}/>
             </div>
 
-            <SplitControl label="API Key">
+            <SplitControl label={I18n.t('console.settings.api.apiKey')}>
                 <div class="key-input-group">
                     <TextInput value={newApiKey.key || ''} readonly block/>
                     <IconButton
                         size="small"
                         color="input"
                         style="margin-left:4px;"
-                        on:click={() => copyAndToast(newApiKey?.key || '', 'API Key copied')}
+                        on:click={() => copyAndToast(newApiKey?.key || '', I18n.t('console.common.copied', { field: I18n.t('console.settings.api.apiKey') }))}
                     >
                         <IconCopy size={12}/>
                     </IconButton>
                 </div>
             </SplitControl>
 
-            <SplitControl label="Name">
+            <SplitControl label={I18n.t('console.settings.api.name')}>
                 <span>{newApiKey.name}</span>
             </SplitControl>
 
-            <SplitControl label="Scopes">
+            <SplitControl label={I18n.t('console.settings.api.scopes')}>
                 <div class="scopes-display">
                     {#each newApiKey.scopes as scope}
                         <Tag size="small">

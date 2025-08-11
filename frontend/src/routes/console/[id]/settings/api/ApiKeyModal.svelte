@@ -10,6 +10,7 @@
     import {createApiKey, updateApiKey} from '../../../lib/actions/apiKeyActions';
     import type {ApiKey} from '../../../types';
     import {getAppConfig} from "../../../lib/stores/consoleStore";
+    import {getI18n} from '../../../lib/i18n';
 
     interface Props {
         show: boolean;
@@ -28,13 +29,14 @@
     }: Props = $props();
 
     let name = $state('');
-    let selectedScopes = $state<string[]>(['sends.send']);
+    let selectedScopes = $state<string[]>([]);
     let isEnabled = $state(true);
     let loading = $state(false);
     let errors = $state<Record<string, string>>({});
 
     const appConfig = getAppConfig();
     const scopes = appConfig.app?.api_keys?.scopes || [];
+    const I18n = getI18n();
 
     // Watch for editingApiKey changes to populate form
     $effect(() => {
@@ -49,7 +51,7 @@
 
     function resetForm() {
         name = '';
-        selectedScopes = ['sends.send'];
+        selectedScopes = [];
         isEnabled = true;
         errors = {};
     }
@@ -58,13 +60,13 @@
         errors = {};
 
         if (!name.trim()) {
-            errors.name = 'Name is required';
+            errors.name = I18n.t('console.settings.api.nameRequired');
         } else if (name.trim().length > 255) {
-            errors.name = 'Name must be less than 255 characters';
+            errors.name = I18n.t('console.settings.api.nameCharLimit');
         }
 
         if (selectedScopes.length === 0) {
-            errors.scopes = 'At least one scope is required';
+            errors.scopes = I18n.t('console.settings.api.scopeRequired');
         }
 
         return Object.keys(errors).length === 0;
@@ -89,17 +91,25 @@
             .then((apiKey) => {
                 if (editingApiKey) {
                     onApiKeyUpdated(apiKey);
-                    toast.success('API key updated successfully');
+                    toast.success(I18n.t('console.common.updated', {field: I18n.t('console.settings.api.apiKey')}));
                 } else {
                     onApiKeyCreated(apiKey);
-                    toast.success('API key created successfully');
+                    toast.success(I18n.t('console.common.created', {field: I18n.t('console.settings.api.apiKey')}));
                 }
                 show = false;
                 resetForm();
             })
             .catch((error) => {
-                console.error(`Failed to ${editingApiKey ? 'update' : 'create'} API key:`, error);
-                toast.error(`Failed to ${editingApiKey ? 'update' : 'create'} API key`);
+                console.error(I18n.t(
+                    'console.common.failedAction', {
+                        field: editingApiKey ? I18n.t('console.settings.api.update') : I18n.t('console.settings.api.create')
+                    }
+                ), error);
+                toast.error(I18n.t(
+                    'console.common.failedAction', {
+                        field: editingApiKey ? I18n.t('console.settings.api.update') : I18n.t('console.settings.api.create')
+                    }
+                ));
             })
             .finally(() => {
                 loading = false;
@@ -120,8 +130,8 @@
     }
 
     const isEditing = $derived(!!editingApiKey);
-    const modalTitle = $derived(isEditing ? 'Edit API Key' : 'Create API Key');
-    const confirmText = $derived(isEditing ? 'Update API Key' : 'Create API Key');
+    const modalTitle = $derived(isEditing ? I18n.t('console.common.editField') : I18n.t('console.common.createField'));
+    const confirmText = $derived(isEditing ? I18n.t('console.common.updateField') : I18n.t('console.common.createField'));
 </script>
 
 <Modal
@@ -130,7 +140,7 @@
     size="medium"
     footer={{
 		cancel: {
-			text: 'Cancel'
+			text: I18n.t('console.common.cancel')
 		},
 		confirm: {
 			text: confirmText
@@ -142,21 +152,21 @@
 >
     <div class="modal-content">
         <SplitControl
-            label="Name"
-            caption="A descriptive name to identify this API key"
+            label={I18n.t('console.settings.api.name')}
+            caption={I18n.t('console.settings.api.nameCaption')}
             error={errors.name}
         >
             <TextInput
                 bind:value={name}
-                placeholder="Enter API key name"
+                placeholder={I18n.t('console.settings.api.namePlaceholder')}
                 block
                 disabled={loading}
             />
         </SplitControl>
 
         <SplitControl
-            label="Scopes"
-            caption="Select what actions this API key can perform"
+            label={I18n.t('console.settings.api.scopes')}
+            caption={I18n.t('console.settings.api.scopesCaption')}
             error={errors.scopes}
         >
             <div class="scopes-header">
@@ -167,7 +177,7 @@
                         disabled={loading || selectedScopes.length === scopes.length}
                         onclick={() => (selectedScopes = [...scopes])}
                     >
-                        Select all
+                        {I18n.t('console.common.selectAll')}
                     </button>
                     <button
                         type="button"
@@ -175,7 +185,7 @@
                         disabled={loading || selectedScopes.length === 0}
                         onclick={() => (selectedScopes = [])}
                     >
-                        Deselect all
+                        {I18n.t('console.common.deselectAll')}
                     </button>
                 </div>
             </div>
@@ -197,9 +207,9 @@
         </SplitControl>
 
         {#if isEditing}
-            <SplitControl label="Status" caption="Enable or disable this API key">
+            <SplitControl label={I18n.t('console.common.status')} caption={I18n.t('console.common.statusCaption')}>
                 <Switch bind:checked={isEnabled} disabled={loading}>
-                    {isEnabled ? 'Enabled' : 'Disabled'}
+                    {isEnabled ? I18n.t('console.settings.api.enabled') : I18n.t('console.settings.api.disabled') }
                 </Switch>
             </SplitControl>
         {/if}
