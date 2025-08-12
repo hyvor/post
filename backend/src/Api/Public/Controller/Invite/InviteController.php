@@ -21,16 +21,17 @@ class InviteController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private UserService $userService,
+        private UserService       $userService,
         private UserInviteService $userInviteService,
-        private AuthInterface $auth
-    ) {
+        private AuthInterface     $auth
+    )
+    {
     }
 
     #[Route('/invite/verify', methods: 'GET')]
     public function verifyInvite(Request $request): RedirectResponse
     {
-        $user = $this->auth->check((string)$request->cookies->get(Auth::HYVOR_SESSION_COOKIE_NAME));
+        $user = $this->auth->check($request);
 
         if (!$user) {
             return $this->redirect(''); // TODO: Replace login URL
