@@ -33,7 +33,7 @@ class NewsletterResolver implements ValueResolverInterface
         }
 
         if (!AuthorizationListener::hasNewsletter($request)) {
-            return [];
+            throw new BadRequestException('Missing X-Newsletter-Id header');
         }
 
         return [AuthorizationListener::getNewsletter($request)];

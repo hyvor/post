@@ -107,7 +107,7 @@ class AuthorizationListener
             );
         }
 
-        // user-level endpoints do not have a project ID
+        // user-level endpoints do not have a newsletter ID
         if ($isUserLevelEndpoint === false) {
             if ($newsletterId === null) {
                 throw new AccessDeniedHttpException('X-Newsletter-ID is required for this endpoint.');
