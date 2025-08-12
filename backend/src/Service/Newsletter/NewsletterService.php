@@ -13,10 +13,12 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
+use App\Service\AppConfig;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -26,15 +28,18 @@ class NewsletterService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em
-    ) {
+        private EntityManagerInterface $em,
+        private AppConfig              $config,
+    )
+    {
     }
 
 
     public function createNewsletter(
-        int $userId,
+        int    $userId,
         string $name,
-    ): Newsletter {
+    ): Newsletter
+    {
         $slugger = new AsciiSlugger();
         $newsletter = new Newsletter()
             ->setUuid(Uuid::v4())
@@ -149,7 +154,7 @@ class NewsletterService
             ->setParameter('status', SubscriberStatus::SUBSCRIBED);
 
         $subscribers = (int)$subscribersQuery->getQuery()->getSingleScalarResult();
-        $subscribersLast30d = (int) $subscribersQuery->andWhere('s.subscribed_at > :date')
+        $subscribersLast30d = (int)$subscribersQuery->andWhere('s.subscribed_at > :date')
             ->setParameter('date', new \DateTimeImmutable()->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
@@ -162,7 +167,7 @@ class NewsletterService
             ->setParameter('status', IssueStatus::SENT);
 
         $issues = (int)$issuesQuery->getQuery()->getSingleScalarResult();
-        $issuesLast30d = (int) $issuesQuery->andWhere('i.sent_at > :date')
+        $issuesLast30d = (int)$issuesQuery->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
@@ -176,7 +181,7 @@ class NewsletterService
 
         $openRate = (float)$openRateQuery->getQuery()->getSingleScalarResult();
         $openRate = round($openRate, 2);
-        $openRateLast30d = (float) $openRateQuery->andWhere('i.sent_at > :date')
+        $openRateLast30d = (float)$openRateQuery->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
@@ -191,7 +196,7 @@ class NewsletterService
 
         $clickRate = (float)$clickRateQuery->getQuery()->getSingleScalarResult();
         $clickRate = round($clickRate, 2);
-        $clickRateLast30d = (int) $clickRateQuery->andWhere('i.sent_at > :date')
+        $clickRateLast30d = (int)$clickRateQuery->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
@@ -257,5 +262,11 @@ class NewsletterService
     {
         $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $username]);
         return $newsletter !== null;
+    }
+
+    public function getArchiveUrl(Newsletter $newsletter): string
+    {
+        $urlArchive = Request::create($this->config->getUrlArchive());
+        return $urlArchive->getScheme() . '://' . $newsletter->getSlug() . '.' . $urlArchive->getHost();
     }
 }

@@ -1,5 +1,5 @@
 import consoleApi from "../consoleApi";
-import type { Domain } from "../../types";
+import type {Domain} from "../../types";
 
 type VerifyDomainResponse = {
     domain: Domain;
@@ -31,6 +31,6 @@ export function deleteDomain(id: number) {
 
 export function verifyDomain(id: number) {
     return consoleApi.post<VerifyDomainResponse>({
-        endpoint: `domains/verify/${id}`,
+        endpoint: `domains/${id}/verify`,
     });
-} 
+}

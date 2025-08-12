@@ -33,10 +33,11 @@ class DevSeedCommand extends Command
 {
 
     public function __construct(
-        private KernelInterface $kernel,
-        private ContentDefaultStyle $contentDefaultStyle,
+        private KernelInterface      $kernel,
+        private ContentDefaultStyle  $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
-    ) {
+    )
+    {
         parent::__construct();
     }
 
@@ -55,13 +56,13 @@ class DevSeedCommand extends Command
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'example.com',
-            'verified_in_ses' => true
+            'verified_in_relay' => true
         ]);
 
         DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'notverified.com',
-            'verified_in_ses' => false
+            'verified_in_relay' => false
         ]);
 
         $newsletter = NewsletterFactory::createOne([

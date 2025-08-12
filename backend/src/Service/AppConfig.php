@@ -8,8 +8,13 @@ readonly class AppConfig
 {
 
     public function __construct(
+        #[Autowire('%env(string:URL_APP)%')]
+        private string $urlApp,
+        #[Autowire('%env(string:URL_ARCHIVE)%')]
+        private string $urlArchive,
+
         #[Autowire('%env(int:MAX_EMAILS_PER_SECOND)%')]
-        private int $maxEmailsPerSecond,
+        private int    $maxEmailsPerSecond,
 
         #[Autowire('%env(string:DEFAULT_EMAIL_DOMAIN)%')]
         private string $defaultEmailDomain,
@@ -35,7 +40,18 @@ readonly class AppConfig
 
         #[Autowire('%env(string:RELAY_API_KEY)%')]
         private string $relayApiKey,
-    ) {
+    )
+    {
+    }
+
+    public function getUrlApp(): string
+    {
+        return $this->urlApp;
+    }
+
+    public function getUrlArchive(): string
+    {
+        return $this->urlArchive;
     }
 
     public function getMaxEmailsPerSecond(): int

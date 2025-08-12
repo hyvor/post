@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Public\Object\NewsletterPage;
+namespace App\Api\Public\Object\Archive;
 
 use App\Entity\Newsletter;
 
