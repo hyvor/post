@@ -6,6 +6,9 @@ export interface AppConfig {
     app: {
         default_email_domain: string;
         archive_url: string;
+        api_keys: {
+            scopes: string[];
+        }
     };
 
     newsletter_defaults: {
@@ -294,4 +297,14 @@ export type Import = {
     imported_subscribers: number | null;
     warnings: string | null;
     error_message: string | null;
+}
+
+export type ApiKey = {
+    id: number;
+    name: string;
+    scopes: string[];
+    key?: string;
+    created_at: number;
+    is_enabled: boolean;
+    last_accessed_at?: number;
 }

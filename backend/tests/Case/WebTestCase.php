@@ -2,7 +2,10 @@
 
 namespace App\Tests\Case;
 
+use App\Api\Console\Authorization\Scope;
 use App\Entity\Newsletter;
+use App\Tests\Factory\ApiKeyFactory;
+use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SudoUserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
@@ -52,28 +55,51 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      * @param array<string, mixed> $data
      * @param array<string, mixed> $files
      * @param array<string, mixed> $parameters
+     * @param array<string, mixed> $server
+     * @param true|(string|Scope)[] $scopes
      */
     public function consoleApi(
         Newsletter|int|null $newsletter,
-        string $method,
-        string $uri,
-        array $data = [],
-        array $files = [],
+        string              $method,
+        string              $uri,
+        array               $data = [],
+        array               $files = [],
         // only use this if $files is used. otherwise, use $data
-        array $parameters = [],
-    ): Response {
+        array               $parameters = [],
+        array               $server = [],
+        true|array          $scopes = true,
+        bool                $useSession = false
+    ): Response
+    {
         $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
 
+        if ($useSession) {
+            $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
+            if ($newsletterId) {
+                $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;
+            }
+        } else {
+            $apiKey = bin2hex(random_bytes(16));
+            $apiKeyHashed = hash('sha256', $apiKey);
+            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter instanceof Newsletter ? $newsletter : NewsletterFactory::createOne(['id' => $newsletterId])];
+            if ($scopes !== true) {
+                $apiKeyFactory['scopes'] = array_map(
+                    fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
+                    $scopes
+                );
+            }
+            ApiKeyFactory::createOne($apiKeyFactory);
+            $server['HTTP_AUTHORIZATION'] = 'Bearer ' . $apiKey;
+        }
         $this->client->getCookieJar()->set(new Cookie('authsess', 'default'));
         $this->client->request(
             $method,
             '/api/console' . $uri,
             parameters: $parameters,
             files: $files,
-            server: [
+            server: array_merge([
                 'CONTENT_TYPE' => 'application/json',
-                'HTTP_X_NEWSLETTER_ID' => $newsletterId,
-            ],
+            ], $server),
             content: (string)json_encode($data),
         );
 
@@ -96,9 +122,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     public function publicApi(
         string $method,
         string $uri,
-        array $data = [],
-        array $headers = [],
-    ): Response {
+        array  $data = [],
+        array  $headers = [],
+    ): Response
+    {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
@@ -123,9 +150,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     public function sudoApi(
         string $method,
         string $uri,
-        array $data = [],
-        array $server = [],
-    ): Response {
+        array  $data = [],
+        array  $server = [],
+    ): Response
+    {
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
 
         $this->client->request(
