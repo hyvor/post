@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
@@ -9,13 +11,12 @@ use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\VerifyDomainException;
-use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 // TODO: wrong bad request class
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,25 +26,29 @@ class DomainController extends AbstractController
 
     public function __construct(
         private DomainService $domainService,
-        private AuthInterface $auth, // TODO: this should be done in the listener
     )
     {
     }
 
     #[Route('/domains', methods: 'GET')]
-    public function getDomains(): JsonResponse
+    #[UserLevelEndpoint]
+    public function getDomains(Request $request): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
+
         $domains = $this->domainService->getDomainsByUserId($user->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
 
     #[Route('/domains', methods: 'POST')]
-    public function createDomain(#[MapRequestPayload] CreateDomainInput $input): JsonResponse
+    #[UserLevelEndpoint]
+    public function createDomain(
+        Request                                $request,
+        #[MapRequestPayload] CreateDomainInput $input
+    ): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
+
         $domainInDb = $this->domainService->getDomainByDomainName($input->domain);
 
         if ($domainInDb) {
@@ -62,18 +67,12 @@ class DomainController extends AbstractController
         }
     }
 
-    // TODO: /domains/{id}/verify
-    #[Route('/domains/verify/{id}', methods: 'POST')]
-    public function verifyDomain(int $id): JsonResponse
+    #[Route('/domains/{id}/verify', methods: 'POST')]
+    #[UserLevelEndpoint]
+    public function verifyDomain(Request $request, Domain $domain): JsonResponse
     {
-        $domain = $this->domainService->getDomainById($id);
+        $user = AuthorizationListener::getUser($request);
 
-        if (!$domain) {
-            throw new BadRequestException('Domain not found');
-        }
-
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');
         }
@@ -94,16 +93,11 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domains/{id}', methods: 'DELETE')]
-    public function deleteDomain(int $id): JsonResponse
+    #[UserLevelEndpoint]
+    public function deleteDomain(Request $request, Domain $domain): JsonResponse
     {
-        $domain = $this->domainService->getDomainById($id);
+        $user = AuthorizationListener::getUser($request);
 
-        if (!$domain) {
-            throw new BadRequestException('Domain not found');
-        }
-
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');
         }

@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\ApiKey\CreateApiKeyInput;
 use App\Api\Console\Input\ApiKey\UpdateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
@@ -24,6 +26,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys', methods: 'POST')]
+    #[ScopeRequired(Scope::API_KEYS_WRITE)]
     public function createApiKey(#[MapRequestPayload] CreateApiKeyInput $input, Newsletter $newsletter): JsonResponse
     {
         $apiKeysCount = count($this->apiKeyService->getApiKeysForNewsletter($newsletter));
@@ -37,6 +40,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys', methods: 'GET')]
+    #[ScopeRequired(Scope::API_KEYS_READ)]
     public function getApiKeys(Newsletter $newsletter): JsonResponse
     {
         $apiKeys = $this->apiKeyService->getApiKeysForNewsletter($newsletter);
@@ -46,6 +50,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::API_KEYS_WRITE)]
     public function updateApiKey(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
     {
         $updates = new UpdateApiKeyDto();
@@ -65,6 +70,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::API_KEYS_WRITE)]
     public function deleteApiKey(ApiKey $apiKey): JsonResponse
     {
         $this->apiKeyService->deleteApiKey($apiKey);

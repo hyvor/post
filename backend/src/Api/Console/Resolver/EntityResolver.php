@@ -3,6 +3,7 @@
 namespace App\Api\Console\Resolver;
 
 use App\Entity\ApiKey;
+use App\Entity\Approval;
 use App\Entity\Domain;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
@@ -29,11 +30,12 @@ class EntityResolver implements ValueResolverInterface
         'subscribers' => Subscriber::class,
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
-        'domain' => Domain::class,
+        'domains' => Domain::class,
         'sending-profiles' => SendingProfile::class,
         'users' => User::class,
         'invites' => UserInvite::class,
         'imports' => SubscriberImport::class,
+        'approvals' => Approval::class,
         'api-keys' => ApiKey::class,
     ];
 

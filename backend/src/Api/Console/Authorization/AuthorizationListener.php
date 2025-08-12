@@ -2,12 +2,16 @@
 
 namespace App\Api\Console\Authorization;
 
+use App\Entity\ApiKey;
+use App\Entity\Newsletter;
 use App\Service\ApiKey\ApiKeyService;
 use App\Service\ApiKey\Dto\UpdateApiKeyDto;
 use App\Service\Newsletter\NewsletterService;
 use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -145,5 +149,34 @@ class AuthorizationListener
                 "You do not have the required scope '$requiredScope' to access this resource."
             );
         }
+    }
+
+    public static function hasUser(Request $request): bool
+    {
+        return $request->attributes->has(self::RESOLVED_USER_ATTRIBUTE_KEY);
+    }
+
+    // only call after hasUser()
+    public static function getUser(Request $request): AuthUser
+    {
+        $user = $request->attributes->get(self::RESOLVED_USER_ATTRIBUTE_KEY);
+        assert($user instanceof AuthUser, 'User must be an instance of AuthUser');
+        return $user;
+    }
+
+    // make sure the newsletter is set before calling this
+    public static function getNewsletter(Request $request): Newsletter
+    {
+        $newsletter = $request->attributes->get(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY);
+        assert($newsletter instanceof Newsletter);
+        return $newsletter;
+    }
+
+    // make sure the API key is set before calling this
+    public static function getApiKey(Request $request): ApiKey
+    {
+        $apiKey = $request->attributes->get(self::RESOLVED_API_KEY_ATTRIBUTE_KEY);
+        assert($apiKey instanceof ApiKey);
+        return $apiKey;
     }
 }

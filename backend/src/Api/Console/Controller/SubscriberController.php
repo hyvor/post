@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
@@ -26,13 +28,15 @@ class SubscriberController extends AbstractController
 {
 
     public function __construct(
-        private SubscriberService $subscriberService,
-        private NewsletterListService $newsletterListService,
+        private SubscriberService         $subscriberService,
+        private NewsletterListService     $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService
-    ) {
+    )
+    {
     }
 
     #[Route('/subscribers', methods: 'GET')]
+    #[ScopeRequired(Scope::SUBSCRIBER_READ)]
     public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -69,10 +73,12 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
-        Newsletter $newsletter
-    ): JsonResponse {
+        Newsletter                                 $newsletter
+    ): JsonResponse
+    {
         $missingListIds = $this
             ->newsletterListService
             ->getMissingListIdsOfNewsletter($newsletter, $input->list_ids);
@@ -103,11 +109,13 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function updateSubscriber(
-        Subscriber $subscriber,
-        Newsletter $newsletter,
+        Subscriber                                 $subscriber,
+        Newsletter                                 $newsletter,
         #[MapRequestPayload] UpdateSubscriberInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $updates = new UpdateSubscriberDto();
 
         if ($input->hasProperty('email')) {
@@ -152,6 +160,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
@@ -159,6 +168,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/bulk', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
     {
         if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {

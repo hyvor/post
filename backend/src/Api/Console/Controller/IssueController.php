@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
@@ -31,16 +33,18 @@ class IssueController extends AbstractController
 {
 
     public function __construct(
-        private IssueService $issueService,
-        private SendService $sendService,
+        private IssueService          $issueService,
+        private SendService           $sendService,
         private NewsletterListService $newsletterListService,
-        private HtmlTemplateRenderer $templateRenderer,
-        private EmailSenderService $emailTransportService,
-        private BillingInterface $billing,
-    ) {
+        private HtmlTemplateRenderer  $templateRenderer,
+        private EmailSenderService    $emailTransportService,
+        private BillingInterface      $billing,
+    )
+    {
     }
 
     #[Route('/issues', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function getIssues(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -55,6 +59,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'POST')]
+    #[ScopeRequired(Scope::ISSUE_WRITE)]
     public function createIssue(Newsletter $newsletter): JsonResponse
     {
         $issue = $this->issueService->createIssueDraft($newsletter);
@@ -63,17 +68,20 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function getById(Issue $issue): JsonResponse
     {
         return $this->json(new IssueObject($issue));
     }
 
     #[Route('/issues/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::ISSUE_WRITE)]
     public function updateIssue(
-        Issue $issue,
-        Newsletter $newsletter,
+        Issue                                 $issue,
+        Newsletter                            $newsletter,
         #[MapRequestPayload] UpdateIssueInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $updates = new UpdateIssueDto();
 
         if ($input->hasProperty('subject')) {
@@ -113,6 +121,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::ISSUE_WRITE)]
     public function deleteIssue(Issue $issue): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
@@ -123,6 +132,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/send', methods: 'POST')]
+    #[ScopeRequired(Scope::ISSUE_WRITE)]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
@@ -179,12 +189,14 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/test', methods: 'POST')]
+    #[ScopeRequired(Scope::ISSUE_WRITE)]
     public function sendTest(
-        Request $request,
-        Newsletter $newsletter,
-        Issue $issue,
+        Request                            $request,
+        Newsletter                         $newsletter,
+        Issue                              $issue,
         #[MapRequestPayload] SendTestInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         // $content = $templateService->renderIssue($issue, $send);
 
         $this->emailTransportService->send(
@@ -197,6 +209,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function previewIssue(Issue $issue): JsonResponse
     {
         $preview = $this->templateRenderer->renderFromIssue($issue);
@@ -208,6 +221,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/progress', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
@@ -215,6 +229,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/sends', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function getIssueSends(Request $request, Issue $issue): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -236,6 +251,7 @@ class IssueController extends AbstractController
     }
 
     #[Route ('/issues/{id}/report', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUE_READ)]
     public function getIssueReport(Issue $issue): JsonResponse
     {
         $counts = $this->issueService->getIssueCounts($issue);

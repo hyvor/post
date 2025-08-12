@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\SubscriberMetadata\CreateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Input\SubscriberMetadata\UpdateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
@@ -19,14 +21,17 @@ class SubscriberMetadataController extends AbstractController
 
     public function __construct(
         private SubscriberMetadataService $subscriberMetadataService
-    ) {
+    )
+    {
     }
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function createMetadata(
-        Newsletter $newsletter,
+        Newsletter                                                   $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $current = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $input->key);
 
         if ($current) {
@@ -49,15 +54,18 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function updateMetadata(
-        SubscriberMetadataDefinition $metadataDefinition,
+        SubscriberMetadataDefinition                                 $metadataDefinition,
         #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $this->subscriberMetadataService->updateMetadataDefinition($metadataDefinition, $input->name);
         return $this->json(new SubscriberMetadataDefinitionObject($metadataDefinition));
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
     public function deleteMetadata(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
     {
         $this->subscriberMetadataService->deleteMetadataDefinition($metadataDefinition);

@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Object\SubscriberExportObject;
 use App\Entity\Newsletter;
 use App\Service\Media\MediaService;
@@ -14,11 +16,13 @@ class ExportController extends AbstractController
 {
     public function __construct(
         private SubscriberService $subscriberService,
-        private MediaService $mediaService,
-    ) {
+        private MediaService      $mediaService,
+    )
+    {
     }
 
     #[Route('/export', methods: 'POST')]
+    #[ScopeRequired(Scope::DATA_WRITE)]
     public function exportSubscribers(Newsletter $newsletter): JsonResponse
     {
         $subscriberExport = $this->subscriberService->exportSubscribers($newsletter);
@@ -26,6 +30,7 @@ class ExportController extends AbstractController
     }
 
     #[Route('/export', methods: 'GET')]
+    #[ScopeRequired(Scope::DATA_READ)]
     public function listExports(Newsletter $newsletter): JsonResponse
     {
         $exports = $this->subscriberService->getExports($newsletter);

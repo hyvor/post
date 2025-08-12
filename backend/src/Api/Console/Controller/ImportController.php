@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Object\SubscriberImportObject;
 use App\Entity\Newsletter;
@@ -28,17 +30,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ImportController extends AbstractController
 {
     public function __construct(
-        private ValidatorInterface $validator,
-        private MediaService $mediaService,
-        private ImportService $importService,
+        private ValidatorInterface  $validator,
+        private MediaService        $mediaService,
+        private ImportService       $importService,
         private MessageBusInterface $messageBus,
-    ) {
+    )
+    {
     }
 
     #[Route('/imports/upload', methods: 'POST')]
+    #[ScopeRequired(Scope::DATA_WRITE)]
     public function upload(
         Newsletter $newsletter,
-        Request $request,
+        Request    $request,
     ): JsonResponse
     {
         $file = $request->files->get('file');
@@ -78,8 +82,9 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/{id}', methods: 'POST')]
+    #[ScopeRequired(Scope::DATA_WRITE)]
     public function import(
-        SubscriberImport $subscriberImport,
+        SubscriberImport                 $subscriberImport,
         #[MapRequestPayload] ImportInput $input
     ): JsonResponse
     {
@@ -102,6 +107,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports', methods: 'GET')]
+    #[ScopeRequired(Scope::DATA_READ)]
     public function listImports(Newsletter $newsletter, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 30);
