@@ -1,0 +1,149 @@
+<?php
+
+namespace App\Api\Console\Authorization;
+
+use App\Service\ApiKey\ApiKeyService;
+use App\Service\ApiKey\Dto\UpdateApiKeyDto;
+use App\Service\Newsletter\NewsletterService;
+use Hyvor\Internal\Auth\AuthInterface;
+use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+#[AsEventListener(event: KernelEvents::CONTROLLER, priority: 200)]
+class AuthorizationListener
+{
+    use ClockAwareTrait;
+
+    public const string RESOLVED_NEWSLETTER_ATTRIBUTE_KEY = 'console_api_resolved_newsletter';
+    public const string RESOLVED_API_KEY_ATTRIBUTE_KEY = 'console_api_resolved_api_key';
+    public const string RESOLVED_USER_ATTRIBUTE_KEY = 'console_api_resolved_user';
+
+    public function __construct(
+        private AuthInterface     $auth,
+        private ApiKeyService     $apiKeyService,
+        private NewsletterService $newsletterService,
+    )
+    {
+    }
+
+    public function __invoke(ControllerEvent $event): void
+    {
+        // only console API requests
+        if (!str_starts_with($event->getRequest()->getPathInfo(), '/api/console')) {
+            return;
+        }
+        if ($event->isMainRequest() === false) {
+            return;
+        }
+
+        $request = $event->getRequest();
+
+        if ($request->headers->has('authorization')) {
+            $this->handleAuthorizationHeader($event);
+        } else {
+            $this->handleSession($event);
+        }
+    }
+
+    private function handleAuthorizationHeader(ControllerEvent $event): void
+    {
+        $request = $event->getRequest();
+        $authorizationHeader = $request->headers->get('authorization');
+        assert(is_string($authorizationHeader));
+
+        if (!str_starts_with($authorizationHeader, 'Bearer ')) {
+            throw new AccessDeniedHttpException('Authorization header must start with "Bearer ".');
+        }
+
+        $apiKey = trim(substr($authorizationHeader, 7));
+
+        if ($apiKey === '') {
+            throw new AccessDeniedHttpException('API key is missing or empty.');
+        }
+
+        $apiKeyModel = $this->apiKeyService->getByRawKey($apiKey);
+
+        if ($apiKeyModel === null) {
+            throw new AccessDeniedHttpException('Invalid API key.');
+        }
+
+        $scopes = $apiKeyModel->getScopes();
+        $this->verifyScopes($scopes, $event);
+
+        $newsletter = $apiKeyModel->getNewsletter();
+
+        $request->attributes->set(self::RESOLVED_API_KEY_ATTRIBUTE_KEY, $apiKeyModel);
+        $request->attributes->set(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
+
+        $apiKeyUpdates = new UpdateApiKeyDto();
+        $apiKeyUpdates->lastAccessedAt = $this->now();
+        $this->apiKeyService->updateApiKey($apiKeyModel, $apiKeyUpdates);
+    }
+
+    private function handleSession(ControllerEvent $event): void
+    {
+        $request = $event->getRequest();
+        $newsletterId = $request->headers->get('x-newsletter-id');
+        $isUserLevelEndpoint = count($event->getAttributes(UserLevelEndpoint::class)) > 0;
+
+        $user = $this->auth->check($request);
+
+        if ($user === false) {
+            throw new DataCarryingHttpException(
+                401,
+                [
+                    'login_url' => $this->auth->authUrl('login'),
+                    'signup_url' => $this->auth->authUrl('signup'),
+                ],
+                'Unauthorized'
+            );
+        }
+
+        // user-level endpoints do not have a project ID
+        if ($isUserLevelEndpoint === false) {
+            if ($newsletterId === null) {
+                throw new AccessDeniedHttpException('X-Newsletter-ID is required for this endpoint.');
+            }
+
+            $newsletter = $this->newsletterService->getNewsletterById((int)$newsletterId);
+
+            if ($newsletter === null) {
+                throw new AccessDeniedHttpException('Invalid newsletter ID.');
+            }
+
+            if ($newsletter->getUserId() !== $user->id) {
+                throw new AccessDeniedHttpException('You do not have access to this newsletter.');
+            }
+
+            $request->attributes->set(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
+        }
+
+        $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
+    }
+
+    /**
+     * @param string[] $scopes
+     */
+    private function verifyScopes(array $scopes, ControllerEvent $event): void
+    {
+        $attributes = $event->getAttributes(ScopeRequired::class);
+        $scopeRequiredAttribute = $attributes[0] ?? null;
+
+        assert(
+            $scopeRequiredAttribute instanceof ScopeRequired,
+            'ScopeRequired attribute must be set on the controller method'
+        );
+
+        $requiredScope = $scopeRequiredAttribute->scope->value;
+
+        if (!in_array($requiredScope, $scopes, true)) {
+            throw new AccessDeniedHttpException(
+                "You do not have the required scope '$requiredScope' to access this resource."
+            );
+        }
+    }
+}
