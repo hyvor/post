@@ -8,20 +8,20 @@ enum Scope: string
     case NEWSLETTER_READ = 'newsletter.read';
     case NEWSLETTER_WRITE = 'newsletter.write';
 
-    case ISSUE_READ = 'issue.read';
-    case ISSUE_WRITE = 'issue.write';
+    case ISSUES_READ = 'issues.read';
+    case ISSUES_WRITE = 'issues.write';
 
-    case SENDING_PROFILE_READ = 'sending_profile.read';
-    case SENDING_PROFILE_WRITE = 'sending_profile.write';
+    case SENDING_PROFILES_READ = 'sending_profiles.read';
+    case SENDING_PROFILES_WRITE = 'sending_profiles.write';
 
-    case SUBSCRIBER_READ = 'subscriber.read';
-    case SUBSCRIBER_WRITE = 'subscriber.write';
+    case SUBSCRIBERS_READ = 'subscribers.read';
+    case SUBSCRIBERS_WRITE = 'subscribers.write';
 
-    case USER_READ = 'user.read';
-    case USER_WRITE = 'user.write';
+    case USERS_READ = 'users.read';
+    case USERS_WRITE = 'users.write';
 
-    case TEMPLATE_READ = 'template.read';
-    case TEMPLATE_WRITE = 'template.write';
+    case TEMPLATES_READ = 'templates.read';
+    case TEMPLATES_WRITE = 'templates.write';
 
     case API_KEYS_READ = 'api_keys.read';
     case API_KEYS_WRITE = 'api_keys.write';

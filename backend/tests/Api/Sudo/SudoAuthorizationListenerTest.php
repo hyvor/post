@@ -33,9 +33,6 @@ class SudoAuthorizationListenerTest extends WebTestCase
     public function test_sudo_api_access_with_valid_sudo_user(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
-        SudoUserFactory::createOne([
-                'user_id' => 1,
-            ]);
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request("GET", "/api/sudo/approvals");
         $this->assertResponseStatusCodeSame(200);
@@ -52,7 +49,7 @@ class SudoAuthorizationListenerTest extends WebTestCase
 
     public function test_sudo_api_access_with_invalid_sudo_user(): void
     {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        AuthFake::enableForSymfony($this->container, ['id' => 9999]);
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request("GET", "/api/sudo/approvals");
         $this->assertResponseStatusCodeSame(403);
