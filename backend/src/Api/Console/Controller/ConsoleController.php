@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -63,7 +64,10 @@ class ConsoleController extends AbstractController
                 ],
                 'app' => [
                     'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
-                    'archive_url' => $this->newsletterService->getArchiveUrl($newslettersUsers[0]['newsletter'])
+                    'archive_url' => $this->newsletterService->getArchiveUrl($newslettersUsers[0]['newsletter']),
+                    'api_keys' => [
+                        'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
+                    ],
                 ],
                 // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
