@@ -2,6 +2,9 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
@@ -10,30 +13,29 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
-use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\UnicodeString;
 
 class NewsletterController extends AbstractController
 {
     public function __construct(
         private NewsletterService $newsletterService,
-        private AuthInterface     $auth, // TODO: this should be done in the listener
     )
     {
     }
 
     #[Route('/newsletter', methods: 'POST')]
-    public function createNewsletter(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    public function createNewsletter(
+        Request                                    $request,
+        #[MapRequestPayload] CreateNewsletterInput $input
+    ): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
 
         $slugger = new AsciiSlugger();
         while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
@@ -44,13 +46,15 @@ class NewsletterController extends AbstractController
         return $this->json(new NewsletterObject($newsletter));
     }
 
-    #[Route('/newsletter', methods: 'GET', condition: 'request.headers.get("X-Newsletter-Id") !== null')]
+    #[Route('/newsletter', methods: 'GET')]
+    #[ScopeRequired(Scope::NEWSLETTER_READ)]
     public function getNewsletterById(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function deleteNewsletter(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
@@ -58,6 +62,7 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'PATCH')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function updateNewsletter(
         Newsletter                                                                                 $newsletter,
         #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input

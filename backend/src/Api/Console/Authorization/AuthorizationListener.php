@@ -164,6 +164,11 @@ class AuthorizationListener
         return $user;
     }
 
+    public static function hasNewsletter(Request $request): bool
+    {
+        return $request->attributes->has(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY);
+    }
+
     // make sure the newsletter is set before calling this
     public static function getNewsletter(Request $request): Newsletter
     {
