@@ -26,7 +26,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function createMetadata(
         Newsletter                                                   $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
@@ -54,7 +54,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function updateMetadata(
         SubscriberMetadataDefinition                                 $metadataDefinition,
         #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input
@@ -65,7 +65,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function deleteMetadata(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
     {
         $this->subscriberMetadataService->deleteMetadataDefinition($metadataDefinition);

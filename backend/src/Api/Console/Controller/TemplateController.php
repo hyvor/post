@@ -34,7 +34,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates', methods: 'GET')]
-    #[ScopeRequired(Scope::TEMPLATE_READ)]
+    #[ScopeRequired(Scope::TEMPLATES_READ)]
     public function getNewsletterTemplate(Newsletter $newsletter): JsonResponse
     {
         $template = $this->templateService->getTemplate($newsletter);
@@ -50,7 +50,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates/update', methods: 'POST')]
-    #[ScopeRequired(Scope::TEMPLATE_WRITE)]
+    #[ScopeRequired(Scope::TEMPLATES_WRITE)]
     public function updateTemplate(
         Newsletter                               $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input
@@ -71,7 +71,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates/render', methods: 'POST')]
-    #[ScopeRequired(Scope::TEMPLATE_READ)]
+    #[ScopeRequired(Scope::TEMPLATES_READ)]
     public function renderTemplate(
         Newsletter                               $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input

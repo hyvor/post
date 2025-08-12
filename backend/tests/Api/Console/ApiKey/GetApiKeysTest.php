@@ -23,7 +23,7 @@ class GetApiKeysTest extends WebTestCase
 
         ApiKeyFactory::createMany(4, [
             'newsletter' => $newsletter,
-            'scopes' => [Scope::ISSUE_READ]
+            'scopes' => [Scope::ISSUES_READ]
         ]);
 
         $response = $this->consoleApi(

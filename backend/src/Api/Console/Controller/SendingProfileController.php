@@ -42,7 +42,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles', methods: 'GET')]
-    #[ScopeRequired(Scope::SENDING_PROFILE_READ)]
+    #[ScopeRequired(Scope::SENDING_PROFILES_READ)]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
@@ -53,7 +53,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles', methods: 'POST')]
-    #[ScopeRequired(Scope::SENDING_PROFILE_WRITE)]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter                                     $newsletter,
@@ -74,7 +74,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SENDING_PROFILE_WRITE)]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function updateSendingProfile(
         SendingProfile                                 $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input
@@ -114,7 +114,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SENDING_PROFILE_WRITE)]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
     {
 

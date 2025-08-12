@@ -36,7 +36,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'GET')]
-    #[ScopeRequired(Scope::SUBSCRIBER_READ)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
     public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -73,7 +73,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter                                 $newsletter
@@ -109,7 +109,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function updateSubscriber(
         Subscriber                                 $subscriber,
         Newsletter                                 $newsletter,
@@ -160,7 +160,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
@@ -168,7 +168,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/bulk', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBER_WRITE)]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
     {
         if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {

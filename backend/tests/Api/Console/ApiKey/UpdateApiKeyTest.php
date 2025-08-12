@@ -37,7 +37,7 @@ class UpdateApiKeyTest extends WebTestCase
             [
                 'is_enabled' => false,
                 'name' => 'Updated API Key',
-                'scopes' => [Scope::NEWSLETTER_READ, Scope::ISSUE_READ, Scope::ISSUE_WRITE]
+                'scopes' => [Scope::NEWSLETTER_READ, Scope::ISSUES_READ, Scope::ISSUES_WRITE]
             ]
         );
 
@@ -57,8 +57,8 @@ class UpdateApiKeyTest extends WebTestCase
         $this->assertFalse($apiKeyDb->getIsEnabled());
         $this->assertCount(3, $apiKeyDb->getScopes());
         $this->assertContains(Scope::NEWSLETTER_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUE_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUE_WRITE->value, $apiKeyDb->getScopes());
+        $this->assertContains(Scope::ISSUES_READ->value, $apiKeyDb->getScopes());
+        $this->assertContains(Scope::ISSUES_WRITE->value, $apiKeyDb->getScopes());
         $this->assertSame('Updated API Key', $apiKeyDb->getName());
     }
 }

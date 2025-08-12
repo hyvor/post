@@ -33,7 +33,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', methods: 'GET')]
-    #[ScopeRequired(Scope::USER_READ)]
+    #[ScopeRequired(Scope::USERS_READ)]
     public function getUsers(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService->getNewsletterUsers($newsletter)
@@ -49,7 +49,7 @@ class UserController extends AbstractController
     }
 
     #[Route('users/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::USER_WRITE)]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
     {
         $this->userService->deleteUser($newsletter, $user);
@@ -57,7 +57,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'GET')]
-    #[ScopeRequired(Scope::USER_READ)]
+    #[ScopeRequired(Scope::USERS_READ)]
     public function getInvites(Newsletter $newsletter): JsonResponse
     {
         $invites = $this->userInviteService->getNewsletterInvites($newsletter)
@@ -74,7 +74,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'POST')]
-    #[ScopeRequired(Scope::USER_WRITE)]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function invite(Newsletter $newsletter, #[MapRequestPayload] InviteUserInput $input): JsonResponse
     {
         if (!$input->email && !$input->username) {
@@ -113,7 +113,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::USER_WRITE)]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteInvite(Newsletter $newsletter, UserInvite $userInvite): JsonResponse
     {
         $this->userInviteService->deleteInvite($userInvite);
