@@ -5,9 +5,12 @@
         SplitControl,
         toast,
         Checkbox,
-        Switch
+        Switch,
+        Button,
+        confirm
     } from '@hyvor/design/components';
-    import {createApiKey, updateApiKey} from '../../../lib/actions/apiKeyActions';
+    import IconArrowCounterclockwise from '@hyvor/icons/IconArrowCounterclockwise';
+    import {createApiKey, regenerateApiKey, updateApiKey} from '../../../lib/actions/apiKeyActions';
     import type {ApiKey} from '../../../types';
     import {getAppConfig} from "../../../lib/stores/consoleStore";
     import {getI18n} from '../../../lib/i18n';
@@ -66,10 +69,40 @@
         }
 
         if (selectedScopes.length === 0) {
-            errors.scopes = I18n.t('console.settings.api.scopeRequired');
+            errors.scopes = I18n.t('console.settings.api.scopesRequired');
         }
 
         return Object.keys(errors).length === 0;
+    }
+
+    async function handleRegenerate() {
+
+        if (!editingApiKey) {
+            return;
+        }
+
+        const confirmation = await confirm({
+            title: I18n.t('console.settings.api.regenerateTitle'),
+            content: I18n.t('console.settings.api.regenerateContent'),
+            confirmText: I18n.t('console.settings.api.regenerate'),
+            cancelText: I18n.t('console.common.cancel'),
+            danger: true,
+            autoClose: false
+        });
+
+        if (confirmation) {
+            confirmation.loading(I18n.t('console.settings.api.regenerating'))
+            await regenerateApiKey(editingApiKey.id)
+                .then(() => {
+                    toast.success(I18n.t('console.settings.api.regenerateSuccess'));
+                })
+                .catch(() => {
+                    toast.error(I18n.t('console.settings.api.regenerateFailed'));
+                })
+                .finally(() => {
+                    confirmation.close();
+                });
+        }
     }
 
     function handleSubmit() {
@@ -101,12 +134,12 @@
             })
             .catch((error) => {
                 console.error(I18n.t(
-                    'console.common.failedAction', {
+                    'console.settings.api.failedAction', {
                         field: editingApiKey ? I18n.t('console.settings.api.update') : I18n.t('console.settings.api.create')
                     }
                 ), error);
                 toast.error(I18n.t(
-                    'console.common.failedAction', {
+                    'console.settings.api.failedAction', {
                         field: editingApiKey ? I18n.t('console.settings.api.update') : I18n.t('console.settings.api.create')
                     }
                 ));
@@ -149,6 +182,7 @@
     title={modalTitle}
     on:cancel={handleClose}
     on:confirm={handleSubmit}
+    closeOnOutsideClick={false}
 >
     <div class="modal-content">
         <SplitControl
@@ -163,6 +197,26 @@
                 disabled={loading}
             />
         </SplitControl>
+
+        {#if isEditing}
+            <SplitControl
+                label={I18n.t('console.settings.api.key')}
+                caption={I18n.t('console.settings.api.keyCaption')}
+            >
+                <Button
+                    color="gray"
+                    variant="outline"
+                    size="small"
+                    onclick={() => handleRegenerate()}
+                >
+                    {I18n.t('console.settings.api.regenerate')}
+
+                    {#snippet end()}
+                        <IconArrowCounterclockwise/>
+                    {/snippet}
+                </Button>
+            </SplitControl>
+        {/if}
 
         <SplitControl
             label={I18n.t('console.settings.api.scopes')}
