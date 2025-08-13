@@ -7,6 +7,7 @@ use App\Entity\Newsletter;
 use App\Service\ApiKey\ApiKeyService;
 use App\Service\ApiKey\Dto\UpdateApiKeyDto;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -30,6 +31,7 @@ class AuthorizationListener
         private AuthInterface     $auth,
         private ApiKeyService     $apiKeyService,
         private NewsletterService $newsletterService,
+        private UserService       $userService
     )
     {
     }
@@ -119,7 +121,7 @@ class AuthorizationListener
                 throw new AccessDeniedHttpException('Invalid newsletter ID.');
             }
 
-            if ($newsletter->getUserId() !== $user->id) {
+            if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
                 throw new AccessDeniedHttpException('You do not have access to this newsletter.');
             }
 
