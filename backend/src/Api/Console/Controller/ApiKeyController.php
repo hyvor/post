@@ -69,6 +69,15 @@ class ApiKeyController extends AbstractController
         return $this->json(new ApiKeyObject($updatedApiKey));
     }
 
+    #[Route('/api-keys/{id}', methods: 'POST')]
+    #[ScopeRequired(Scope::API_KEYS_WRITE)]
+    public function regenerateApiKey(ApiKey $apiKey): JsonResponse
+    {
+        $regeneration = $this->apiKeyService->regenerateApiKey($apiKey);
+
+        return $this->json(new ApiKeyObject($regeneration['apiKey'], $regeneration['rawKey']));
+    }
+
     #[Route('/api-keys/{id}', methods: 'DELETE')]
     #[ScopeRequired(Scope::API_KEYS_WRITE)]
     public function deleteApiKey(ApiKey $apiKey): JsonResponse

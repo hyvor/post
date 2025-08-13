@@ -46,6 +46,23 @@ class ApiKeyService
         ];
     }
 
+    /**
+     * @return array{ apiKey: ApiKey, rawKey: string }
+     */
+    public function regenerateApiKey(ApiKey $apiKey): array
+    {
+        $newKey = bin2hex(random_bytes(16));
+        $apiKey->setKeyHashed(hash('sha256', $newKey));
+        $apiKey->setUpdatedAt($this->now());
+
+        $this->em->persist($apiKey);
+        $this->em->flush();
+        return [
+            'apiKey' => $apiKey,
+            'rawKey' => $newKey,
+        ];
+    }
+
     public function updateApiKey(ApiKey $apiKey, UpdateApiKeyDto $updates): ApiKey
     {
         if ($updates->hasProperty('enabled')) {
