@@ -6,6 +6,7 @@ use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Newsletter;
+use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
@@ -67,6 +68,44 @@ class UpdateIssueTest extends WebTestCase
         $this->assertSame('Test content', $issue->getContent());
     }
 
+    public function testUpdateDraftIssueContent(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'status' => IssueStatus::DRAFT,
+            'list_ids' => [$list1->getId()]
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'PATCH',
+            '/issues/' . $issue->getId(),
+            [
+                'subject' => 'Test subject',
+                'content' => 'Test content',
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertIsInt($json['id']);
+        $this->assertSame('Test subject', $json['subject']);
+        $this->assertSame('Test content', $json['content']);
+
+        $repository = $this->em->getRepository(Issue::class);
+        $issue = $repository->find($json['id']);
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame('Test subject', $issue->getSubject());
+        $this->assertSame('Test content', $issue->getContent());
+
+    }
+
     public function testCreateIssueWithInvalidList(): void
     {
         $newsletter1 = NewsletterFactory::createOne();
@@ -119,8 +158,9 @@ class UpdateIssueTest extends WebTestCase
      */
     private function validateInput(
         callable $input,
-        array $violations
-    ): void {
+        array    $violations
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(['newsletter' => $newsletter]);
 

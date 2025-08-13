@@ -1,21 +1,18 @@
-import { debounce } from "$lib/helpers/debounce";
-import { get } from "svelte/store";
-import type { Issue } from "../../../../types";
-import { draftIssueEditingStore, draftIssueStore, draftPreviewKey } from "./draftStore";
-import { updateIssue } from "../../../../lib/actions/issueActions";
-import { toast } from "@hyvor/design/components";
+import {debounce} from "$lib/helpers/debounce";
+import {get} from "svelte/store";
+import type {Issue} from "../../../../types";
+import {draftIssueEditingStore, draftIssueStore, draftPreviewKey} from "./draftStore";
+import {updateIssue} from "../../../../lib/actions/issueActions";
+import {toast} from "@hyvor/design/components";
 
 export const debouncedUpdateDraftIssue = debounce(updateDraftIssue, 800);
 
 export function updateDraftIssue() {
 
-    const updatableFields : (keyof Issue)[] = [
+    const updatableFields: (keyof Issue)[] = [
         'subject',
-        'from_name',
-        'from_email',
-        'reply_to_email',
         'content',
-        'lists'
+        // 'lists'
     ]
 
     const changedFields: Partial<Issue> = {};
