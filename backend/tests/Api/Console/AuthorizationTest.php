@@ -159,7 +159,7 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
-            "You do not have the required scope 'issue.read' to access this resource.",
+            "You do not have the required scope 'issues.read' to access this resource.",
             $this->getJson()["message"]
         );
     }
@@ -200,6 +200,11 @@ class AuthorizationTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne([
             'user_id' => 1
         ]);
+        UserFactory::createOne([
+            'hyvor_user_id' => 1,
+            'newsletter' => $newsletter
+        ]);
+
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
             "GET",
