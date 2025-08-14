@@ -1,15 +1,20 @@
 <script lang="ts">
-    import {Button, IconButton, Modal, SplitControl, Tag, TextInput} from "@hyvor/design/components";
+    import {Button, IconButton, Modal, SplitControl, Tag, TextInput, toast} from "@hyvor/design/components";
     import {getI18n} from "../../../../../lib/i18n";
     import IconX from "@hyvor/icons/IconX";
+    import {onMount} from "svelte";
+    import {getIssueTestData} from "../../../../../lib/actions/issueActions";
+    import {draftIssueEditingStore} from "../draftStore";
 
     const I18n = getI18n();
 
     let showTestEmailModal = $state(false);
     let newEmail = $state('');
+    let isLoading = $state(true);
 
     let selectedEmails: string[] = $state([]);
-    let suggestedEmails: string[] = $state(['nadil@hyvor.com', 'supun@hyvor.com', 'ishini@hyvor.com', 'thibault@hyvor.com']);
+    let suggestedEmails: string[] = $state([]);
+    let verifiedDomains: string[] = $state([]);
 
     const newEmailActions = {
         onKeydown: (e: KeyboardEvent) => {
@@ -25,8 +30,34 @@
         }
     };
 
+    function validateEmail(email: string): boolean {
+        if (email.trim() === '') {
+            toast.error('Email cannot be empty');
+            return false;
+        }
+
+        email = email.trim();
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error('Invalid email address');
+            return false;
+        }
+
+        if (suggestedEmails.includes(email)) {
+            return true;
+        }
+
+        const domain = email.split('@')[1];
+        if (!verifiedDomains.includes(domain)) {
+            toast.error("The email must be from a newsletter user or a newsletter owner verified domain.");
+            return false;
+        }
+        return true;
+    }
+
     function selectEmail(email: string) {
-        if (email.trim() === '' || selectedEmails.includes(email)) {
+        if (!validateEmail(email)) {
             return;
         }
         selectedEmails = [...selectedEmails, email];
@@ -36,6 +67,16 @@
     function deselectEmail(email: string) {
         selectedEmails = selectedEmails.filter(e => e !== email);
     }
+
+    onMount(() => {
+        getIssueTestData($draftIssueEditingStore.id)
+            .then((res) => {
+                suggestedEmails = res.suggested_emails;
+                selectedEmails = res.test_sent_emails;
+                verifiedDomains = res.verified_domains;
+                isLoading = false;
+            });
+    });
 </script>
 
 <div class="wrap">
@@ -50,17 +91,20 @@
 
 <Modal
     bind:show={showTestEmailModal}
+    loading={isLoading}
     title={I18n.t('console.issues.draft.testEmail')}
     footer={{
         confirm: {
-            text: I18n.t('console.issues.draft.testEmail')
+            text: I18n.t('console.issues.draft.testEmail'),
+            props: {
+                disabled: selectedEmails.length === 0
+            }
         }
     }}
     closeOnOutsideClick={false}
     closeOnEscape={false}
 >
     <SplitControl label="To">
-
         <div class="new-email-wrap">
             <TextInput
                 bind:value={newEmail}

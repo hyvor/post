@@ -36,6 +36,12 @@ class Newsletter
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"newsletters_meta"}'])]
     private NewsletterMeta $meta;
 
+    /**
+     * @var string[]|null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $test_sent_emails = null;
+
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -128,6 +134,24 @@ class Newsletter
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getTestSentEmails(): ?array
+    {
+        return $this->test_sent_emails;
+    }
+
+    /**
+     * @param string[]|null $test_sent_emails
+     */
+    public function setTestSentEmails(?array $test_sent_emails): static
+    {
+        $this->test_sent_emails = $test_sent_emails;
 
         return $this;
     }

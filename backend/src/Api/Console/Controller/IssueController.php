@@ -11,6 +11,7 @@ use App\Api\Console\Object\SendObject;
 use App\Entity\Issue;
 use App\Entity\Newsletter;
 use App\Entity\Type\IssueStatus;
+use App\Service\Domain\DomainService;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\IssueService;
@@ -18,13 +19,14 @@ use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\User\UserService;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,6 +41,9 @@ class IssueController extends AbstractController
         private HtmlTemplateRenderer  $templateRenderer,
         private EmailSenderService    $emailTransportService,
         private BillingInterface      $billing,
+        private DomainService         $domainService,
+        private UserService           $userService,
+        private AuthInterface         $authService
     )
     {
     }
@@ -186,6 +191,26 @@ class IssueController extends AbstractController
         $bus->dispatch(new SendIssueMessage($issue->getId()));
 
         return $this->json(new IssueObject($issue));
+    }
+
+    #[Route('/issues/{id}/test', methods: 'GET')]
+    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    public function getTestData(Issue $issue): JsonResponse
+    {
+        $newsletter = $issue->getNewsletter();
+        $verifiedDomains = $this->domainService->getVerifiedDomainsByUserId($newsletter->getUserId());
+
+        $newsletterUserIds = array_map(fn($user) => $user->getHyvorUserId(), $this->userService->getNewsletterUsers($newsletter)->toArray());
+        $newsletterUserEmails = array_map(fn($authUser) => $authUser->email, $this->authService->fromIds($newsletterUserIds));
+
+        $testSentEmails = $newsletter->getTestSentEmails() ?? [];
+        $suggestedEmails = array_merge($newsletterUserEmails, $testSentEmails);
+
+        return $this->json([
+            'verified_domains' => array_map(fn($domain) => $domain->getDomain(), $verifiedDomains),
+            'suggested_emails' => $suggestedEmails,
+            'test_sent_emails' => $testSentEmails,
+        ]);
     }
 
     #[Route ('/issues/{id}/test', methods: 'POST')]
