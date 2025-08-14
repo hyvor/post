@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Button, Tooltip} from '@hyvor/design/components';
+    import {Button, Tooltip, confirm, toast} from '@hyvor/design/components';
     import Step from './Step.svelte';
     import IconArrowRightShort from '@hyvor/icons/IconArrowRightShort';
     import IconArrowLeftShort from '@hyvor/icons/IconArrowLeftShort';
@@ -32,6 +32,21 @@
         const nextSection = sections[currentIndex + 1] || 'audience';
         draftStepStore.set(nextSection);
     }
+
+    async function handleSend() {
+        const confirmed = await confirm({
+            title: I18n.t('console.issues.draft.sendIssue.title'),
+            content: I18n.t('console.issues.draft.sendIssue.content'),
+            confirmText: I18n.t('console.issues.draft.sendIssue.confirmText'),
+            autoClose: false
+        });
+
+        if (confirmed) {
+            confirmed.close();
+            // TODO: backend action goes here
+            toast.success(I18n.t('console.issues.draft.sendIssue.success'));
+        }
+    }
 </script>
 
 <div class="wrap">
@@ -50,10 +65,10 @@
     <div class="right">
         {#if $draftStepStore === 'audience'}
             <Tooltip
-                text={I18n.t('console.issue.draft.approveBeforeSending')}
+                text={I18n.t('console.issues.draft.approveBeforeSending')}
                 disabled={$userApprovalStatusStore === 'approved'}
             >
-                <Button onclick={handleNext} disabled={$userApprovalStatusStore !== 'approved'}>
+                <Button onclick={handleSend} disabled={$userApprovalStatusStore !== 'approved'}>
                     Send Issue
                     {#snippet end()}
                         <IconSend size={14}/>
