@@ -147,7 +147,9 @@
                 "sendingLimitReached": {
                     "title": "Sending Limit Reached",
                     "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
-                }
+                },
+                "testEmail": "Send Test Email",
+                "testEmailCaption": "Ready to send your issue? Try sending a test email first to see how it looks in your inbox."
             }
         },
         "tools": {
