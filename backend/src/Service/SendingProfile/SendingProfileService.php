@@ -39,6 +39,14 @@ class SendingProfileService
         return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
     }
 
+    public function getSendingProfileOfNewsletterById(Newsletter $newsletter, int $id): ?SendingProfile
+    {
+        return $this->sendingEmailRepository->findOneBy([
+            'id' => $id,
+            'newsletter' => $newsletter,
+        ]);
+    }
+
     public function createSendingProfile(
         Newsletter $newsletter,
         Domain     $customDomain,

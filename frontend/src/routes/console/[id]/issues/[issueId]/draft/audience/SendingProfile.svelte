@@ -2,8 +2,19 @@
     import {Radio, SplitControl, Tooltip} from '@hyvor/design/components';
     import {sendingProfilesStore} from '../../../../../lib/stores/newsletterStore';
     import {Tag} from "@hyvor/design/components";
+    import {draftIssueEditingStore, draftIssueStore} from "../draftStore.js";
+    import {debouncedUpdateDraftIssue} from "../draftActions.js";
 
-    let sendingProfileId = $state($sendingProfilesStore[0]?.id || 0);
+    let sendingProfileId = $state(
+        $draftIssueStore.sending_profile_id ??
+        $sendingProfilesStore.find(p => p.is_default)?.id
+        ?? 0
+    );
+
+    $effect(() => {
+        $draftIssueEditingStore.sending_profile_id = sendingProfileId;
+        debouncedUpdateDraftIssue();
+    })
 </script>
 
 <SplitControl label="Sending Profile">
@@ -16,13 +27,13 @@
                             {profile.from_email}
 
                             {#if profile.is_system}
-                                <Tooltip text="This is the default system profile.">
+                                <Tooltip text="This is the system profile.">
                                     <Tag size="small" color="blue">System</Tag>
                                 </Tooltip>
                             {/if}
 
                             {#if profile.is_default}
-                                <Tooltip text="New issues will use this profile by default.">
+                                <Tooltip text="This is the default sending profile.">
                                     <Tag size="small" color="green">Default</Tag>
                                 </Tooltip>
                             {/if}

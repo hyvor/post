@@ -182,9 +182,7 @@ export type Issue = {
     uuid: string;
     created_at: number;
     subject: string;
-    from_name: string;
-    from_email: string;
-    reply_to_email: string;
+    sending_profile_id: number;
     content: string;
     status: IssueStatus;
     lists: number[];

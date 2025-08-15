@@ -44,13 +44,13 @@ class IssueService
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $this->sendingProfileService->getDefaultEmailAddressOfNewsletterWithFallback($newsletter);
+        $sendingProfile = $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         $issue = new Issue()
             ->setNewsletter($newsletter)
             ->setUuid(Uuid::v4())
             ->setStatus(IssueStatus::DRAFT)
-            ->setFromEmail($fromEmail)
+            ->setSendingProfile($sendingProfile)
             ->setListids($listIds)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
@@ -67,26 +67,17 @@ class IssueService
             $issue->setSubject($updates->subject);
         }
 
-        if ($updates->hasProperty('fromName')) {
-            $issue->setFromName($updates->fromName);
-        }
-
         if ($updates->hasProperty('lists')) {
             $issue->setListids($updates->lists);
-        }
-
-        if ($updates->hasProperty('fromEmail')) {
-            $issue->setFromEmail($updates->fromEmail);
-        }
-
-        if ($updates->hasProperty('replyToEmail')) {
-            $issue->setReplyToEmail($updates->replyToEmail);
         }
 
         if ($updates->hasProperty('content')) {
             $issue->setContent($updates->content);
         }
 
+        if ($updates->hasProperty('sendingProfile')) {
+            $issue->setSendingProfile($updates->sendingProfile);
+        }
         if ($updates->hasProperty('html')) {
             $issue->setHtml($updates->html);
         }

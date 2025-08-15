@@ -17,6 +17,7 @@ use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -41,7 +42,8 @@ class IssueController extends AbstractController
         private BillingInterface      $billing,
         private DomainService         $domainService,
         private UserService           $userService,
-        private AuthInterface         $authService
+        private AuthInterface         $authService,
+        private SendingProfileService $sendingProfileService
     )
     {
     }
@@ -94,10 +96,6 @@ class IssueController extends AbstractController
             $updates->subject = $input->subject;
         }
 
-        if ($input->hasProperty('from_name')) {
-            $updates->fromName = $input->from_name;
-        }
-
         if ($input->hasProperty('lists')) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter($newsletter, $input->lists);
 
@@ -108,17 +106,21 @@ class IssueController extends AbstractController
             $updates->lists = $input->lists;
         }
 
-        if ($input->hasProperty('from_email')) {
-            // TODO: validate the from email once sending emails are set up
-            $updates->fromEmail = $input->from_email;
-        }
-
-        if ($input->hasProperty('reply_to_email')) {
-            $updates->replyToEmail = $input->reply_to_email;
-        }
-
         if ($input->hasProperty('content')) {
             $updates->content = $input->content;
+        }
+
+        if ($input->hasProperty('sending_profile_id')) {
+            $sendingProfile = $this->sendingProfileService->getSendingProfileOfNewsletterById(
+                $newsletter,
+                $input->sending_profile_id
+            );
+
+            if ($sendingProfile === null) {
+                throw new UnprocessableEntityHttpException("Sending profile not found.");
+            }
+
+            $updates->sendingProfile = $sendingProfile;
         }
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);

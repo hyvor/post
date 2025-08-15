@@ -17,7 +17,8 @@ export function updateDraftIssue() {
     const updatableFields: (keyof Issue)[] = [
         'subject',
         'content',
-        'lists'
+        'lists',
+        'sending_profile_id'
     ]
 
     const changedFields: Partial<Issue> = {};
@@ -26,6 +27,9 @@ export function updateDraftIssue() {
     const draftIssueEditing = get(draftIssueEditingStore);
 
     for (const field of updatableFields) {
+        if (field === 'sending_profile_id') {
+            console.log(draftIssue[field], draftIssueEditing[field]);
+        }
         if (field === 'lists') {
             if (JSON.stringify(draftIssue[field].sort()) !== JSON.stringify(draftIssueEditing[field].sort())) {
                 (changedFields as any)[field] = draftIssueEditing[field];

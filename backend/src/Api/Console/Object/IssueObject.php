@@ -12,9 +12,7 @@ class IssueObject
 
     public int $created_at;
     public ?string $subject;
-    public ?string $from_name;
-    public string $from_email;
-    public ?string $reply_to_email;
+    public int $sending_profile_id;
     public ?string $content;
     public IssueStatus $status;
     /**
@@ -37,9 +35,7 @@ class IssueObject
         $this->uuid = $issue->getUuid();
         $this->created_at = $issue->getCreatedAt()->getTimestamp();
         $this->subject = $issue->getSubject();
-        $this->from_name = $issue->getFromName();
-        $this->from_email = $issue->getFromEmail();
-        $this->reply_to_email = $issue->getReplyToEmail();
+        $this->sending_profile_id = $issue->getSendingProfile()->getId();
         $this->content = $issue->getContent();
         $this->status = $issue->getStatus();
         $this->lists = $issue->getListids();

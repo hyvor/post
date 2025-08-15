@@ -71,7 +71,7 @@ class DevSeedCommand extends Command
             'slug' => 'test'
         ]);
 
-        SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => null,
             'from_email' => 'test@hvrpst.com',
@@ -136,7 +136,8 @@ class DevSeedCommand extends Command
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'content' => $this->contentDefaultStyle->json()
+            'content' => $this->contentDefaultStyle->json(),
+            'sending_profile' => $sendingProfile,
         ]);
         $draftIssue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($draftIssue));
 
