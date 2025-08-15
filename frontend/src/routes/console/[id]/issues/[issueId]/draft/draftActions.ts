@@ -12,7 +12,7 @@ export function updateDraftIssue() {
     const updatableFields: (keyof Issue)[] = [
         'subject',
         'content',
-        // 'lists'
+        'lists'
     ]
 
     const changedFields: Partial<Issue> = {};
@@ -21,6 +21,12 @@ export function updateDraftIssue() {
     const draftIssueEditing = get(draftIssueEditingStore);
 
     for (const field of updatableFields) {
+        if (field === 'lists') {
+            if (JSON.stringify(draftIssue[field].sort()) !== JSON.stringify(draftIssueEditing[field].sort())) {
+                (changedFields as any)[field] = draftIssueEditing[field];
+            }
+            continue;
+        }
         if (draftIssue[field] !== draftIssueEditing[field]) {
             (changedFields as any)[field] = draftIssueEditing[field];
         }

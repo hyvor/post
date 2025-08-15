@@ -112,7 +112,14 @@
 
         sendIssueTest(issue.id, testEmail)
             .then((res) => {
-                toast.success('Test email sent successfully', {id: toastId});
+                let count = res.success_count;
+                if (count > 1) {
+                    toast.success(`Test email successfully sent for ${count} users`, {id: toastId});
+                } else if (count === 1) {
+                    toast.success('Test email successfully sent', {id: toastId});
+                } else {
+                    toast.error('Failed to sent test emails', {id: toastId});
+                }
             })
             .catch((e) => {
                 toast.error('Failed to send test email: ' + e.message, {id: toastId});

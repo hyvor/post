@@ -60,8 +60,12 @@ export function getIssueTestData(id: number) {
     });
 }
 
+interface IssueTest {
+    success_count: number;
+}
+
 export function sendIssueTest(id: number, email: string) {
-    return consoleApi.post({
+    return consoleApi.post<IssueTest>({
         endpoint: `issues/${id}/test`,
         data: {
             email

@@ -1,17 +1,41 @@
 <script lang="ts">
-    import {Button, Tooltip, confirm, toast} from '@hyvor/design/components';
+    import {Button, Tooltip, confirm, toast, Modal} from '@hyvor/design/components';
     import Step from './Step.svelte';
     import IconArrowRightShort from '@hyvor/icons/IconArrowRightShort';
     import IconArrowLeftShort from '@hyvor/icons/IconArrowLeftShort';
-    import {draftStepStore} from './draftStore';
     import {goto} from '$app/navigation';
     import {consoleUrlWithNewsletter} from '../../../../lib/consoleUrl';
     import IconSend from '@hyvor/icons/IconSend';
     import {userApprovalStatusStore} from "../../../../lib/stores/consoleStore";
     import {getI18n} from '../../../../lib/i18n';
+    import {draftIssueEditingStore, draftStepStore, initDraftStores} from './draftStore';
+    import {sendIssue} from "../../../../lib/actions/issueActions";
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();
+
+    let showLimitModal = $state(false);
+    let currentLimit = $state(0);
+    let exceedAmount = $state(0);
+
+    function validate(): boolean {
+        if (!$draftIssueEditingStore.subject || $draftIssueEditingStore.subject.trim() === '') {
+            toast.error('Subject is required');
+            return false;
+        }
+
+        if ($draftIssueEditingStore.lists.length === 0) {
+            toast.error('At least one list is required');
+            return false;
+        }
+
+        if ($draftIssueEditingStore.content.trim() === '') {
+            toast.error('Content is required');
+            return false;
+        }
+
+        return true;
+    }
 
     function handleBack() {
         if ($draftStepStore === 'content') {
@@ -34,6 +58,10 @@
     }
 
     async function handleSend() {
+        if (!validate()) {
+            return;
+        }
+
         const confirmed = await confirm({
             title: I18n.t('console.issues.draft.sendIssue.title'),
             content: I18n.t('console.issues.draft.sendIssue.content'),
@@ -42,9 +70,24 @@
         });
 
         if (confirmed) {
-            confirmed.close();
-            // TODO: backend action goes here
-            toast.success(I18n.t('console.issues.draft.sendIssue.success'));
+            confirmed.loading();
+
+            sendIssue($draftIssueEditingStore.id)
+                .then(() => {
+                    toast.success('Newsletter sent successfully');
+                })
+                .catch((e) => {
+                    if (e.message.includes('would_exceed_limit')) {
+                        currentLimit = e.data.current_limit || 0;
+                        exceedAmount = e.data.exceed_amount || 0;
+                        showLimitModal = true;
+                    } else {
+                        toast.error('Failed to send newsletter: ' + e.message);
+                    }
+                })
+                .finally(() => {
+                    confirmed.close();
+                });
         }
     }
 </script>
@@ -86,6 +129,32 @@
     </div>
 </div>
 
+
+<Modal
+    bind:show={showLimitModal}
+    title={I18n.t('console.issues.draft.sendingLimitReached.title')}
+    footer={{
+		cancel: {
+			text: 'Close'
+		},
+		confirm: {
+			text: 'Upgrade'
+		}
+	}}
+    on:cancel={() => (showLimitModal = false)}
+    on:confirm={() => {
+		showLimitModal = false;
+		window.location.href = '/console/billing';
+	}}
+>
+    <p class="limit-error">
+        {I18n.t('console.issues.draft.sendingLimitReached.message', {
+            currentLimit,
+            exceedAmount
+        })}
+    </p>
+</Modal>
+
 <style>
     .wrap {
         border-top: 1px solid var(--border);
@@ -112,5 +181,12 @@
 
     .right :global(.tooltip-wrap) {
         text-align: left;
+    }
+
+    .limit-error {
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.5;
     }
 </style>

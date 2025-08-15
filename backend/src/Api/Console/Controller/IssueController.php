@@ -39,7 +39,6 @@ class IssueController extends AbstractController
         private SendService           $sendService,
         private NewsletterListService $newsletterListService,
         private HtmlTemplateRenderer  $templateRenderer,
-        private EmailSenderService    $emailTransportService,
         private BillingInterface      $billing,
         private DomainService         $domainService,
         private UserService           $userService,
@@ -216,8 +215,6 @@ class IssueController extends AbstractController
     #[Route ('/issues/{id}/test', methods: 'POST')]
     #[ScopeRequired(Scope::ISSUES_WRITE)]
     public function sendTest(
-        Request                            $request,
-        Newsletter                         $newsletter,
         Issue                              $issue,
         #[MapRequestPayload] SendTestInput $input
     ): JsonResponse
@@ -234,7 +231,11 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("Content cannot be empty.");
         }
 
-        return $this->json([]);
+        $sendCount = $this->issueService->sendTestEmails($issue, $input->emails);
+
+        return $this->json([
+            'success_count' => $sendCount,
+        ]);
     }
 
     #[Route ('/issues/{id}/preview', methods: 'GET')]

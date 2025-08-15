@@ -26,11 +26,13 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository $issueRepository,
-        private SendRepository $sendRepository,
-        private NewsletterListService $newsletterListService,
-        private SendingProfileService $sendingProfileService,
-    ) {
+        private IssueRepository        $issueRepository,
+        private SendRepository         $sendRepository,
+        private NewsletterListService  $newsletterListService,
+        private SendingProfileService  $sendingProfileService,
+        private EmailSenderService     $emailSenderService,
+    )
+    {
     }
 
     public function getIssueByUuid(string $uuid): ?Issue
@@ -141,11 +143,12 @@ class IssueService
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
-        Newsletter $newsletter,
-        int $limit,
-        int $offset,
+        Newsletter   $newsletter,
+        int          $limit,
+        int          $offset,
         ?IssueStatus $status = null,
-    ): ArrayCollection {
+    ): ArrayCollection
+    {
         $where = ['newsletter' => $newsletter];
 
         if ($status !== null) {
@@ -189,5 +192,28 @@ class IssueService
             'bounced' => 0,
             'complained' => 0,
         ];
+    }
+
+    /**
+     * @param string[] $emails
+     */
+    public function sendTestEmails(Issue $issue, array $emails): int
+    {
+        $testSentEmails = [];
+        foreach ($emails as $email) {
+            try {
+                $this->emailSenderService->send($issue, email: $email);
+            } catch (\Exception) {
+                continue;
+            }
+            $testSentEmails[] = $email;
+        }
+
+        $newsletter = $issue->getNewsletter();
+        $newsletter->setTestSentEmails($testSentEmails);
+        $this->em->persist($newsletter);
+        $this->em->flush();
+
+        return count($testSentEmails);
     }
 }

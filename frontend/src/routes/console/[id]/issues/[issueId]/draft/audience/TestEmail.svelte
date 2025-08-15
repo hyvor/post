@@ -153,7 +153,7 @@
 
     </SplitControl>
 
-    <SplitControl label="Suggested emails">
+    <SplitControl label="Suggested emails" caption="Emails of newsletter users">
         <div class="suggested-emails">
             {#if suggestedEmails.every(email => selectedEmails.includes(email))}
                 <div class="no-suggestions">No suggestions</div>
