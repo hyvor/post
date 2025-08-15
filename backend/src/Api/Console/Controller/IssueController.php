@@ -222,13 +222,17 @@ class IssueController extends AbstractController
         #[MapRequestPayload] SendTestInput $input
     ): JsonResponse
     {
-        // $content = $templateService->renderIssue($issue, $send);
+        if ($issue->getStatus() != IssueStatus::DRAFT) {
+            throw new UnprocessableEntityHttpException("Issue is not a draft.");
+        }
 
-        $this->emailTransportService->send(
-            $input->email,
-            (string)$issue->getSubject(),
-            '<p>See Twig integration for better HTML integration!</p>'
-        );
+        if ($issue->getSubject() === null || trim($issue->getSubject()) === '') {
+            throw new UnprocessableEntityHttpException("Subject cannot be empty.");
+        }
+
+        if ($issue->getContent() === null) {
+            throw new UnprocessableEntityHttpException("Content cannot be empty.");
+        }
 
         return $this->json([]);
     }
