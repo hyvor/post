@@ -3,7 +3,7 @@
     import {getI18n} from "../../../../../lib/i18n";
     import IconX from "@hyvor/icons/IconX";
     import {onMount} from "svelte";
-    import {getIssueTestData} from "../../../../../lib/actions/issueActions";
+    import {getIssueTestData, sendIssueTest} from "../../../../../lib/actions/issueActions";
     import {draftIssueEditingStore} from "../draftStore";
 
     const I18n = getI18n();
@@ -68,6 +68,25 @@
         selectedEmails = selectedEmails.filter(e => e !== email);
     }
 
+    function handleConfirm() {
+        const toastId = toast.loading('Sending test email...');
+
+        sendIssueTest($draftIssueEditingStore.id, selectedEmails)
+            .then((res) => {
+                let count = res.success_count;
+                if (count > 1) {
+                    toast.success(`Test email successfully sent for ${count} addresses`, {id: toastId});
+                } else if (count === 1) {
+                    toast.success('Test email successfully sent', {id: toastId});
+                } else {
+                    toast.error('Failed to sent test emails', {id: toastId});
+                }
+            })
+            .catch((e) => {
+                toast.error('Failed to send test email: ' + e.message, {id: toastId});
+            });
+    }
+
     onMount(() => {
         getIssueTestData($draftIssueEditingStore.id)
             .then((res) => {
@@ -101,6 +120,7 @@
             }
         }
     }}
+    on:confirm={handleConfirm}
     closeOnOutsideClick={false}
     closeOnEscape={false}
 >

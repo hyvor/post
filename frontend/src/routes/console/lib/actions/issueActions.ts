@@ -64,11 +64,11 @@ interface IssueTest {
     success_count: number;
 }
 
-export function sendIssueTest(id: number, email: string) {
+export function sendIssueTest(id: number, emails: string[]) {
     return consoleApi.post<IssueTest>({
         endpoint: `issues/${id}/test`,
         data: {
-            email
+            emails
         }
     });
 }
