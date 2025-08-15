@@ -149,6 +149,13 @@
                     "title": "Sending Limit Reached",
                     "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
                 },
+                "sendingProfile": {
+                    "title": "Sending Profile",
+                    "system": "This is the system profile.",
+                    "default": "This is the default sending profile.",
+                    "noBranding": "No branding configured",
+                    "brandLogo": "Brand Logo"
+                },
                 "testEmail": {
                     "title": "Send Test Email",
                     "description": "Ready to send your issue? Try sending a test email first to see how it looks in your inbox.",

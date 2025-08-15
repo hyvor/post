@@ -4,6 +4,7 @@
     import {Tag} from "@hyvor/design/components";
     import {draftIssueEditingStore, draftIssueStore} from "../draftStore.js";
     import {debouncedUpdateDraftIssue} from "../draftActions.js";
+    import {getI18n} from "../../../../../lib/i18n.js";
 
     let sendingProfileId = $state(
         $draftIssueStore.sending_profile_id ??
@@ -11,13 +12,15 @@
         ?? 0
     );
 
+    const I18n = getI18n();
+
     $effect(() => {
         $draftIssueEditingStore.sending_profile_id = sendingProfileId;
         debouncedUpdateDraftIssue();
     })
 </script>
 
-<SplitControl label="Sending Profile">
+<SplitControl label={I18n.t('console.issues.draft.sendingProfile.title')}>
     {#each $sendingProfilesStore as profile (profile.id)}
         <div class="profile">
             <Radio bind:group={sendingProfileId} value={profile.id} name="sending-profile">
@@ -27,13 +30,13 @@
                             {profile.from_email}
 
                             {#if profile.is_system}
-                                <Tooltip text="This is the system profile.">
+                                <Tooltip text={I18n.t('console.issues.draft.sendingProfile.system')}>
                                     <Tag size="small" color="blue">System</Tag>
                                 </Tooltip>
                             {/if}
 
                             {#if profile.is_default}
-                                <Tooltip text="This is the default sending profile.">
+                                <Tooltip text={I18n.t('console.issues.draft.sendingProfile.default')}>
                                     <Tag size="small" color="green">Default</Tag>
                                 </Tooltip>
                             {/if}
@@ -55,11 +58,12 @@
 
                     <div class="brand-wrap">
                         {#if !profile.brand_name && !profile.brand_logo}
-                            <div class="no-brand">No branding configured</div>
+                            <div class="no-brand">{I18n.t('console.issues.draft.sendingProfile.noBranding')}</div>
                         {:else}
                             <div class="brand">
                                 {#if profile.brand_logo}
-                                    <img src={profile.brand_logo} alt="Brand Logo"/>
+                                    <img src={profile.brand_logo}
+                                         alt={I18n.t('console.issues.draft.sendingProfile.brandLogo')}/>
                                 {/if}
                                 {#if profile.brand_name}
                                     <span class="brand-name">{profile.brand_name}</span>
