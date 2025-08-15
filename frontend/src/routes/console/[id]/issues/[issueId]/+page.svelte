@@ -126,6 +126,7 @@
         display: flex;
         flex-direction: column;
         overflow: auto;
+        padding: 20px 30px;
     }
 
     .content {
