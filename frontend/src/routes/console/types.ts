@@ -182,8 +182,8 @@ export type Issue = {
     uuid: string;
     created_at: number;
     subject: string;
-    sending_profile_id: number;
     content: string;
+    sending_profile_id: number;
     status: IssueStatus;
     lists: number[];
     scheduled_at: number | null;
