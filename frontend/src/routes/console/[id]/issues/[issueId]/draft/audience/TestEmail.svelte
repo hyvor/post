@@ -32,7 +32,7 @@
 
     function validateEmail(email: string): boolean {
         if (email.trim() === '') {
-            toast.error('Email cannot be empty');
+            toast.error(I18n.t('console.issues.draft.testEmail.emailValidation.emailNonEmpty'));
             return false;
         }
 
@@ -40,7 +40,7 @@
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            toast.error('Invalid email address');
+            toast.error(I18n.t('console.issues.draft.testEmail.emailValidation.emailInvalid'));
             return false;
         }
 
@@ -50,7 +50,7 @@
 
         const domain = email.split('@')[1];
         if (!verifiedDomains.includes(domain)) {
-            toast.error("The email must be from a newsletter user or a newsletter owner verified domain.");
+            toast.error(I18n.t('console.issues.draft.testEmail.emailValidation.emailNotAllowed'));
             return false;
         }
         return true;
@@ -69,21 +69,21 @@
     }
 
     function handleConfirm() {
-        const toastId = toast.loading('Sending test email...');
+        const toastId = toast.loading(I18n.t('console.issues.draft.testEmail.confirm.sending'));
 
         sendIssueTest($draftIssueEditingStore.id, selectedEmails)
             .then((res) => {
                 let count = res.success_count;
                 if (count > 1) {
-                    toast.success(`Test email successfully sent for ${count} addresses`, {id: toastId});
+                    toast.success(I18n.t('console.issues.draft.testEmail.confirm.sentMultiple', {count: count}), {id: toastId});
                 } else if (count === 1) {
-                    toast.success('Test email successfully sent', {id: toastId});
+                    toast.success(I18n.t('console.issues.draft.testEmail.confirm.sent'), {id: toastId});
                 } else {
-                    toast.error('Failed to sent test emails', {id: toastId});
+                    toast.error(I18n.t('console.issues.draft.testEmail.confirm.failed'), {id: toastId});
                 }
             })
             .catch((e) => {
-                toast.error('Failed to send test email: ' + e.message, {id: toastId});
+                toast.error(I18n.t('console.issues.draft.testEmail.confirm.failed') + ': ' + e.message, {id: toastId});
             });
     }
 
@@ -99,22 +99,22 @@
 </script>
 
 <div class="wrap">
-    {I18n.t('console.issues.draft.testEmailCaption')}
+    {I18n.t('console.issues.draft.testEmail.description')}
     <Button
         color="input"
         onclick={() => (showTestEmailModal = true)}
     >
-        {I18n.t('console.issues.draft.testEmail')}
+        {I18n.t('console.issues.draft.testEmail.title')}
     </Button>
 </div>
 
 <Modal
     bind:show={showTestEmailModal}
     loading={isLoading}
-    title={I18n.t('console.issues.draft.testEmail')}
+    title={I18n.t('console.issues.draft.testEmail.title')}
     footer={{
         confirm: {
-            text: I18n.t('console.issues.draft.testEmail'),
+            text: I18n.t('console.issues.draft.testEmail.title'),
             props: {
                 disabled: selectedEmails.length === 0
             }
@@ -124,11 +124,11 @@
     closeOnOutsideClick={false}
     closeOnEscape={false}
 >
-    <SplitControl label="To">
+    <SplitControl label={I18n.t('console.issues.draft.testEmail.modal.to')}>
         <div class="new-email-wrap">
             <TextInput
                 bind:value={newEmail}
-                placeholder="Enter email address"
+                placeholder={I18n.t('console.issues.draft.testEmail.modal.toPlaceholder')}
                 on:keydown={newEmailActions.onKeydown}
                 type="email"
                 size="small"
@@ -173,10 +173,13 @@
 
     </SplitControl>
 
-    <SplitControl label="Suggested emails" caption="Emails of newsletter users">
+    <SplitControl
+        label={I18n.t('console.issues.draft.testEmail.modal.suggested')}
+        caption={I18n.t('console.issues.draft.testEmail.modal.suggestedCaption')}
+    >
         <div class="suggested-emails">
             {#if suggestedEmails.every(email => selectedEmails.includes(email))}
-                <div class="no-suggestions">No suggestions</div>
+                <div class="no-suggestions">{I18n.t('console.issues.draft.testEmail.modal.noSuggested')}</div>
             {:else}
                 {#each suggestedEmails as suggestedEmail (suggestedEmail)}
                     {#if !selectedEmails.includes(suggestedEmail)}

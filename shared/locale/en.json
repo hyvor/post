@@ -149,8 +149,28 @@
                     "title": "Sending Limit Reached",
                     "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
                 },
-                "testEmail": "Send Test Email",
-                "testEmailCaption": "Ready to send your issue? Try sending a test email first to see how it looks in your inbox.",
+                "testEmail": {
+                    "title": "Send Test Email",
+                    "description": "Ready to send your issue? Try sending a test email first to see how it looks in your inbox.",
+                    "emailValidation": {
+                        "emailNonEmpty": "Email cannot be empty",
+                        "emailInvalid": "Invalid email address",
+                        "emailNotAllowed": "The email must be from a newsletter user or a newsletter owner verified domain."
+                    },
+                    "confirm": {
+                        "sending": "Sending test email...",
+                        "sentMultiple": "Test email successfully sent for {count} addresses",
+                        "sent": "Test email successfully sent.",
+                        "failed": "Failed to send test email."
+                    },
+                    "modal": {
+                        "to": "To",
+                        "toPlaceholder": "Enter email address",
+                        "suggested": "Suggested emails",
+                        "suggestedCaption": "Emails of newsletter users",
+                        "noSuggested": "No suggested emails"
+                    }
+                },
                 "approveBeforeSending": "Your account must be approved to send issues.",
                 "sendIssue": {
                     "title": "Send Issue Confirmation",
