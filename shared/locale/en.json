@@ -145,9 +145,14 @@
                 "fromEmail": "From Email",
                 "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",
                 "replyTo": "Reply To Email",
+                "steps": {
+                    "content": "Content",
+                    "audience": "Audience & Send"
+                },
                 "sendingLimitReached": {
                     "title": "Sending Limit Reached",
-                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
+                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers.",
+                    "upgrade": "Upgrade"
                 },
                 "sendingProfile": {
                     "title": "Sending Profile",
@@ -183,7 +188,13 @@
                     "title": "Send Issue Confirmation",
                     "content": "You are about to send this newsletter issue. Are you sure you want to send this? Please double-check everything before sending as you cannot undo this action.",
                     "confirmText": "Yes, send it",
-                    "success": "Issue will be sent."
+                    "success": "Newsletter sent successfully",
+                    "failed": "Failed to send newsletter",
+                    "validate": {
+                        "subject": "Subject is required",
+                        "lists": "At least one list is required",
+                        "content": "Content is required"
+                    }
                 }
             },
             "delete": {

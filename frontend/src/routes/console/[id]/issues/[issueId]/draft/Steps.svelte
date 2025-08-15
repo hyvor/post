@@ -20,17 +20,17 @@
 
     function validate(): boolean {
         if (!$draftIssueEditingStore.subject || $draftIssueEditingStore.subject.trim() === '') {
-            toast.error('Subject is required');
+            toast.error(I18n.t('console.issues.draft.sendIssue.validate.subject'));
             return false;
         }
 
         if ($draftIssueEditingStore.lists.length === 0) {
-            toast.error('At least one list is required');
+            toast.error(I18n.t('console.issues.draft.sendIssue.validate.lists'));
             return false;
         }
 
         if ($draftIssueEditingStore.content.trim() === '') {
-            toast.error('Content is required');
+            toast.error(I18n.t('console.issues.draft.sendIssue.validate.content'));
             return false;
         }
 
@@ -74,7 +74,7 @@
 
             sendIssue($draftIssueEditingStore.id)
                 .then(() => {
-                    toast.success('Newsletter sent successfully');
+                    toast.success(I18n.t('console.issues.draft.sendIssue.success'));
                 })
                 .catch((e) => {
                     if (e.message.includes('would_exceed_limit')) {
@@ -82,7 +82,7 @@
                         exceedAmount = e.data.exceed_amount || 0;
                         showLimitModal = true;
                     } else {
-                        toast.error('Failed to send newsletter: ' + e.message);
+                        toast.error(I18n.t('console.issues.draft.sendIssue.failed') + ': ' + e.message);
                     }
                 })
                 .finally(() => {
@@ -102,8 +102,8 @@
         </Button>
     </div>
     <div class="steps">
-        <Step key="content" name="Content"/>
-        <Step key="audience" name="Audience & Send"/>
+        <Step key="content" name={I18n.t('console.issues.draft.steps.content')}/>
+        <Step key="audience" name={I18n.t('console.issues.draft.steps.audience')}/>
     </div>
     <div class="right">
         {#if $draftStepStore === 'audience'}
@@ -135,10 +135,10 @@
     title={I18n.t('console.issues.draft.sendingLimitReached.title')}
     footer={{
 		cancel: {
-			text: 'Close'
+			text: I18n.t('console.common.close')
 		},
 		confirm: {
-			text: 'Upgrade'
+			text: I18n.t('console.issues.draft.sendingLimitReached.upgrade')
 		}
 	}}
     on:cancel={() => (showLimitModal = false)}
