@@ -14,6 +14,7 @@
     import IssueSending from './sending/IssueSending.svelte';
     import SentIssue from './sent/SentIssue.svelte';
     import SingleBox from '../../../@components/content/SingleBox.svelte';
+    import {draftSendableSubscribersCountStore} from "./draft/draftStore";
 
     const id = Number(page.params.issueId);
 
@@ -52,6 +53,11 @@
         getIssue(id)
             .then((res) => {
                 issue = res;
+
+                draftSendableSubscribersCountStore.set({
+                    loading: false,
+                    count: res.sendable_subscribers_count
+                });
             })
             .catch((err) => {
                 error = err.message;

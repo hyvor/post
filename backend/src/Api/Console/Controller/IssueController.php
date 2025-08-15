@@ -13,7 +13,6 @@ use App\Entity\Newsletter;
 use App\Entity\Type\IssueStatus;
 use App\Service\Domain\DomainService;
 use App\Service\Issue\Dto\UpdateIssueDto;
-use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\IssueService;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\SendService;
@@ -75,7 +74,10 @@ class IssueController extends AbstractController
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getById(Issue $issue): JsonResponse
     {
-        return $this->json(new IssueObject($issue));
+        return $this->json(new IssueObject(
+            $issue,
+            $this->sendService->getSendableSubscribersCount($issue)
+        ));
     }
 
     #[Route('/issues/{id}', methods: 'PATCH')]
@@ -121,7 +123,10 @@ class IssueController extends AbstractController
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
 
-        return $this->json(new IssueObject($issueUpdated));
+        return $this->json(new IssueObject(
+            $issueUpdated,
+            $this->sendService->getSendableSubscribersCount($issue)
+        ));
     }
 
     #[Route ('/issues/{id}', methods: 'DELETE')]

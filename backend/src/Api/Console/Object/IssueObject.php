@@ -29,7 +29,9 @@ class IssueObject
     public int $opened_sends = 0;
     public int $clicked_sends = 0;
 
-    public function __construct(Issue $issue)
+    public int $sendable_subscribers_count = 0;
+
+    public function __construct(Issue $issue, ?int $sendableSubscribersCount = 0)
     {
         $this->id = $issue->getId();
         $this->uuid = $issue->getUuid();
@@ -48,5 +50,7 @@ class IssueObject
         $this->total_sends = $issue->getTotalSends();
         $this->opened_sends = $issue->getOpenedSends();
         $this->clicked_sends = $issue->getClickedSends();
+
+        $this->sendable_subscribers_count = $sendableSubscribersCount;
     }
 }

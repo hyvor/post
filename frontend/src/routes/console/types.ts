@@ -195,6 +195,8 @@ export type Issue = {
     total_sends: number;
     opened_sends: number;
     clicked_sends: number;
+
+    sendable_subscribers_count: number;
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';

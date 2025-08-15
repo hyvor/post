@@ -1,7 +1,12 @@
 import {debounce} from "$lib/helpers/debounce";
 import {get} from "svelte/store";
 import type {Issue} from "../../../../types";
-import {draftIssueEditingStore, draftIssueStore, draftPreviewKey} from "./draftStore";
+import {
+    draftIssueEditingStore,
+    draftIssueStore,
+    draftPreviewKey,
+    draftSendableSubscribersCountStore
+} from "./draftStore";
 import {updateIssue} from "../../../../lib/actions/issueActions";
 import {toast} from "@hyvor/design/components";
 
@@ -37,11 +42,15 @@ export function updateDraftIssue() {
         return;
     }
 
-    const hasPreviewChanges = keys.some((key) => key === 'content' || key === 'lists' || key === 'subject');
+    const hasPreviewChanges = keys.some((key) => key === 'content' || key === 'subject');
 
     updateIssue(draftIssue.id, changedFields)
         .then((issue) => {
             draftIssueStore.set(issue);
+            draftSendableSubscribersCountStore.set({
+                loading: false,
+                count: issue.sendable_subscribers_count
+            });
 
             if (hasPreviewChanges) {
                 draftPreviewKey.update((key) => key + 1);
