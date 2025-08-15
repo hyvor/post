@@ -9,11 +9,10 @@ class IssueObject
 {
     public int $id;
     public string $uuid;
-
     public int $created_at;
     public ?string $subject;
-    public int $sending_profile_id;
     public ?string $content;
+    public int $sending_profile_id;
     public IssueStatus $status;
     /**
      * @var array<int>
@@ -35,8 +34,8 @@ class IssueObject
         $this->uuid = $issue->getUuid();
         $this->created_at = $issue->getCreatedAt()->getTimestamp();
         $this->subject = $issue->getSubject();
-        $this->sending_profile_id = $issue->getSendingProfile()->getId();
         $this->content = $issue->getContent();
+        $this->sending_profile_id = $issue->getSendingProfile()->getId();
         $this->status = $issue->getStatus();
         $this->lists = $issue->getListids();
         $this->scheduled_at = $issue->getScheduledAt()?->getTimestamp();
