@@ -20,8 +20,8 @@ class EmailSenderService
 {
 
     public function __construct(
-        private MailerInterface       $mailer,
-//        private RelayApiClient        $relayApiClient,
+//        private MailerInterface       $mailer,
+        private RelayApiClient        $relayApiClient,
         private SendingProfileService $sendingProfileService,
         private HtmlTemplateRenderer  $htmlEmailTemplateRenderer,
         private TextTemplateRenderer  $textEmailTemplateRenderer,
@@ -49,8 +49,8 @@ class EmailSenderService
 
         $text = $send ?
             $this->textEmailTemplateRenderer->renderFromSend($send) :
-            '';
-//            $this->textEmailTemplateRenderer->renderFromIssue($issue);
+            $this->textEmailTemplateRenderer->renderFromIssue($issue);
+//            '';
 
         $emailObject = new Email();
         $this->sendingProfileService->setSendingProfileToEmail($emailObject, $issue->getNewsletter());
@@ -66,8 +66,8 @@ class EmailSenderService
             ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
-//        $this->relayApiClient->sendEmail($emailObject, $send?->getId());
-        $this->mailer->send($emailObject);
+        $this->relayApiClient->sendEmail($emailObject, $send?->getId());
+//        $this->mailer->send($emailObject);
     }
 
     private function unsubscribeApiUrl(?Send $send): string
