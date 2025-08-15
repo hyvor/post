@@ -96,16 +96,6 @@ class IssueController extends AbstractController
             $updates->subject = $input->subject;
         }
 
-        if ($input->hasProperty('lists')) {
-            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter($newsletter, $input->lists);
-
-            if ($missingListIds !== null) {
-                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-            }
-
-            $updates->lists = $input->lists;
-        }
-
         if ($input->hasProperty('content')) {
             $updates->content = $input->content;
         }
@@ -121,6 +111,16 @@ class IssueController extends AbstractController
             }
 
             $updates->sendingProfile = $sendingProfile;
+        }
+
+        if ($input->hasProperty('lists')) {
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter($newsletter, $input->lists);
+
+            if ($missingListIds !== null) {
+                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
+
+            $updates->lists = $input->lists;
         }
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);

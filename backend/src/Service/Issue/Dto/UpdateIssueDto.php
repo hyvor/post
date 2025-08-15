@@ -11,15 +11,14 @@ class UpdateIssueDto
     use OptionalPropertyTrait;
 
     public ?string $subject;
+    public ?string $content;
+    public ?SendingProfile $sendingProfile;
+    public IssueStatus $status;
     /**
      * @var array<int>
      */
     public array $lists;
-    public ?string $content;
 
-    public ?SendingProfile $sendingProfile;
-
-    public IssueStatus $status;
     public string $html;
     public string $text;
     public \DateTimeImmutable $sendingAt;

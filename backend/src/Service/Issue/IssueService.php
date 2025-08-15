@@ -67,10 +67,6 @@ class IssueService
             $issue->setSubject($updates->subject);
         }
 
-        if ($updates->hasProperty('lists')) {
-            $issue->setListids($updates->lists);
-        }
-
         if ($updates->hasProperty('content')) {
             $issue->setContent($updates->content);
         }
@@ -78,12 +74,17 @@ class IssueService
         if ($updates->hasProperty('sendingProfile')) {
             $issue->setSendingProfile($updates->sendingProfile);
         }
-        if ($updates->hasProperty('html')) {
-            $issue->setHtml($updates->html);
-        }
 
         if ($updates->hasProperty('status')) {
             $issue->setStatus($updates->status);
+        }
+
+        if ($updates->hasProperty('lists')) {
+            $issue->setListids($updates->lists);
+        }
+
+        if ($updates->hasProperty('html')) {
+            $issue->setHtml($updates->html);
         }
 
         if ($updates->hasProperty('text')) {
