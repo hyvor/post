@@ -2,6 +2,7 @@
     import Editor from '../../../Editor/Editor.svelte';
     import {draftIssueEditingStore} from '../draftStore';
     import {debouncedUpdateDraftIssue} from '../draftActions';
+    import {getI18n} from '../../../../../lib/i18n';
 
     function onContentDocUpdate(doc: string) {
         $draftIssueEditingStore.content = doc;
@@ -13,11 +14,18 @@
         $draftIssueEditingStore.subject = input.value;
         debouncedUpdateDraftIssue();
     }
+
+    const I18n = getI18n();
 </script>
 
 <div class="content-wrap">
     <div class="content-inner">
-        <input type="text" placeholder="Subject..." value={$draftIssueEditingStore.subject} onchange={onSubjectUpdate}/>
+        <input
+            type="text"
+            placeholder={I18n.t('console.issues.draft.subjectPlaceholder')}
+            value={$draftIssueEditingStore.subject}
+            onchange={onSubjectUpdate}
+        />
         <Editor content={$draftIssueEditingStore.content} onDocUpdate={onContentDocUpdate}/>
     </div>
 </div>

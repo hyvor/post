@@ -136,6 +136,7 @@
             "createFirstIssue": "Create your first issue",
             "draft": {
                 "subject": "Subject",
+                "subjectPlaceholder": "Subject...",
                 "lists": "Lists",
                 "listsEmptyError": "Please select at least one list",
                 "subscribersCount": "{count} subscribers",
