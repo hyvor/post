@@ -178,6 +178,12 @@
                     "confirmText": "Yes, send it",
                     "success": "Issue will be sent."
                 }
+            },
+            "delete": {
+                "title": "Delete Issue",
+                "content": "Are you sure you want to delete this issue?",
+                "confirmText": "Yes, delete",
+                "success": "Issue deleted successfully"
             }
         },
         "tools": {

@@ -15,6 +15,7 @@
     import SentIssue from './sent/SentIssue.svelte';
     import SingleBox from '../../../@components/content/SingleBox.svelte';
     import {draftSendableSubscribersCountStore} from "./draft/draftStore";
+    import {getI18n} from "../../../lib/i18n";
 
     const id = Number(page.params.issueId);
 
@@ -22,12 +23,15 @@
     let loading = $state(true);
     let error: null | string = $state(null);
 
+    const I18n = getI18n();
+
+    // TODO: Not called anywhere
     async function onDelete() {
         const confirmed = await confirm({
-            title: 'Delete issue',
-            content: 'Are you sure you want to delete this issue?',
-            confirmText: 'Yes, delete',
-            cancelText: 'Cancel',
+            title: I18n.t('console.issues.delete.title'),
+            content: I18n.t('console.issues.delete.content'),
+            confirmText: I18n.t('console.issues.delete.confirmText'),
+            cancelText: I18n.t('console.common.cancel'),
             danger: true
         });
 
@@ -37,7 +41,7 @@
             deleteIssue(id)
                 .then(() => {
                     $issueStore = $issueStore.filter((i) => i.id !== id);
-                    toast.success('Issue deleted successfully');
+                    toast.success(I18n.t('console.issues.delete.success'));
                     goto(consoleUrlWithNewsletter('/issues'));
                 })
                 .catch((err) => {
@@ -87,32 +91,6 @@
         {:else if error}
             <IconMessage error message={error}/>
         {:else if issue}
-            <!-- <div class="top">
-                <div class="left">
-                    <Button
-                        size="small"
-                        color="input"
-                        as="a"
-                        href={consoleUrlWithNewsletter('/issues')}
-                    >
-                        {#snippet start()}
-                            <IconCaretLeft size={12} />
-                        {/snippet}
-                        All issues
-                    </Button>
-                </div>
-                <div>
-                    {#if issue.status === 'draft'}
-                        <Button variant="fill-light" color="red" on:click={onDelete}>
-                            Delete
-                            {#snippet end()}
-                                <IconTrash size={12} />
-                            {/snippet}
-                        </Button>
-                    {/if}
-                    <IssueStatusTag status={issue.status} size="large" />
-                </div>
-            </div> -->
             <div class="content">
                 {#if issue.status === 'draft'}
                     <DraftIssue {issue} send={onSendingStart}/>
