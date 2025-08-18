@@ -23,7 +23,7 @@ class DomainObject
     /**
      * Whether the domain has been verified to be used with SES
      */
-    public bool $verified_in_ses;
+    public bool $verified_in_relay;
 
     public bool $requested_by_current_website;
 
@@ -35,6 +35,6 @@ class DomainObject
         $this->dkim_public_key = $domain->getDkimTxtvalue();
         $this->dkim_txt_name = $domain->getDkimHost();
         $this->dkim_txt_value = $domain->getDkimTxtvalue();
-        $this->verified_in_ses = $domain->isVerifiedInRelay();
+        $this->verified_in_relay = $domain->isVerifiedInRelay();
     }
 }
