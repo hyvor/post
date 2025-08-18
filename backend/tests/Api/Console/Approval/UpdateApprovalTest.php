@@ -40,7 +40,8 @@ class UpdateApprovalTest extends WebTestCase
                 'social_links' => 'https://new-social.com',
                 'frequency' => null,
                 'why_post' => 'New reason for posting',
-            ]
+            ],
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -86,7 +87,8 @@ class UpdateApprovalTest extends WebTestCase
             "/approvals/{$approval->getId()}",
             [
                 'company_name' => 'New Company',
-            ]
+            ],
+            useSession: true
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -106,7 +108,8 @@ class UpdateApprovalTest extends WebTestCase
             '/approvals/999999',
             [
                 'company_name' => 'New Company',
-            ]
+            ],
+            useSession: true
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -115,6 +118,6 @@ class UpdateApprovalTest extends WebTestCase
         $this->assertJson($content);
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertSame('Approval request not found', $data['message']);
+        $this->assertSame('Approval not found', $data['message']);
     }
 }
