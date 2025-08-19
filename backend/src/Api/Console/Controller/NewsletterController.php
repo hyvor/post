@@ -5,7 +5,9 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
+use App\Api\Console\Input\Newsletter\GetSubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -17,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -28,8 +31,29 @@ class NewsletterController extends AbstractController
     {
     }
 
+    #[Route('/newsletter/subdomain', methods: 'GET')]
+    #[UserLevelEndpoint]
+    public function getSubdomainAvailability(Request $request): JsonResponse
+    {
+        $subdomain = $request->query->get('subdomain');
+
+        if (!$subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
+
+        $available = true;
+
+        if ($this->newsletterService->isUsernameTaken($subdomain)) {
+            $available = false;
+        }
+
+        return $this->json([
+            'available' => $available
+        ]);
+    }
+
     #[Route('/newsletter', methods: 'POST')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[UserLevelEndpoint]
     public function createNewsletter(
         Request                                    $request,
         #[MapRequestPayload] CreateNewsletterInput $input
@@ -37,12 +61,11 @@ class NewsletterController extends AbstractController
     {
         $user = AuthorizationListener::getUser($request);
 
-        $slugger = new AsciiSlugger();
-        while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
-            $input->name .= ' ' . random_int(1, 100);
+        if ($this->newsletterService->isUsernameTaken($input->subdomain)) {
+            throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name);
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name, $input->subdomain);
         return $this->json(new NewsletterObject($newsletter));
     }
 

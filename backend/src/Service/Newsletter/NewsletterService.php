@@ -38,6 +38,7 @@ class NewsletterService
     public function createNewsletter(
         int    $userId,
         string $name,
+        string $subdomain
     ): Newsletter
     {
         $slugger = new AsciiSlugger();
@@ -46,7 +47,7 @@ class NewsletterService
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
-            ->setSubdomain($slugger->slug($name))
+            ->setSubdomain($subdomain)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
