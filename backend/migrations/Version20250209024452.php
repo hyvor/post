@@ -49,7 +49,7 @@ final class Version20250209024452 extends AbstractMigration
             ok_sends INT DEFAULT 0 NOT NULL,
             failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
-            sent_at timestamptz,
+            sent_at timestamptz
         );
         SQL
         );
