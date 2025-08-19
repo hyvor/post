@@ -4,12 +4,15 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
+use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -43,7 +46,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'newsletter' => $newsletter,
             'status' => SubscriberStatus::UNSUBSCRIBED,
         ]);
-        // other newsletter
+        // other newsletters
         SubscriberFactory::createMany(3, [
             'newsletter' => $otherNewsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
@@ -94,8 +97,8 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $stats = $data['stats'];
         $this->assertIsArray($stats['subscribers']);
         $this->assertIsArray($stats['issues']);
-        $this->assertIsArray($stats['open_rate']);
-        $this->assertIsArray($stats['click_rate']);
+        $this->assertIsArray($stats['bounced_rate']);
+        $this->assertIsArray($stats['complained_rate']);
 
         $subscribers = $stats['subscribers'];
         $this->assertSame(7, $subscribers['total']);
@@ -106,32 +109,66 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $this->assertSame(3, $issues['last_30_days']);
     }
 
-    public function test_stats_open_click_rates(): void
+    public function test_stats_bounced_complained_rates(): void
     {
-
         $newsletter = NewsletterFactory::createOne();
 
         $issueThisMonth = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::SENT,
             'sent_at' => new \DateTimeImmutable('-10 days'),
-            'total_sends' => 10,
-            'opened_sends' => 5,
-            'clicked_sends' => 2,
         ]);
 
         $issueLastMonth = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'sent_at' => new \DateTimeImmutable('-40 days'),
             'status' => IssueStatus::SENT,
-            'total_sends' => 20,
-            'opened_sends' => 7,
-            'clicked_sends' => 7,
         ]);
 
-        $issueDraft = IssueFactory::createOne([
+        $sendDateThisMonth = new \DateTimeImmutable('-10 days');
+        // 8 sends for this month issue: 2 bounced, 1 complained
+        SendFactory::createMany(2, [
             'newsletter' => $newsletter,
-            'status' => IssueStatus::DRAFT,
+            'issue' => $issueThisMonth,
+            'sent_at' => $sendDateThisMonth,
+            'status' => SendStatus::SENT,
+            'bounced_at' => $sendDateThisMonth,
+        ]);
+        SendFactory::createOne([
+            'newsletter' => $newsletter,
+            'issue' => $issueThisMonth,
+            'sent_at' => $sendDateThisMonth,
+            'status' => SendStatus::SENT,
+            'complained_at' => $sendDateThisMonth,
+        ]);
+        SendFactory::createMany(5, [
+            'newsletter' => $newsletter,
+            'issue' => $issueThisMonth,
+            'sent_at' => $sendDateThisMonth,
+            'status' => SendStatus::SENT,
+        ]);
+
+        $sendDateLastMonth = new \DateTimeImmutable('-40 days');
+        // 14 sends for last month issue: 4 bounced, 2 complained
+        SendFactory::createMany(4, [
+            'newsletter' => $newsletter,
+            'issue' => $issueLastMonth,
+            'sent_at' => $sendDateLastMonth,
+            'status' => SendStatus::SENT,
+            'bounced_at' => $sendDateLastMonth,
+        ]);
+        SendFactory::createMany(2, [
+            'newsletter' => $newsletter,
+            'issue' => $issueLastMonth,
+            'sent_at' => $sendDateLastMonth,
+            'status' => SendStatus::SENT,
+            'complained_at' => $sendDateLastMonth,
+        ]);
+        SendFactory::createMany(8, [
+            'newsletter' => $newsletter,
+            'issue' => $issueLastMonth,
+            'sent_at' => $sendDateLastMonth,
+            'status' => SendStatus::SENT,
         ]);
 
         $response = $this->consoleApi(
@@ -146,16 +183,15 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $stats = $json['stats'];
         $this->assertIsArray($stats);
 
-        $openRate = $stats['open_rate'];
-        $this->assertIsArray($openRate);
-        $this->assertSame(40, $openRate['total']);
-        $this->assertSame(50, $openRate['last_30_days']);
+        $bouncedRate = $stats['bounced_rate'];
+        $this->assertIsArray($bouncedRate);
+        $this->assertSame(27.27, $bouncedRate['total']);
+        $this->assertSame(25, $bouncedRate['last_30_days']);
 
-        $clickRate = $stats['click_rate'];
-        $this->assertIsArray($clickRate);
-        $this->assertSame(30, $clickRate['total']);
-        $this->assertSame(20, $clickRate['last_30_days']);
-
+        $complainedRate = $stats['complained_rate'];
+        $this->assertIsArray($complainedRate);
+        $this->assertSame(13.64, $complainedRate['total']);
+        $this->assertSame(12.5, $complainedRate['last_30_days']);
     }
 
 

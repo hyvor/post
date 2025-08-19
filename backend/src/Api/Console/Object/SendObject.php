@@ -20,20 +20,10 @@ class SendObject
     public ?int $failed_at;
     public ?int $delivered_at;
 
-    public ?int $first_opened_at;
-    public ?int $last_opened_at;
-
-
-    public ?int $first_clicked_at;
-    public ?int $last_clicked_at;
-
     public ?int $unsubscribed_at;
     public ?int $bounced_at;
     public bool $hard_bounce;
     public ?int $complained_at;
-
-    public int $open_count;
-    public int $click_count;
 
     public function __construct(Send $send)
     {
@@ -48,21 +38,11 @@ class SendObject
         $this->failed_at = $send->getFailedAt()?->getTimestamp();
         $this->delivered_at = $send->getDeliveredAt()?->getTimestamp();
 
-        $this->first_opened_at = $send->getFirstOpenedAt()?->getTimestamp();
-        $this->last_opened_at = $send->getLastOpenedAt()?->getTimestamp();
-
-        $this->first_clicked_at = $send->getFirstClickedAt()?->getTimestamp();
-        $this->last_clicked_at = $send->getLastClickedAt()?->getTimestamp();
-
         $this->unsubscribed_at = $send->getUnsubscribeAt()?->getTimestamp();
 
         $this->bounced_at = $send->getBouncedAt()?->getTimestamp();
         $this->hard_bounce = $send->isHardBounce();
 
         $this->complained_at = $send->getComplainedAt()?->getTimestamp();
-
-        $this->open_count = $send->getOpenCount();
-        $this->click_count = $send->getClickCount();
-
     }
 }

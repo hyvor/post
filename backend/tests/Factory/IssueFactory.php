@@ -70,8 +70,6 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'total_sends' => $total,
             'ok_sends' => self::faker()->randomNumber(),
             'failed_sends' => self::faker()->randomNumber(),
-            'opened_sends' => min($total, self::faker()->randomNumber()),
-            'clicked_sends' => min($total, self::faker()->randomNumber()),
         ];
     }
 

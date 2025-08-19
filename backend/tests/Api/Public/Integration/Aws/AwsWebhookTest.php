@@ -26,11 +26,12 @@ class AwsWebhookTest extends WebTestCase
      * @param array<string, mixed> $additionalData
      */
     private function callWebhook(
-        array $message = [],
+        array  $message = [],
         string $type = 'Notification',
-        array $additionalData = [],
-        bool $mockSns = true,
-    ): Response {
+        array  $additionalData = [],
+        bool   $mockSns = true,
+    ): Response
+    {
         if ($mockSns) {
             $this->mockSnsValidation();
         }
@@ -263,7 +264,6 @@ class AwsWebhookTest extends WebTestCase
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
-            'clickCount' => 0,
         ]);
 
         $response = $this->callWebhook(
@@ -286,10 +286,6 @@ class AwsWebhookTest extends WebTestCase
 
         $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertNotNull($send->getFirstClickedAt());
-        $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()->format('Y-m-d H:i:s'));
-        $this->assertSame(1, $send->getClickCount());
-        $this->assertSame(1, $issue->getClickedSends());
     }
 
     public function test_click_second(): void
@@ -300,8 +296,6 @@ class AwsWebhookTest extends WebTestCase
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
-            'click_count' => 1,
-            'first_clicked_at' => new \DateTimeImmutable('2021-02-16 21:41:19'),
         ]);
 
         $response = $this->callWebhook(
@@ -325,11 +319,6 @@ class AwsWebhookTest extends WebTestCase
 
         $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertSame(2, $send->getClickCount());
-        $this->assertSame('2021-02-16 21:41:19', $send->getFirstClickedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('2021-02-16 21:42:19', $send->getLastClickedAt()?->format('Y-m-d H:i:s'));
-
-        $this->assertSame(1, $issue->getClickedSends());
     }
 
     public function test_open_first(): void
@@ -362,11 +351,6 @@ class AwsWebhookTest extends WebTestCase
 
         $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertSame('2021-02-16 21:41:19', $send->getFirstOpenedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('2021-02-16 21:41:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame(1, $send->getOpenCount());
-
-        $this->assertSame(1, $issue->getOpenedSends());
     }
 
     public function test_open_second(): void
@@ -377,8 +361,6 @@ class AwsWebhookTest extends WebTestCase
         ]);
         $send = SendFactory::createOne([
             'issue' => $issue,
-            'open_count' => 1,
-            'first_opened_at' => new \DateTimeImmutable('2021-01-16 21:41:19'),
         ]);
 
         $response = $this->callWebhook(
@@ -402,11 +384,6 @@ class AwsWebhookTest extends WebTestCase
 
         $send = $this->em->getRepository(Send::class)->find($send->getId());
         $this->assertNotNull($send);
-        $this->assertSame(2, $send->getOpenCount());
-        $this->assertSame('2021-01-16 21:41:19', $send->getFirstOpenedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('2021-02-16 21:42:19', $send->getLastOpenedAt()?->format('Y-m-d H:i:s'));
-
-        $this->assertSame(1, $issue->getOpenedSends());
     }
 
     public function test_subscription(): void
