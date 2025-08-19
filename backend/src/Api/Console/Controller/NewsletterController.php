@@ -35,11 +35,8 @@ class NewsletterController extends AbstractController
     #[UserLevelEndpoint]
     public function getSubdomainAvailability(Request $request): JsonResponse
     {
-        $subdomain = $request->query->get('subdomain');
-
-        if (!$subdomain) {
-            throw new UnprocessableEntityHttpException('Subdomain is required.');
-        }
+        $subdomain = (string)$request->query->get('subdomain');
+        $this->validateSubdomain($subdomain);
 
         $available = true;
 
@@ -60,6 +57,7 @@ class NewsletterController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $this->validateSubdomain($input->subdomain);
 
         if ($this->newsletterService->isUsernameTaken($input->subdomain)) {
             throw new UnprocessableEntityHttpException('Subdomain is already taken.');
@@ -109,5 +107,20 @@ class NewsletterController extends AbstractController
         $newsletter = $this->newsletterService->updateNewsletterMeta($newsletter, $updatesMeta);
 
         return $this->json(new NewsletterObject($newsletter));
+    }
+
+    private function validateSubdomain(string $subdomain): void
+    {
+        if (!$subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
+
+        if (strlen($subdomain) > 50) {
+            throw new UnprocessableEntityHttpException('Subdomain must be less than 50 characters long.');
+        }
+
+        if (!preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $subdomain)) {
+            throw new UnprocessableEntityHttpException('Subdomain can only contain lowercase letters, numbers, and hyphens.');
+        }
     }
 }
