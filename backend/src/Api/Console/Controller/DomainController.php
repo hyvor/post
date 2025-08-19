@@ -30,6 +30,17 @@ class DomainController extends AbstractController
     {
     }
 
+    private function resolveDomainEntity(string $id): Domain
+    {
+        $domain = $this->domainService->getDomainById((int)$id);
+
+        if (!$domain) {
+            throw new BadRequestException('Domain not found');
+        }
+
+        return $domain;
+    }
+
     #[Route('/domains', methods: 'GET')]
     #[UserLevelEndpoint]
     public function getDomains(Request $request): JsonResponse
@@ -69,9 +80,10 @@ class DomainController extends AbstractController
 
     #[Route('/domains/{id}/verify', methods: 'POST')]
     #[UserLevelEndpoint]
-    public function verifyDomain(Request $request, Domain $domain): JsonResponse
+    public function verifyDomain(Request $request, string $id): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $domain = $this->resolveDomainEntity($id);
 
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');
@@ -94,9 +106,10 @@ class DomainController extends AbstractController
 
     #[Route('/domains/{id}', methods: 'DELETE')]
     #[UserLevelEndpoint]
-    public function deleteDomain(Request $request, Domain $domain): JsonResponse
+    public function deleteDomain(Request $request, string $id): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $domain = $this->resolveDomainEntity($id);
 
         if ($domain->getUserId() !== $user->id) {
             throw new BadRequestException('You are not the owner of this domain');

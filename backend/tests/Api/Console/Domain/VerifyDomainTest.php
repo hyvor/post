@@ -14,6 +14,9 @@ use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(DomainController::class)]
 #[CoversClass(DomainService::class)]
@@ -22,30 +25,37 @@ class VerifyDomainTest extends WebTestCase
 {
     private function mockCreateEmailIdentity(): void
     {
-        $sesV2ClientMock = $this->createMock(SesV2Client::class);
-        $sesV2ClientMock->method('__call')->with(
-            'getEmailIdentity',
-            $this->callback(function ($args) {
-                $input = $args[0];
+        $response = new JsonMockResponse([
+            'domain' => 'hyvor.com',
+            'dkim_verified' => true,
+            'dkim_checked_at' => 1755455400,
+        ]);
+        $this->container->set(HttpClientInterface::class, new MockHttpClient($response));
 
-                $this->assertSame('hyvor.com', $input['EmailIdentity']);
-
-                return true;
-            })
-        )
-            ->willReturn(
-                new Result([
-                    'VerifiedForSendingStatus' => true,
-                    'VerificationInfo' => [
-                        'LastCheckedTimestamp' => '2025-02-21T00:00:00Z',
-                        'error_type' => 'None',
-                    ]
-                ])
-            );
-
-        $sesServiceMock = $this->createMock(SesService::class);
-        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
-        $this->container->set(SesService::class, $sesServiceMock);
+//        $sesV2ClientMock = $this->createMock(SesV2Client::class);
+//        $sesV2ClientMock->method('__call')->with(
+//            'getEmailIdentity',
+//            $this->callback(function ($args) {
+//                $input = $args[0];
+//
+//                $this->assertSame('hyvor.com', $input['EmailIdentity']);
+//
+//                return true;
+//            })
+//        )
+//            ->willReturn(
+//                new Result([
+//                    'VerifiedForSendingStatus' => true,
+//                    'VerificationInfo' => [
+//                        'LastCheckedTimestamp' => '2025-02-21T00:00:00Z',
+//                        'error_type' => 'None',
+//                    ]
+//                ])
+//            );
+//
+//        $sesServiceMock = $this->createMock(SesService::class);
+//        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
+//        $this->container->set(SesService::class, $sesServiceMock);
     }
 
     public function test_verify_domain(): void
@@ -66,14 +76,15 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/domains/verify/' . $domain->getId(),
+            '/domains/' . $domain->getId() . '/verify',
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsArray($json['domain']);
         $this->assertSame('hyvor.com', $json['domain']['domain']);
-        $this->assertTrue($json['domain']['verified_in_ses']);
+        $this->assertTrue($json['domain']['verified_in_relay']);
 
         $email = $this->getMailerMessage();
         $this->assertNotNull($email);
@@ -95,7 +106,7 @@ class VerifyDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'verified_in_relay' => true,
                 'user_id' => 1,
             ]
         );
@@ -103,7 +114,8 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/domains/verify/' . $domain->getId(),
+            '/domains/' . $domain->getId() . '/verify',
+            useSession: true
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -122,7 +134,8 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/domains/verify/99999',
+            '/domains/99999/verify',
+            useSession: true
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -148,7 +161,8 @@ class VerifyDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/domains/verify/' . $domain->getId(),
+            '/domains/' . $domain->getId() . '/verify',
+            useSession: true
         );
 
         $this->assertSame(400, $response->getStatusCode());
