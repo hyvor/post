@@ -82,12 +82,6 @@ class Issue
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
 
-    #[ORM\Column]
-    private int $opened_sends = 0;
-
-    #[ORM\Column]
-    private int $clicked_sends = 0;
-
     public function getId(): int
     {
         return $this->id;
@@ -354,30 +348,6 @@ class Issue
     public function setSentAt(?\DateTimeImmutable $sent_at): static
     {
         $this->sent_at = $sent_at;
-
-        return $this;
-    }
-
-    public function getOpenedSends(): int
-    {
-        return $this->opened_sends;
-    }
-
-    public function setOpenedSends(int $opened_sends): static
-    {
-        $this->opened_sends = $opened_sends;
-
-        return $this;
-    }
-
-    public function getClickedSends(): int
-    {
-        return $this->clicked_sends;
-    }
-
-    public function setClickedSends(int $clicked_sends): static
-    {
-        $this->clicked_sends = $clicked_sends;
 
         return $this;
     }

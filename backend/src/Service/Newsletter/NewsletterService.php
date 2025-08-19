@@ -141,7 +141,7 @@ class NewsletterService
     }
 
     /**
-     * @return array<string, array{total: int, last_30_days: int}>
+     * @return array<string, array{total: int|float, last_30_days: int|float}>
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {

@@ -20,9 +20,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class AwsWebhookController extends AbstractController
 {
     public function __construct(
-        private SendService $sendService,
-        private SubscriberService $subscriberService,
-        private HttpClientInterface $httpClient,
+        private SendService          $sendService,
+        private SubscriberService    $subscriberService,
+        private HttpClientInterface  $httpClient,
         private SnsValidationService $snsValidationService
     )
     {
@@ -30,7 +30,7 @@ class AwsWebhookController extends AbstractController
 
     #[Route('/integration/aws/webhook', methods: 'POST')]
     public function handleWebhook(
-        Request $request,
+        Request                              $request,
         #[MapRequestPayload] AwsWebhookInput $input
     ): JsonResponse
     {
@@ -113,20 +113,6 @@ class AwsWebhookController extends AbstractController
             $updates->bouncedAt = $time;
             $updates->hardBounce = $isHardBounce;
             $jsonResponse = new JsonResponse(['status' => 'Bounce OK']);
-        } elseif ($eventType === 'Click') {
-            $time = $message['click']['timestamp'];
-            $updates->firstClickedAt = $send->getFirstClickedAt() ?? new \DateTimeImmutable($time);
-            $updates->lastClickedAt = new \DateTimeImmutable($time);
-            $updates->clickCount = $send->getClickCount() + 1;
-
-            $jsonResponse = new JsonResponse(['status' => 'Click OK']);
-        } elseif ($eventType === 'Open') {
-            $time = $message['open']['timestamp'];
-            $updates->firstOpenedAt = $send->getFirstOpenedAt() ?? new \DateTimeImmutable($time);
-            $updates->lastOpenedAt = new \DateTimeImmutable($time);
-            $updates->openCount = $send->getOpenCount() + 1;
-
-            $jsonResponse = new JsonResponse(['status' => 'Open OK']);
         } elseif ($eventType === 'Subscription') {
             // We manually handle unsubscription
             $jsonResponse = new JsonResponse(['status' => 'Subscription OK']);

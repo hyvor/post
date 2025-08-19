@@ -53,18 +53,6 @@ class Send
     private ?\DateTimeImmutable $delivered_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $first_opened_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $last_opened_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $first_clicked_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $last_clicked_at = null;
-
-    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $unsubscribe_at = null;
 
     #[ORM\Column(nullable: true)]
@@ -72,12 +60,6 @@ class Send
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $complained_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private int $open_count = 0;
-
-    #[ORM\Column(nullable: true)]
-    private int $click_count = 0;
 
     #[ORM\Column(nullable: true)]
     private bool $hard_bounce = false;
@@ -238,54 +220,6 @@ class Send
         return $this;
     }
 
-    public function getFirstOpenedAt(): ?\DateTimeImmutable
-    {
-        return $this->first_opened_at;
-    }
-
-    public function setFirstOpenedAt(?\DateTimeImmutable $first_opened_at): static
-    {
-        $this->first_opened_at = $first_opened_at;
-
-        return $this;
-    }
-
-    public function getLastOpenedAt(): ?\DateTimeImmutable
-    {
-        return $this->last_opened_at;
-    }
-
-    public function setLastOpenedAt(?\DateTimeImmutable $last_opened_at): static
-    {
-        $this->last_opened_at = $last_opened_at;
-
-        return $this;
-    }
-
-    public function getFirstClickedAt(): ?\DateTimeImmutable
-    {
-        return $this->first_clicked_at;
-    }
-
-    public function setFirstClickedAt(?\DateTimeImmutable $first_clicked_at): static
-    {
-        $this->first_clicked_at = $first_clicked_at;
-
-        return $this;
-    }
-
-    public function getLastClickedAt(): ?\DateTimeImmutable
-    {
-        return $this->last_clicked_at;
-    }
-
-    public function setLastClickedAt(?\DateTimeImmutable $last_clicked_at): static
-    {
-        $this->last_clicked_at = $last_clicked_at;
-
-        return $this;
-    }
-
     public function getUnsubscribeAt(): ?\DateTimeImmutable
     {
         return $this->unsubscribe_at;
@@ -318,30 +252,6 @@ class Send
     public function setComplainedAt(?\DateTimeImmutable $complained_at): static
     {
         $this->complained_at = $complained_at;
-
-        return $this;
-    }
-
-    public function getOpenCount(): int
-    {
-        return $this->open_count;
-    }
-
-    public function setOpenCount(int $open_count): static
-    {
-        $this->open_count = $open_count;
-
-        return $this;
-    }
-
-    public function getClickCount(): int
-    {
-        return $this->click_count;
-    }
-
-    public function setClickCount(int $click_count): static
-    {
-        $this->click_count = $click_count;
 
         return $this;
     }

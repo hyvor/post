@@ -50,10 +50,6 @@ final class Version20250209024452 extends AbstractMigration
             failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
             sent_at timestamptz,
-            
-            -- cache
-            opened_sends INT DEFAULT 0 NOT NULL,
-            clicked_sends INT DEFAULT 0 NOT NULL
         );
         SQL
         );

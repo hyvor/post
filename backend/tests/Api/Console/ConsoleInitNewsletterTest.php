@@ -116,8 +116,6 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'status' => IssueStatus::SENT,
             'sent_at' => new \DateTimeImmutable('-10 days'),
             'total_sends' => 10,
-            'opened_sends' => 5,
-            'clicked_sends' => 2,
         ]);
 
         $issueLastMonth = IssueFactory::createOne([

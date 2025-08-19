@@ -136,7 +136,6 @@ class GetSendsTest extends WebTestCase
             [
                 'issue' => $issue,
                 'email' => 'thibault@hyvor.com',
-                'first_clicked_at' => new \DateTimeImmutable()
             ]
         );
 

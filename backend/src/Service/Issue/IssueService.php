@@ -26,11 +26,12 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository $issueRepository,
-        private SendRepository $sendRepository,
-        private NewsletterListService $newsletterListService,
-        private SendingProfileService $sendingProfileService,
-    ) {
+        private IssueRepository        $issueRepository,
+        private SendRepository         $sendRepository,
+        private NewsletterListService  $newsletterListService,
+        private SendingProfileService  $sendingProfileService,
+    )
+    {
     }
 
     public function getIssueByUuid(string $uuid): ?Issue
@@ -121,14 +122,6 @@ class IssueService
             $issue->setFailedAt($updates->failedAt);
         }
 
-        if ($updates->hasProperty('openedSends')) {
-            $issue->setOpenedSends($updates->openedSends);
-        }
-
-        if ($updates->hasProperty('clickedSends')) {
-            $issue->setClickedSends($updates->clickedSends);
-        }
-
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);
@@ -141,11 +134,12 @@ class IssueService
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
-        Newsletter $newsletter,
-        int $limit,
-        int $offset,
+        Newsletter   $newsletter,
+        int          $limit,
+        int          $offset,
         ?IssueStatus $status = null,
-    ): ArrayCollection {
+    ): ArrayCollection
+    {
         $where = ['newsletter' => $newsletter];
 
         if ($status !== null) {
