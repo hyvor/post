@@ -46,7 +46,7 @@ class NewsletterService
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
-            ->setSlug($slugger->slug($name))
+            ->setSubdomain($slugger->slug($name))
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -94,9 +94,9 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);
     }
 
-    public function getNewsletterBySlug(string $slug): ?Newsletter
+    public function getNewsletterBySubdomain(string $subdomain): ?Newsletter
     {
-        return $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $slug]);
+        return $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
     }
 
     /**
@@ -247,8 +247,8 @@ class NewsletterService
             $newsletter->setName($updates->name);
         }
 
-        if ($updates->hasProperty('slug')) {
-            $newsletter->setSlug($updates->slug);
+        if ($updates->hasProperty('subdomain')) {
+            $newsletter->setSubdomain($updates->subdomain);
         }
 
         $newsletter->setUpdatedAt($this->now());
@@ -260,13 +260,13 @@ class NewsletterService
 
     public function isUsernameTaken(string $username): bool
     {
-        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $username]);
+        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
         return $newsletter !== null;
     }
 
     public function getArchiveUrl(Newsletter $newsletter): string
     {
         $urlArchive = Request::create($this->config->getUrlArchive());
-        return $urlArchive->getScheme() . '://' . $newsletter->getSlug() . '.' . $urlArchive->getHost();
+        return $urlArchive->getScheme() . '://' . $newsletter->getSubdomain() . '.' . $urlArchive->getHost();
     }
 }

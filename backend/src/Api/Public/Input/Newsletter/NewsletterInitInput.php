@@ -8,6 +8,6 @@ class NewsletterInitInput
 {
 
     #[Assert\NotBlank]
-    public string $slug;
+    public string $subdomain;
 
 }
