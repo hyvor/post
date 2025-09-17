@@ -182,10 +182,8 @@ export type Issue = {
     uuid: string;
     created_at: number;
     subject: string;
-    from_name: string;
-    from_email: string;
-    reply_to_email: string;
     content: string;
+    sending_profile_id: number;
     status: IssueStatus;
     lists: number[];
     scheduled_at: number | null;
@@ -193,6 +191,10 @@ export type Issue = {
     sent_at: number | null;
 
     total_sends: number;
+    opened_sends: number;
+    clicked_sends: number;
+
+    sendable_subscribers_count: number;
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';

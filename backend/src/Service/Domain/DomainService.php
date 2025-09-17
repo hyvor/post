@@ -24,7 +24,6 @@ class DomainService
     public function __construct(
         private EntityManagerInterface   $em,
         private EmailNotificationService $emailNotificationService,
-        private AwsDomainService         $awsDomainService,
         private LoggerInterface          $logger,
         private readonly Environment     $mailTemplate,
         private readonly StringsFactory  $stringsFactory,
@@ -49,6 +48,18 @@ class DomainService
     public function getDomainsByUserId(int $userId): array
     {
         return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
+    }
+
+    /**
+     * @return Domain[]
+     */
+    public function getVerifiedDomainsByUserId(int $userId): array
+    {
+        return $this->em->getRepository(Domain::class)
+            ->findBy([
+                'user_id' => $userId,
+                'verified_in_relay' => true
+            ]);
     }
 
     public static function getDkimTxtValue(string $publicKey): string

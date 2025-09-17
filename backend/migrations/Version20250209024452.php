@@ -33,10 +33,8 @@ final class Version20250209024452 extends AbstractMigration
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             uuid TEXT UNIQUE NOT NULL,
             newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
+            sending_profile_id BIGINT NOT NULL references sending_profiles(id),
             subject VARCHAR(255),
-            from_name VARCHAR(255),
-            from_email TEXT NOT NULL,
-            reply_to_email TEXT,
             content TEXT,
             status issues_status,
             list_ids jsonb,
@@ -49,7 +47,14 @@ final class Version20250209024452 extends AbstractMigration
             ok_sends INT DEFAULT 0 NOT NULL,
             failed_sends INT DEFAULT 0 NOT NULL,
             failed_at timestamptz,
-            sent_at timestamptz
+            sent_at timestamptz,
+
+            -- cache
+            opened_sends INT DEFAULT 0 NOT NULL,
+            clicked_sends INT DEFAULT 0 NOT NULL,
+            from_email TEXT DEFAULT  NULL, -- set right before sending
+            from_name TEXT DEFAULT NULL,
+            reply_to_email TEXT DEFAULT NULL
         );
         SQL
         );

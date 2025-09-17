@@ -136,6 +136,7 @@
             "createFirstIssue": "Create your first issue",
             "draft": {
                 "subject": "Subject",
+                "subjectPlaceholder": "Subject...",
                 "lists": "Lists",
                 "listsEmptyError": "Please select at least one list",
                 "subscribersCount": "{count} subscribers",
@@ -144,10 +145,63 @@
                 "fromEmail": "From Email",
                 "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",
                 "replyTo": "Reply To Email",
+                "steps": {
+                    "content": "Content",
+                    "audience": "Audience & Send"
+                },
                 "sendingLimitReached": {
                     "title": "Sending Limit Reached",
-                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers."
+                    "message": "You have reached your sending limit of {currentLimit} emails and this issue would exceed the limit by {exceedAmount} emails. Please upgrade your plan to send to more subscribers.",
+                    "upgrade": "Upgrade"
+                },
+                "sendingProfile": {
+                    "title": "Sending Profile",
+                    "system": "This is the system profile.",
+                    "default": "This is the default sending profile.",
+                    "noBranding": "No branding configured",
+                    "brandLogo": "Brand Logo"
+                },
+                "testEmail": {
+                    "title": "Send Test Email",
+                    "description": "Ready to send your issue? Try sending a test email first to see how it looks in your inbox.",
+                    "emailValidation": {
+                        "emailNonEmpty": "Email cannot be empty",
+                        "emailInvalid": "Invalid email address",
+                        "emailNotAllowed": "The email must be from a newsletter user or a newsletter owner verified domain."
+                    },
+                    "confirm": {
+                        "sending": "Sending test email...",
+                        "sentMultiple": "Test email successfully sent for {count} addresses",
+                        "sent": "Test email successfully sent.",
+                        "failed": "Failed to send test email."
+                    },
+                    "modal": {
+                        "to": "To",
+                        "toPlaceholder": "Enter email address",
+                        "suggested": "Suggested emails",
+                        "suggestedCaption": "Emails of newsletter users",
+                        "noSuggested": "No suggested emails"
+                    }
+                },
+                "approveBeforeSending": "Your account must be approved to send issues.",
+                "sendIssue": {
+                    "title": "Send Issue Confirmation",
+                    "content": "You are about to send this newsletter issue. Are you sure you want to send this? Please double-check everything before sending as you cannot undo this action.",
+                    "confirmText": "Yes, send it",
+                    "success": "Newsletter sent successfully",
+                    "failed": "Failed to send newsletter",
+                    "validate": {
+                        "subject": "Subject is required",
+                        "lists": "At least one list is required",
+                        "content": "Content is required"
+                    }
                 }
+            },
+            "delete": {
+                "title": "Delete Issue",
+                "content": "Are you sure you want to delete this issue?",
+                "confirmText": "Yes, delete",
+                "success": "Issue deleted successfully"
             }
         },
         "tools": {

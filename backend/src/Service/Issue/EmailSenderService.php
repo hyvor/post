@@ -50,6 +50,7 @@ class EmailSenderService
         $text = $send ?
             $this->textEmailTemplateRenderer->renderFromSend($send) :
             $this->textEmailTemplateRenderer->renderFromIssue($issue);
+//            '';
 
         $emailObject = new Email();
         $this->sendingProfileService->setSendingProfileToEmail($emailObject, $issue->getNewsletter());
