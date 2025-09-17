@@ -75,11 +75,11 @@
             "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours.",
             "rejectNotice": "Your approval request has been rejected. Please contact support for any further clarifications.",
             "rejectReason": "Reject reason: {reason}",
-            "approvedNotice": "Your account has been approved on {date}"
+            "approvedNotice": "Your account was approved on {date}"
         },
         "domains": {
             "addDomain": "Add Domain",
-            "firstDomain": "Add your first domain to use it to send emails"
+            "firstDomain": "Add a domain to send newsletters from your own domain."
         },
         "billing": {
             "usage": {
