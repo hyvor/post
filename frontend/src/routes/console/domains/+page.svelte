@@ -6,8 +6,8 @@
 	import { getI18n } from '../lib/i18n';
 	import IconPlus from '@hyvor/icons/IconPlus';
 
-	let showCreateModal = false;
-	let domainList: DomainList;
+	let showCreateModal = $state(false);
+	let domainList: DomainList = $state({} as DomainList);
 
 	function handleCreate() {
 		domainList.refreshDomains();

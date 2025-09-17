@@ -10,15 +10,21 @@
 	import { createDomain } from '../lib/actions/domainActions';
 	import DnsRecordsModal from './DnsRecordsModal.svelte';
 	import type { Domain } from '../types';
+	import { onMount } from 'svelte';
 
-	export let show = false;
-	export let onCreate: () => void;
+	interface Props {
+		show?: boolean;
+		onCreate: () => void;
+	}
 
-	let domain = '';
-	let domainError: string | null = null;
-	let loading = false;
-	let showDnsRecords = false;
-	let createdDomain: Domain | null = null;
+	let { show = $bindable(false), onCreate }: Props = $props();
+
+	let domain = $state('');
+	let domainError: string | null = $state(null);
+	let loading = $state(false);
+	let showDnsRecords = $state(false);
+	let createdDomain: Domain | null = $state(null);
+	let domainInput: HTMLInputElement = $state({} as HTMLInputElement);
 
 	function validateDomain(domain: string): boolean {
 		if (!domain) {
@@ -58,6 +64,12 @@
 				loading = false;
 			});
 	}
+
+	$effect(() => {
+		if (show && domainInput) {
+			domainInput.focus();
+		}
+	});
 </script>
 
 <Modal
@@ -79,8 +91,14 @@
 			<TextInput
 				placeholder="example.com"
 				bind:value={domain}
+				bind:input={domainInput}
 				state={domainError ? 'error' : 'default'}
 				block
+				on:keydown={(e) => {
+					if (e.key === 'Enter') {
+						handleSubmit();
+					}
+				}}
 			/>
 			{#if domainError}
 				<Validation type="error">{domainError}</Validation>

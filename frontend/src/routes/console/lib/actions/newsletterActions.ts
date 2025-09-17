@@ -1,20 +1,21 @@
 import consoleApi from "../consoleApi";
-import type {Newsletter} from "../../types";
+import type { Newsletter } from "../../types";
 
 export function getSubdomainAvailability(subdomain: string) {
     return consoleApi.get<{ available: boolean }>({
         endpoint: 'newsletter/subdomain',
-        data: {subdomain},
+        data: { subdomain },
         userApi: true
     })
 }
 
-export function createNewsletter(name: string) {
+export function createNewsletter(name: string, subdomain: string) {
     return consoleApi.post<Newsletter>({
         endpoint: 'newsletter',
         userApi: true,
         data: {
             name,
+            subdomain,
         }
     });
 }
