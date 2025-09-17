@@ -35,7 +35,7 @@ class TextTemplateRenderer
 
         $text = $variables->name . self::LINE_BREAK;
         $text .= $variables->subject . self::LINE_BREAK;
-        $text .= $this->contentService->getTextFromJson($variables->content);
+        $text .= $this->contentService->getTextFromJson($issue->getContent());
 
         return $text;
     }

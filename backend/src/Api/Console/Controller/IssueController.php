@@ -19,6 +19,7 @@ use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TextTemplateRenderer;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Billing\BillingInterface;
@@ -38,7 +39,8 @@ class IssueController extends AbstractController
         private IssueService          $issueService,
         private SendService           $sendService,
         private NewsletterListService $newsletterListService,
-        private HtmlTemplateRenderer  $templateRenderer,
+        private TextTemplateRenderer $textTemplateRenderer,
+        private HtmlTemplateRenderer  $htmlTemplateRenderer,
         private BillingInterface      $billing,
         private DomainService         $domainService,
         private UserService           $userService,
@@ -162,9 +164,6 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("Content cannot be empty.");
         }
 
-        $fromEmail = $issue->getFromEmail();
-        // TODO: validate from email
-
         $subscribersCount = $this->sendService->getSendableSubscribersCount($issue);
         if ($subscribersCount == 0) {
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
@@ -172,7 +171,7 @@ class IssueController extends AbstractController
 
         $license = $this->billing->license($issue->getNewsletter()->getUserId(), $issue->getNewsletter()->getId());
         if (!$license instanceof PostLicense) {
-            throw new UnprocessableEntityHttpException("Invalid license for sending issues.");
+            throw new UnprocessableEntityHttpException("License not found or invalid.");
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfNewsletter($issue->getNewsletter());
@@ -188,10 +187,16 @@ class IssueController extends AbstractController
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
         $updates->sendingAt = new \DateTimeImmutable();
-        $updates->html = $this->templateRenderer->renderFromIssue($issue);
-        // TODO:
-        $updates->text = ""; // $this->sendService->renderText($issue);
+        $updates->html = $this->htmlTemplateRenderer->renderFromIssue($issue);
+        $updates->text = $this->textTemplateRenderer->renderFromIssue($issue);
         $updates->totalSends = $subscribersCount;
+
+        // cache from sending profile
+        $sendingProfile = $issue->getSendingProfile();
+        $updates->fromEmail = $sendingProfile->getFromEmail();
+        $updates->fromName = $sendingProfile->getFromName();
+        $updates->replyToEmail = $sendingProfile->getReplyToEmail();
+
         $issue = $this->issueService->updateIssue($issue, $updates);
 
         $bus->dispatch(new SendIssueMessage($issue->getId()));
@@ -249,7 +254,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function previewIssue(Issue $issue): JsonResponse
     {
-        $preview = $this->templateRenderer->renderFromIssue($issue);
+        $preview = $this->htmlTemplateRenderer->renderFromIssue($issue);
 
         return $this->json([
             'html' => $preview,

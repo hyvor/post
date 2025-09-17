@@ -26,6 +26,11 @@ class IssueObject
     public int $opened_sends = 0;
     public int $clicked_sends = 0;
 
+    // set after the issue is sent
+    public ?string $from_email;
+    public ?string $from_name;
+    public ?string $reply_to_email;
+
     public int $sendable_subscribers_count = 0;
 
     public function __construct(Issue $issue, ?int $sendableSubscribersCount = 0)
@@ -45,6 +50,10 @@ class IssueObject
         $this->total_sends = $issue->getTotalSends();
         $this->opened_sends = $issue->getOpenedSends();
         $this->clicked_sends = $issue->getClickedSends();
+
+        $this->from_email = $issue->getFromEmail();
+        $this->from_name = $issue->getFromName();
+        $this->reply_to_email = $issue->getReplyToEmail();
 
         $this->sendable_subscribers_count = $sendableSubscribersCount;
     }

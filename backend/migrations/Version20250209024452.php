@@ -51,7 +51,10 @@ final class Version20250209024452 extends AbstractMigration
 
             -- cache
             opened_sends INT DEFAULT 0 NOT NULL,
-            clicked_sends INT DEFAULT 0 NOT NULL
+            clicked_sends INT DEFAULT 0 NOT NULL,
+            from_email TEXT DEFAULT  NULL, -- set right before sending
+            from_name TEXT DEFAULT NULL,
+            reply_to_email TEXT DEFAULT NULL
         );
         SQL
         );

@@ -33,4 +33,8 @@ class UpdateIssueDto
 
     public int $openedSends;
     public int $clickedSends;
+
+    public string $fromEmail;
+    public string $fromName;
+    public string $replyToEmail;
 }

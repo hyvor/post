@@ -123,6 +123,18 @@ class IssueService
             $issue->setClickedSends($updates->clickedSends);
         }
 
+        if ($updates->hasProperty('fromEmail')) {
+            $issue->setFromEmail($updates->fromEmail);
+        }
+
+        if ($updates->hasProperty('fromName')) {
+            $issue->setFromName($updates->fromName);
+        }
+
+        if ($updates->hasProperty('replyToEmail')) {
+            $issue->setReplyToEmail($updates->replyToEmail);
+        }
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);
