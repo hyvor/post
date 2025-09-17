@@ -32,8 +32,10 @@ class CreateNewsletterTest extends WebTestCase
             'POST',
             '/newsletter',
             [
-                'name' => 'Valid Newsletter Name'
-            ]
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => 'valid-newsletter-subdomain'
+            ],
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -46,6 +48,7 @@ class CreateNewsletterTest extends WebTestCase
         $newsletter = $repository->find($newsletterId);
         $this->assertNotNull($newsletter);
         $this->assertSame('Valid Newsletter Name', $newsletter->getName());
+        $this->assertSame('valid-newsletter-subdomain', $newsletter->getSubdomain());
 
         $listRepository = $this->em->getRepository(NewsletterList::class);
         $lists = $listRepository->findBy(['newsletter' => $newsletter]);
@@ -71,8 +74,10 @@ class CreateNewsletterTest extends WebTestCase
             'POST',
             '/newsletter',
             [
-                'name' => $long_string
-            ]
+                'name' => $long_string,
+                'subdomain' => 'valid-newsletter-subdomain'
+            ],
+            useSession: true
         );
 
         $this->assertSame(422, $response->getStatusCode());

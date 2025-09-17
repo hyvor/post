@@ -5,7 +5,9 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
+use App\Api\Console\Input\Newsletter\GetSubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -17,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -28,21 +31,39 @@ class NewsletterController extends AbstractController
     {
     }
 
+    #[Route('/newsletter/subdomain', methods: 'GET')]
+    #[UserLevelEndpoint]
+    public function getSubdomainAvailability(Request $request): JsonResponse
+    {
+        $subdomain = (string)$request->query->get('subdomain');
+        $this->validateSubdomain($subdomain);
+
+        $available = true;
+
+        if ($this->newsletterService->isUsernameTaken($subdomain)) {
+            $available = false;
+        }
+
+        return $this->json([
+            'available' => $available
+        ]);
+    }
+
     #[Route('/newsletter', methods: 'POST')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[UserLevelEndpoint]
     public function createNewsletter(
         Request                                    $request,
         #[MapRequestPayload] CreateNewsletterInput $input
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $this->validateSubdomain($input->subdomain);
 
-        $slugger = new AsciiSlugger();
-        while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
-            $input->name .= ' ' . random_int(1, 100);
+        if ($this->newsletterService->isUsernameTaken($input->subdomain)) {
+            throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name);
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name, $input->subdomain);
         return $this->json(new NewsletterObject($newsletter));
     }
 
@@ -86,5 +107,20 @@ class NewsletterController extends AbstractController
         $newsletter = $this->newsletterService->updateNewsletterMeta($newsletter, $updatesMeta);
 
         return $this->json(new NewsletterObject($newsletter));
+    }
+
+    private function validateSubdomain(string $subdomain): void
+    {
+        if (!$subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
+
+        if (strlen($subdomain) > 50) {
+            throw new UnprocessableEntityHttpException('Subdomain must be less than 50 characters long.');
+        }
+
+        if (!preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $subdomain)) {
+            throw new UnprocessableEntityHttpException('Subdomain can only contain lowercase letters, numbers, and hyphens.');
+        }
     }
 }

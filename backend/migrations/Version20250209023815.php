@@ -21,7 +21,7 @@ final class Version20250209023815 extends AbstractMigration
         CREATE TABLE newsletters (
             id BIGSERIAL PRIMARY KEY,
             uuid UUID DEFAULT gen_random_uuid() NOT NULL,
-            slug TEXT UNIQUE NOT NULL,
+            subdomain TEXT UNIQUE NOT NULL,
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             user_id BIGINT NOT NULL,
