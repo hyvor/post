@@ -10,7 +10,7 @@ class NewsletterObject extends NewsletterMeta
 
     public int $id;
     public string $uuid;
-    public string $slug;
+    public string $subdomain;
     public int $created_at; // unix timestamp
     public string $name;
 
@@ -18,7 +18,7 @@ class NewsletterObject extends NewsletterMeta
     {
         $this->id = $newsletter->getId();
         $this->uuid = $newsletter->getUuid();
-        $this->slug = $newsletter->getSlug();
+        $this->subdomain = $newsletter->getSubdomain();
         $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
         $this->name = $newsletter->getName();
 

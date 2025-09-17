@@ -19,7 +19,7 @@ class Newsletter
     private string $uuid;
 
     #[ORM\Column(unique: true)]
-    private string $slug;
+    private string $subdomain;
 
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
@@ -66,16 +66,16 @@ class Newsletter
         return $this->uuid;
     }
 
-    public function setSlug(string $slug): static
+    public function setSubdomain(string $subdomain): static
     {
-        $this->slug = $slug;
+        $this->subdomain = $subdomain;
 
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSubdomain(): string
     {
-        return $this->slug;
+        return $this->subdomain;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

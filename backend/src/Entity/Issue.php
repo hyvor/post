@@ -90,7 +90,7 @@ class Issue
 
     #[ORM\Column()]
     private ?string $reply_to_email;
-
+  
     public function getId(): int
     {
         return $this->id;

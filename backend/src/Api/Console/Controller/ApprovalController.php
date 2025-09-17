@@ -27,6 +27,17 @@ class ApprovalController extends AbstractController
     {
     }
 
+    private function resolveApproval(string $id): Approval
+    {
+        $approval = $this->approvalService->getApporvalById((int)$id);
+
+        if ($approval === null) {
+            throw new UnprocessableEntityHttpException('Approval not found');
+        }
+
+        return $approval;
+    }
+
     #[Route('/approvals', methods: 'GET')]
     #[UserLevelEndpoint]
     public function getApproval(Request $request): JsonResponse
@@ -77,11 +88,12 @@ class ApprovalController extends AbstractController
     #[UserLevelEndpoint]
     public function updateApproval(
         Request                                  $request,
-        Approval                                 $approval,
+        string                                   $id,
         #[MapRequestPayload] UpdateApprovalInput $input
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $approval = $this->resolveApproval($id);
 
         if ($this->approvalService->getApprovalStatusOfUser($user) !== ApprovalStatus::REVIEWING) {
             throw new UnprocessableEntityHttpException('Approval is not in reviewing status');

@@ -148,8 +148,8 @@ interface StatsType {
 export interface NewsletterStats {
     subscribers: StatsType;
     issues: StatsType;
-    open_rate: StatsType;
-    click_rate: StatsType;
+    bounced_rate: StatsType;
+    complained_rate: StatsType;
 }
 
 export type List = {
@@ -198,7 +198,7 @@ export type Issue = {
 };
 
 export type SendStatus = 'pending' | 'sent' | 'failed';
-export type SendType = 'all' | 'opened' | 'clicked' | 'unsubscribed' | 'bounced' | 'complained';
+export type SendType = 'all' | 'unsubscribed' | 'bounced' | 'complained';
 
 export interface IssueSend {
     id: number;
@@ -209,16 +209,10 @@ export interface IssueSend {
     sent_at: number | null;
     failed_at: number | null;
     delivered_at: number | null;
-    first_opened_at: number | null;
-    last_opened_at: number | null;
-    first_clicked_at: number | null;
-    last_clicked_at: number | null;
     unsubscribed_at: number | null;
     bounced_at: number | null;
     hard_bounce: boolean;
     complained_at: number | null;
-    open_count: number;
-    click_count: number;
 }
 
 export type Domain = {

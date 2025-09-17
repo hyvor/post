@@ -3,16 +3,16 @@
 namespace App\Tests\Api\Console\Domain;
 
 use App\Api\Console\Controller\DomainController;
-use App\Api\Console\Input\Domain\CreateDomainInput;
-use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
 use App\Service\Domain\DomainService;
-use App\Service\Integration\Aws\SesService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
 use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(DomainController::class)]
 #[CoversClass(DomainService::class)]
@@ -20,20 +20,8 @@ class DeleteDomainTest extends WebTestCase
 {
     private function mockDeleteDomainEntity(): void
     {
-        $sesV2ClientMock = $this->createMock(SesV2Client::class);
-        $sesV2ClientMock->method('__call')->with(
-            'deleteEmailIdentity',
-            $this->callback(function ($args) {
-                $input = $args[0];
-
-                $this->assertSame('hyvor.com', $input['EmailIdentity']);
-                return true;
-            })
-        );
-
-        $sesServiceMock = $this->createMock(SesService::class);
-        $sesServiceMock->method('getClient')->willReturn($sesV2ClientMock);
-        $this->container->set(SesService::class, $sesServiceMock);
+        $response = new JsonMockResponse();
+        $this->container->set(HttpClientInterface::class, new MockHttpClient($response));
     }
 
     public function testDeleteDomain(): void
@@ -53,7 +41,8 @@ class DeleteDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/domains/' . $domain->getId()
+            '/domains/' . $domain->getId(),
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -71,7 +60,9 @@ class DeleteDomainTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/domains/123456789'
+            '/domains/123456789',
+            useSession: true
+
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -96,6 +87,8 @@ class DeleteDomainTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/domains/' . $domain->getId(),
+            useSession: true
+
         );
 
         $this->assertSame(400, $response->getStatusCode());

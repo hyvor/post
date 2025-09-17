@@ -36,7 +36,7 @@ class ArchiveController extends AbstractController
         #[MapQueryString] NewsletterInitInput $input,
     ): JsonResponse
     {
-        $newsletter = $this->newsletterService->getNewsletterBySlug($input->slug);
+        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->subdomain);
 
         if ($newsletter === null) {
             throw new UnprocessableEntityHttpException('Newsletter not found');

@@ -23,8 +23,6 @@ class IssueObject
     public ?int $sent_at;
 
     public int $total_sends = 0;
-    public int $opened_sends = 0;
-    public int $clicked_sends = 0;
 
     // set after the issue is sent
     public ?string $from_email;

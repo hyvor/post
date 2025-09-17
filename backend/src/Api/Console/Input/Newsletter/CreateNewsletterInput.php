@@ -11,4 +11,7 @@ class CreateNewsletterInput
     #[Assert\Length(max: 255)]
     public string $name;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
+    public string $subdomain;
 }

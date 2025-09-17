@@ -2,14 +2,15 @@
 
 namespace App\Service\Newsletter;
 
-use App\Api\Console\Object\StatCategoryObject;
 use App\Entity\Issue;
 use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
+use App\Entity\Send;
 use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
@@ -20,7 +21,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
 
 class NewsletterService
@@ -38,6 +38,7 @@ class NewsletterService
     public function createNewsletter(
         int    $userId,
         string $name,
+        string $subdomain
     ): Newsletter
     {
         $slugger = new AsciiSlugger();
@@ -46,7 +47,7 @@ class NewsletterService
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
-            ->setSlug($slugger->slug($name))
+            ->setSubdomain($subdomain)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
 
@@ -94,9 +95,9 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);
     }
 
-    public function getNewsletterBySlug(string $slug): ?Newsletter
+    public function getNewsletterBySubdomain(string $subdomain): ?Newsletter
     {
-        return $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $slug]);
+        return $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
     }
 
     /**
@@ -141,7 +142,7 @@ class NewsletterService
     }
 
     /**
-     * @return array<string, array{total: int, last_30_days: int}>
+     * @return array<string, array{total: int|float, last_30_days: int|float}>
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {
@@ -172,34 +173,34 @@ class NewsletterService
             ->getQuery()
             ->getSingleScalarResult();
 
-        $openRateQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
-            ->select('(sum(i.opened_sends) * 1.0) / (sum(i.total_sends) * 1.0) * 100')
-            ->where('i.newsletter = :newsletter')
-            ->andWhere('i.status = :status')
+        // bounced rate and complained rate
+        $bouncedAndComplainedRateQuery = $this->em->getRepository(Send::class)->createQueryBuilder('s')
+            ->select('COUNT(s.id) as totalSends')
+            ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedSends')
+            ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedSends')
+            ->where('s.newsletter = :newsletter')
+            ->andWhere('s.status = :status')
             ->setParameter('newsletter', $newsletter)
-            ->setParameter('status', IssueStatus::SENT);
+            ->setParameter('status', SendStatus::SENT);
 
-        $openRate = (float)$openRateQuery->getQuery()->getSingleScalarResult();
-        $openRate = round($openRate, 2);
-        $openRateLast30d = (float)$openRateQuery->andWhere('i.sent_at > :date')
+        /** @var array<string, string> $bouncedAndComplainedRateValues */
+        $bouncedAndComplainedRateValues = $bouncedAndComplainedRateQuery->getQuery()->getSingleResult();
+        $totalSends = (int)$bouncedAndComplainedRateValues['totalSends'];
+        $bouncedSends = (int)$bouncedAndComplainedRateValues['bouncedSends'];
+        $complainedSends = (int)$bouncedAndComplainedRateValues['complainedSends'];
+        $bouncedRate = $totalSends > 0 ? round(($bouncedSends / $totalSends) * 100, 2) : 0.0;
+        $complainedRate = $totalSends > 0 ? round(($complainedSends / $totalSends) * 100, 2) : 0.0;
+
+        /** @var array<string, string> $bouncedAndComplainedRateLast30dValues */
+        $bouncedAndComplainedRateLast30dValues = $bouncedAndComplainedRateQuery->andWhere('s.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
-            ->getSingleScalarResult();
-        $openRateLast30d = round($openRateLast30d, 2);
-
-        $clickRateQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
-            ->select('(sum(i.clicked_sends) * 1.0) / (sum(i.total_sends) * 1.0) * 100')
-            ->where('i.newsletter = :newsletter')
-            ->andWhere('i.status = :status')
-            ->setParameter('newsletter', $newsletter)
-            ->setParameter('status', IssueStatus::SENT);
-
-        $clickRate = (float)$clickRateQuery->getQuery()->getSingleScalarResult();
-        $clickRate = round($clickRate, 2);
-        $clickRateLast30d = (int)$clickRateQuery->andWhere('i.sent_at > :date')
-            ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleResult();
+        $totalSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['totalSends'];
+        $bouncedSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['bouncedSends'];
+        $complainedSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['complainedSends'];
+        $bouncedRateLast30d = $totalSendsLast30d > 0 ? round(($bouncedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
+        $complainedRateLast30d = $totalSendsLast30d > 0 ? round(($complainedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
 
         return [
             'subscribers' => [
@@ -210,13 +211,13 @@ class NewsletterService
                 'total' => $issues,
                 'last_30_days' => $issuesLast30d,
             ],
-            'open_rate' => [
-                'total' => $openRate,
-                'last_30_days' => $openRateLast30d,
+            'bounced_rate' => [
+                'total' => $bouncedRate,
+                'last_30_days' => $bouncedRateLast30d,
             ],
-            'click_rate' => [
-                'total' => $clickRate,
-                'last_30_days' => $clickRateLast30d,
+            'complained_rate' => [
+                'total' => $complainedRate,
+                'last_30_days' => $complainedRateLast30d,
             ],
         ];
     }
@@ -247,8 +248,8 @@ class NewsletterService
             $newsletter->setName($updates->name);
         }
 
-        if ($updates->hasProperty('slug')) {
-            $newsletter->setSlug($updates->slug);
+        if ($updates->hasProperty('subdomain')) {
+            $newsletter->setSubdomain($updates->subdomain);
         }
 
         $newsletter->setUpdatedAt($this->now());
@@ -260,13 +261,13 @@ class NewsletterService
 
     public function isUsernameTaken(string $username): bool
     {
-        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['slug' => $username]);
+        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
         return $newsletter !== null;
     }
 
     public function getArchiveUrl(Newsletter $newsletter): string
     {
         $urlArchive = Request::create($this->config->getUrlArchive());
-        return $urlArchive->getScheme() . '://' . $newsletter->getSlug() . '.' . $urlArchive->getHost();
+        return $urlArchive->getScheme() . '://' . $newsletter->getSubdomain() . '.' . $urlArchive->getHost();
     }
 }
