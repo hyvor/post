@@ -1,8 +1,8 @@
 ###################################################
 # Alias for deppendencies
-FROM node:23.11.0 AS node
+FROM node:24.8.0-alpine3.22 AS node
 FROM composer:2.8.8 AS composer
-FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
+FROM dunglas/frankenphp:1.4.4-php8.4-alpine AS frankenphp
 
 ###################################################
 ################  FRONTEND STAGES  ################
@@ -16,6 +16,7 @@ COPY frontend/package.json frontend/package-lock.json \
     frontend/svelte.config.js \
     frontend/vite.config.ts \
     frontend/tsconfig.json /app/frontend/
+RUN npm install
 # copy code
 COPY frontend/src /app/frontend/src
 COPY frontend/static /app/frontend/static
@@ -23,14 +24,12 @@ COPY shared /app/shared
 
 ###################################################
 FROM frontend-base AS frontend-dev
-RUN npm install
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM frontend-base AS frontend-prod
 # build the frontend
-RUN  npm install \
-    && npm run build \
+RUN  npm run build \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
 
 
@@ -39,7 +38,7 @@ RUN  npm install \
 ###################################################
 
 ###################################################
-FROM node:22.17.1 AS archive-base
+FROM node AS archive-base
 WORKDIR /app/archive
 # install dependencies
 COPY archive/package.json archive/package-lock.json \
@@ -112,9 +111,6 @@ FROM backend-base AS backend-dev
 
 ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 
-# symfony cli
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
-    && apt install -y symfony-cli
 # pcov for coverage
 RUN install-php-extensions pcov
 COPY backend/composer.json backend/composer.lock /app/backend/
@@ -130,7 +126,7 @@ FROM backend-base AS final
 
 ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 
-RUN apt update && apt install -y supervisor
+RUN apk update && apk add --no-cache supervisor
 
 COPY backend /app/backend
 
