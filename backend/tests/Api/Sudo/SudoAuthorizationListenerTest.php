@@ -4,8 +4,8 @@ namespace App\Tests\Api\Sudo;
 
 use App\Api\Sudo\Authorization\SudoAuthorizationListener;
 use App\Tests\Case\WebTestCase;
-use App\Tests\Factory\SudoUserFactory;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
 
@@ -24,7 +24,7 @@ class SudoAuthorizationListenerTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/init'
+            '/init',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -33,6 +33,8 @@ class SudoAuthorizationListenerTest extends WebTestCase
     public function test_sudo_api_access_with_valid_sudo_user(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        SudoUserFactory::createOne(['user_id' => 1]);
+
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request("GET", "/api/sudo/approvals");
         $this->assertResponseStatusCodeSame(200);
@@ -44,7 +46,7 @@ class SudoAuthorizationListenerTest extends WebTestCase
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request("GET", "/api/sudo/approvals");
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid session.", $this->getJson()["message"]);
+        $this->assertSame("Not logged in", $this->getJson()["message"]);
     }
 
     public function test_sudo_api_access_with_invalid_sudo_user(): void

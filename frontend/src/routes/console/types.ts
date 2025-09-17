@@ -5,7 +5,6 @@ export interface AppConfig {
 
     app: {
         default_email_domain: string;
-        archive_url: string;
         api_keys: {
             scopes: string[];
         }

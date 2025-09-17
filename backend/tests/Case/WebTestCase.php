@@ -73,7 +73,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
 
-        if ($useSession) {
+        if ($useSession || $newsletterId === null) {
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
             if ($newsletterId) {
                 $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;

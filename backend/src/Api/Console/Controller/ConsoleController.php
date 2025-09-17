@@ -63,12 +63,10 @@ class ConsoleController extends AbstractController
                 ],
                 'app' => [
                     'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
-                    'archive_url' => $this->newsletterService->getArchiveUrl($newslettersUsers[0]['newsletter']),
                     'api_keys' => [
                         'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
                     ],
                 ],
-                // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
             'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
