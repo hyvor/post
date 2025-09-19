@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\RelayDomainStatus;
 use App\Repository\DomainRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,6 +39,15 @@ class Domain
 
     #[ORM\Column]
     private bool $verified_in_relay = false;
+
+    #[ORM\Column]
+    private RelayDomainStatus $relay_status = RelayDomainStatus::PENDING;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $relay_last_checked_at = null;
+
+    #[ORM\Column]
+    private ?string $relay_error_message = null;
 
     public function getId(): int
     {
@@ -143,6 +153,42 @@ class Domain
     public function setVerifiedInRelay(bool $verified_in_relay): static
     {
         $this->verified_in_relay = $verified_in_relay;
+
+        return $this;
+    }
+
+    public function getRelayStatus(): RelayDomainStatus
+    {
+        return $this->relay_status;
+    }
+
+    public function setRelayStatus(RelayDomainStatus $relay_status): static
+    {
+        $this->relay_status = $relay_status;
+
+        return $this;
+    }
+
+    public function getRelayLastCheckedAt(): ?\DateTimeImmutable
+    {
+        return $this->relay_last_checked_at;
+    }
+
+    public function setRelayLastCheckedAt(?\DateTimeImmutable $relay_last_checked_at): static
+    {
+        $this->relay_last_checked_at = $relay_last_checked_at;
+
+        return $this;
+    }
+
+    public function getRelayErrorMessage(): ?string
+    {
+        return $this->relay_error_message;
+    }
+
+    public function setRelayErrorMessage(?string $relay_error_message): static
+    {
+        $this->relay_error_message = $relay_error_message;
 
         return $this;
     }
