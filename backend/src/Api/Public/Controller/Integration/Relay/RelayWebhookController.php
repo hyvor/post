@@ -55,18 +55,18 @@ class RelayWebhookController extends AbstractController
 
             $newStatus = $payload['new_status'];
             $updates = new UpdateDomainDto();
+            $isDomainActive = $domain->getRelayStatus() === RelayDomainStatus::ACTIVE;
 
-            if (!$domain->isVerifiedInRelay() && $newStatus === 'active') {
+            if (!$isDomainActive && $newStatus === 'active') {
                 $updates->verifiedInRelay = true;
                 $updates->relayStatus = RelayDomainStatus::ACTIVE;
-                // TODO: Update dkim values
             }
 
-            if ($domain->isVerifiedInRelay() && $newStatus === 'warning') {
+            if ($isDomainActive && $newStatus === 'warning') {
                 $updates->relayStatus = RelayDomainStatus::WARNING;
             }
 
-            if ($domain->isVerifiedInRelay() && $newStatus === 'suspended') {
+            if ($isDomainActive && $newStatus === 'suspended') {
                 $updates->verifiedInRelay = false;
                 $updates->relayStatus = RelayDomainStatus::SUSPENDED;
             }
