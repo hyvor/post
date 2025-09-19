@@ -127,10 +127,27 @@ class SendingProfileService
 
     public function getCurrentDefaultSendingProfileOfNewsletter(Newsletter $newsletter): ?SendingProfile
     {
-        return $this->sendingEmailRepository->findOneBy([
+        $default = $this->sendingEmailRepository->findOneBy([
             'newsletter' => $newsletter,
             'is_default' => true
         ]);
+
+        if ($default === null) {
+            // this should not happen, but in case it does, we return the system profile
+            return $this->getSystemSendingProfileOfNewsletter($newsletter);
+        }
+
+        return $default;
+    }
+
+    public function getSystemSendingProfileOfNewsletter(Newsletter $newsletter): SendingProfile
+    {
+        $system = $this->sendingEmailRepository->findOneBy([
+            'newsletter' => $newsletter,
+            'is_system' => true
+        ]);
+        assert($system !== null, 'System sending profile must exist');
+        return $system;
     }
 
     public function getDefaultEmailAddressOfNewsletterWithFallback(Newsletter $newsletter): string
@@ -144,7 +161,7 @@ class SendingProfileService
         return $this->getSystemAddressOfNewsletter($newsletter);
     }
 
-    public function getSystemAddressOfNewsletter(Newsletter $newsletter): string
+    private function getSystemAddressOfNewsletter(Newsletter $newsletter): string
     {
         return sprintf(
             "%s@%s",

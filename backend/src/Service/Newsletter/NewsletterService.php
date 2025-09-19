@@ -68,7 +68,8 @@ class NewsletterService
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now())
             ->setNewsletter($newsletter)
-            ->setIsSystem(true);
+            ->setIsSystem(true)
+            ->setIsDefault(true);
 
         $this->em->persist($user);
         $this->em->persist($newsletter);

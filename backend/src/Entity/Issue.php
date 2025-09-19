@@ -83,14 +83,14 @@ class Issue
     private int $clicked_sends = 0;
 
     #[ORM\Column()]
-    private ?string $from_email;
+    private ?string $from_email = null;
 
     #[ORM\Column()]
-    private ?string $from_name;
+    private ?string $from_name = null;
 
     #[ORM\Column()]
-    private ?string $reply_to_email;
-  
+    private ?string $reply_to_email = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -361,12 +361,12 @@ class Issue
         return $this;
     }
 
-    public function getFromEmail(): string
+    public function getFromEmail(): ?string
     {
         return $this->from_email;
     }
 
-    public function setFromEmail(string $from_email): static
+    public function setFromEmail(?string $from_email): static
     {
         $this->from_email = $from_email;
 
