@@ -3,8 +3,7 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Domain;
-use App\Service\Domain\DomainService;
-use App\Service\Integration\Aws\AwsDomainService;
+use App\Entity\Type\RelayDomainStatus;
 
 class DomainObject
 {
@@ -20,12 +19,9 @@ class DomainObject
      */
     public bool $verified;
 
-    /**
-     * Whether the domain has been verified to be used with SES
-     */
-    public bool $verified_in_relay;
-
-    public bool $requested_by_current_website;
+    public RelayDomainStatus $relay_status;
+    public ?int $relay_last_checked_at;
+    public ?string $relay_error_message;
 
     public function __construct(Domain $domain)
     {
@@ -35,6 +31,8 @@ class DomainObject
         $this->dkim_public_key = $domain->getDkimTxtvalue();
         $this->dkim_txt_name = $domain->getDkimHost();
         $this->dkim_txt_value = $domain->getDkimTxtvalue();
-        $this->verified_in_relay = $domain->isVerifiedInRelay();
+        $this->relay_status = $domain->getRelayStatus();
+        $this->relay_last_checked_at = $domain->getRelayLastCheckedAt()?->getTimestamp() ?? null;
+        $this->relay_error_message = $domain->getRelayErrorMessage();
     }
 }

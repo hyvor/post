@@ -122,8 +122,8 @@ class DomainService
         try {
             $result = $this->relayApiClient->verifyDomain($domain->getRelayId());
         } catch (RelayApiException $e) {
-            $this->logger->critical('Failed to create email domain in Hyvor Relay', [
-                'domain' => $domain,
+            $this->logger->critical('Failed to verify email domain in Hyvor Relay', [
+                'domain' => $domain->getDomain(),
                 'error' => $e,
             ]);
             throw new VerifyDomainException(previous: $e);

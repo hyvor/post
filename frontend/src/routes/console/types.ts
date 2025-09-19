@@ -214,6 +214,8 @@ export interface IssueSend {
     complained_at: number | null;
 }
 
+export type RelayDomainStatus = 'pending' | 'active' | 'warning' | 'suspended';
+
 export type Domain = {
     id: number;
     domain: string;
@@ -221,8 +223,9 @@ export type Domain = {
     dkim_txt_name: string;
     dkim_txt_value: string;
     verified: boolean;
-    verified_in_ses: boolean;
-    requested_by_current_website: boolean;
+    relay_status: RelayDomainStatus;
+    relay_last_checked_at: number | null;
+    relay_error_message: string | null;
 };
 
 

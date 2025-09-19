@@ -178,6 +178,7 @@ class RelayWebhookTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
 
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber1->getStatus());
+        $this->assertSame('bounce - Hard bounce', $subscriber1->getUnsubscribeReason());
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber2->getStatus());
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber3->getStatus());
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber4->getStatus());

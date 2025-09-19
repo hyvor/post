@@ -14,7 +14,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
-use App\Tests\Factory\SudoUserFactory;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
