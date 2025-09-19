@@ -9,4 +9,19 @@
 	let { content = null, onDocUpdate }: Props = $props();
 </script>
 
-<Editor value={content} onvaluechange={onDocUpdate} />
+<Editor
+	value={content}
+	onvaluechange={onDocUpdate}
+	config={{
+		// colorButtonText:
+		// colorButtonBackground:
+
+		tableEnabled: false, // add later
+		tocEnabled: false,
+		bookmarkEnabled: false, // add later
+
+		// TODO:
+		imageUploader: async () => null,
+		audioUploader: async () => null
+	}}
+/>
