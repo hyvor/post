@@ -116,14 +116,6 @@ class RelayWebhookController extends AbstractController
     /**
      * @param array<string, mixed> $payload
      */
-    public function handleSendRecipientDeferred(array $payload): void
-    {
-
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     */
     private function handleDomainStatusChanged(array $payload): void
     {
         assert(
