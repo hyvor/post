@@ -27,7 +27,7 @@ class RelayWebhookTest extends WebTestCase
     public function test_domain_status_changed_active(): void
     {
         $domain = DomainFactory::createOne([
-            'verified_in_relay' => false
+            'relay_status' => RelayDomainStatus::PENDING,
         ]);
 
         $data = [
@@ -66,7 +66,7 @@ class RelayWebhookTest extends WebTestCase
     public function test_domain_status_changed_warning(): void
     {
         $domain = DomainFactory::createOne([
-            'verified_in_relay' => true
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
 
         $data = [
@@ -105,7 +105,7 @@ class RelayWebhookTest extends WebTestCase
     public function test_domain_status_changed_suspended(): void
     {
         $domain = DomainFactory::createOne([
-            'verified_in_relay' => true
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
 
         $data = [

@@ -3,6 +3,7 @@
 namespace App\Service\Domain;
 
 use App\Entity\Domain;
+use App\Entity\Type\RelayDomainStatus;
 use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
@@ -57,7 +58,7 @@ class DomainService
         return $this->em->getRepository(Domain::class)
             ->findBy([
                 'user_id' => $userId,
-                'verified_in_relay' => true
+                'relay_status' => [RelayDomainStatus::ACTIVE, RelayDomainStatus::PENDING]
             ]);
     }
 
@@ -129,11 +130,12 @@ class DomainService
             throw new VerifyDomainException(previous: $e);
         }
 
+        // TODO: Fix this to handle status
         $verified = $result->dkim_verified;
 
         if ($verified) {
             // use a separate method with DTO
-            $domain->setVerifiedInRelay(true);
+            $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
 
 
@@ -171,9 +173,6 @@ class DomainService
 
     public function updateDomain(Domain $domain, UpdateDomainDto $updates): Domain
     {
-        if ($updates->verifiedInRelaySet) {
-            $domain->setVerifiedInRelay($updates->verifiedInRelay);
-        }
         if ($updates->relayStatusSet) {
             $domain->setRelayStatus($updates->relayStatus);
         }

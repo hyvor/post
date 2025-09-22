@@ -9,6 +9,7 @@ use App\Service\Subscriber\SubscriberService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RelayWebhookController extends AbstractController
@@ -36,66 +37,87 @@ class RelayWebhookController extends AbstractController
             isset($data['payload'])
             && is_array($data['payload'])
         );
+
+        /** @var array<string, mixed> $payload */
         $payload = $data['payload'];
 
+
+        /** **************** EVENTS **************** */
+        if ($event === 'send.recipient.accepted') {
+            $this->handleSendRecipientAccepted($payload);
+        }
+
         if ($event === 'domain.status.changed') {
-
-            assert(
-                isset($payload['domain'])
-                && is_array($payload['domain'])
-            );
-
-            /** @var string $domainName */
-            $domainName = $payload['domain']['domain'];
-            $domain = $this->domainService->getDomainByDomainName($domainName);
-
-            if ($domain === null) {
-                throw new \HttpException('Domain not found');
-            }
-
-            $newStatus = $payload['new_status'];
-            $updates = new UpdateDomainDto();
-            $isDomainActive = $domain->getRelayStatus() === RelayDomainStatus::ACTIVE;
-
-            if (!$isDomainActive && $newStatus === 'active') {
-                $updates->verifiedInRelay = true;
-                $updates->relayStatus = RelayDomainStatus::ACTIVE;
-            }
-
-            if ($isDomainActive && $newStatus === 'warning') {
-                $updates->relayStatus = RelayDomainStatus::WARNING;
-            }
-
-            if ($isDomainActive && $newStatus === 'suspended') {
-                $updates->verifiedInRelay = false;
-                $updates->relayStatus = RelayDomainStatus::SUSPENDED;
-            }
-
-            $this->domainService->updateDomain($domain, $updates);
+            $this->handleDomainStatusChanged($payload);
         }
 
         if ($event === 'suppression.created') {
-
-            assert(
-                isset($payload['suppression'])
-                && is_array($payload['suppression'])
-            );
-
-            $suppression = $payload['suppression'];
-            /** @var string $suppressedEmail */
-            $suppressedEmail = $suppression['email'];
-            /** @var string $reason */
-            $reason = $suppression['reason'];
-            /** @var string|null $description */
-            $description = $suppression['description'] ?? null;
-
-
-            $this->subscriberService->unsubscribeByEmail(
-                $suppressedEmail,
-                reason: "$reason" . ($description ? " - $description" : '')
-            );
+            $this->handleSuppressionCreated($payload);
         }
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function handleSendRecipientAccepted(array $payload): void
+    {
+        assert(isset($payload['recipient']));
+        // TODO
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function handleDomainStatusChanged(array $payload): void
+    {
+        assert(
+            isset($payload['domain'])
+            && is_array($payload['domain'])
+        );
+
+        /** @var string $domainName */
+        $domainName = $payload['domain']['domain'];
+        $domain = $this->domainService->getDomainByDomainName($domainName);
+
+        if ($domain === null) {
+            throw new BadRequestHttpException('Domain not found');
+        }
+
+        assert(
+            isset($payload['new_status'])
+            && is_string($payload['new_status'])
+        );
+        $newStatus = RelayDomainStatus::from($payload['new_status']);
+
+        $updates = new UpdateDomainDto();
+        $updates->relayStatus = $newStatus;
+
+        $this->domainService->updateDomain($domain, $updates);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function handleSuppressionCreated(array $payload): void
+    {
+        assert(
+            isset($payload['suppression'])
+            && is_array($payload['suppression'])
+        );
+
+        $suppression = $payload['suppression'];
+        /** @var string $suppressedEmail */
+        $suppressedEmail = $suppression['email'];
+        /** @var string $reason */
+        $reason = $suppression['reason'];
+        /** @var string|null $description */
+        $description = $suppression['description'] ?? null;
+
+        $this->subscriberService->unsubscribeByEmail(
+            $suppressedEmail,
+            reason: "$reason" . ($description ? " - $description" : '')
+        );
     }
 }

@@ -37,13 +37,6 @@ class Domain
     #[ORM\Column]
     private int $relay_id;
 
-    /**
-     * @deprecated
-     * TODO: Remove all usages and use $relay_status instead.
-     */
-    #[ORM\Column]
-    private bool $verified_in_relay = false;
-
     #[ORM\Column]
     private RelayDomainStatus $relay_status = RelayDomainStatus::PENDING;
 
@@ -149,22 +142,9 @@ class Domain
         return $this;
     }
 
-    /**
-     * @deprecated Use getRelayStatus() instead.
-     */
     public function isVerifiedInRelay(): bool
     {
-        return $this->verified_in_relay;
-    }
-
-    /**
-     * @deprecated Use getRelayStatus() instead.
-     */
-    public function setVerifiedInRelay(bool $verified_in_relay): static
-    {
-        $this->verified_in_relay = $verified_in_relay;
-
-        return $this;
+        return $this->getRelayStatus() === RelayDomainStatus::ACTIVE || $this->getRelayStatus() === RelayDomainStatus::WARNING;
     }
 
     public function getRelayStatus(): RelayDomainStatus

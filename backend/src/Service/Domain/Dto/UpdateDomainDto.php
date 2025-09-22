@@ -6,13 +6,6 @@ use App\Entity\Type\RelayDomainStatus;
 
 class UpdateDomainDto
 {
-    public bool $verifiedInRelay {
-        set {
-            $this->verifiedInRelay = $value;
-            $this->verifiedInRelaySet = true;
-        }
-    }
-
     public RelayDomainStatus $relayStatus {
         set {
             $this->relayStatus = $value;
