@@ -8,17 +8,33 @@ use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
 use App\Service\Subscriber\SubscriberService;
-use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * @phpstan-type SendRecipientWebhookPayload array{
+ *     'send': array{'headers': array<string, string>},
+ *     'attempt': array{'created_at': string}
+ * }
+ *
+ * @phpstan-type DomainStatusChangedPayload array{
+ *     'domain': array{'domain': string},
+ *     'new_status': string
+ * }
+ *
+ * @phpstan-type SuppressionCreatedPayload array{
+ *     'suppression': array{
+ *          'email': string,
+ *          'reason': string,
+ *          'description'?: string
+ *     }
+ * }
+ */
 class RelayWebhookController extends AbstractController
 {
-    use ClockAwareTrait;
-
     public function __construct(
         private DomainService     $domainService,
         private SubscriberService $subscriberService,
@@ -45,54 +61,24 @@ class RelayWebhookController extends AbstractController
 
         /** **************** EVENTS **************** */
         if (str_starts_with('send.recipient.', $event)) {
-            /** @var array{
-             *     'send': array{
-             *         'headers': array<string, string>
-             *     },
-             *     'attempt': array{
-             *         'created_at': string
-             *     }
-             * } $payload
-             */
+            /** @var SendRecipientWebhookPayload $payload */
             $this->handleSendRecipientWebhooks($payload, $event);
         }
 
         if ($event === 'domain.status.changed') {
-            /** @var array{
-             *     domain: array{
-             *         domain: string
-             *    },
-             *    new_status: string
-             * } $payload
-             */
+            /** @var DomainStatusChangedPayload $payload */
             $this->handleDomainStatusChanged($payload);
         }
 
         if ($event === 'suppression.created') {
-            /** @var array{
-             *     suppression: array{
-             *          email: string,
-             *          reason: string,
-             *          description?: string
-             *      }
-             *  } $payload
-             */
+            /** @var SuppressionCreatedPayload $payload */
             $this->handleSuppressionCreated($payload);
         }
 
         return new JsonResponse();
     }
 
-    /**
-     * @param array{
-     *     'send': array{
-     *         'headers': array<string, string>
-     *     },
-     *     'attempt': array{
-     *         'created_at': string
-     *     }
-     * } $payload
-     */
+    /** @param SendRecipientWebhookPayload $payload */
     private function handleSendRecipientWebhooks(array $payload, string $event): void
     {
         $send = $payload['send'];
@@ -124,14 +110,7 @@ class RelayWebhookController extends AbstractController
         $this->sendService->updateSend($send, $updates);
     }
 
-    /**
-     * @param array{
-     *     'domain': array{
-     *         'domain': string
-     *    },
-     *     'new_status': string
-     * } $payload
-     */
+    /** @param DomainStatusChangedPayload $payload */
     private function handleDomainStatusChanged(array $payload): void
     {
         $domainName = $payload['domain']['domain'];
@@ -149,15 +128,7 @@ class RelayWebhookController extends AbstractController
         $this->domainService->updateDomain($domain, $updates);
     }
 
-    /**
-     * @param array{
-     *     'suppression': array{
-     *          'email': string,
-     *          'reason': string,
-     *          'description'?: string
-     *     }
-     * } $payload
-     */
+    /** @param SuppressionCreatedPayload $payload */
     private function handleSuppressionCreated(array $payload): void
     {
         $suppression = $payload['suppression'];
