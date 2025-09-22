@@ -3,6 +3,7 @@
 namespace App\Api\Public\Controller\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
+use App\Entity\Type\SendStatus;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Issue\Dto\UpdateSendDto;
@@ -60,7 +61,7 @@ class RelayWebhookController extends AbstractController
         $payload = $data['payload'];
 
         /** **************** EVENTS **************** */
-        if (str_starts_with('send.recipient.', $event)) {
+        if (str_starts_with($event, 'send.recipient.')) {
             /** @var SendRecipientWebhookPayload $payload */
             $this->handleSendRecipientWebhooks($payload, $event);
         }
@@ -96,12 +97,15 @@ class RelayWebhookController extends AbstractController
 
         if ($event === 'send.recipient.accepted') {
             $updates->deliveredAt = $attemptedTime;
+            $updates->status = SendStatus::SENT;
         }
         if ($event === 'send.recipient.failed') {
             $updates->failedAt = $attemptedTime;
+            $updates->status = SendStatus::FAILED;
         }
         if ($event === 'send.recipient.bounced') {
             $updates->bouncedAt = $attemptedTime;
+            $updates->status = SendStatus::FAILED;
         }
         if ($event === 'send.recipient.complained') {
             $updates->complainedAt = $attemptedTime;

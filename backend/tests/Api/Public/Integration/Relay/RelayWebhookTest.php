@@ -3,9 +3,11 @@
 namespace App\Tests\Api\Public\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
+use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +24,117 @@ class RelayWebhookTest extends WebTestCase
             '/integration/relay/webhook',
             $data
         );
+    }
+
+    public function test_send_recipient_accepted(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'delivered_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame(SendStatus::SENT, $send->getStatus());
+        $this->assertNotNull($send->getDeliveredAt());
+    }
+
+    public function test_send_recipient_failed(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'failed_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.failed",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame(SendStatus::FAILED, $send->getStatus());
+        $this->assertNotNull($send->getFailedAt());
+    }
+
+    public function test_send_recipient_bounced(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'bounced_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.bounced",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame(SendStatus::FAILED, $send->getStatus());
+        $this->assertNotNull($send->getBouncedAt());
+    }
+
+    public function test_send_recipient_complained(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::SENT,
+            'complained_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.complained",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertNotNull($send->getComplainedAt());
     }
 
     public function test_domain_status_changed_active(): void

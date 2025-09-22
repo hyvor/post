@@ -9,6 +9,7 @@ class UpdateSendDto
 {
     use OptionalPropertyTrait;
 
+    public SendStatus $status;
     public ?\DateTimeImmutable $deliveredAt;
     public ?\DateTimeImmutable $failedAt;
     public ?\DateTimeImmutable $complainedAt;
