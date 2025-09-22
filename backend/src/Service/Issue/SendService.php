@@ -156,6 +156,10 @@ class SendService
             $send->setDeliveredAt($updates->deliveredAt);
         }
 
+        if ($updates->hasProperty('failedAt')) {
+            $send->setFailedAt($updates->failedAt);
+        }
+
         if ($updates->hasProperty('bouncedAt')) {
             $send->setBouncedAt($updates->bouncedAt);
         }

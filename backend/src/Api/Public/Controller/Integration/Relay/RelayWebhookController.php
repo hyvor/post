@@ -98,6 +98,10 @@ class RelayWebhookController extends AbstractController
             $updates->deliveredAt = $attemptedTime;
         }
 
+        if ($event === 'send.recipient.failed') {
+            $updates->failedAt = $attemptedTime;
+        }
+
         if ($event === 'send.recipient.bounced') {
             $updates->bouncedAt = $attemptedTime;
         }

@@ -10,6 +10,7 @@ class UpdateSendDto
     use OptionalPropertyTrait;
 
     public ?\DateTimeImmutable $deliveredAt;
+    public ?\DateTimeImmutable $failedAt;
     public ?\DateTimeImmutable $complainedAt;
     public ?\DateTimeImmutable $bouncedAt;
     public bool $hardBounce;
