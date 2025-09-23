@@ -82,6 +82,34 @@ class RelayWebhookTest extends WebTestCase
         $this->assertNotNull($send->getFailedAt());
     }
 
+    public function test_send_recipient_suppressed(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'failed_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.suppressed",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame(SendStatus::FAILED, $send->getStatus());
+        $this->assertNotNull($send->getFailedAt());
+    }
+
     public function test_send_recipient_bounced(): void
     {
         $send = SendFactory::createOne([
