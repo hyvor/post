@@ -113,10 +113,8 @@ class SendingProfileService
                 $sendingProfile->getNewsletter()
             );
 
-            if ($currentDefaultSendingProfile) {
-                $currentDefaultSendingProfile->setIsDefault(false);
-                $currentDefaultSendingProfile->setUpdatedAt($this->now());
-            }
+            $currentDefaultSendingProfile->setIsDefault(false);
+            $currentDefaultSendingProfile->setUpdatedAt($this->now());
         }
 
         $sendingProfile->setUpdatedAt($this->now());
@@ -125,7 +123,7 @@ class SendingProfileService
         return $sendingProfile;
     }
 
-    public function getCurrentDefaultSendingProfileOfNewsletter(Newsletter $newsletter): ?SendingProfile
+    public function getCurrentDefaultSendingProfileOfNewsletter(Newsletter $newsletter): SendingProfile
     {
         $default = $this->sendingProfileRepository->findOneBy([
             'newsletter' => $newsletter,
@@ -153,12 +151,7 @@ class SendingProfileService
     public function getDefaultEmailAddressOfNewsletterWithFallback(Newsletter $newsletter): string
     {
         $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
-
-        if ($sendingProfile && $sendingProfile->getFromEmail()) {
-            return $sendingProfile->getFromEmail();
-        }
-
-        return $this->getSystemAddressOfNewsletter($newsletter);
+        return $sendingProfile->getFromEmail();
     }
 
     public function getSystemAddressOfNewsletter(Newsletter $newsletter): string
@@ -190,13 +183,11 @@ class SendingProfileService
         $this->em->flush();
     }
 
-    public function setSendingProfileToEmail(Email $email, Newsletter $newsletter): Email
+    public function setSendingProfileToEmail(Email $email, SendingProfile $sendingProfile): Email
     {
-        $sendingProfile = $this->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
-
-        $from = $sendingProfile?->getFromEmail() ?? $this->getSystemAddressOfNewsletter($newsletter);
-        $fromName = $sendingProfile?->getFromName() ?? $newsletter->getName();
-        $replyTo = $sendingProfile?->getReplyToEmail() ?? $from;
+        $from = $sendingProfile->getFromEmail();
+        $fromName = $sendingProfile->getFromName() ?? $sendingProfile->getNewsletter()->getName();
+        $replyTo = $sendingProfile->getReplyToEmail() ?? $from;
 
         return $email
             ->from(new Address(
