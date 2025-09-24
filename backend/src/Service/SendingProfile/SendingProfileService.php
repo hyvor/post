@@ -20,7 +20,7 @@ class SendingProfileService
 
     public function __construct(
         private EntityManagerInterface   $em,
-        private SendingProfileRepository $sendingEmailRepository,
+        private SendingProfileRepository $sendingProfileRepository,
         private AppConfig                $appConfig,
     )
     {
@@ -31,17 +31,17 @@ class SendingProfileService
      */
     public function getSendingProfiles(Newsletter $newsletter): array
     {
-        return $this->sendingEmailRepository->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
+        return $this->sendingProfileRepository->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
     }
 
     public function getSendingProfilesCount(Newsletter $newsletter): int
     {
-        return $this->sendingEmailRepository->count(['newsletter' => $newsletter]);
+        return $this->sendingProfileRepository->count(['newsletter' => $newsletter]);
     }
 
     public function getSendingProfileOfNewsletterById(Newsletter $newsletter, int $id): ?SendingProfile
     {
-        return $this->sendingEmailRepository->findOneBy([
+        return $this->sendingProfileRepository->findOneBy([
             'id' => $id,
             'newsletter' => $newsletter,
         ]);
@@ -127,7 +127,7 @@ class SendingProfileService
 
     public function getCurrentDefaultSendingProfileOfNewsletter(Newsletter $newsletter): ?SendingProfile
     {
-        $default = $this->sendingEmailRepository->findOneBy([
+        $default = $this->sendingProfileRepository->findOneBy([
             'newsletter' => $newsletter,
             'is_default' => true
         ]);
@@ -142,7 +142,7 @@ class SendingProfileService
 
     public function getSystemSendingProfileOfNewsletter(Newsletter $newsletter): SendingProfile
     {
-        $system = $this->sendingEmailRepository->findOneBy([
+        $system = $this->sendingProfileRepository->findOneBy([
             'newsletter' => $newsletter,
             'is_system' => true
         ]);
