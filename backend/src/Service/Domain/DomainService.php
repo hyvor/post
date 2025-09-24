@@ -130,14 +130,12 @@ class DomainService
             throw new VerifyDomainException(previous: $e);
         }
 
-        // TODO: Fix this to handle status
-        $verified = $result->dkim_verified;
+        $verified = $result->status === RelayDomainStatus::ACTIVE;
 
         if ($verified) {
             // use a separate method with DTO
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
-
 
             $strings = $this->stringsFactory->create();
 
