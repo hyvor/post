@@ -142,8 +142,11 @@ class RelayApiClient
     {
         return $this->callApi(
             'POST',
-            "/domains/{$id}/verify",
+            "/domains/verify",
             VerifyDomainResponse::class,
+            [
+                'id' => $id
+            ]
         );
     }
 
