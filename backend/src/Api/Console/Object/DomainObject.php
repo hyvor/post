@@ -14,11 +14,6 @@ class DomainObject
     public string $dkim_txt_name;
     public string $dkim_txt_value;
 
-    /**
-     * Whether the domain has been verified to be used with the current website ID
-     */
-    public bool $verified;
-
     public RelayDomainStatus $relay_status;
     public ?int $relay_last_checked_at;
     public ?string $relay_error_message;

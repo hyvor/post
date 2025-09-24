@@ -222,7 +222,6 @@ export type Domain = {
     dkim_public_key: string;
     dkim_txt_name: string;
     dkim_txt_value: string;
-    verified: boolean;
     relay_status: RelayDomainStatus;
     relay_last_checked_at: number | null;
     relay_error_message: string | null;
