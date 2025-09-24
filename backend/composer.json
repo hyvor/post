@@ -1,105 +1,105 @@
 {
-    "type": "project",
-    "license": "proprietary",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "php": ">=8.4",
-        "ext-ctype": "*",
-        "ext-dom": "*",
-        "ext-iconv": "*",
-        "ext-openssl": "*",
-        "aws/aws-php-sns-message-validator": "^1.10",
-        "aws/aws-sdk-php": "^3.351.8",
-        "doctrine/dbal": "^3.10.0",
-        "doctrine/doctrine-bundle": "^2.15.0",
-        "doctrine/doctrine-migrations-bundle": "^3.4.2",
-        "doctrine/orm": "^3.5.0",
-        "dunglas/doctrine-json-odm": "^1.4.2",
-        "fakerphp/faker": "^1.24.1",
-        "hyvor/internal": "^3.1.4",
-        "hyvor/phrosemirror": "^1.0.5",
-        "league/flysystem-aws-s3-v3": "^3.29",
-        "nelmio/cors-bundle": "^2.5",
-        "runtime/frankenphp-symfony": "^0.2.0",
-        "symfony/clock": "7.2.*",
-        "symfony/console": "7.2.*",
-        "symfony/doctrine-messenger": "7.2.*",
-        "symfony/dotenv": "7.2.*",
-        "symfony/flex": "^2.8.1",
-        "symfony/framework-bundle": "7.2.*",
-        "symfony/lock": "7.2.*",
-        "symfony/mailer": "7.2.*",
-        "symfony/messenger": "7.2.*",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/rate-limiter": "7.2.*",
-        "symfony/runtime": "7.2.*",
-        "symfony/scheduler": "7.3.*",
-        "symfony/serializer": "7.2.*",
-        "symfony/string": "7.2.*",
-        "symfony/twig-bundle": "7.2.*",
-        "symfony/uid": "7.2.*",
-        "symfony/ux-twig-component": "^2.28.0",
-        "symfony/validator": "7.3.*",
-        "symfony/yaml": "7.2.*",
-        "twig/cssinliner-extra": "^3.21",
-        "twig/extra-bundle": "^3.21"
+  "type": "project",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.4",
+    "ext-ctype": "*",
+    "ext-dom": "*",
+    "ext-iconv": "*",
+    "ext-openssl": "*",
+    "aws/aws-php-sns-message-validator": "^1.10",
+    "aws/aws-sdk-php": "^3.351.8",
+    "doctrine/dbal": "^3.10.0",
+    "doctrine/doctrine-bundle": "^2.15.0",
+    "doctrine/doctrine-migrations-bundle": "^3.4.2",
+    "doctrine/orm": "^3.5.0",
+    "dunglas/doctrine-json-odm": "^1.4.2",
+    "fakerphp/faker": "^1.24.1",
+    "hyvor/internal": "^3.1.5",
+    "hyvor/phrosemirror": "^1.0.5",
+    "league/flysystem-aws-s3-v3": "^3.29",
+    "nelmio/cors-bundle": "^2.5",
+    "runtime/frankenphp-symfony": "^0.2.0",
+    "symfony/clock": "7.2.*",
+    "symfony/console": "7.2.*",
+    "symfony/doctrine-messenger": "7.2.*",
+    "symfony/dotenv": "7.2.*",
+    "symfony/flex": "^2.8.1",
+    "symfony/framework-bundle": "7.2.*",
+    "symfony/lock": "7.2.*",
+    "symfony/mailer": "7.2.*",
+    "symfony/messenger": "7.2.*",
+    "symfony/monolog-bundle": "^3.10",
+    "symfony/rate-limiter": "7.2.*",
+    "symfony/runtime": "7.2.*",
+    "symfony/scheduler": "7.3.*",
+    "symfony/serializer": "7.2.*",
+    "symfony/string": "7.2.*",
+    "symfony/twig-bundle": "7.2.*",
+    "symfony/uid": "7.2.*",
+    "symfony/ux-twig-component": "^2.28.0",
+    "symfony/validator": "7.3.*",
+    "symfony/yaml": "7.2.*",
+    "twig/cssinliner-extra": "^3.21",
+    "twig/extra-bundle": "^3.21"
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "symfony/flex": true,
+      "symfony/runtime": true
     },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
-        },
-        "bump-after-update": true,
-        "sort-packages": true
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*",
-        "symfony/polyfill-php82": "*"
-    },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "7.2.*"
-        }
-    },
-    "require-dev": {
-        "dama/doctrine-test-bundle": "^8.3",
-        "phpstan/phpstan": "^2.1.21",
-        "phpunit/phpunit": "^11.5.27",
-        "symfony/browser-kit": "7.2.*",
-        "symfony/css-selector": "7.2.*",
-        "symfony/maker-bundle": "^1.64.0",
-        "symfony/phpunit-bridge": "^7.3.1",
-        "symfony/stopwatch": "7.2.*",
-        "symfony/web-profiler-bundle": "7.2.*",
-        "zenstruck/foundry": "^2.6.1",
-        "zenstruck/messenger-test": "^1.11.1"
+    "bump-after-update": true,
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "tests/"
+    }
+  },
+  "replace": {
+    "symfony/polyfill-ctype": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php74": "*",
+    "symfony/polyfill-php80": "*",
+    "symfony/polyfill-php81": "*",
+    "symfony/polyfill-php82": "*"
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    }
+  },
+  "conflict": {
+    "symfony/symfony": "*"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "7.2.*"
+    }
+  },
+  "require-dev": {
+    "dama/doctrine-test-bundle": "^8.3",
+    "phpstan/phpstan": "^2.1.21",
+    "phpunit/phpunit": "^11.5.27",
+    "symfony/browser-kit": "7.2.*",
+    "symfony/css-selector": "7.2.*",
+    "symfony/maker-bundle": "^1.64.0",
+    "symfony/phpunit-bridge": "^7.3.1",
+    "symfony/stopwatch": "7.2.*",
+    "symfony/web-profiler-bundle": "7.2.*",
+    "zenstruck/foundry": "^2.6.1",
+    "zenstruck/messenger-test": "^1.11.1"
+  }
 }
