@@ -13,6 +13,8 @@
     import type {Domain} from '../types';
     import DnsRecordsModal from './DnsRecordsModal.svelte';
     import IconTrash from '@hyvor/icons/IconTrash';
+    import DomainStatusTag from "./DomainStatusTag.svelte";
+    import RelativeTime from "../@components/utils/RelativeTime.svelte";
 
     export let domain: Domain;
     export let onDelete: () => void;
@@ -60,12 +62,11 @@
         verifyDomain(domain.id)
             .then((res) => {
                 domain = res.domain;
-                if (res.domain.verified_in_ses === false) {
+                if (res.domain.relay_status !== 'active') {
                     verificationDebug = res.data.debug;
                     showVerificationDebug = true;
                 } else {
                     toast.success('Verification Successful');
-                    domain.verified_in_ses = true;
                 }
             })
             .catch((error: any) => {
@@ -79,23 +80,30 @@
 
 <div class="domain-row">
     <div class="domain-info">
-        <div class="domain-name">{domain.domain}</div>
-        <div class="domain-status">
-            <Tag
-                size="small"
-                color={getVerificationStatusColor(domain.verified_in_ses)}
-                on:click={() => (showVerificationDebug = true)}
-                interactive={true}
-            >
-                {domain.verified_in_ses ? 'Verified' : 'Not Verified'}
-            </Tag>
+        <div class="top">
+            <div class="domain-name">{domain.domain}</div>
+            <DomainStatusTag status={domain.relay_status} bind:showVerificationDebug/>
+        </div>
+        <div class="domain-meta">
+            <!--            <div class="error">-->
+            {#if domain.relay_status === 'pending' || domain.relay_status === 'warning'}
+                {#if domain.relay_last_checked_at}
+                    <div>Last Checked:
+                        <RelativeTime unix={domain.relay_last_checked_at}/>
+                    </div>
+                {/if}
+                {#if domain.relay_error_message}
+                    <div>Error: {domain.relay_error_message}</div>
+                {/if}
+            {/if}
+            <!--            </div>-->
         </div>
     </div>
     <div class="domain-actions">
         <Button size="small" color="input" on:click={() => (showDnsRecords = true)} {loading}>
             View DNS Records
         </Button>
-        {#if !domain.verified_in_ses}
+        {#if domain.relay_status === 'pending'}
             <Button size="small" color="input" on:click={handleVerify} {loading}>
                 Verify Domain
             </Button>
@@ -108,17 +116,24 @@
 
 {#if showVerificationDebug}
     <Modal
-        title="Verification Status"
-        footer={{ confirm: false, cancel: { text: 'Close' } }}
-        on:cancel={() => (showVerificationDebug = false)}
-        show={true}
+            title="Verification Status"
+            footer={{ confirm: false, cancel: { text: 'Close' } }}
+            on:cancel={() => (showVerificationDebug = false)}
+            closeOnOutsideClick={false}
+            closeOnEscape={false}
+            show={true}
     >
         <p>
-            Domain verification for <strong>{domain.domain}</strong> is {domain.verified_in_ses
-            ? 'verified'
-            : 'not verified'}.
-            {#if !domain.verified_in_ses}
-                Please note that it may take up to 72 hours for the changes to take effect.
+            {#if domain.relay_status === 'suspended'}
+                Domain <strong>{domain.domain}</strong> is suspended. Please contact support for more information.
+            {:else if domain.relay_status === 'warning' }
+                Domain <strong>{domain.domain}</strong> is put on warning status. Please check the DNS records
+                and ensure they are correct. Please contact support for more information.
+            {:else if domain.relay_status === 'pending'}
+                Domain verification for <strong>{domain.domain}</strong> is in pending
+                status. Please note that it may take up to 72 hours for the changes to take effect.
+            {:else}
+                Domain verification for <strong>{domain.domain}</strong> is in active status.
             {/if}
         </p>
         {#if verificationDebug}
@@ -146,13 +161,18 @@
         gap: 5px;
     }
 
+    .top {
+        display: flex;
+        gap: 10px;
+    }
+
     .domain-name {
         font-weight: 500;
     }
 
-    .domain-status {
-        display: flex;
-        gap: 5px;
+    .domain-meta {
+        font-size: 12px;
+        color: var(--text-light);
     }
 
     .domain-actions {

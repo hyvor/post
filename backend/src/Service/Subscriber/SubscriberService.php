@@ -32,26 +32,28 @@ class SubscriberService
     public const BULK_SUBSCRIBER_LIMIT = 100;
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private SubscriberRepository $subscriberRepository,
-        private MessageBusInterface $messageBus,
+        private EntityManagerInterface   $em,
+        private SubscriberRepository     $subscriberRepository,
+        private MessageBusInterface      $messageBus,
         private EventDispatcherInterface $eventDispatcher,
-    ) {
+    )
+    {
     }
 
     /**
      * @param iterable<NewsletterList> $lists
      */
     public function createSubscriber(
-        Newsletter $newsletter,
-        string $email,
-        iterable $lists,
-        SubscriberStatus $status,
-        SubscriberSource $source,
-        ?string $subscribeIp = null,
+        Newsletter          $newsletter,
+        string              $email,
+        iterable            $lists,
+        SubscriberStatus    $status,
+        SubscriberSource    $source,
+        ?string             $subscribeIp = null,
         ?\DateTimeImmutable $subscribedAt = null,
         ?\DateTimeImmutable $unsubscribedAt = null
-    ): Subscriber {
+    ): Subscriber
+    {
         $subscriber = new Subscriber()
             ->setNewsletter($newsletter)
             ->setEmail($email)
@@ -116,13 +118,14 @@ class SubscriberService
      * @return ArrayCollection<int, Subscriber>
      */
     public function getSubscribers(
-        Newsletter $newsletter,
+        Newsletter        $newsletter,
         ?SubscriberStatus $status,
-        ?int $listId,
-        ?string $search,
-        int $limit,
-        int $offset
-    ): ArrayCollection {
+        ?int              $listId,
+        ?string           $search,
+        int               $limit,
+        int               $offset
+    ): ArrayCollection
+    {
         $qb = $this->subscriberRepository->createQueryBuilder('s');
 
         $qb
@@ -231,10 +234,11 @@ class SubscriberService
     }
 
     public function unsubscribeBySend(
-        Send $send,
+        Send                $send,
         ?\DateTimeImmutable $at = null,
-        ?string $reason = null
-    ): void {
+        ?string             $reason = null
+    ): void
+    {
         $subscriber = $send->getSubscriber();
 
         $update = new UpdateSubscriberDto();
@@ -244,6 +248,27 @@ class SubscriberService
         $update->unsubscribedReason = $reason;
 
         $this->updateSubscriber($subscriber, $update);
+    }
+
+    public function unsubscribeByEmail(
+        string              $email,
+        ?\DateTimeImmutable $at = null,
+        ?string             $reason = null
+    ): void
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->update(Subscriber::class, 's')
+            ->set('s.status', ':status')
+            ->set('s.unsubscribed_at', ':unsubscribedAt')
+            ->set('s.unsubscribe_reason', ':reason')
+            ->where('s.email = :email')
+            ->setParameter('status', SubscriberStatus::UNSUBSCRIBED->value)
+            ->setParameter('unsubscribedAt', $at ?? $this->now())
+            ->setParameter('reason', $reason)
+            ->setParameter('email', $email);
+
+        $qb->getQuery()->execute();
     }
 
     public function exportSubscribers(Newsletter $newsletter): SubscriberExport
@@ -265,8 +290,9 @@ class SubscriberService
 
     public function markSubscriberExportAsFailed(
         SubscriberExport $subscriberExport,
-        string $errorMessage
-    ): void {
+        string           $errorMessage
+    ): void
+    {
         $subscriberExport->setStatus(SubscriberExportStatus::FAILED);
         $subscriberExport->setErrorMessage($errorMessage);
         $this->em->persist($subscriberExport);
@@ -275,8 +301,9 @@ class SubscriberService
 
     public function markSubscriberExportAsCompleted(
         SubscriberExport $subscriberExport,
-        Media $media
-    ): void {
+        Media            $media
+    ): void
+    {
         $subscriberExport->setStatus(SubscriberExportStatus::COMPLETED);
         $subscriberExport->setMedia($media);
         $this->em->persist($subscriberExport);

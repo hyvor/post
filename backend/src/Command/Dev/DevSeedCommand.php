@@ -3,6 +3,7 @@
 namespace App\Command\Dev;
 
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Content\ContentDefaultStyle;
@@ -14,7 +15,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
-use App\Tests\Factory\SudoUserFactory;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -56,13 +57,13 @@ class DevSeedCommand extends Command
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'example.com',
-            'verified_in_relay' => true
+            'relay_status' => RelayDomainStatus::ACTIVE
         ]);
 
         DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'notverified.com',
-            'verified_in_relay' => false
+            'relay_status' => RelayDomainStatus::PENDING
         ]);
 
         $newsletter = NewsletterFactory::createOne([

@@ -3,11 +3,11 @@
 namespace App\Service\Domain;
 
 use App\Entity\Domain;
-use App\Service\Integration\Aws\AwsDomainService;
+use App\Entity\Type\RelayDomainStatus;
+use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\UserInvite\EmailNotificationService;
-use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -58,7 +58,7 @@ class DomainService
         return $this->em->getRepository(Domain::class)
             ->findBy([
                 'user_id' => $userId,
-                'verified_in_relay' => true
+                'relay_status' => [RelayDomainStatus::ACTIVE, RelayDomainStatus::PENDING]
             ]);
     }
 
@@ -123,18 +123,19 @@ class DomainService
         try {
             $result = $this->relayApiClient->verifyDomain($domain->getRelayId());
         } catch (RelayApiException $e) {
-            $this->logger->critical('Failed to create email domain in Hyvor Relay', [
-                'domain' => $domain,
+            $this->logger->critical('Failed to verify email domain in Hyvor Relay', [
+                'domain' => $domain->getDomain(),
                 'error' => $e,
             ]);
             throw new VerifyDomainException(previous: $e);
         }
 
+        // TODO: Fix this to handle status
         $verified = $result->dkim_verified;
 
         if ($verified) {
             // use a separate method with DTO
-            $domain->setVerifiedInRelay(true);
+            $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
 
 
@@ -164,10 +165,30 @@ class DomainService
         return [
             'verified' => $verified,
             'debug' => $verified ? null : [
-                'last_checked_at' => $result->dkim_checked_at ?? '',
+                'last_checked_at' => (string)$result->dkim_checked_at,
                 'error_type' => $result->dkim_error_message ?? ''
             ]
         ];
+    }
+
+    public function updateDomain(Domain $domain, UpdateDomainDto $updates): Domain
+    {
+        if ($updates->relayStatusSet) {
+            $domain->setRelayStatus($updates->relayStatus);
+        }
+        if ($updates->relayLastCheckedAtSet) {
+            $domain->setRelayLastCheckedAt($updates->relayLastCheckedAt);
+        }
+        if ($updates->relayErrorMessageSet) {
+            $domain->setRelayErrorMessage($updates->relayErrorMessage);
+        }
+
+        $domain->setUpdatedAt($this->now());
+
+        $this->em->persist($domain);
+        $this->em->flush();
+
+        return $domain;
     }
 
     /**
