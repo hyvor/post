@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Service\AppConfig;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\SendingProfile\SendingProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ class NewsletterService
     public function __construct(
         private EntityManagerInterface $em,
         private AppConfig              $config,
+        private SendingProfileService  $sendingProfileService
     )
     {
     }
@@ -64,12 +66,16 @@ class NewsletterService
             ->setUpdatedAt($this->now())
             ->setNewsletter($newsletter);
 
+        $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
         $sendingProfile = new SendingProfile()
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now())
             ->setNewsletter($newsletter)
             ->setIsSystem(true)
-            ->setIsDefault(true);
+            ->setIsDefault(true)
+            ->setFromEmail($systemAddress)
+            ->setFromName($newsletter->getName())
+            ->setReplyToEmail($systemAddress);
 
         $this->em->persist($user);
         $this->em->persist($newsletter);

@@ -161,7 +161,7 @@ class SendingProfileService
         return $this->getSystemAddressOfNewsletter($newsletter);
     }
 
-    private function getSystemAddressOfNewsletter(Newsletter $newsletter): string
+    public function getSystemAddressOfNewsletter(Newsletter $newsletter): string
     {
         return sprintf(
             "%s@%s",
