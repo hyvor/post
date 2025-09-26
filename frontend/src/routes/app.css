@@ -1,9 +1,9 @@
 :root {
-	--accent: #5A8387!important;
+    --accent: #5A8387 !important;
 }
 
 :root:not(.dark) {
     --accent-light: #e5f1f2;
-    --accent-lightest: #fdfdfd;
-    --accent-light-mid: #f7fbff;
+    --accent-lightest: #fbfdff;
+    --accent-light-mid: #eaf1f2;
 }

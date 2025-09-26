@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Media\MediaUploadInput;
 use App\Api\Console\Object\MediaObject;
 use App\Entity\Newsletter;
@@ -23,16 +25,19 @@ class MediaController extends AbstractController
 
     public function __construct(
         private ValidatorInterface $validator,
-        private MediaService $mediaService
-    ) {
+        private MediaService       $mediaService
+    )
+    {
     }
 
     #[Route('/media', methods: 'POST')]
+    #[ScopeRequired(Scope::MEDIA_WRITE)]
     public function upload(
-        Newsletter $newsletter,
-        Request $request,
+        Newsletter                            $newsletter,
+        Request                               $request,
         #[MapRequestPayload] MediaUploadInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $file = $request->files->get(key: 'file');
         $folder = $input->folder;
 

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Api\Console\Resolver;
 
+use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Entity\NewsletterList;
@@ -116,7 +117,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Newsletter-Id', (string)$newsletter->getId());
+        $request->attributes->set(AuthorizationListener::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
             'App\Api\Console\Controller\NewsletterListController::getLists'
@@ -128,29 +129,6 @@ class EntityResolverTest extends KernelTestCase
         $outputList = ((array)$output)[0];
         $this->assertInstanceOf(NewsletterList::class, $outputList);
         $this->assertSame($newsletterList->getId(), $outputList->getId());
-    }
-
-    public function testDoesNotResolveEntityForPathWhenNewsletterNotFound(): void
-    {
-        $newsletter = NewsletterFactory::createOne();
-        $newsletterList = NewsletterListFactory::createOne(['newsletter' => $newsletter, 'name' => 'Valid List Name']);
-
-        /** @var EntityResolver $resolver */
-        $resolver = $this->container->get(EntityResolver::class);
-
-        $request = new Request();
-        $request->attributes->set('id', (string)$newsletterList->getId());
-        $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Newsletter-Id', '12');
-        $argument = $this->createMock(ArgumentMetadata::class);
-        $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
-        );
-        $argument->method('getType')->willReturn('App\Entity\NewsletterList');
-
-        $this->expectException(NotFoundHttpException::class);
-        $this->expectExceptionMessage('Newsletter not found');
-        $resolver->resolve($request, $argument);
     }
 
     public function testDoesNotResolveEntityForPathWhenEntityNotFound(): void
@@ -189,7 +167,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->headers->set('X-Newsletter-Id', (string)$newsletter2->getId());
+        $request->attributes->set(AuthorizationListener::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, NewsletterFactory::createOne());
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
             'App\Api\Console\Controller\NewsletterListController::getLists'

@@ -3,6 +3,7 @@
 namespace App\Tests\Factory;
 
 use App\Entity\Domain;
+use App\Entity\Type\RelayDomainStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -34,11 +35,12 @@ final class DomainFactory extends PersistentProxyObjectFactory
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'verified_in_ses' => false,
+            'relay_status' => RelayDomainStatus::PENDING,
             'dkim_host' => self::faker()->domainName(),
             'dkim_txt_value' => self::faker()->text(),
             'domain' => self::faker()->domainName(),
             'user_id' => self::faker()->randomNumber(),
+            'relay_id' => self::faker()->randomNumber(),
         ];
     }
 
@@ -47,8 +49,7 @@ final class DomainFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Domain $domain): void {})
-        ;
+        return $this// ->afterInstantiate(function(Domain $domain): void {})
+            ;
     }
 }

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -18,34 +22,31 @@ use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
-use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Auth\AuthUser;
-use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
 {
     public function __construct(
-        private NewsletterService $newsletterService,
-        private ListRepository $listRepository,
-        private InternalConfig $internalConfig,
-        private AppConfig $appConfig,
+        private NewsletterService         $newsletterService,
+        private ListRepository            $listRepository,
+        private InternalConfig            $internalConfig,
+        private AppConfig                 $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
-        private SendingProfileService $sendingProfileService,
-        private ApprovalService $approvalService,
-        private AuthInterface $auth, // TODO: this should be done in the listener
-        private BillingInterface $billing
-    ) {
+        private SendingProfileService     $sendingProfileService,
+        private ApprovalService           $approvalService,
+    )
+    {
     }
 
     #[Route('/init', methods: 'GET')]
-    public function initConsole(): JsonResponse
+    #[UserLevelEndpoint]
+    public function initConsole(Request $request): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
 
         $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);
         $newsletters = array_map(
@@ -62,8 +63,10 @@ class ConsoleController extends AbstractController
                 ],
                 'app' => [
                     'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
+                    'api_keys' => [
+                        'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
+                    ],
                 ],
-                // 'template_defaults' => TemplateDefaults::getAll(),
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
             'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
@@ -72,6 +75,7 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/init/newsletter', methods: 'GET')]
+    #[ScopeRequired(Scope::NEWSLETTER_READ)]
     public function initNewsletter(Newsletter $newsletter): JsonResponse
     {
         $newsletterStats = $this->newsletterService->getnewsletterStats($newsletter);

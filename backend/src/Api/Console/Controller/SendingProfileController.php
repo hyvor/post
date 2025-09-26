@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\SendingProfile\CreateSendingProfileInput;
 use App\Api\Console\Input\SendingProfile\UpdateSendingProfileInput;
 use App\Api\Console\Object\SendingProfileObject;
@@ -21,8 +23,9 @@ class SendingProfileController extends AbstractController
 {
     public function __construct(
         private SendingProfileService $sendingProfileService,
-        private DomainService $domainService
-    ) {
+        private DomainService         $domainService
+    )
+    {
     }
 
     private function getDomainFromEmail(string $email): Domain
@@ -32,27 +35,30 @@ class SendingProfileController extends AbstractController
         if (!$domain) {
             throw new BadRequestHttpException("Domain not found");
         }
-        if (!$domain->isVerifiedInSes()) {
+        if (!$domain->isVerifiedInRelay()) {
             throw new BadRequestHttpException("Domain is not verified");
         }
         return $domain;
     }
 
     #[Route('/sending-profiles', methods: 'GET')]
+    #[ScopeRequired(Scope::SENDING_PROFILES_READ)]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
-            fn (SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
+            fn(SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
             $this->sendingProfileService->getSendingProfiles($newsletter)
         );
         return $this->json($sendingProfiles);
     }
 
     #[Route('/sending-profiles', methods: 'POST')]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
-        Newsletter $newsletter,
-    ): JsonResponse {
+        Newsletter                                     $newsletter,
+    ): JsonResponse
+    {
         $domain = $this->getDomainFromEmail($input->from_email);
         $sendingProfile = $this->sendingProfileService->createSendingProfile(
             $newsletter,
@@ -68,10 +74,12 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function updateSendingProfile(
-        SendingProfile $sendingProfile,
+        SendingProfile                                 $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
 
         $updates = new UpdateSendingProfileDto();
         if ($input->hasProperty('from_email')) {
@@ -106,6 +114,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
     public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
     {
 
@@ -118,7 +127,7 @@ class SendingProfileController extends AbstractController
 
         return $this->json(
             array_map(
-                fn (SendingProfile $profile) => new SendingProfileObject($profile),
+                fn(SendingProfile $profile) => new SendingProfileObject($profile),
                 $sendingProfiles
             )
         );

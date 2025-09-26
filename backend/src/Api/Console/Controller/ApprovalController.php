@@ -2,16 +2,18 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Input\Approval\UpdateApprovalInput;
 use App\Api\Console\Object\ApprovalObject;
+use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Service\Approval\Dto\UpdateApprovalDto;
-use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Auth\AuthUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,16 +23,26 @@ class ApprovalController extends AbstractController
 
     public function __construct(
         private ApprovalService $approvalService,
-            private AuthInterface $auth // TODO: this should be done in the listener
+    )
+    {
+    }
 
-    ) {
+    private function resolveApproval(string $id): Approval
+    {
+        $approval = $this->approvalService->getApporvalById((int)$id);
+
+        if ($approval === null) {
+            throw new UnprocessableEntityHttpException('Approval not found');
+        }
+
+        return $approval;
     }
 
     #[Route('/approvals', methods: 'GET')]
-    public function getApproval(): JsonResponse
+    #[UserLevelEndpoint]
+    public function getApproval(Request $request): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
 
         $approval = $this->approvalService->getApprovalOfUser($user);
 
@@ -41,12 +53,13 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals', methods: 'POST')]
+    #[UserLevelEndpoint]
     public function approve(
+        Request                                  $request,
         #[MapRequestPayload] CreateApprovalInput $input
     ): JsonResponse
     {
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
+        $user = AuthorizationListener::getUser($request);
 
         if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('Account already approved');
@@ -72,20 +85,15 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals/{id}', methods: 'PATCH')]
+    #[UserLevelEndpoint]
     public function updateApproval(
-        string $id,
+        Request                                  $request,
+        string                                   $id,
         #[MapRequestPayload] UpdateApprovalInput $input
     ): JsonResponse
     {
-        $id = intval($id);
-        $user = $this->auth->check('');
-        assert($user instanceof AuthUser);
-
-        $approval = $this->approvalService->getApporvalById($id);
-
-        if (!$approval) {
-            throw new UnprocessableEntityHttpException('Approval request not found');
-        }
+        $user = AuthorizationListener::getUser($request);
+        $approval = $this->resolveApproval($id);
 
         if ($this->approvalService->getApprovalStatusOfUser($user) !== ApprovalStatus::REVIEWING) {
             throw new UnprocessableEntityHttpException('Approval is not in reviewing status');

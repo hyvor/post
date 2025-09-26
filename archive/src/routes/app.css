@@ -1,0 +1,30 @@
+body {
+    font-family: var(--hp-font-family);
+    font-size: var(--hp-font-size);
+    font-weight: var(--hp-font-weight);
+
+    --hp-box-text-light: color-mix(in srgb, var(--hp-box-text), transparent 50%);
+    --hp-accent-light: color-mix(in srgb, var(--hp-accent), transparent 90%);
+    
+    margin: 0;
+    padding: 0;
+}
+
+.hds-box {
+    box-shadow: var(--box-shadow);
+    border-radius: var(--box-radius);
+    background-color: var(--box-background);
+}
+
+button,
+a {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    appearance: none;
+    padding: 0;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}

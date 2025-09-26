@@ -24,10 +24,11 @@ class SendService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SubscriberRepository $subscriberRepository,
-        private SendRepository $sendRepository,
-        private IssueService $issueService
-    ) {
+        private SubscriberRepository   $subscriberRepository,
+        private SendRepository         $sendRepository,
+        private IssueService           $issueService
+    )
+    {
     }
 
     /**
@@ -48,12 +49,6 @@ class SendService
                 ->setParameter('search', '%' . $search . '%');
         }
         if ($sendType !== null && $sendType != 'all') {
-            if ($sendType === 'opened') {
-                $qb->andWhere('s.first_open_at IS NOT NULL');
-            }
-            if ($sendType === 'clicked') {
-                $qb->andWhere('s.first_clicked_at IS NOT NULL');
-            }
             if ($sendType === 'unsubscribed') {
                 $qb->andWhere('s.unsubscribe_at IS NOT NULL');
             }
@@ -157,13 +152,16 @@ class SendService
 
     public function updateSend(Send $send, UpdateSendDto $updates): Send
     {
+        if ($updates->hasProperty('status')) {
+            $send->setStatus($updates->status);
+        }
+
         if ($updates->hasProperty('deliveredAt')) {
             $send->setDeliveredAt($updates->deliveredAt);
         }
 
-        $hasFirstClickedAt = $updates->hasProperty('firstClickedAt');
-        if ($hasFirstClickedAt) {
-            $send->setFirstClickedAt($updates->firstClickedAt);
+        if ($updates->hasProperty('failedAt')) {
+            $send->setFailedAt($updates->failedAt);
         }
 
         if ($updates->hasProperty('bouncedAt')) {
@@ -174,80 +172,14 @@ class SendService
             $send->setComplainedAt($updates->complainedAt);
         }
 
-        $hasFirstOpenedAt = $updates->hasProperty('firstOpenedAt');
-        if ($hasFirstOpenedAt) {
-            $send->setFirstOpenedAt($updates->firstOpenedAt);
-        }
-
-        if ($updates->hasProperty('lastClickedAt')) {
-            $send->setLastClickedAt($updates->lastClickedAt);
-        }
-
-        if ($updates->hasProperty('lastOpenedAt')) {
-            $send->setLastOpenedAt($updates->lastOpenedAt);
-        }
-
         if ($updates->hasProperty('hardBounce')) {
             $send->setHardBounce($updates->hardBounce);
-        }
-
-        if ($updates->hasProperty('clickCount')) {
-            $send->setClickCount($updates->clickCount);
-        }
-
-        if ($updates->hasProperty('openCount')) {
-            $send->setOpenCount($updates->openCount);
         }
 
         $this->em->persist($send);
         $this->em->flush();
 
-        if ($hasFirstOpenedAt || $hasFirstClickedAt) {
-            $issue = $send->getIssue();
-            $issueUpdatesDto = new UpdateIssueDto();
-            if ($hasFirstOpenedAt) {
-                $issueUpdatesDto->openedSends = $this->getOpensOfIssue($issue);
-            }
-            if ($hasFirstClickedAt) {
-                $issueUpdatesDto->clickedSends = $this->getClicksOfIssue($issue);
-            }
-
-            $this->issueService->updateIssue($issue, $issueUpdatesDto);
-        }
-
         return $send;
-    }
-
-    public function getOpensOfIssue(Issue $issue): int
-    {
-        $query = <<<DQL
-        SELECT COUNT(s.id)
-        FROM App\Entity\Send s
-        WHERE
-            s.issue = :issue AND
-            s.first_opened_at IS NOT NULL
-        DQL;
-
-        $qb = $this->em->createQuery($query);
-        $qb->setParameter('issue', $issue);
-
-        return (int)$qb->getSingleScalarResult();
-    }
-
-    public function getClicksOfIssue(Issue $issue): int
-    {
-        $query = <<<DQL
-        SELECT COUNT(s.id)
-        FROM App\Entity\Send s
-        WHERE
-            s.issue = :issue AND
-            s.first_clicked_at IS NOT NULL
-        DQL;
-
-        $qb = $this->em->createQuery($query);
-        $qb->setParameter('issue', $issue);
-
-        return (int)$qb->getSingleScalarResult();
     }
 
     public function getSendsCountThisMonthOfUser(int $hyvorUserId): int

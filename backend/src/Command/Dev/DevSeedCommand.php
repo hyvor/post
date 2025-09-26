@@ -3,6 +3,7 @@
 namespace App\Command\Dev;
 
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Content\ContentDefaultStyle;
@@ -14,7 +15,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
-use App\Tests\Factory\SudoUserFactory;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -33,10 +34,11 @@ class DevSeedCommand extends Command
 {
 
     public function __construct(
-        private KernelInterface $kernel,
-        private ContentDefaultStyle $contentDefaultStyle,
+        private KernelInterface      $kernel,
+        private ContentDefaultStyle  $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
-    ) {
+    )
+    {
         parent::__construct();
     }
 
@@ -55,22 +57,22 @@ class DevSeedCommand extends Command
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'example.com',
-            'verified_in_ses' => true
+            'relay_status' => RelayDomainStatus::ACTIVE
         ]);
 
         DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'notverified.com',
-            'verified_in_ses' => false
+            'relay_status' => RelayDomainStatus::PENDING
         ]);
 
         $newsletter = NewsletterFactory::createOne([
             'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Newsletter',
-            'slug' => 'test'
+            'subdomain' => 'test'
         ]);
 
-        SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => null,
             'from_email' => 'test@hvrpst.com',
@@ -135,7 +137,8 @@ class DevSeedCommand extends Command
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'content' => $this->contentDefaultStyle->json()
+            'content' => $this->contentDefaultStyle->json(),
+            'sending_profile' => $sendingProfile,
         ]);
         $draftIssue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($draftIssue));
 

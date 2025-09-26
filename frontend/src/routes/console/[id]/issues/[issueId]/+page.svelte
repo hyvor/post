@@ -1,32 +1,34 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { Button, IconMessage, Loader, confirm, toast } from '@hyvor/design/components';
-	import IssueStatusTag from '../IssueStatusTag.svelte';
+	import { IconMessage, Loader, confirm, toast } from '@hyvor/design/components';
 	import { goto } from '$app/navigation';
 	import { consoleUrlWithNewsletter } from '../../../lib/consoleUrl';
 	import { issueStore } from '../../../lib/stores/newsletterStore';
 	import type { Issue } from '../../../types';
-	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
-	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteIssue, getIssue } from '../../../lib/actions/issueActions';
 	import DraftIssue from './draft/DraftIssue.svelte';
 	import IssueSending from './sending/IssueSending.svelte';
 	import SentIssue from './sent/SentIssue.svelte';
 	import SingleBox from '../../../@components/content/SingleBox.svelte';
+	import { draftSendableSubscribersCountStore } from './draft/draftStore';
+	import { getI18n } from '../../../lib/i18n';
 
 	const id = Number(page.params.issueId);
 
-	let issue: Issue = $state();
+	let issue: Issue | undefined = $state(undefined);
 	let loading = $state(true);
 	let error: null | string = $state(null);
 
+	const I18n = getI18n();
+
+	// TODO: Not called anywhere
 	async function onDelete() {
 		const confirmed = await confirm({
-			title: 'Delete issue',
-			content: 'Are you sure you want to delete this issue?',
-			confirmText: 'Yes, delete',
-			cancelText: 'Cancel',
+			title: I18n.t('console.issues.delete.title'),
+			content: I18n.t('console.issues.delete.content'),
+			confirmText: I18n.t('console.issues.delete.confirmText'),
+			cancelText: I18n.t('console.common.cancel'),
 			danger: true
 		});
 
@@ -36,7 +38,7 @@
 			deleteIssue(id)
 				.then(() => {
 					$issueStore = $issueStore.filter((i) => i.id !== id);
-					toast.success('Issue deleted successfully');
+					toast.success(I18n.t('console.issues.delete.success'));
 					goto(consoleUrlWithNewsletter('/issues'));
 				})
 				.catch((err) => {
@@ -47,10 +49,16 @@
 				});
 		}
 	}
+
 	function fetchIssue() {
 		getIssue(id)
 			.then((res) => {
 				issue = res;
+
+				draftSendableSubscribersCountStore.set({
+					loading: false,
+					count: res.sendable_subscribers_count
+				});
 			})
 			.catch((err) => {
 				error = err.message;
@@ -79,33 +87,7 @@
 			<Loader full />
 		{:else if error}
 			<IconMessage error message={error} />
-		{:else}
-			<!-- <div class="top">
-				<div class="left">
-					<Button
-						size="small"
-						color="input"
-						as="a"
-						href={consoleUrlWithNewsletter('/issues')}
-					>
-						{#snippet start()}
-							<IconCaretLeft size={12} />
-						{/snippet}
-						All issues
-					</Button>
-				</div>
-				<div>
-					{#if issue.status === 'draft'}
-						<Button variant="fill-light" color="red" on:click={onDelete}>
-							Delete
-							{#snippet end()}
-								<IconTrash size={12} />
-							{/snippet}
-						</Button>
-					{/if}
-					<IssueStatusTag status={issue.status} size="large" />
-				</div>
-			</div> -->
+		{:else if issue}
 			<div class="content">
 				{#if issue.status === 'draft'}
 					<DraftIssue {issue} send={onSendingStart} />
@@ -126,18 +108,21 @@
 		flex-direction: column;
 		overflow: auto;
 	}
+
 	.content {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
 		min-height: 0;
 	}
+
 	.top {
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 20px;
 		padding: 0 15px;
 	}
+
 	.left {
 		flex: 1;
 	}

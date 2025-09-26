@@ -6,18 +6,57 @@
 		Loader,
 		SplitControl,
 		TextInput,
-		Validation,
-		toast
+		toast,
+		Validation
 	} from '@hyvor/design/components';
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import { addUserNewsletter, userNewslettersStore } from '../lib/stores/userNewslettersStore';
-	import { createNewsletter } from '../lib/actions/newsletterActions';
+	import { createNewsletter, getSubdomainAvailability } from '../lib/actions/newsletterActions';
 
 	let name = $state('');
+	let subdomain = $state('');
+
+	let subdomainEdited = false;
 
 	let nameError: string | null = $state(null);
+	let subdomainError: string | null = $state(null);
+	let subdomainSuccess: string | null = $state(null);
 
 	let isCreating = $state(false);
+
+	let subdomainCheckTimeout: null | ReturnType<typeof setTimeout> = null;
+	let subdomainCheckAbortController: AbortController | null = null;
+
+	function checkSubdomain() {
+		if (subdomainCheckTimeout) {
+			clearTimeout(subdomainCheckTimeout);
+		}
+		if (subdomainCheckAbortController) {
+			subdomainCheckAbortController.abort();
+		}
+
+		subdomainError = null;
+		subdomainSuccess = null;
+
+		if (!subdomain) return;
+
+		subdomainCheckTimeout = setTimeout(() => {
+			subdomainCheckAbortController = new AbortController();
+
+			getSubdomainAvailability(subdomain).then((res) => {
+				if (res.available) {
+					subdomainSuccess = 'Subdomain is available';
+				} else {
+					subdomainError = 'Subdomain is already taken';
+				}
+			});
+		}, 500);
+	}
+
+	$effect(() => {
+		subdomain;
+		checkSubdomain();
+	});
 
 	function handleBack() {
 		if ($userNewslettersStore.length > 0) {
@@ -31,6 +70,40 @@
 		nameError = null;
 
 		const value = e.target.value;
+
+		if (!subdomainEdited) {
+			subdomain = value
+				.toLowerCase()
+				.replace(/[^a-z0-9-]/g, '-')
+				.replace(/-+/g, '-')
+				.replace(/(^-|-$)/g, '');
+		}
+	}
+
+	function handleSubdomainInput(e: any) {
+		subdomainEdited = true;
+		let error = false;
+
+		subdomain = e.target.value;
+		subdomain = subdomain.toLowerCase();
+
+		if (!subdomain) {
+			subdomainError = 'Subdomain is required';
+			error = true;
+		} else if (!/^[a-z0-9-]*$/.test(subdomain)) {
+			subdomainError = 'Only a-z, 0-9, and hyphens (-) are allowed';
+			error = true;
+		} else if (/--/.test(subdomain)) {
+			subdomainError = 'Consecutive hyphens are not allowed';
+			error = true;
+		} else if (/^-|-$/.test(subdomain)) {
+			subdomainError = 'Subdomain cannot start or end with a hyphen';
+			error = true;
+		}
+
+		if (error && subdomainCheckTimeout) {
+			clearTimeout(subdomainCheckTimeout);
+		}
 	}
 
 	function handleCreate() {
@@ -41,24 +114,24 @@
 			valid = false;
 		}
 
+		if (subdomain.trim() === '') {
+			subdomainError = 'Subdomain is required';
+			valid = false;
+		}
+
 		if (!valid) {
 			return;
 		}
 
 		isCreating = true;
 
-		createNewsletter(name)
+		createNewsletter(name, subdomain)
 			.then((res) => {
-				toast.success('Newsletter created successfully');
-
 				addUserNewsletter({ role: 'owner', newsletter: res });
-
 				goto('/console/' + res.id);
 			})
 			.catch((e) => {
 				toast.error(e.message);
-			})
-			.finally(() => {
 				isCreating = false;
 			});
 	}
@@ -100,6 +173,33 @@
 						{/if}
 					</FormControl>
 				</SplitControl>
+				<SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)">
+					<FormControl>
+						<TextInput
+							block
+							bind:value={subdomain}
+							on:input={handleSubdomainInput}
+							maxlength="50"
+							state={subdomainError
+								? 'error'
+								: subdomainSuccess
+									? 'success'
+									: undefined}
+						></TextInput>
+
+						{#if subdomainError}
+							<Validation state="error">
+								{subdomainError}
+							</Validation>
+						{/if}
+
+						{#if subdomainSuccess}
+							<Validation state="success">
+								{subdomainSuccess}
+							</Validation>
+						{/if}
+					</FormControl>
+				</SplitControl>
 			</div>
 
 			<div class="footer">
@@ -116,6 +216,7 @@
 		left: 0;
 		padding: 15px 0;
 	}
+
 	.wrap {
 		display: flex;
 		flex-direction: column;
@@ -124,20 +225,24 @@
 		width: 100%;
 		height: 100vh;
 	}
+
 	.title {
 		padding: 25px;
 		font-weight: 600;
 		font-size: 22px;
 		text-align: center;
 	}
+
 	.inner {
 		width: 550px;
 		max-width: 100%;
 		position: relative;
 	}
+
 	.form {
 		padding: 0 20px;
 	}
+
 	.footer {
 		padding: 20px;
 		padding-bottom: 30px;

@@ -35,6 +35,36 @@ RUN  npm install \
 
 
 ###################################################
+################  ARCHIVE STAGES  ################
+###################################################
+
+###################################################
+FROM node:22.17.1 AS archive-base
+WORKDIR /app/archive
+# install dependencies
+COPY archive/package.json archive/package-lock.json \
+    archive/svelte.config.js \
+    archive/vite.config.ts \
+    archive/tsconfig.json /app/archive/
+# copy code
+COPY archive/src /app/archive/src
+COPY archive/static /app/archive/static
+COPY shared /app/shared
+
+###################################################
+FROM archive-base AS archive-dev
+RUN npm install
+CMD ["npm", "run", "dev"]
+
+###################################################
+FROM archive-base AS archive-prod
+# build the archive
+RUN  npm install \
+    && npm run build \
+    && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
+
+
+###################################################
 ################  EMBED STAGES  ################
 ###################################################
 

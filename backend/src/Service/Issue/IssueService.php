@@ -26,11 +26,13 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository $issueRepository,
-        private SendRepository $sendRepository,
-        private NewsletterListService $newsletterListService,
-        private SendingProfileService $sendingProfileService,
-    ) {
+        private IssueRepository        $issueRepository,
+        private SendRepository         $sendRepository,
+        private NewsletterListService  $newsletterListService,
+        private SendingProfileService  $sendingProfileService,
+        private EmailSenderService     $emailSenderService,
+    )
+    {
     }
 
     public function getIssueByUuid(string $uuid): ?Issue
@@ -42,13 +44,13 @@ class IssueService
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
-        $fromEmail = $this->sendingProfileService->getDefaultEmailAddressOfNewsletterWithFallback($newsletter);
+        $sendingProfile = $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         $issue = new Issue()
             ->setNewsletter($newsletter)
             ->setUuid(Uuid::v4())
             ->setStatus(IssueStatus::DRAFT)
-            ->setFromEmail($fromEmail)
+            ->setSendingProfile($sendingProfile)
             ->setListids($listIds)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now());
@@ -65,32 +67,24 @@ class IssueService
             $issue->setSubject($updates->subject);
         }
 
-        if ($updates->hasProperty('fromName')) {
-            $issue->setFromName($updates->fromName);
+        if ($updates->hasProperty('content')) {
+            $issue->setContent($updates->content);
+        }
+
+        if ($updates->hasProperty('sendingProfile')) {
+            $issue->setSendingProfile($updates->sendingProfile);
+        }
+
+        if ($updates->hasProperty('status')) {
+            $issue->setStatus($updates->status);
         }
 
         if ($updates->hasProperty('lists')) {
             $issue->setListids($updates->lists);
         }
 
-        if ($updates->hasProperty('fromEmail')) {
-            $issue->setFromEmail($updates->fromEmail);
-        }
-
-        if ($updates->hasProperty('replyToEmail')) {
-            $issue->setReplyToEmail($updates->replyToEmail);
-        }
-
-        if ($updates->hasProperty('content')) {
-            $issue->setContent($updates->content);
-        }
-
         if ($updates->hasProperty('html')) {
             $issue->setHtml($updates->html);
-        }
-
-        if ($updates->hasProperty('status')) {
-            $issue->setStatus($updates->status);
         }
 
         if ($updates->hasProperty('text')) {
@@ -129,6 +123,18 @@ class IssueService
             $issue->setClickedSends($updates->clickedSends);
         }
 
+        if ($updates->hasProperty('fromEmail')) {
+            $issue->setFromEmail($updates->fromEmail);
+        }
+
+        if ($updates->hasProperty('fromName')) {
+            $issue->setFromName($updates->fromName);
+        }
+
+        if ($updates->hasProperty('replyToEmail')) {
+            $issue->setReplyToEmail($updates->replyToEmail);
+        }
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);
@@ -141,11 +147,12 @@ class IssueService
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
-        Newsletter $newsletter,
-        int $limit,
-        int $offset,
+        Newsletter   $newsletter,
+        int          $limit,
+        int          $offset,
         ?IssueStatus $status = null,
-    ): ArrayCollection {
+    ): ArrayCollection
+    {
         $where = ['newsletter' => $newsletter];
 
         if ($status !== null) {
@@ -189,5 +196,28 @@ class IssueService
             'bounced' => 0,
             'complained' => 0,
         ];
+    }
+
+    /**
+     * @param string[] $emails
+     */
+    public function sendTestEmails(Issue $issue, array $emails): int
+    {
+        $testSentEmails = [];
+        foreach ($emails as $email) {
+            try {
+                $this->emailSenderService->send($issue, email: $email);
+            } catch (\Exception) {
+                continue;
+            }
+            $testSentEmails[] = $email;
+        }
+
+        $newsletter = $issue->getNewsletter();
+        $newsletter->setTestSentEmails($testSentEmails);
+        $this->em->persist($newsletter);
+        $this->em->flush();
+
+        return count($testSentEmails);
     }
 }

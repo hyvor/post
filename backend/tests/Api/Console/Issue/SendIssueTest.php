@@ -18,13 +18,11 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\BillingInterface;
-use Hyvor\Internal\Billing\Dto\LicensesCollection;
-use Hyvor\Internal\Billing\License\License;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\InternalConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -189,10 +187,17 @@ class SendIssueTest extends WebTestCase
             'lists' => [$list]
         ]);
 
+        $sendingProfile = SendingProfileFactory::createOne([
+            'from_email' => 'newsletter@hyvor.com',
+            'from_name' => 'Hyvor Newsletter',
+            'reply_to_email' => 'no-reply@hyvor.com',
+        ]);
+
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'list_ids' => [$list->getId()]
+            'list_ids' => [$list->getId()],
+            'sending_profile' => $sendingProfile,
         ]);
 
         $internalConfig = $this->getContainer()->get(InternalConfig::class);
@@ -219,12 +224,16 @@ class SendIssueTest extends WebTestCase
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
         $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
+        $this->assertSame('newsletter@hyvor.com', $issue->getFromEmail());
+        $this->assertSame('Hyvor Newsletter', $issue->getFromName());
+        $this->assertSame('no-reply@hyvor.com', $issue->getReplyToEmail());
 
-        $this->transport()->queue()->assertCount(1);
-        $message = $this->transport()->queue()->first()->getMessage();
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(1);
+        $message = $transport->queue()->first()->getMessage();
         $this->assertInstanceOf(SendIssueMessage::class, $message);
 
-        $this->transport()->throwExceptions()->process();
+        $transport->throwExceptions()->process(1);
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->findOneBy([

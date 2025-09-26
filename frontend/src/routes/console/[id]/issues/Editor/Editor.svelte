@@ -1,14 +1,27 @@
 <script lang="ts">
 	import { Editor } from '@hyvor/richtext';
-	import type { EditorView } from 'prosemirror-view';
 
 	interface Props {
 		content?: string | null;
-		ondocupdate: (doc: string) => void;
-		view: EditorView;
+		onDocUpdate: (doc: string) => void;
 	}
 
-	let { content = null, ondocupdate }: Props = $props();
+	let { content = null, onDocUpdate }: Props = $props();
 </script>
 
-<Editor />
+<Editor
+	value={content}
+	onvaluechange={onDocUpdate}
+	config={{
+		// colorButtonText:
+		// colorButtonBackground:
+
+		tableEnabled: false, // add later
+		tocEnabled: false,
+		bookmarkEnabled: false, // add later
+
+		// TODO:
+		imageUploader: async () => null,
+		audioUploader: async () => null
+	}}
+/>
