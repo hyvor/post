@@ -3,7 +3,8 @@
 		ColorPicker,
 		SplitControl,
 		TextInput,
-		BoxShadowPicker
+		BoxShadowPicker,
+		Switch
 	} from '@hyvor/design/components';
 	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
@@ -124,6 +125,16 @@
 		{/snippet}
 	</SplitControl>
 
+	<SplitControl
+		label="Branding"
+		caption="Show 'Sent Privately via Hyvor Post' at the bottom of the newsletter."
+	>
+		<Switch
+			checked={$newsletterEditingStore.branding}
+			on:change={(e) => ($newsletterEditingStore.branding = e.target.checked)}
+		/>
+	</SplitControl>
+
 	<NewsletterSaveDiscard
 		keys={[
 			'template_color_accent',
@@ -139,7 +150,8 @@
 			'template_font_weight',
 			'template_font_weight_heading',
 			'template_font_line_height',
-			'template_box_radius'
+			'template_box_radius',
+			'branding'
 		]}
 		{onsave}
 	/>

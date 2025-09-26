@@ -11,6 +11,7 @@ class NewsletterMeta
     public ?string $logo = null;
     public ?string $address = null;
     public ?string $unsubscribe_text = null;
+    public bool $branding = true;
 
     /**
      * Template variables
