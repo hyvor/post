@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	import TrialChecks from './TrialChecks.svelte';
+	// import TrialChecks from './TrialChecks.svelte';
 	import { getMarketingI18n } from '../locale';
 
 	const I18n = getMarketingI18n();
@@ -22,7 +22,7 @@
 
 		<div class="button-wrap">
 			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('homepage.startYourNewsletter')}</Button> -->
-			<Button as="a" size="large" href={`/${I18n.getLocale()}#waitlist`}
+			<Button as="a" size="large" href={`/#waitlist`}
 				>{I18n.t('comingSoon.joinWaitlist')}</Button
 			>
 		</div>
