@@ -8,7 +8,7 @@ class FormSubscribeInput
 {
 
     #[Assert\NotBlank]
-    public string $newsletter_uuid;
+    public string $newsletter_subdomain;
 
     #[Assert\NotBlank]
     #[Assert\Email]

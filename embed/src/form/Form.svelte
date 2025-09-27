@@ -8,12 +8,14 @@
     import Message from "./Message.svelte";
 
     interface Props {
-        newsletterUuid: string;
+        newsletterSubdomain: string;
         instance: string;
         shadowRoot: ShadowRoot;
     }
 
-    let { newsletterUuid, instance, shadowRoot }: Props = $props();
+    let { newsletterSubdomain, instance, shadowRoot }: Props = $props();
+
+    let initError = $state("");
     let email = $state("");
     let selectedListsIds: number[] = $state([]);
     let loading = $state(true);
@@ -33,9 +35,12 @@
         lists: List[];
     }
 
-    onMount(() => {
+    function doInit() {
+        loading = true;
+        initError = "";
+
         api<InitResponse>("/init", {
-            newsletter_uuid: newsletterUuid,
+            newsletter_subdomain: newsletterSubdomain,
         })
             .then((response) => {
                 newsletter = response.newsletter;
@@ -46,12 +51,14 @@
                 setCustomCss();
             })
             .catch((err) => {
-                console.error("Error loading Hyvor Post form:", err);
+                initError = err.message || "Unable to load signup form.";
             })
             .finally(() => {
                 loading = false;
             });
-    });
+    }
+
+    onMount(doInit);
 
     function onSubscribe(e: Event) {
         e.preventDefault();
@@ -61,7 +68,7 @@
         subscribingError = "";
 
         api<InitResponse>("/subscribe", {
-            newsletter_uuid: newsletterUuid,
+            newsletter_subdomain: newsletterSubdomain,
             email,
             list_ids: selectedListsIds,
         })
@@ -94,7 +101,9 @@
             if (checkbox.checked) {
                 selectedListsIds.push(listId);
             } else {
-                selectedListsIds = selectedListsIds.filter((id) => id !== listId);
+                selectedListsIds = selectedListsIds.filter(
+                    (id) => id !== listId,
+                );
             }
         };
     }
@@ -130,6 +139,16 @@
 
 {#if loading}
     <Skeleton />
+{:else if initError}
+    <div class="form">
+        <Message message={initError} type="error" />
+
+        <div style="text-align:center;margin-top:10px;">
+            <button style="padding: 6px 15px;" onclick={doInit}>
+                Reload
+            </button>
+        </div>
+    </div>
 {:else}
     <div
         class="form"
@@ -175,7 +194,10 @@
                         <div class="list-name">{list.name}</div>
                         <div class="list-description">{list.description}</div>
                     </div>
-                    <Switch checked={true} onchange={handleListSwitch(list.id)}/>
+                    <Switch
+                        checked={true}
+                        onchange={handleListSwitch(list.id)}
+                    />
                 </label>
             {/each}
         </div>

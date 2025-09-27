@@ -40,7 +40,7 @@ class FormController extends AbstractController
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
+        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
@@ -75,7 +75,7 @@ class FormController extends AbstractController
         Request $request,
     ): JsonResponse {
         $ip = $request->getClientIp();
-        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
+        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');

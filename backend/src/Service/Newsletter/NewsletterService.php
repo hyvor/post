@@ -91,6 +91,9 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->find($id);
     }
 
+    /**
+     * @deprecated
+     */
     public function getNewsletterByUuid(string $uuid): ?Newsletter
     {
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);

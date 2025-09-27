@@ -28,13 +28,13 @@
 <CodeBlock
 	code={`
     <hyvor-post-form
-        newsletter="YOUR_NEWSLETTER_UUID"
+        newsletter="YOUR_NEWSLETTER_SUBDOMAIN"
     ></hyvor-post-form>
 `}
 />
 
 <p>
-	Replace <code>YOUR_NEWSLETTER_UUID</code> with your newsletter UUID. You can find it at
+	Replace <code>YOUR_NEWSLETTER_SUBDOMAIN</code> with your newsletter UUID. You can find it at
 	<strong>Console &rarr; Settings &rarr; Newsletter &rarr; Newsletter UUID</strong>.
 </p>
 
@@ -43,6 +43,6 @@
 <h2 id="double-opt-in">Double Opt-In</h2>
 
 <p>
-    By default, the signup form uses double opt-in. Subscribers are added to your lists only after
-    they confirm their subscription via the email they receive.
+	By default, the signup form uses double opt-in. Subscribers are added to your lists only after
+	they confirm their subscription via the email they receive.
 </p>
