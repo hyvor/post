@@ -152,8 +152,16 @@ class SendService
 
     public function updateSend(Send $send, UpdateSendDto $updates): Send
     {
+        if ($updates->hasProperty('status')) {
+            $send->setStatus($updates->status);
+        }
+
         if ($updates->hasProperty('deliveredAt')) {
             $send->setDeliveredAt($updates->deliveredAt);
+        }
+
+        if ($updates->hasProperty('failedAt')) {
+            $send->setFailedAt($updates->failedAt);
         }
 
         if ($updates->hasProperty('bouncedAt')) {

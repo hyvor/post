@@ -22,16 +22,14 @@
 	});
 </script>
 
-<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/{I18n.getLocale()}">
+<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
 	{#snippet center()}
 		<div class="center">
 			<Button
 				as="a"
 				size="small"
-				href={`/${I18n.getLocale()}/pricing`}
-				variant={$page.url.pathname === `/${I18n.getLocale()}/pricing`
-					? 'fill-light'
-					: 'invisible'}
+				href={`/pricing`}
+				variant={$page.url.pathname === `/pricing` ? 'fill-light' : 'invisible'}
 			>
 				{I18n.t('pricing.name')}
 			</Button>

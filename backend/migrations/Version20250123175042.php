@@ -19,6 +19,12 @@ final class Version20250123175042 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        // Enum: RelayDomainStatus -> 'pending', 'active', 'warning', suspended'
+        $this->addSql(<<<SQL
+        CREATE TYPE relay_domain_status AS ENUM ('pending', 'active', 'warning', 'suspended');
+        SQL
+        );
+
         $this->addSql(<<<SQL
         CREATE TABLE domains (
             id BIGSERIAL PRIMARY KEY,
@@ -29,7 +35,9 @@ final class Version20250123175042 extends AbstractMigration
             dkim_txt_value TEXT NOT NULL,
             user_id BIGINT NOT NULL,
             relay_id BIGINT NOT NULL,
-            verified_in_relay BOOLEAN DEFAULT FALSE
+            relay_status relay_domain_status DEFAULT 'pending',
+            relay_last_checked_at timestamptz DEFAULT NULL,
+            relay_error_message TEXT DEFAULT NULL
         );
         SQL
         );
