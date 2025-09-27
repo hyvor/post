@@ -133,7 +133,7 @@ class FormController extends AbstractController
         $instance = $input->instance ?? 'https://post.hyvor.localhost';
 
         $response = <<<HTML
-            <hyvor-post-form newsletter={$newsletter->getUuid()}
+            <hyvor-post-form newsletter={$newsletter->getSubdomain()}
             instance={$instance}></hyvor-post-form>
             <script type="module" src="{$instance}/dev/dev.ts"></script>
         HTML;

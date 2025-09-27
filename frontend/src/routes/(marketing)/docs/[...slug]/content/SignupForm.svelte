@@ -27,15 +27,14 @@
 
 <CodeBlock
 	code={`
-    <hyvor-post-form
-        newsletter="YOUR_NEWSLETTER_SUBDOMAIN"
-    ></hyvor-post-form>
+    <hyvor-post-form newsletter="YOUR_NEWSLETTER_SUBDOMAIN"></hyvor-post-form>
 `}
 />
 
 <p>
-	Replace <code>YOUR_NEWSLETTER_SUBDOMAIN</code> with your newsletter UUID. You can find it at
-	<strong>Console &rarr; Settings &rarr; Newsletter &rarr; Newsletter UUID</strong>.
+	Replace <code>YOUR_NEWSLETTER_SUBDOMAIN</code> with your newsletter subdomain. You can find it
+	at
+	<strong>Console &rarr; Settings &rarr; Newsletter &rarr; Newsletter Subdomain</strong>.
 </p>
 
 <h2 id="attributes">Form Attributes</h2>
