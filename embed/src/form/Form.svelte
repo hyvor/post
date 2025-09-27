@@ -104,6 +104,13 @@
                 selectedListsIds = selectedListsIds.filter(
                     (id) => id !== listId,
                 );
+                if (selectedListsIds.length === 0) {
+                    // Select the next list ID
+                    const nextList = lists.find((list) => list.id !== listId);
+                    if (nextList) {
+                        selectedListsIds = [nextList.id];
+                    }
+                }
             }
         };
     }
@@ -195,8 +202,9 @@
                         <div class="list-description">{list.description}</div>
                     </div>
                     <Switch
-                        checked={true}
+                        checked={selectedListsIds.includes(list.id)}
                         onchange={handleListSwitch(list.id)}
+                        disabled={subscribing}
                     />
                 </label>
             {/each}

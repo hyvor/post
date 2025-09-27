@@ -41,9 +41,7 @@ class NewsletterService
         string $subdomain
     ): Newsletter
     {
-        $slugger = new AsciiSlugger();
         $newsletter = new Newsletter()
-            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())

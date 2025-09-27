@@ -17,7 +17,7 @@ class FormSubscribeInput
     /**
      * @var int[] $list_ids
      */
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'You must select at least one list.')]
     #[Assert\All([
         new Assert\NotBlank(),
         new Assert\Type('int'),
