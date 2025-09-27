@@ -11,7 +11,7 @@ class FormSubscribeInput
     public string $newsletter_subdomain;
 
     #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email address.')]
     public string $email;
 
     /**
