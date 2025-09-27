@@ -15,6 +15,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Internationalization\StringsFactory;

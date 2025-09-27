@@ -15,7 +15,7 @@
 	let isLoading = $state(true);
 
 	onMount(() => {
-		const newsletterId = page.params.id;
+		const newsletterId = Number(page.params.id);
 		loadNewsletter(newsletterId)
 			.then(() => {
 				isLoading = false;

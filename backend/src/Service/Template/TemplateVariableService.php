@@ -37,7 +37,7 @@ class TemplateVariableService
             address: $meta->address ?? '',
             unsubscribe_url: '',
             unsubscribe_text: $meta->unsubscribe_text ?? 'Unsubscribe',
-            branding: true,
+            branding: $meta->branding,
 
             color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
             color_accent_text: $meta->template_color_accent_text ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT_TEXT,

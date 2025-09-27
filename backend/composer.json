@@ -17,7 +17,7 @@
         "doctrine/orm": "^3.5.0",
         "dunglas/doctrine-json-odm": "^1.4.2",
         "fakerphp/faker": "^1.24.1",
-        "hyvor/internal": "^3.1.4",
+        "hyvor/internal": "^3.1.6",
         "hyvor/phrosemirror": "^1.0.5",
         "league/flysystem-aws-s3-v3": "^3.29",
         "nelmio/cors-bundle": "^2.5",

@@ -3,6 +3,9 @@
 namespace App;
 
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Billing\License\License;
+use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Component\Component;
 
 /**
  * @phpstan-import-type AuthUserArrayPartial from AuthUser
@@ -37,6 +40,14 @@ class InternalFake extends \Hyvor\Internal\InternalFake
                 'name' => 'Thibault Boutet',
             ]
         ];
+    }
+
+    public function license(int $userId, ?int $resourceId, Component $component): ?License
+    {
+        return new PostLicense(
+            emails: 20000,
+            allowRemoveBranding: false
+        );
     }
 
 }

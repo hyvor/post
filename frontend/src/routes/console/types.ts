@@ -134,6 +134,10 @@ export type Newsletter = {
     name: string;
 } & NewsletterMeta;
 
+export type NewsletterPermissions = {
+    can_change_branding: boolean;
+}
+
 export interface SubscriberMetadataDefinition {
     id: number;
     created_at: number;
