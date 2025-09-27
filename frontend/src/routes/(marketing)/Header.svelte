@@ -33,34 +33,33 @@
 			>
 				{I18n.t('pricing.name')}
 			</Button>
-			<!-- <Button
+			<Button
 				as="a"
 				size="small"
 				href="/docs"
 				variant={$page.url.pathname.startsWith('/docs') ? 'fill-light' : 'invisible'}
 			>
 				Docs
-			</Button> -->
+			</Button>
 		</div>
 	{/snippet}
 
 	{#snippet end()}
 		<div class="end">
-			<!-- {#if loggedIn}
+			{#if loggedIn}
 				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
 			{:else}
 				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
-			{/if} -->
-			<!-- join the waitlist -->
-			<Button as="a" size="small" href="/#waitlist">
-				{I18n.t('comingSoon.joinWaitlist')}
-			</Button>
+			{/if}
 		</div>
 	{/snippet}
 </Header>
 
 <style>
+	:global(.container) {
+		width: 95vw !important;
+	}
 	.end {
 		display: flex;
 		align-items: center;
