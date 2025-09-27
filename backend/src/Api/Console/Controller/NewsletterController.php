@@ -7,7 +7,6 @@ use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
-use App\Api\Console\Input\Newsletter\GetSubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -21,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class NewsletterController extends AbstractController
 {
@@ -69,7 +67,7 @@ class NewsletterController extends AbstractController
 
     #[Route('/newsletter', methods: 'GET')]
     #[ScopeRequired(Scope::NEWSLETTER_READ)]
-    public function getNewsletterById(Newsletter $newsletter): JsonResponse
+    public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }

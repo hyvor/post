@@ -1,19 +1,21 @@
 import { writable } from 'svelte/store';
 import {
-    type NewsletterStats,
-    type Newsletter,
-    type List,
-    type Issue,
-    type UserRole,
-    type SubscriberMetadataDefinition,
-    type SendingProfile,
-    type Import
+	type NewsletterStats,
+	type Newsletter,
+	type List,
+	type Issue,
+	type UserRole,
+	type SubscriberMetadataDefinition,
+	type SendingProfile,
+	type Import,
+	type NewsletterPermissions
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
 export const newsletterEditingStore = writable<Newsletter>();
 export const newsletterRoleStore = writable<UserRole>();
 
+export const newsletterPermissionsStore = writable<NewsletterPermissions>();
 export const newsletterStatsStore = writable<NewsletterStats>();
 export const listStore = writable<List[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();

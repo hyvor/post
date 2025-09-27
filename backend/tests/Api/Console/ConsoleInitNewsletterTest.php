@@ -4,7 +4,6 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
-use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
@@ -14,6 +13,8 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -24,6 +25,11 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_stats_subscribers_and_issues(): void
     {
+        BillingFake::enableForSymfony(
+            $this->container,
+            license: new PostLicense(allowRemoveBranding: true)
+        );
+
         $newsletter = NewsletterFactory::createOne();
         $otherNewsletter = NewsletterFactory::createOne();
 
@@ -107,6 +113,33 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $issues = $stats['issues'];
         $this->assertSame(5, $issues['total']);
         $this->assertSame(3, $issues['last_30_days']);
+
+        $permissions = $data['permissions'];
+        $this->assertIsArray($permissions);
+        $this->assertTrue($permissions['can_change_branding']);
+    }
+
+    public function test_when_can_no_permissions_to_change_branding(): void
+    {
+        BillingFake::enableForSymfony(
+            $this->container,
+            license: new PostLicense(allowRemoveBranding: false)
+        );
+
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter->getId(),
+            'GET',
+            '/init/newsletter',
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $data = $this->getJson();
+
+        $permissions = $data['permissions'];
+        $this->assertIsArray($permissions);
+        $this->assertFalse($permissions['can_change_branding']);
     }
 
     public function test_stats_bounced_complained_rates(): void
