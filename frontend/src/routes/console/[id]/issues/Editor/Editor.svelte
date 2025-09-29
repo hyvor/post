@@ -16,12 +16,20 @@
 		// colorButtonText:
 		// colorButtonBackground:
 
-		tableEnabled: false, // add later
-		tocEnabled: false,
-		bookmarkEnabled: false, // add later
+		codeBlockEnabled: true,
+		customHtmlEnabled: true,
+		buttonEnabled: true,
+
+		// to be added later
+		tableEnabled: false,
+		bookmarkEnabled: false,
 
 		imageEnabled: true,
-		audioEnabled: false, // most email clients do not support audio
+
+		// does not make sense for emails (or email clients do not support)
+		tocEnabled: false,
+		audioEnabled: false,
+		embedEnabled: false,
 
 		fileUploader: async (file, name, type) => {
 			// TODO: upload to server
