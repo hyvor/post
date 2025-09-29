@@ -16,16 +16,11 @@ const config = {
 		}),
 
 		prerender: {
-			handleHttpError: 'ignore',
-			handleMissingId: 'ignore',
-			handleUnseenRoutes: 'ignore',
+			// TODO: Remove this when going production
+			handleHttpError: 'warn',
+			handleMissingId: 'warn',
 
-			entries: [
-				'*',
-				// add new entries when new languages are added
-				'/en',
-				'/fr'
-			]
+			entries: ['*', '/docs']
 		}
 	}
 };
