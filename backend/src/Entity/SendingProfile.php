@@ -27,7 +27,7 @@ class SendingProfile
     private ?Domain $domain;
 
     #[ORM\Column]
-    private ?string $from_email;
+    private string $from_email;
 
     #[ORM\Column]
     private ?string $from_name;
@@ -107,12 +107,12 @@ class SendingProfile
         return $this;
     }
 
-    public function getFromEmail(): ?string
+    public function getFromEmail(): string
     {
-        return $this->from_email ?? null;
+        return $this->from_email;
     }
 
-    public function setFromEmail(?string $from_email): static
+    public function setFromEmail(string $from_email): static
     {
         $this->from_email = $from_email;
 

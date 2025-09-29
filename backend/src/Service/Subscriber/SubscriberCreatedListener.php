@@ -109,7 +109,10 @@ final class SubscriberCreatedListener
         $template = $this->templateService->getTemplateStringFromNewsletter($newsletter);
 
         $email = new Email();
-        $this->sendingProfileService->setSendingProfileToEmail($email, $newsletter);
+        $this->sendingProfileService->setSendingProfileToEmail(
+            $email,
+            $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter)
+        );
 
         $email->to($subscriber->getEmail())
             ->html($this->htmlTemplateRenderer->render($template, $variables))

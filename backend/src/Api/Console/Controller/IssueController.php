@@ -39,7 +39,7 @@ class IssueController extends AbstractController
         private IssueService          $issueService,
         private SendService           $sendService,
         private NewsletterListService $newsletterListService,
-        private TextTemplateRenderer $textTemplateRenderer,
+        private TextTemplateRenderer  $textTemplateRenderer,
         private HtmlTemplateRenderer  $htmlTemplateRenderer,
         private BillingInterface      $billing,
         private DomainService         $domainService,
@@ -194,8 +194,8 @@ class IssueController extends AbstractController
         // cache from sending profile
         $sendingProfile = $issue->getSendingProfile();
         $updates->fromEmail = $sendingProfile->getFromEmail();
-        $updates->fromName = $sendingProfile->getFromName();
-        $updates->replyToEmail = $sendingProfile->getReplyToEmail();
+        $updates->fromName = $sendingProfile->getFromName() ?? $issue->getNewsletter()->getName();
+        $updates->replyToEmail = $sendingProfile->getReplyToEmail() ?? $sendingProfile->getFromEmail();
 
         $issue = $this->issueService->updateIssue($issue, $updates);
 
