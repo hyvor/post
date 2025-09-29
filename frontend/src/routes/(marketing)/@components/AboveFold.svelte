@@ -201,4 +201,70 @@
 			justify-content: center;
 		}
 	}
+
+	@media (max-width: 768px) {
+		.above-fold {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			width: 100%;
+		}
+
+		h1 {
+			font-size: 40px;
+			line-height: 1.2;
+		}
+
+		h1 .highlight {
+			font-size: 28px;
+		}
+
+		h2 {
+			font-size: 20px;
+			padding-top: 15px;
+		}
+
+		.right {
+			width: 100%;
+		}
+
+		.main-browser {
+			width: 100%;
+			animation: none; /* optional: disable float animations on small devices */
+		}
+
+		.another-browser {
+			position: static;
+			width: 70%;
+			margin: 20px auto 0;
+			animation: none;
+		}
+	}
+
+	@media (max-width: 480px) {
+		h1 {
+			font-size: 32px;
+		}
+
+		h1 .highlight {
+			font-size: 22px;
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		h2 {
+			font-size: 18px;
+		}
+
+		.buttons {
+			flex-direction: column;
+			width: 100%;
+			align-items: stretch;
+		}
+
+		.buttons a,
+		.buttons button {
+			width: 100%;
+			text-align: center;
+		}
+	}
 </style>

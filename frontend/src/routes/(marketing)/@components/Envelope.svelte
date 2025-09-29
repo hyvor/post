@@ -46,12 +46,9 @@
 					<div class="email-date">{date}</div>
 				</div>
 			</div>
-			<div class="subject-line" class:priority-high={priority === 'high'}>
-				<!-- {#if priority === 'high'}
-					<span class="priority-indicator">🔴</span>
-				{/if} -->
+			<!-- <div class="subject-line" class:priority-high={priority === 'high'}>
 				{subject}
-			</div>
+			</div> -->
 		</div>
 
 		<div class="header-actions">
@@ -65,9 +62,6 @@
 			</button>
 
 			<div class="expand-indicator" class:rotated={isExpanded}>
-				<!-- <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
-				</svg> -->
 				<IconChevronDown />
 			</div>
 		</div>
