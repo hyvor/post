@@ -23,7 +23,8 @@ const config = {
 				// add new entries when new languages are added
 				"/en",
 				"/fr",
-			]
+			],
+			handleHttpError: 'warn'
 		}
 	},
 };
