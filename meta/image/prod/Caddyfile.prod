@@ -6,6 +6,10 @@
 
 }
 
+{$URL_ARCHIVE} {
+	reverse_proxy 127.0.0.1:3000
+}
+
 :80 {
 	# backend
 	@backend {
@@ -42,8 +46,4 @@
         header Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
         file_server
     }
-}
-
-{$URL_ARCHIVE} {
-	reverse_proxy 127.0.0.1:3000
 }
