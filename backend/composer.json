@@ -46,8 +46,7 @@
         "twig/extra-bundle": "^3.21"
     },
     "bump-after-update": true,
-    "sort-packages": true
-  },
+    "sort-packages": true,
   "autoload": {
     "psr-4": {
       "App\\": "src/"
@@ -95,5 +94,11 @@
     "symfony/web-profiler-bundle": "7.2.*",
     "zenstruck/foundry": "^2.6.1",
     "zenstruck/messenger-test": "^1.11.1"
-  }
+  },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true,
+            "symfony/flex": true
+        }
+    }
 }

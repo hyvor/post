@@ -139,6 +139,9 @@ ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 
 RUN apt update && apt install -y supervisor
 
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt install -y nodejs
+
 COPY backend /app/backend
 
 RUN composer install --no-cache --prefer-dist --no-dev --no-scripts --no-progress
