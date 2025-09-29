@@ -11,9 +11,19 @@
         newsletterSubdomain: string;
         instance: string;
         shadowRoot: ShadowRoot;
+        lists: string[]; // lists to filter by (empty = no filter)
+        listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
+        listsHidden: boolean; // if true, hide the lists section
     }
 
-    let { newsletterSubdomain, instance, shadowRoot }: Props = $props();
+    let {
+        newsletterSubdomain,
+        instance,
+        shadowRoot,
+        lists: listsToFilter,
+        listsHidden,
+        listsDefaultUnselected,
+    }: Props = $props();
 
     let initError = $state("");
     let email = $state("");
@@ -44,8 +54,39 @@
         })
             .then((response) => {
                 newsletter = response.newsletter;
+
                 lists = response.lists;
+
+                // filter lists
+                if (listsToFilter.length > 0) {
+                    lists = lists.filter((list) =>
+                        listsToFilter.includes(list.name),
+                    );
+                    if (lists.length === 0) {
+                        initError =
+                            "No lists found with the provided list names: " +
+                            listsToFilter.join(", ");
+                        return;
+                    }
+                }
+
                 selectedListsIds = lists.map((list) => list.id);
+
+                // deselect on attribue
+                if (listsDefaultUnselected.length > 0) {
+                    selectedListsIds = selectedListsIds.filter((id) => {
+                        const list = lists.find((list) => list.id === id);
+                        return (
+                            list && !listsDefaultUnselected.includes(list.name)
+                        );
+                    });
+
+                    if (selectedListsIds.length === 0) {
+                        // Select the first list ID if all were unselected
+                        selectedListsIds = [lists[0].id];
+                    }
+                }
+
                 palette = newsletter.palette_light;
 
                 setCustomCss();
@@ -193,7 +234,7 @@
         <div
             class="lists"
             transition:slide={laterElementsAnimation}
-            class:hidden={lists.length === 0}
+            class:hidden={lists.length === 0 || listsHidden}
         >
             {#each lists as list (list.id)}
                 <label class="list">

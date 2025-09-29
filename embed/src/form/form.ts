@@ -24,12 +24,23 @@ class HyvorPostForm extends HTMLElement {
                 newsletterSubdomain,
                 instance: this.getAttribute("instance") || "https://post.hyvor.com",
                 shadowRoot: this.shadowRoot!,
+                lists: this.getListsArr("lists"),
+                listsDefaultUnselected: this.getListsArr("lists-default-unselected"),
+                listsHidden: this.hasAttribute("lists-hidden"),
             }
         });
 
         const style = document.createElement("style");
         style.textContent = formCss;
         this.shadowRoot!.appendChild(style);
+    }
+
+    private getListsArr(attrName: string): string[] {
+        const attr = this.getAttribute(attrName);
+        if (!attr) {
+            return [];
+        }
+        return attr.split(",").map(item => item.trim());
     }
 
     static get observedAttributes() {
