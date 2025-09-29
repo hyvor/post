@@ -9,7 +9,6 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(FormController::class)]
 #[CoversClass(FormListObject::class)]
@@ -20,7 +19,7 @@ class FormInitTest extends WebTestCase
     public function test_error_when_newsletter_by_uuid_not_found(): void
     {
         $response = $this->publicApi('POST', '/form/init', [
-            'newsletter_uuid' => Uuid::v4(),
+            'newsletter_subdomain' => 'test',
         ]);
 
         $this->assertResponseStatusCodeSame(422, $response);
@@ -35,9 +34,9 @@ class FormInitTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $uuid = $newsletter->getUuid();
+        $subdomain = $newsletter->getSubdomain();
         $response = $this->publicApi('POST', '/form/init', [
-            'newsletter_uuid' => $uuid,
+            'newsletter_subdomain' => $subdomain,
         ]);
 
         $this->assertResponseStatusCodeSame(200, $response);
@@ -46,7 +45,7 @@ class FormInitTest extends WebTestCase
         // newsletter
         $newsletterArray = $json['newsletter'];
         $this->assertIsArray($newsletterArray);
-        $this->assertSame($uuid, $newsletterArray['uuid']);
+        $this->assertSame($subdomain, $newsletterArray['subdomain']);
 
         // lists
         $lists = $json['lists'];
@@ -63,9 +62,9 @@ class FormInitTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $uuid = $newsletter->getUuid();
+        $subdomain = $newsletter->getSubdomain();
         $response = $this->publicApi('POST', '/form/init', [
-            'newsletter_uuid' => $uuid,
+            'newsletter_subdomain' => $subdomain,
             'list_ids' => [$list1->getId()],
         ]);
 
@@ -86,9 +85,9 @@ class FormInitTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => NewsletterFactory::createOne()]);
 
-        $uuid = $newsletter->getUuid();
+        $subdomain = $newsletter->getSubdomain();
         $response = $this->publicApi('POST', '/form/init', [
-            'newsletter_uuid' => $uuid,
+            'newsletter_subdomain' => $subdomain,
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
 

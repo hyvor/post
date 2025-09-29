@@ -15,6 +15,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Component\InstanceUrlResolver;
 use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -56,6 +57,10 @@ class TemplateController extends AbstractController
     public function basicTemplate(): Response
     {
         $newsletter = $this->em->getRepository(Newsletter::class)->find(1);
+        $meta = $newsletter->getMeta();
+        $meta->address = '10 Rue de Penthievre, 75008 Paris, France';
+        //$meta->unsubscribe_text = 'Unsubscribe.';
+
         assert($newsletter instanceof Newsletter);
 
         $subject = 'Introducing Hyvor Post';

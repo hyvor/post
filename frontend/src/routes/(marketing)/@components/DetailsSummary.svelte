@@ -45,6 +45,7 @@
 		border-radius: 20px;
 		overflow: hidden;
 		background-color: var(--accent-lightest);
+		font-size: 17px;
 	}
 	summary {
 		padding: 15px 20px;

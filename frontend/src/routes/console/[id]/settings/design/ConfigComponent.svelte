@@ -3,9 +3,14 @@
 		ColorPicker,
 		SplitControl,
 		TextInput,
-		BoxShadowPicker
+		BoxShadowPicker,
+		Switch,
+		Callout
 	} from '@hyvor/design/components';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
+	import {
+		newsletterEditingStore,
+		newsletterPermissionsStore
+	} from '../../../lib/stores/newsletterStore';
 	import { getAppConfig } from '../../../lib/stores/consoleStore';
 	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
 	import BoxBorder from './BoxBorder.svelte';
@@ -24,6 +29,8 @@
 	const newsletterDefaults = getAppConfig().newsletter_defaults;
 
 	setContext(saveDiscardBoxClassContextName, 'config-component-wrap');
+
+	const canChangeBrading = $derived($newsletterPermissionsStore.can_change_branding);
 </script>
 
 <div class="wrap config-component-wrap">
@@ -124,6 +131,22 @@
 		{/snippet}
 	</SplitControl>
 
+	<SplitControl label="Branding" caption="Show 'Sent Privately via Hyvor Post' in the footer">
+		<Switch
+			checked={$newsletterEditingStore.branding}
+			on:change={(e) => ($newsletterEditingStore.branding = e.target.checked)}
+			disabled={!canChangeBrading}
+		/>
+
+		{#if !canChangeBrading}
+			<div class="cant-branding">
+				<Callout type="warning">
+					Your license does not permit removing the branding.
+				</Callout>
+			</div>
+		{/if}
+	</SplitControl>
+
 	<NewsletterSaveDiscard
 		keys={[
 			'template_color_accent',
@@ -139,8 +162,15 @@
 			'template_font_weight',
 			'template_font_weight_heading',
 			'template_font_line_height',
-			'template_box_radius'
+			'template_box_radius',
+			'branding'
 		]}
 		{onsave}
 	/>
 </div>
+
+<style>
+	.cant-branding {
+		margin-top: 15px;
+	}
+</style>

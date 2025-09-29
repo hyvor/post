@@ -50,6 +50,9 @@ export interface AppConfig {
 }
 
 export type NewsletterMeta = {
+    unsubscribe_text: string | null;
+    branding: boolean;
+
     template_color_accent: string | null;
     template_color_accent_text: string | null;
     template_color_background: string | null;
@@ -130,6 +133,10 @@ export type Newsletter = {
     created_at: number;
     name: string;
 } & NewsletterMeta;
+
+export type NewsletterPermissions = {
+    can_change_branding: boolean;
+}
 
 export interface SubscriberMetadataDefinition {
     id: number;

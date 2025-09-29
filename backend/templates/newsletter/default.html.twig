@@ -149,6 +149,14 @@
             height: auto;
             display: block;
         }
+
+        .branding-tag {
+            display: inline-block;
+            font-size: 14px;
+            opacity: 0.6;
+            color: {{ color_background_text }};
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -180,12 +188,18 @@
         ">
     {{ address }}
 
-    {% if unsubscribe_url %}
-        <div>
-            <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
-        </div>
-    {% endif %}
+    <div>
+        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
+    </div>
 </div>
+
+{% if branding %}
+    <div style="text-align:center;">
+        <a class="branding-tag" target="_blank" href="https://post.hyvor.com?source=mail-branding">
+            [<span style="vertical-align:middle">Sent privately via</span> <strong style="vertical-align:middle">Hyvor Post</strong> <img style="vertical-align:middle" src="https://post.hyvor.com/img/logo.png" width="14" />]
+        </a>
+    </div>
+{% endif %}
 
 </body>
 

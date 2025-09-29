@@ -24,7 +24,9 @@
 
 	function toggleSelection() {
 		if (isSelected) {
-			selectedSubscriberIds.update((ids: number[]) => ids.filter((id: number) => id !== subscriber.id));
+			selectedSubscriberIds.update((ids: number[]) =>
+				ids.filter((id: number) => id !== subscriber.id)
+			);
 		} else {
 			selectedSubscriberIds.update((ids: number[]) => [...ids, subscriber.id]);
 		}
@@ -77,7 +79,7 @@
 		<div class="segments">
 			<Tooltip text={segmentsText}>
 				<span class="segments-text">
-					{I18n.t('console.subscribers.count', {
+					{I18n.t('console.subscribers.lists_count', {
 						count: subscriber.list_ids.length
 					})}
 				</span>
@@ -118,11 +120,7 @@
 </button>
 
 {#if editing}
-	<SubscriberEdit
-		bind:show={editing} 
-		{subscriber}
-		handleUpdate={handleUpdate}
-	/>
+	<SubscriberEdit bind:show={editing} {subscriber} {handleUpdate} />
 {/if}
 
 <style>

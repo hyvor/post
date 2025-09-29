@@ -15,8 +15,8 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
-use Hyvor\Internal\Sudo\SudoUserFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,7 +67,6 @@ class DevSeedCommand extends Command
         ]);
 
         $newsletter = NewsletterFactory::createOne([
-            'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Newsletter',
             'subdomain' => 'test'
         ]);

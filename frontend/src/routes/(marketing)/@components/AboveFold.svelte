@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button } from '@hyvor/design/components';
-	import TrialChecks from './TrialChecks.svelte';
+	// import { Button } from '@hyvor/design/components';
+	// import TrialChecks from './TrialChecks.svelte';
 	import MainGraphic from './MainGraphic.svelte';
 	import { getMarketingI18n } from '../locale';
 

@@ -16,7 +16,7 @@ class FormCorsTest extends WebTestCase
             'OPTIONS',
             '/form/init',
             [
-                'newsletter_uuid' => Uuid::v4(),
+                'newsletter_subdomain' => 'test',
             ],
             headers: [
                 'Origin' => $origin,
