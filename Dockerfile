@@ -81,7 +81,7 @@ WORKDIR /app/embed
 # install dependencies
 COPY embed/package.json embed/package-lock.json \
     embed/vite.config.ts \
-    embed/tsconfig.json \
+    embed/tsconfig*.json \
     embed/src/ \
     /app/embed/
 
@@ -95,7 +95,7 @@ CMD ["npm", "run", "dev"]
 FROM embed-base AS embed-prod
 # build the embed
 RUN  npm install \
-    && npm build \
+    && npm run build \
     && find . -maxdepth 1 -not -name dist -not -name . -exec rm -rf {} \;
 
 
