@@ -2,14 +2,15 @@
     interface Props {
         checked: boolean;
         onchange: (event: Event) => void;
+        disabled: boolean;
     }
 
-    let { checked, onchange }: Props = $props();
+    let { checked, onchange, disabled }: Props = $props();
 </script>
 
 <label class="switch-wrap">
     <span class="switch">
-        <input type="checkbox" bind:checked {onchange} />
+        <input type="checkbox" bind:checked {onchange} {disabled} />
         <span class="slider"></span>
     </span>
 </label>

@@ -111,6 +111,7 @@
                 "pending": "Pending"
             },
             "count": "{count} subscribers",
+            "lists_count": "{count} lists",
             "source": {
                 "label": "Source",
                 "console": "Console",

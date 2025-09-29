@@ -41,9 +41,7 @@ class NewsletterService
         string $subdomain
     ): Newsletter
     {
-        $slugger = new AsciiSlugger();
         $newsletter = new Newsletter()
-            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
@@ -91,6 +89,9 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->find($id);
     }
 
+    /**
+     * @deprecated
+     */
     public function getNewsletterByUuid(string $uuid): ?Newsletter
     {
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);

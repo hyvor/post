@@ -1,4 +1,4 @@
-import type {Issue, IssueList, Newsletter, List, Palette} from '../types';
+import type { Issue, IssueList, Newsletter, List, Palette } from '../types';
 import publicApi from "$lib/publicApi";
 
 const ARCHIVE_PREFIX = '/archive';
@@ -9,10 +9,10 @@ interface InitNewsletterResponse {
     palette: Palette
 }
 
-export function initNewsletter(slug: string) {
+export function initNewsletter(subdomain: string) {
     return publicApi.get<InitNewsletterResponse>({
         endpoint: ARCHIVE_PREFIX + "/newsletter",
-        data: {slug}
+        data: { subdomain }
     });
 }
 

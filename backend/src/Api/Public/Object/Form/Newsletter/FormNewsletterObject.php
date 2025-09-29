@@ -7,14 +7,14 @@ use App\Entity\Newsletter;
 class FormNewsletterObject
 {
 
-    public string $uuid;
+    public string $subdomain;
     public FormObject $form;
     public PaletteObject $palette_light;
     public PaletteObject $palette_dark;
 
     public function __construct(Newsletter $newsletter)
     {
-        $this->uuid = $newsletter->getUuid();
+        $this->subdomain = $newsletter->getSubdomain();
         $meta = $newsletter->getMeta();
         $this->form = new FormObject($meta);
 
