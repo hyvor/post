@@ -20,8 +20,14 @@
 		tocEnabled: false,
 		bookmarkEnabled: false, // add later
 
-		// TODO:
-		imageUploader: async () => null,
-		audioUploader: async () => null
+		imageEnabled: true,
+		audioEnabled: false, // most email clients do not support audio
+
+		fileUploader: async (file, name, type) => {
+			// TODO: upload to server
+			return {
+				url: URL.createObjectURL(file)
+			};
+		}
 	}}
 />
