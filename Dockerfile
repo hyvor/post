@@ -95,7 +95,7 @@ CMD ["npm", "run", "dev"]
 FROM embed-base AS embed-prod
 # build the embed
 RUN  npm install \
-    && ./build.sh \
+    && npm build \
     && find . -maxdepth 1 -not -name dist -not -name . -exec rm -rf {} \;
 
 
