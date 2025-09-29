@@ -16,9 +16,6 @@ class Newsletter
     private int $id;
 
     #[ORM\Column(unique: true)]
-    private string $uuid;
-
-    #[ORM\Column(unique: true)]
     private string $subdomain;
 
     #[ORM\Column]
@@ -52,18 +49,6 @@ class Newsletter
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setUuid(string $uuid): static
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function getUuid(): string
-    {
-        return $this->uuid;
     }
 
     public function setSubdomain(string $subdomain): static

@@ -20,20 +20,20 @@ export const categories: Category[] = [
 		name: 'Features',
 		pages: [
 			{
+				slug: 'form',
+				name: 'Signup Form',
+				component: SignupForm
+			},
+			{
 				slug: 'design',
 				name: 'Email Design',
 				component: EmailDesign
 			},
 			{
-				slug: 'form',
-				name: 'Signup Form',
-				component: SignupForm
-			},
-            {
-                slug: 'import',
-                name: 'Import',
-                component: Import
-            }
+				slug: 'import',
+				name: 'Import',
+				component: Import
+			}
 		]
 	},
 

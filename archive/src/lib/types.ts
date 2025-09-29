@@ -1,5 +1,4 @@
 export interface Newsletter {
-    uuid: string;
     slug: string;
     name: string;
     logo: string | null;
