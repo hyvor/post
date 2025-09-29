@@ -21,7 +21,7 @@
 		bookmarkEnabled: false, // add later
 
 		imageEnabled: true,
-		audioEnabled: true,
+		audioEnabled: false, // most email clients do not support audio
 
 		fileUploader: async (file, name, type) => {
 			// TODO: upload to server
