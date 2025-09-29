@@ -34,6 +34,7 @@ RUN  npm install \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
 
 
+
 ###################################################
 ################  ARCHIVE STAGES  ################
 ###################################################
@@ -61,7 +62,13 @@ FROM archive-base AS archive-prod
 # build the archive
 RUN  npm install \
     && npm run build \
-    && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
+    && find . -maxdepth 1 \
+        -not -name build \
+        -not -name node_modules \
+        -not -name package.json \
+        -not -name . \
+        -exec rm -rf {} \;
+
 
 
 ###################################################
@@ -74,7 +81,7 @@ WORKDIR /app/embed
 # install dependencies
 COPY embed/package.json embed/package-lock.json \
     embed/vite.config.ts \
-    embed/tsconfig.json \
+    embed/tsconfig*.json \
     embed/src/ \
     /app/embed/
 
@@ -88,14 +95,14 @@ CMD ["npm", "run", "dev"]
 FROM embed-base AS embed-prod
 # build the embed
 RUN  npm install \
-    && ./build.sh \
+    && npm run build \
     && find . -maxdepth 1 -not -name dist -not -name . -exec rm -rf {} \;
+
 
 
 ###################################################
 ################  BACKEND STAGES  #################
 ###################################################
-
 
 ###################################################
 FROM frankenphp AS backend-base
@@ -132,11 +139,18 @@ ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 
 RUN apt update && apt install -y supervisor
 
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt install -y nodejs
+
 COPY backend /app/backend
 
 RUN composer install --no-cache --prefer-dist --no-dev --no-scripts --no-progress
 
+# Copy Frontend, Embed and Archive builds
 COPY --from=frontend-prod /app/frontend/build /app/static
+COPY --from=embed-prod /app/embed/dist /app/static/form
+COPY --from=archive-prod /app/archive/ /app/archive
+
 COPY meta/image/prod/Caddyfile.prod /etc/caddy/Caddyfile
 COPY meta/image/prod/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY meta/image/prod/run.prod /app/run
