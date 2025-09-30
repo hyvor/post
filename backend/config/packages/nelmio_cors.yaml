@@ -13,11 +13,6 @@ nelmio_cors:
       allow_methods: [ 'GET', 'POST', 'OPTIONS', 'PATCH' ]
       max_age: 3600
 
-    '^/api/console/':
-      allow_origin: [ '*' ]
-      allow_methods: [ 'GET', 'POST', 'OPTIONS', 'PATCH', 'DELETE' ]
-      max_age: 3600
-
     '^/api/embed/':
       allow_origin: [ '*' ]
       allow_methods: [ 'GET', 'POST', 'OPTIONS', 'PATCH', 'DELETE' ]
