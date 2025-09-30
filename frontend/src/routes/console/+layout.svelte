@@ -52,9 +52,11 @@
 			})
 			.catch((err) => {
 				if (err.code === 401) {
-					const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
-					location.href =
-						`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
+					const toPage = $page.url.searchParams.has('signup') ? err.data['signup_url'] : err.data['login_url'];
+					location.href = toPage;
+					// const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
+					// location.href =
+					// 	`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
 				} else {
 					toast.error(err.message);
 				}
