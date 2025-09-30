@@ -34,13 +34,13 @@
 		padding: 20px;
 		padding-left: 35px;
 		padding-right: 35px;
-		font-weight: 600;
 	}
 	.left {
 		display: flex;
 		align-items: center;
 		gap: 5px;
 		cursor: pointer;
+		font-weight: 600;
 	}
 	.rows {
 		padding: 10px 35px;

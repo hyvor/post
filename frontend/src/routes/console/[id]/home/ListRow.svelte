@@ -3,13 +3,12 @@
 	import { listStore, newsletterStore } from '../../lib/stores/newsletterStore';
 	import type { List } from '../../types';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import { deleteList, updateList } from '../../lib/actions/listActions';
-	import EditListButton from './EditListButton.svelte';
+	import { deleteList } from '../../lib/actions/listActions';
+	import IconPencil from '@hyvor/icons/IconPencil';
+	import ListEditionModal from './ListEditionModal.svelte';
 
 	let { list }: { list: List } = $props();
-	let listName = $state(list.name);
-	let listDescription = $state(list.description);
-	let modalOpen = false;
+	let modalOpen = $state(false);
 
 	function truncateDescription(description: string | null): string {
 		if (!description) return '(No description)';
@@ -23,25 +22,6 @@
 		event.stopPropagation();
 		event.preventDefault();
 		modalOpen = true;
-	}
-
-	async function submitEdit() {
-		const toastId = toast.loading('Updating list...');
-
-		updateList(list.id, listName, listDescription)
-			.then((res) => {
-				toast.success('List updated', { id: toastId });
-				listStore.update((lists) => {
-					const index = lists.findIndex((l) => l.id === list.id);
-					if (index !== -1) {
-						lists[index] = { ...lists[index], ...res };
-					}
-					return lists;
-				});
-			})
-			.catch(() => {
-				toast.error('Failed to update list', { id: toastId });
-			});
 	}
 
 	async function onDelete(event: Event) {
@@ -91,12 +71,24 @@
 		</div>
 	</a>
 	<div class="actions">
-		<EditListButton bind:listName bind:listDescription {onEdit} submitList={submitEdit} />
+		<IconButton
+			color="input"
+			size="small"
+			on:click={(event: Event) => {
+				modalOpen = true;
+				onEdit(event);
+			}}
+		>
+			<IconPencil size={12} />
+		</IconButton>
+
 		<IconButton color="red" variant="fill-light" size="small" on:click={onDelete}>
 			<IconTrash size={12} />
 		</IconButton>
 	</div>
 </div>
+
+<ListEditionModal bind:modalOpen {list} />
 
 <style>
 	.list-item {
