@@ -1,263 +1,1028 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 264.58 264.58">
-  <path fill="#8d9e9d" fill-rule="evenodd" d="M3.118 136.06c30.853 39.229 145.71-16.793 134.99 88.754-6.182 60.87 85.912-15.695 123.36-88.754z" style="fill:#e8ce80;fill-opacity:1"/>
-  <g stroke-width="4.848">
-    <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20627 0 0 .20627 169 29.284)"/>
-    <g fill="#f4e3d7">
-      <g stroke-width="13.991" color="#000">
-        <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.19859 -.05575 .05575 .19859 169 29.284)"/>
-        <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.19859 -.05575 .05575 .19859 169 29.284)"/>
-      </g>
-      <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.04379 -.20156 .20156 .04379 169 29.284)"/>
-      <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.13662 -.15453 .15453 .13662 169 29.284)"/>
-      <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20527 -.02026 .02026 .20527 169 29.284)"/>
-      <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.18895 .08272 -.08272 .18895 169 29.285)"/>
-    </g>
-  </g>
-  <g stroke-width="4.848">
-    <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.20627 0 0 .20627 211.176 29.284)"/>
-    <g fill="#f4e3d7">
-      <g stroke-width="13.991" color="#000">
-        <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.20627 .20627) rotate(-15.682 3.572 3788.171)"/>
-        <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.20627 .20627) rotate(-15.682 3.572 3788.171)"/>
-      </g>
-      <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.20627 .20627) rotate(-77.743 -423.837 706.04)"/>
-      <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.20627 .20627) rotate(-48.52 -354.39 1206.838)"/>
-      <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.20527 -.02026 -.02026 .20527 211.176 29.284)"/>
-      <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.18895 .08272 .08272 .18895 211.175 29.285)"/>
-    </g>
-  </g>
-  <g stroke-width="2.886" color="#000">
-    <path fill="#f4e3d7" fill-rule="evenodd" d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(185.86 92.039) scale(.34652)"/>
-    <path fill="#4d4d4d" d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(185.86 92.039) scale(.34652)"/>
-  </g>
-  <g fill-rule="evenodd" stroke-width="2.886">
-    <path fill="#73a9ad" d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(185.86 92.039) scale(.34652)"/>
-    <path fill="#5a8387" d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(185.86 92.039) scale(.34652)"/>
-    <path fill="#5a8387" d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z" style="paint-order:stroke fill markers" transform="translate(185.86 92.039) scale(.34652)"/>
-    <path fill="#7bb0ad" d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z" style="paint-order:stroke fill markers" transform="translate(185.86 92.039) scale(.34652)"/>
-    <path fill="#fdffff" d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z" style="paint-order:stroke fill markers" transform="translate(185.86 92.039) scale(.34652)"/>
-  </g>
-  <path fill="#4d4d4d" d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(185.86 92.039) scale(.34652)"/>
-  <path fill="#6f7c91" d="M460.8 37.283h-97.263a7.389 7.389 0 0 0-5.246 2.166 7.389 7.389 0 0 0-2.166 5.247v51.888c0 2.053.826 3.906 2.166 5.246a7.389 7.389 0 0 0 5.246 2.166H460.8a7.389 7.389 0 0 0 5.246-2.166 7.389 7.389 0 0 0 2.167-5.246V44.694a7.389 7.389 0 0 0-2.167-5.246 7.39 7.39 0 0 0-5.246-2.166z" style="paint-order:fill markers stroke" transform="translate(-226.23 31.937)"/>
-  <path fill="#535d6c" fill-opacity=".162" d="M363.54 104.12a7.388 7.388 0 0 1-7.103-5.286s39.14-32.53 48.435-40.238c6.378-5.736 8.148-5.747 14.704-.59 9.48 7.474 48.354 40.75 48.354 40.75a7.39 7.39 0 0 1-7.126 5.364z" style="paint-order:fill markers stroke" transform="translate(-226.23 31.937)"/>
-  <path fill="#939dac" d="M363.54 37.283a7.388 7.388 0 0 0-7.103 5.286s39.14 32.53 48.435 40.238c6.378 5.736 8.148 5.747 14.704.59 9.48-7.474 48.354-40.75 48.354-40.75a7.39 7.39 0 0 0-7.126-5.364z" style="paint-order:fill markers stroke" transform="translate(-226.23 31.937)"/>
-  <g stroke-width="0">
-    <path fill="#deaa87" d="M386.8 86.35h-65.728c-1.388 0-2.64.559-3.545 1.464a4.993 4.993 0 0 0-1.464 3.545v35.065c0 1.388.558 2.64 1.464 3.545a4.993 4.993 0 0 0 3.545 1.464H386.8c1.388 0 2.64-.558 3.545-1.464a4.993 4.993 0 0 0 1.464-3.545V91.36c0-1.387-.558-2.64-1.464-3.545a4.993 4.993 0 0 0-3.545-1.464z" style="paint-order:fill markers stroke" transform="translate(-200.09 4.628)"/>
-    <path fill="#d38d5f" fill-opacity=".37" d="M321.07 131.19a4.993 4.993 0 0 1-4.8-3.572s26.45-21.984 32.73-27.192c4.311-3.876 5.507-3.884 9.937-.398 6.407 5.05 32.677 27.538 32.677 27.538a4.994 4.994 0 0 1-4.816 3.625z" style="paint-order:fill markers stroke" transform="translate(-200.09 4.628)"/>
-    <path fill="#d38d5f" d="M321.07 86.35a4.993 4.993 0 0 0-4.8 3.572s26.45 21.984 32.73 27.192c4.311 3.876 5.507 3.884 9.937.398 6.407-5.05 32.677-27.538 32.677-27.538a4.994 4.994 0 0 0-4.816-3.625z" style="paint-order:fill markers stroke" transform="translate(-200.09 4.628)"/>
-  </g>
-  <g stroke-width="0">
-    <path fill="#c4b7c8" d="M445.19 99.97h-40.08a3.045 3.045 0 0 0-3.054 3.054v21.382a3.045 3.045 0 0 0 3.054 3.055h40.08a3.045 3.045 0 0 0 3.054-3.055v-21.382a3.045 3.045 0 0 0-3.054-3.054z" style="paint-order:fill markers stroke" transform="translate(-302.98 -17.331) scale(1.2034)"/>
-    <path fill="#8a6f91" fill-opacity=".107" d="M405.11 127.31a3.045 3.045 0 0 1-2.927-2.178s16.129-13.405 19.959-16.581c2.628-2.364 3.357-2.368 6.059-.243 3.907 3.08 19.926 16.792 19.926 16.792a3.042 3.042 0 0 1-2.937 2.21z" style="paint-order:fill markers stroke" transform="translate(-302.98 -17.331) scale(1.2034)"/>
-    <path fill="#a793ac" d="M405.11 99.97a3.045 3.045 0 0 0-2.927 2.178s16.129 13.405 19.959 16.581c2.628 2.364 3.357 2.368 6.059.243 3.907-3.08 19.926-16.792 19.926-16.792a3.042 3.042 0 0 0-2.937-2.21z" style="paint-order:fill markers stroke" transform="translate(-302.98 -17.331) scale(1.2034)"/>
-  </g>
-  <g stroke-width="1.276">
-    <g stroke-width="4.782">
-      <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.2091 0 0 -.2091 81.513 149.192)"/>
-      <g fill="#f4e3d7">
-        <g stroke-width="9.14" color="#000">
-          <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20131 .05652 .05652 -.20131 81.513 149.192)"/>
-          <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20131 .05652 .05652 -.20131 81.513 149.192)"/>
-        </g>
-        <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.04439 .20433 .20433 -.04439 81.513 149.192)"/>
-        <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.1385 .15665 .15665 -.1385 81.512 149.192)"/>
-        <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20808 .02054 .02054 -.20808 81.512 149.192)"/>
-        <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(.2091 -.2091) rotate(23.642 1899.516 574.565)"/>
-      </g>
-    </g>
-    <g stroke-width="4.782">
-      <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.2091 0 0 .2091 123.85 85.139)"/>
-      <g fill="#f4e3d7">
-        <g stroke-width="9.14" color="#000">
-          <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.2091 .2091) rotate(-15.682 1182.224 2354.15)"/>
-          <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.2091 .2091) rotate(-15.682 1182.224 2354.15)"/>
-        </g>
-        <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.2091 .2091) rotate(-77.743 -43.588 570.998)"/>
-        <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.2091 .2091) rotate(-48.52 155.587 860.733)"/>
-        <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.2091 .2091) rotate(-5.636 3839.71 6219.936)"/>
-        <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.19154 .08385 .08385 .19154 123.849 85.139)"/>
-      </g>
-    </g>
-    <g stroke-width="2.847">
-      <g color="#000">
-        <path fill="#f4e3d7" fill-rule="evenodd" d="m73.994 44.436 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802a27.224 27.224 0 0 1 27.005-27.559z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-        <path fill="#4d4d4d" d="M69.067 59.312c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.051-.016.356-.272.407-.257 1.167-.501 2.038-.501.87 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.206-3.622-1.176-.74-2.602-1.11-4.146-1.11zM85.962 59.312c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-      </g>
-      <g fill-rule="evenodd">
-        <path fill="#73a9ad" d="m107.93 92.277.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-        <path fill="#5a8387" d="m47.219 94.92.019 2.74 60.721-.906-.019-2.74z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-        <path fill="#5a8387" d="M87.084 97.283a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z" style="paint-order:stroke fill markers" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-        <path fill="#7bb0ad" d="M84.401 97.313a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.739-6.877 6.808 6.808 0 0 1 6.877 6.739z" style="paint-order:stroke fill markers" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-        <path fill="#fdffff" d="M81.535 97.337a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.982-3.902 3.942 3.942 0 0 1 3.902-3.982 3.942 3.942 0 0 1 3.982 3.902z" style="paint-order:stroke fill markers" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-      </g>
-      <path fill="#4d4d4d" d="M73.005 76.116a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.219 3.051 2.501 3.772s2.818 1.076 4.488 1.076 3.205-.354 4.487-1.076c1.283-.721 2.501-2.006 2.501-3.772a2.094 2.094 0 0 0-2.094-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.489.275-1.4.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35128 0 0 .35128 75.407 86.6)"/>
-    </g>
-    <path fill="#483e37" d="M79.156 122.857c-.189-.79-.08-.84 1.059-.49l.888.275.152-.208c.205-.281.325-.615.299-.837-.02-.177-.053-.2-.747-.538-.399-.194-.762-.385-.806-.424-.123-.107.01-.261.427-.5.739-.42 1.501-.469 2.216-.14.63.288 1.12.914 1.233 1.572.065.38.356.954.62 1.224.29.296 5.108 4.026 5.327 4.124.277.123.806.151 1.316.069.806-.13 1.45.013 2.054.457.788.58 1.182 1.915.61 2.068-.1.027-.424-.072-.977-.3-.907-.374-.964-.374-1.215.003-.213.319-.332.962-.2 1.073.036.03.42.222.852.427.445.211.8.416.819.472.115.353-.974.922-1.824.953-.342.012-1.022-.166-1.333-.35-.597-.352-1.011-.993-1.111-1.72-.04-.293-.106-.466-.321-.851l-.27-.484-5.11-3.97-.489-.129a3.291 3.291 0 0 0-.996-.1c-.98.055-1.72-.285-2.172-.998a2.338 2.338 0 0 1-.302-.678z"/>
-  </g>
-  <g stroke-width="4.848">
-    <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20627 0 0 .20627 20.692 85.825)"/>
-    <g fill="#f4e3d7">
-      <g stroke-width="13.991" color="#000">
-        <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.19859 -.05575 .05575 .19859 20.693 85.825)"/>
-        <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.19859 -.05575 .05575 .19859 20.693 85.825)"/>
-      </g>
-      <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.04379 -.20156 .20156 .04379 20.692 85.825)"/>
-      <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(.20627) rotate(-48.52 511.788 96.75)"/>
-      <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20527 -.02026 .02026 .20527 20.692 85.825)"/>
-      <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.18895 .08272 -.08272 .18895 20.693 85.826)"/>
-    </g>
-  </g>
-  <g stroke-width="4.848">
-    <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.20627 0 0 .20627 62.869 85.825)"/>
-    <g fill="#f4e3d7">
-      <g stroke-width="13.991" color="#000">
-        <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.19859 -.05575 -.05575 .19859 62.869 85.825)"/>
-        <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.19859 -.05575 -.05575 .19859 62.869 85.825)"/>
-      </g>
-      <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.04379 -.20156 -.20156 .04379 62.869 85.825)"/>
-      <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="scale(-.20627 .20627) rotate(-48.52 309.231 546.199)"/>
-      <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.20527 -.02026 -.02026 .20527 62.869 85.825)"/>
-      <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.18895 .08272 .08272 .18895 62.868 85.826)"/>
-    </g>
-  </g>
-  <g stroke-width="2.886" color="#000">
-    <path fill="#f4e3d7" fill-rule="evenodd" d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(37.553 148.58) scale(.34652)"/>
-    <path fill="#4d4d4d" d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(37.553 148.58) scale(.34652)"/>
-  </g>
-  <g fill-rule="evenodd" stroke-width="2.886">
-    <path fill="#73a9ad" d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(37.553 148.58) scale(.34652)"/>
-    <path fill="#5a8387" d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(37.553 148.58) scale(.34652)"/>
-    <path fill="#5a8387" d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z" style="paint-order:stroke fill markers" transform="translate(37.553 148.58) scale(.34652)"/>
-    <path fill="#7bb0ad" d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z" style="paint-order:stroke fill markers" transform="translate(37.553 148.58) scale(.34652)"/>
-    <path fill="#fdffff" d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z" style="paint-order:stroke fill markers" transform="translate(37.553 148.58) scale(.34652)"/>
-  </g>
-  <path fill="#4d4d4d" d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="translate(37.553 148.58) scale(.34652)"/>
-  <g stroke-width="0">
-    <path fill="#c4b7c8" d="M445.19 99.97h-40.08a3.045 3.045 0 0 0-3.054 3.054v21.382a3.045 3.045 0 0 0 3.054 3.055h40.08a3.045 3.045 0 0 0 3.054-3.055v-21.382a3.045 3.045 0 0 0-3.054-3.054z" style="paint-order:fill markers stroke" transform="rotate(37.632 55.626 -122.49) scale(.46656)"/>
-    <path fill="#8a6f91" fill-opacity=".107" d="M405.11 127.31a3.045 3.045 0 0 1-2.927-2.178s16.129-13.405 19.959-16.581c2.628-2.364 3.357-2.368 6.059-.243 3.907 3.08 19.926 16.792 19.926 16.792a3.042 3.042 0 0 1-2.937 2.21z" style="paint-order:fill markers stroke" transform="rotate(37.632 55.626 -122.49) scale(.46656)"/>
-    <path fill="#a793ac" d="M405.11 99.97a3.045 3.045 0 0 0-2.927 2.178s16.129 13.405 19.959 16.581c2.628 2.364 3.357 2.368 6.059.243 3.907-3.08 19.926-16.792 19.926-16.792a3.042 3.042 0 0 0-2.937-2.21z" style="paint-order:fill markers stroke" transform="rotate(37.632 55.626 -122.49) scale(.46656)"/>
-  </g>
-  <g stroke-width=".738">
-    <path fill="#e6e6e6" d="m145.87 18.203-22.043 58.208-48.356-28.205z" style="paint-order:fill markers stroke" transform="rotate(12.24 166.628 -313.64) scale(1.35459)"/>
-    <path fill="gray" d="m40.169 76.401 20.48-9.041-13.28-10.977z"/>
-    <path fill="#ccc" d="m107.07 47.747 16.749 28.664-48.356-28.205z" style="paint-order:fill markers stroke" transform="rotate(12.24 166.628 -313.64) scale(1.35459)"/>
-    <path fill="#a4a4a4" d="M145.87 18.203 88.879 56.027l3.946 13.621 3.861-9.067z" style="paint-order:fill markers stroke" transform="rotate(12.24 166.628 -313.64) scale(1.35459)"/>
-    <g stroke-width="4.629">
-      <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.21135 -.04466 .04466 .21135 48.931 13.774)"/>
-      <g fill="#f4e3d7">
-        <g stroke-width="8.468" color="#000">
-          <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.1914 -.10013 .10013 .1914 48.932 13.774)"/>
-          <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.1914 -.10013 .10013 .1914 48.932 13.774)"/>
-        </g>
-        <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.00122 -.21601 .21601 .00122 48.932 13.774)"/>
-        <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.10653 -.18792 .18792 .10653 48.931 13.774)"/>
-        <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20594 -.0652 .0652 .20594 48.931 13.774)"/>
-        <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.21152 .04384 -.04384 .21152 48.932 13.774)"/>
-      </g>
-    </g>
-    <g stroke-width="4.629">
-      <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.21135 .04466 .04466 .21135 92.147 4.642)"/>
-      <g fill="#f4e3d7">
-        <g stroke-width="8.468" color="#000">
-          <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.21555 -.01413 -.01413 .21555 92.146 4.642)"/>
-          <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.21555 -.01413 -.01413 .21555 92.146 4.642)"/>
-        </g>
-        <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.08851 -.19705 -.19705 .08851 92.147 4.642)"/>
-        <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.17345 -.12875 -.12875 .17345 92.147 4.642)"/>
-        <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.21471 .02369 .02369 .21471 92.147 4.642)"/>
-        <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(-.1757 .12567 .12567 .1757 92.146 4.642)"/>
-      </g>
-    </g>
-    <g stroke-width="2.756" color="#000">
-      <path fill="#f4e3d7" fill-rule="evenodd" d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-      <path fill="#4d4d4d" d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-    </g>
-    <g fill-rule="evenodd" stroke-width="2.756">
-      <path fill="#73a9ad" d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-      <path fill="#5a8387" d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-      <path fill="#5a8387" d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z" style="paint-order:stroke fill markers" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-      <path fill="#7bb0ad" d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z" style="paint-order:stroke fill markers" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-      <path fill="#fdffff" d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z" style="paint-order:stroke fill markers" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-    </g>
-    <path fill="#4d4d4d" d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"/>
-    <path fill="#e6e6e6" d="M125.17 23.533 66.59 55.36l12.682 38.9 45.897-70.725"/>
-  </g>
-  <g stroke-width="0">
-    <path fill="#ac9d93" d="m127.58 35.37-14.395-4.706a1.15 1.15 0 0 0-1.456.739l-2.51 7.68a1.15 1.15 0 0 0 .738 1.455l14.395 4.706a1.15 1.15 0 0 0 1.456-.739l2.51-7.68a1.15 1.15 0 0 0-.738-1.455z" style="paint-order:fill markers stroke" transform="translate(-25.283 -12.93)"/>
-    <path fill="#917c6f" fill-opacity=".229" d="M109.97 40.485a1.15 1.15 0 0 1-.796-1.126s7.367-2.921 9.116-3.612c1.222-.54 1.484-.456 2.205.624 1.041 1.565 5.185 8.37 5.185 8.37a1.15 1.15 0 0 1-1.315.45z" style="paint-order:fill markers stroke" transform="translate(-25.283 -12.93)"/>
-    <path fill="#917c6f" d="M113.18 30.664a1.15 1.15 0 0 0-1.307.439s4.219 6.708 5.222 8.299c.666 1.157.928 1.244 2.147.798 1.765-.647 9.129-3.692 9.129-3.692a1.15 1.15 0 0 0-.795-1.139z" style="paint-order:fill markers stroke" transform="translate(-25.283 -12.93)"/>
-  </g>
-  <path fill="#4d4d4d" stroke-width="4.306" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(-23.288 405.908 -288.34) scale(.23224)"/>
-  <g fill="#f4e3d7">
-    <g stroke-width="8.229" color="#000">
-      <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.18056 -.14605 .14605 .18056 147.06 136.98)"/>
-      <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.18056 -.14605 .14605 .18056 147.06 136.98)"/>
-    </g>
-    <path stroke-width="4.306" d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(-101.03 129.963 7.914) scale(.23224)"/>
-    <path stroke-width="4.306" d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(-71.807 168.14 -33.069) scale(.23224)"/>
-    <path stroke-width="4.306" d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(-28.924 339.117 -216.604) scale(.23224)"/>
-  </g>
-  <g stroke-width="0" transform="matrix(-1.6009 .53568 .53568 1.6009 120.47 87.869)">
-    <rect width="3.875" height="18.174" x="-11.359" y="43.966" fill="#f95" ry="0" style="paint-order:markers fill stroke"/>
-    <rect width="3.875" height="2.138" x="-11.359" y="61.06" fill="#ffe680" ry="0" style="paint-order:markers fill stroke"/>
-    <path fill="#ff7f2a" d="M-9.421 43.966h1.937V62.14H-9.42z" style="paint-order:markers fill stroke"/>
-    <path fill="#ffd42a" d="M-9.421 61.06h1.937v2.138H-9.42z" style="paint-order:markers fill stroke"/>
-    <path fill="#fca" d="m-24.001 39.121-.85 1.63-.861 1.626-.987-1.552-.977-1.558 1.837-.08z" style="paint-order:markers fill stroke" transform="matrix(1.0536 -.04319 -.04096 -.99916 19.408 82.05)"/>
-    <path fill="#2b1100" d="m-24.001 39.121-.85 1.63-.861 1.626-.987-1.552-.977-1.558 1.837-.08z" style="paint-order:markers fill stroke" transform="matrix(.40121 -.01645 -.0156 -.38048 1.558 56.521)"/>
-  </g>
-  <g stroke-width="4.306">
-    <path fill="#4d4d4d" d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(169.531 96.997 107.966) scale(.23224)"/>
-    <g fill="#f4e3d7">
-      <g stroke-width="8.229" color="#000">
-        <path d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(153.849 83.178 122.874) scale(.23224)"/>
-        <path d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(153.849 83.178 122.874) scale(.23224)"/>
-      </g>
-      <path d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(91.789 10.763 200.995) scale(.23224)"/>
-      <path d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(121.012 50.421 158.212) scale(.23224)"/>
-      <path d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(163.895 92.098 113.251) scale(.23224)"/>
-      <path d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="rotate(-166.826 117.343 86.016) scale(.23224)"/>
-    </g>
-  </g>
-  <g color="#000">
-    <path fill="#f4e3d7" fill-rule="evenodd" d="m181.21 147.26 2.403-.024c5.897-.06 10.692 4.6 10.752 10.446l.166 16.17c.06 5.846-4.64 10.6-10.536 10.66l-2.403.024c-5.897.06-10.692-4.6-10.752-10.446l-.166-16.17c-.06-5.846 4.64-10.601 10.536-10.66z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-    <path fill="#4d4d4d" d="M179.29 153.27c-.602 0-1.16.144-1.618.433-.459.289-.86.785-.86 1.413a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0 .035-.02-.006.139-.106.159-.1.455-.196.795-.196s.636.096.795.196c.159.1.139.14.139.106a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0-.628-.402-1.124-.86-1.413-.46-.289-1.016-.433-1.618-.433zM185.88 153.27c-.603 0-1.16.144-1.618.433-.459.289-.86.785-.86 1.413a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0 .035-.02-.006.14-.106.158-.1.454-.196.794-.196s.636.096.795.196c.159.1.139.14.139.106a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0-.628-.402-1.124-.86-1.413-.459-.289-1.016-.433-1.618-.433z" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-  </g>
-  <g fill-rule="evenodd">
-    <path fill="#73a9ad" d="m194.48 166.19.046 8.155c.033 5.897-4.712 10.671-10.638 10.704l-2.416.013c-5.926.033-10.725-4.687-10.758-10.585l-.046-8.155 23.811-.132" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-    <path fill="#5a8387" d="m170.68 167.02-.006 1.069 23.852-.066.006-1.07z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-    <path fill="#5a8387" d="M186.32 168.09a3.703 3.703 0 0 1-3.665 3.74 3.703 3.703 0 0 1-3.741-3.665 3.703 3.703 0 0 1 3.665-3.74 3.703 3.703 0 0 1 3.741 3.665z" style="paint-order:stroke fill markers"/>
-    <path fill="#7bb0ad" d="M185.27 168.1a2.656 2.656 0 0 1-2.63 2.683 2.656 2.656 0 0 1-2.682-2.629 2.656 2.656 0 0 1 2.629-2.683 2.656 2.656 0 0 1 2.683 2.629z" style="paint-order:stroke fill markers"/>
-    <path fill="#fdffff" d="M184.15 168.11a1.538 1.538 0 0 1-1.522 1.554 1.538 1.538 0 0 1-1.554-1.523 1.538 1.538 0 0 1 1.522-1.553 1.538 1.538 0 0 1 1.554 1.522z" style="paint-order:stroke fill markers"/>
-  </g>
-  <path fill="#4d4d4d" d="M180.82 159.83a.817.817 0 0 0-.817.817c0 .689.475 1.19.976 1.472s1.1.42 1.75.42 1.251-.139 1.751-.42c.5-.282.976-.783.976-1.472a.817.817 0 0 0-.817-.817.817.817 0 0 0-.817.816c.001-.092.046-.057-.143.049-.19.107-.546.21-.95.21-.403 0-.758-.103-.95-.21-.19-.108-.142-.144-.142-.048a.817.817 0 0 0-.817-.817z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-  <path fill="#f4e3d7" stroke-width="4.306" d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z" color="#000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal" transform="matrix(.20533 .1085 -.1085 .20533 157.81 130.81)"/>
-  <g stroke-width="0">
-    <path fill="#f2f2f2" d="m196.32 192.71-8.42 8.468c-.178.179-.155.416.026.654.182.239.522.48.978.666l11.526 4.722c.456.186.94.283 1.353.288.414.005.758-.08.936-.26l8.42-8.468c.178-.178.155-.415-.027-.653-.182-.239-.522-.48-.978-.666l-11.526-4.722a3.806 3.806 0 0 0-1.353-.289c-.413-.005-.757.081-.935.26z" style="paint-order:fill markers stroke" transform="translate(43.505 40.502) scale(.74954)"/>
-    <path fill="#b3b3b3" fill-opacity=".183" d="M202.63 207.22c-.178.179-.522.265-.935.26a3.571 3.571 0 0 1-.854-.123s-3.838-6.367-4.745-7.878c-.722-1.077-.571-1.232 1.142-1.334 2.48-.145 13.238-.502 13.238-.502.242.142.429.3.547.455.182.239.205.475.027.654z" style="paint-order:fill markers stroke" transform="translate(43.505 40.502) scale(.74954)"/>
-    <path fill="#ccc" d="M187.9 201.18c-.178.179-.155.415.027.654.116.152.297.306.532.445 0 0 10.615-.447 13.131-.555 1.827-.034 1.982-.187 1.404-1.227-.84-1.505-4.866-7.918-4.866-7.918a3.598 3.598 0 0 0-.872-.127c-.414-.005-.758.081-.936.26z" style="paint-order:fill markers stroke" transform="translate(43.505 40.502) scale(.74954)"/>
-  </g>
-  <g stroke-width="0">
-    <path fill="#e3dbde" d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z" style="paint-order:fill markers stroke" transform="translate(47.107 60.732) scale(.69551)"/>
-    <path fill="#916f7c" fill-opacity=".107" d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z" style="paint-order:fill markers stroke" transform="translate(47.107 60.732) scale(.69551)"/>
-    <path fill="#c8b7be" d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z" style="paint-order:fill markers stroke" transform="translate(47.107 60.732) scale(.69551)"/>
-  </g>
-  <g stroke-width="0">
-    <path fill="#e3dbde" d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-    <path fill="#916f7c" fill-opacity=".107" d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-    <path fill="#c8b7be" d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-    <path fill="#e3dbde" d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-    <path fill="#916f7c" fill-opacity=".107" d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-    <path fill="#c8b7be" d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z" style="paint-order:fill markers stroke" transform="translate(150.05 130.01) scale(.26933)"/>
-  </g>
-  <path fill="#f2f2f2" d="m156.859 183.005-4.504 4.53c-.095.095-.083.221.014.349.097.128.28.256.523.356l6.165 2.525c.244.1.502.152.724.155.22.003.405-.043.5-.139l4.504-4.53c.095-.095.083-.221-.015-.349-.097-.128-.279-.256-.523-.356l-6.164-2.526a2.036 2.036 0 0 0-.724-.154c-.221-.003-.405.043-.5.139z" style="stroke-width:0;paint-order:fill markers stroke"/>
-  <path fill="#b3b3b3" fill-opacity=".183" d="M160.234 190.766c-.095.095-.28.141-.5.139a1.931 1.931 0 0 1-.457-.066s-2.053-3.406-2.538-4.214c-.386-.576-.306-.659.61-.713 1.328-.078 7.081-.268 7.081-.268.13.076.23.16.293.243.097.127.11.254.014.35z" style="stroke-width:0;paint-order:fill markers stroke"/>
-  <path fill="#ccc" d="M152.355 187.535c-.095.096-.083.222.015.35a.998.998 0 0 0 .284.238l7.024-.297c.976-.018 1.06-.1.75-.656-.448-.805-2.602-4.235-2.602-4.235a1.93 1.93 0 0 0-.467-.068c-.221-.003-.405.043-.5.139z" style="stroke-width:0;paint-order:fill markers stroke"/>
+	<g stroke-width="4.848">
+		<path
+			fill="#4d4d4d"
+			d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="matrix(.20627 0 0 .20627 169 29.284)"
+		/>
+		<g fill="#f4e3d7">
+			<g stroke-width="13.991" color="#000">
+				<path
+					d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.19859 -.05575 .05575 .19859 169 29.284)"
+				/>
+				<path
+					d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.19859 -.05575 .05575 .19859 169 29.284)"
+				/>
+			</g>
+			<path
+				d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.04379 -.20156 .20156 .04379 169 29.284)"
+			/>
+			<path
+				d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.13662 -.15453 .15453 .13662 169 29.284)"
+			/>
+			<path
+				d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.20527 -.02026 .02026 .20527 169 29.284)"
+			/>
+			<path
+				d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.18895 .08272 -.08272 .18895 169 29.285)"
+			/>
+		</g>
+	</g>
+	<g stroke-width="4.848">
+		<path
+			fill="#4d4d4d"
+			d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="matrix(-.20627 0 0 .20627 211.176 29.284)"
+		/>
+		<g fill="#f4e3d7">
+			<g stroke-width="13.991" color="#000">
+				<path
+					d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(-.20627 .20627) rotate(-15.682 3.572 3788.171)"
+				/>
+				<path
+					d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(-.20627 .20627) rotate(-15.682 3.572 3788.171)"
+				/>
+			</g>
+			<path
+				d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="scale(-.20627 .20627) rotate(-77.743 -423.837 706.04)"
+			/>
+			<path
+				d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="scale(-.20627 .20627) rotate(-48.52 -354.39 1206.838)"
+			/>
+			<path
+				d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.20527 -.02026 -.02026 .20527 211.176 29.284)"
+			/>
+			<path
+				d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.18895 .08272 .08272 .18895 211.175 29.285)"
+			/>
+		</g>
+	</g>
+	<g stroke-width="2.886" color="#000">
+		<path
+			fill="#f4e3d7"
+			fill-rule="evenodd"
+			d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+		<path
+			fill="#4d4d4d"
+			d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+	</g>
+	<g fill-rule="evenodd" stroke-width="2.886">
+		<path
+			fill="#73a9ad"
+			d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+		<path
+			fill="#5a8387"
+			d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+		<path
+			fill="#5a8387"
+			d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z"
+			style="paint-order:stroke fill markers"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+		<path
+			fill="#7bb0ad"
+			d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z"
+			style="paint-order:stroke fill markers"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+		<path
+			fill="#fdffff"
+			d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z"
+			style="paint-order:stroke fill markers"
+			transform="translate(185.86 92.039) scale(.34652)"
+		/>
+	</g>
+	<path
+		fill="#4d4d4d"
+		d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z"
+		color="#000"
+		style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		transform="translate(185.86 92.039) scale(.34652)"
+	/>
+	<path
+		fill="#6f7c91"
+		d="M460.8 37.283h-97.263a7.389 7.389 0 0 0-5.246 2.166 7.389 7.389 0 0 0-2.166 5.247v51.888c0 2.053.826 3.906 2.166 5.246a7.389 7.389 0 0 0 5.246 2.166H460.8a7.389 7.389 0 0 0 5.246-2.166 7.389 7.389 0 0 0 2.167-5.246V44.694a7.389 7.389 0 0 0-2.167-5.246 7.39 7.39 0 0 0-5.246-2.166z"
+		style="paint-order:fill markers stroke"
+		transform="translate(-226.23 31.937)"
+	/>
+	<path
+		fill="#535d6c"
+		fill-opacity=".162"
+		d="M363.54 104.12a7.388 7.388 0 0 1-7.103-5.286s39.14-32.53 48.435-40.238c6.378-5.736 8.148-5.747 14.704-.59 9.48 7.474 48.354 40.75 48.354 40.75a7.39 7.39 0 0 1-7.126 5.364z"
+		style="paint-order:fill markers stroke"
+		transform="translate(-226.23 31.937)"
+	/>
+	<path
+		fill="#939dac"
+		d="M363.54 37.283a7.388 7.388 0 0 0-7.103 5.286s39.14 32.53 48.435 40.238c6.378 5.736 8.148 5.747 14.704.59 9.48-7.474 48.354-40.75 48.354-40.75a7.39 7.39 0 0 0-7.126-5.364z"
+		style="paint-order:fill markers stroke"
+		transform="translate(-226.23 31.937)"
+	/>
+	<g stroke-width="0">
+		<path
+			fill="#deaa87"
+			d="M386.8 86.35h-65.728c-1.388 0-2.64.559-3.545 1.464a4.993 4.993 0 0 0-1.464 3.545v35.065c0 1.388.558 2.64 1.464 3.545a4.993 4.993 0 0 0 3.545 1.464H386.8c1.388 0 2.64-.558 3.545-1.464a4.993 4.993 0 0 0 1.464-3.545V91.36c0-1.387-.558-2.64-1.464-3.545a4.993 4.993 0 0 0-3.545-1.464z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-200.09 4.628)"
+		/>
+		<path
+			fill="#d38d5f"
+			fill-opacity=".37"
+			d="M321.07 131.19a4.993 4.993 0 0 1-4.8-3.572s26.45-21.984 32.73-27.192c4.311-3.876 5.507-3.884 9.937-.398 6.407 5.05 32.677 27.538 32.677 27.538a4.994 4.994 0 0 1-4.816 3.625z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-200.09 4.628)"
+		/>
+		<path
+			fill="#d38d5f"
+			d="M321.07 86.35a4.993 4.993 0 0 0-4.8 3.572s26.45 21.984 32.73 27.192c4.311 3.876 5.507 3.884 9.937.398 6.407-5.05 32.677-27.538 32.677-27.538a4.994 4.994 0 0 0-4.816-3.625z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-200.09 4.628)"
+		/>
+	</g>
+	<g stroke-width="0">
+		<path
+			fill="#c4b7c8"
+			d="M445.19 99.97h-40.08a3.045 3.045 0 0 0-3.054 3.054v21.382a3.045 3.045 0 0 0 3.054 3.055h40.08a3.045 3.045 0 0 0 3.054-3.055v-21.382a3.045 3.045 0 0 0-3.054-3.054z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-302.98 -17.331) scale(1.2034)"
+		/>
+		<path
+			fill="#8a6f91"
+			fill-opacity=".107"
+			d="M405.11 127.31a3.045 3.045 0 0 1-2.927-2.178s16.129-13.405 19.959-16.581c2.628-2.364 3.357-2.368 6.059-.243 3.907 3.08 19.926 16.792 19.926 16.792a3.042 3.042 0 0 1-2.937 2.21z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-302.98 -17.331) scale(1.2034)"
+		/>
+		<path
+			fill="#a793ac"
+			d="M405.11 99.97a3.045 3.045 0 0 0-2.927 2.178s16.129 13.405 19.959 16.581c2.628 2.364 3.357 2.368 6.059.243 3.907-3.08 19.926-16.792 19.926-16.792a3.042 3.042 0 0 0-2.937-2.21z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-302.98 -17.331) scale(1.2034)"
+		/>
+	</g>
+	<g stroke-width="1.276">
+		<g stroke-width="4.782">
+			<path
+				fill="#4d4d4d"
+				d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.2091 0 0 -.2091 81.513 149.192)"
+			/>
+			<g fill="#f4e3d7">
+				<g stroke-width="9.14" color="#000">
+					<path
+						d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(.20131 .05652 .05652 -.20131 81.513 149.192)"
+					/>
+					<path
+						d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(.20131 .05652 .05652 -.20131 81.513 149.192)"
+					/>
+				</g>
+				<path
+					d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.04439 .20433 .20433 -.04439 81.513 149.192)"
+				/>
+				<path
+					d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.1385 .15665 .15665 -.1385 81.512 149.192)"
+				/>
+				<path
+					d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.20808 .02054 .02054 -.20808 81.512 149.192)"
+				/>
+				<path
+					d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(.2091 -.2091) rotate(23.642 1899.516 574.565)"
+				/>
+			</g>
+		</g>
+		<g stroke-width="4.782">
+			<path
+				fill="#4d4d4d"
+				d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.2091 0 0 .2091 123.85 85.139)"
+			/>
+			<g fill="#f4e3d7">
+				<g stroke-width="9.14" color="#000">
+					<path
+						d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="scale(-.2091 .2091) rotate(-15.682 1182.224 2354.15)"
+					/>
+					<path
+						d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="scale(-.2091 .2091) rotate(-15.682 1182.224 2354.15)"
+					/>
+				</g>
+				<path
+					d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(-.2091 .2091) rotate(-77.743 -43.588 570.998)"
+				/>
+				<path
+					d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(-.2091 .2091) rotate(-48.52 155.587 860.733)"
+				/>
+				<path
+					d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="scale(-.2091 .2091) rotate(-5.636 3839.71 6219.936)"
+				/>
+				<path
+					d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.19154 .08385 .08385 .19154 123.849 85.139)"
+				/>
+			</g>
+		</g>
+		<g stroke-width="2.847">
+			<g color="#000">
+				<path
+					fill="#f4e3d7"
+					fill-rule="evenodd"
+					d="m73.994 44.436 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802a27.224 27.224 0 0 1 27.005-27.559z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+				<path
+					fill="#4d4d4d"
+					d="M69.067 59.312c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.051-.016.356-.272.407-.257 1.167-.501 2.038-.501.87 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.206-3.622-1.176-.74-2.602-1.11-4.146-1.11zM85.962 59.312c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+			</g>
+			<g fill-rule="evenodd">
+				<path
+					fill="#73a9ad"
+					d="m107.93 92.277.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+				<path
+					fill="#5a8387"
+					d="m47.219 94.92.019 2.74 60.721-.906-.019-2.74z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+				<path
+					fill="#5a8387"
+					d="M87.084 97.283a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z"
+					style="paint-order:stroke fill markers"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+				<path
+					fill="#7bb0ad"
+					d="M84.401 97.313a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.739-6.877 6.808 6.808 0 0 1 6.877 6.739z"
+					style="paint-order:stroke fill markers"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+				<path
+					fill="#fdffff"
+					d="M81.535 97.337a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.982-3.902 3.942 3.942 0 0 1 3.902-3.982 3.942 3.942 0 0 1 3.982 3.902z"
+					style="paint-order:stroke fill markers"
+					transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+				/>
+			</g>
+			<path
+				fill="#4d4d4d"
+				d="M73.005 76.116a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.219 3.051 2.501 3.772s2.818 1.076 4.488 1.076 3.205-.354 4.487-1.076c1.283-.721 2.501-2.006 2.501-3.772a2.094 2.094 0 0 0-2.094-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.489.275-1.4.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.35128 0 0 .35128 75.407 86.6)"
+			/>
+		</g>
+		<path
+			fill="#483e37"
+			d="M79.156 122.857c-.189-.79-.08-.84 1.059-.49l.888.275.152-.208c.205-.281.325-.615.299-.837-.02-.177-.053-.2-.747-.538-.399-.194-.762-.385-.806-.424-.123-.107.01-.261.427-.5.739-.42 1.501-.469 2.216-.14.63.288 1.12.914 1.233 1.572.065.38.356.954.62 1.224.29.296 5.108 4.026 5.327 4.124.277.123.806.151 1.316.069.806-.13 1.45.013 2.054.457.788.58 1.182 1.915.61 2.068-.1.027-.424-.072-.977-.3-.907-.374-.964-.374-1.215.003-.213.319-.332.962-.2 1.073.036.03.42.222.852.427.445.211.8.416.819.472.115.353-.974.922-1.824.953-.342.012-1.022-.166-1.333-.35-.597-.352-1.011-.993-1.111-1.72-.04-.293-.106-.466-.321-.851l-.27-.484-5.11-3.97-.489-.129a3.291 3.291 0 0 0-.996-.1c-.98.055-1.72-.285-2.172-.998a2.338 2.338 0 0 1-.302-.678z"
+		/>
+	</g>
+	<g stroke-width="4.848">
+		<path
+			fill="#4d4d4d"
+			d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="matrix(.20627 0 0 .20627 20.692 85.825)"
+		/>
+		<g fill="#f4e3d7">
+			<g stroke-width="13.991" color="#000">
+				<path
+					d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.19859 -.05575 .05575 .19859 20.693 85.825)"
+				/>
+				<path
+					d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.19859 -.05575 .05575 .19859 20.693 85.825)"
+				/>
+			</g>
+			<path
+				d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.04379 -.20156 .20156 .04379 20.692 85.825)"
+			/>
+			<path
+				d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="scale(.20627) rotate(-48.52 511.788 96.75)"
+			/>
+			<path
+				d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.20527 -.02026 .02026 .20527 20.692 85.825)"
+			/>
+			<path
+				d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.18895 .08272 -.08272 .18895 20.693 85.826)"
+			/>
+		</g>
+	</g>
+	<g stroke-width="4.848">
+		<path
+			fill="#4d4d4d"
+			d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="matrix(-.20627 0 0 .20627 62.869 85.825)"
+		/>
+		<g fill="#f4e3d7">
+			<g stroke-width="13.991" color="#000">
+				<path
+					d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.19859 -.05575 -.05575 .19859 62.869 85.825)"
+				/>
+				<path
+					d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.19859 -.05575 -.05575 .19859 62.869 85.825)"
+				/>
+			</g>
+			<path
+				d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.04379 -.20156 -.20156 .04379 62.869 85.825)"
+			/>
+			<path
+				d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="scale(-.20627 .20627) rotate(-48.52 309.231 546.199)"
+			/>
+			<path
+				d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.20527 -.02026 -.02026 .20527 62.869 85.825)"
+			/>
+			<path
+				d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.18895 .08272 .08272 .18895 62.868 85.826)"
+			/>
+		</g>
+	</g>
+	<g stroke-width="2.886" color="#000">
+		<path
+			fill="#f4e3d7"
+			fill-rule="evenodd"
+			d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+		<path
+			fill="#4d4d4d"
+			d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+	</g>
+	<g fill-rule="evenodd" stroke-width="2.886">
+		<path
+			fill="#73a9ad"
+			d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+		<path
+			fill="#5a8387"
+			d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+		<path
+			fill="#5a8387"
+			d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z"
+			style="paint-order:stroke fill markers"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+		<path
+			fill="#7bb0ad"
+			d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z"
+			style="paint-order:stroke fill markers"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+		<path
+			fill="#fdffff"
+			d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z"
+			style="paint-order:stroke fill markers"
+			transform="translate(37.553 148.58) scale(.34652)"
+		/>
+	</g>
+	<path
+		fill="#4d4d4d"
+		d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z"
+		color="#000"
+		style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		transform="translate(37.553 148.58) scale(.34652)"
+	/>
+	<g stroke-width="0">
+		<path
+			fill="#c4b7c8"
+			d="M445.19 99.97h-40.08a3.045 3.045 0 0 0-3.054 3.054v21.382a3.045 3.045 0 0 0 3.054 3.055h40.08a3.045 3.045 0 0 0 3.054-3.055v-21.382a3.045 3.045 0 0 0-3.054-3.054z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(37.632 55.626 -122.49) scale(.46656)"
+		/>
+		<path
+			fill="#8a6f91"
+			fill-opacity=".107"
+			d="M405.11 127.31a3.045 3.045 0 0 1-2.927-2.178s16.129-13.405 19.959-16.581c2.628-2.364 3.357-2.368 6.059-.243 3.907 3.08 19.926 16.792 19.926 16.792a3.042 3.042 0 0 1-2.937 2.21z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(37.632 55.626 -122.49) scale(.46656)"
+		/>
+		<path
+			fill="#a793ac"
+			d="M405.11 99.97a3.045 3.045 0 0 0-2.927 2.178s16.129 13.405 19.959 16.581c2.628 2.364 3.357 2.368 6.059.243 3.907-3.08 19.926-16.792 19.926-16.792a3.042 3.042 0 0 0-2.937-2.21z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(37.632 55.626 -122.49) scale(.46656)"
+		/>
+	</g>
+	<g stroke-width=".738">
+		<path
+			fill="#e6e6e6"
+			d="m145.87 18.203-22.043 58.208-48.356-28.205z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(12.24 166.628 -313.64) scale(1.35459)"
+		/>
+		<path fill="gray" d="m40.169 76.401 20.48-9.041-13.28-10.977z" />
+		<path
+			fill="#ccc"
+			d="m107.07 47.747 16.749 28.664-48.356-28.205z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(12.24 166.628 -313.64) scale(1.35459)"
+		/>
+		<path
+			fill="#a4a4a4"
+			d="M145.87 18.203 88.879 56.027l3.946 13.621 3.861-9.067z"
+			style="paint-order:fill markers stroke"
+			transform="rotate(12.24 166.628 -313.64) scale(1.35459)"
+		/>
+		<g stroke-width="4.629">
+			<path
+				fill="#4d4d4d"
+				d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.21135 -.04466 .04466 .21135 48.931 13.774)"
+			/>
+			<g fill="#f4e3d7">
+				<g stroke-width="8.468" color="#000">
+					<path
+						d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(.1914 -.10013 .10013 .1914 48.932 13.774)"
+					/>
+					<path
+						d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(.1914 -.10013 .10013 .1914 48.932 13.774)"
+					/>
+				</g>
+				<path
+					d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.00122 -.21601 .21601 .00122 48.932 13.774)"
+				/>
+				<path
+					d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.10653 -.18792 .18792 .10653 48.931 13.774)"
+				/>
+				<path
+					d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.20594 -.0652 .0652 .20594 48.931 13.774)"
+				/>
+				<path
+					d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(.21152 .04384 -.04384 .21152 48.932 13.774)"
+				/>
+			</g>
+		</g>
+		<g stroke-width="4.629">
+			<path
+				fill="#4d4d4d"
+				d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(-.21135 .04466 .04466 .21135 92.147 4.642)"
+			/>
+			<g fill="#f4e3d7">
+				<g stroke-width="8.468" color="#000">
+					<path
+						d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(-.21555 -.01413 -.01413 .21555 92.146 4.642)"
+					/>
+					<path
+						d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+						style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+						transform="matrix(-.21555 -.01413 -.01413 .21555 92.146 4.642)"
+					/>
+				</g>
+				<path
+					d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.08851 -.19705 -.19705 .08851 92.147 4.642)"
+				/>
+				<path
+					d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.17345 -.12875 -.12875 .17345 92.147 4.642)"
+				/>
+				<path
+					d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.21471 .02369 .02369 .21471 92.147 4.642)"
+				/>
+				<path
+					d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+					color="#000"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="matrix(-.1757 .12567 .12567 .1757 92.146 4.642)"
+				/>
+			</g>
+		</g>
+		<g stroke-width="2.756" color="#000">
+			<path
+				fill="#f4e3d7"
+				fill-rule="evenodd"
+				d="m9.137-132.5 6.16-.063a27.224 27.224 0 0 1 27.56 27.005l.424 41.802a27.224 27.224 0 0 1-27.005 27.56l-6.16.062a27.224 27.224 0 0 1-27.56-27.005l-.424-41.802A27.224 27.224 0 0 1 9.137-132.5z"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+			<path
+				fill="#4d4d4d"
+				d="M4.21-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.98-1.98c0 .089-.052-.016.355-.272.407-.257 1.167-.501 2.038-.501.871 0 1.63.244 2.037.5s.357.362.357.273a1.98 1.98 0 0 0 1.979 1.98 1.98 1.98 0 0 0 1.978-1.98c0-1.61-1.03-2.882-2.205-3.622-1.175-.74-2.601-1.11-4.146-1.11zM21.105-117.63c-1.544 0-2.971.37-4.147 1.11-1.175.74-2.205 2.012-2.205 3.622a1.98 1.98 0 0 0 1.98 1.98 1.98 1.98 0 0 0 1.978-1.98c0 .089-.05-.016.357-.272.407-.257 1.166-.501 2.037-.501.87 0 1.63.244 2.038.5.407.257.356.362.356.273a1.98 1.98 0 0 0 1.978 1.98 1.98 1.98 0 0 0 1.98-1.98c0-1.61-1.03-2.882-2.205-3.622-1.176-.74-2.603-1.11-4.147-1.11z"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+		</g>
+		<g fill-rule="evenodd" stroke-width="2.756">
+			<path
+				fill="#73a9ad"
+				d="m43.069-84.663.212 20.902a27.224 27.224 0 0 1-27.005 27.559l-6.16.063a27.224 27.224 0 0 1-27.559-27.005l-.212-20.902 60.72-.617"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+			<path
+				fill="#5a8387"
+				d="m-17.638-82.02.019 2.74 60.721-.906-.019-2.74z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+			<path
+				fill="#5a8387"
+				d="M22.227-79.657a9.491 9.491 0 0 1-9.395 9.588 9.491 9.491 0 0 1-9.587-9.395 9.491 9.491 0 0 1 9.394-9.588 9.491 9.491 0 0 1 9.588 9.395z"
+				style="paint-order:stroke fill markers"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+			<path
+				fill="#7bb0ad"
+				d="M19.544-79.627a6.808 6.808 0 0 1-6.739 6.878 6.808 6.808 0 0 1-6.877-6.74 6.808 6.808 0 0 1 6.738-6.877 6.808 6.808 0 0 1 6.878 6.739z"
+				style="paint-order:stroke fill markers"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+			<path
+				fill="#fdffff"
+				d="M16.678-79.603a3.942 3.942 0 0 1-3.902 3.982 3.942 3.942 0 0 1-3.981-3.902 3.942 3.942 0 0 1 3.901-3.982 3.942 3.942 0 0 1 3.982 3.902z"
+				style="paint-order:stroke fill markers"
+				transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+			/>
+		</g>
+		<path
+			fill="#4d4d4d"
+			d="M8.148-100.82a2.094 2.094 0 0 0-2.094 2.094c0 1.766 1.218 3.051 2.5 3.772s2.818 1.076 4.488 1.076 3.206-.354 4.488-1.076c1.282-.721 2.5-2.006 2.5-3.772a2.094 2.094 0 0 0-2.093-2.094 2.094 2.094 0 0 0-2.094 2.09c.003-.233.117-.146-.366.126-.49.275-1.401.538-2.434.538s-1.946-.263-2.435-.538c-.489-.275-.366-.368-.366-.122a2.094 2.094 0 0 0-2.094-2.094z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="matrix(.35505 -.07503 .07503 .35505 79.796 74.423)"
+		/>
+		<path fill="#e6e6e6" d="M125.17 23.533 66.59 55.36l12.682 38.9 45.897-70.725" />
+	</g>
+	<g stroke-width="0">
+		<path
+			fill="#ac9d93"
+			d="m127.58 35.37-14.395-4.706a1.15 1.15 0 0 0-1.456.739l-2.51 7.68a1.15 1.15 0 0 0 .738 1.455l14.395 4.706a1.15 1.15 0 0 0 1.456-.739l2.51-7.68a1.15 1.15 0 0 0-.738-1.455z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-25.283 -12.93)"
+		/>
+		<path
+			fill="#917c6f"
+			fill-opacity=".229"
+			d="M109.97 40.485a1.15 1.15 0 0 1-.796-1.126s7.367-2.921 9.116-3.612c1.222-.54 1.484-.456 2.205.624 1.041 1.565 5.185 8.37 5.185 8.37a1.15 1.15 0 0 1-1.315.45z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-25.283 -12.93)"
+		/>
+		<path
+			fill="#917c6f"
+			d="M113.18 30.664a1.15 1.15 0 0 0-1.307.439s4.219 6.708 5.222 8.299c.666 1.157.928 1.244 2.147.798 1.765-.647 9.129-3.692 9.129-3.692a1.15 1.15 0 0 0-.795-1.139z"
+			style="paint-order:fill markers stroke"
+			transform="translate(-25.283 -12.93)"
+		/>
+	</g>
+	<path
+		fill="#4d4d4d"
+		stroke-width="4.306"
+		d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+		color="#000"
+		style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		transform="rotate(-23.288 405.908 -288.34) scale(.23224)"
+	/>
+	<g fill="#f4e3d7">
+		<g stroke-width="8.229" color="#000">
+			<path
+				d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.18056 -.14605 .14605 .18056 147.06 136.98)"
+			/>
+			<path
+				d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="matrix(.18056 -.14605 .14605 .18056 147.06 136.98)"
+			/>
+		</g>
+		<path
+			stroke-width="4.306"
+			d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="rotate(-101.03 129.963 7.914) scale(.23224)"
+		/>
+		<path
+			stroke-width="4.306"
+			d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="rotate(-71.807 168.14 -33.069) scale(.23224)"
+		/>
+		<path
+			stroke-width="4.306"
+			d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="rotate(-28.924 339.117 -216.604) scale(.23224)"
+		/>
+	</g>
+	<g stroke-width="0" transform="matrix(-1.6009 .53568 .53568 1.6009 120.47 87.869)">
+		<rect
+			width="3.875"
+			height="18.174"
+			x="-11.359"
+			y="43.966"
+			fill="#f95"
+			ry="0"
+			style="paint-order:markers fill stroke"
+		/>
+		<rect
+			width="3.875"
+			height="2.138"
+			x="-11.359"
+			y="61.06"
+			fill="#ffe680"
+			ry="0"
+			style="paint-order:markers fill stroke"
+		/>
+		<path
+			fill="#ff7f2a"
+			d="M-9.421 43.966h1.937V62.14H-9.42z"
+			style="paint-order:markers fill stroke"
+		/>
+		<path
+			fill="#ffd42a"
+			d="M-9.421 61.06h1.937v2.138H-9.42z"
+			style="paint-order:markers fill stroke"
+		/>
+		<path
+			fill="#fca"
+			d="m-24.001 39.121-.85 1.63-.861 1.626-.987-1.552-.977-1.558 1.837-.08z"
+			style="paint-order:markers fill stroke"
+			transform="matrix(1.0536 -.04319 -.04096 -.99916 19.408 82.05)"
+		/>
+		<path
+			fill="#2b1100"
+			d="m-24.001 39.121-.85 1.63-.861 1.626-.987-1.552-.977-1.558 1.837-.08z"
+			style="paint-order:markers fill stroke"
+			transform="matrix(.40121 -.01645 -.0156 -.38048 1.558 56.521)"
+		/>
+	</g>
+	<g stroke-width="4.306">
+		<path
+			fill="#4d4d4d"
+			d="M23.885 123.7c-.67 5.602 1.478 9.533 4.09 14.012 2.611 4.48 6.211 9.12 10.512 13.477 8.6 8.715 19.885 16.867 32.902 16.42l-.496-14.459c-5.814.2-15.108-4.502-22.107-11.594-3.5-3.546-6.455-7.944-8.313-11.131s-2.094-6.078-2.222-5.004z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+			transform="rotate(169.531 96.997 107.966) scale(.23224)"
+		/>
+		<g fill="#f4e3d7">
+			<g stroke-width="8.229" color="#000">
+				<path
+					d="M-5.184 113.52c-6.616 0-11.983 4.779-11.984 10.676-.001 5.897 5.363 10.678 11.98 10.68 6.615.002 11.982-4.775 11.985-10.672v-.006c0-.002 0-.004-.002-.006-.003-5.894-5.364-10.671-11.979-10.672z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="rotate(153.849 83.178 122.874) scale(.23224)"
+				/>
+				<path
+					d="M6.782 124.2c-.003 5.888 0-5.892 0-.005z"
+					style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+					transform="rotate(153.849 83.178 122.874) scale(.23224)"
+				/>
+			</g>
+			<path
+				d="M-116.78 34.967a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="rotate(91.789 10.763 200.995) scale(.23224)"
+			/>
+			<path
+				d="M-72.047 80.547a4.921 4.921 0 0 0-4.932 4.932v6.986c0 2.732 2.2 4.93 4.932 4.93s4.932-2.198 4.932-4.93v-6.986c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="rotate(121.012 50.421 158.212) scale(.23224)"
+			/>
+			<path
+				d="M18.326 101.36a4.92 4.92 0 0 0-4.932 4.93v6.986c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.986a4.92 4.92 0 0 0-4.932-4.93z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="rotate(163.895 92.098 113.251) scale(.23224)"
+			/>
+			<path
+				d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+				color="#000"
+				style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+				transform="rotate(-166.826 117.343 86.016) scale(.23224)"
+			/>
+		</g>
+	</g>
+	<g color="#000">
+		<path
+			fill="#f4e3d7"
+			fill-rule="evenodd"
+			d="m181.21 147.26 2.403-.024c5.897-.06 10.692 4.6 10.752 10.446l.166 16.17c.06 5.846-4.64 10.6-10.536 10.66l-2.403.024c-5.897.06-10.692-4.6-10.752-10.446l-.166-16.17c-.06-5.846 4.64-10.601 10.536-10.66z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		/>
+		<path
+			fill="#4d4d4d"
+			d="M179.29 153.27c-.602 0-1.16.144-1.618.433-.459.289-.86.785-.86 1.413a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0 .035-.02-.006.139-.106.159-.1.455-.196.795-.196s.636.096.795.196c.159.1.139.14.139.106a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0-.628-.402-1.124-.86-1.413-.46-.289-1.016-.433-1.618-.433zM185.88 153.27c-.603 0-1.16.144-1.618.433-.459.289-.86.785-.86 1.413a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0 .035-.02-.006.14-.106.158-.1.454-.196.794-.196s.636.096.795.196c.159.1.139.14.139.106a.772.772 0 0 0 .772.773.772.772 0 0 0 .772-.773c0-.628-.402-1.124-.86-1.413-.459-.289-1.016-.433-1.618-.433z"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		/>
+	</g>
+	<g fill-rule="evenodd">
+		<path
+			fill="#73a9ad"
+			d="m194.48 166.19.046 8.155c.033 5.897-4.712 10.671-10.638 10.704l-2.416.013c-5.926.033-10.725-4.687-10.758-10.585l-.046-8.155 23.811-.132"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		/>
+		<path
+			fill="#5a8387"
+			d="m170.68 167.02-.006 1.069 23.852-.066.006-1.07z"
+			color="#000"
+			style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		/>
+		<path
+			fill="#5a8387"
+			d="M186.32 168.09a3.703 3.703 0 0 1-3.665 3.74 3.703 3.703 0 0 1-3.741-3.665 3.703 3.703 0 0 1 3.665-3.74 3.703 3.703 0 0 1 3.741 3.665z"
+			style="paint-order:stroke fill markers"
+		/>
+		<path
+			fill="#7bb0ad"
+			d="M185.27 168.1a2.656 2.656 0 0 1-2.63 2.683 2.656 2.656 0 0 1-2.682-2.629 2.656 2.656 0 0 1 2.629-2.683 2.656 2.656 0 0 1 2.683 2.629z"
+			style="paint-order:stroke fill markers"
+		/>
+		<path
+			fill="#fdffff"
+			d="M184.15 168.11a1.538 1.538 0 0 1-1.522 1.554 1.538 1.538 0 0 1-1.554-1.523 1.538 1.538 0 0 1 1.522-1.553 1.538 1.538 0 0 1 1.554 1.522z"
+			style="paint-order:stroke fill markers"
+		/>
+	</g>
+	<path
+		fill="#4d4d4d"
+		d="M180.82 159.83a.817.817 0 0 0-.817.817c0 .689.475 1.19.976 1.472s1.1.42 1.75.42 1.251-.139 1.751-.42c.5-.282.976-.783.976-1.472a.817.817 0 0 0-.817-.817.817.817 0 0 0-.817.816c.001-.092.046-.057-.143.049-.19.107-.546.21-.95.21-.403 0-.758-.103-.95-.21-.19-.108-.142-.144-.142-.048a.817.817 0 0 0-.817-.817z"
+		color="#000"
+		style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+	/>
+	<path
+		fill="#f4e3d7"
+		stroke-width="4.306"
+		d="M80.041 80.461a4.921 4.921 0 0 0-4.932 4.932v6.984c0 2.732 2.2 4.932 4.932 4.932s4.932-2.2 4.932-4.932v-6.984c0-2.732-2.2-4.932-4.932-4.932z"
+		color="#000"
+		style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+		transform="matrix(.20533 .1085 -.1085 .20533 157.81 130.81)"
+	/>
+	<g stroke-width="0">
+		<path
+			fill="#f2f2f2"
+			d="m196.32 192.71-8.42 8.468c-.178.179-.155.416.026.654.182.239.522.48.978.666l11.526 4.722c.456.186.94.283 1.353.288.414.005.758-.08.936-.26l8.42-8.468c.178-.178.155-.415-.027-.653-.182-.239-.522-.48-.978-.666l-11.526-4.722a3.806 3.806 0 0 0-1.353-.289c-.413-.005-.757.081-.935.26z"
+			style="paint-order:fill markers stroke"
+			transform="translate(43.505 40.502) scale(.74954)"
+		/>
+		<path
+			fill="#b3b3b3"
+			fill-opacity=".183"
+			d="M202.63 207.22c-.178.179-.522.265-.935.26a3.571 3.571 0 0 1-.854-.123s-3.838-6.367-4.745-7.878c-.722-1.077-.571-1.232 1.142-1.334 2.48-.145 13.238-.502 13.238-.502.242.142.429.3.547.455.182.239.205.475.027.654z"
+			style="paint-order:fill markers stroke"
+			transform="translate(43.505 40.502) scale(.74954)"
+		/>
+		<path
+			fill="#ccc"
+			d="M187.9 201.18c-.178.179-.155.415.027.654.116.152.297.306.532.445 0 0 10.615-.447 13.131-.555 1.827-.034 1.982-.187 1.404-1.227-.84-1.505-4.866-7.918-4.866-7.918a3.598 3.598 0 0 0-.872-.127c-.414-.005-.758.081-.936.26z"
+			style="paint-order:fill markers stroke"
+			transform="translate(43.505 40.502) scale(.74954)"
+		/>
+	</g>
+	<g stroke-width="0">
+		<path
+			fill="#e3dbde"
+			d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z"
+			style="paint-order:fill markers stroke"
+			transform="translate(47.107 60.732) scale(.69551)"
+		/>
+		<path
+			fill="#916f7c"
+			fill-opacity=".107"
+			d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z"
+			style="paint-order:fill markers stroke"
+			transform="translate(47.107 60.732) scale(.69551)"
+		/>
+		<path
+			fill="#c8b7be"
+			d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z"
+			style="paint-order:fill markers stroke"
+			transform="translate(47.107 60.732) scale(.69551)"
+		/>
+	</g>
+	<g stroke-width="0">
+		<path
+			fill="#e3dbde"
+			d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+		<path
+			fill="#916f7c"
+			fill-opacity=".107"
+			d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+		<path
+			fill="#c8b7be"
+			d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+		<path
+			fill="#e3dbde"
+			d="m177.32 182.22-5.252 11.819c-.11.25-.026.483.2.66.227.176.595.295 1.053.316l11.572.529c.458.02.916-.061 1.287-.21.371-.15.656-.366.767-.616l5.251-11.819c.111-.25.027-.483-.2-.66-.226-.176-.595-.295-1.053-.316l-11.572-.528c-.458-.021-.915.06-1.287.21-.37.149-.655.365-.766.615z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+		<path
+			fill="#916f7c"
+			fill-opacity=".107"
+			d="M186.87 194.71c-.11.25-.395.466-.766.615-.238.096-.51.163-.796.194 0 0-5.142-5.087-6.36-6.295-.934-.834-.841-1.049.663-1.793 2.179-1.076 11.7-5.461 11.7-5.461.254.055.463.146.61.26.227.177.311.411.2.66z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+		<path
+			fill="#c8b7be"
+			d="M172.07 194.04c-.11.25-.027.483.2.66.145.112.348.202.595.257 0 0 9.369-4.425 11.59-5.476 1.623-.717 1.721-.932.925-1.78-1.155-1.229-6.478-6.292-6.478-6.292a3.04 3.04 0 0 0-.814.196c-.371.15-.656.366-.767.616z"
+			style="paint-order:fill markers stroke"
+			transform="translate(150.05 130.01) scale(.26933)"
+		/>
+	</g>
+	<path
+		fill="#f2f2f2"
+		d="m156.859 183.005-4.504 4.53c-.095.095-.083.221.014.349.097.128.28.256.523.356l6.165 2.525c.244.1.502.152.724.155.22.003.405-.043.5-.139l4.504-4.53c.095-.095.083-.221-.015-.349-.097-.128-.279-.256-.523-.356l-6.164-2.526a2.036 2.036 0 0 0-.724-.154c-.221-.003-.405.043-.5.139z"
+		style="stroke-width:0;paint-order:fill markers stroke"
+	/>
+	<path
+		fill="#b3b3b3"
+		fill-opacity=".183"
+		d="M160.234 190.766c-.095.095-.28.141-.5.139a1.931 1.931 0 0 1-.457-.066s-2.053-3.406-2.538-4.214c-.386-.576-.306-.659.61-.713 1.328-.078 7.081-.268 7.081-.268.13.076.23.16.293.243.097.127.11.254.014.35z"
+		style="stroke-width:0;paint-order:fill markers stroke"
+	/>
+	<path
+		fill="#ccc"
+		d="M152.355 187.535c-.095.096-.083.222.015.35a.998.998 0 0 0 .284.238l7.024-.297c.976-.018 1.06-.1.75-.656-.448-.805-2.602-4.235-2.602-4.235a1.93 1.93 0 0 0-.467-.068c-.221-.003-.405.043-.5.139z"
+		style="stroke-width:0;paint-order:fill markers stroke"
+	/>
 </svg>
 
-
 <style>
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+	svg {
+		width: 100%;
+		height: 100%;
+	}
 </style>

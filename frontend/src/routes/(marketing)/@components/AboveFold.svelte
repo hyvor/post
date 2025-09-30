@@ -29,6 +29,9 @@
 				{/snippet}
 			</Button>
 		</div>
+		<div class="main-graphic">
+			<MainGraphic />
+		</div>
 
 		<!-- <div class="trial-checks">
 			< <TrialChecks /> -->
@@ -53,6 +56,7 @@
 		overflow-x: hidden;
 	}
 	.above-fold {
+		position: relative;
 		padding-top: 75px;
 		display: flex;
 		width: 95vw;
@@ -89,6 +93,12 @@
 		animation:
 			heroEnterDelayed 1.2s ease-out,
 			subtleFloat 6s ease-in-out infinite 3s reverse;
+	}
+
+	.main-graphic {
+		width: 80%;
+		margin: 0 0 -400px 0;
+		opacity: 0.9;
 	}
 
 	@keyframes heroEnter {
@@ -153,7 +163,7 @@
 	.buttons {
 		display: flex;
 		gap: 10px;
-		margin-top: 30px;
+		margin-top: 40px;
 	}
 
 	.trial-checks {

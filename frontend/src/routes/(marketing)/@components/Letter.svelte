@@ -35,12 +35,11 @@
 
 <style>
 	.letter-section {
-		background-color: var(--accent);
+		background-color: var(--accent-light);
 		padding: 100px 0;
 	}
 
 	.wrap {
-		position: relative; /* enable positioning context for overlay */
 		z-index: 1;
 		font-style: normal;
 		font-size: 20px;
@@ -49,18 +48,6 @@
 		margin: auto;
 		max-width: 1000px;
 		border-radius: 20px;
-		border: 1.5px solid var(--text);
-		overflow: hidden; /* keeps overlay inside rounded corners */
-	}
-
-	.wrap::before {
-		content: '';
-		position: absolute;
-		inset: 0; /* top:0; right:0; bottom:0; left:0 */
-		background-color: var(--accent-lightest); /* your chosen background color */
-		opacity: 0.6; /* adjust transparency */
-		z-index: -1; /* place it behind the content */
-		border-radius: inherit; /* follow the parent’s radius */
 	}
 
 	.head {
@@ -75,6 +62,7 @@
 		line-height: 60px;
 		margin-top: 0;
 		margin-bottom: 0;
+		/* color: #b7f9ff; */
 	}
 
 	p {
@@ -84,9 +72,9 @@
 		line-height: 32px;
 	}
 
-	.highlight {
-		text-decoration: underline;
-	}
+	/* p :global(strong) {
+		color: #b7f9ff;
+	} */
 
 	@media (max-width: 768px) {
 		.letter-section {
