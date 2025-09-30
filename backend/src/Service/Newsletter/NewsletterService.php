@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Service\AppConfig;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use App\Service\SendingProfile\SendingProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -65,20 +66,20 @@ class NewsletterService
             ->setNewsletter($newsletter);
 
         $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
-        $sendingProfile = new SendingProfile()
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setNewsletter($newsletter)
-            ->setIsSystem(true)
-            ->setIsDefault(true)
-            ->setFromEmail($systemAddress)
-            ->setFromName($newsletter->getName())
-            ->setReplyToEmail($systemAddress);
+
+        $this->sendingProfileService
+            ->createSendingProfile(
+                $newsletter,
+                null,
+                fromEmail: $systemAddress,
+                fromName: $newsletter->getName(),
+                system: true,
+                flush: false
+            );
 
         $this->em->persist($user);
         $this->em->persist($newsletter);
         $this->em->persist($list);
-        $this->em->persist($sendingProfile);
         $this->em->flush();
 
         return $newsletter;
@@ -258,6 +259,13 @@ class NewsletterService
 
         if ($updates->hasProperty('subdomain')) {
             $newsletter->setSubdomain($updates->subdomain);
+
+            $systemSendingProfile = $this->sendingProfileService->getSystemSendingProfileOfNewsletter($newsletter);
+            $sendingProfileUpdates = new UpdateSendingProfileDto();
+            $sendingProfileUpdates->fromEmail = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+
+            $this->sendingProfileService
+                ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
         $newsletter->setUpdatedAt($this->now());
@@ -267,7 +275,7 @@ class NewsletterService
         return $newsletter;
     }
 
-    public function isUsernameTaken(string $username): bool
+    public function isSubdomainTaken(string $username): bool
     {
         $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
         return $newsletter !== null;

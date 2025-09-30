@@ -5,6 +5,7 @@ export interface AppConfig {
 
     app: {
         default_email_domain: string;
+        archive_url: string;
         api_keys: {
             scopes: string[];
         }
@@ -128,8 +129,7 @@ export type NewsletterList = {
 
 export type Newsletter = {
     id: number;
-    slug: string;
-    uuid: string;
+    subdomain: string;
     created_at: number;
     name: string;
 } & NewsletterMeta;

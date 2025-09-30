@@ -1,5 +1,6 @@
 import consoleApi from "../consoleApi";
 import type { Newsletter } from "../../types";
+import { updateNewsletterStore } from "../stores/newsletterStore";
 
 export function getSubdomainAvailability(subdomain: string) {
     return consoleApi.get<{ available: boolean }>({
@@ -20,13 +21,20 @@ export function createNewsletter(name: string, subdomain: string) {
     });
 }
 
-export function updateNewsletter(
-    newsletter: Omit<Newsletter, 'id' | 'created_at'>
+export async function updateNewsletter(
+    newsletter: Partial<Omit<Newsletter, 'id' | 'created_at'>>,
+    updateStore = false,
 ) {
-    return consoleApi.patch<Newsletter>({
+    const res = await consoleApi.patch<Newsletter>({
         endpoint: 'newsletter',
         data: newsletter,
     });
+
+    if (updateStore) {
+        updateNewsletterStore(res);
+    }
+
+    return res;
 }
 
 export function deleteNewsletter() {

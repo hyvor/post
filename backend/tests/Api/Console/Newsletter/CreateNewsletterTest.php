@@ -9,9 +9,12 @@ use App\Entity\SendingProfile;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Repository\NewsletterRepository;
+use App\Service\Newsletter\Constraint\Subdomain;
+use App\Service\Newsletter\Constraint\SubdomainValidator;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 
 #[CoversClass(NewsletterController::class)]
 #[CoversClass(NewsletterService::class)]
@@ -19,11 +22,33 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Newsletter::class)]
 #[CoversClass(NewsletterList::class)]
 #[CoversClass(User::class)]
+#[CoversClass(Subdomain::class)]
+#[CoversClass(SubdomainValidator::class)]
 class CreateNewsletterTest extends WebTestCase
 {
 
-    // TODO: tests for input validation
-    // TODO: tests for authentication
+    #[TestWith(['-invalid'])]
+    #[TestWith(['invalid-'])]
+    #[TestWith(['in--valid'])]
+    #[TestWith(['in_valid'])]
+    public function test_subdomain_validation(string $subdomain): void
+    {
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletter',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => $subdomain
+            ],
+            useSession: true
+        );
+
+        $this->assertResponseStatusCodeSame(422);
+
+        $json = $this->getJson();
+        $this->assertStringStartsWith('Subdomain', $json['message']);
+    }
 
     public function testCreateNewsletterValid(): void
     {
@@ -62,8 +87,9 @@ class CreateNewsletterTest extends WebTestCase
         $sendingProfileRepository = $this->em->getRepository(SendingProfile::class);
         $sendingProfiles = $sendingProfileRepository->findBy(['newsletter' => $newsletter]);
         $this->assertCount(1, $sendingProfiles);
-        $this->assertNull($sendingProfiles[0]->getFromEmail());
+        $this->assertSame('valid-newsletter-subdomain@hyvorpost.email', $sendingProfiles[0]->getFromEmail());
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
+        $this->assertTrue($sendingProfiles[0]->getIsDefault());
     }
 
     public function testCreateNewsletterInvalid(): void

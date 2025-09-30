@@ -8,7 +8,6 @@ use App\Entity\Domain;
 use App\Repository\SendingProfileRepository;
 use App\Service\AppConfig;
 use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Mime\Address;
@@ -49,12 +48,14 @@ class SendingProfileService
 
     public function createSendingProfile(
         Newsletter $newsletter,
-        Domain     $customDomain,
+        ?Domain     $customDomain,
         string     $fromEmail,
         ?string    $fromName = null,
         ?string    $replyToEmail = null,
         ?string    $brandName = null,
-        ?string    $brandLogo = null
+        ?string    $brandLogo = null,
+        bool $system = false,
+        bool $flush = true,
     ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
@@ -68,9 +69,12 @@ class SendingProfileService
         $sendingProfile->setBrandName($brandName);
         $sendingProfile->setBrandLogo($brandLogo);
         $sendingProfile->setIsDefault($this->getSendingProfilesCount($newsletter) === 0);
+        $sendingProfile->setIsSystem($system);
 
         $this->em->persist($sendingProfile);
-        $this->em->flush();
+        if ($flush) {
+            $this->em->flush();
+        }
 
         return $sendingProfile;
     }
@@ -187,13 +191,14 @@ class SendingProfileService
     {
         $from = $sendingProfile->getFromEmail();
         $fromName = $sendingProfile->getFromName() ?? $sendingProfile->getNewsletter()->getName();
-        $replyTo = $sendingProfile->getReplyToEmail() ?? $from;
+        $replyTo = $sendingProfile->getReplyToEmail();
 
-        return $email
-            ->from(new Address(
-                $from,
-                $fromName
-            ))
-            ->replyTo($replyTo);
+        $email->from(new Address($from, $fromName));
+
+        if ($replyTo) {
+            $email->replyTo($replyTo);
+        }
+
+        return $email;
     }
 }

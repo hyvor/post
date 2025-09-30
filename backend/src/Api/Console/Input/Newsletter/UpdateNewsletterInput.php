@@ -3,6 +3,7 @@
 namespace App\Api\Console\Input\Newsletter;
 
 use App\Api\Console\Object\NewsletterObject;
+use App\Service\Newsletter\Constraint\Subdomain;
 use App\Util\OptionalPropertyTrait;
 
 class UpdateNewsletterInput extends NewsletterObject
@@ -10,6 +11,9 @@ class UpdateNewsletterInput extends NewsletterObject
     use OptionalPropertyTrait;
 
     public string $name;
+
+    #[Subdomain]
+    public string $subdomain;
 
     public const UNUPDATABLE_PROPERTIES = [
         'id',
