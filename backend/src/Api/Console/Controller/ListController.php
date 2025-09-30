@@ -54,7 +54,7 @@ class ListController extends AbstractController
         }
 
         if (!$this->newsletterListService->isNameAvailable($newsletter, $input->name)) {
-            throw new BadRequestHttpException("List name already exists.");
+            throw new BadRequestHttpException("List name \"$input->name\" already exists.");
         }
 
         $list = $this->newsletterListService->createNewsletterList(
