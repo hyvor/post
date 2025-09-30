@@ -45,6 +45,7 @@ class UpdateNewsletterInputResolver implements ValueResolverInterface
         $errors = $this->validator->validate($input);
         if (count($errors) > 0) {
             throw new UnprocessableEntityHttpException(
+                message: $errors[0]->getMessage(),
                 previous: new ValidatorException($errors)
             );
         }

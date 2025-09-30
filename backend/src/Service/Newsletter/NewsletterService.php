@@ -275,7 +275,7 @@ class NewsletterService
         return $newsletter;
     }
 
-    public function isUsernameTaken(string $username): bool
+    public function isSubdomainTaken(string $username): bool
     {
         $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
         return $newsletter !== null;

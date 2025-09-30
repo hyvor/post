@@ -107,6 +107,7 @@
 				block
 				bind:value={$newsletterEditingStore.subdomain}
 				oninput={handleSubdomainInput}
+				maxlength={50}
 			/>
 		</div>
 

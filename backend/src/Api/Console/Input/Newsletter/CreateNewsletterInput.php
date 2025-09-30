@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Input\Newsletter;
 
+use App\Service\Newsletter\Constraint\Subdomain;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateNewsletterInput
@@ -12,6 +13,8 @@ class CreateNewsletterInput
     public string $name;
 
     #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
+    #[Assert\Length(min: 1, max: 50)]
+    #[Subdomain]
     public string $subdomain;
+
 }

@@ -34,11 +34,10 @@ class NewsletterController extends AbstractController
     public function getSubdomainAvailability(Request $request): JsonResponse
     {
         $subdomain = (string)$request->query->get('subdomain');
-        $this->validateSubdomain($subdomain);
 
         $available = true;
 
-        if ($this->newsletterService->isUsernameTaken($subdomain)) {
+        if ($this->newsletterService->isSubdomainTaken($subdomain)) {
             $available = false;
         }
 
@@ -55,9 +54,8 @@ class NewsletterController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
-        $this->validateSubdomain($input->subdomain);
 
-        if ($this->newsletterService->isUsernameTaken($input->subdomain)) {
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
@@ -92,6 +90,9 @@ class NewsletterController extends AbstractController
             $updates->name = $input->name;
         }
         if ($input->hasProperty('subdomain')) {
+            if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
+                throw new UnprocessableEntityHttpException('Subdomain is already taken.');
+            }
             $updates->subdomain = $input->subdomain;
         }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
@@ -110,18 +111,4 @@ class NewsletterController extends AbstractController
         return $this->json(new NewsletterObject($newsletter));
     }
 
-    private function validateSubdomain(string $subdomain): void
-    {
-        if (!$subdomain) {
-            throw new UnprocessableEntityHttpException('Subdomain is required.');
-        }
-
-        if (strlen($subdomain) > 50) {
-            throw new UnprocessableEntityHttpException('Subdomain must be less than 50 characters long.');
-        }
-
-        if (!preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $subdomain)) {
-            throw new UnprocessableEntityHttpException('Subdomain can only contain lowercase letters, numbers, and hyphens.');
-        }
-    }
 }
