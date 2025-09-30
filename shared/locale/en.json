@@ -267,8 +267,8 @@
                 "title": "Newsletter",
                 "name": "Newsletter Name",
                 "sendingEmail": "Sending email",
-                "uuid": "Newsletter UUID",
-                "uuidCaption": "Used in the signup form embed code",
+                "subdomain": "Newsletter Subdomain",
+                "subdomainCaption": "Used for the archive site and the system sending email",
                 "delete": "Delete Newsletter",
                 "deleteContent": "Are you sure you want to delete this project? This action cannot be undone.",
                 "deleted": "Newsletter deleted"

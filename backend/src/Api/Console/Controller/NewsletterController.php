@@ -91,6 +91,9 @@ class NewsletterController extends AbstractController
         if ($input->hasProperty('name')) {
             $updates->name = $input->name;
         }
+        if ($input->hasProperty('subdomain')) {
+            $updates->subdomain = $input->subdomain;
+        }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();

@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Service\AppConfig;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use App\Service\SendingProfile\SendingProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -258,6 +259,13 @@ class NewsletterService
 
         if ($updates->hasProperty('subdomain')) {
             $newsletter->setSubdomain($updates->subdomain);
+
+            $systemSendingProfile = $this->sendingProfileService->getSystemSendingProfileOfNewsletter($newsletter);
+            $sendingProfileUpdates = new UpdateSendingProfileDto();
+            $sendingProfileUpdates->fromEmail = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+
+            $this->sendingProfileService
+                ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
         $newsletter->setUpdatedAt($this->now());
