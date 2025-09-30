@@ -31,8 +31,12 @@
 		try_files {path} {path}.html
 	}
 
-	# console
-	handle /console* {
+	# dynamic
+	@dynamic {
+		path /console*
+		path /sudo*
+	}
+	handle @dynamic {
 		root * /app/static
 		encode zstd gzip
 		file_server

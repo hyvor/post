@@ -4,7 +4,7 @@
 	import IconCardChecklist  from '@hyvor/icons/IconCardChecklist';
 </script>
 
-<Document title="Privacy Policy (Hyvor Post)" subtitle="Last Updated: 205-06-01">
+<Document title="Privacy Policy (Hyvor Post)" subtitle="Last Updated: 2025-06-01">
 	<p>
 		This Privacy Policy extends the general privacy policy available at <a
 			href="https://hyvor.com/privacy">https://hyvor.com/privacy</a
@@ -31,6 +31,7 @@
 			<li>
 				We only share your data with third parties when necessary for the operation of Hyvor
 				Post. This includes email delivery.
+			</li>
 			<li>We never sell data to third parties.</li>
 		</ul>
 	</Callout>
