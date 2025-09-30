@@ -12,6 +12,7 @@
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import { addUserNewsletter, userNewslettersStore } from '../lib/stores/userNewslettersStore';
 	import { createNewsletter, getSubdomainAvailability } from '../lib/actions/newsletterActions';
+	import { validateSubdomain } from '../lib/subdomain';
 
 	let name = $state('');
 	let subdomain = $state('');
@@ -82,27 +83,19 @@
 
 	function handleSubdomainInput(e: any) {
 		subdomainEdited = true;
-		let error = false;
+		subdomainError = null;
 
 		subdomain = e.target.value;
 		subdomain = subdomain.toLowerCase();
 
-		if (!subdomain) {
-			subdomainError = 'Subdomain is required';
-			error = true;
-		} else if (!/^[a-z0-9-]*$/.test(subdomain)) {
-			subdomainError = 'Only a-z, 0-9, and hyphens (-) are allowed';
-			error = true;
-		} else if (/--/.test(subdomain)) {
-			subdomainError = 'Consecutive hyphens are not allowed';
-			error = true;
-		} else if (/^-|-$/.test(subdomain)) {
-			subdomainError = 'Subdomain cannot start or end with a hyphen';
-			error = true;
-		}
+		const subdomainValidation = validateSubdomain(subdomain);
 
-		if (error && subdomainCheckTimeout) {
-			clearTimeout(subdomainCheckTimeout);
+		if (subdomainValidation) {
+			subdomainError = subdomainValidation;
+
+			if (subdomainCheckTimeout) {
+				clearTimeout(subdomainCheckTimeout);
+			}
 		}
 	}
 

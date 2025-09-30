@@ -17,7 +17,7 @@
 	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
 	import { getAppConfig } from '../../lib/stores/consoleStore';
 	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
-	import { isSubdomainValid } from '../../lib/subdomain';
+	import { validateSubdomain } from '../../lib/subdomain';
 
 	const I18n = getI18n();
 
@@ -59,9 +59,10 @@
 
 		const subdomain = $newsletterEditingStore.subdomain;
 
-		if (!isSubdomainValid(subdomain)) {
-			subdomainError = 'Invalid subdomain.';
-			return;
+		const subdomainValidation = validateSubdomain(subdomain);
+
+		if (subdomainValidation) {
+			subdomainError = subdomainValidation;
 		}
 	}
 
