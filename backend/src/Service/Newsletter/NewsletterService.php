@@ -65,20 +65,20 @@ class NewsletterService
             ->setNewsletter($newsletter);
 
         $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
-        $sendingProfile = new SendingProfile()
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setNewsletter($newsletter)
-            ->setIsSystem(true)
-            ->setIsDefault(true)
-            ->setFromEmail($systemAddress)
-            ->setFromName($newsletter->getName())
-            ->setReplyToEmail($systemAddress);
+
+        $this->sendingProfileService
+            ->createSendingProfile(
+                $newsletter,
+                null,
+                fromEmail: $systemAddress,
+                fromName: $newsletter->getName(),
+                system: true,
+                flush: false
+            );
 
         $this->em->persist($user);
         $this->em->persist($newsletter);
         $this->em->persist($list);
-        $this->em->persist($sendingProfile);
         $this->em->flush();
 
         return $newsletter;

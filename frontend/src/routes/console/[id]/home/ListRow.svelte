@@ -33,7 +33,8 @@
 			content: 'Are you sure you want to delete this list?',
 			confirmText: 'Delete',
 			cancelText: 'Cancel',
-			danger: true
+			danger: true,
+			autoClose: false
 		});
 
 		if (!confirmation) return;

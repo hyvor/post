@@ -22,9 +22,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class CreateNewsletterTest extends WebTestCase
 {
 
-    // TODO: tests for input validation
-    // TODO: tests for authentication
-
     public function testCreateNewsletterValid(): void
     {
         $response = $this->consoleApi(
@@ -62,8 +59,9 @@ class CreateNewsletterTest extends WebTestCase
         $sendingProfileRepository = $this->em->getRepository(SendingProfile::class);
         $sendingProfiles = $sendingProfileRepository->findBy(['newsletter' => $newsletter]);
         $this->assertCount(1, $sendingProfiles);
-        $this->assertNull($sendingProfiles[0]->getFromEmail());
+        $this->assertSame('valid-newsletter-subdomain@hyvorpost.email', $sendingProfiles[0]->getFromEmail());
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
+        $this->assertTrue($sendingProfiles[0]->getIsDefault());
     }
 
     public function testCreateNewsletterInvalid(): void
