@@ -143,6 +143,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt install -y nodejs
 
 COPY backend /app/backend
+COPY shared /app/shared
 
 RUN composer install --no-cache --prefer-dist --no-dev --no-scripts --no-progress
 
