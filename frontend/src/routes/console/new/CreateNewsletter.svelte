@@ -134,7 +134,7 @@
 <div class="wrap">
 	<div class="inner hds-box">
 		<div class="back">
-			<Button variant="outline" size="small" on:click={handleBack} disabled={isCreating}>
+			<Button size="small" color="input" on:click={handleBack} disabled={isCreating}>
 				{#snippet start()}
 					<IconCaretLeft size={14} />
 				{/snippet}
@@ -148,7 +148,7 @@
 			<div class="title">Start a new newsletter</div>
 
 			<div class="form">
-				<SplitControl label="Name" caption="A name for your newsletter" column>
+				<SplitControl label="Name" caption="A name for your newsletter">
 					<FormControl>
 						<TextInput
 							block
@@ -167,7 +167,7 @@
 						{/if}
 					</FormControl>
 				</SplitControl>
-				<SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)" column>
+				<SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)">
 					<FormControl>
 						<TextInput
 							block
@@ -234,7 +234,7 @@
 	}
 
 	.inner {
-		width: 550px;
+		width: 650px;
 		max-width: 100%;
 		position: relative;
 	}

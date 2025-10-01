@@ -36,7 +36,6 @@
 		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
 		"faqs": "Frequently Asked Questions",
 		"faqsDescription": "We will answer some of the most common questions about Hyvor Post. Feel free to contact our team anytime."
-
 	},
 	"comingSoon": {
 		"heading": "Hyvor Post",
@@ -44,7 +43,6 @@
 		"joinWaitlist": "Join the waitlist",
 		"readytoExplore": "Ready to explore Hyvor Post?"
 	},
-
 	"pricing": {
 		"name": "Pricing",
 		"simpleTransparentPricing": "Simple, Transparent Pricing",
@@ -77,7 +75,7 @@
 			"customEmailDomain": "Custom Email Domain",
 			"emailAndChatSupport": "Email & Chat Support",
 			"customizableTemplates": "Customizable templates",
-			"noBranding": "No Branding",
+			"noBranding": "Remove Branding",
 			"allFeaturesIncluded": "All features included in other plans",
 			"samlSso": "SAML SSO for teams",
 			"customSla": "Custom SLA",
@@ -85,10 +83,7 @@
 			"customOnboarding": "Custom Onboarding"
 		},
 		"pricesAsOfJuly2025": "Pricing comparing as of 2025-07-20"
-		
-		
 	},
-
 	"newsletter": {
 		"confirmation": {
 			"error": "Error",
