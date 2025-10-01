@@ -13,6 +13,7 @@
 	import { addUserNewsletter, userNewslettersStore } from '../lib/stores/userNewslettersStore';
 	import { createNewsletter, getSubdomainAvailability } from '../lib/actions/newsletterActions';
 	import { validateSubdomain } from '../lib/subdomain';
+	import { getArchiveUrlAsUrl } from '../lib/archive';
 
 	let name = $state('');
 	let subdomain = $state('');
@@ -147,7 +148,7 @@
 			<div class="title">Start a new newsletter</div>
 
 			<div class="form">
-				<SplitControl label="Name" caption="A name for your newsletter">
+				<SplitControl label="Name" caption="A name for your newsletter" column>
 					<FormControl>
 						<TextInput
 							block
@@ -166,7 +167,7 @@
 						{/if}
 					</FormControl>
 				</SplitControl>
-				<SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)">
+				<SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)" column>
 					<FormControl>
 						<TextInput
 							block
@@ -178,7 +179,13 @@
 								: subdomainSuccess
 									? 'success'
 									: undefined}
-						></TextInput>
+						>
+							{#snippet end()}
+								<span class="archive-hostname"
+									>.{getArchiveUrlAsUrl().hostname}</span
+								>
+							{/snippet}
+						</TextInput>
 
 						{#if subdomainError}
 							<Validation state="error">
@@ -240,5 +247,11 @@
 		padding: 20px;
 		padding-bottom: 30px;
 		text-align: center;
+	}
+
+	.archive-hostname {
+		color: var(--text-light);
+		font-size: 14px;
+		font-weight: normal;
 	}
 </style>
