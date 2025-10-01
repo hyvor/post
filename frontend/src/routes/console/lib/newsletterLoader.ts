@@ -20,7 +20,7 @@ interface NewsletterResponse {
 }
 
 // to prevent multiple requests for the same subdomain
-const LOADER_PROMISES: Record<string, Promise<NewsletterResponse>> = {};
+const LOADER_PROMISES: Record<number, Promise<NewsletterResponse>> = {};
 
 export function loadNewsletter(newsletterId: number) {
 	if (LOADER_PROMISES[newsletterId] !== undefined) {

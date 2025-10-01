@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Modal } from '@hyvor/design/components';
-	import Editor from '../../console/[id]/issues/Editor/Editor.svelte';
+	import Editor from '../../console/[subdomain]/issues/Editor/Editor.svelte';
 	import { retrieveContentHtml } from './lib/actions/templateActions';
 
 	interface Props {

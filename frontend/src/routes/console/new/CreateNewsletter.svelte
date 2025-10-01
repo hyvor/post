@@ -122,7 +122,7 @@
 		createNewsletter(name, subdomain)
 			.then((res) => {
 				addUserNewsletter({ role: 'owner', newsletter: res });
-				goto('/console/' + res.id);
+				goto('/console/' + res.subdomain);
 			})
 			.catch((e) => {
 				toast.error(e.message);
