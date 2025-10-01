@@ -14,6 +14,8 @@
 	import { createNewsletter, getSubdomainAvailability } from '../lib/actions/newsletterActions';
 	import { validateSubdomain } from '../lib/subdomain';
 	import { getArchiveUrlAsUrl } from '../lib/archive';
+	import { setNewsletterStoreByNewsletterList } from '../lib/stores/newsletterStore';
+	import type { NewsletterList } from '../types';
 
 	let name = $state('');
 	let subdomain = $state('');
@@ -121,7 +123,9 @@
 
 		createNewsletter(name, subdomain)
 			.then((res) => {
-				addUserNewsletter({ role: 'owner', newsletter: res });
+				const list: NewsletterList = { role: 'owner', newsletter: res };
+				addUserNewsletter(list);
+				setNewsletterStoreByNewsletterList(list);
 				goto('/console/' + res.subdomain);
 			})
 			.catch((e) => {

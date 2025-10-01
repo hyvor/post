@@ -6,6 +6,7 @@
 	import { Loader, toast } from '@hyvor/design/components';
 	import NewsletterSelector from '../@components/Nav/NewsletterSelector.svelte';
 	import { userNewslettersStore } from '../lib/stores/userNewslettersStore';
+	import { newsletterStore } from '../lib/stores/newsletterStore';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -46,9 +47,11 @@
 	{:else}
 		<Nav />
 		<NewsletterSelector />
-		<div class="content">
-			{@render children?.()}
-		</div>
+		{#key $newsletterStore.subdomain}
+			<div class="content">
+				{@render children?.()}
+			</div>
+		{/key}
 	{/if}
 </div>
 
