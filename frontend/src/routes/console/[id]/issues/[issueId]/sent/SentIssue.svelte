@@ -74,8 +74,6 @@
 		{:else}
 			<div class="stats">
 				<SentStat title="Total Sent" value={counts.total} />
-				<SentStat title="Opened" value={counts.opened} total={counts.total} />
-				<SentStat title="Clicked" value={counts.clicked} total={counts.total} />
 				<SentStat title="Unsubscribed" value={counts.unsubscribed} total={counts.total} />
 				<SentStat title="Bounced" value={counts.bounced} total={counts.total} />
 				<SentStat title="Complaints" value={counts.complained} total={counts.total} />
@@ -108,7 +106,7 @@
 	}
 	.stats {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		margin: 20px -40px;
 		padding: 15px 40px;
 	}
