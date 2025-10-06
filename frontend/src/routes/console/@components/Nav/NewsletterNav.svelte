@@ -12,6 +12,7 @@
     import {page} from '$app/state';
     import {getI18n} from '../../lib/i18n';
     import {getAppConfig, selectingNewsletter} from '../../lib/stores/consoleStore';
+	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
 
     let width: number;
 
@@ -47,7 +48,7 @@
 
             {#snippet end()}
                 <Tooltip text="Visit archive site" color="soft">
-                    <a class="home-link" href={config.app.archive_url} target="_blank">
+                    <a class="home-link" href={getNewsletterArchiveUrlFromSubdomain($newsletterStore.subdomain)} target="_blank">
                         <IconBoxArrowUpRight size={12}/>
                     </a>
                 </Tooltip>
