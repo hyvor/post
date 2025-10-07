@@ -1,12 +1,11 @@
 <script lang="ts">
-    import {confirm, IconButton, Tag, toast, Tooltip} from '@hyvor/design/components';
+    import {ActionList, ActionListItem, confirm, Dropdown, IconButton, Tag, toast, Tooltip} from '@hyvor/design/components';
     import type {SendingProfile} from '../../../types';
-    import IconTrash from '@hyvor/icons/IconTrash';
     import {getI18n} from '../../../lib/i18n';
     import {sendingProfilesStore} from '../../../lib/stores/newsletterStore';
-    import {deleteSendingProfile} from '../../../lib/actions/sendingProfileActions';
-    import IconPencil from '@hyvor/icons/IconPencil';
+    import {deleteSendingProfile, updateSendingProfile} from '../../../lib/actions/sendingProfileActions';
     import AddEditSendingProfileModal from './AddEditSendingProfileModal.svelte';
+	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 
     interface Props {
         profile: SendingProfile;
@@ -16,6 +15,7 @@
 
     const I = getI18n();
     let editing = $state(false);
+    let showDropdown = $state(false);
 
     async function handleDelete() {
         const confirmation = await confirm({
@@ -39,6 +39,40 @@
                     I.t('console.common.deleted', {
                         field: I.t('console.settings.sendingProfiles.sendingProfile')
                     })
+                );
+            })
+            .catch((e) => {
+                toast.error(e.message);
+            })
+            .finally(() => {
+                confirmation.close();
+            });
+    }
+
+    async function handleSetAsDefault() {
+        const confirmation = await confirm({
+            title: I.t('console.settings.sendingProfiles.setAsDefault'),
+            content: I.t('console.settings.sendingProfiles.setAsDefaultContent'),
+            autoClose: false
+        });
+
+        if (!confirmation) return;
+
+        confirmation.loading();
+
+        updateSendingProfile(profile.id, {is_default: true})
+            .then((res) => {
+                toast.success(
+					I.t('console.common.updated', {
+						field: I.t('console.settings.sendingProfiles.sendingProfile')
+					})
+				);
+                sendingProfilesStore.update((profiles) =>
+                    profiles.map((p) =>
+                        p.id === res.id
+                            ? res
+                            : {...p, is_default: false}
+                    )
                 );
             })
             .catch((e) => {
@@ -96,14 +130,30 @@
     </div>
 
     <div class="action">
-        <IconButton color="gray" variant="fill-light" size="small" on:click={() => (editing = true)}>
-            <IconPencil size={12}/>
-        </IconButton>
-        {#if !profile.is_system}
-            <IconButton color="red" variant="fill-light" size="small" on:click={handleDelete}>
-                <IconTrash size={12}/>
-            </IconButton>
-        {/if}
+        <Dropdown bind:show={showDropdown} align="end">
+            {#snippet trigger()}
+                <IconButton color="input">
+                    <IconCaretDown size={12} />
+                </IconButton>
+            {/snippet}
+            {#snippet content()}
+                <ActionList>
+                    {#if !profile.is_default}
+                        <ActionListItem on:select={() => {showDropdown = false; handleSetAsDefault();}}>
+                            Set as default
+                        </ActionListItem>
+                    {/if}
+                    <ActionListItem on:select={() => {showDropdown = false; editing = true;}}>
+                        Edit
+                    </ActionListItem>
+                    {#if !profile.is_system}
+                        <ActionListItem on:select={() => {showDropdown = false; handleDelete();}}>
+                            Delete
+                        </ActionListItem>
+                    {/if}
+                </ActionList>
+            {/snippet}
+        </Dropdown>
     </div>
 </div>
 
@@ -155,5 +205,9 @@
     .action {
         width: 100px;
         text-align: right;
+    }
+
+    :global(.content-wrap) {
+        margin-top: 10px;
     }
 </style>
