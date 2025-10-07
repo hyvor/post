@@ -54,6 +54,7 @@ COPY shared /app/shared
 
 ###################################################
 FROM archive-base AS archive-dev
+COPY archive/.env /app/archive/
 RUN npm install
 CMD ["npm", "run", "dev"]
 
