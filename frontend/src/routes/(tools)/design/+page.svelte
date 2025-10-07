@@ -55,7 +55,6 @@
 			const variablesObj = JSON.parse(variables);
 			variablesObj.content = newContent;
 			variables = JSON.stringify(variablesObj, null, 2);
-			console.log(variables);
 			variableEditorId += 1;
 		} catch (err) {
 			console.error('Error updating variables:', err);

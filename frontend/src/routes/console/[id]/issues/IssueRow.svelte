@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { IconButton, toast } from '@hyvor/design/components';
     import FriendlyDate from '../../@components/utils/FriendlyDate.svelte';
     import {consoleUrlWithNewsletter} from '../../lib/consoleUrl';
     import type {Issue} from '../../types';
     import IssueStatusTag from './IssueStatusTag.svelte';
     import SentStat from './SentStat.svelte';
+	import IconTrash from '@hyvor/icons/IconTrash';
+	import { deleteIssue } from '../../lib/actions/issueActions';
+	import { issueStore } from '../../lib/stores/newsletterStore';
 
     interface Props {
         issue: Issue;
@@ -11,9 +15,20 @@
 
     let {issue}: Props = $props();
 
-    function percentage(value: number, total: number): string {
-        if (total === 0) return '0%';
-        return `${Math.round((value / total) * 100)}%`;
+    function handleDelete(e: Event) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        deleteIssue(issue.id)
+            .then(() => {
+                toast.success('Issue deleted successfully');
+                issueStore.update((issues) => {
+					return issues.filter((i) => i.id !== issue.id);
+				});
+            })
+            .catch(() => {
+                toast.error('Failed to delete the issue');
+            });
     }
 </script>
 
@@ -29,9 +44,13 @@
 			</span>
         {/if}
     </div>
-    <div class="results">
+    <div class="end">
         {#if issue.status === 'sent'}
             <SentStat value={issue.total_sends.toLocaleString()} name="Total Sent"/>
+        {:else if issue.status === 'draft'}
+            <IconButton color="red" variant="fill-light" size="small" on:click={handleDelete}>
+                <IconTrash size={12}/>
+            </IconButton>
         {/if}
     </div>
 </a>
@@ -64,7 +83,7 @@
         min-width: 60px;
     }
 
-    .results {
+    .end {
         flex: 1;
         display: flex;
         align-items: center;
