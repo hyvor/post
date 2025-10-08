@@ -139,9 +139,8 @@ class CreateDomainTest extends WebTestCase
         );
     }
 
-    public function test_error_on_aws_call_fails_and_logs(): void
+    public function test_error_on_relay_call_fails_and_logs(): void
     {
-
         $httpClient = new MockHttpClient(new MockResponse(info: ['error' => 'host unreachable']));
         $this->container->set(HttpClientInterface::class, $httpClient);
 
