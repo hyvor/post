@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImportTest extends WebTestCase
 {
-    /** @var array<string, string>  */
+    /** @var array<string, string> */
     const array MAPPING = [
         'email' => 'email',
         'lists' => 'lists'
@@ -29,6 +29,7 @@ class ImportTest extends WebTestCase
             mimeType: "text/csv",
         );
 
+        /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
             $newsletter->_real(),
@@ -53,12 +54,13 @@ class ImportTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $this->transport()->queue()->assertCount(1);
-        $message = $this->transport()->queue()->first()->getMessage();
+        $this->transport('async')->queue()->assertCount(1);
+        $message = $this->transport('async')->queue()->first()->getMessage();
         $this->assertInstanceOf(ImportSubscribersMessage::class, $message);
 
-        $this->transport()->throwExceptions()->process();
+        $this->transport('async')->throwExceptions()->process();
 
+//        dd($subscriberImport->getErrorMessage());
         $this->assertSame(SubscriberImportStatus::COMPLETED, $subscriberImport->getStatus());
         $this->assertSame(self::MAPPING, $subscriberImport->getFields());
     }
