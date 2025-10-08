@@ -224,9 +224,7 @@ class SendIssueTest extends WebTestCase
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
         $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
-        $this->assertSame('newsletter@hyvor.com', $issue->getFromEmail());
-        $this->assertSame('Hyvor Newsletter', $issue->getFromName());
-        $this->assertSame('no-reply@hyvor.com', $issue->getReplyToEmail());
+        $this->assertSame($sendingProfile->getId(), $issue->getSendingProfile()->getId());
 
         $transport = $this->transport('async');
         $transport->queue()->assertCount(1);

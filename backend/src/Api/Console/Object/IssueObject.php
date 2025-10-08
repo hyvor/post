@@ -31,7 +31,7 @@ class IssueObject
 
     public int $sendable_subscribers_count = 0;
 
-    public function __construct(Issue $issue, ?int $sendableSubscribersCount = 0)
+    public function __construct(Issue $issue, int $sendableSubscribersCount = 0)
     {
         $this->id = $issue->getId();
         $this->uuid = $issue->getUuid();
@@ -44,15 +44,7 @@ class IssueObject
         $this->scheduled_at = $issue->getScheduledAt()?->getTimestamp();
         $this->sending_at = $issue->getSendingAt()?->getTimestamp();
         $this->sent_at = $issue->getSentAt()?->getTimestamp();
-
         $this->total_sends = $issue->getTotalSends();
-        $this->opened_sends = $issue->getOpenedSends();
-        $this->clicked_sends = $issue->getClickedSends();
-
-        $this->from_email = $issue->getFromEmail();
-        $this->from_name = $issue->getFromName();
-        $this->reply_to_email = $issue->getReplyToEmail();
-
         $this->sendable_subscribers_count = $sendableSubscribersCount;
     }
 }

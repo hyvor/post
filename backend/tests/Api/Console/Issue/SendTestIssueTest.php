@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
+use App\Entity\Type\IssueStatus;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -22,6 +23,7 @@ class SendTestIssueTest extends WebTestCase
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
+                'status' => IssueStatus::DRAFT
             ]
         );
 
@@ -30,7 +32,9 @@ class SendTestIssueTest extends WebTestCase
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [
-                'email' => 'thibault@hyvor.com'
+                'emails' => [
+                    'thibault@hyvor.com'
+                ]
             ]
         );
 
@@ -49,6 +53,7 @@ class SendTestIssueTest extends WebTestCase
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'content' => 'Test content',
+                'status' => IssueStatus::DRAFT
             ]
         );
 
@@ -57,14 +62,16 @@ class SendTestIssueTest extends WebTestCase
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [
-                'email' => 'thibault'
+                'emails' => [
+                    'nadil@hyvor.com',
+                    'thibault'
+                ]
             ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('Validation failed with 1 violations(s)', $json['message']);
-        $this->assertViolationCount(1);
-        $this->assertHasViolation('email', 'This value is not a valid email address.');
+        $this->assertSame('This value is not a valid email address.', $json['message']);
+        $this->assertHasViolation('emails[1]', 'This value is not a valid email address.');
     }
 }
