@@ -45,7 +45,7 @@ class RenderTemplateTest extends WebTestCase
         max-width: 100%;
         margin: auto;
         color: {{ font_color_on_box }};
-        background-color: {{ color_box_background  }};
+        background-color: {{ color_background  }};
         border-radius: {{ box_radius  }};
         box-shadow: {{ box_shadow }};
         border: {{ box_border }};
@@ -57,17 +57,15 @@ class RenderTemplateTest extends WebTestCase
         align-items: center;
         gap: 6px;
     ">
-        <a href="{{ brand_url }}" target="_blank"
+        <a href="" target="_blank"
            style="
            display:inline-flex;
            align-items:center;
            text-decoration: none;
            color:inherit
        ">
-            <img src="{{ logo }}" alt="{{ logo_alt }}" style="max-height: 26px; width: auto;">
-            <span class="name" style="font-weight: 600; padding-left: 6px;">
-                {{ brand }}
-            </span>
+            <img src="" alt="" style="max-height: 26px; width: auto;">
+            <span class="name" style="font-weight: 600; padding-left: 6px;"></span>
         </a>
     </div>
     <div class="mail-body" style="
@@ -85,7 +83,7 @@ class RenderTemplateTest extends WebTestCase
     {{ address }}
 
     <div>
-        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
+        <a href="" target="_blank" style="color: inherit;"></a>
     </div>
 </div>
 </body>
