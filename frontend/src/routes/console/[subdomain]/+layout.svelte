@@ -5,6 +5,8 @@
 	import { loadNewsletter } from '../lib/newsletterLoader';
 	import { Loader, toast } from '@hyvor/design/components';
 	import NewsletterSelector from '../@components/Nav/NewsletterSelector.svelte';
+	import { userNewslettersStore } from '../lib/stores/userNewslettersStore';
+	import { newsletterStore } from '../lib/stores/newsletterStore';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -15,13 +17,24 @@
 	let isLoading = $state(true);
 
 	onMount(() => {
-		const newsletterId = Number(page.params.id);
-		loadNewsletter(newsletterId)
+		const subdomain = String(page.params.subdomain);
+
+		const userNewsletter = $userNewslettersStore.find(
+			(n) => n.newsletter.subdomain === subdomain
+		);
+
+		if (!userNewsletter) {
+			toast.error('Newsletter not found');
+			location.href = '/console';
+			return;
+		}
+
+		loadNewsletter(userNewsletter.newsletter.id)
 			.then(() => {
 				isLoading = false;
 			})
 			.catch((e) => {
-				toast.error('Unable to load newsletter');
+				toast.error('Unable to load newsletter:' + e.message);
 			});
 	});
 </script>
@@ -34,9 +47,11 @@
 	{:else}
 		<Nav />
 		<NewsletterSelector />
-		<div class="content">
-			{@render children?.()}
-		</div>
+		{#key $newsletterStore.subdomain}
+			<div class="content">
+				{@render children?.()}
+			</div>
+		{/key}
 	{/if}
 </div>
 

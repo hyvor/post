@@ -8,7 +8,8 @@ import {
 	type SubscriberMetadataDefinition,
 	type SendingProfile,
 	type Import,
-	type NewsletterPermissions
+	type NewsletterPermissions,
+	type NewsletterList
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
@@ -22,6 +23,11 @@ export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefi
 export const issueStore = writable<Issue[]>([]);
 export const sendingProfilesStore = writable<SendingProfile[]>([]);
 export const importStore = writable<Import[]>([]);
+
+export function setNewsletterStoreByNewsletterList(list: NewsletterList) {
+	setNewsletterStore(list.newsletter);
+	newsletterRoleStore.set(list.role);
+}
 
 export function setNewsletterStore(newsletter: Newsletter) {
 	newsletterStore.set(newsletter);

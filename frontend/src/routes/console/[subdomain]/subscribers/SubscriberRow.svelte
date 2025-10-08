@@ -70,9 +70,9 @@
 </script>
 
 <button class="subscriber">
-	<div class="checkbox">
+	<label class="checkbox">
 		<Checkbox checked={isSelected} on:change={toggleSelection} />
-	</div>
+	</label>
 
 	<div class="email-wrap">
 		<div class="email">{subscriber.email}</div>
@@ -125,19 +125,27 @@
 
 <style>
 	.subscriber {
-		padding: 15px 25px;
+		padding: 15px 25px 15px 55px;
 		border-radius: var(--box-radius);
 		display: flex;
 		text-align: left;
 		width: 100%;
 		align-items: center;
+		position: relative;
 	}
 	.subscriber:hover {
 		background: var(--hover);
 	}
 
 	.checkbox {
-		margin-right: 15px;
+		position: absolute;
+		left: 15px;
+		width: 40px;
+		height: 100%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
 	}
 
 	.email-wrap {
