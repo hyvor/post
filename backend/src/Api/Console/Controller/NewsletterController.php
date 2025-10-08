@@ -7,6 +7,7 @@ use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
+use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -29,15 +30,20 @@ class NewsletterController extends AbstractController
     {
     }
 
-    #[Route('/newsletter/subdomain', methods: 'GET')]
+    #[Route('/newsletter/subdomain', methods: 'POST')]
     #[UserLevelEndpoint]
-    public function getSubdomainAvailability(Request $request): JsonResponse
+    public function getSubdomainAvailability(
+        Request                                         $request,
+        #[MapRequestPayload] SubdomainAvailabilityInput $input
+    ): JsonResponse
     {
-        $subdomain = (string)$request->query->get('subdomain');
+        if (!$input->subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
 
         $available = true;
 
-        if ($this->newsletterService->isSubdomainTaken($subdomain)) {
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             $available = false;
         }
 

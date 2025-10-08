@@ -16,8 +16,11 @@ class GetSubdomainAvailabilityTest extends WebTestCase
     {
         $response = $this->consoleApi(
             null,
-            'GET',
-            '/newsletter/subdomain?subdomain=unique-subdomain',
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => 'unique-subdomain'
+            ],
             useSession: true
         );
         $this->assertSame(200, $response->getStatusCode());
@@ -32,8 +35,11 @@ class GetSubdomainAvailabilityTest extends WebTestCase
         ]);
         $response = $this->consoleApi(
             null,
-            'GET',
-            '/newsletter/subdomain?subdomain=taken-subdomain',
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => 'taken-subdomain'
+            ],
             useSession: true
         );
         $this->assertSame(200, $response->getStatusCode());
@@ -45,15 +51,17 @@ class GetSubdomainAvailabilityTest extends WebTestCase
     {
         $response = $this->consoleApi(
             null,
-            'GET',
-            '/newsletter/subdomain?subdomain=',
-            [],
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => ''
+            ],
             useSession: true
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsString($json['message']);;
-        $this->assertStringContainsString('Subdomain is required', $json['message']);
+        $this->assertStringContainsString('This value should not be blank.', $json['message']);
     }
 
     public function testTooLongSubdomain(): void
@@ -61,27 +69,33 @@ class GetSubdomainAvailabilityTest extends WebTestCase
         $longSubdomain = str_repeat('a', 51);
         $response = $this->consoleApi(
             null,
-            'GET',
-            '/newsletter/subdomain?subdomain=' . $longSubdomain,
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => $longSubdomain
+            ],
             useSession: true
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsString($json['message']);;
-        $this->assertStringContainsString('Subdomain must be less than 50 characters', $json['message']);
+        $this->assertStringContainsString('This value is too long. It should have 50 characters or less.', $json['message']);
     }
 
     public function testInvalidCharactersSubdomain(): void
     {
         $response = $this->consoleApi(
             null,
-            'GET',
-            '/newsletter/subdomain?subdomain=Invalid_Subdomain!',
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => 'Invalid_Subdomain!'
+            ],
             useSession: true
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsString($json['message']);;
-        $this->assertStringContainsString('Subdomain can only contain lowercase letters, numbers, and hyphens', $json['message']);
+        $this->assertStringContainsString('Subdomain must start and end with a letter or digit.', $json['message']);
     }
 }
