@@ -145,7 +145,7 @@ class SendService
             'pending' => $pendingCount,
             'sent' => $issue->getOkSends(),
             'progress' => $issue->getTotalSends() > 0
-                ? (int)round($issue->getOkSends() / $issue->getTotalSends()) * 100
+                ? (int)round($issue->getOkSends() / $issue->getTotalSends() * 100)
                 : 0,
         ];
     }
