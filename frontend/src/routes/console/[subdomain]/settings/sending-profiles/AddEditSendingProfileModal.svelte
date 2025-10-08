@@ -60,8 +60,6 @@
 				)
 			);
 
-			console.log('params', params);
-
 			updateSendingProfile(profile.id, params).then((res) => {
 				toast.success(
 					I.t('console.common.updated', {

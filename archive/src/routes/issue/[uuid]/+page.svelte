@@ -19,7 +19,6 @@
 		    }
 		`;
         doc.body.appendChild(style);
-        console.log(doc.documentElement.outerHTML);
 
         if (iframeEl) {
             iframeEl.srcdoc = doc.documentElement.innerHTML;

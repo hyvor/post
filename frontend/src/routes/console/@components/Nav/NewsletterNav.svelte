@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { Divider, NavLink, IconButton, Tag, toast, Tooltip } from '@hyvor/design/components';
-	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
-	import IconHouse from '@hyvor/icons/IconHouse';
-	import IconPeople from '@hyvor/icons/IconPeople';
-	import IconSend from '@hyvor/icons/IconSend';
-	import IconGear from '@hyvor/icons/IconGear';
-	import IconTools from '@hyvor/icons/IconTools';
-	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
-	import NavItem from './NavItem.svelte';
-	import { newsletterStore } from '../../lib/stores/newsletterStore';
-	import { page } from '$app/state';
-	import { getI18n } from '../../lib/i18n';
-	import { getAppConfig, selectingNewsletter } from '../../lib/stores/consoleStore';
+    import {Divider, NavLink, IconButton, Tag, toast, Tooltip} from '@hyvor/design/components';
+    import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
+    import IconHouse from '@hyvor/icons/IconHouse';
+    import IconPeople from '@hyvor/icons/IconPeople';
+    import IconSend from '@hyvor/icons/IconSend';
+    import IconGear from '@hyvor/icons/IconGear';
+    import IconTools from '@hyvor/icons/IconTools';
+    import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
+    import NavItem from './NavItem.svelte';
+    import {newsletterStore} from '../../lib/stores/newsletterStore';
+    import {page} from '$app/state';
+    import {getI18n} from '../../lib/i18n';
+    import {getAppConfig, selectingNewsletter} from '../../lib/stores/consoleStore';
+	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
 
 	let width: number;
 
@@ -45,14 +46,14 @@
 				<span slot="text">{I18n.t('console.nav.home')}</span>
 			</NavItem>
 
-			{#snippet end()}
-				<Tooltip text="Visit archive site" color="soft">
-					<a class="home-link" href={config.app.archive_url} target="_blank">
-						<IconBoxArrowUpRight size={12} />
-					</a>
-				</Tooltip>
-			{/snippet}
-		</NavLink>
+            {#snippet end()}
+                <Tooltip text="Visit archive site" color="soft">
+                    <a class="home-link" href={getNewsletterArchiveUrlFromSubdomain($newsletterStore.subdomain)} target="_blank">
+                        <IconBoxArrowUpRight size={12}/>
+                    </a>
+                </Tooltip>
+            {/snippet}
+        </NavLink>
 
 		<NavLink
 			href={'/console/' + $newsletterStore.subdomain.toString() + '/subscribers'}

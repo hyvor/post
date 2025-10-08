@@ -1,6 +1,6 @@
 ###################################################
 # Alias for deppendencies
-FROM node:23.11.0 AS node
+FROM node:24.9.0 AS node
 FROM composer:2.8.8 AS composer
 FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
 
@@ -40,7 +40,7 @@ RUN  npm install \
 ###################################################
 
 ###################################################
-FROM node:22.17.1 AS archive-base
+FROM node AS archive-base
 WORKDIR /app/archive
 # install dependencies
 COPY archive/package.json archive/package-lock.json \
@@ -54,6 +54,7 @@ COPY shared /app/shared
 
 ###################################################
 FROM archive-base AS archive-dev
+COPY archive/.env /app/archive/
 RUN npm install
 CMD ["npm", "run", "dev"]
 
@@ -143,6 +144,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt install -y nodejs
 
 COPY backend /app/backend
+COPY shared /app/shared
 
 RUN composer install --no-cache --prefer-dist --no-dev --no-scripts --no-progress
 

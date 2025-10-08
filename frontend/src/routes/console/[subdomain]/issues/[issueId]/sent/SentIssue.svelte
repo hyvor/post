@@ -10,11 +10,12 @@
 	import SentStat from './SentStat.svelte';
 	import FriendlyDate from '../../../../@components/utils/FriendlyDate.svelte';
 	import { copyAndToast } from '$lib/helpers/copy';
+	import { getNewsletterArchiveUrlFromSubdomain } from '../../../../lib/archive';
+	import { newsletterStore } from '../../../../lib/stores/newsletterStore';
 
 	export let issue: Issue;
 
-    // TODO: Fix web url
-	const webUrl = '' + '/api/newsletter/issue/' + issue.uuid;
+	const webUrl = getNewsletterArchiveUrlFromSubdomain($newsletterStore.subdomain) + '/issue/' + issue.uuid;
 
 	let loading = true;
 
@@ -55,7 +56,8 @@
 		<div>
 			<Tooltip text="This is a shareable link" position="bottom">
 				<a class="web-url" href={webUrl} target="_blank" rel="noopener noreferrer">
-					Web version <IconBoxArrowUpRight size={12} />
+					<span>Web version</span>
+					<IconBoxArrowUpRight size={12} />
 				</a>
 			</Tooltip>
 			<IconButton
@@ -74,8 +76,6 @@
 		{:else}
 			<div class="stats">
 				<SentStat title="Total Sent" value={counts.total} />
-				<SentStat title="Opened" value={counts.opened} total={counts.total} />
-				<SentStat title="Clicked" value={counts.clicked} total={counts.total} />
 				<SentStat title="Unsubscribed" value={counts.unsubscribed} total={counts.total} />
 				<SentStat title="Bounced" value={counts.bounced} total={counts.total} />
 				<SentStat title="Complaints" value={counts.complained} total={counts.total} />
@@ -108,12 +108,15 @@
 	}
 	.stats {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		margin: 20px -40px;
 		padding: 15px 40px;
 	}
 	.web-url {
-		text-decoration: underline;
 		display: inline-block;
+		align-items: center;
+	}
+	.web-url span {
+		text-decoration: underline;
 	}
 </style>
