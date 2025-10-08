@@ -225,7 +225,7 @@ class CreateSubscriberTest extends WebTestCase
 
     /**
      * @param callable(Newsletter): array<string, mixed> $input
-     * @param array<mixed> $violations
+     * @param array<int, array{property: string, message: string}> $violations
      * @return void
      */
     private function validateInput(
