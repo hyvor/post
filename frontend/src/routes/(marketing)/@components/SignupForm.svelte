@@ -3,6 +3,8 @@
 	import signupImg from '../img/signup.png';
 	import emailImg from '../img/email.png';
 	import Envelope from './Envelope.svelte';
+	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import IconLink from '@hyvor/icons/IconLink';
 	// import signupSvg from './img/img/api-webhooks.svg';
 </script>
 
@@ -14,16 +16,32 @@
 			website
 		</h2>
 		<!-- <img src={signupSvg} alt="Signup Form Illustration" width="300" /> -->
+
+		<div class="bento-grid">
+			<div class="int">
+				<IconBullseye class="int-icon" size={30} />
+				<div class="seo-feature-name">Easy embedding</div>
+			</div>
+
+			<div class="int">
+				<IconLink class="int-icon" size={30} />
+				<div class="seo-feature-name">Double opt-in</div>
+			</div>
+
+			<div class="int">
+				<IconLink class="int-icon" size={30} />
+				<div class="seo-feature-name">Fully-customizable</div>
+			</div>
+		</div>
 	</div>
 	<div class="right">
 		<div class="form-preview">
 			<BrowserWindow image={signupImg} link="https://post.hyvor.com" />
 		</div>
 
-		<div class="another-browser">
+		<!-- <div class="another-browser">
 			<Envelope emailImage={emailImg} />
-			<!-- Additional content can go here if needed -->
-		</div>
+		</div> -->
 	</div>
 </div>
 
@@ -72,7 +90,7 @@
 		padding-bottom: 70px;
 		padding-left: 70px;
 		border-radius: 20px;
-		filter: blur(1px);
+		/* filter: blur(1px); */
 		opacity: 0.9;
 	}
 
@@ -85,6 +103,40 @@
 		box-shadow: var(--box-shadow);
 	}
 
+	.bento-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px 40px;
+		margin-top: 40px;
+	}
+
+	.int {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		/* font-size: 25px; */
+		font-size: 20px;
+		margin-bottom: 10px;
+		color: var(--gray-dark);
+	}
+
+	.seo-feature-name {
+		color: var(--gray-dark);
+	}
+
+	/* h1 {
+		margin: 0;
+		font-size: 40px;
+	} */
+
+	/* h2 {
+		font-weight: normal;
+		/* font-size: 25px; */
+	/* font-size: 20px;
+	color: var(--grey-dark);
+	margin: 0;
+	padding-top: 20px; */
+	/* } */
 	@keyframes heroEnter {
 		0% {
 			/* //transform: translateX(30px) translateY(0) translateZ(20px); */

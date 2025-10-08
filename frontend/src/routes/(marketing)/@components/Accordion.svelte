@@ -6,11 +6,10 @@
 		title?: string;
 		content?: string; // HTML string
 		isOpen?: boolean;
-		id: string;
 		icon?: Component;
 	}
 
-	let { title, content, isOpen = false, id, icon }: Props = $props();
+	let { title, content, isOpen = false, icon }: Props = $props();
 	const Icon = icon;
 
 	function handleClick() {

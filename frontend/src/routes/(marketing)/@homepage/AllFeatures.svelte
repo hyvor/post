@@ -4,41 +4,23 @@
 	const I18n = getMarketingI18n();
 
 	const features = [
-		// {
-		// 	title: I18n.t('homepage.embeddableNewsletterForm'),
-		// 	description: I18n.t('homepage.embeddableNewsletterFormDescription'),
-		// 	image: '/img/embed-newsletter-form.svg'
-		// },
-		// {
-		// 	title: I18n.t('homepage.customizableTemplates'),
-		// 	description: I18n.t('homepage.customizableTemplatesDescription'),
-		// 	image: '/img/custom-templates.svg'
-		// },
 		{
 			title: I18n.t('homepage.listMngmt'),
 			description: I18n.t('homepage.listMngmtDescription'),
 			image: '/img/multiple-segments.svg'
 		},
-		// {
-		// 	title: I18n.t('homepage.customSendingDomain'),
-		// 	description: I18n.t('homepage.customSendingDomainDescription'),
-		// 	image: '/img/custom-domain.svg'
-		// },
-		// {
-		// 	title: I18n.t('homepage.apiWebhooks'),
-		// 	description: I18n.t('homepage.apiWebhooksDescription'),
-		// 	image: '/img/api-webhooks.svg'
-		// },
+
+		{
+			title: I18n.t('homepage.apiWebhooks'),
+			description: I18n.t('homepage.apiWebhooksDescription'),
+			image: '/img/api-webhooks.svg'
+		},
 		{
 			title: I18n.t('homepage.teamCollaboration'),
 			description: I18n.t('homepage.teamCollaborationDescription'),
 			image: '/img/team-collaboration.svg'
 		},
-		{
-			title: I18n.t('homepage.automation'),
-			description: I18n.t('homepage.automationDescription'),
-			image: '/img/automation.svg'
-		},
+
 		{
 			title: I18n.t('homepage.migration'),
 			description: I18n.t('homepage.migrationDescription'),
@@ -47,67 +29,30 @@
 	];
 </script>
 
-<div class="feature-wrapper hds-container">
-	{#each features as feature}
-		<div class="feature hds-box">
-			<div class="feature-image">
-				<img src={feature.image} alt={feature.title} width={180} height={140} />
+<div class="outer-box">
+	<div class="feature-wrapper hds-container">
+		{#each features as feature}
+			<div class="feature hds-box">
+				<div class="feature-image">
+					<img src={feature.image} alt={feature.title} width={180} height={140} />
+				</div>
+				<div class="feature-content">
+					<div class="title">{feature.title}</div>
+					<div class="desc">{feature.description}</div>
+				</div>
 			</div>
-			<div class="feature-content">
-				<div class="title">{feature.title}</div>
-				<div class="desc">{feature.description}</div>
-			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </div>
 
-<!-- <style>
-	.feature-wrapper {
-		margin: 70px auto;
-		display: grid;
-		grid-template-columns: repeat(2, minmax(300px, 1fr));
-		gap: 45px;
-	}
-
-	.feature {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 15px;
-	}
-
-	.feature-content {
-		width: 70%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.title {
-		font-size: 20px;
-		font-weight: 600;
-	}
-
-	.desc {
-		margin-top: 10px;
-		font-size: 17px;
-		color: var(--text-light);
-		width: 100%;
-	}
-
-	@media (max-width: 992px) {
-		.feature-wrapper {
-			grid-template-columns: 1fr;
-		}
-	}
-</style> 
-
--->
-
 <style>
+	.outer-box {
+		background-color: var(--accent);
+		padding: 60px 0;
+	}
 	.feature-wrapper {
-		margin: 70px 50px;
+		margin: 70px 40px;
+		/* background-color: var(--accent); */
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 2rem;
@@ -116,16 +61,16 @@
 	}
 
 	.feature {
-		background: white;
-		border-radius: 16px;
+		/* background: white; */
+		/* border-radius: 16px; */
 		padding: 2rem 1.5rem;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+		/* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
 		transition: all 0.3s ease;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		border: 1px solid rgba(0, 0, 0, 0.05);
+		/* border: 1px solid rgba(0, 0, 0, 0.05); */
 		position: relative;
 		overflow: hidden;
 	}
@@ -136,8 +81,8 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		height: 3px;
-		background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+		height: 4px;
+		background: var(--green);
 	}
 
 	.feature:hover {
@@ -147,15 +92,15 @@
 	}
 
 	.feature:nth-child(2)::before {
-		background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+		background: var(--red);
 	}
 
 	.feature:nth-child(3)::before {
-		background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+		background: var(--orange);
 	}
 
 	.feature:nth-child(4)::before {
-		background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+		background: var(--blue);
 	}
 
 	.feature-image {

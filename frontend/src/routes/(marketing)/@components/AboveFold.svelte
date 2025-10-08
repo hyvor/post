@@ -32,11 +32,6 @@
 		<div class="main-graphic">
 			<MainGraphic />
 		</div>
-
-		<!-- <div class="trial-checks">
-			< <TrialChecks /> -->
-		<!-- <MainGraphic /> -->
-		<!-- </div> -->
 	</div>
 
 	<div class="right">
@@ -45,7 +40,6 @@
 			<BrowserWindow image={consoleImg} link="console.hyvor.com" />
 		</div>
 		<div class="another-browser">
-			<!-- <BrowserWindow image={emailImg} link="post.hyvor.com" /> -->
 			<Envelope emailImage={emailImg} />
 		</div>
 	</div>
@@ -165,13 +159,6 @@
 		gap: 10px;
 		margin-top: 40px;
 	}
-
-	.trial-checks {
-		margin-top: 30px;
-		/* margin-left: -10px; */
-		width: 350px;
-	}
-
 	@media (max-width: 992px) {
 		.above-fold {
 			flex-direction: column;

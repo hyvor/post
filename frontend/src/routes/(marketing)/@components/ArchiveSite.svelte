@@ -2,6 +2,8 @@
 	import archiveImg from '../img/archive.png';
 	import emailImg from '../img/email.png';
 	import BrowserWindow from './BrowserWindow.svelte';
+	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import IconLink from '@hyvor/icons/IconLink';
 </script>
 
 <div class="archive-site">
@@ -19,23 +21,31 @@
 		<div class="right">
 			<h1>Archive Site</h1>
 			<h2>This site is for all the emails sent through Hyvor Post.</h2>
+
+			<div class="bento-grid">
+				<div class="int">
+					<IconBullseye class="int-icon" size={30} />
+					<div class="seo-feature-name">Customizable</div>
+				</div>
+
+				<div class="int">
+					<IconLink class="int-icon" size={30} />
+					<div class="seo-feature-name">Free subdomain</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <style>
 	.archive-site {
-		/* width: 95vw; */
 		padding: 60px 0;
-		/* margin: auto 55px; */
 		background-color: var(--accent);
 	}
 
 	.wrap {
 		display: flex;
-		/* width: 90%; */
 		margin: auto 55px;
-		/* max-width: 1200px; */
 		text-align: right;
 	}
 
@@ -43,12 +53,13 @@
 		margin: 0;
 		font-size: 60px;
 		text-align: end;
+		color: var(--text-white);
 	}
 
 	h2 {
 		font-weight: normal;
 		font-size: 20px;
-		color: var(--grey-dark);
+		color: var(--text-white);
 		margin: 0;
 		padding-top: 20px;
 		text-align: end;
@@ -61,15 +72,13 @@
 	}
 
 	.main-browser {
-		width: 150%; /* did this to make it extend over the screen edge */
+		width: 150%;
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: -50%; /* This makes it extend over the left edge */
-		/* background-color: #191e19; */
 		padding-top: 70px;
 		padding-bottom: 70px;
 		padding-left: 70px;
 		border-radius: 20px;
-		/* filter: blur(1px); */
 		opacity: 0.9;
 	}
 
@@ -87,26 +96,62 @@
 		margin-left: 35px;
 	}
 
+	.bento-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px 40px;
+		margin-top: 40px;
+	}
+
+	.int {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		/* font-size: 25px; */
+		font-size: 20px;
+		margin-bottom: 10px;
+		color: var(--gray-light);
+		justify-content: flex-end;
+	}
+
+	.seo-feature-name {
+		color: var(--gray-light);
+	}
+
 	@media (max-width: 992px) {
 		.wrap {
-			margin: auto 20px;
+			flex-direction: column-reverse;
 			text-align: center;
+			margin: 20px auto;
+		}
+
+		.left {
+			width: 100%;
+			padding-right: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 		}
 
 		h1 {
-			font-size: 40px;
+			margin-top: 20px;
 		}
 
 		h2 {
-			font-size: 18px;
 			padding-top: 10px;
 		}
 
-		.left,
-		.right {
-			float: none;
+		.main-browser {
 			width: 100%;
-			text-align: center;
+			margin-left: 0;
+		}
+
+		.another-browser {
+			position: relative;
+			bottom: 0;
+			left: 0;
+			margin-top: 30px;
+			box-shadow: var(--box-shadow);
 		}
 	}
 </style>

@@ -24,3 +24,7 @@
 <PriceCompare />
 <Faq />
 <TrialSignUp />
+
+<style>
+	/*  */
+</style>

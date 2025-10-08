@@ -158,7 +158,8 @@
 		}
 
 		.another-browser {
-			display: flex;
+			/* display: flex; */
+			display: none;
 		}
 	}
 </style>

@@ -9,6 +9,7 @@
 	let yearly = false;
 </script>
 
+<div class="ripple"></div>
 <div class="yearly-wrap hds-container">
 	<div class="yearly hds-box">
 		<Button
@@ -36,7 +37,18 @@
 	<div>{I18n.t('pricing.vatIncluded')}</div>
 </div>
 
-<style>
+<!-- <style>
+	.ripple {
+		position: absolute;
+		width: 100%;
+		height: 300px;
+		background: radial-gradient(circle, rgba(107, 135, 131, 0.4) 10%, transparent 10.01%);
+		background-size: 10px 10px;
+		z-index: -1;
+		top: 0;
+		left: 0;
+	}
+
 	.plans {
 		display: flex;
 		gap: 15px;
@@ -76,6 +88,75 @@
 		margin-bottom: 5px;
 	}
 
+	@media (max-width: 992px) {
+		.plans {
+			flex-direction: column;
+		}
+	}
+</style> -->
+
+<style>
+	/* Full-page dot background */
+	.ripple {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(circle, rgba(107, 135, 131, 0.4) 10%, transparent 10.01%);
+		background-size: 20px 20px; /* space between dots */
+		z-index: -1;
+	}
+
+	/* Plans layout */
+	.plans {
+		display: flex;
+		gap: 15px;
+		padding-top: 20px;
+		width: 450px;
+		max-width: 100%;
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Yearly toggle buttons */
+	.yearly-wrap {
+		display: flex;
+		justify-content: center;
+		padding-top: 35px;
+		position: relative;
+		z-index: 1;
+	}
+	.yearly {
+		display: inline-flex;
+		width: 350px;
+		background-color: #fff;
+		padding: 5px;
+		border-radius: 20px;
+		gap: 3px;
+	}
+	.yearly :global(button) {
+		flex: 1;
+	}
+	.off {
+		color: var(--text-light);
+		font-size: 12px;
+		margin-left: 5px;
+	}
+
+	/* Disclaimers */
+	.disclaimers {
+		text-align: center;
+		color: var(--text-light);
+		font-size: 14px;
+		padding-top: 30px;
+		position: relative;
+		z-index: 1;
+	}
+	.disclaimers div {
+		margin-bottom: 5px;
+	}
+
+	/* Responsive */
 	@media (max-width: 992px) {
 		.plans {
 			flex-direction: column;
