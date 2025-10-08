@@ -47,7 +47,7 @@ class CreateApiKeyTest extends WebTestCase
         ]);
         $this->assertNotNull($apiKey);
         $this->assertSame('Test name', $apiKey->getName());
-        $this->assertSame([Scope::ISSUES_READ, Scope::ISSUES_WRITE], $apiKey->getScopes());
+        $this->assertSame([Scope::ISSUES_READ->value, Scope::ISSUES_WRITE->value], $apiKey->getScopes());
     }
 
     public function test_create_api_key_without_name(): void
