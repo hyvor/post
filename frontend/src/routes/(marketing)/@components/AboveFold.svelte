@@ -182,20 +182,20 @@
 		}
 
 		.right {
-			margin: auto;
-			margin-top: 30px;
+			width: 100%;
+			margin-top: 70px;
 			padding-left: 0;
-			width: 500px;
-			max-width: 100%;
+		}
+
+		.main-browser {
+			width: 100%;
 		}
 		.buttons {
 			justify-content: center;
 		}
 
-		.trial-checks {
-			margin-left: 0;
-			display: flex;
-			justify-content: center;
+		.another-browser {
+			display: none;
 		}
 	}
 
@@ -222,18 +222,16 @@
 
 		.right {
 			width: 100%;
+			margin-top: 70px;
+			padding-left: 0;
 		}
 
 		.main-browser {
 			width: 100%;
-			animation: none; /* optional: disable float animations on small devices */
 		}
 
 		.another-browser {
-			position: static;
-			width: 70%;
-			margin: 20px auto 0;
-			animation: none;
+			display: none;
 		}
 	}
 
@@ -254,14 +252,6 @@
 
 		.buttons {
 			flex-direction: column;
-			width: 100%;
-			align-items: stretch;
-		}
-
-		.buttons a,
-		.buttons button {
-			width: 100%;
-			text-align: center;
 		}
 	}
 </style>

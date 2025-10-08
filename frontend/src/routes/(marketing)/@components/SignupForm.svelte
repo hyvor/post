@@ -187,37 +187,98 @@
 		/* differed the appearance and float animation a bit using different timings */
 	}
 
-	/* mobile */
-	@media (max-width: 900px) {
+	@media (max-width: 992px) {
 		.signup-form {
 			flex-direction: column;
-			padding: 20px 0;
-			margin: auto 20px;
+			align-items: center;
+			text-align: center;
+			margin: 20px auto;
+			gap: 30px;
+			padding: 40px 0;
 		}
 
 		.left {
-			padding: 0 10px;
+			width: 100%;
+			padding: 0 15px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.right {
+			width: 100%;
+			padding-left: 0;
 			text-align: center;
 		}
 
 		h1 {
-			font-size: 40px;
+			font-size: 42px;
+			text-align: center;
+			margin-top: 10px;
 		}
 
 		h2 {
 			font-size: 18px;
-		}
-
-		.right {
-			padding: 30px 0 0 0;
+			text-align: center;
+			padding-top: 10px;
+			max-width: 90%;
 		}
 
 		.form-preview {
-			display: none;
+			width: 100%;
+			margin-left: 0;
+			padding: 40px 20px;
+		}
+
+		.bento-grid {
+			grid-template-columns: 1fr;
+			gap: 20px;
+			justify-items: center;
+		}
+
+		.int {
+			justify-content: center;
 		}
 
 		.another-browser {
-			display: block;
+			display: none;
+		}
+	}
+
+	@media (max-width: 768px) {
+		h1 {
+			font-size: 36px;
+			line-height: 1.2;
+		}
+
+		h2 {
+			font-size: 16px;
+			max-width: 90%;
+		}
+
+		.form-preview {
+			padding: 30px 15px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		h1 {
+			font-size: 30px;
+		}
+
+		h2 {
+			font-size: 15px;
+			padding-top: 5px;
+		}
+
+		.bento-grid {
+			margin-top: 25px;
+			gap: 15px;
+		}
+
+		.int {
+			font-size: 16px;
+			gap: 10px;
 		}
 	}
 </style>

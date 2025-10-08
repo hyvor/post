@@ -96,18 +96,16 @@
 </style> -->
 
 <style>
-	/* Full-page dot background */
 	.ripple {
 		position: fixed;
 		inset: 0;
 		width: 100%;
 		height: 100%;
 		background: radial-gradient(circle, rgba(107, 135, 131, 0.4) 10%, transparent 10.01%);
-		background-size: 20px 20px; /* space between dots */
+		background-size: 20px 20px; /* the space between the dots here */
 		z-index: -1;
 	}
 
-	/* Plans layout */
 	.plans {
 		display: flex;
 		gap: 15px;
@@ -118,7 +116,6 @@
 		z-index: 1;
 	}
 
-	/* Yearly toggle buttons */
 	.yearly-wrap {
 		display: flex;
 		justify-content: center;
@@ -142,8 +139,6 @@
 		font-size: 12px;
 		margin-left: 5px;
 	}
-
-	/* Disclaimers */
 	.disclaimers {
 		text-align: center;
 		color: var(--text-light);

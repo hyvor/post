@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 	import { getMarketingI18n } from '../locale';
 
@@ -12,6 +13,32 @@
 
 	const maxPrice = Math.max(...prices.map((p) => p.price));
 	const I18n = getMarketingI18n();
+
+	let animatedPrices = prices.map(() => 0);
+	let animatedWidths = prices.map(() => 0);
+
+	function easeOutCubic(t: number) {
+		return 1 - Math.pow(1 - t, 3);
+	}
+
+	onMount(() => {
+		prices.forEach((p, i) => {
+			const duration = 1200; // slightly slower for smoother effect
+			const start = performance.now();
+
+			function animate(now: number) {
+				const rawProgress = Math.min((now - start) / duration, 1);
+				const progress = easeOutCubic(rawProgress);
+
+				animatedPrices[i] = Math.floor(progress * p.price);
+				animatedWidths[i] = progress * ((p.price / maxPrice) * 100 + 10);
+
+				if (rawProgress < 1) requestAnimationFrame(animate);
+			}
+
+			requestAnimationFrame(animate);
+		});
+	});
 </script>
 
 <div class="wrap hds-container">
@@ -20,20 +47,18 @@
 		wrapStyle="margin-top:50px; padding-bottom: 20px;"
 		subtitle={I18n.t('pricing.priceCompareDescription')}
 	/>
+
 	<div class="hds-container">
 		<div class="graph-container">
-			{#each prices as { name, price, color }}
+			{#each prices as { name, price, color }, i}
 				<div class="row">
-					<div class="name">
-						{name}
-					</div>
+					<div class="name">{name}</div>
 					<div class="bar-container">
 						<div
 							class="bar"
-							style="width:  {(price / maxPrice) * 100 +
-								10}%; background-color: {color};"
+							style="width: {animatedWidths[i]}%; background-color: {color};"
 						>
-							<div class="price">€{price}</div>
+							<div class="price">€{animatedPrices[i]}</div>
 						</div>
 					</div>
 				</div>
@@ -42,10 +67,7 @@
 	</div>
 
 	<div class="disclaimers">
-		<div>
-			<!-- pricing comparing as of 2025-07-20 -->
-			{I18n.t('pricing.pricesAsOfJuly2025')}
-		</div>
+		<div>{I18n.t('pricing.pricesAsOfJuly2025')}</div>
 	</div>
 </div>
 
@@ -75,16 +97,16 @@
 		align-items: center;
 		gap: 0.5rem;
 		font-weight: 600;
-		font-size: 1rem;
+		font-size: 1.3rem;
 	}
 
 	.bar-container {
 		flex: 1;
-		// background-color: #e5e7eb; /* light gray background to visualize bar space */
 		border-radius: 20px;
 		overflow: hidden;
-		height: 30px;
+		height: 40px;
 		position: relative;
+		background-color: #f0f0f000;
 	}
 
 	.bar {
@@ -96,6 +118,11 @@
 		color: white;
 		font-weight: 600;
 		font-size: 0.9rem;
+		transition: width 0.3s ease-out;
+	}
+
+	.price {
+		min-width: 40px;
 	}
 
 	.disclaimers {
@@ -109,7 +136,6 @@
 		font-size: 30px;
 	}
 
-	/* Mobile styles */
 	@media (max-width: 640px) {
 		.row {
 			flex-direction: column;
@@ -119,6 +145,7 @@
 		.name {
 			width: auto;
 			font-size: 0.95rem;
+			margin-bottom: 0.5rem;
 		}
 
 		.bar-container {
