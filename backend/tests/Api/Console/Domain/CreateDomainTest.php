@@ -41,7 +41,7 @@ class CreateDomainTest extends WebTestCase
             return new JsonMockResponse([
                 'id' => 1,
                 'domain' => 'hyvor.com',
-                'dkim_selector' => 'rly2025',
+                'dkim_host' => 'rly2025',
                 'dkim_txt_value' => 'v=DKIM1; k=rsa; p=...',
             ]);
         };
@@ -64,7 +64,8 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'hyvor.com',
-            ]
+            ],
+            useSession: true
         );
         $this->assertSame(200, $response->getStatusCode());
 
@@ -93,7 +94,8 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'invalid-domain',
-            ]
+            ],
+            useSession: true
         );
         $this->assertSame(422, $response->getStatusCode());
 
