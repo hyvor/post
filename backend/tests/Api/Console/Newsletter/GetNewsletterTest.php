@@ -56,7 +56,6 @@ class GetNewsletterTest extends WebTestCase
             'GET',
             '/newsletter'
         );
-        dd($response->getContent());
         $this->assertSame(403, $response->getStatusCode());
     }
 }

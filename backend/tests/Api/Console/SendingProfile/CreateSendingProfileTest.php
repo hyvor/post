@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\SendingProfile;
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
+use App\Entity\Type\RelayDomainStatus;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -23,7 +24,7 @@ class CreateSendingProfileTest extends WebTestCase
 
         DomainFactory::createOne([
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -60,7 +61,7 @@ class CreateSendingProfileTest extends WebTestCase
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -119,7 +120,7 @@ class CreateSendingProfileTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
         DomainFactory::createOne([
             'domain' => 'hyvor.com',
-            'verified_in_ses' => false,
+            'relay_status' => RelayDomainStatus::PENDING,
             'user_id' => 1
         ]);
         $response = $this->consoleApi(
