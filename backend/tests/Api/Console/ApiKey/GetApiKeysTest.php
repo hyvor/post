@@ -9,7 +9,9 @@ use App\Service\ApiKey\ApiKeyService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use function _PHPStan_f9a2208af\Symfony\Component\String\u;
 
 #[CoversClass(ApiKeyController::class)]
 #[CoversClass(ApiKeyService::class)]
@@ -20,7 +22,10 @@ class GetApiKeysTest extends WebTestCase
     public function test_get_api_keys(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
+        UserFactory::createOne([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => 1
+        ]);
         ApiKeyFactory::createMany(4, [
             'newsletter' => $newsletter,
             'scopes' => [Scope::ISSUES_READ]
@@ -29,7 +34,8 @@ class GetApiKeysTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/api-keys'
+            '/api-keys',
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -50,11 +56,15 @@ class GetApiKeysTest extends WebTestCase
     public function test_get_api_keys_empty(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
+        UserFactory::createOne([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => 1
+        ]);
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/api-keys'
+            '/api-keys',
+            useSession: true
         );
 
         $this->assertSame(200, $response->getStatusCode());
