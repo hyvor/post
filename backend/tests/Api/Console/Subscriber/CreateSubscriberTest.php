@@ -186,7 +186,7 @@ class CreateSubscriberTest extends WebTestCase
                 ],
                 [
                     'property' => 'source',
-                    'message' => 'This value should be of type console|form|import|auto_subscribe.',
+                    'message' => 'This value should be of type console|form|import.',
                 ],
                 [
                     'property' => 'subscribed_at',
@@ -206,7 +206,8 @@ class CreateSubscriberTest extends WebTestCase
     #[TestWith(['169.254.255.255'])] // reserved ip
     public function testValidatesIp(
         string $ip
-    ): void {
+    ): void
+    {
         $this->validateInput(
             fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
@@ -229,8 +230,9 @@ class CreateSubscriberTest extends WebTestCase
      */
     private function validateInput(
         callable $input,
-        array $violations
-    ): void {
+        array    $violations
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
@@ -243,7 +245,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
-        $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
+        $this->assertSame($violations[0]['message'], $json['message']);
     }
 
     public function testCreateSubscriberInvalidList(): void
