@@ -56,10 +56,18 @@ jobs:
 
       - name: Run Tests
         run: |
+          touch coverage.xml
           docker run \
           -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
           --network ci \
+          --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
           backend-dev sh -c "
-          php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
-          php -d memory_limit=1024M ./vendor/bin/phpunit"
+          php -d memory_limit=2048M bin/console doctrine:migrations:migrate --no-interaction &&
+          php -d memory_limit=2048M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.HYVOR_ORG_CODECOV_TOKEN }}
+          slug: hyvor/talk
+          files: /app/coverage.xml
