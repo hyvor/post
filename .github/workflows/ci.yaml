@@ -58,15 +58,13 @@ jobs:
         run: |
           touch coverage.xml
           docker run \
-          --memory=6g \
           -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
           --network ci \
           --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
           backend-dev sh -c "
-          echo "memory_limit=4096M" > /usr/local/etc/php/conf.d/99-memory.ini &&
           php -i | grep memory_limit &&
-          php bin/console doctrine:migrations:migrate --no-interaction &&
-          php ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
+          php -d memory_limit=-1 bin/console doctrine:migrations:migrate --no-interaction &&
+          php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
