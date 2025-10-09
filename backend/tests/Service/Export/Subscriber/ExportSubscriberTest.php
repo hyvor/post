@@ -16,14 +16,12 @@ class ExportSubscriberTest extends KernelTestCase
     public function test_export_subscriber(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
         $subscribers = SubscriberFactory::createMany(50, [
             'newsletter' => $newsletter,
         ]);
-
-        $subscriberMetadata  = SubscriberMetadataDefinitionFactory::createOne([
-            'key' => 'Phone Number',
+        SubscriberMetadataDefinitionFactory::createOne([
             'newsletter' => $newsletter,
+            'key' => 'Phone Number',
         ]);
 
         $exporter = new SubscriberCsvExporter(
@@ -39,7 +37,7 @@ class ExportSubscriberTest extends KernelTestCase
         $this->assertSame('Email,Status,"Subscribed At",Source,"Phone Number"', $lines[0]);
 
         $data = explode(',', $lines[1]);
-        $this->assertSame(4, count($data));
+        $this->assertSame(5, count($data));
         $this->assertSame($subscribers[0]->getEmail(), $data[0]);
         $this->assertSame($subscribers[0]->getStatus()->value, $data[1]);
         $this->assertNotNull($subscribers[0]->getSubscribedAt());
