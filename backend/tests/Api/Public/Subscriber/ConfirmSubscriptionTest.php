@@ -9,6 +9,8 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
@@ -70,18 +72,17 @@ class ConfirmSubscriptionTest extends WebTestCase
 
     public function test_confirm_subscription_with_expired_token(): void
     {
+        $date = new \DateTimeImmutable('2025-10-09 00:00:00');
+        Clock::set(new MockClock($date));
+
         $newsletter = NewsletterFactory::createOne();
-
-        $subscriber = SubscriberFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-            ]
-        );
-
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+        ]);
 
         $data = [
             'subscriber_id' => $subscriber->getId(),
-            'expires_at' => (new \DateTimeImmutable())->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
+            'expires_at' => $date->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
         $token = $this->encryption->encrypt($data);
