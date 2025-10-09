@@ -12,6 +12,7 @@ use App\Service\Content\Marks\Underline;
 use App\Service\Content\Nodes\Blockquote;
 use App\Service\Content\Nodes\BulletList;
 use App\Service\Content\Nodes\Button;
+use App\Service\Content\Nodes\Callout;
 use App\Service\Content\Nodes\CodeBlock;
 use App\Service\Content\Nodes\CustomHtml;
 use App\Service\Content\Nodes\Doc;
@@ -114,6 +115,7 @@ JSON;
                 new Figcaption(),
                 new CodeBlock(),
                 new CustomHtml(),
+                new Callout(),
             ],
             [
                 new Em(),
