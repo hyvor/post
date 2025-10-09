@@ -62,7 +62,10 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
 
         $this->transport('async')->throwExceptions()->process();
 
-        $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(['newsletter' => $newsletter->_real()]);
+        $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(
+            ['newsletter' => $newsletter->_real()],
+            ['id' => 'ASC']
+        );
 
         $this->assertCount(3, $importedSubscribers);
         $this->assertSame('john@hyvor.com', $importedSubscribers[0]->getEmail());
