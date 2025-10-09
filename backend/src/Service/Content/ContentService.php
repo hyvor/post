@@ -10,12 +10,15 @@ use App\Service\Content\Marks\Strike;
 use App\Service\Content\Marks\Strong;
 use App\Service\Content\Marks\Underline;
 use App\Service\Content\Nodes\Blockquote;
+use App\Service\Content\Nodes\BulletList;
 use App\Service\Content\Nodes\Button;
 use App\Service\Content\Nodes\Doc;
 use App\Service\Content\Nodes\HardBreak;
 use App\Service\Content\Nodes\Heading;
 use App\Service\Content\Nodes\HorizontalRule;
 use App\Service\Content\Nodes\Image;
+use App\Service\Content\Nodes\ListItem;
+use App\Service\Content\Nodes\OrderedList;
 use App\Service\Content\Nodes\Paragraph;
 use App\Service\Content\Nodes\Text;
 use Hyvor\Phrosemirror\Document\Node;
@@ -99,7 +102,10 @@ JSON;
                 new Heading(),
                 new HorizontalRule(),
                 new Blockquote(),
-                new Button()
+                new Button(),
+                new BulletList(),
+                new OrderedList(),
+                new ListItem(),
             ],
             [
                 new Em(),
