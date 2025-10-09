@@ -58,6 +58,7 @@ jobs:
         run: |
           touch coverage.xml
           docker run \
+          --memory=3g \
           -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
           --network ci \
           --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
@@ -69,5 +70,5 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.HYVOR_ORG_CODECOV_TOKEN }}
-          slug: hyvor/talk
+          slug: hyvor/post
           files: /app/coverage.xml
