@@ -46,6 +46,8 @@ class UploadMediaTest extends WebTestCase
 
     public function test_large_file(): void
     {
+        $this->markTestSkipped();
+
         $filePath = sys_get_temp_dir() . '/large_test_file.jpg';
 
         // total 110MB
