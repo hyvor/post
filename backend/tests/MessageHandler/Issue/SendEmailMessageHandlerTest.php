@@ -20,14 +20,44 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Mime\Email;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(SendEmailMessageHandler::class)]
 #[CoversClass(SendEmailMessage::class)]
 #[CoversClass(EmailSenderService::class)]
 class SendEmailMessageHandlerTest extends KernelTestCase
 {
+    private function mockHttpClient(Send $send): void
+    {
+        $callback = function ($method, $url, $options) use ($send): JsonMockResponse {
+
+            $this->assertSame('POST', $method);
+            $this->assertSame('https://relay.hyvor.com/api/console/sends', $url);
+            $this->assertContains('Content-Type: application/json', $options['headers']);
+            $this->assertContains('Authorization: Bearer test-relay-key', $options['headers']);
+            $this->assertContains("X-Idempotency-Key: newsletter-send-{$send->getId()}", $options['headers']);
+
+            $body = json_decode($options['body'], true);
+            $this->assertIsArray($body);
+            $this->assertSame('First Newsletter Issue!', $body['subject']);
+            $this->assertSame($send->getEmail(), $body['to']['email']);
+
+            /** @var array<string, string> $emailHeaders */
+            $emailHeaders = $body['headers'];
+            $this->assertSame($send->getId(), (int)$emailHeaders['X-Newsletter-Send-ID']);
+            $this->assertStringStartsWith('<https://post.hyvor.com/api/public/subscriber/unsubscribe?token=', $emailHeaders['List-Unsubscribe']);
+            $this->assertSame('List-Unsubscribe=One-Click', $emailHeaders['List-Unsubscribe-Post']);
+
+            return new JsonMockResponse();
+        };
+
+        $httpClient = new MockHttpClient($callback);
+        $this->container->set(HttpClientInterface::class, $httpClient);
+    }
 
     public function test_send_job(): void
     {
@@ -60,6 +90,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'subscriber' => $subscribers[0],
         ]);
 
+        $this->mockHttpClient($send);
+
         $message = new SendEmailMessage($send->getId());
         $this->getMessageBus()->dispatch($message);
 
@@ -70,16 +102,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::SENT, $send->getStatus());
         $this->assertSame('2025-02-21 00:00:00', $send->getSentAt()?->format('Y-m-d H:i:s'));
-
-        $this->assertEmailCount(1);
-
-        /** @var Email $email */
-        $email = $this->getMailerMessage();
-        $this->assertEmailSubjectContains($email, 'First Newsletter Issue!');
-        $header = $email->getHeaders()->get('List-Unsubscribe');
-        $this->assertNotNull($header);
-        $this->assertStringStartsWith('<https://post.hyvor.com/api/public/subscriber/unsubscribe?token=', $header->getBodyAsString());
-        $this->assertEmailHeaderSame($email, 'List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
@@ -94,7 +116,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     public function test_send_job_with_exception(): void
     {
         Clock::set(new MockClock('2025-02-21'));
-
 
         $newsletter = NewsletterFactory::createOne();
 
@@ -145,8 +166,8 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         // Test checkCompletion method
         $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame($issueDB->getFailedSends(), 1);
-        $this->assertSame($issueDB->getStatus(), IssueStatus::FAILED);
+        $this->assertSame(1, $issueDB->getFailedSends());
+        $this->assertSame(IssueStatus::FAILED, $issueDB->getStatus());
         $this->assertSame("2025-02-21 00:00:00", $issueDB->getFailedAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(0);
