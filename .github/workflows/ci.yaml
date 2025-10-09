@@ -63,8 +63,8 @@ jobs:
           --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
           backend-dev sh -c "
           php -i | grep memory_limit &&
-          php -d memory_limit=-1 bin/console doctrine:migrations:migrate --no-interaction &&
-          php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
+          php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
+          php -d memory_limit=1024M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
