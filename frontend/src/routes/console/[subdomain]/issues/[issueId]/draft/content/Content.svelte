@@ -66,6 +66,13 @@
                 // colorButtonBackground:
 
                 codeBlockEnabled: true,
+                codeBlockConfig: {
+                    language: false,
+                    fileName: false,
+                    annotations: false,
+                    annotationsUrl: null
+                },
+
                 customHtmlEnabled: true,
                 buttonEnabled: true,
 

@@ -123,13 +123,29 @@
             font-weight: 600;
         }
 
-        .content code {
+        .content :not(pre) code {
             background: rgba(135, 131, 120, 0.15);
             color: #a33a3a;
             border-radius: 3px;
             font-size: 0.85em;
             padding: 0.2em 0.4em;
             font-family: monospace;
+        }
+
+        .content pre code {
+            display: block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #4b3b2f;
+            background-color: #fdf8f4;
+            border: 1px solid #f0e1d2;
+            border-radius: 10px;
+            padding: 14px 18px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 14px 0;
+            box-shadow: 0 1px 3px rgba(120, 90, 70, 0.15);
         }
 
         .content blockquote {
