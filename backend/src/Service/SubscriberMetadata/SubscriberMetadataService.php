@@ -88,6 +88,7 @@ class SubscriberMetadataService
     ): bool
     {
         return match ($metadataDefinition->getType()) {
+            //  @phpstan-ignore-next-line
             SubscriberMetadataDefinitionType::TEXT => is_string($value),
             // Other Metadata types can be added here
             default => false,
