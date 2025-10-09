@@ -5,23 +5,20 @@ namespace App\Tests\Service\Content\Nodes;
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class ButtonTest extends TestCase
+class CodeBlockTest extends TestCase
 {
     public function test_json_to_html(): void
     {
-        $text = 'Click me';
+        $code = 'echo "Hello, World!";';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'button',
-                    'attrs' => [
-                        'href' => 'https://post.hyvor.com',
-                    ],
+                    'type' => 'code_block',
                     'content' => [
                         [
                             'type' => 'text',
-                            'text' => $text,
+                            'text' => $code,
                         ],
                     ],
                 ],
@@ -29,30 +26,28 @@ class ButtonTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame("<p class=\"button-wrap\"><a href=\"https://post.hyvor.com\" target=\"_blank\" class=\"button\">$text</a></p>", $html);
+        $this->assertSame("<pre><code>echo &quot;Hello, World!&quot;;</code></pre>", $html);
     }
 
     public function test_html_to_json(): void
     {
-        $text = 'Click me';
-        $html = "<a class=\"button\" href=\"https://post.hyvor.com\">$text</a>";
-        $json = (new ContentService())->getJsonFromHtml($html);
+        $code = 'echo "Hello, World!";';
+        $html = "<pre><code>$code</code></pre>";
+        $json = new ContentService()->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'button',
-                    'attrs' => [
-                        'href' => 'https://post.hyvor.com',
-                    ],
+                    'type' => 'code_block',
                     'content' => [
                         [
                             'type' => 'text',
-                            'text' => $text,
+                            'text' => $code,
                         ],
                     ],
                 ],
             ],
         ]), $json);
     }
+
 }

@@ -21,12 +21,13 @@ class Image extends NodeType
         assert(is_string($src));
         assert(is_string($alt));
 
-        $attrs = <<<ATTR
-            src="$src"
-            alt="$alt"
-        ATTR;
+        $width = $node->attr('width');
+        $widthAttr = is_string($width) && $width ? " width=\"$width\"" : '';
 
-        return "<img $attrs />";
+        $height = $node->attr('height');
+        $heightAttr = is_string($height) && $height ? " height=\"$height\"" : '';
+
+        return "<img src=\"$src\" alt=\"$alt\"$widthAttr$heightAttr />";
     }
 
     public function fromHtml(): array
