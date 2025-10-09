@@ -6,20 +6,23 @@ use Hyvor\Phrosemirror\Converters\HtmlParser\ParserRule;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Types\NodeType;
 
-class HorizontalRule extends NodeType
+class OrderedList extends NodeType
 {
-    public string $name = 'horizontal_rule';
+
+    public string $name = 'ordered_list';
+
     public string $group = 'block';
+    public ?string $content = 'list_item*';
 
     public function toHtml(Node $node, string $children): string
     {
-        return '<hr />';
+        return "<ol>$children</ol>";
     }
 
     public function fromHtml(): array
     {
         return [
-            new ParserRule(tag: 'hr'),
+            new ParserRule(tag: 'ol')
         ];
     }
 

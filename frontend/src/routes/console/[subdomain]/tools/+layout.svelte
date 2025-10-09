@@ -12,7 +12,7 @@
 
 	let { children }: Props = $props();
 
-	const prefix = `/console/${$newsletterStore.id}/tools`;
+	const prefix = `/console/${$newsletterStore.subdomain}/tools`;
 	const I18n = getI18n();
 </script>
 

@@ -83,6 +83,7 @@
 		updateNewsletter({ subdomain: $newsletterEditingStore.subdomain }, true)
 			.then(() => {
 				toast.success('Subdomain updated');
+				goto(consoleUrlWithNewsletter(''));
 			})
 			.catch((e) => {
 				toast.error(e.message);

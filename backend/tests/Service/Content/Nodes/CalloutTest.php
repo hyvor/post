@@ -5,18 +5,24 @@ namespace App\Tests\Service\Content\Nodes;
 use App\Service\Content\ContentService;
 use PHPUnit\Framework\TestCase;
 
-class ButtonTest extends TestCase
+class CalloutTest extends TestCase
 {
+
     public function test_json_to_html(): void
     {
-        $text = 'Click me';
+        $emoji = '💡';
+        $bg = '#FFFBCC';
+        $fg = '#333333';
+        $text = 'This is a callout';
         $json = json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'button',
+                    'type' => 'callout',
                     'attrs' => [
-                        'href' => 'https://post.hyvor.com',
+                        'emoji' => $emoji,
+                        'bg' => $bg,
+                        'fg' => $fg,
                     ],
                     'content' => [
                         [
@@ -29,21 +35,26 @@ class ButtonTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame("<p class=\"button-wrap\"><a href=\"https://post.hyvor.com\" target=\"_blank\" class=\"button\">$text</a></p>", $html);
+        $this->assertSame("<div class=\"callout\" style=\"background-color:$bg;color:$fg\"><span>$emoji</span><div>$text</div></div>", $html);
     }
 
     public function test_html_to_json(): void
     {
-        $text = 'Click me';
-        $html = "<a class=\"button\" href=\"https://post.hyvor.com\">$text</a>";
-        $json = (new ContentService())->getJsonFromHtml($html);
+        $emoji = '💡';
+        $bg = '#FFFBCC';
+        $fg = '#333333';
+        $text = 'This is a callout';
+        $html = "<div class=\"callout\" style=\"background-color:$bg;color:$fg\"><span>$emoji</span><div><p>$text</p></div></div>";
+        $json = new ContentService()->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
                 [
-                    'type' => 'button',
+                    'type' => 'callout',
                     'attrs' => [
-                        'href' => 'https://post.hyvor.com',
+                        'emoji' => $emoji,
+                        'bg' => $bg,
+                        'fg' => $fg,
                     ],
                     'content' => [
                         [
@@ -55,4 +66,5 @@ class ButtonTest extends TestCase
             ],
         ]), $json);
     }
+
 }
