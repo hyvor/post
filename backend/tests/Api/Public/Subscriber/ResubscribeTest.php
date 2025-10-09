@@ -35,7 +35,6 @@ class ResubscribeTest extends WebTestCase
             ]
         );
 
-        dump($response->getContent());
         $this->assertSame(200, $response->getStatusCode());
 
         $subscriber = $send->getSubscriber();
