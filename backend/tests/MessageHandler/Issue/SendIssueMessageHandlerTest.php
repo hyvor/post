@@ -46,9 +46,9 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $message = new SendIssueMessage($issue->getId());
         $this->getMessageBus()->dispatch($message);
 
-        $this->transport()->throwExceptions()->process(1);
+        $this->transport('async')->throwExceptions()->process(1);
 
-        $allMessages = $this->transport()->queue()->all();
+        $allMessages = $this->transport('async')->queue()->all();
         $this->assertCount(5, $allMessages);
 
         // by default, the max emails per second value is 1
