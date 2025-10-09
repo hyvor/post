@@ -63,6 +63,7 @@ jobs:
           --network ci \
           --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
           backend-dev sh -c "
+          php -i | grep memory_limit &&
           php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
           php -d memory_limit=4096M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
