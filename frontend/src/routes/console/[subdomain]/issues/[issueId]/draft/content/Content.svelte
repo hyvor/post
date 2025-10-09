@@ -25,7 +25,7 @@
     function handleDomEvent(name: string, e: Event) {
         
         // focus the subject input back
-        if (name === 'keydown' && (e as KeyboardEvent).key === 'ArrowUp') {
+        if (name === 'keydown' && ['ArrowUp', 'Backspace'].includes((e as KeyboardEvent).key)) {
             const selection = editorView.state.selection;
             if (selection.from === 1 && selection.to === 1) {
                 e.preventDefault();
