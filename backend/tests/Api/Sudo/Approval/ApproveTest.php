@@ -4,7 +4,6 @@ namespace App\Tests\Api\Sudo\Approval;
 
 use App\Api\Sudo\Controller\ApprovalController;
 use App\Api\Sudo\Object\ApprovalObject;
-use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Tests\Case\WebTestCase;
@@ -19,7 +18,7 @@ class ApproveTest extends WebTestCase
     public function test_approve(): void
     {
         $approval = ApprovalFactory::createOne([
-            'user_id' => 1,
+            'user_id' => 2,
             'status' => ApprovalStatus::REVIEWING,
         ]);
 
@@ -32,7 +31,6 @@ class ApproveTest extends WebTestCase
                 'private_note' => 'Approved by admin',
             ]
         );
-
         $this->assertSame(200, $response->getStatusCode());
         $content = $response->getContent();
         $this->assertNotFalse($content);
@@ -58,7 +56,7 @@ class ApproveTest extends WebTestCase
     public function test_reject(): void
     {
         $approval = ApprovalFactory::createOne([
-            'user_id' => 1,
+            'user_id' => 2,
             'status' => ApprovalStatus::REVIEWING,
         ]);
 

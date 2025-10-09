@@ -9,6 +9,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -163,6 +164,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         array  $server = [],
     ): Response
     {
+        SudoUserFactory::findOrCreate([
+            'user_id' => 1
+        ]);
+
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
 
         $this->client->request(
