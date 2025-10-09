@@ -14,8 +14,8 @@
 	const maxPrice = Math.max(...prices.map((p) => p.price));
 	const I18n = getMarketingI18n();
 
-	let animatedPrices = prices.map(() => 0);
-	let animatedWidths = prices.map(() => 0);
+	let animatedPrices = prices.map(() => 20);
+	let animatedWidths = prices.map(() => 20);
 
 	function easeOutCubic(t: number) {
 		return 1 - Math.pow(1 - t, 3);

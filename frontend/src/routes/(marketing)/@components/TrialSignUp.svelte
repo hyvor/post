@@ -22,14 +22,10 @@
 
 		<div class="button-wrap">
 			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('homepage.startYourNewsletter')}</Button> -->
-			<Button as="a" size="large" href={`/#waitlist`}
+			<Button as="a" size="x-large" href={`/#waitlist`}
 				>{I18n.t('comingSoon.joinWaitlist')}</Button
 			>
 		</div>
-
-		<!-- <div class="trial-checks">
-			<TrialChecks style="display:flex;justify-content:space-around" />
-		</div> -->
 	</div>
 </div>
 

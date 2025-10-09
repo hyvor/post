@@ -4,7 +4,7 @@
 
 	interface Props {
 		title?: string;
-		content?: string; // HTML string
+		content?: string; // HTML string SHOWS
 		isOpen?: boolean;
 		icon?: Component;
 	}
@@ -13,12 +13,12 @@
 	const Icon = icon;
 
 	function handleClick() {
-		isOpen = !isOpen; // toggle state internally
+		isOpen = !isOpen; // toggle state
 	}
 </script>
 
 <div class="accordion-item">
-	<button class="accordion-header" class:open={isOpen} on:click={handleClick}>
+	<button class="accordion-header" class:open={isOpen} onclick={handleClick}>
 		{#if icon}
 			<span class="icon">
 				<Icon size={20} />
@@ -34,7 +34,6 @@
 		<div class="accordion-content">
 			<div class="content-text">
 				{@html content}
-				<!-- ✅ render HTML safely -->
 			</div>
 		</div>
 	{/if}

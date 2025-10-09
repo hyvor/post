@@ -3,10 +3,10 @@
 	import IconBarChart from '@hyvor/icons/IconBarChart';
 	import IconWallet from '@hyvor/icons/IconWallet';
 	import IconBoxArrowRight from '@hyvor/icons/IconBoxArrowRight';
-	import FAQs from '../@components/FAQs.svelte';
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 	import { getMarketingI18n } from '../locale';
-	import DetailsSummary from '../@components/DetailsSummary.svelte';
+
+	import Accordion from '../@components/Accordion.svelte';
 
 	const I18n = getMarketingI18n();
 </script>
@@ -14,26 +14,27 @@
 <div class="wrap hds-container">
 	<FeatureSectionHead title={I18n.t('pricing.faqs')} />
 	<div class="faqs">
-		<DetailsSummary
-			summary={I18n.t('pricing.isThereATrial')}
+		<Accordion
+			title={I18n.t('pricing.isThereATrial')}
 			icon={IconArrowClockwise}
 			content={I18n.t('pricing.isThereATrialAnswer')}
 		/>
-		<DetailsSummary
-			summary={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimit')}
+		<Accordion
+			title={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimit')}
 			icon={IconBarChart}
 			content={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimitAnswer')}
 		/>
-		<DetailsSummary
-			summary={I18n.t('pricing.howDoPaymentsWork')}
+		<Accordion
+			title={I18n.t('pricing.howDoPaymentsWork')}
 			icon={IconWallet}
 			content={I18n.t('pricing.howDoPaymentsWorkAnswer')}
 		/>
-		<DetailsSummary
-			summary={I18n.t('pricing.canICancelAnytime')}
+		<Accordion
+			title={I18n.t('pricing.canICancelAnytime')}
 			icon={IconBoxArrowRight}
 			content={I18n.t('pricing.canICancelAnytimeAnswer')}
 		/>
+		<!-- <FAQs /> -->
 	</div>
 </div>
 

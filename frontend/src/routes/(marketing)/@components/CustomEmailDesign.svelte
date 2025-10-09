@@ -25,7 +25,8 @@
 
 <style>
 	.custom-email-design {
-		/* width: 95vw; */
+		width: var(--width);
+		max-width: var(--max-width);
 		padding: 60px 0;
 		margin: auto 55px;
 		display: flex;

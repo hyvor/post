@@ -22,7 +22,7 @@
 			{I18n.t('homepage.subHeading')}
 		</h2>
 		<div class="buttons">
-			<Button as="a" href="/console?signup" size="large"
+			<Button as="a" href="/console?signup" size="x-large"
 				>{I18n.t('homepage.cta')}
 				{#snippet end()}
 					&rarr;
@@ -53,8 +53,10 @@
 		position: relative;
 		padding-top: 75px;
 		display: flex;
-		width: 95vw;
+		width: var(--width);
 		padding-bottom: 75px;
+		max-width: var(--max-width);
+		margin: 0 auto;
 	}
 
 	.left {

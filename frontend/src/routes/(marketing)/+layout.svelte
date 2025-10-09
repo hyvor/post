@@ -16,5 +16,6 @@
 <style>
 	.footer-wrap {
 		margin-top: 100px;
+		background-color: var(--background, var(--accent-lightest));
 	}
 </style>

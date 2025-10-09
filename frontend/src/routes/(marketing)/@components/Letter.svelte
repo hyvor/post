@@ -39,6 +39,13 @@
 		padding: 100px 0;
 	}
 
+	/* larger screens */
+	@media (min-width: 1200px) {
+		.letter-section {
+			padding: 150px 0;
+		}
+	}
+
 	.wrap {
 		z-index: 1;
 		font-style: normal;

@@ -10,7 +10,7 @@
 </script>
 
 <div class="ripple"></div>
-<div class="yearly-wrap hds-container">
+<!-- <div class="yearly-wrap hds-container">
 	<div class="yearly hds-box">
 		<Button
 			on:click={() => (yearly = false)}
@@ -27,10 +27,12 @@
 			></Button
 		>
 	</div>
-</div>
+</div> -->
 
 <div class="plans hds-container">
 	<PricingPlan {yearly} {currency} />
+
+	<PricingPlan enterprise={true} {yearly} {currency} />
 </div>
 
 <div class="disclaimers">
@@ -101,22 +103,25 @@
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle, rgba(107, 135, 131, 0.4) 10%, transparent 10.01%);
+		background: radial-gradient(circle, rgba(107, 135, 131, 0.1) 10%, transparent 10.01%);
 		background-size: 20px 20px; /* the space between the dots here */
-		z-index: -1;
+		z-index: -2;
 	}
 
 	.plans {
 		display: flex;
-		gap: 15px;
-		padding-top: 20px;
-		width: 450px;
-		max-width: 100%;
+		justify-content: center;
+		gap: 25px;
+		flex-wrap: wrap;
+		padding-top: 40px;
+		width: 100%;
+		max-width: 1000px;
+		margin: 0 auto;
 		position: relative;
 		z-index: 1;
 	}
 
-	.yearly-wrap {
+	/* .yearly-wrap {
 		display: flex;
 		justify-content: center;
 		padding-top: 35px;
@@ -138,7 +143,7 @@
 		color: var(--text-light);
 		font-size: 12px;
 		margin-left: 5px;
-	}
+	} */
 	.disclaimers {
 		text-align: center;
 		color: var(--text-light);

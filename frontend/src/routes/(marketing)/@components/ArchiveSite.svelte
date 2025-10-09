@@ -165,9 +165,10 @@
 
 	.wrap {
 		display: flex;
+		width: var(--width);
+		max-width: var(--max-width);
 		margin: auto 55px;
 		text-align: right;
-		align-items: center;
 		justify-content: center;
 		gap: 40px;
 	}
