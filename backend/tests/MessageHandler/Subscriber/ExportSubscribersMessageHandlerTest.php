@@ -118,7 +118,7 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
         );
 
         // Only default headers should be present
-        $this->assertSame("Email,Status,\"Subscribed At\",Source", $read);
+        $this->assertSame("Email,Status,\"Subscribed At\",Source\n", $read);
 
     }
 }

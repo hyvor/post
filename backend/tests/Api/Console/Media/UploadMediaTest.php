@@ -28,7 +28,7 @@ class UploadMediaTest extends WebTestCase
             'upload_test.css',
         );
 
-        $response = $this->consoleApi(
+        $this->consoleApi(
             $newsletter,
             'POST',
             '/media',
@@ -36,7 +36,7 @@ class UploadMediaTest extends WebTestCase
                 'file' => $file,
             ],
             parameters: [
-                'type' => 'import',
+                'folder' => MediaFolder::IMPORT->value,
             ]
         );
 
@@ -59,7 +59,7 @@ class UploadMediaTest extends WebTestCase
         );
 
         $newsletter = NewsletterFactory::createOne();
-        $response = $this->consoleApi(
+        $this->consoleApi(
             $newsletter,
             'POST',
             '/media',
@@ -67,7 +67,7 @@ class UploadMediaTest extends WebTestCase
                 'file' => $file,
             ],
             parameters: [
-                'type' => 'issue_images',
+                'folder' => MediaFolder::ISSUE_IMAGES->value,
             ]
         );
 
@@ -132,5 +132,4 @@ class UploadMediaTest extends WebTestCase
         );
         $this->assertStringContainsString('ID,Name,Department,Salary', $read);
     }
-
 }
