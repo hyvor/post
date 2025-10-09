@@ -63,9 +63,10 @@ jobs:
           --network ci \
           --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
           backend-dev sh -c "
+          echo "memory_limit=4096M" > /usr/local/etc/php/conf.d/99-memory.ini &&
           php -i | grep memory_limit &&
-          php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
-          php -d memory_limit=4096M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
+          php bin/console doctrine:migrations:migrate --no-interaction &&
+          php ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
