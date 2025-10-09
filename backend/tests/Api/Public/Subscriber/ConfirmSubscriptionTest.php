@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Public\Subscriber;
 
 use App\Api\Public\Controller\Subscriber\SubscriberController;
+use App\Entity\Type\SubscriberStatus;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
@@ -16,12 +17,10 @@ class ConfirmSubscriptionTest extends WebTestCase
     public function test_confirm_subscription(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
-        $subscriber = SubscriberFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-            ]
-        );
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'status' => SubscriberStatus::PENDING
+        ]);
 
         $data = [
             'subscriber_id' => $subscriber->getId(),
@@ -34,8 +33,9 @@ class ConfirmSubscriptionTest extends WebTestCase
             'GET',
             '/subscriber/confirm?token=' . $token,
         );
-
-        $this->assertResponseRedirects('https://post.hyvor.com/newsletter/' . $newsletter->getSubdomain() . '/confirm?token=' . $token);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertNotNull($subscriber->getSubscribedAt());
     }
 
     public function test_confirm_subscription_with_invalid_token(): void
@@ -112,6 +112,6 @@ class ConfirmSubscriptionTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('Invalid subscriber ID.', $json['message']);
+        $this->assertSame('Subscriber not found.', $json['message']);
     }
 }
