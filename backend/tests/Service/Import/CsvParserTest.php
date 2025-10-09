@@ -9,6 +9,7 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\Import\Dto\ImportingSubscriberDto;
 use App\Service\Import\Parser\CsvParser;
 use App\Service\Import\Parser\ParserAbstract;
+use App\Service\Import\Parser\ParserFactory;
 use App\Service\Media\MediaService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterFactory;
@@ -24,7 +25,10 @@ class CsvParserTest extends KernelTestCase
 {
     public function test_parse(): void
     {
-        $parser = $this->container->get(CsvParser::class);
+        /** @var ParserFactory $parserFactory */
+        $parserFactory = $this->container->get(ParserFactory::class);
+        $parser = $parserFactory->csv();
+
         $newsletter = NewsletterFactory::createOne();
 
         $file = new UploadedFile(
@@ -33,6 +37,7 @@ class CsvParserTest extends KernelTestCase
             mimeType: "text/csv",
         );
 
+        /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
             $newsletter->_real(),
@@ -70,8 +75,8 @@ class CsvParserTest extends KernelTestCase
                 "lists" => "lists",
                 'subscribed_at' => 'subscribed at',
                 'subscribe_ip' => 'subscribe ip',
-                'name' => 'name',
-                'address' => 'address',
+                'metadata_name' => 'name',
+                'metadata_address' => 'address',
             ],
         ]);
 
@@ -80,7 +85,7 @@ class CsvParserTest extends KernelTestCase
         $this->assertCount(3, $subscribers);
         $this->assertInstanceOf(ImportingSubscriberDto::class, $subscribers[0]);
         $this->assertSame('john@hyvor.com', $subscribers[0]->email);
-        $this->assertSame(["List 1","List 2","List 3"], $subscribers[0]->lists);
+        $this->assertSame(["List 1", "List 2", "List 3"], $subscribers[0]->lists);
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscribers[0]->status);
         $this->assertSame('2024-10-03 10:45:00', $subscribers[0]->subscribedAt?->format('Y-m-d H:i:s'));
         $this->assertSame('192.168.1.1', $subscribers[0]->subscribeIp);
