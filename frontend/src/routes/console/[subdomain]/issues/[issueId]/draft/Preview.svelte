@@ -118,6 +118,10 @@
         border-left: 1px solid var(--border);
     }
 
+    iframe {
+        min-height: 100%;
+    }
+
     .loader {
         position: absolute;
         left: 0;

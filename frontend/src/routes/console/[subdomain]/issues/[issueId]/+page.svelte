@@ -114,18 +114,6 @@
         display: flex;
         flex-direction: column;
         min-height: 0;
-        padding: 30px;
-    }
-
-    .top {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-        padding: 0 15px;
-    }
-
-    .left {
-        flex: 1;
     }
 
     @media (max-width: 992px) {
