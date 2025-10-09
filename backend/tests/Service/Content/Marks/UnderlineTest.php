@@ -30,7 +30,7 @@ class UnderlineTest extends TestCase
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
         $this->assertStringContainsString(
-            '<p style="margin: 0 0 20px;line-height:26px;"><span style="text-decoration:underline">Underlined</span></p>',
+            '<p><span style="text-decoration:underline">Underlined</span></p>',
             $html
         );
     }
