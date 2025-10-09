@@ -103,6 +103,7 @@ class RelayWebhookController extends AbstractController
             $event === 'send.recipient.failed'
             || $event === 'send.recipient.suppressed'
         ) {
+            $updates->failedAt = $attemptedTime;
             $updates->status = SendStatus::FAILED;
         }
         if ($event === 'send.recipient.bounced') {
