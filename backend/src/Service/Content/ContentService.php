@@ -13,6 +13,8 @@ use App\Service\Content\Nodes\Blockquote;
 use App\Service\Content\Nodes\BulletList;
 use App\Service\Content\Nodes\Button;
 use App\Service\Content\Nodes\Doc;
+use App\Service\Content\Nodes\Figcaption;
+use App\Service\Content\Nodes\Figure;
 use App\Service\Content\Nodes\HardBreak;
 use App\Service\Content\Nodes\Heading;
 use App\Service\Content\Nodes\HorizontalRule;
@@ -106,6 +108,8 @@ JSON;
                 new BulletList(),
                 new OrderedList(),
                 new ListItem(),
+                new Figure(),
+                new Figcaption(),
             ],
             [
                 new Em(),
