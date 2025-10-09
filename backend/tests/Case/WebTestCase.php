@@ -206,6 +206,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $json = $this->getJson();
         $this->assertArrayHasKey('message', $json);
+        $this->assertIsString($json['message']);
         $this->assertStringContainsString($expectedMessage, $json['message']);
 
     }

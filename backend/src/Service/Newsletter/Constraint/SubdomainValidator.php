@@ -4,17 +4,20 @@ namespace App\Service\Newsletter\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use function PHPUnit\Framework\assertIsString;
 
 class SubdomainValidator extends ConstraintValidator
 {
 
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         assert($constraint instanceof Subdomain);
 
-        if (null === $value || '' === $value) {
+        if ($value === null) {
             return; // skip empty values
         }
+
+        assert(is_string($value));
 
         // Check length
         if (strlen($value) < 1 || strlen($value) > 63) {

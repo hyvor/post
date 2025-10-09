@@ -47,7 +47,8 @@ class GetSendingProfilesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
         $item = $json[0];
         $this->assertSame($sendingProfile->getId(), $item['id']);

@@ -75,6 +75,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertStringContainsString('Subscribers status updated successfully', (string)$response->getContent());
 
+        /** @var Subscriber[] $subscribers */
         $subscribers = $this->em->getRepository(Subscriber::class)
             ->createQueryBuilder('s')
             ->where('s.status != :status')
@@ -82,7 +83,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             ->getQuery()
             ->getResult();
 
-        $this->assertCount(0, $subscribers, 'All subscribers should be unsubscribed after bulk status update action.');
+        $this->assertCount(0, $subscribers);
     }
 
     public function test_bulk_status_update_status_not_provided(): void

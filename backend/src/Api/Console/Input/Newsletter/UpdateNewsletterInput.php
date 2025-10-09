@@ -21,7 +21,8 @@ class UpdateNewsletterInput extends NewsletterObject
     ];
 
     public function __construct()
-    {}
+    {
+    }
 
     /**
      * @var string[]
@@ -43,6 +44,9 @@ class UpdateNewsletterInput extends NewsletterObject
         return in_array($property, $this->setProperties);
     }
 
+    /**
+     * @return string[]
+     */
     public function getSetProperties(): array
     {
         return $this->setProperties;

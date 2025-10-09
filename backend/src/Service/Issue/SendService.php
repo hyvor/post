@@ -25,8 +25,7 @@ class SendService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository   $subscriberRepository,
-        private SendRepository         $sendRepository,
-        private IssueService           $issueService
+        private SendRepository         $sendRepository
     )
     {
     }
