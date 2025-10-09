@@ -8,6 +8,5 @@ class ButtonAttrs extends AttrsType
 {
 
     public ?string $href = null;
-    public string $text = '';
 
 }

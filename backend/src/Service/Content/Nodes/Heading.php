@@ -22,19 +22,11 @@ class Heading extends NodeType
         $level = is_scalar($levelAttr) ? intval($levelAttr) : 2;
         $level = in_array($level, self::ALLOWED_LEVELS) ? $level : 2;
 
-        $fontSizes = [
-            1 => '32px',
-            2 => '28px',
-            3 => '24px',
-            4 => '20px',
-            5 => '16px',
-            6 => '14px',
-        ];
-        $fontSize = $fontSizes[$level];
-        $bottomMargin = '20px';
-        $style = "margin: 0 0 $bottomMargin; font-size: $fontSize; font-weight: bold;";
+        /** @var ?string $id */
+        $id = $node->attr('id');
+        $idAttr = $id ? ' id="' . $id . '"' : '';
 
-        return "<h$level>$children</h$level>";
+        return "<h$level$idAttr>$children</h$level>";
     }
 
     public function fromHtml(): array
@@ -43,9 +35,12 @@ class Heading extends NodeType
             return new ParserRule(
                 tag: "h{$level}",
                 getAttrs: function (DOMElement $node) use ($level) {
+                    $id = $node->getAttribute('id');
+                    $id = $id === '' ? null : $id;
+
                     return HeadingAttrs::fromArray([
                         'level' => $level,
-                        'id' => $node->getAttribute('id'),
+                        'id' => $id,
                     ]);
                 },
             );
