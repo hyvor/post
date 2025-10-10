@@ -76,21 +76,6 @@ class Issue
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
 
-    #[ORM\Column]
-    private int $opened_sends = 0;
-
-    #[ORM\Column]
-    private int $clicked_sends = 0;
-
-    #[ORM\Column()]
-    private ?string $from_email = null;
-
-    #[ORM\Column()]
-    private ?string $from_name = null;
-
-    #[ORM\Column()]
-    private ?string $reply_to_email = null;
-
     public function getId(): int
     {
         return $this->id;
@@ -333,66 +318,6 @@ class Issue
     public function setSentAt(?\DateTimeImmutable $sent_at): static
     {
         $this->sent_at = $sent_at;
-
-        return $this;
-    }
-
-    public function getOpenedSends(): int
-    {
-        return $this->opened_sends;
-    }
-
-    public function setOpenedSends(int $opened_sends): static
-    {
-        $this->opened_sends = $opened_sends;
-
-        return $this;
-    }
-
-    public function getClickedSends(): int
-    {
-        return $this->clicked_sends;
-    }
-
-    public function setClickedSends(int $clicked_sends): static
-    {
-        $this->clicked_sends = $clicked_sends;
-
-        return $this;
-    }
-
-    public function getFromEmail(): ?string
-    {
-        return $this->from_email;
-    }
-
-    public function setFromEmail(?string $from_email): static
-    {
-        $this->from_email = $from_email;
-
-        return $this;
-    }
-
-    public function getFromName(): ?string
-    {
-        return $this->from_name;
-    }
-
-    public function setFromName(?string $from_name): static
-    {
-        $this->from_name = $from_name;
-
-        return $this;
-    }
-
-    public function getReplyToEmail(): ?string
-    {
-        return $this->reply_to_email;
-    }
-
-    public function setReplyToEmail(?string $reply_to_email): static
-    {
-        $this->reply_to_email = $reply_to_email;
 
         return $this;
     }

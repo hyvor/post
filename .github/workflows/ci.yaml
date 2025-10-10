@@ -15,51 +15,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -   name: Checkout
-          uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      -   name: Build Docker image
-          run: docker build -t frontend-dev . --target frontend-dev
+      - name: Build Docker image
+        run: docker build -t frontend-dev . --target frontend-dev
 
-      -   name: Run Svelte Check
-          run: docker run frontend-dev npm run check
+      - name: Run Svelte Check
+        run: docker run frontend-dev npm run check
 
   phpstan:
     name: PHPStan
     runs-on: ubuntu-latest
 
     steps:
-      -   name: Checkout
-          uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      -   name: Build Docker image
-          run: docker build -t backend-dev . --target backend-dev
+      - name: Build Docker image
+        run: docker build -t backend-dev . --target backend-dev
 
-      -   name: Run PHPStan
-          run: docker run backend-dev ./vendor/bin/phpstan analyse --memory-limit=1G --ansi
+      - name: Run PHPStan
+        run: docker run backend-dev ./vendor/bin/phpstan analyse --memory-limit=1G --ansi
 
   php-tests:
     name: "PHP Tests"
     runs-on: ubuntu-latest
 
     steps:
-      -   name: Checkout
-          uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      -   name: Set up services
-          run: |
-            docker network create ci
-            docker compose -f meta/ci/compose.ci.yaml up -d
+      - name: Set up services
+        run: |
+          docker network create ci
+          docker compose -f meta/ci/compose.ci.yaml up -d
 
-      -   name: Build Docker image
-          run: docker build -t backend-dev . --target backend-dev
+      - name: Build Docker image
+        run: docker build -t backend-dev . --target backend-dev
 
-      -   name: Run Tests
-          run: |
-            docker run \
-            -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
-            --network ci \
-            backend-dev sh -c "
-            php bin/console doctrine:migrations:migrate --no-interaction &&
-            php -d memory_limit=1024M ./vendor/bin/phpunit"
+      - name: Run Tests
+        run: |
+          touch coverage.xml
+          docker run \
+          -e DATABASE_URL="postgresql://postgres:postgres@postgres:5432/hyvor_post_testing?serverVersion=16&charset=utf8" \
+          --network ci \
+          --mount type=bind,source=$(pwd)/coverage.xml,target=/app/coverage.xml \
+          backend-dev sh -c "
+          php -i | grep memory_limit &&
+          php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
+          php -d memory_limit=1024M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.HYVOR_ORG_CODECOV_TOKEN }}
+          slug: hyvor/post
+          files: /app/coverage.xml

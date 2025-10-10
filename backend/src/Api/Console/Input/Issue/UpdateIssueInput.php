@@ -20,5 +20,5 @@ class UpdateIssueInput
     ])]
     public array $lists;
     public ?string $content;
-    public ?int $sending_profile_id;
+    public int $sending_profile_id;
 }

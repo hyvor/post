@@ -47,6 +47,7 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422);
 
         $json = $this->getJson();
+        $this->assertIsString($json['message']);
         $this->assertStringStartsWith('Subdomain', $json['message']);
     }
 

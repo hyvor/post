@@ -26,11 +26,12 @@ class GetIssueProgressTest extends WebTestCase
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-                'total_sends' => 1,
+                'total_sends' => 20,
+                'ok_sends' => 15,
             ]
         );
 
-        $send = SendFactory::createOne(
+        SendFactory::createMany(5,
             [
                 'issue' => $issue,
                 'status' => SendStatus::PENDING
@@ -46,10 +47,10 @@ class GetIssueProgressTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
 
-        $this->assertSame(1, $json['total']);
-        $this->assertSame(0, $json['sent']);
-        $this->assertSame(1, $json['pending']);
-        $this->assertSame(0, $json['progress']);
+        $this->assertSame(20, $json['total']);
+        $this->assertSame(15, $json['sent']);
+        $this->assertSame(5, $json['pending']);
+        $this->assertSame(75, $json['progress']);
     }
 
     public function test_issue_progress_success(): void

@@ -2,10 +2,8 @@
 
 namespace App\Service\Subscriber\MessageHandler;
 
-use App\Entity\Newsletter;
 use App\Entity\SubscriberExport;
 use App\Entity\Type\MediaFolder;
-use App\Entity\Type\SubscriberExportStatus;
 use App\Service\Media\MediaService;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
 use App\Service\Subscriber\SubscriberCsvExporter;
@@ -19,10 +17,11 @@ class ExportSubscribersMessageHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private SubscriberService $subscriberService,
-        private SubscriberCsvExporter $csvExporter,
-        private MediaService $mediaService,
-    ) {
+        private SubscriberService      $subscriberService,
+        private SubscriberCsvExporter  $csvExporter,
+        private MediaService           $mediaService,
+    )
+    {
     }
 
     public function __invoke(ExportSubscribersMessage $message): void
@@ -31,7 +30,6 @@ class ExportSubscribersMessageHandler
         assert($subscriberExport !== null);
 
         $newsletter = $subscriberExport->getNewsletter();
-
         $csvPath = $this->csvExporter->createFile($newsletter);
 
         $file = new UploadedFile(
@@ -50,16 +48,11 @@ class ExportSubscribersMessageHandler
             );
 
             $this->subscriberService->markSubscriberExportAsCompleted($subscriberExport, $media);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->subscriberService->markSubscriberExportAsFailed($subscriberExport, $e->getMessage());
         }
 
         // Clean up the temporary file
         unlink($csvPath);
-
-
-
-
     }
 }

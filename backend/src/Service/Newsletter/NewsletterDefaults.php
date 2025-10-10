@@ -52,6 +52,8 @@ class NewsletterDefaults
     public const TEMPLATE_FONT_SIZE = '16px';
     public const TEMPLATE_FONT_WEIGHT = 'normal';
     public const TEMPLATE_FONT_WEIGHT_HEADING = 'bold';
+    public const TEMPLATE_FONT_COLOR_ON_BACKGROUND = '#007bff'; // TODO: set a color
+    public const TEMPLATE_FONT_COLOR_ON_BOX = '#333333'; // TODO: set a color
     public const TEMPLATE_FONT_LINE_HEIGHT = '1.6';
 
     /**

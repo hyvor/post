@@ -97,6 +97,7 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422);
 
         $json = $this->getJson();
+        $this->assertIsString($json['message']);
         $this->assertStringStartsWith('Subdomain', $json['message']);
     }
 
@@ -126,7 +127,7 @@ class UpdateNewsletterTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
+        $json = $this->getJson();
         $this->assertSame('boutet', $json['subdomain']);
 
         $repository = $this->em->getRepository(Newsletter::class);

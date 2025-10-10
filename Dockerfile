@@ -123,6 +123,7 @@ ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
 # symfony cli
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
     && apt install -y symfony-cli
+RUN echo "memory_limit=1024M" >> /usr/local/etc/php/conf.d/app.ini
 # pcov for coverage
 RUN install-php-extensions pcov
 COPY backend/composer.json backend/composer.lock /app/backend/

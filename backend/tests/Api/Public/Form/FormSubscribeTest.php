@@ -12,6 +12,7 @@ use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -72,6 +73,10 @@ class FormSubscribeTest extends WebTestCase
         Clock::set(new MockClock($date));
 
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
@@ -95,15 +100,15 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], $json['list_ids']);
-        $this->assertSame('pending', $json['status']);
-        $this->assertSame($date->getTimestamp(), $json['subscribed_at']);
-        $this->assertSame(null, $json['unsubscribed_at']);
+        $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
+        $this->assertNull($json['subscribed_at']);
+        $this->assertNull($json['unsubscribed_at']);
 
         $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertNotNull($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
-        $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
-        $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
+        $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
+        $this->assertNull($subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
 
         $email = $this->getMailerMessage();
@@ -114,6 +119,10 @@ class FormSubscribeTest extends WebTestCase
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);

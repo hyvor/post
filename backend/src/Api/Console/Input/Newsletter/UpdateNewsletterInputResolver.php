@@ -15,7 +15,8 @@ class UpdateNewsletterInputResolver implements ValueResolverInterface
 
     public function __construct(
         private ValidatorInterface $validator
-    ) {
+    )
+    {
     }
 
     /**
@@ -29,6 +30,7 @@ class UpdateNewsletterInputResolver implements ValueResolverInterface
             return [];
         }
 
+        /** @var array<string, mixed> $data */
         $data = json_decode($request->getContent(), true);
         if (empty($data)) {
             return [];
@@ -43,7 +45,7 @@ class UpdateNewsletterInputResolver implements ValueResolverInterface
         }
 
         $errors = $this->validator->validate($input);
-        if (count($errors) > 0) {
+        if (count($errors) > 0 && $errors[0]) {
             throw new UnprocessableEntityHttpException(
                 message: $errors[0]->getMessage(),
                 previous: new ValidatorException($errors)

@@ -14,20 +14,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\DependencyInjection\Attribute\AutowireServiceClosure;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 class ImportSubscribersMessageHandler
 {
     use ClockAwareTrait;
+
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterListService $newsletterListService,
-        private ParserFactory $parserFactory,
-        private ManagerRegistry $registry,
-        private LoggerInterface $logger,
-    ) {
+        private NewsletterListService  $newsletterListService,
+        private ParserFactory          $parserFactory,
+        private ManagerRegistry        $registry,
+        private LoggerInterface        $logger,
+    )
+    {
     }
 
     public function __invoke(ImportSubscribersMessage $message): void
@@ -43,8 +44,7 @@ class ImportSubscribersMessageHandler
             $this->em->beginTransaction();
             $this->import($subscriberImport, $parser);
             $this->em->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->em->rollback();
             $this->registry->resetManager();
 
@@ -111,7 +111,7 @@ class ImportSubscribersMessageHandler
                         :newsletter_id, :email, :status, :subscribed_at,
                         :subscribe_ip, :source, :metadata, :created_at, :updated_at
                     )
-                    ON CONFLICT (email) DO NOTHING
+                    ON CONFLICT (newsletter_id, email) DO NOTHING
                     RETURNING id
                 SQL;
 

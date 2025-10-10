@@ -5,6 +5,7 @@ namespace App\Service\Template;
 use App\Entity\Issue;
 use App\Entity\Send;
 use App\Service\Content\ContentService;
+use function PHPUnit\Framework\assertNotNull;
 
 class TextTemplateRenderer
 {
@@ -31,6 +32,8 @@ class TextTemplateRenderer
 
     public function renderFromIssue(Issue $issue): string
     {
+        assertNotNull($issue->getContent());
+
         $variables = $this->templateVariableService->variablesFromIssue($issue);
 
         $text = $variables->name . self::LINE_BREAK;

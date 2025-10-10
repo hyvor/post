@@ -190,12 +190,7 @@ class IssueController extends AbstractController
         $updates->html = $this->htmlTemplateRenderer->renderFromIssue($issue);
         $updates->text = $this->textTemplateRenderer->renderFromIssue($issue);
         $updates->totalSends = $subscribersCount;
-
-        // cache from sending profile
-        $sendingProfile = $issue->getSendingProfile();
-        $updates->fromEmail = $sendingProfile->getFromEmail();
-        $updates->fromName = $sendingProfile->getFromName() ?? $issue->getNewsletter()->getName();
-        $updates->replyToEmail = $sendingProfile->getReplyToEmail() ?? $sendingProfile->getFromEmail();
+        $updates->sendingProfile = $issue->getSendingProfile();
 
         $issue = $this->issueService->updateIssue($issue, $updates);
 

@@ -24,12 +24,15 @@ class TemplateVariables
         public string $subdomain = '',
         public string $logo = '',
         public string $logo_url = '',
+        public string $logo_alt = '',
+        public string $brand = '',
+        public string $brand_url = '',
 
         // footer
         public string $address = '',
         public string $unsubscribe_url = '',
         public string $unsubscribe_text = '',
-        public bool $branding = true,
+        public bool   $branding = true,
 
         // colors in HEX format
         public string $color_accent = NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
@@ -44,13 +47,16 @@ class TemplateVariables
         public string $font_size = NewsletterDefaults::TEMPLATE_FONT_SIZE,
         public string $font_weight = NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
         public string $font_weight_heading = NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+        public string $font_color_on_background = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+        public string $font_color_on_box = NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
         public string $font_line_height = NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
         // Box radius
         public string $box_radius = NewsletterDefaults::TEMPLATE_BOX_RADIUS,
         public string $box_shadow = NewsletterDefaults::TEMPLATE_BOX_SHADOW,
         public string $box_border = NewsletterDefaults::TEMPLATE_BOX_BORDER,
-    ) {
+    )
+    {
     }
 
 }
