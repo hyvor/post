@@ -1,35 +1,35 @@
 <script lang="ts">
-	import { Modal } from '@hyvor/design/components';
-	import Editor from '../../console/[subdomain]/issues/Editor/Editor.svelte';
-	import { retrieveContentHtml } from './lib/actions/templateActions';
+    import {Modal} from '@hyvor/design/components';
+    // import Editor from '../../console/[subdomain]/issues/Editor/Editor.svelte';
+    import {retrieveContentHtml} from './lib/actions/templateActions';
 
-	interface Props {
-		content: string;
-		show: boolean;
-		updateContent: (s: string) => void;
-	}
+    interface Props {
+        content: string;
+        show: boolean;
+        updateContent: (s: string) => void;
+    }
 
-	let { content, show = $bindable(), updateContent }: Props = $props();
+    let {content, show = $bindable(), updateContent}: Props = $props();
 
-	function getContentHtml() {
-		retrieveContentHtml(content)
-			.then((res) => {
-				updateContent(res['html']);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+    function getContentHtml() {
+        retrieveContentHtml(content)
+            .then((res) => {
+                updateContent(res['html']);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
 
-	function submitModal() {
-		getContentHtml();
-	}
+    function submitModal() {
+        getContentHtml();
+    }
 </script>
 
 <Modal
-	title="Edit content"
-	bind:show
-	footer={{
+        title="Edit content"
+        bind:show
+        footer={{
 		cancel: {
 			text: 'Cancel'
 		},
@@ -37,13 +37,13 @@
 			text: 'Update content'
 		}
 	}}
-	on:cancel={() => {
+        on:cancel={() => {
 		show = false;
 	}}
-	on:confirm={() => {
+        on:confirm={() => {
 		show = false;
 		submitModal();
 	}}
 >
-	<Editor {content} ondocupdate={(s: string) => (content = s)} />
+    <!--	<Editor {content} ondocupdate={(s: string) => (content = s)} />-->
 </Modal>
