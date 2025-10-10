@@ -1,7 +1,9 @@
 import type { Media } from '../../types';
 import consoleApi from '../consoleApi';
 
-export function uploadImage(file: File | Blob, folder: string) {
+type MediaFolder = 'issue_images' | 'newsletter_images';
+
+export function uploadImage(file: File | Blob, folder: MediaFolder) {
 	const formData = new FormData();
 	formData.append('file', file);
 	formData.append('folder', folder);

@@ -3,6 +3,8 @@
     import {draftIssueEditingStore} from '../draftStore';
     import {debouncedUpdateDraftIssue} from '../draftActions';
     import {getI18n} from '../../../../../lib/i18n';
+	import { newsletterStore } from '../../../../../lib/stores/newsletterStore';
+	import { uploadImage } from '../../../../../lib/actions/mediaActions';
 
     function onContentDocUpdate(doc: string) {
         $draftIssueEditingStore.content = doc;
@@ -62,8 +64,8 @@
             onvaluechange={onContentDocUpdate}
             ondomevent={handleDomEvent}
             config={{
-                // colorButtonText:
-                // colorButtonBackground:
+                colorButtonBackground: $newsletterStore?.template_color_accent || '#5A8387',
+                colorButtonText: $newsletterStore?.template_color_accent_text || '#ffffff',
 
                 codeBlockEnabled: true,
                 codeBlockConfig: {
@@ -87,10 +89,14 @@
                 audioEnabled: false,
                 embedEnabled: false,
 
+                fileMaxSizeInMB: 10,
                 fileUploader: async (file, name, type) => {
-                    // TODO: upload to server
+                    if (type !== 'image') {
+                        return null;
+                    }
+                    const media = await uploadImage(file, 'issue_images');
                     return {
-                        url: URL.createObjectURL(file)
+                        url: media.url,
                     };
                 }
             }}

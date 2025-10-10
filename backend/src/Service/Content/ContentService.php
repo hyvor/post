@@ -8,6 +8,8 @@ use App\Service\Content\Marks\Em;
 use App\Service\Content\Marks\Link;
 use App\Service\Content\Marks\Strike;
 use App\Service\Content\Marks\Strong;
+use App\Service\Content\Marks\Sub;
+use App\Service\Content\Marks\Sup;
 use App\Service\Content\Marks\Underline;
 use App\Service\Content\Nodes\Blockquote;
 use App\Service\Content\Nodes\BulletList;
@@ -121,9 +123,10 @@ JSON;
                 new Em(),
                 new Strong(),
                 new Link(),
-                new Underline(),
                 new Strike(),
                 new Code(),
+                new Sub(),
+                new Sup(),
             ]
         );
     }

@@ -36,7 +36,7 @@ class UploadMediaTest extends WebTestCase
                 'file' => $file,
             ],
             parameters: [
-                'type' => 'import',
+                'folder' => 'issue_images',
             ]
         );
 
@@ -67,7 +67,7 @@ class UploadMediaTest extends WebTestCase
                 'file' => $file,
             ],
             parameters: [
-                'type' => 'issue_images',
+                'folder' => 'issue_images',
             ]
         );
 
