@@ -163,7 +163,7 @@ class SendingProfileService
         return sprintf(
             "%s@%s",
             $newsletter->getSubdomain(),
-            $this->appConfig->getDefaultEmailDomain()
+            $this->appConfig->getSystemMailDomain()
         );
     }
 

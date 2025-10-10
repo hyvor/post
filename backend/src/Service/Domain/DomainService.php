@@ -7,7 +7,7 @@ use App\Entity\Type\RelayDomainStatus;
 use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
-use App\Service\SystemMail\SystemMailService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -23,7 +23,7 @@ class DomainService
 
     public function __construct(
         private EntityManagerInterface   $em,
-        private SystemMailService $emailNotificationService,
+        private SystemNotificationMailService $emailNotificationService,
         private LoggerInterface          $logger,
         private readonly Environment     $mailTemplate,
         private readonly StringsFactory  $stringsFactory,

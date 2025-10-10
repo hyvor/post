@@ -178,7 +178,6 @@ class RelayApiClient
                 strtolower($name) === 'from'
                 || strtolower($name) === 'to'
                 || strtolower($name) === 'subject'
-                || strtolower($name) === 'reply-to'     // TODO: Remove once Relay bug-fix is deployed
             ) {
                 continue;
             }

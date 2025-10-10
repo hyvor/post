@@ -5,7 +5,7 @@ namespace App\Service\UserInvite;
 use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
-use App\Service\SystemMail\SystemMailService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -19,7 +19,7 @@ class UserInviteService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SystemMailService $emailNotificationService,
+        private SystemNotificationMailService $emailNotificationService,
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
     ) {
