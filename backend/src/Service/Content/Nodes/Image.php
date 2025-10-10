@@ -22,10 +22,10 @@ class Image extends NodeType
         assert(is_string($alt));
 
         $width = $node->attr('width');
-        $widthAttr = is_string($width) && $width ? " width=\"$width\"" : '';
+        $widthAttr = is_numeric($width) && $width ? " width=\"$width\"" : '';
 
         $height = $node->attr('height');
-        $heightAttr = is_string($height) && $height ? " height=\"$height\"" : '';
+        $heightAttr = is_numeric($height) && $height ? " height=\"$height\"" : '';
 
         return "<img src=\"$src\" alt=\"$alt\"$widthAttr$heightAttr />";
     }

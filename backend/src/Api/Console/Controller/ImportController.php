@@ -34,6 +34,7 @@ class ImportController extends AbstractController
         private MediaService        $mediaService,
         private ImportService       $importService,
         private MessageBusInterface $messageBus,
+        private MediaController $mediaController,
     )
     {
     }
@@ -48,33 +49,34 @@ class ImportController extends AbstractController
         $file = $request->files->get('file');
         $folder = MediaFolder::IMPORT;
 
-        $constraint = new Constraints\File(
-            maxSize: '100M',
-            extensions: $folder->getAllowedExtensions()
-        );
-        $errors = $this->validator->validate($file, $constraint);
+//        $constraint = new Constraints\File(
+//            maxSize: '100M',
+//            extensions: $folder->getAllowedExtensions()
+//        );
+//        $errors = $this->validator->validate($file, $constraint);
+//
+//        if (count($errors) > 0) {
+//            throw new UnprocessableEntityHttpException(
+//                previous: new ValidationFailedException(
+//                    'Invalid file upload',
+//                    $errors
+//                )
+//            );
+//        }
+//
+//        assert($file instanceof UploadedFile);
+//
+//        try {
+//            $upload = $this->mediaService->upload(
+//                $newsletter,
+//                $folder,
+//                $file
+//            );
+//        } catch (MediaUploadException $e) {
+//            throw new UnprocessableEntityHttpException($e->getMessage());
+//        }
 
-        if (count($errors) > 0) {
-            throw new UnprocessableEntityHttpException(
-                previous: new ValidationFailedException(
-                    'Invalid file upload',
-                    $errors
-                )
-            );
-        }
-
-        assert($file instanceof UploadedFile);
-
-        try {
-            $upload = $this->mediaService->upload(
-                $newsletter,
-                $folder,
-                $file
-            );
-        } catch (MediaUploadException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage());
-        }
-
+        $upload = $this->mediaController->doUpload($newsletter, $folder, $file);
         $fields = $this->importService->getFields($upload);
         $import = $this->importService->createSubscriberImport($upload, $fields);
 

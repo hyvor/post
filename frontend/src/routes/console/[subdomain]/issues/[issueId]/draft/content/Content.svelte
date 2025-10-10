@@ -4,6 +4,7 @@
     import {debouncedUpdateDraftIssue} from '../draftActions';
     import {getI18n} from '../../../../../lib/i18n';
 	import { newsletterStore } from '../../../../../lib/stores/newsletterStore';
+	import { uploadImage } from '../../../../../lib/actions/mediaActions';
 
     function onContentDocUpdate(doc: string) {
         $draftIssueEditingStore.content = doc;
@@ -88,10 +89,14 @@
                 audioEnabled: false,
                 embedEnabled: false,
 
+                fileMaxSizeInMB: 10,
                 fileUploader: async (file, name, type) => {
-                    // TODO: upload to server
+                    if (type !== 'image') {
+                        return null;
+                    }
+                    const media = await uploadImage(file, 'issue_images');
                     return {
-                        url: URL.createObjectURL(file)
+                        url: media.url,
                     };
                 }
             }}
