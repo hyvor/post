@@ -1,7 +1,9 @@
 #!/bin/sh
 
 # Dynamically export ARCHIVE_HOST
+echo "DEBUG: URL_ARCHIVE=$URL_ARCHIVE"
 ARCHIVE_HOST=$(echo "$URL_ARCHIVE" | sed -E 's#https?://##' | sed 's#/##g')
+echo "DEBUG: ARCHIVE_HOST=$ARCHIVE_HOST"
 export ARCHIVE_HOST
 
 /usr/bin/supervisord
