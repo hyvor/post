@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Event\Subscriber;
+namespace App\Service\Subscriber\Event;
 
 use App\Entity\Subscriber;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class CreateSubscriberEvent extends Event
+class SubscriberCreatedEvent extends Event
 {
     public const NAME = 'subscriber.created';
 
