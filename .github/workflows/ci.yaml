@@ -72,3 +72,31 @@ jobs:
           token: ${{ secrets.HYVOR_ORG_CODECOV_TOKEN }}
           slug: hyvor/post
           files: /app/coverage.xml
+
+  embed-check:
+    name: "Embed Check"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t embed-dev . --target embed-dev
+
+      - name: Run Svelte Check
+        run: docker run embed-dev npm run check
+
+  archive-check:
+    name: "Archive Check"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t archive-dev . --target archive-dev
+
+      - name: Run Svelte Check
+        run: docker run archive-dev npm run check
