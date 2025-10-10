@@ -6,7 +6,7 @@
 
 }
 
-{$ARCHIVE_HOST}, *.{$ARCHIVE_HOST} {
+{$ARCHIVE_HOST}:80, *.{$ARCHIVE_HOST}:80 {
 	reverse_proxy 127.0.0.1:3000
 }
 
