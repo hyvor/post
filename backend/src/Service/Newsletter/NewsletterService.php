@@ -19,6 +19,7 @@ use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use App\Service\SendingProfile\SendingProfileService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -275,9 +276,14 @@ class NewsletterService
         return $newsletter;
     }
 
-    public function isSubdomainTaken(string $username): bool
+    public function isSubdomainTaken(string $subdomain): bool
     {
-        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
+        // notifications@ is reserved
+        if ($subdomain === SystemNotificationMailService::NOTIFICATIONS_MAIL_USERNAME) {
+            return true;
+        }
+
+        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
         return $newsletter !== null;
     }
 

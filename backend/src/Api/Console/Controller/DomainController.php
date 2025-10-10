@@ -7,6 +7,7 @@ use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
+use App\Service\AppConfig;
 use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
@@ -26,6 +27,7 @@ class DomainController extends AbstractController
 
     public function __construct(
         private DomainService $domainService,
+        private AppConfig $appConfig,
     )
     {
     }
@@ -59,6 +61,10 @@ class DomainController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+
+        if ($input->domain === $this->appConfig->getSystemMailDomain()) {
+            throw new BadRequestException('This domain is reserved and cannot be registered');
+        }
 
         $domainInDb = $this->domainService->getDomainByDomainName($input->domain);
 

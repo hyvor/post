@@ -80,6 +80,29 @@ class CreateDomainTest extends WebTestCase
         $this->assertSame('hyvor.com', $domain->getDomain());
     }
 
+    public function test_create_system_domain_fails(): void
+    {
+        $this->mockHttpClient();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/domains',
+            [
+                'domain' => 'hyvorpost.email',
+            ],
+            useSession: true
+        );
+        $this->assertSame(400, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertSame('This domain is reserved and cannot be registered', $json['message']);
+    }
+
     public function test_create_domain_invalid(): void
     {
         $this->mockHttpClient();

@@ -28,6 +28,22 @@ class GetSubdomainAvailabilityTest extends WebTestCase
         $this->assertTrue($json['available']);
     }
 
+    public function test_reservedSubdomain(): void
+    {
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletter/subdomain',
+            [
+                'subdomain' => 'notifications'
+            ],
+            useSession: true
+        );
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertFalse($json['available']);
+    }
+
     public function testUnavailableSubdomain(): void
     {
         NewsletterFactory::createOne([

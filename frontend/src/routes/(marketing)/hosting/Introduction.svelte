@@ -38,19 +38,15 @@
 		</ul>
 	</li>
 	<li>
-		Then, in Hyvor Relay, add and verify the domain you will be sending system emails from and
-		set <code>SYSTEM_MAIL_FROM</code> environment variable in Hyvor Post to an email address in
-		that domain. Ex:
-		<ul>
-			<li>Domain: example.com</li>
-			<li>
-				<code>SYSTEM_MAIL_FROM</code>: no-reply@example.com
-			</li>
-		</ul>
+		Then, set <code>SYSTEM_MAIL_DOMAIN</code> to the domain you will be sending system emails
+		from. System notification emails (domain verification, etc.) are sent from
+		<code>notifications@{'<SYSTEM_MAIL_DOMAIN>'}</code>
+		and each newsletter will get its own email address like
+		<code>{'<newsletter-subdomain>'}@{'<SYSTEM_MAIL_DOMAIN>'}</code>.
 		<p>
-			Note that users of Hyvor Post <strong>cannot setup</strong> this domain in their
-			newsletters. Optionally, you can also set <code>SYSTEM_MAIL_REPLY_TO</code> env variable
-			to set the reply-to address for system emails.
+			Note that users of Hyvor Post <strong>cannot set up</strong> this exact domain as custom
+			domain. Optionally, you can also set <code>SYSTEM_MAIL_REPLY_TO</code> env variable to set
+			the reply-to address for system emails.
 		</p>
 	</li>
 </ul>

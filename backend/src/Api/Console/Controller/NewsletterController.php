@@ -15,6 +15,7 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
