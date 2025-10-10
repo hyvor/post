@@ -40,6 +40,9 @@ readonly class AppConfig
 
         #[Autowire('%env(string:RELAY_API_KEY)%')]
         private string $relayApiKey,
+
+        #[Autowire('%env(string:SYSTEM_MAIL_FROM)%')]
+        private string $systemMailFrom,
     )
     {
     }
@@ -92,6 +95,11 @@ readonly class AppConfig
     public function getRelayApiKey(): string
     {
         return $this->relayApiKey;
+    }
+
+    public function getSystemMailFrom(): string
+    {
+        return $this->systemMailFrom;
     }
 
 }
