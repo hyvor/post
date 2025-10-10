@@ -123,7 +123,6 @@ JSON;
                 new Em(),
                 new Strong(),
                 new Link(),
-                new Underline(),
                 new Strike(),
                 new Code(),
                 new Sub(),
