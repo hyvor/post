@@ -131,6 +131,7 @@ RUN composer install --no-interaction
 # set up code and install composer packages
 COPY backend /app/backend/
 COPY meta/image/dev/Caddyfile.dev /etc/caddy/Caddyfile
+COPY meta/image/dev/php.dev.ini /usr/local/etc/php/conf.d/app.ini
 COPY meta/image/dev/run.dev /app/run
 CMD ["sh", "/app/run"]
 
@@ -156,6 +157,7 @@ COPY --from=archive-prod /app/archive/ /app/archive
 
 COPY meta/image/prod/Caddyfile.prod /etc/caddy/Caddyfile
 COPY meta/image/prod/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY meta/image/prod/php.prod.ini /usr/local/etc/php/conf.d/app.ini
 COPY meta/image/prod/run.prod /app/run
 
 EXPOSE 80

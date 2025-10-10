@@ -37,7 +37,7 @@ class NewsletterDefaults
 //                We are excited to introduce Hyvor Post, a simple newsletter platform. With Hyvor Post, you can collect emails, create newsletters, and send them to your subscribers.
 //            </p>
 //        HTML;
-    public const TEMPLATE_COLOR_ACCENT = '#007bff';
+    public const TEMPLATE_COLOR_ACCENT = '#5A8387';
     public const TEMPLATE_COLOR_ACCENT_TEXT = '#ffffff';
     public const TEMPLATE_COLOR_BACKGROUND = '#f8f9fa';
     public const TEMPLATE_COLOR_BACKGROUND_TEXT = '#4a4a4a';
