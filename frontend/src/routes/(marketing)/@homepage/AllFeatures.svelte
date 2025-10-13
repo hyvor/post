@@ -173,4 +173,14 @@
 			margin-bottom: 1rem;
 		}
 	}
+
+	/* for larger screens */
+	@media (min-width: 1200px) {
+		.outer-box {
+			padding: 100px 0;
+		}
+		.feature-wrapper {
+			margin: auto;
+		}
+	}
 </style>

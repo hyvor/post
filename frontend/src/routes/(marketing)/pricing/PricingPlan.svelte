@@ -79,7 +79,7 @@
 		{#if enterprise}
 			Enterprise Plan
 		{:else}
-			{I18n.t('pricing.chooseYourPlan')}
+			{I18n.t('pricing.saas')}
 		{/if}
 		{#if !enterprise}
 			<div class="plan-toggle">
@@ -143,9 +143,9 @@
 			<div class="min-max">
 				<span class="min"> 25k </span>
 				<div>{currentPlanDisplay}</div>
-				<span class="max"> 1M+ </span>
+				<span class="max"> 1M </span>
 			</div>
-			<Slider min={1} max={5} step={1} value={sliderVal} on:change={onSliderChange} />
+			<Slider min={1} max={4} step={1} value={sliderVal} on:change={onSliderChange} />
 			<div class="amount">{I18n.t('pricing.monthlyEmail')}</div>
 		</div>
 	{:else}
@@ -190,6 +190,8 @@
 		flex-direction: column;
 	}
 	.name {
+		display: flex;
+		flex-direction: column;
 		font-weight: 600;
 		font-size: 25px;
 		text-align: center;

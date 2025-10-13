@@ -31,6 +31,14 @@
 </div>
 
 <style>
+	.checks {
+		display: flex;
+		gap: 20px;
+		justify-content: space-between;
+		width: 700px;
+		max-width: 100%;
+		margin: auto;
+	}
 	.check {
 		display: flex;
 		align-items: center;

@@ -40,11 +40,11 @@
 	}
 
 	/* larger screens */
-	@media (min-width: 1200px) {
+	/* @media (min-width: 1200px) {
 		.letter-section {
 			padding: 150px 0;
 		}
-	}
+	} */
 
 	.wrap {
 		z-index: 1;
@@ -53,7 +53,8 @@
 		line-height: 32px;
 		padding: 30px 55px;
 		margin: auto;
-		max-width: 1000px;
+		max-width: var(--max-width);
+		width: 1000px;
 		border-radius: 20px;
 	}
 
@@ -93,6 +94,7 @@
 			font-size: 18px;
 			line-height: 28px;
 			margin: 0 15px;
+			width: auto;
 		}
 
 		.title {
@@ -105,6 +107,14 @@
 			margin-bottom: 24px;
 			font-size: 18px;
 			line-height: 28px;
+		}
+	}
+
+	/* for larger screens */
+	@media (min-width: 1200px) {
+		.letter-section {
+			padding: 150px 0;
+			margin: auto;
 		}
 	}
 </style>

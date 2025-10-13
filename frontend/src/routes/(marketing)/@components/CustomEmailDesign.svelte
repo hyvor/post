@@ -163,4 +163,12 @@
 			display: none;
 		}
 	}
+
+	/* for larger screens */
+	@media (min-width: 1200px) {
+		.custom-email-design {
+			padding: 100px 0;
+			margin: auto;
+		}
+	}
 </style>

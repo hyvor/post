@@ -9,7 +9,6 @@
 	let yearly = false;
 </script>
 
-<div class="ripple"></div>
 <!-- <div class="yearly-wrap hds-container">
 	<div class="yearly hds-box">
 		<Button
@@ -98,16 +97,6 @@
 </style> -->
 
 <style>
-	.ripple {
-		position: fixed;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		background: radial-gradient(circle, rgba(107, 135, 131, 0.1) 10%, transparent 10.01%);
-		background-size: 20px 20px; /* the space between the dots here */
-		z-index: -2;
-	}
-
 	.plans {
 		display: flex;
 		justify-content: center;

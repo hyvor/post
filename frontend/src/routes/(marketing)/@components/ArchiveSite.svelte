@@ -160,7 +160,7 @@
 <style>
 	.archive-site {
 		padding: 60px 0;
-		background-color: var(--accent);
+		background-color: var(--accent-light);
 	}
 
 	.wrap {
@@ -177,13 +177,13 @@
 		margin: 0;
 		font-size: 60px;
 		text-align: end;
-		color: var(--text-white);
+		color: var(--text);
 	}
 
 	h2 {
 		font-weight: normal;
 		font-size: 20px;
-		color: var(--text-white);
+		color: var(--text);
 		margin: 0;
 		padding-top: 20px;
 		text-align: end;
@@ -226,7 +226,7 @@
 
 	.bento-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
 		gap: 20px 40px;
 		margin-top: 40px;
 	}
@@ -236,12 +236,12 @@
 		align-items: center;
 		gap: 15px;
 		font-size: 20px;
-		color: var(--gray-light);
+		color: var(--text);
 		justify-content: flex-end;
 	}
 
 	.seo-feature-name {
-		color: var(--gray-light);
+		color: var(--text);
 	}
 
 	@keyframes heroEnter {
@@ -368,6 +368,15 @@
 		.int {
 			font-size: 16px;
 			gap: 10px;
+		}
+	}
+
+	/* for larger screens */
+
+	@media (min-width: 1200px) {
+		.wrap {
+			padding: 100px 0;
+			margin: auto;
 		}
 	}
 </style>

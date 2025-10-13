@@ -106,7 +106,7 @@
 
 	.bento-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
 		gap: 20px 40px;
 		margin-top: 40px;
 	}
@@ -280,6 +280,14 @@
 		.int {
 			font-size: 16px;
 			gap: 10px;
+		}
+	}
+
+	/* for larger screens */
+	@media (min-width: 1200px) {
+		.signup-form {
+			padding: 100px 0;
+			margin: auto;
 		}
 	}
 </style>
