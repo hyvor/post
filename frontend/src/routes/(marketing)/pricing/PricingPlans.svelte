@@ -9,7 +9,7 @@
 	let yearly = false;
 </script>
 
-<div class="yearly-wrap hds-container">
+<!-- <div class="yearly-wrap hds-container">
 	<div class="yearly hds-box">
 		<Button
 			on:click={() => (yearly = false)}
@@ -26,10 +26,12 @@
 			></Button
 		>
 	</div>
-</div>
+</div> -->
 
 <div class="plans hds-container">
 	<PricingPlan {yearly} {currency} />
+
+	<PricingPlan enterprise={true} {yearly} {currency} />
 </div>
 
 <div class="disclaimers">
@@ -39,16 +41,23 @@
 <style>
 	.plans {
 		display: flex;
-		gap: 15px;
-		padding-top: 20px;
-		width: 450px;
-		max-width: 100%;
+		justify-content: center;
+		gap: 25px;
+		flex-wrap: wrap;
+		padding-top: 40px;
+		width: 100%;
+		max-width: 1000px;
+		margin: 0 auto;
+		position: relative;
+		z-index: 1;
 	}
 
-	.yearly-wrap {
+	/* .yearly-wrap {
 		display: flex;
 		justify-content: center;
 		padding-top: 35px;
+		position: relative;
+		z-index: 1;
 	}
 	.yearly {
 		display: inline-flex;
@@ -65,17 +74,20 @@
 		color: var(--text-light);
 		font-size: 12px;
 		margin-left: 5px;
-	}
+	} */
 	.disclaimers {
 		text-align: center;
 		color: var(--text-light);
 		font-size: 14px;
 		padding-top: 30px;
+		position: relative;
+		z-index: 1;
 	}
 	.disclaimers div {
 		margin-bottom: 5px;
 	}
 
+	/* Responsive */
 	@media (max-width: 992px) {
 		.plans {
 			flex-direction: column;

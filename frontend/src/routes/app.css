@@ -1,5 +1,7 @@
 :root {
     --accent: #5A8387 !important;
+    --width: 95vw;
+    --max-width: 1440px;
 }
 
 :root:not(.dark) {

@@ -16,21 +16,21 @@
 	{#snippet center()}
 		<div>
 			<div class="row first">
-				<!-- <FooterLinkList title="Hyvor Post">
+				<FooterLinkList title="Product">
 					<a href="/console">Console</a>
-					<a href="/{I18n.getLocale()}/pricing">Pricing</a>
+					<a href="/pricing">Pricing</a>
 					<a href="/docs">Docs</a>
-				</FooterLinkList> -->
+				</FooterLinkList>
 
-				<!-- <FooterLinkList title="Legal">
-					<a href="/terms" target="_blank">Terms of Service</a>
-					<a href="/privacy" target="_blank">Privacy Policy</a>
+				<FooterLinkList title="Legal">
+					<a href="/terms">Terms of Service</a>
+					<a href="/privacy">Privacy Policy</a>
 					<a href="https://hyvor.com/compliance" target="_blank">Compliance</a>
-				</FooterLinkList> -->
+				</FooterLinkList>
 
 				<FooterLinkList title="HYVOR">
 					<a href="https://hyvor.com" target="_blank">hyvor.com</a>
-					<a href="https://hyvor.com/about" target="_blank">About</a>
+					<a href="https://hyvor.com/#letter" target="_blank">About</a>
 					<a href="https://hyvor.com/security" target="_blank">Security</a>
 					<a href="https://status.hyvor.com" target="_blank">System Status</a>
 					<a href="https://hyvor.com/blog" target="_blank">Blog</a>
@@ -43,18 +43,31 @@
 <style>
 	.row {
 		display: flex;
+		margin: auto 55px;
 	}
 	.row:not(.first) {
 		margin-top: 60px;
+	}
+	:global(.footer-top-right) {
+		display: none !important;
 	}
 
 	@media (max-width: 992px) {
 		.row {
 			flex-direction: column;
 			gap: 35px;
+			text-align: center;
 		}
 		.row:not(.first) {
 			margin-top: 35px;
+		}
+
+		.row :global(.links) {
+			align-items: center;
+		}
+
+		.footer-top-left :global(.email-wrap) :global(.social-wrap) {
+			text-align: center !important;
 		}
 	}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	// import TrialChecks from './TrialChecks.svelte';
+	import TrialChecks from './TrialChecks.svelte';
 	import { getMarketingI18n } from '../locale';
 
 	const I18n = getMarketingI18n();
@@ -22,14 +22,14 @@
 
 		<div class="button-wrap">
 			<!-- <Button as="a" size="large" href="/console?signup">{I18n.t('homepage.startYourNewsletter')}</Button> -->
-			<Button as="a" size="large" href={`/#waitlist`}
+			<Button as="a" size="x-large" href={`/#waitlist`}
 				>{I18n.t('comingSoon.joinWaitlist')}</Button
 			>
 		</div>
 
-		<!-- <div class="trial-checks">
-			<TrialChecks style="display:flex;justify-content:space-around" />
-		</div> -->
+		<div class="trial-checks">
+			<TrialChecks />
+		</div>
 	</div>
 </div>
 
@@ -58,6 +58,15 @@
 	}
 
 	.trial-checks {
-		margin-top: 15px;
+		display: flex;
+		gap: 20px;
+		justify-content: center;
+		margin-top: 50px;
+		flex-direction: row;
+	}
+
+	.trial-checks :global(.checks) {
+		flex-direction: row;
+		gap: 15px !important;
 	}
 </style>

@@ -1,7 +1,7 @@
 {
 	"homepage": {
-		"heading": "Simple Newsletter Platform",
-		"subHeading": "Collecting emails, growing audiences, delivering to inboxes — all simplified!",
+		"heading": "Newsletter Platform",
+		"subHeading": "No Tracking. Just Ideas, Delivered.",
 		"whyHyvorPost": "Why Hyvor Post?",
 		"letter": {
 			"s1": "First, <strong>Privacy</strong>.",
@@ -51,7 +51,7 @@
 		"yearly": "Yearly",
 		"2MonthsOff": "(2 months off)",
 		"vatIncluded": "All VAT charges are included in the price.",
-		"chooseYourPlan": "Choose your plan",
+		"saas": "SaaS",
 		"enterprise": "Enterprise",
 		"monthlyEmail": "Monthly Emails",
 		"choosePlan": "Choose Plan",
@@ -82,7 +82,7 @@
 			"dedicatedSupport": "Dedicated Support via Slack",
 			"customOnboarding": "Custom Onboarding"
 		},
-		"pricesAsOfJuly2025": "Pricing comparing as of 2025-07-20"
+		"pricesAsOfJuly2025": "Pricing comparing as of 2025-07"
 	},
 	"newsletter": {
 		"confirmation": {

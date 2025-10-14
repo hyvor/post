@@ -75,7 +75,38 @@
 </script>
 
 <div class="wrap hds-box">
-	<div class="name">{I18n.t('pricing.chooseYourPlan')}</div>
+	<div class="name">
+		{#if enterprise}
+			Enterprise Plan
+		{:else}
+			{I18n.t('pricing.saas')}
+		{/if}
+		{#if !enterprise}
+			<div class="plan-toggle">
+				<Button
+					on:click={() => (yearly = false)}
+					color="input"
+					size="small"
+					variant={yearly ? 'invisible' : 'fill'}
+				>
+					{I18n.t('pricing.monthly')}
+				</Button>
+				<Button
+					on:click={() => (yearly = true)}
+					color="input"
+					size="small"
+					variant={!yearly ? 'invisible' : 'fill'}
+				>
+					{I18n.t('pricing.yearly')}
+					<span class="off">{I18n.t('pricing.2MonthsOff')}</span>
+				</Button>
+			</div>
+		{:else}
+			<div class="plan-yearly-only">
+				<div class="yearly-only">Yearly Contracts</div>
+			</div>
+		{/if}
+	</div>
 
 	<div class="features">
 		{#each getFeatures() as feature}
@@ -107,15 +138,23 @@
 		{/if}
 	</div>
 
-	<div class="email-selector">
-		<div class="min-max">
-			<span class="min"> 25k </span>
-			<div>{currentPlanDisplay}</div>
-			<span class="max"> 1M+ </span>
+	{#if !enterprise}
+		<div class="email-selector">
+			<div class="min-max">
+				<span class="min"> 25k </span>
+				<div>{currentPlanDisplay}</div>
+				<span class="max"> 1M </span>
+			</div>
+			<Slider min={1} max={4} step={1} value={sliderVal} on:change={onSliderChange} />
+			<div class="amount">{I18n.t('pricing.monthlyEmail')}</div>
 		</div>
-		<Slider min={1} max={5} step={1} value={sliderVal} on:change={onSliderChange} />
-		<div class="amount">{I18n.t('pricing.monthlyEmail')}</div>
-	</div>
+	{:else}
+		<div class="email-selector">
+			<div class="min-max" style="justify-content: center;">
+				<div>1M+ emails per month</div>
+			</div>
+		</div>
+	{/if}
 
 	<div class="card-footer">
 		<div class="price">
@@ -149,13 +188,16 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		border: 1px solid var(--border);
 	}
 	.name {
+		display: flex;
+		flex-direction: column;
 		font-weight: 600;
 		font-size: 25px;
 		text-align: center;
 		text-transform: capitalize;
-		padding: 25px 20px;
+		padding: 25px 20px 0 20px;
 		border-bottom: 1px solid var(--border);
 	}
 	.price {
@@ -235,5 +277,40 @@
 		color: black;
 		font-weight: 600;
 		font-size: 28px;
+	}
+
+	.plan-toggle {
+		margin: 15px auto 25px auto;
+		display: inline-flex;
+		width: 350px;
+		background-color: var(--accent-lightest);
+		padding: 5px;
+		border-radius: 20px;
+		gap: 3px;
+	}
+
+	.plan-toggle :global(button) {
+		flex: 1;
+	}
+	.off {
+		font-size: 12px;
+		color: var(--text-light);
+		margin-left: 5px;
+	}
+
+	.plan-yearly-only {
+		margin: 15px auto 25px auto;
+		justify-content: center;
+		display: inline-flex;
+		width: 350px;
+		padding: 5px;
+	}
+
+	.yearly-only {
+		height: 26px;
+		padding: 0 12px;
+		text-align: center;
+		font-size: 15px;
+		color: var(--text-light);
 	}
 </style>
