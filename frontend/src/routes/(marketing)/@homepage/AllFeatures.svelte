@@ -47,7 +47,7 @@
 
 <style>
 	.outer-box {
-		background-color: var(--accent);
+		background-color: var(--accent-light);
 		padding: 60px 0;
 	}
 	.feature-wrapper {

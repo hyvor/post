@@ -48,7 +48,6 @@
 	.row:not(.first) {
 		margin-top: 60px;
 	}
-
 	:global(.footer-top-right) {
 		display: none !important;
 	}
@@ -57,9 +56,18 @@
 		.row {
 			flex-direction: column;
 			gap: 35px;
+			text-align: center;
 		}
 		.row:not(.first) {
 			margin-top: 35px;
+		}
+
+		.row :global(.links) {
+			align-items: center;
+		}
+
+		.footer-top-left :global(.email-wrap) :global(.social-wrap) {
+			text-align: center !important;
 		}
 	}
 </style>

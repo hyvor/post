@@ -55,10 +55,10 @@
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
+			width: auto;
 		}
 		.check {
-			width: 250px;
-			max-width: 100%;
+			width: auto;
 		}
 	}
 </style>

@@ -167,7 +167,7 @@
 		display: flex;
 		width: var(--width);
 		max-width: var(--max-width);
-		margin: auto 55px;
+		/* margin: auto 55px; */
 		text-align: right;
 		justify-content: center;
 		gap: 40px;
@@ -376,7 +376,7 @@
 	@media (min-width: 1200px) {
 		.wrap {
 			padding: 100px 0;
-			margin: auto;
+			/* margin: auto; */
 		}
 	}
 </style>

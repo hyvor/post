@@ -8,7 +8,7 @@
 
 <!-- href="/{I18n.getLocale()}/pricing#trialnote" -->
 <Tooltip
-	text="To maintain high email deliverability, we only allow paid customers to send newsletters. In the trial period, you can send test emails to verified email addresses. Click to learn more."
+	text="To maintain high email deliverability, we only allow paid customers to send newsletters. In the trial period, you can send test emails to verified email addresses."
 >
 	<a>
 		{children}

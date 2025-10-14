@@ -181,12 +181,12 @@
 			subtleFloat 8s ease-in-out infinite 2s;
 	}
 
-	.another-browser {
+	/* .another-browser {
 		animation:
 			heroEnterDelayed 3s ease-out,
 			subtleFloat 6s ease-in-out infinite 3s reverse;
-		/* differed the appearance and float animation a bit using different timings */
-	}
+		/* differed the appearance and float animation a bit using different timings 
+	} */
 
 	@media (max-width: 992px) {
 		.signup-form {
@@ -287,7 +287,7 @@
 	@media (min-width: 1200px) {
 		.signup-form {
 			padding: 100px 0;
-			margin: auto;
+			/* margin: auto; */
 		}
 	}
 </style>

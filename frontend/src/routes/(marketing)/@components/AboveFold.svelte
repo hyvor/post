@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	// import TrialChecks from './TrialChecks.svelte';
+	import TrialChecks from './TrialChecks.svelte';
 	import MainGraphic from './MainGraphic.svelte';
 	import Envelope from './Envelope.svelte';
 	import { getMarketingI18n } from '../locale';
@@ -29,8 +29,9 @@
 				{/snippet}
 			</Button>
 		</div>
-		<div class="main-graphic">
-			<MainGraphic />
+
+		<div class="trial-checks">
+			<TrialChecks />
 		</div>
 	</div>
 
@@ -41,6 +42,10 @@
 		</div>
 		<div class="another-browser">
 			<Envelope emailImage={emailImg} />
+		</div>
+
+		<div class="main-graphic">
+			<MainGraphic />
 		</div>
 	</div>
 </div>
@@ -76,9 +81,26 @@
 		width: clamp(100%, 150%, 900px); /* min, ideal, max */
 		margin-left: 0;
 
+		/* width: clamp(90%, 110%, 850px);
+		transform: translateX(5%);
+		max-width: 100%;
+		margin-left: 0; */
 		animation:
 			heroEnter 1s ease-out,
 			subtleFloat 8s ease-in-out infinite 2s;
+	}
+
+	/* main-browser scaling for medium screens */
+	@media (max-width: 1280px) and (min-width: 993px) {
+		.main-browser {
+			width: 140%; /* slightly smaller to fit better */
+			margin-left: -10%; /* shift it left to balance clipping */
+		}
+
+		.another-browser {
+			top: 220px; /* adjust vertical position */
+			right: 50px; /* closer to edge for balance */
+		}
 	}
 
 	.another-browser {
@@ -92,9 +114,19 @@
 	}
 
 	.main-graphic {
-		width: 80%;
-		margin: 0 0 -400px 0;
-		opacity: 0.9;
+		display: none;
+	}
+
+	.trial-checks {
+		margin-top: 30px;
+		margin-left: 0;
+		display: flex;
+		justify-content: center;
+	}
+
+	:global(.checks) {
+		flex-direction: column;
+		gap: 15px !important;
 	}
 
 	@keyframes heroEnter {
@@ -190,7 +222,7 @@
 		}
 
 		.main-browser {
-			width: 100%;
+			display: none;
 		}
 		.buttons {
 			justify-content: center;
@@ -198,6 +230,13 @@
 
 		.another-browser {
 			display: none;
+		}
+
+		.main-graphic {
+			display: block;
+			max-width: 80%;
+			margin: auto;
+			padding: 0;
 		}
 	}
 
@@ -229,11 +268,18 @@
 		}
 
 		.main-browser {
-			width: 100%;
+			display: none;
 		}
 
 		.another-browser {
 			display: none;
+		}
+
+		.main-graphic {
+			display: block;
+			max-width: 80%;
+			margin: auto;
+			padding: 0;
 		}
 	}
 

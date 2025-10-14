@@ -71,6 +71,22 @@
 		position: relative;
 	}
 
+	.bento-grid {
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		gap: 20px 40px;
+		margin-top: 40px;
+	}
+
+	.int {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		/* font-size: 25px; */
+		font-size: 20px;
+		margin-bottom: 10px;
+		color: var(--gray-dark);
+	}
 	.form-preview {
 		width: 120%; /* did this to make it extend over the screen edge */
 		max-width: none; /* did this to remove max-width thing */
@@ -144,7 +160,7 @@
 	}
 
 	/* mobilr */
-	@media (max-width: 900px) {
+	@media (max-width: 992px) {
 		.custom-email-design {
 			flex-direction: column;
 			padding: 20px 0;
@@ -171,6 +187,15 @@
 		.form-preview {
 			display: none;
 		}
+		.bento-grid {
+			grid-template-columns: 1fr;
+			gap: 20px;
+			justify-items: center;
+		}
+
+		.int {
+			justify-content: center;
+		}
 
 		.another-browser {
 			/* display: flex; */
@@ -182,7 +207,7 @@
 	@media (min-width: 1200px) {
 		.custom-email-design {
 			padding: 100px 0;
-			margin: auto;
+			/* margin: auto; */
 		}
 	}
 </style>

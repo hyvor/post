@@ -11,11 +11,7 @@
 	const I18n = getMarketingI18n();
 </script>
 
-<FeatureSectionHead
-	title={I18n.t('homepage.faqs')}
-	subtitle={I18n.t('homepage.faqsDescription')}
-	wrapStyle="padding: 30px 0 0 0"
-/>
+<FeatureSectionHead title={I18n.t('homepage.faqs')} wrapStyle="padding: 30px 0 0 0" />
 
 <div class="faq-accordion hds-container">
 	<Accordion

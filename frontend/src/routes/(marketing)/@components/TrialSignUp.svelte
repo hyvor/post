@@ -64,4 +64,9 @@
 		margin-top: 50px;
 		flex-direction: row;
 	}
+
+	.trial-checks :global(.checks) {
+		flex-direction: row;
+		gap: 15px !important;
+	}
 </style>

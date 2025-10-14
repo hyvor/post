@@ -53,7 +53,7 @@
 		line-height: 32px;
 		padding: 30px 55px;
 		margin: auto;
-		max-width: var(--max-width);
+		max-width: 100%;
 		width: 1000px;
 		border-radius: 20px;
 	}
