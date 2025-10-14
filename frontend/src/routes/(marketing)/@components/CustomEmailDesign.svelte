@@ -2,6 +2,8 @@
 	import BrowserWindow from './BrowserWindow.svelte';
 	import customEmailImg from '../img/custom-email.jpeg';
 	import customEmailImg1 from '../img/custom-email1.jpeg';
+	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import IconLink from '@hyvor/icons/IconLink';
 </script>
 
 <div class="custom-email-design">
@@ -9,6 +11,18 @@
 		<h1>Custom Email Design</h1>
 
 		<h2>Choose from a variety of templates and customize them to match your brand</h2>
+
+		<div class="bento-grid">
+			<div class="int">
+				<IconBullseye class="int-icon" size={30} />
+				<div class="seo-feature-name">Customizable</div>
+			</div>
+
+			<div class="int">
+				<IconLink class="int-icon" size={30} />
+				<div class="seo-feature-name">Free subdomain</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="right">
