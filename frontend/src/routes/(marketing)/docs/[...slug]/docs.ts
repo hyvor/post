@@ -2,7 +2,8 @@ import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
 import SignupForm from './content/SignupForm.svelte';
-import Import from "./content/Import/Import.svelte";
+import Import from './content/Import/Import.svelte';
+import Approval from './content/Approval.svelte';
 
 export const categories: Category[] = [
 	{
@@ -49,6 +50,17 @@ export const categories: Category[] = [
 				slug: 'api-console',
 				name: 'Console API'
 				// component: add component name
+			}
+		]
+	},
+
+	{
+		name: 'Misc',
+		pages: [
+			{
+				slug: 'approval',
+				name: 'Approval',
+				component: Approval
 			}
 		]
 	}

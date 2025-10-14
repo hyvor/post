@@ -44,6 +44,7 @@
             "required": "Required",
             "preferred": "Preferred",
             "companyName": "Company Name",
+            "companyNameCaption": "Or, if you are an individual, your full name.",
             "country": "Country",
             "website": "Website",
             "socialLinks": "Social Media Links",
