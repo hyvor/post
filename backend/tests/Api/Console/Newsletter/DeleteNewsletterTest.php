@@ -33,7 +33,7 @@ class DeleteNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/newsletters'
+            '/newsletter'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -55,9 +55,9 @@ class DeleteNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'DELETE',
-            '/newsletters'
+            '/newsletter'
         );
 
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(403, $response->getStatusCode());
     }
 }

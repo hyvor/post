@@ -95,25 +95,23 @@
     {/if}
 </svelte:element>
 
-<style lang="scss">
+<style>
     .slot.start {
         margin-right: 6px;
         display: inline-flex;
         align-items: center;
-
-        &:empty {
-            margin-right: 0;
-        }
+    }
+    .slot.start:empty {
+        margin-right: 0;
     }
 
     .slot.end {
         margin-left: 6px;
         display: inline-flex;
         align-items: center;
-
-        &:empty {
-            margin-left: 0;
-        }
+    }
+    .slot.end:empty {
+        margin-left: 0;
     }
 
     .button {
@@ -127,24 +125,21 @@
 
         --local-hover-shadow-size: 2.5px;
         --local-hover-shadow-color: var(--hp-accent-light);
-
-        &:active {
-            --local-hover-shadow-size: 4px;
-        }
-
-        &.block {
-            display: flex;
-            width: 100%;
-        }
-
-        &:hover {
-            box-shadow: 0 0 0 var(--local-hover-shadow-size) var(--local-hover-shadow-color);
-        }
-
-        &:focus-visible {
-            outline: none;
-            box-shadow: 0 0 0 calc(var(--local-hover-shadow-size) + 1px) var(--local-hover-shadow-color);
-        }
+        transition: 0.2s box-shadow;
+    }
+    .button:active {
+        --local-hover-shadow-size: 4px;
+    }
+    .button.block {
+        display: flex;
+        width: 100%;
+    }
+    .button:hover {
+        box-shadow: 0 0 0 var(--local-hover-shadow-size) var(--local-hover-shadow-color);
+    }
+    .button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 calc(var(--local-hover-shadow-size) + 1px) var(--local-hover-shadow-color);
     }
 
     .button-content {
@@ -171,29 +166,24 @@
         padding: 0 8px;
         font-size: 12px;
         --local-hover-shadow-size: 1px;
-
-        &:active {
-            --local-hover-shadow-size: 2px;
-        }
+    }
+    .button.x-small:active {
+        --local-hover-shadow-size: 2px;
     }
 
     .button.small {
         height: 26px;
         padding: 0 12px;
-
         --local-hover-shadow-size: 2px;
-
-        &:active {
-            --local-hover-shadow-size: 3px;
-        }
-
-        .slot.start {
-            margin-right: 4px;
-        }
-
-        .slot.end {
-            margin-left: 4px;
-        }
+    }
+    .button.small:active {
+        --local-hover-shadow-size: 3px;
+    }
+    .button.small .slot.start {
+        margin-right: 4px;
+    }
+    .button.small .slot.end {
+        margin-left: 4px;
     }
 
     .button.medium {
@@ -205,14 +195,12 @@
         height: 36px;
         padding: 0 20px;
         --local-hover-shadow-size: 3px;
-
-        &:active {
-            --local-hover-shadow-size: 5px;
-        }
+    }
+    .button.large:active {
+        --local-hover-shadow-size: 5px;
     }
 
     .button {
-        transition: 0.2s box-shadow;
         --local-hover-shadow-color: var(--hp-accent-light);
     }
 
@@ -220,36 +208,30 @@
         background-color: transparent;
         color: var(--text);
         transition: 0.2s background-color;
-
-        &:hover {
-            background-color: var(--hp-accent-light);
-            box-shadow: none !important;
-        }
-
-        /*styles for disabled state*/
-        &[disabled] {
-            background-color: transparent;
-            color: var(--hp-accent-text);
-            box-shadow: none !important;
-            cursor: not-allowed;
-            opacity: 0.2;
-
-            &:hover {
-                background-color: transparent;
-                box-shadow: none !important;
-                color: var(--hp-accent-text);
-            }
-        }
+    }
+    .button.invisible:hover {
+        background-color: var(--hp-accent-light);
+        box-shadow: none !important;
+    }
+    .button.invisible[disabled] {
+        background-color: transparent;
+        color: var(--hp-accent-text);
+        box-shadow: none !important;
+        cursor: not-allowed;
+        opacity: 0.2;
+    }
+    .button.invisible[disabled]:hover {
+        background-color: transparent;
+        box-shadow: none !important;
+        color: var(--hp-accent-text);
     }
 
-    /*Styles for button disabled state*/
     .button[disabled] {
         cursor: not-allowed;
         opacity: 0.2;
         box-shadow: none !important;
-
-        &:hover {
-            box-shadow: none !important;
-        }
+    }
+    .button[disabled]:hover {
+        box-shadow: none !important;
     }
 </style>

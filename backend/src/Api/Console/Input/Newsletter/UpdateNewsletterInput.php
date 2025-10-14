@@ -3,6 +3,7 @@
 namespace App\Api\Console\Input\Newsletter;
 
 use App\Api\Console\Object\NewsletterObject;
+use App\Service\Newsletter\Constraint\Subdomain;
 use App\Util\OptionalPropertyTrait;
 
 class UpdateNewsletterInput extends NewsletterObject
@@ -11,13 +12,17 @@ class UpdateNewsletterInput extends NewsletterObject
 
     public string $name;
 
+    #[Subdomain]
+    public string $subdomain;
+
     public const UNUPDATABLE_PROPERTIES = [
         'id',
         'created_at',
     ];
 
     public function __construct()
-    {}
+    {
+    }
 
     /**
      * @var string[]
@@ -39,6 +44,9 @@ class UpdateNewsletterInput extends NewsletterObject
         return in_array($property, $this->setProperties);
     }
 
+    /**
+     * @return string[]
+     */
     public function getSetProperties(): array
     {
         return $this->setProperties;

@@ -8,16 +8,16 @@ class FormSubscribeInput
 {
 
     #[Assert\NotBlank]
-    public string $newsletter_uuid;
+    public string $newsletter_subdomain;
 
     #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email address.')]
     public string $email;
 
     /**
      * @var int[] $list_ids
      */
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'You must select at least one list.')]
     #[Assert\All([
         new Assert\NotBlank(),
         new Assert\Type('int'),

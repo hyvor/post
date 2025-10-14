@@ -7,7 +7,7 @@ use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
-use App\Api\Console\Input\Newsletter\GetSubdomainAvailabilityInput;
+use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -15,13 +15,13 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class NewsletterController extends AbstractController
 {
@@ -31,16 +31,20 @@ class NewsletterController extends AbstractController
     {
     }
 
-    #[Route('/newsletter/subdomain', methods: 'GET')]
+    #[Route('/newsletter/subdomain', methods: 'POST')]
     #[UserLevelEndpoint]
-    public function getSubdomainAvailability(Request $request): JsonResponse
+    public function getSubdomainAvailability(
+        Request                                         $request,
+        #[MapRequestPayload] SubdomainAvailabilityInput $input
+    ): JsonResponse
     {
-        $subdomain = (string)$request->query->get('subdomain');
-        $this->validateSubdomain($subdomain);
+        if (!$input->subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
 
         $available = true;
 
-        if ($this->newsletterService->isUsernameTaken($subdomain)) {
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             $available = false;
         }
 
@@ -57,9 +61,8 @@ class NewsletterController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
-        $this->validateSubdomain($input->subdomain);
 
-        if ($this->newsletterService->isUsernameTaken($input->subdomain)) {
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
@@ -69,7 +72,7 @@ class NewsletterController extends AbstractController
 
     #[Route('/newsletter', methods: 'GET')]
     #[ScopeRequired(Scope::NEWSLETTER_READ)]
-    public function getNewsletterById(Newsletter $newsletter): JsonResponse
+    public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
@@ -93,6 +96,12 @@ class NewsletterController extends AbstractController
         if ($input->hasProperty('name')) {
             $updates->name = $input->name;
         }
+        if ($input->hasProperty('subdomain')) {
+            if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
+                throw new UnprocessableEntityHttpException('Subdomain is already taken.');
+            }
+            $updates->subdomain = $input->subdomain;
+        }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();
@@ -109,18 +118,4 @@ class NewsletterController extends AbstractController
         return $this->json(new NewsletterObject($newsletter));
     }
 
-    private function validateSubdomain(string $subdomain): void
-    {
-        if (!$subdomain) {
-            throw new UnprocessableEntityHttpException('Subdomain is required.');
-        }
-
-        if (strlen($subdomain) > 50) {
-            throw new UnprocessableEntityHttpException('Subdomain must be less than 50 characters long.');
-        }
-
-        if (!preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $subdomain)) {
-            throw new UnprocessableEntityHttpException('Subdomain can only contain lowercase letters, numbers, and hyphens.');
-        }
-    }
 }

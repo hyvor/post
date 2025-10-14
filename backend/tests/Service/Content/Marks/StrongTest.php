@@ -29,7 +29,7 @@ class StrongTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;"><strong>Bold</strong></p>', $html);
+        $this->assertSame('<p><strong>Bold</strong></p>', $html);
     }
 
     public function test_html_to_json(): void

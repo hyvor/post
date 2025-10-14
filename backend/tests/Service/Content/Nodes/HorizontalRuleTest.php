@@ -20,7 +20,7 @@ class HorizontalRuleTest extends TestCase
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
         $this->assertSame(
-            '<hr style="margin:0 0 20px;height:1px;background-color:currentColor;opacity:0.3" />',
+            '<hr />',
             trim($html)
         );
     }

@@ -13,33 +13,22 @@ readonly class AppConfig
         #[Autowire('%env(string:URL_ARCHIVE)%')]
         private string $urlArchive,
 
-        #[Autowire('%env(int:MAX_EMAILS_PER_SECOND)%')]
-        private int    $maxEmailsPerSecond,
-
-        #[Autowire('%env(string:DEFAULT_EMAIL_DOMAIN)%')]
-        private string $defaultEmailDomain,
-
-        /**
-         * AWS SES Configuration
-         * We use SES for sending emails.
-         */
-        #[Autowire('%env(string:SES_REGION)%')]
-        private string $awsSesRegion,
-        #[Autowire('%env(string:SES_ACCESS_KEY_ID)%')]
-        private string $awsSesAccessKeyId,
-        #[Autowire('%env(string:SES_SECRET_ACCESS_KEY)%')]
-        private string $awsSesSecretAccessKey,
-        #[Autowire('%env(string:SES_NEWSLETTER_CONFIGURATION_SET_NAME)%')]
-        private string $awsSesNewsletterConfigurationSetName,
-
-        /**
-         * Hyvor Relay configuration
-         */
+        // Relay configuration
         #[Autowire('%env(string:RELAY_URL)%')]
         private string $relayUrl,
 
         #[Autowire('%env(string:RELAY_API_KEY)%')]
         private string $relayApiKey,
+
+        // Email configuration
+        #[Autowire('%env(int:MAX_EMAILS_PER_SECOND)%')]
+        private int    $maxEmailsPerSecond,
+
+        #[Autowire('%env(string:SYSTEM_MAIL_DOMAIN)%')]
+        private string $systemMailDomain,
+
+        #[Autowire('%env(string:SYSTEM_MAIL_REPLY_TO)%')]
+        private string $systemMailReplyTo,
     )
     {
     }
@@ -59,29 +48,9 @@ readonly class AppConfig
         return $this->maxEmailsPerSecond;
     }
 
-    public function getDefaultEmailDomain(): string
+    public function getSystemMailDomain(): string
     {
-        return $this->defaultEmailDomain;
-    }
-
-    public function getAwsSesRegion(): string
-    {
-        return $this->awsSesRegion;
-    }
-
-    public function getAwsSesAccessKeyId(): string
-    {
-        return $this->awsSesAccessKeyId;
-    }
-
-    public function getAwsSesSecretAccessKey(): string
-    {
-        return $this->awsSesSecretAccessKey;
-    }
-
-    public function getAwsSesNewsletterConfigurationSetName(): string
-    {
-        return $this->awsSesNewsletterConfigurationSetName;
+        return $this->systemMailDomain;
     }
 
     public function getRelayUrl(): string
@@ -92,6 +61,11 @@ readonly class AppConfig
     public function getRelayApiKey(): string
     {
         return $this->relayApiKey;
+    }
+
+    public function getSystemMailReplyTo(): string
+    {
+        return $this->systemMailReplyTo;
     }
 
 }

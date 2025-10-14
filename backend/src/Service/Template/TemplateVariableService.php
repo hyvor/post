@@ -30,12 +30,14 @@ class TemplateVariableService
             content: '',
 
             name: $newsletter->getName(),
+            subdomain: $newsletter->getSubdomain(),
             logo: $meta->logo ?? '',
             logo_url: $meta->template_logo_url ?? '',
 
             address: $meta->address ?? '',
             unsubscribe_url: '',
             unsubscribe_text: $meta->unsubscribe_text ?? 'Unsubscribe',
+            branding: $meta->branding,
 
             color_accent: $meta->template_color_accent ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT,
             color_accent_text: $meta->template_color_accent_text ?? NewsletterDefaults::TEMPLATE_COLOR_ACCENT_TEXT,
@@ -48,6 +50,8 @@ class TemplateVariableService
             font_size: $meta->template_font_size ?? NewsletterDefaults::TEMPLATE_FONT_SIZE,
             font_weight: $meta->template_font_weight ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT,
             font_weight_heading: $meta->template_font_weight_heading ?? NewsletterDefaults::TEMPLATE_FONT_WEIGHT_HEADING,
+            font_color_on_background: $meta->template_font_color_on_background ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BACKGROUND,
+            font_color_on_box: $meta->template_font_color_on_box ?? NewsletterDefaults::TEMPLATE_FONT_COLOR_ON_BOX,
             font_line_height: $meta->template_font_line_height ?? NewsletterDefaults::TEMPLATE_FONT_LINE_HEIGHT,
 
             box_radius: $meta->template_box_radius ?? NewsletterDefaults::TEMPLATE_BOX_RADIUS,

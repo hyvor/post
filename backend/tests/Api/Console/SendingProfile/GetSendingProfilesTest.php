@@ -6,6 +6,7 @@ use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
+use App\Entity\Type\RelayDomainStatus;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -23,7 +24,7 @@ class GetSendingProfilesTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $domain = DomainFactory::createOne([
-            'verified_in_ses' => true,
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
 
         $sendingProfile = SendingProfileFactory::createOne([
@@ -35,7 +36,7 @@ class GetSendingProfilesTest extends WebTestCase
         SendingProfileFactory::createMany(2, [
             'newsletter' => NewsletterFactory::createOne(),
             'domain' => DomainFactory::createOne([
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
             ])
         ]);
 
@@ -46,7 +47,8 @@ class GetSendingProfilesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
         $item = $json[0];
         $this->assertSame($sendingProfile->getId(), $item['id']);
@@ -58,7 +60,7 @@ class GetSendingProfilesTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
         $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
-            'from_email' => null,
+            'from_email' => 'system@email.com',
             'from_name' => null,
             'reply_to_email' => null,
             'brand_name' => null,
@@ -73,7 +75,8 @@ class GetSendingProfilesTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $json = $this->getJson($response);
+        /** @var array<int, array<string, mixed>> $json */
+        $json = $this->getJson();
         $this->assertCount(1, $json);
         $item = $json[0];
         $this->assertSame($sendingProfile->getId(), $item['id']);

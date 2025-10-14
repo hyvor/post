@@ -29,6 +29,7 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
             mimeType: "text/csv",
         );
 
+        /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
             $newsletter->_real(),
@@ -59,9 +60,12 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
         $message = new ImportSubscribersMessage($subscriberImport->getId());
         $this->getMessageBus()->dispatch($message);
 
-        $this->transport()->throwExceptions()->process();
+        $this->transport('async')->throwExceptions()->process();
 
-        $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(['newsletter' => $newsletter->_real()]);
+        $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(
+            ['newsletter' => $newsletter->_real()],
+            ['id' => 'ASC']
+        );
 
         $this->assertCount(3, $importedSubscribers);
         $this->assertSame('john@hyvor.com', $importedSubscribers[0]->getEmail());

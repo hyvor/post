@@ -48,8 +48,8 @@ class SubscriberController extends AbstractController
         }
 
         $listId = null;
-        if ($request->query->has('listId')) {
-            $listId = $request->query->getInt('listId');
+        if ($request->query->has('list_id')) {
+            $listId = $request->query->getInt('list_id');
         }
 
         $search = null;

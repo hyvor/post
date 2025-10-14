@@ -12,7 +12,7 @@ class UpdateIssueDto
 
     public ?string $subject;
     public ?string $content;
-    public ?SendingProfile $sendingProfile;
+    public SendingProfile $sendingProfile;
     public IssueStatus $status;
     /**
      * @var array<int>
@@ -30,11 +30,4 @@ class UpdateIssueDto
 
     public int $failedSends;
     public string $error_private;
-
-    public int $openedSends;
-    public int $clickedSends;
-
-    public string $fromEmail;
-    public string $fromName;
-    public string $replyToEmail;
 }

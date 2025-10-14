@@ -15,15 +15,13 @@ class ButtonTest extends TestCase
             'content' => [
                 [
                     'type' => 'button',
+                    'attrs' => [
+                        'href' => 'https://post.hyvor.com',
+                    ],
                     'content' => [
                         [
-                            'type' => 'paragraph',
-                            'content' => [
-                                [
-                                    'type' => 'text',
-                                    'text' => $text,
-                                ],
-                            ],
+                            'type' => 'text',
+                            'text' => $text,
                         ],
                     ],
                 ],
@@ -31,28 +29,26 @@ class ButtonTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame('<button><p style="margin: 0 0 20px;line-height:26px;">Click me</p></button>', $html);
+        $this->assertSame("<p class=\"button-wrap\"><a href=\"https://post.hyvor.com\" target=\"_blank\" class=\"button\">$text</a></p>", $html);
     }
 
     public function test_html_to_json(): void
     {
         $text = 'Click me';
-        $html = "<button><p>$text</p></button>";
+        $html = "<a class=\"button\" href=\"https://post.hyvor.com\">$text</a>";
         $json = (new ContentService())->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [
                 [
                     'type' => 'button',
+                    'attrs' => [
+                        'href' => 'https://post.hyvor.com',
+                    ],
                     'content' => [
                         [
-                            'type' => 'paragraph',
-                            'content' => [
-                                [
-                                    'type' => 'text',
-                                    'text' => $text,
-                                ],
-                            ],
+                            'type' => 'text',
+                            'text' => $text,
                         ],
                     ],
                 ],

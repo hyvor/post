@@ -6,12 +6,17 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendFactory;
+use App\Tests\Factory\SendingProfileFactory;
 
 class ResubscribeTest extends WebTestCase
 {
     public function test_resubscribe(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
         $lists = NewsletterListFactory::createMany(5, [
             'newsletter' => $newsletter
         ]);

@@ -20,11 +20,11 @@ class GetNewsletterTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
-    public function testGetSpecificProjet(): void
+    public function testGetSpecificProject(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
-        $user = UserFactory::createOne([
+        UserFactory::createOne([
             'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
@@ -33,8 +33,9 @@ class GetNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/newsletters'
+            '/newsletter'
         );
+
 
         $this->assertSame(200, $response->getStatusCode());
 
@@ -50,11 +51,11 @@ class GetNewsletterTest extends WebTestCase
 
     public function testGetSpecificNewsletterNotFound(): void
     {
-        $find_newsletter = $this->consoleApi(
-            999,
+        $response = $this->consoleApi(
+            999999,
             'GET',
-            '/newsletters'
+            '/newsletter'
         );
-        $this->assertSame(404, $find_newsletter->getStatusCode());
+        $this->assertSame(403, $response->getStatusCode());
     }
 }

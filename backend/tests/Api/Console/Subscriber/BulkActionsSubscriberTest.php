@@ -9,6 +9,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -41,7 +42,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('Subscribers deleted successfully', (string) $response->getContent());
+        $this->assertStringContainsString('Subscribers deleted successfully', (string)$response->getContent());
 
         $subscriberRepository = $this->em->getRepository(Subscriber::class);
         $subscribers = $subscriberRepository->findAll();
@@ -72,8 +73,9 @@ class BulkActionsSubscriberTest extends WebTestCase
 
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('Subscribers status updated successfully', (string) $response->getContent());
+        $this->assertStringContainsString('Subscribers status updated successfully', (string)$response->getContent());
 
+        /** @var Subscriber[] $subscribers */
         $subscribers = $this->em->getRepository(Subscriber::class)
             ->createQueryBuilder('s')
             ->where('s.status != :status')
@@ -81,7 +83,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             ->getQuery()
             ->getResult();
 
-        $this->assertCount(0, $subscribers, 'All subscribers should be unsubscribed after bulk status update action.');
+        $this->assertCount(0, $subscribers);
     }
 
     public function test_bulk_status_update_status_not_provided(): void
@@ -106,7 +108,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Status must be provided for status change action', (string) $response->getContent());
+        $this->assertStringContainsString('Status must be provided for status change action', (string)$response->getContent());
     }
 
     public function test_bulk_status_update_invalid_status(): void
@@ -132,13 +134,16 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Invalid status provided', (string) $response->getContent());
+        $this->assertStringContainsString('Invalid status provided', (string)$response->getContent());
     }
 
     public function test_bulk_metadata_update(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
         $subscribers = SubscriberFactory::createMany(50, [
             'newsletter' => $newsletter,
         ]);
@@ -170,7 +175,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('Subscribers metadata updated successfully', (string) $response->getContent());
+        $this->assertStringContainsString('Subscribers metadata updated successfully', (string)$response->getContent());
 
         $subscriberRepository = $this->em->getRepository(Subscriber::class);
         foreach ($subscriberIds as $id) {
@@ -202,7 +207,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Metadata must be provided for metadata update action', (string) $response->getContent());
+        $this->assertStringContainsString('Metadata must be provided for metadata update action', (string)$response->getContent());
     }
 
     public function test_bulk_metadata_update_metadata_not_found(): void
@@ -229,7 +234,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Metadata definition with key non_existent_key not found', (string) $response->getContent());
+        $this->assertStringContainsString('Metadata definition with key non_existent_key not found', (string)$response->getContent());
     }
 
     public function test_bulk_action_invalid_subscriber_ids(): void
@@ -247,7 +252,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Subscriber with ID 9999 not found in the newsletter', (string) $response->getContent());
+        $this->assertStringContainsString('Subscriber with ID 9999 not found in the newsletter', (string)$response->getContent());
     }
 
     public function test_bulk_action_exceeds_limit(): void
@@ -271,7 +276,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Subscribers limit exceeded', (string) $response->getContent());
+        $this->assertStringContainsString('Subscribers limit exceeded', (string)$response->getContent());
     }
 
     public function test_bulk_action_invalid_action(): void
@@ -295,6 +300,6 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Invalid action.', (string) $response->getContent());
+        $this->assertStringContainsString('Invalid action.', (string)$response->getContent());
     }
 }

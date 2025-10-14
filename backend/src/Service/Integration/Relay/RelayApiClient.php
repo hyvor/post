@@ -142,8 +142,11 @@ class RelayApiClient
     {
         return $this->callApi(
             'POST',
-            "/domains/{$id}/verify",
+            "/domains/verify",
             VerifyDomainResponse::class,
+            [
+                'id' => $id
+            ]
         );
     }
 
@@ -175,7 +178,6 @@ class RelayApiClient
                 strtolower($name) === 'from'
                 || strtolower($name) === 'to'
                 || strtolower($name) === 'subject'
-                || strtolower($name) === 'reply-to'     // TODO: Remove once Relay bug-fix is deployed
             ) {
                 continue;
             }

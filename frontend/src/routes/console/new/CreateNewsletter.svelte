@@ -12,6 +12,10 @@
 	import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
 	import { addUserNewsletter, userNewslettersStore } from '../lib/stores/userNewslettersStore';
 	import { createNewsletter, getSubdomainAvailability } from '../lib/actions/newsletterActions';
+	import { validateSubdomain } from '../lib/subdomain';
+	import { getArchiveUrlAsUrl } from '../lib/archive';
+	import { setNewsletterStoreByNewsletterList } from '../lib/stores/newsletterStore';
+	import type { NewsletterList } from '../types';
 
 	let name = $state('');
 	let subdomain = $state('');
@@ -82,27 +86,19 @@
 
 	function handleSubdomainInput(e: any) {
 		subdomainEdited = true;
-		let error = false;
+		subdomainError = null;
 
 		subdomain = e.target.value;
 		subdomain = subdomain.toLowerCase();
 
-		if (!subdomain) {
-			subdomainError = 'Subdomain is required';
-			error = true;
-		} else if (!/^[a-z0-9-]*$/.test(subdomain)) {
-			subdomainError = 'Only a-z, 0-9, and hyphens (-) are allowed';
-			error = true;
-		} else if (/--/.test(subdomain)) {
-			subdomainError = 'Consecutive hyphens are not allowed';
-			error = true;
-		} else if (/^-|-$/.test(subdomain)) {
-			subdomainError = 'Subdomain cannot start or end with a hyphen';
-			error = true;
-		}
+		const subdomainValidation = validateSubdomain(subdomain);
 
-		if (error && subdomainCheckTimeout) {
-			clearTimeout(subdomainCheckTimeout);
+		if (subdomainValidation) {
+			subdomainError = subdomainValidation;
+
+			if (subdomainCheckTimeout) {
+				clearTimeout(subdomainCheckTimeout);
+			}
 		}
 	}
 
@@ -127,8 +123,10 @@
 
 		createNewsletter(name, subdomain)
 			.then((res) => {
-				addUserNewsletter({ role: 'owner', newsletter: res });
-				goto('/console/' + res.id);
+				const list: NewsletterList = { role: 'owner', newsletter: res };
+				addUserNewsletter(list);
+				setNewsletterStoreByNewsletterList(list);
+				goto('/console/' + res.subdomain);
 			})
 			.catch((e) => {
 				toast.error(e.message);
@@ -140,7 +138,7 @@
 <div class="wrap">
 	<div class="inner hds-box">
 		<div class="back">
-			<Button variant="outline" size="small" on:click={handleBack} disabled={isCreating}>
+			<Button size="small" color="input" on:click={handleBack} disabled={isCreating}>
 				{#snippet start()}
 					<IconCaretLeft size={14} />
 				{/snippet}
@@ -185,7 +183,13 @@
 								: subdomainSuccess
 									? 'success'
 									: undefined}
-						></TextInput>
+						>
+							{#snippet end()}
+								<span class="archive-hostname"
+									>.{getArchiveUrlAsUrl().hostname}</span
+								>
+							{/snippet}
+						</TextInput>
 
 						{#if subdomainError}
 							<Validation state="error">
@@ -234,7 +238,7 @@
 	}
 
 	.inner {
-		width: 550px;
+		width: 650px;
 		max-width: 100%;
 		position: relative;
 	}
@@ -247,5 +251,11 @@
 		padding: 20px;
 		padding-bottom: 30px;
 		text-align: center;
+	}
+
+	.archive-hostname {
+		color: var(--text-light);
+		font-size: 14px;
+		font-weight: normal;
 	}
 </style>

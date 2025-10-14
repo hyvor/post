@@ -86,7 +86,7 @@
     {/if}
 </div>
 
-<style lang="scss">
+<style>
     .loader {
         display: inline-flex;
         align-items: center;
@@ -102,9 +102,11 @@
         justify-content: center;
         flex-direction: column;
 
-        .message {
-            margin-top: 10px;
-        }
+        
+    }
+
+    .loader.block .message {
+        margin-top: 10px;
     }
 
     .loader.full {
@@ -115,10 +117,10 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+    }
 
-        .message {
-            margin-top: 10px;
-        }
+    .loader.full .message {
+        margin-top: 10px;
     }
 
     .loader-wrap {

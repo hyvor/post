@@ -17,7 +17,8 @@ class SubscriberMetadataService
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-    ) {
+    )
+    {
     }
 
     /**
@@ -46,9 +47,10 @@ class SubscriberMetadataService
 
     public function createMetadataDefinition(
         Newsletter $newsletter,
-        string $key,
-        string $name,
-    ): SubscriberMetadataDefinition {
+        string     $key,
+        string     $name,
+    ): SubscriberMetadataDefinition
+    {
         $metadataDefinition = new SubscriberMetadataDefinition();
         $metadataDefinition->setNewsletter($newsletter);
         $metadataDefinition->setKey($key);
@@ -65,8 +67,9 @@ class SubscriberMetadataService
 
     public function updateMetadataDefinition(
         SubscriberMetadataDefinition $metadataDefinition,
-        string $name,
-    ): void {
+        string                       $name,
+    ): void
+    {
         $metadataDefinition->setName($name);
         $metadataDefinition->setUpdatedAt($this->now());
 
@@ -81,11 +84,13 @@ class SubscriberMetadataService
 
     public function validateValueType(
         SubscriberMetadataDefinition $metadataDefinition,
-        mixed $value
+        mixed                        $value
     ): bool
     {
         return match ($metadataDefinition->getType()) {
+            //  @phpstan-ignore-next-line
             SubscriberMetadataDefinitionType::TEXT => is_string($value),
+            // Other Metadata types can be added here
             default => false,
         };
     }

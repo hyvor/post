@@ -136,6 +136,7 @@ class GetSendsTest extends WebTestCase
             [
                 'issue' => $issue,
                 'email' => 'thibault@hyvor.com',
+                'bounced_at' => new \DateTimeImmutable()
             ]
         );
 
@@ -149,7 +150,7 @@ class GetSendsTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId() . "/sends?type=clicked"
+            "/issues/" . $issue->getId() . "/sends?type=bounced"
         );
 
         $this->assertSame(200, $response->getStatusCode());

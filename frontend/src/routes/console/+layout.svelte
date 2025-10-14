@@ -8,13 +8,13 @@
 	} from '@hyvor/design/components';
 	import en from '../../../../shared/locale/en.json';
 	import fr from '../../../../shared/locale/fr.json';
-    import type {AppConfig, ApprovalStatus, NewsletterList} from './types';
+	import type { AppConfig, ApprovalStatus, NewsletterList } from './types';
 
 	import { onMount } from 'svelte';
 	import consoleApi from './lib/consoleApi';
 	import { page } from '$app/stores';
-    import {setAppConfig, getAppConfig, approvalStore, userApprovalStatusStore} from './lib/stores/consoleStore';
-	import { newsletterRoleStore, newsletterStore } from './lib/stores/newsletterStore';
+	import { setAppConfig, getAppConfig, userApprovalStatusStore } from './lib/stores/consoleStore';
+	import { setNewsletterStoreByNewsletterList } from './lib/stores/newsletterStore';
 	import { userNewslettersStore } from './lib/stores/userNewslettersStore';
 
 	interface Props {
@@ -26,7 +26,7 @@
 	interface InitResponse {
 		config: AppConfig;
 		newsletters: NewsletterList[];
-        user_approval: ApprovalStatus;
+		user_approval: ApprovalStatus;
 	}
 
 	let isLoading = $state(true);
@@ -41,20 +41,20 @@
 				setAppConfig(res.config);
 
 				userNewslettersStore.set(res.newsletters);
-				if (res.newsletters.length != 0) {
-					newsletterStore.set(res.newsletters[0].newsletter); // Set the first newsletter as the active newsletter
-					newsletterRoleStore.set(res.newsletters[0].role);
+				if (res.newsletters.length > 0) {
+					setNewsletterStoreByNewsletterList(res.newsletters[0]);
 				}
 
-                userApprovalStatusStore.set(res.user_approval);
+				userApprovalStatusStore.set(res.user_approval);
 
 				isLoading = false;
 			})
 			.catch((err) => {
 				if (err.code === 401) {
 					const toPage = $page.url.searchParams.has('signup') ? 'signup' : 'login';
-					location.href =
-						`/api/auth/${toPage}?redirect=` + encodeURIComponent(location.href);
+					const url = new URL(err.data[toPage + '_url'], location.origin);
+					url.searchParams.set('redirect', location.href);
+					location.href = url.toString();
 				} else {
 					toast.error(err.message);
 				}

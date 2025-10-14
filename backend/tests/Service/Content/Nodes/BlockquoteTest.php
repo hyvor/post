@@ -30,14 +30,7 @@ class BlockquoteTest extends TestCase
         $html = new ContentService()->getHtmlFromJson($json);
 
         $this->assertSame(
-            '<blockquote style="
-            border-left: 4px solid;
-            border-color: #000;
-            border-color: currentColor;
-            border-color: var(--accent);
-            margin: 0 0 20px;
-            padding: 15px;
-        ">I am a blockquote</blockquote>',
+            '<blockquote>I am a blockquote</blockquote>',
             trim($html)
         );
     }

@@ -25,8 +25,7 @@ class SendService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository   $subscriberRepository,
-        private SendRepository         $sendRepository,
-        private IssueService           $issueService
+        private SendRepository         $sendRepository
     )
     {
     }
@@ -145,7 +144,7 @@ class SendService
             'pending' => $pendingCount,
             'sent' => $issue->getOkSends(),
             'progress' => $issue->getTotalSends() > 0
-                ? (int)round($issue->getOkSends() / $issue->getTotalSends()) * 100
+                ? (int)round($issue->getOkSends() / $issue->getTotalSends() * 100)
                 : 0,
         ];
     }
@@ -190,12 +189,14 @@ class SendService
         JOIN App\Entity\Newsletter p WITH s.newsletter = p.id
         WHERE
             p.user_id = :hyvorUserId AND
-            s.created_at >= :startOfMonth
+            s.created_at >= :startOfMonth AND
+            s.created_at <= :endOfMonth
         DQL;
 
         $qb = $this->em->createQuery($query);
         $qb->setParameter('hyvorUserId', $hyvorUserId);
         $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
+        $qb->setParameter('endOfMonth', $this->now()->modify('last day of this month'));
 
         return (int)$qb->getSingleScalarResult();
     }

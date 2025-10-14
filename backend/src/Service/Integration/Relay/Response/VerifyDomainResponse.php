@@ -2,10 +2,12 @@
 
 namespace App\Service\Integration\Relay\Response;
 
+use App\Entity\Type\RelayDomainStatus;
+
 class VerifyDomainResponse
 {
     public string $domain;
-    public bool $dkim_verified;
+    public RelayDomainStatus $status;
     public ?int $dkim_checked_at;
     public ?string $dkim_error_message;
 }

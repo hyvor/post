@@ -7,16 +7,11 @@ use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
 use App\Service\Domain\DomainService;
-use App\Service\Integration\Aws\SesService;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use Aws\Command;
-use Aws\Exception\AwsException;
-use Aws\SesV2\SesV2Client;
 use Doctrine\Common\Collections\ArrayCollection;
-use Monolog\Handler\TestHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
@@ -46,7 +41,7 @@ class CreateDomainTest extends WebTestCase
             return new JsonMockResponse([
                 'id' => 1,
                 'domain' => 'hyvor.com',
-                'dkim_selector' => 'rly2025',
+                'dkim_host' => 'rly2025',
                 'dkim_txt_value' => 'v=DKIM1; k=rsa; p=...',
             ]);
         };
@@ -69,7 +64,8 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'hyvor.com',
-            ]
+            ],
+            useSession: true
         );
         $this->assertSame(200, $response->getStatusCode());
 
@@ -82,6 +78,29 @@ class CreateDomainTest extends WebTestCase
         $domain = $domainRepository->find($domainId);
         $this->assertNotNull($domain);
         $this->assertSame('hyvor.com', $domain->getDomain());
+    }
+
+    public function test_create_system_domain_fails(): void
+    {
+        $this->mockHttpClient();
+
+        Clock::set(new MockClock('2025-02-21'));
+
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/domains',
+            [
+                'domain' => 'hyvorpost.email',
+            ],
+            useSession: true
+        );
+        $this->assertSame(400, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertSame('This domain is reserved and cannot be registered', $json['message']);
     }
 
     public function test_create_domain_invalid(): void
@@ -98,7 +117,8 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'invalid-domain',
-            ]
+            ],
+            useSession: true
         );
         $this->assertSame(422, $response->getStatusCode());
 
@@ -142,9 +162,8 @@ class CreateDomainTest extends WebTestCase
         );
     }
 
-    public function test_error_on_aws_call_fails_and_logs(): void
+    public function test_error_on_relay_call_fails_and_logs(): void
     {
-
         $httpClient = new MockHttpClient(new MockResponse(info: ['error' => 'host unreachable']));
         $this->container->set(HttpClientInterface::class, $httpClient);
 

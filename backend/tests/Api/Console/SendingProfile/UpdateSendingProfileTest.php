@@ -5,6 +5,7 @@ namespace App\Tests\Api\Console\SendingProfile;
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
+use App\Entity\Type\RelayDomainStatus;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
@@ -28,7 +29,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $domain1 = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -36,7 +37,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $domain2 = DomainFactory::createOne(
             [
                 'domain' => 'gmail.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -69,6 +70,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getFromEmail());
         $this->assertSame('Hyvor Post', $sendingEmail->getBrandName());
+        $this->assertNotNull($sendingEmail->getDomain());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
         $this->assertSame(false, $sendingEmail->getIsDefault());
         $this->assertSame('2025-02-21 00:00:00', $sendingEmail->getUpdatedAt()->format('Y-m-d H:i:s'));
@@ -83,7 +85,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $domain1 = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -91,7 +93,7 @@ class UpdateSendingProfileTest extends WebTestCase
         $domain2 = DomainFactory::createOne(
             [
                 'domain' => 'gmail.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );

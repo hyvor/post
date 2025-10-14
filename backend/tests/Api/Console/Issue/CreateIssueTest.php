@@ -6,6 +6,7 @@ use App\Api\Console\Controller\IssueController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\RelayDomainStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
@@ -31,6 +32,12 @@ class CreateIssueTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne([
             'subdomain' => 'thibault'
         ]);
+        $sendingProfile = SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'from_email' => 'thibault@hvrpst.com',
+            'is_default' => true,
+            'is_system' => true,
+        ]);
 
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
@@ -38,7 +45,6 @@ class CreateIssueTest extends WebTestCase
             $newsletter,
             'POST',
             '/issues',
-            []
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -47,7 +53,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
         $this->assertSame([$list->getId()], $json['lists']);
-        $this->assertSame('thibault@hvrpst.com', $json['from_email']);
+        $this->assertSame($sendingProfile->getId(), $json['sending_profile_id']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($json['id']);
@@ -56,7 +62,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
         $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
-        $this->assertSame('thibault@hvrpst.com', $issue->getFromEmail());
+        $this->assertSame($sendingProfile->getId(), $issue->getSendingProfile()->getId());
     }
 
     public function test_create_issue_draft_with_custom_email(): void
@@ -68,13 +74,13 @@ class CreateIssueTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
 
-        $sendingEmail = SendingProfileFactory::createOne([
-            'email' => 'thibault@hyvor.com',
+        $sendingProfile = SendingProfileFactory::createOne([
+            'from_email' => 'thibault@hyvor.com',
             'newsletter' => $newsletter,
             'domain' => $domain,
             'is_default' => true
@@ -86,7 +92,6 @@ class CreateIssueTest extends WebTestCase
             $newsletter,
             'POST',
             '/issues',
-            []
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -94,7 +99,7 @@ class CreateIssueTest extends WebTestCase
         $this->assertIsInt($json['id']);
         $this->assertSame('draft', $json['status']);
         $this->assertSame([$list->getId()], $json['lists']);
-        $this->assertSame('thibault@hyvor.com', $json['from_email']);
+        $this->assertSame($sendingProfile->getId(), $json['sending_profile_id']);
 
         $repository = $this->em->getRepository(Issue::class);
         $issue = $repository->find($json['id']);
@@ -103,6 +108,6 @@ class CreateIssueTest extends WebTestCase
         $this->assertSame([$list->getId()], $issue->getListids());
         $this->assertSame('2025-02-21 00:00:00', $issue->getCreatedAt()->format('Y-m-d H:i:s'));
         $this->assertSame($newsletter->getId(), $issue->getNewsletter()->getId());
-        $this->assertSame('thibault@hyvor.com', $issue->getFromEmail());
+        $this->assertSame($sendingProfile->getId(), $issue->getSendingProfile()->getId());
     }
 }

@@ -6,13 +6,13 @@ export function consoleUrl(path: string) {
 
     path = path.replace(/^\//, '');
 
-    return '/console/' 
+    return '/console/'
         + path;
 }
 
 
 export function consoleUrlWithNewsletter(path: string) {
-    const newsletterId = get(newsletterStore).id;
+    const newsletterSubdomain = get(newsletterStore).subdomain;
     path = path.replace(/^\//, '');
-    return consoleUrl(`${newsletterId}/${path}`)
+    return consoleUrl(`${newsletterSubdomain}/${path}`)
 }

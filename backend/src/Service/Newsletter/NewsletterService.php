@@ -17,6 +17,9 @@ use App\Entity\User;
 use App\Service\AppConfig;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
+use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
+use App\Service\SendingProfile\SendingProfileService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +33,7 @@ class NewsletterService
     public function __construct(
         private EntityManagerInterface $em,
         private AppConfig              $config,
+        private SendingProfileService  $sendingProfileService
     )
     {
     }
@@ -41,9 +45,7 @@ class NewsletterService
         string $subdomain
     ): Newsletter
     {
-        $slugger = new AsciiSlugger();
         $newsletter = new Newsletter()
-            ->setUuid(Uuid::v4())
             ->setName($name)
             ->setUserId($userId)
             ->setMeta(new NewsletterMeta())
@@ -64,17 +66,21 @@ class NewsletterService
             ->setUpdatedAt($this->now())
             ->setNewsletter($newsletter);
 
-        $sendingProfile = new SendingProfile()
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setNewsletter($newsletter)
-            ->setIsSystem(true)
-            ->setIsDefault(true);
+        $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+
+        $this->sendingProfileService
+            ->createSendingProfile(
+                $newsletter,
+                null,
+                fromEmail: $systemAddress,
+                fromName: $newsletter->getName(),
+                system: true,
+                flush: false
+            );
 
         $this->em->persist($user);
         $this->em->persist($newsletter);
         $this->em->persist($list);
-        $this->em->persist($sendingProfile);
         $this->em->flush();
 
         return $newsletter;
@@ -91,6 +97,9 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->find($id);
     }
 
+    /**
+     * @deprecated
+     */
     public function getNewsletterByUuid(string $uuid): ?Newsletter
     {
         return $this->em->getRepository(Newsletter::class)->findOneBy(['uuid' => $uuid]);
@@ -251,6 +260,13 @@ class NewsletterService
 
         if ($updates->hasProperty('subdomain')) {
             $newsletter->setSubdomain($updates->subdomain);
+
+            $systemSendingProfile = $this->sendingProfileService->getSystemSendingProfileOfNewsletter($newsletter);
+            $sendingProfileUpdates = new UpdateSendingProfileDto();
+            $sendingProfileUpdates->fromEmail = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+
+            $this->sendingProfileService
+                ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
         $newsletter->setUpdatedAt($this->now());
@@ -260,9 +276,14 @@ class NewsletterService
         return $newsletter;
     }
 
-    public function isUsernameTaken(string $username): bool
+    public function isSubdomainTaken(string $subdomain): bool
     {
-        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $username]);
+        // notifications@ is reserved
+        if ($subdomain === SystemNotificationMailService::NOTIFICATIONS_MAIL_USERNAME) {
+            return true;
+        }
+
+        $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
         return $newsletter !== null;
     }
 

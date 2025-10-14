@@ -75,10 +75,6 @@
 		change(url);
 		toast.info('Image removed');
 	};
-
-	$effect(() => {
-		console.log('showModal', showModal);
-	})
 </script>
 
 {#if !url}
