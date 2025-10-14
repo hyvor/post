@@ -9,7 +9,9 @@
 
 <h2 id="who-should-not-apply">Who Should NOT Apply?</h2>
 
-<p></p>
+<p>
+	<!--  -->
+</p>
 
 <h2 id="approval-requirements">Approval Requirements</h2>
 
@@ -24,9 +26,7 @@
 		If you plan to import an existing email list, you must provide proof that all subscribers
 		have opted in to receive your newsletters.
 	</li>
-	<li>
-        If you are new 
-    </li>
+	<li>If you are new</li>
 </ul>
 
 <p>

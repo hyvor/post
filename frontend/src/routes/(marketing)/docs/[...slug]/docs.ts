@@ -13,6 +13,11 @@ export const categories: Category[] = [
 				slug: '',
 				name: 'Introduction',
 				component: Introduction
+			},
+			{
+				slug: 'approval',
+				name: 'Approval',
+				component: Approval
 			}
 		]
 	},
@@ -53,17 +58,6 @@ export const categories: Category[] = [
 			}
 		]
 	},
-
-	{
-		name: 'Misc',
-		pages: [
-			{
-				slug: 'approval',
-				name: 'Approval',
-				component: Approval
-			}
-		]
-	}
 ];
 
 export const pages = categories.reduce((acc, category) => acc.concat(category.pages), [] as Page[]);
