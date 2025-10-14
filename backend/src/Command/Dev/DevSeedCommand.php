@@ -6,6 +6,7 @@ use App\Entity\Type\IssueStatus;
 use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Service\AppConfig;
 use App\Service\Content\ContentDefaultStyle;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Factory\DomainFactory;
@@ -37,6 +38,7 @@ class DevSeedCommand extends Command
         private KernelInterface      $kernel,
         private ContentDefaultStyle  $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
+        private AppConfig $appConfig,
     )
     {
         parent::__construct();
@@ -74,14 +76,14 @@ class DevSeedCommand extends Command
         $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => null,
-            'from_email' => 'test@hvrpst.com',
+            'from_email' => 'test@' . $this->appConfig->getSystemMailDomain(),
             'is_system' => true,
+            'is_default' => true,
         ]);
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domainVerified,
             'from_email' => 'supun@example.com',
-            'is_default' => true,
         ]);
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,

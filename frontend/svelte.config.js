@@ -20,7 +20,7 @@ const config = {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
 
-			entries: ['*', '/docs']
+			entries: ['*', '/hosting']
 		}
 	}
 };

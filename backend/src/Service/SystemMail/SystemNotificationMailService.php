@@ -7,10 +7,13 @@ use App\Service\Integration\Relay\RelayApiClient;
 use Symfony\Component\Mime\Email;
 
 /**
- * Service to send system emails like domain verification, etc.
+ * Service to send system notification emails like domain verification, etc.
  */
-class SystemMailService
+class SystemNotificationMailService
 {
+
+    public const string NOTIFICATIONS_MAIL_USERNAME = 'notifications';
+
     public function __construct(
         private RelayApiClient $relayApiClient,
         private AppConfig $appConfig,
@@ -24,11 +27,18 @@ class SystemMailService
         string $content,
     ): void
     {
+        $fromEmail = self::NOTIFICATIONS_MAIL_USERNAME . '@' . $this->appConfig->getSystemMailDomain();
+
         $email = new Email()
-            ->from($this->appConfig->getSystemMailFrom())
+            ->from($fromEmail)
             ->to($emailAddress)
             ->subject($subject)
             ->html($content);
+
+        $replyTo = $this->appConfig->getSystemMailReplyTo();
+        if ($replyTo) {
+            $email->replyTo($replyTo);
+        }
 
         $this->relayApiClient->sendEmail($email);
     }

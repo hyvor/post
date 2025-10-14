@@ -13,6 +13,7 @@ use App\Service\Newsletter\Constraint\Subdomain;
 use App\Service\Newsletter\Constraint\SubdomainValidator;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -115,6 +116,31 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
         $this->assertHasViolation('name', 'This value is too long. It should have 255 characters or less.');
+    }
+
+    #[TestWith(['notifications'])]
+    #[TestWith(['other', true])]
+    public function test_subdomain_taken(string $subdomain, bool $create = false): void
+    {
+
+        if ($create) {
+            NewsletterFactory::createOne(['subdomain' => $subdomain]);
+        }
+
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletter',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => $subdomain
+            ],
+            useSession: true
+        );
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertSame('Subdomain is already taken.', $this->getJson()['message']);
+
     }
 
 }

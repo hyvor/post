@@ -66,7 +66,7 @@ class ConsoleController extends AbstractController
                     'instance' => $this->internalConfig->getInstance(),
                 ],
                 'app' => [
-                    'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
+                    'default_email_domain' => $this->appConfig->getSystemMailDomain(),
                     'archive_url' => $this->appConfig->getUrlArchive(),
                     'api_keys' => [
                         'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),

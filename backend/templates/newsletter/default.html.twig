@@ -13,18 +13,15 @@
             box-sizing: border-box;
         }
 
-        html {
-            font-size: {{ font_size }};
-        }
-
         body {
             margin: 0;
-            padding: 20px;
+            padding: 20px 5px;
             font-family: {{ font_family | raw }};
             font-weight: {{ font_weight }};
             line-height: {{ font_line_height }};
             background-color: {{ color_background }};
             color: {{ color_background_text }};
+            font-size: {{ font_size }};
         }
 
         .content-box {
@@ -62,10 +59,6 @@
             font-weight: 600;
         }
 
-        .content h1 {
-            font-size: 20px;
-        }
-
         .content p {
             margin: 0 0 20px;
         }
@@ -81,11 +74,11 @@
         }
 
         .content h1 {
-            font-size: 2rem;
+            font-size: 1.75rem;
         }
 
         .content h2 {
-            font-size: 1.875rem;
+            font-size: 1.75rem;
         }
 
         .content h3 {
@@ -170,7 +163,7 @@
             margin-top: 16px;
         }
 
-        .content img {
+        .content figure img {
             max-width: 100%;
             height: auto;
             display: block;

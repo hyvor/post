@@ -5,7 +5,7 @@ namespace App\Service\Approval;
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\Dto\UpdateApprovalDto;
-use App\Service\SystemMail\SystemMailService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -23,7 +23,7 @@ class ApprovalService
         private AuthInterface $auth,
         private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
-        private SystemMailService $emailNotificationService,
+        private SystemNotificationMailService $emailNotificationService,
     ) {
     }
 
