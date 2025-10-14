@@ -22,6 +22,9 @@ use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
+use Hyvor\Internal\Billing\BillingInterface;
+use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\InternalApi\Exceptions\InternalApiCallFailedException;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,6 +41,7 @@ class ConsoleController extends AbstractController
         private SubscriberMetadataService $subscriberMetadataService,
         private SendingProfileService     $sendingProfileService,
         private ApprovalService           $approvalService,
+        private BillingInterface $billing,
     )
     {
     }
@@ -62,7 +66,8 @@ class ConsoleController extends AbstractController
                     'instance' => $this->internalConfig->getInstance(),
                 ],
                 'app' => [
-                    'default_email_domain' => $this->appConfig->getDefaultEmailDomain(),
+                    'default_email_domain' => $this->appConfig->getSystemMailDomain(),
+                    'archive_url' => $this->appConfig->getUrlArchive(),
                     'api_keys' => [
                         'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
                     ],
@@ -88,13 +93,28 @@ class ConsoleController extends AbstractController
 
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
+        $canChangeBranding = false;
+        try {
+            $license = $this->billing->license(
+                $newsletter->getUserId(),
+                $newsletter->getId(),
+            );
+            if ($license instanceof PostLicense) {
+                // can only change branding if no branding is enabled in license
+                $canChangeBranding = $license->allowRemoveBranding === true;
+            }
+        } catch (InternalApiCallFailedException) {}
+
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
             'lists' => array_map(fn($list) => new ListObject($list), $lists),
             'sending_profiles' => array_map(fn($address) => new SendingProfileObject($address), $this->sendingProfileService->getSendingProfiles($newsletter)),
             'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
                 $subscriberMetadataDefinitions),
-            'stats' => $newsletterStats
+            'stats' => $newsletterStats,
+            'permissions' => [
+                'can_change_branding' => $canChangeBranding,
+            ],
         ]);
     }
 

@@ -10,7 +10,6 @@ use App\Service\Newsletter\NewsletterService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
-use App\Service\UserInvite\EmailNotificationService;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
@@ -25,6 +24,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
+use function PHPUnit\Framework\assertNotNull;
 
 /**
  * @codeCoverageIgnore
@@ -56,7 +56,10 @@ class TemplateController extends AbstractController
     public function basicTemplate(): Response
     {
         $newsletter = $this->em->getRepository(Newsletter::class)->find(1);
-        assert($newsletter instanceof Newsletter);
+        assertNotNull($newsletter);
+        $meta = $newsletter->getMeta();
+        $meta->address = '10 Rue de Penthievre, 75008 Paris, France';
+        //$meta->unsubscribe_text = 'Unsubscribe.';
 
         $subject = 'Introducing Hyvor Post';
         $content = (string)file_get_contents($this->projectDir . '/templates/newsletter/content-styles.html');

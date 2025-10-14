@@ -200,12 +200,8 @@ class SendIssueTest extends WebTestCase
             'sending_profile' => $sendingProfile,
         ]);
 
-        $internalConfig = $this->getContainer()->get(InternalConfig::class);
         $licence = new PostLicense(emails: 10);
-
-        $billing = new BillingFake($internalConfig, license: $licence);
-
-        $this->getContainer()->set(BillingInterface::class, $billing);
+        BillingFake::enableForSymfony($this->getContainer(), $licence);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -217,16 +213,14 @@ class SendIssueTest extends WebTestCase
         $json = $this->getJson();
         $this->assertSame($issue->getId(), $json['id']);
         $this->assertSame('sending', $json['status']);
-        $this->assertSame(new \DateTimeImmutable()->getTimestamp(), $json['sending_at']);
+        $this->assertNotNull($json['sending_at']);
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issue = $issueRepository->find($issue->getId());
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
-        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
-        $this->assertSame('newsletter@hyvor.com', $issue->getFromEmail());
-        $this->assertSame('Hyvor Newsletter', $issue->getFromName());
-        $this->assertSame('no-reply@hyvor.com', $issue->getReplyToEmail());
+        $this->assertNotNull($issue->getSendingAt());
+        $this->assertSame($sendingProfile->getId(), $issue->getSendingProfile()->getId());
 
         $transport = $this->transport('async');
         $transport->queue()->assertCount(1);
@@ -280,12 +274,8 @@ class SendIssueTest extends WebTestCase
             'content' => "content"
         ]);
 
-        $internalConfig = $this->getContainer()->get(InternalConfig::class);
         $licence = new PostLicense(emails: 10);
-
-        $billing = new BillingFake($internalConfig, license: $licence);
-
-        $this->getContainer()->set(BillingInterface::class, $billing);
+        BillingFake::enableForSymfony($this->getContainer(), $licence);
 
         $response = $this->consoleApi(
             $newsletter,

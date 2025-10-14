@@ -5,6 +5,8 @@ namespace App\Tests\Api\Console\Billing;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
@@ -13,11 +15,13 @@ class GetUsageTest extends WebTestCase
 
     public function test_get_usage(): void
     {
-        Clock::set(new MockClock('2025-05-10'));
+        $date = new \DateTimeImmutable('2025-05-10');
+        Clock::set(new MockClock($date));
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         // current user sends
         $currentUserNewsletter = NewsletterFactory::createOne(['user_id' => 1]);
-        $firstDayThisMonth = new \DateTimeImmutable('first day of this month')->modify('+1 day');
+        $firstDayThisMonth = $date->modify('first day of this month')->modify('+1 day');
         SendFactory::createMany(3, [
             'newsletter' => $currentUserNewsletter,
             'created_at' => $firstDayThisMonth,

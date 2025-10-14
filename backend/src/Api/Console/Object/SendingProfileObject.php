@@ -23,10 +23,7 @@ class SendingProfileObject
         $this->created_at = $sendingProfile->getCreatedAt()->getTimestamp();
         $this->is_default = $sendingProfile->getIsDefault();
         $this->is_system = $sendingProfile->getIsSystem();
-//        $this->from_email = $this->is_system ?
-//            $sendingProfileService->getFallbackAddressOfNewsletter($sendingProfile->getNewsletter()) :
-//            $sendingProfile->getFromEmail();
-        $this->from_email = $this->is_system ? 'system@email.com' : $sendingProfile->getFromEmail();
+        $this->from_email = $sendingProfile->getFromEmail();
         $this->from_name = $sendingProfile->getFromName();
         $this->reply_to_email = $sendingProfile->getReplyToEmail();
         $this->brand_name = $sendingProfile->getBrandName();

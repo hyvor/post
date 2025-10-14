@@ -7,7 +7,7 @@ use App\Entity\Type\RelayDomainStatus;
 use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
-use App\Service\UserInvite\EmailNotificationService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -23,7 +23,7 @@ class DomainService
 
     public function __construct(
         private EntityManagerInterface   $em,
-        private EmailNotificationService $emailNotificationService,
+        private SystemNotificationMailService $emailNotificationService,
         private LoggerInterface          $logger,
         private readonly Environment     $mailTemplate,
         private readonly StringsFactory  $stringsFactory,
@@ -130,14 +130,12 @@ class DomainService
             throw new VerifyDomainException(previous: $e);
         }
 
-        // TODO: Fix this to handle status
-        $verified = $result->dkim_verified;
+        $verified = $result->status === RelayDomainStatus::ACTIVE;
 
         if ($verified) {
             // use a separate method with DTO
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
-
 
             $strings = $this->stringsFactory->create();
 

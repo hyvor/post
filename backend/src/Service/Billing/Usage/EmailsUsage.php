@@ -3,15 +3,19 @@
 namespace App\Service\Billing\Usage;
 
 use App\Service\Issue\SendService;
+use App\Service\Newsletter\NewsletterService;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\Usage\UsageAbstract;
+use function PHPUnit\Framework\assertNotNull;
 
 class EmailsUsage extends UsageAbstract
 {
 
     public function __construct(
-        private SendService $sendService,
-    ) {
+        private SendService       $sendService,
+        private NewsletterService $newsletterService
+    )
+    {
         parent::__construct();
     }
 
@@ -32,7 +36,10 @@ class EmailsUsage extends UsageAbstract
 
     public function usageOfResource(int $resourceId): int
     {
-        return $this->sendService->getSendsCountThisMonthOfNewsletter($resourceId);
+        $newsletter = $this->newsletterService->getNewsletterById($resourceId);
+        assertNotNull($newsletter);
+
+        return $this->sendService->getSendsCountThisMonthOfNewsletter($newsletter);
     }
 
 }

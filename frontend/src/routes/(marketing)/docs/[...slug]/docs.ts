@@ -2,7 +2,8 @@ import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
 import SignupForm from './content/SignupForm.svelte';
-import Import from "./content/Import/Import.svelte";
+import Import from './content/Import/Import.svelte';
+import Approval from './content/Approval.svelte';
 
 export const categories: Category[] = [
 	{
@@ -12,6 +13,11 @@ export const categories: Category[] = [
 				slug: '',
 				name: 'Introduction',
 				component: Introduction
+			},
+			{
+				slug: 'approval',
+				name: 'Approval',
+				component: Approval
 			}
 		]
 	},
@@ -20,20 +26,20 @@ export const categories: Category[] = [
 		name: 'Features',
 		pages: [
 			{
+				slug: 'form',
+				name: 'Signup Form',
+				component: SignupForm
+			},
+			{
 				slug: 'design',
 				name: 'Email Design',
 				component: EmailDesign
 			},
 			{
-				slug: 'form',
-				name: 'Signup Form',
-				component: SignupForm
-			},
-            {
-                slug: 'import',
-                name: 'Import',
-                component: Import
-            }
+				slug: 'import',
+				name: 'Import',
+				component: Import
+			}
 		]
 	},
 
@@ -51,7 +57,7 @@ export const categories: Category[] = [
 				// component: add component name
 			}
 		]
-	}
+	},
 ];
 
 export const pages = categories.reduce((acc, category) => acc.concat(category.pages), [] as Page[]);

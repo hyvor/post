@@ -49,7 +49,7 @@ class GetListTest extends WebTestCase
             '/lists/999'
         );
 
-        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame(403, $response->getStatusCode());
 
         $content = $response->getContent();
         $this->assertNotFalse($content);

@@ -6,6 +6,10 @@
 
 }
 
+{$ARCHIVE_HOST}:80, *.{$ARCHIVE_HOST}:80 {
+	reverse_proxy 127.0.0.1:3000
+}
+
 :80 {
 	# backend
 	@backend {
@@ -27,8 +31,12 @@
 		try_files {path} {path}.html
 	}
 
-	# console
-	handle /console* {
+	# dynamic
+	@dynamic {
+		path /console*
+		path /sudo*
+	}
+	handle @dynamic {
 		root * /app/static
 		encode zstd gzip
 		file_server

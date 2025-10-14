@@ -36,9 +36,7 @@ class GetIssueTest extends WebTestCase
         $this->assertSame($issue->getUuid(), $json['uuid']);
         $this->assertSame($issue->getCreatedAt()->getTimestamp(), $json['created_at']);
         $this->assertSame($issue->getSubject(), $json['subject']);
-        $this->assertSame($issue->getFromName(), $json['from_name']);
-        $this->assertSame($issue->getFromEmail(), $json['from_email']);
-        $this->assertSame($issue->getReplyToEmail(), $json['reply_to_email']);
+        $this->assertSame($issue->getSendingProfile()->getId(), $json['sending_profile_id']);
         $this->assertSame($issue->getContent(), $json['content']);
         $this->assertSame($issue->getStatus()->value, $json['status']);
         $this->assertSame($issue->getListids(), $json['lists']);
@@ -49,16 +47,16 @@ class GetIssueTest extends WebTestCase
 
     public function testGetSpecificIssueNotFound(): void
     {
+        $newsletter = NewsletterFactory::createOne();
+
         $response = $this->consoleApi(
-            null,
-            // TODO: this is wrong. We should always send a newsletter. This error was not caught because of the lack of validation for the error message
+            $newsletter,
             'GET',
-            '/issues/999'
+            '/issues/999',
+            useSession: true
         );
 
         $this->assertSame(404, $response->getStatusCode());
-        // TODO: // always validate the error message
-
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $this->assertJson($content);

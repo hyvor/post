@@ -107,7 +107,7 @@ class CreateListTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('List name already exists.', $json['message']);
+        $this->assertSame('List name "Valid List Name" already exists.', $json['message']);
     }
 
     public function test_create_list_name_with_comma(): void

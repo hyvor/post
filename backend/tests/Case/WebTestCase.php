@@ -6,9 +6,10 @@ use App\Api\Console\Authorization\Scope;
 use App\Entity\Newsletter;
 use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\SudoUserFactory;
+use App\Tests\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -71,17 +72,26 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         bool                $useSession = false
     ): Response
     {
-        $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
+        if ($newsletter instanceof Newsletter) {
+            $newsletterId = $newsletter->getId();
+        } else if ($newsletter) {
+            $newsletterId = $newsletter;
+            $newsletter = NewsletterFactory::findOrCreate(['id' => $newsletterId]);
+        }
 
-        if ($useSession || $newsletterId === null) {
+        if ($useSession || $newsletter === null) {
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
-            if ($newsletterId) {
+            if ($newsletter) {
+                UserFactory::findOrCreate([
+                    'newsletter' => $newsletter,
+                    'hyvor_user_id' => 1,
+                ]);
                 $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;
             }
         } else {
             $apiKey = bin2hex(random_bytes(16));
             $apiKeyHashed = hash('sha256', $apiKey);
-            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter instanceof Newsletter ? $newsletter : NewsletterFactory::findOrCreate(['id' => $newsletterId])];
+            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
             if ($scopes !== true) {
                 $apiKeyFactory['scopes'] = array_map(
                     fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
@@ -154,6 +164,10 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         array  $server = [],
     ): Response
     {
+        SudoUserFactory::findOrCreate([
+            'user_id' => 1
+        ]);
+
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
 
         $this->client->request(
@@ -192,6 +206,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $json = $this->getJson();
         $this->assertArrayHasKey('message', $json);
+        $this->assertIsString($json['message']);
         $this->assertStringContainsString($expectedMessage, $json['message']);
 
     }

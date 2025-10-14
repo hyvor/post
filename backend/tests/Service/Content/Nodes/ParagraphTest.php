@@ -26,7 +26,7 @@ class ParagraphTest extends TestCase
         ]);
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame('<p style="margin: 0 0 20px;line-height:26px;">I am a paragraph</p>', trim($html));
+        $this->assertSame('<p>I am a paragraph</p>', trim($html));
     }
 
     public function test_html_to_json(): void

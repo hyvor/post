@@ -103,13 +103,14 @@ class UpdateSubscriberTest extends WebTestCase
 
     /**
      * @param callable(Newsletter): array<string, mixed> $input
-     * @param array<mixed> $violations
+     * @param array<int, array{property: string, message: string}> $violations
      * @return void
      */
     private function validateInput(
         callable $input,
-        array $violations
-    ): void {
+        array    $violations
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
         $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
@@ -123,7 +124,7 @@ class UpdateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
-        $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
+        $this->assertSame($violations[0]['message'], $json['message']);
     }
 
     public function testUpdateSubscriberInvalidListId(): void
@@ -210,7 +211,7 @@ class UpdateSubscriberTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $metadata = SubscriberMetadataDefinitionFactory::createOne([
-            'key'=> 'name',
+            'key' => 'name',
             'name' => 'Name',
             'newsletter' => $newsletter,
         ]);

@@ -6,7 +6,7 @@ export interface ConsoleApiOptions {
     data?: Record<string, any> | FormData,
     userApi?: boolean,
     publicApi?: boolean,
-    newsletterId?: string,
+    newsletterId?: number,
     signal?: AbortSignal,
 }
 
@@ -45,7 +45,7 @@ function getConsoleApi() {
             headers['X-Newsletter-Id'] = newsletter.id.toString();
         }
         else if (newsletterId) {
-            headers['X-Newsletter-Id'] = newsletterId;
+            headers['X-Newsletter-Id'] = newsletterId.toString();
         }
 
         if (!(data instanceof FormData)) {
@@ -75,7 +75,7 @@ function getConsoleApi() {
 
             const toThrow = new Error(error) as any;
             toThrow.message = error;
-            toThrow.code = e && e.code ? e.code : 500;
+            toThrow.code = e && e.status ? e.status : 500;
             toThrow.data = e && e.data ? e.data : null;
 
 

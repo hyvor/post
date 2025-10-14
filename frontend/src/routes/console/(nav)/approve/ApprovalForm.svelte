@@ -29,8 +29,8 @@
 	let existingList: string = $state(approval?.existing_list || '');
 	let sample: string = $state(approval?.sample || '');
 	let whyPost: string = $state(approval?.why_post || '');
-    let checkbox1: boolean = $state(false);
-    let checkbox2: boolean = $state(false);
+	let checkbox1: boolean = $state(false);
+	let checkbox2: boolean = $state(false);
 
 	let error: string | undefined = $state(undefined);
 
@@ -53,12 +53,12 @@
 			error = I18n.t('console.approve.websiteInvalid');
 			return false;
 		}
-        if (!checkbox1 || !checkbox2) {
-            error = I18n.t('console.approve.checkboxRequired');
-            return false;
-        }
-        return true;
-    }
+		if (!checkbox1 || !checkbox2) {
+			error = I18n.t('console.approve.checkboxRequired');
+			return false;
+		}
+		return true;
+	}
 
 	function onSubmit() {
 		if (!validate() && error) {
@@ -153,19 +153,21 @@
 			<IconXCircle />
 		{/snippet}
 		{I18n.t('console.approve.rejectNotice')}
-        {#if $approvalStore?.public_note}
-            <p>
-                <strong>
-                    {I18n.t('console.approve.rejectReason', {reason: $approvalStore?.public_note})}
-                </strong>
-            </p>
-        {/if}
+		{#if $approvalStore?.public_note}
+			<p>
+				<strong>
+					{I18n.t('console.approve.rejectReason', {
+						reason: $approvalStore?.public_note
+					})}
+				</strong>
+			</p>
+		{/if}
 	</Callout>
 {/if}
 
 <SplitControl
-	label={I18n.t('console.approve.companyName')}
-	caption={`(${I18n.t('console.approve.required')})`}
+	label={`${I18n.t('console.approve.companyName')}*`}
+	caption={I18n.t('console.approve.companyNameCaption')}
 >
 	<TextInput bind:value={companyName} maxLength={255} disabled={readOnly} block />
 </SplitControl>
@@ -197,7 +199,7 @@
 >
 	<TextInput
 		bind:value={typeOfContent}
-        maxLength={1024}
+		maxLength={1024}
 		disabled={readOnly}
 		block
 		placeholder={readOnly ? '' : I18n.t('console.approve.typeOfContentPlaceholder')}
@@ -210,7 +212,7 @@
 >
 	<TextInput
 		placeholder={readOnly ? '' : I18n.t('console.approve.frequencyPlaceholder')}
-        maxLength={1024}
+		maxLength={1024}
 		bind:value={frequency}
 		disabled={readOnly}
 		block
@@ -239,37 +241,34 @@
 </SplitControl>
 
 {#if !$approvalStore}
-    <div class="checkboxes">
-        <Checkbox bind:checked={checkbox1}>
-            <I18n.T
-                key="console.approve.checkbox1"
-                params={{strong: {element: 'strong'}}}
-            />
-        </Checkbox>
-        <Checkbox bind:checked={checkbox2}>
-            <I18n.T
-                key="console.approve.checkbox2"
-                params={{
-                    termsLink: {
-                        element: 'a',
-                        props: {
-                            href: '/terms',
-                            target: '_blank',
-                            class: 'hds-link'
-                        }
-                    },
-                    privacyLink: {
-                        element: 'a',
-                        props: {
-                            href: '/privacy',
-                            target: '_blank',
-                            class: 'hds-link'
-                        }
-                    }
-                }}
-            />
-        </Checkbox>
-    </div>
+	<div class="checkboxes">
+		<Checkbox bind:checked={checkbox1}>
+			<I18n.T key="console.approve.checkbox1" params={{ strong: { element: 'strong' } }} />
+		</Checkbox>
+		<Checkbox bind:checked={checkbox2}>
+			<I18n.T
+				key="console.approve.checkbox2"
+				params={{
+					termsLink: {
+						element: 'a',
+						props: {
+							href: '/terms',
+							target: '_blank',
+							class: 'hds-link'
+						}
+					},
+					privacyLink: {
+						element: 'a',
+						props: {
+							href: '/privacy',
+							target: '_blank',
+							class: 'hds-link'
+						}
+					}
+				}}
+			/>
+		</Checkbox>
+	</div>
 {/if}
 
 <div class="submit">

@@ -43,6 +43,8 @@
     </div>
 {/if}
 
+{@html `<script>window.APP_CONFIG = ${JSON.stringify(data.config)};</script>`}
+
 <style>
     .loader-wrap {
         display: flex;

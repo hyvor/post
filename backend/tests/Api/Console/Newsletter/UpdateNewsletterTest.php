@@ -11,8 +11,10 @@ use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
@@ -73,62 +75,90 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('Subscribe to newsletter', $newsletterMeta->form_title);
     }
 
-    public function test_update_newsletter_email_username(): void
+    #[TestWith(['-invalid'])]
+    #[TestWith(['invalid-'])]
+    #[TestWith(['in--valid'])]
+    #[TestWith(['in_valid'])]
+    public function test_update_subdomain_validates(string $subdomain): void
     {
-        Clock::set(new MockClock('2025-02-21'));
-
-        // TODO:
         $newsletter = NewsletterFactory::createOne([
-            'default_email_username' => 'thibault@newsletter.com'
+            'subdomain' => 'init'
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/newsletters',
+            '/newsletter',
             [
-                'default_email_username' => 'thibault@gmail.com',
-                'name' => 'UpdateName',
+                'subdomain' => $subdomain,
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(422);
+
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertStringStartsWith('Subdomain', $json['message']);
+    }
+
+    public function test_update_newsletter_subdomain(): void
+    {
+        Clock::set(new MockClock('2025-02-21'));
+
+        $newsletter = NewsletterFactory::createOne([
+            'subdomain' => 'thibault'
+        ]);
+
+        $sendingProfile = SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_default' => true,
+            'from_email' => 'thibault@hyvorpost.email',
+            'is_system' => true,
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'PATCH',
+            '/newsletter',
+            [
+                'subdomain' => 'boutet',
             ]
         );
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $json = $this->getJson($response);
-        $this->assertSame('UpdateName', $json['name']);
-        $this->assertSame('thibault@gmail.com', $json['default_email_username']);
+        $json = $this->getJson();
+        $this->assertSame('boutet', $json['subdomain']);
 
         $repository = $this->em->getRepository(Newsletter::class);
         $newsletter = $repository->find($json['id']);
         $this->assertNotNull($newsletter);
-        $this->assertSame('2025-02-21 00:00:00', $newsletter->getUpdatedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('UpdateName', $newsletter->getName());
-        $this->assertSame('thibault@gmail.com', $newsletter->getSubdomain());
+        $this->assertSame('boutet', $newsletter->getSubdomain());
+
+        $this->assertSame('boutet@hyvorpost.email', $sendingProfile->getFromEmail());
     }
 
-    public function test_update_newsletter_email_username_taken(): void
+    public function test_update_subdomain_when_taken(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
-
         $newsletter = NewsletterFactory::createOne([
-            'default_email_username' => 'thibault@gmail.com',
+            'subdomain' => 'thibault',
         ]);
 
         NewsletterFactory::createOne([
-            'default_email_username' => 'thibault@hyvor.com',
+            'subdomain' => 'boutet',
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'PATCH',
-            '/newsletters',
+            '/newsletter',
             [
-                'default_email_username' => 'thibault@hyvor.com',
+                'subdomain' => 'boutet',
             ]
         );
 
-        $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson($response);
-        $this->assertSame('Username is already taken', $json['message']);
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('Subdomain is already taken.', $json['message']);
     }
 }

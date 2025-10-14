@@ -8,8 +8,7 @@ class FormInitInput
 {
 
     #[Assert\NotBlank]
-    #[Assert\Uuid]
-    public string $newsletter_uuid;
+    public string $newsletter_subdomain;
 
     public ?string $language = null;
 

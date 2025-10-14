@@ -45,7 +45,7 @@ class Button extends NodeType
                         return false;
                     }
 
-                    return ButtonAttrs::fromArray(['href' => $href, 'text' => $text]);
+                    return ButtonAttrs::fromArray(['href' => $href]);
                 }
             ),
         ];

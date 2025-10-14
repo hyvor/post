@@ -23,7 +23,7 @@ class FormRenderTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $content = $response->getContent();;
         $this->assertNotFalse($content);
-        $this->assertStringContainsString("newsletter=" . $newsletter->getUuid(), $content);
+        $this->assertStringContainsString("newsletter=" . $newsletter->getSubdomain(), $content);
         $this->assertStringContainsString("instance=https://post.hyvor.instance", $content);
         $this->assertStringContainsString("src=\"https://post.hyvor.instance", $content);
     }

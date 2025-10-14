@@ -11,7 +11,8 @@ class SubscriberCsvExporter
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
+    )
+    {
     }
 
     protected function getTemporaryFile(string $extension): string
@@ -67,6 +68,7 @@ class SubscriberCsvExporter
                     $subscriber->getStatus()->value,
                     $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s') ?? '',
                     $subscriber->getSource()->value,
+                    ...array_map(fn($md) => $subscriber->getMetadata()[$md->getKey()] ?? '', $subscriberMetadata),
                 ]);
             }
 

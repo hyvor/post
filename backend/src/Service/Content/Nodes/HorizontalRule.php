@@ -13,7 +13,7 @@ class HorizontalRule extends NodeType
 
     public function toHtml(Node $node, string $children): string
     {
-        return '<hr style="margin:0 0 20px;height:1px;background-color:currentColor;opacity:0.3" />';
+        return '<hr />';
     }
 
     public function fromHtml(): array
