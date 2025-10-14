@@ -58,7 +58,8 @@
 
 <style>
 	:global(.container) {
-		width: 95vw !important;
+		width: var(--width) !important;
+		max-width: var(--max-width) !important;
 	}
 	.end {
 		display: flex;

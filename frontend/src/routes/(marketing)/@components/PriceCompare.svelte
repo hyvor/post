@@ -231,6 +231,7 @@
 
 	.price {
 		min-width: 40px;
+		padding-inline-start: 2px;
 	}
 
 	.disclaimers {

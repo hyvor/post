@@ -95,14 +95,14 @@
 		opacity: 0.9;
 	}
 
-	.another-browser {
+	/* .another-browser {
 		position: absolute;
 		width: 400px;
 		bottom: 30px;
 		right: 0;
 		border-radius: 20px;
 		box-shadow: var(--box-shadow);
-	}
+	} */
 
 	.bento-grid {
 		display: grid;
@@ -284,10 +284,10 @@
 	}
 
 	/* for larger screens */
-	@media (min-width: 1200px) {
+	@media (min-width: 1500px) {
 		.signup-form {
 			padding: 100px 0;
-			/* margin: auto; */
+			margin: auto;
 		}
 	}
 </style>

@@ -373,10 +373,10 @@
 
 	/* for larger screens */
 
-	@media (min-width: 1200px) {
+	@media (min-width: 1500px) {
 		.wrap {
 			padding: 100px 0;
-			/* margin: auto; */
+			margin: auto;
 		}
 	}
 </style>

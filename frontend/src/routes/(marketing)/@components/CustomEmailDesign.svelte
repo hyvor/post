@@ -3,6 +3,7 @@
 	import customEmailImg from '../img/custom-email.jpeg';
 	import customEmailImg1 from '../img/custom-email1.jpeg';
 	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
 </script>
 
@@ -15,12 +16,17 @@
 		<div class="bento-grid">
 			<div class="int">
 				<IconBullseye class="int-icon" size={30} />
-				<div class="seo-feature-name">Customizable</div>
+				<div class="seo-feature-name">Customizable Email Templates</div>
 			</div>
 
 			<div class="int">
 				<IconLink class="int-icon" size={30} />
 				<div class="seo-feature-name">Free subdomain</div>
+			</div>
+
+			<div class="int">
+				<IconPencilSquare class="int-icon" size={30} />
+				<div class="seo-feature-name">New Templates</div>
 			</div>
 		</div>
 	</div>
@@ -159,7 +165,7 @@
 		/* differed the appearance and float animation a bit using different timings */
 	}
 
-	/* mobilr */
+	/* mobile */
 	@media (max-width: 992px) {
 		.custom-email-design {
 			flex-direction: column;
@@ -204,10 +210,10 @@
 	}
 
 	/* for larger screens */
-	@media (min-width: 1200px) {
+	@media (min-width: 1500px) {
 		.custom-email-design {
 			padding: 100px 0;
-			/* margin: auto; */
+			margin: auto !important;
 		}
 	}
 </style>

@@ -77,14 +77,8 @@
 		width: 150%; /* did this to make it extend over the screen edge */
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: 0;
-
 		width: clamp(100%, 150%, 900px); /* min, ideal, max */
 		margin-left: 0;
-
-		/* width: clamp(90%, 110%, 850px);
-		transform: translateX(5%);
-		max-width: 100%;
-		margin-left: 0; */
 		animation:
 			heroEnter 1s ease-out,
 			subtleFloat 8s ease-in-out infinite 2s;
