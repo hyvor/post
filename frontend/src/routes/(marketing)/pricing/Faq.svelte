@@ -5,8 +5,7 @@
 	import IconBoxArrowRight from '@hyvor/icons/IconBoxArrowRight';
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 	import { getMarketingI18n } from '../locale';
-
-	import Accordion from '../@components/Accordion.svelte';
+	import { Accordion } from '@hyvor/design/components';
 
 	const I18n = getMarketingI18n();
 </script>
@@ -17,24 +16,43 @@
 		<Accordion
 			title={I18n.t('pricing.isThereATrial')}
 			icon={IconArrowClockwise}
-			content={I18n.t('pricing.isThereATrialAnswer')}
-		/>
+			headerColor="var(--accent-light-mid)"
+			openedColor="var(--accent-light)"
+			borderColor="#f3f4f6"
+			topBorderColor="#f3f4f6"
+		>
+			{I18n.t('pricing.isThereATrialAnswer')}
+		</Accordion>
 		<Accordion
 			title={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimit')}
 			icon={IconBarChart}
-			content={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimitAnswer')}
-		/>
+			headerColor="var(--accent-light-mid)"
+			openedColor="var(--accent-light)"
+			borderColor="#f3f4f6"
+			topBorderColor="#f3f4f6"
+		>
+			{I18n.t('pricing.whatHappensIfIExceedTheEmailsLimitAnswer')}
+		</Accordion>
 		<Accordion
 			title={I18n.t('pricing.howDoPaymentsWork')}
 			icon={IconWallet}
-			content={I18n.t('pricing.howDoPaymentsWorkAnswer')}
-		/>
+			headerColor="var(--accent-light-mid)"
+			openedColor="var(--accent-light)"
+			borderColor="#f3f4f6"
+			topBorderColor="#f3f4f6"
+		>
+			{I18n.t('pricing.howDoPaymentsWorkAnswer')}
+		</Accordion>
 		<Accordion
 			title={I18n.t('pricing.canICancelAnytime')}
 			icon={IconBoxArrowRight}
-			content={I18n.t('pricing.canICancelAnytimeAnswer')}
-		/>
-		<!-- <FAQs /> -->
+			headerColor="var(--accent-light-mid)"
+			openedColor="var(--accent-light)"
+			borderColor="#f3f4f6"
+			topBorderColor="#f3f4f6"
+		>
+			{I18n.t('pricing.canICancelAnytimeAnswer')}
+		</Accordion>
 	</div>
 </div>
 

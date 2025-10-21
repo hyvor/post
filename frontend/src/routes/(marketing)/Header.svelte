@@ -5,24 +5,24 @@
 	import { onMount } from 'svelte';
 	import { getMarketingI18n } from './locale';
 
-	let loggedIn = $state(false);
+	// let loggedIn = $state(false);
 
 	const I18n = getMarketingI18n();
 
-	onMount(() => {
-		fetch('/api/auth/check', {
-			method: 'POST'
-		})
-			.then<{ is_logged_in: boolean }>((res) => res.json())
-			.then((res) => {
-				if (res?.is_logged_in) {
-					loggedIn = true;
-				}
-			});
-	});
+	// onMount(() => {
+	// 	fetch('/api/auth/check', {
+	// 		method: 'POST'
+	// 	})
+	// 		.then<{ is_logged_in: boolean }>((res) => res.json())
+	// 		.then((res) => {
+	// 			if (res?.is_logged_in) {
+	// 				loggedIn = true;
+	// 			}
+	// 		});
+	// });
 </script>
 
-<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
+<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/" max={true}>
 	{#snippet center()}
 		<div class="center">
 			<Button
@@ -46,21 +46,21 @@
 
 	{#snippet end()}
 		<div class="end">
-			{#if loggedIn}
-				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
-			{:else}
+			<!-- {#if loggedIn} -->
+			<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
+			<!-- {:else}
 				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
 				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
-			{/if}
+			{/if} -->
 		</div>
 	{/snippet}
 </Header>
 
 <style>
-	:global(.container) {
+	/* :global(.container) {
 		width: var(--width) !important;
 		max-width: var(--max-width) !important;
-	}
+	} */
 	.end {
 		display: flex;
 		align-items: center;

@@ -8,7 +8,7 @@
 	// import signupSvg from './img/img/api-webhooks.svg';
 </script>
 
-<div class="signup-form">
+<div class="signup-form hds-container-max">
 	<div class="left">
 		<h1>Signup Form</h1>
 		<h2>
@@ -50,11 +50,12 @@
 		overflow-x: hidden;
 	}
 	.signup-form {
-		width: var(--width);
-		max-width: var(--max-width);
-		padding: 60px 0;
-		margin: auto 55px;
+		/* width: var(--width);
+		max-width: var(--max-width); */
+		/* margin: auto 55px; */
 		display: flex;
+		padding-top: 80px;
+		padding-bottom: 80px;
 	}
 
 	h1 {
@@ -87,8 +88,8 @@
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: 0;
 		/* background-color: #191e19; */
-		padding-top: 70px;
-		padding-bottom: 70px;
+		/* padding-top: 70px;
+		padding-bottom: 70px; */
 		padding-left: 70px;
 		border-radius: 20px;
 		/* filter: blur(1px); */

@@ -31,14 +31,6 @@
 </div>
 
 <style>
-	.checks {
-		display: flex;
-		gap: 20px;
-		justify-content: space-between;
-		width: 700px;
-		max-width: 100%;
-		margin: auto;
-	}
 	.check {
 		display: flex;
 		align-items: center;
@@ -47,7 +39,7 @@
 	}
 
 	.check :global(svg) {
-		color: var(--accent);
+		color: var(--text-light);
 	}
 
 	@media (max-width: 992px) {
@@ -55,10 +47,10 @@
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
-			width: auto;
 		}
 		.check {
-			width: auto;
+			width: 250px;
+			max-width: 100%;
 		}
 	}
 </style>

@@ -30,7 +30,7 @@
 </script>
 
 <div class="outer-box">
-	<div class="feature-wrapper hds-container">
+	<div class="feature-wrapper hds-container-max">
 		{#each features as feature}
 			<div class="feature hds-box">
 				<div class="feature-image">
@@ -48,16 +48,15 @@
 <style>
 	.outer-box {
 		background-color: var(--accent-light);
-		padding: 60px 0;
+		/* padding: 60px 0; */
 	}
 	.feature-wrapper {
 		margin: 70px 40px;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 2rem;
-		width: auto;
-		width: var(--width);
-		max-width: var(--max-width);
+		/* width: auto; */
+		max-width: 100%;
 	}
 
 	.feature {

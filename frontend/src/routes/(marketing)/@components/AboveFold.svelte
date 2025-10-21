@@ -11,7 +11,7 @@
 	const I18n = getMarketingI18n();
 </script>
 
-<div class="hds-container above-fold">
+<div class="hds-container-max above-fold">
 	<div class="left">
 		<h1 id="waitlist">
 			<span class="highlight">Simple, privacy-first</span> <br />
@@ -115,7 +115,7 @@
 		margin-top: 30px;
 		margin-left: 0;
 		display: flex;
-		justify-content: center;
+		/* justify-content: center; */
 	}
 
 	:global(.checks) {

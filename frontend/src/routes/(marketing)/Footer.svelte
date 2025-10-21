@@ -12,6 +12,7 @@
 		youtube: null,
 		discord: null
 	}}
+	max={true}
 >
 	{#snippet center()}
 		<div>
@@ -43,7 +44,6 @@
 <style>
 	.row {
 		display: flex;
-		margin: auto 55px;
 	}
 	.row:not(.first) {
 		margin-top: 60px;
