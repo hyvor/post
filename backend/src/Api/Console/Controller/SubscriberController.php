@@ -141,7 +141,7 @@ class SubscriberController extends AbstractController
         }
 
         if ($input->hasProperty('status')) {
-            if ($subscriber->getOptInAt() === null && $input->status === SubscriberStatus::SUBSCRIBED) {
+            if ($input->status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
                 throw new UnprocessableEntityHttpException('Subscribers without opt-in can not be updated to SUBSCRIBED status.');
             }
 
@@ -184,9 +184,11 @@ class SubscriberController extends AbstractController
         // Validate that all subscriber IDs exist in the newsletter
         foreach ($input->subscribers_ids as $subscriberId) {
             $subscriber = array_find($currentSubscribers, fn($s) => $s->getId() === $subscriberId);
+
             if ($subscriber === null) {
                 throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
             }
+
             $subscribers[] = $subscriber;
         }
 
@@ -198,27 +200,44 @@ class SubscriberController extends AbstractController
         if ($input->action == 'status_change') {
             if ($input->status == null)
                 throw new UnprocessableEntityHttpException("Status must be provided for status change action");
-            if (!SubscriberStatus::tryFrom($input->status)) {
+
+            $status = SubscriberStatus::tryFrom($input->status);
+            if (!$status) {
                 throw new UnprocessableEntityHttpException("Invalid status provided");
             }
-            $status = SubscriberStatus::from($input->status);
-            $this->subscriberService->updateSubscribersStatus($subscribers, $status);
+
+            foreach ($subscribers as $subscriber) {
+                $updates = new UpdateSubscriberDto();
+
+                if ($status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
+                    $updates->status = SubscriberStatus::PENDING;
+                } else {
+                    $updates->status = $status;
+                }
+
+                $this->subscriberService->updateSubscriber($subscriber, $updates);
+            }
+
             return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
         }
 
         if ($input->action == 'metadata_update') {
             if ($input->metadata == null)
                 throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
+
             foreach ($subscribers as $subscriber) {
                 $updates = new UpdateSubscriberDto();
+
                 try {
                     $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
                 } catch (\Exception $e) {
                     throw new UnprocessableEntityHttpException($e->getMessage());
                 }
+
                 $updates->metadata = $input->metadata;
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
+
             return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
         }
 
