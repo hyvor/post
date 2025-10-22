@@ -98,7 +98,7 @@ class SubscriberController extends AbstractController
             $newsletter,
             $input->email,
             $lists,
-            $input->status ?? SubscriberStatus::SUBSCRIBED,
+            SubscriberStatus::PENDING,
             $input->source ?? SubscriberSource::CONSOLE,
             $input->subscribe_ip,
             $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
