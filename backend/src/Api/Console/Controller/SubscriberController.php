@@ -141,6 +141,10 @@ class SubscriberController extends AbstractController
         }
 
         if ($input->hasProperty('status')) {
+            if ($subscriber->getOptInAt() === null && $input->status === SubscriberStatus::SUBSCRIBED) {
+                throw new UnprocessableEntityHttpException('Subscribers without opt-in can not be updated to SUBSCRIBED status.');
+            }
+
             $updates->status = $input->status;
         }
 

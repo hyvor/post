@@ -42,6 +42,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
             'status' => self::faker()->randomElement(SubscriberStatus::cases()),
             'subscribe_ip' => self::faker()->text(255),
             'subscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'opt_in_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'unsubscribe_reason' => self::faker()->text(255),
             'unsubscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),

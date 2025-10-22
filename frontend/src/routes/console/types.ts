@@ -176,6 +176,7 @@ export type Subscriber = {
     status: NewsletterSubscriberStatus;
     list_ids: number[];
     source: NewsletterSubscriberSource;
+    is_opted_in: boolean;
     subscribed_at: number;
     unsubscribed_at: number | null;
     metadata: Record<string, string>;
