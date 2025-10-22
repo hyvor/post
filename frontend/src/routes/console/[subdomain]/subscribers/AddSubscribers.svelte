@@ -78,6 +78,10 @@
 	on:confirm={addSubscribers}
 	{loading}
 >
+	<p>
+		Subscribers will receive an email to confirm their opt-in and will be added only upon confirmation.
+	</p>
+
 	<SplitControl label="Emails" caption="Add one email per line">
 		<FormControl>
 			<Textarea
