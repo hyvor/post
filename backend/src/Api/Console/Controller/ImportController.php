@@ -13,28 +13,23 @@ use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
 use App\Service\Import\Message\ImportSubscribersMessage;
-use App\Service\Media\MediaService;
-use App\Service\Media\MediaUploadException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ImportController extends AbstractController
 {
+    private const int DAILY_IMPORT_LIMIT = 1;
+    private const int MONTHLY_IMPORT_LIMIT = 5;
+
     public function __construct(
-        private ValidatorInterface  $validator,
-        private MediaService        $mediaService,
         private ImportService       $importService,
         private MessageBusInterface $messageBus,
-        private MediaController $mediaController,
+        private MediaController     $mediaController,
     )
     {
     }
@@ -46,35 +41,18 @@ class ImportController extends AbstractController
         Request    $request,
     ): JsonResponse
     {
+        $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
+
+        if ($importCounts['month'] >= self::MONTHLY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Monthly import limit reached.');
+        }
+
+        if ($importCounts['day'] >= self::DAILY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Daily import limit reached.');
+        }
+
         $file = $request->files->get('file');
         $folder = MediaFolder::IMPORT;
-
-//        $constraint = new Constraints\File(
-//            maxSize: '100M',
-//            extensions: $folder->getAllowedExtensions()
-//        );
-//        $errors = $this->validator->validate($file, $constraint);
-//
-//        if (count($errors) > 0) {
-//            throw new UnprocessableEntityHttpException(
-//                previous: new ValidationFailedException(
-//                    'Invalid file upload',
-//                    $errors
-//                )
-//            );
-//        }
-//
-//        assert($file instanceof UploadedFile);
-//
-//        try {
-//            $upload = $this->mediaService->upload(
-//                $newsletter,
-//                $folder,
-//                $file
-//            );
-//        } catch (MediaUploadException $e) {
-//            throw new UnprocessableEntityHttpException($e->getMessage());
-//        }
 
         $upload = $this->mediaController->doUpload($newsletter, $folder, $file);
         $fields = $this->importService->getFields($upload);
@@ -86,10 +64,21 @@ class ImportController extends AbstractController
     #[Route('/imports/{id}', methods: 'POST')]
     #[ScopeRequired(Scope::DATA_WRITE)]
     public function import(
+        Newsletter                       $newsletter,
         SubscriberImport                 $subscriberImport,
         #[MapRequestPayload] ImportInput $input
     ): JsonResponse
     {
+        $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
+
+        if ($importCounts['month'] >= self::MONTHLY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Monthly import limit reached.');
+        }
+
+        if ($importCounts['day'] >= self::DAILY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Daily import limit reached.');
+        }
+
         if ($subscriberImport->getStatus() !== SubscriberImportStatus::REQUIRES_INPUT) {
             throw new UnprocessableEntityHttpException('Import is not in pending status.');
         }
@@ -120,5 +109,17 @@ class ImportController extends AbstractController
             return new SubscriberImportObject($import);
         }, $imports);
         return new JsonResponse($importObjects);
+    }
+
+    #[Route('/imports/limits', methods: 'GET')]
+    #[ScopeRequired(Scope::DATA_READ)]
+    public function importCounts(Newsletter $newsletter): JsonResponse
+    {
+        $counts = $this->importService->getNewsletterImportCounts($newsletter);
+
+        return new JsonResponse([
+            'daily_limit_exceeded' => $counts['day'] >= self::DAILY_IMPORT_LIMIT,
+            'monthly_limit_exceeded' => $counts['month'] >= self::MONTHLY_IMPORT_LIMIT,
+        ]);
     }
 }

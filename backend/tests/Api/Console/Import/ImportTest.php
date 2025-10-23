@@ -9,6 +9,8 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\SubscriberImportFactory;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Tests\Factory\NewsletterFactory;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImportTest extends WebTestCase
@@ -60,7 +62,6 @@ class ImportTest extends WebTestCase
 
         $this->transport('async')->throwExceptions()->process();
 
-//        dd($subscriberImport->getErrorMessage());
         $this->assertSame(SubscriberImportStatus::COMPLETED, $subscriberImport->getStatus());
         $this->assertSame(self::MAPPING, $subscriberImport->getFields());
     }
@@ -177,5 +178,51 @@ class ImportTest extends WebTestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('message', $data);
         $this->assertHasViolation('mapping', 'The mapping must contain the key "email".');
+    }
+
+    public function test_daily_import_limit(): void
+    {
+        $date = new \DateTimeImmutable('2025-10-23 12:00:00');
+        Clock::set(new MockClock($date));
+
+        $newsletter = NewsletterFactory::createOne();
+        SubscriberImportFactory::createOne([
+            'newsletter' => $newsletter,
+            'created_at' => $date,
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/imports/upload'
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertStringContainsString('Daily import limit reached.', $content);
+    }
+
+    public function test_monthly_import_limit(): void
+    {
+        $date = new \DateTimeImmutable('2025-10-23 12:00:00');
+        Clock::set(new MockClock($date));
+
+        $newsletter = NewsletterFactory::createOne();
+        SubscriberImportFactory::createMany(5, [
+            'newsletter' => $newsletter,
+            'created_at' => $date->modify('-7 day'),
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/imports/upload'
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertStringContainsString('Monthly import limit reached.', $content);
     }
 }

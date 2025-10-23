@@ -302,6 +302,11 @@ export type Import = {
     error_message: string | null;
 }
 
+export type ImportLimits = {
+    daily_limit_exceeded: boolean,
+    monthly_limit_exceeded: boolean,
+}
+
 export type ApiKey = {
     id: number;
     name: string;

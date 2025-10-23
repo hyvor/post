@@ -16,9 +16,11 @@ class ImportService
     use ClockAwareTrait;
 
     public function __construct(
-        private MediaService $mediaService,
+        private MediaService           $mediaService,
         private EntityManagerInterface $em,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @return string[]
@@ -96,5 +98,34 @@ class ImportService
         $results = $qb->getQuery()->getResult();
 
         return $results;
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return array{
+     *     day: int,
+     *     month: int
+     * }
+     */
+    public function getNewsletterImportCounts(Newsletter $newsletter): array
+    {
+        $qb = $this->em->getRepository(SubscriberImport::class)
+            ->createQueryBuilder('si')
+            ->select('SUM(CASE WHEN si.created_at >= :start_of_day THEN 1 ELSE 0 END) AS day_count,
+                SUM(CASE WHEN si.created_at >= :start_of_month THEN 1 ELSE 0 END) AS month_count')
+            ->where('si.newsletter = :newsletter')
+            ->andWhere('si.status = :status')
+            ->setParameter('newsletter', $newsletter)
+            ->setParameter('status', SubscriberImportStatus::COMPLETED)
+            ->setParameter('start_of_day', $this->now()->modify('today'))
+            ->setParameter('start_of_month', $this->now()->modify('first day of this month midnight'));
+
+        /** @var array{day_count: int|null, month_count: int|null} $result */
+        $result = $qb->getQuery()->getSingleResult();
+
+        return [
+            'day' => $result['day_count'] ?? 0,
+            'month' => $result['month_count'] ?? 0
+        ];
     }
 }
