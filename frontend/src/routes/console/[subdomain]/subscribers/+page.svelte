@@ -140,48 +140,48 @@
         <div class="left">
             <div class="selectors">
                 <Selector
-                    name={I18n.t('console.subscribers.status.label')}
-                    bind:show={showStatus}
-                    value={statusKey}
-                    width={200}
+                        name={I18n.t('console.subscribers.status.label')}
+                        bind:show={showStatus}
+                        value={statusKey}
+                        width={200}
                 >
                     <ActionList selection="single" selectionAlign="end">
                         <ActionListItem on:click={() => selectStatus(null)} selected={status === null}>
                             {I18n.t('console.subscribers.status.all')}
                         </ActionListItem>
                         <ActionListItem
-                            on:click={() => selectStatus('subscribed')}
-                            selected={status === 'subscribed'}
+                                on:click={() => selectStatus('subscribed')}
+                                selected={status === 'subscribed'}
                         >
                             {I18n.t('console.subscribers.status.subscribed')}
                         </ActionListItem>
                         <ActionListItem
-                            on:click={() => selectStatus('unsubscribed')}
-                            selected={status === 'unsubscribed'}
+                                on:click={() => selectStatus('unsubscribed')}
+                                selected={status === 'unsubscribed'}
                         >
                             {I18n.t('console.subscribers.status.unsubscribed')}
                         </ActionListItem>
                         <ActionListItem
-                            on:click={() => selectStatus('pending')}
-                            selected={status === 'pending'}
+                                on:click={() => selectStatus('pending')}
+                                selected={status === 'pending'}
                         >
                             {I18n.t('console.subscribers.status.pending')}
                         </ActionListItem>
                     </ActionList>
                 </Selector>
                 <Selector
-                    name={I18n.t('console.lists.list')}
-                    bind:show={showList}
-                    value={currentList ? currentList.name : I18n.t('console.common.any')}
-                    width={200}
-                    isSelected={!!currentList}
-                    handleDeselectClick={() => (currentList = null)}
+                        name={I18n.t('console.lists.list')}
+                        bind:show={showList}
+                        value={currentList ? currentList.name : I18n.t('console.common.any')}
+                        width={200}
+                        isSelected={!!currentList}
+                        handleDeselectClick={() => (currentList = null)}
                 >
                     <ActionList>
                         {#each $listStore as list}
                             <ActionListItem
-                                on:click={() => selectList(list)}
-                                selected={list.id === list?.id}
+                                    on:click={() => selectList(list)}
+                                    selected={list.id === list?.id}
                             >
                                 {list.name}
                             </ActionListItem>
@@ -191,39 +191,39 @@
             </div>
             <div class="search-wrap">
                 <TextInput
-                    bind:value={searchVal}
-                    placeholder="{I18n.t('console.common.search')}..."
-                    style="width:250px"
-                    on:keydown={searchActions.onKeydown}
-                    on:blur={searchActions.onBlur}
-                    size="small"
+                        bind:value={searchVal}
+                        placeholder="{I18n.t('console.common.search')}..."
+                        style="width:250px"
+                        on:keydown={searchActions.onKeydown}
+                        on:blur={searchActions.onBlur}
+                        size="small"
                 >
                     {#snippet end()}
+                        {#if search !== searchVal}
+                            <span class="press-enter"> ⏎ </span>
+                        {/if}
+
                         {#if searchVal.trim() !== ''}
                             <IconButton
-                                variant="invisible"
-                                color="gray"
-                                size={16}
-                                on:click={searchActions.onClear}
+                                    variant="invisible"
+                                    color="gray"
+                                    size={16}
+                                    on:click={searchActions.onClear}
                             >
                                 <IconX size={12}/>
                             </IconButton>
                         {/if}
                     {/snippet}
                 </TextInput>
-
-                {#if search !== searchVal}
-                    <span class="press-enter"> ⏎ </span>
-                {/if}
             </div>
         </div>
         <div class="right">
             <ButtonGroup>
                 <Button
-                    size="small"
-                    color="input"
-                    as="a"
-                    href={consoleUrlWithNewsletter('/tools/import')}
+                        size="small"
+                        color="input"
+                        as="a"
+                        href={consoleUrlWithNewsletter('/tools/import')}
                 >
                     {#snippet end()}
                         <IconBoxArrowInDown/>
@@ -241,16 +241,16 @@
     </div>
 
     <SubscriberList
-        {status}
-        {key}
-        {subscribers}
-        {loading}
-        {loadingMore}
-        {hasMore}
-        {error}
-        onLoadMore={() => load(true)}
-        onDelete={handleDelete}
-        onUpdate={handleUpdate}
+            {status}
+            {key}
+            {subscribers}
+            {loading}
+            {loadingMore}
+            {hasMore}
+            {error}
+            onLoadMore={() => load(true)}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
     />
 
     {#if addingManually}
@@ -258,10 +258,10 @@
     {/if}
 
     <SubscriberBulk
-        onUpdateMetadata={() => (showMetadataModal = true)}
-        onUpdateStatus={() => (showStatusModal = true)}
-        onDelete={handleDelete}
-        {subscribers}
+            onUpdateMetadata={() => (showMetadataModal = true)}
+            onUpdateStatus={() => (showStatusModal = true)}
+            onDelete={handleDelete}
+            {subscribers}
     />
 
     {#if showMetadataModal}
@@ -270,8 +270,8 @@
 
     {#if showStatusModal}
         <SubscriberBulkStatusModal
-            bind:show={showStatusModal}
-            onStatusUpdate={handleStatusUpdate}
+                bind:show={showStatusModal}
+                onStatusUpdate={handleStatusUpdate}
         />
     {/if}
 </SingleBox>
@@ -298,7 +298,8 @@
         .press-enter {
             color: var(--text-light);
             font-size: 14px;
-            margin-left: 4px;
+            margin-top: 2px;
+            margin-right: 4px;
         }
 
         :global(input) {
