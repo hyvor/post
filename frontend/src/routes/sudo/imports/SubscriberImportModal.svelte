@@ -37,7 +37,11 @@
 >
     <div class="content-wrap">
         <SplitControl label="Columns">
-            {subscriberImport.columns}
+            {
+                subscriberImport.columns.length === 0
+                    ? "No columns found"
+                    : subscriberImport.columns.join(" | ")
+            }
         </SplitControl>
 
 

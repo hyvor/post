@@ -11,14 +11,24 @@ export function getSubscriberImports(
             created_at: 1700000000,
             newsletter_subdomain: "Tech News",
             total_rows: 1500,
-            source: "CSV Upload"
+            source: "CSV Upload",
+            columns: ["email", "first_name", "last_name"]
         },
         {
             id: 2,
             created_at: 1700000500,
             newsletter_subdomain: "Daily Updates",
             total_rows: 800,
-            source: "API Import"
+            source: "API Import",
+            columns: []
         }
     ]
+}
+
+export function getImportingSubscribers() {
+    // TODO
+}
+
+export function approveSubscriptionImport() {
+    // TODO
 }
