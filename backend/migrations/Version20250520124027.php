@@ -17,7 +17,7 @@ final class Version20250520124027 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(
-            "CREATE TYPE subscriber_import_status AS ENUM ('requires_input', 'importing', 'failed', 'completed');"
+            "CREATE TYPE subscriber_import_status AS ENUM ('requires_input', 'pending_approval', 'importing', 'failed', 'completed');"
         );
 
         $this->addSql(
@@ -29,8 +29,10 @@ final class Version20250520124027 extends AbstractMigration
             newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
             media_id BIGINT NOT NULL references media(id) ON DELETE CASCADE,
             status subscriber_import_status NOT NULL DEFAULT 'requires_input',
+            source VARCHAR(1024) NOT NULL,
             fields JSONB,
             csv_fields JSONB,
+            csv_rows INTEGER,
             imported_subscribers INTEGER,
             warnings TEXT,
             error_message TEXT

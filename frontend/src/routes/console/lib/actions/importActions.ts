@@ -3,9 +3,10 @@ import type {Import, ImportLimits} from "../../types";
 
 export const IMPORTS_PER_PAGE = 30;
 
-export function uploadCsv(file: File | Blob) {
+export function uploadCsv(file: File | Blob, source: string) {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('source', source)
 
     return consoleApi.post<Import>({
         endpoint: "imports/upload",

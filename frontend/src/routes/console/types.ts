@@ -289,7 +289,7 @@ export type Approval = {
     rejected_at: number | null;
 }
 
-export type ImportStatus = 'requires_input' | 'importing' | 'failed' | 'completed';
+export type ImportStatus = 'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
 
 export type Import = {
     id: number;

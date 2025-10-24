@@ -6,10 +6,11 @@
         SplitControl,
         toast,
         LoadButton,
-        Tooltip
-        ,
-
+        Tooltip,
+        Textarea,
+        Callout,
     } from '@hyvor/design/components';
+    import IconInfoCircle from '@hyvor/icons/IconInfoCircle';
     import SettingsBody from '../../settings/@components/SettingsBody.svelte';
     import ImportMapping from './ImportMapping.svelte';
     import {getImportLimits, getImports, IMPORTS_PER_PAGE, uploadCsv} from '../../../lib/actions/importActions';
@@ -34,6 +35,8 @@
     let uploading = $state(false);
     let mapping = $state(false);
     let fileInput: HTMLInputElement | undefined = $state();
+    let sourceRequired = $state(false);
+    let source: string = $state('');
     let importId: number | undefined = $state();
     let fields: string[] = $state([]);
 
@@ -52,6 +55,7 @@
 
         const files = fileInput.files;
         const importFile = files && files[0];
+        sourceRequired = false;
 
         if (!importFile) {
             return toast.error('Please select a file');
@@ -59,11 +63,15 @@
         if (importFile.size > 100 * 1024 * 1024) {
             return toast.error('File is too large (Max 100 MB)');
         }
+        if (!source.trim()) {
+            sourceRequired = true;
+            return toast.error('Please provide the source of the import file');
+        }
 
         uploading = true;
         const toastId = toast.loading('Uploading file...');
 
-        uploadCsv(importFile)
+        uploadCsv(importFile, source)
             .then((data) => {
                 toast.info('File uploaded, map the fields to start the import', {id: toastId});
                 importStore.update(imports => {
@@ -141,11 +149,28 @@
 </script>
 
 <SettingsBody>
+    <Callout type="info">
+        {#snippet icon()}
+            <IconInfoCircle/>
+        {/snippet}
+        To prevent malicious activities, all imports exceeding 50 subscribers will require a manual approval from our
+        team and it may take upto 1 working day. Reach out to us on <a href="mailto:support@post.hyvor.com">
+        support@post.hyvor.com</a> for any inquiries.
+    </Callout>
+
     <SplitControl label="New Import">
         {#snippet nested()}
             <SplitControl label="Import File">
                 <div class="upload">
-                    <input type="file" accept=".csv" bind:this={fileInput}/>
+                    <Tooltip
+                            text={
+							importLimitsOfNewsletter.monthly_limit_exceeded ? 'Monthly import limit exceeded. (5/5)' :
+							importLimitsOfNewsletter.daily_limit_exceeded ? 'Daily import limit exceeded. (1/1)' : undefined
+						}
+                            disabled={!limitsExceeded}
+                    >
+                        <input type="file" accept=".csv" bind:this={fileInput}/>
+                    </Tooltip>
                     <Tooltip
                             text={
 							importLimitsOfNewsletter.monthly_limit_exceeded ? 'Monthly import limit exceeded. (5/5)' :
@@ -156,11 +181,7 @@
                         <Button
                                 type="button"
                                 on:click={submitFile}
-                                disabled={
-								importLimitsOfNewsletter.monthly_limit_exceeded
-								|| importLimitsOfNewsletter.daily_limit_exceeded
-								|| uploading
-							}>
+                                disabled={limitsExceeded || uploading}>
                             Upload
                             {#snippet action()}
                                 {#if uploading}
@@ -170,6 +191,26 @@
                         </Button>
                     </Tooltip>
                 </div>
+            </SplitControl>
+
+            <SplitControl
+                    label="Source of Import File"
+                    caption="Briefly explain the source of the import file (e.g., exported from Mailchimp, manually created, etc.)"
+            >
+                <Tooltip
+                        text={
+							importLimitsOfNewsletter.monthly_limit_exceeded ? 'Monthly import limit exceeded. (5/5)' :
+							importLimitsOfNewsletter.daily_limit_exceeded ? 'Daily import limit exceeded. (1/1)' : undefined
+						}
+                        disabled={!limitsExceeded}
+                >
+                    <Textarea
+                            bind:value={source}
+                            maxlength={1000}
+                            disabled={limitsExceeded || uploading}
+                            state={sourceRequired ? 'error' : 'default'}
+                    />
+                </Tooltip>
             </SplitControl>
         {/snippet}
     </SplitControl>

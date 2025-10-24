@@ -43,16 +43,40 @@ class ImportService
         return array_values(array_filter($headers, fn($h) => $h !== null));
     }
 
+    public function getRowCount(Media $media): int
+    {
+        $stream = $this->mediaService->getMediaStream($media);
+
+        if (!is_resource($stream)) {
+            throw new ImportException("Invalid CSV stream.");
+        }
+
+        $rowCount = 0;
+        while (fgetcsv($stream) !== false) {
+            $rowCount++;
+        }
+        fclose($stream);
+
+        return max(0, $rowCount - 1);
+    }
+
     /**
-     * @param array<int, string>|null $csv_fields
+     * @param array<int, string>|null $csvFields
      */
-    public function createSubscriberImport(Media $media, ?array $csv_fields = null): SubscriberImport
+    public function createSubscriberImport(
+        Media  $media,
+        string $source,
+        ?array $csvFields = null,
+        ?int   $csvRows = null
+    ): SubscriberImport
     {
         $subscriberImport = new SubscriberImport();
         $subscriberImport->setNewsletter($media->getNewsletter());
         $subscriberImport->setMedia($media);
-        $subscriberImport->setCsvFields($csv_fields);
+        $subscriberImport->setCsvFields($csvFields);
+        $subscriberImport->setCsvRows($csvRows);
         $subscriberImport->setStatus(SubscriberImportStatus::REQUIRES_INPUT);
+        $subscriberImport->setSource($source);
         $subscriberImport->setCreatedAt($this->now());
         $subscriberImport->setUpdatedAt($this->now());
 
