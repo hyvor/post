@@ -25,3 +25,16 @@ export type Approval = {
     approved_at: number | null;
     rejected_at: number | null;
 }
+
+export type SubscriberImport = {
+    id: number;
+    created_at: number;
+    newsletter_subdomain: string;
+    total_rows: number;
+    source: string;
+    mapping: Record<string, string>;
+}
+
+export type ImportingSubscriber = {
+    email: string;
+}
