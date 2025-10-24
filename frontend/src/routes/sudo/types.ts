@@ -32,7 +32,7 @@ export type SubscriberImport = {
     newsletter_subdomain: string;
     total_rows: number;
     source: string;
-    mapping: Record<string, string>;
+    columns: string[];
 }
 
 export type ImportingSubscriber = {
