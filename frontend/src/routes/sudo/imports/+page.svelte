@@ -5,10 +5,8 @@
     import SubscriberImportRow from "./SubscriberImportRow.svelte";
     import type {SubscriberImport} from "../types";
     import IconX from "@hyvor/icons/IconX";
-    import {getApprovals} from "../lib/actions/approvalActions";
     import {ITEMS_PER_PAGE} from "../lib/generalActions";
     import {getSubscriberImports} from "../lib/actions/subscriberImportActions";
-    import ApprovalModal from "../approvals/ApprovalModal.svelte";
     import SubscriberImportModal from "./SubscriberImportModal.svelte";
 
     let loading = $state(true);
@@ -23,32 +21,28 @@
     let searchValue: string | undefined = $state(undefined);
 
     function load(more = false) {
-        subscriberImportStore.set(getSubscriberImports())
-        loading = false;
+        more ? (loadingMore = true) : (loading = true);
 
-        // TODO
-        // more ? (loadingMore = true) : (loading = true);
-        //
-        // getSubscriberImports(
-        //     search ?? null,
-        //     ITEMS_PER_PAGE,
-        //     more ? $subscriberImportStore.length : 0
-        // )
-        //     .then((data) => {
-        //         if (more) {
-        //             subscriberImportStore.update(subscriberImports => [...subscriberImports, ...data]);
-        //         } else {
-        //             subscriberImportStore.set(data);
-        //         }
-        //         hasMore = data.length === ITEMS_PER_PAGE;
-        //     })
-        //     .catch((e) => {
-        //         error = e.message;
-        //     })
-        //     .finally(() => {
-        //         loading = false;
-        //         loadingMore = false;
-        //     });
+        getSubscriberImports(
+            search ?? null,
+            ITEMS_PER_PAGE,
+            more ? $subscriberImportStore.length : 0
+        )
+            .then((data) => {
+                if (more) {
+                    subscriberImportStore.update(subscriberImports => [...subscriberImports, ...data]);
+                } else {
+                    subscriberImportStore.set(data);
+                }
+                hasMore = data.length === ITEMS_PER_PAGE;
+            })
+            .catch((e) => {
+                error = e.message;
+            })
+            .finally(() => {
+                loading = false;
+                loadingMore = false;
+            });
     }
 
     function handleSelect(subscriberImport: SubscriberImport) {

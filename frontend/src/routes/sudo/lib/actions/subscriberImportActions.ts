@@ -1,34 +1,38 @@
 import {ITEMS_PER_PAGE} from "../generalActions";
+import sudoApi from "../sudoApi";
+import type {ImportingSubscriber, SubscriberImport} from "../../types";
 
 export function getSubscriberImports(
     subdomain: string | null = null,
     limit: number = ITEMS_PER_PAGE,
     offset: number = 0
 ) {
-    return [
-        {
-            id: 1,
-            created_at: 1700000000,
-            newsletter_subdomain: "Tech News",
-            total_rows: 1500,
-            source: "CSV Upload",
-            columns: ["email", "first_name", "last_name"]
-        },
-        {
-            id: 2,
-            created_at: 1700000500,
-            newsletter_subdomain: "Daily Updates",
-            total_rows: 800,
-            source: "API Import",
-            columns: []
+    return sudoApi.get<SubscriberImport[]>({
+        endpoint: 'subscriber-imports',
+        data: {
+            subdomain,
+            limit,
+            offset
         }
-    ]
+    });
 }
 
-export function getImportingSubscribers() {
-    // TODO
+export function getImportingSubscribers(
+    subscriberImportId: number,
+    limit: number = ITEMS_PER_PAGE,
+    offset: number = 0
+) {
+    return sudoApi.get<ImportingSubscriber[]>({
+        endpoint: 'subscriber-imports/' + subscriberImportId,
+        data: {
+            limit,
+            offset
+        }
+    });
 }
 
-export function approveSubscriptionImport() {
-    // TODO
+export function approveSubscriptionImport(subscriberImportId: number) {
+    return sudoApi.post<SubscriberImport>({
+        endpoint: 'subscriber-imports/' + subscriberImportId
+    });
 }

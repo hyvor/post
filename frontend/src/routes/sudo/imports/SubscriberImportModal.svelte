@@ -1,8 +1,10 @@
 <script lang="ts">
-    import {IconMessage, LoadButton, Modal, SplitControl} from "@hyvor/design/components";
+    import {IconMessage, LoadButton, Modal, SplitControl, toast} from "@hyvor/design/components";
     import type {ImportingSubscriber, SubscriberImport} from "../types";
     import ImportingSubscriberRow from "./ImportingSubscriberRow.svelte";
     import {onMount} from "svelte";
+    import {getImportingSubscribers} from "../lib/actions/subscriberImportActions";
+    import {ITEMS_PER_PAGE} from "../lib/generalActions";
 
     interface Props {
         show: boolean;
@@ -19,9 +21,28 @@
     let importingSubscribers: ImportingSubscriber[] = $state([]);
 
     function load(more = false) {
-        setTimeout(() => {
-            loading = false;
-        }, 500);
+        more ? (loadingMore = true) : (loading = true);
+
+        getImportingSubscribers(
+            subscriberImport.id,
+            ITEMS_PER_PAGE,
+            more ? importingSubscribers.length : 0
+        )
+            .then((data) => {
+                if (more) {
+                    importingSubscribers = [...importingSubscribers, ...data];
+                } else {
+                    importingSubscribers = data;
+                }
+                hasMore = data.length === ITEMS_PER_PAGE;
+            })
+            .catch((e) => {
+                toast.error(e.message);
+            })
+            .finally(() => {
+                loading = false;
+                loadingMore = false;
+            });
     }
 
     onMount(() => {
