@@ -108,13 +108,27 @@ class ImportService
     /**
      * @return SubscriberImport[]
      */
-    public function getSubscriberImports(Newsletter $newsletter, int $limit = 30, int $offset = 0): array
+    public function getSubscriberImports(
+        ?Newsletter             $newsletter = null,
+        ?SubscriberImportStatus $status = null,
+        int                     $limit = 30,
+        int                     $offset = 0
+    ): array
     {
         $qb = $this->em->getRepository(SubscriberImport::class)
-            ->createQueryBuilder('si')
-            ->where('si.newsletter = :newsletter')
-            ->setParameter('newsletter', $newsletter)
-            ->orderBy('si.created_at', 'DESC')
+            ->createQueryBuilder('si');
+
+        if ($newsletter !== null) {
+            $qb->where('si.newsletter = :newsletter')
+                ->setParameter('newsletter', $newsletter);
+        }
+
+        if ($status !== null) {
+            $qb->andWhere('si.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        $qb->orderBy('si.created_at', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 

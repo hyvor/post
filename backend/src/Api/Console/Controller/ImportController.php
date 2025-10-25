@@ -112,7 +112,7 @@ class ImportController extends AbstractController
         $limit = $request->query->getInt('limit', 30);
         $offset = $request->query->getInt('offset', 0);
 
-        $imports = $this->importService->getSubscriberImports($newsletter, $limit, $offset);
+        $imports = $this->importService->getSubscriberImports($newsletter, limit: $limit, offset: $offset);
         $importObjects = array_map(function (SubscriberImport $import) {
             return new SubscriberImportObject($import);
         }, $imports);
