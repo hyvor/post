@@ -4,6 +4,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Api\Console\Resolver\EntityResolver;
+use App\Api\Sudo\Resolver\EntityResolver as SudoEntityResolver;
 use App\Service\Media\FilesystemFactory;
 use Aws\S3\S3Client;
 use League\Flysystem\Filesystem;
@@ -37,6 +38,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag(
             'controller.argument_value_resolver',
             ['name' => 'console_api_resource', 'priority' => 150]
+        );
+
+    // ================ SUDO API =================
+    $services->set(SudoEntityResolver::class)
+        ->tag(
+            'controller.argument_value_resolver',
+            ['name' => 'sudo_api_resource', 'priority' => 150]
         );
 
     // ================ STORAGE =================
