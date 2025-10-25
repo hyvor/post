@@ -5,18 +5,23 @@ namespace App\Api\Sudo\Controller;
 use App\Api\Sudo\Object\SubscriberImportObject;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
+use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
+use App\Service\Import\Message\ImportSubscribersMessage;
 use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SubscriberImportController extends AbstractController
 {
     public function __construct(
-        private ImportService     $importService,
-        private NewsletterService $newsletterService
+        private ImportService       $importService,
+        private NewsletterService   $newsletterService,
+        private MessageBusInterface $messageBus,
     )
     {
     }
@@ -54,6 +59,30 @@ class SubscriberImportController extends AbstractController
     #[Route('/subscriber-imports/{id}', methods: ['POST'])]
     public function approveSubscriberImport(SubscriberImport $subscriberImport): JsonResponse
     {
-        return new JsonResponse();
+        if ($subscriberImport->getStatus() !== SubscriberImportStatus::PENDING_APPROVAL) {
+            throw new UnprocessableEntityHttpException('Import is not in pending approval status.');
+        }
+
+        $importCounts = $this->importService->getNewsletterImportCounts($subscriberImport->getNewsletter());
+
+        if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Monthly import limit reached for newsletter.');
+        }
+
+        if ($importCounts['day'] >= ImportService::DAILY_IMPORT_LIMIT) {
+            throw new UnprocessableEntityHttpException('Daily import limit reached for newsletter.');
+        }
+
+        $updates = new UpdateSubscriberImportDto();
+        $updates->status = SubscriberImportStatus::IMPORTING;
+
+        $subscriberImport = $this->importService->updateSubscriberImport(
+            $subscriberImport,
+            $updates
+        );
+
+        $this->messageBus->dispatch(new ImportSubscribersMessage($subscriberImport->getId()));
+
+        return new JsonResponse(new SubscriberImportObject($subscriberImport));
     }
 }

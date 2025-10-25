@@ -13,6 +13,10 @@ use Symfony\Component\Clock\ClockAwareTrait;
 
 class ImportService
 {
+    public const int DAILY_IMPORT_LIMIT = 1;
+    public const int MONTHLY_IMPORT_LIMIT = 5;
+    public const int SUBSCRIBER_LIMIT_FOR_MANUAL_REVIEW = 50;
+
     use ClockAwareTrait;
 
     public function __construct(

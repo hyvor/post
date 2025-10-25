@@ -2,11 +2,16 @@
 
 namespace App\Tests\Api\Sudo\SubscriberImports;
 
+use App\Api\Sudo\Controller\SubscriberImportController;
 use App\Entity\Type\SubscriberImportStatus;
+use App\Service\Import\ImportService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberImportFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(SubscriberImportController::class)]
+#[CoversClass(ImportService::class)]
 class GetSubscriberImportsTest extends WebTestCase
 {
     public function test_get_subscriber_imports(): void

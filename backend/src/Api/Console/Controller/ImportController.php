@@ -24,10 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends AbstractController
 {
-    private const int DAILY_IMPORT_LIMIT = 1;
-    private const int MONTHLY_IMPORT_LIMIT = 5;
-    private const int SUBSCRIBER_LIMIT_FOR_MANUAL_REVIEW = 50;
-
     public function __construct(
         private ImportService       $importService,
         private MessageBusInterface $messageBus,
@@ -46,11 +42,11 @@ class ImportController extends AbstractController
     {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
-        if ($importCounts['month'] >= self::MONTHLY_IMPORT_LIMIT) {
+        if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
             throw new UnprocessableEntityHttpException('Monthly import limit reached.');
         }
 
-        if ($importCounts['day'] >= self::DAILY_IMPORT_LIMIT) {
+        if ($importCounts['day'] >= ImportService::DAILY_IMPORT_LIMIT) {
             throw new UnprocessableEntityHttpException('Daily import limit reached.');
         }
 
@@ -75,11 +71,11 @@ class ImportController extends AbstractController
     {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
-        if ($importCounts['month'] >= self::MONTHLY_IMPORT_LIMIT) {
+        if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
             throw new UnprocessableEntityHttpException('Monthly import limit reached.');
         }
 
-        if ($importCounts['day'] >= self::DAILY_IMPORT_LIMIT) {
+        if ($importCounts['day'] >= ImportService::DAILY_IMPORT_LIMIT) {
             throw new UnprocessableEntityHttpException('Daily import limit reached.');
         }
 
@@ -90,7 +86,7 @@ class ImportController extends AbstractController
         $updates = new UpdateSubscriberImportDto();
         $updates->fields = $input->mapping;
 
-        if (($subscriberImport->getCsvRows() ?? 0) < self::SUBSCRIBER_LIMIT_FOR_MANUAL_REVIEW) {
+        if (($subscriberImport->getCsvRows() ?? 0) < ImportService::SUBSCRIBER_LIMIT_FOR_MANUAL_REVIEW) {
             $updates->status = SubscriberImportStatus::IMPORTING;
             $this->messageBus->dispatch(new ImportSubscribersMessage($subscriberImport->getId()));
         } else {
@@ -126,8 +122,8 @@ class ImportController extends AbstractController
         $counts = $this->importService->getNewsletterImportCounts($newsletter);
 
         return new JsonResponse([
-            'daily_limit_exceeded' => $counts['day'] >= self::DAILY_IMPORT_LIMIT,
-            'monthly_limit_exceeded' => $counts['month'] >= self::MONTHLY_IMPORT_LIMIT,
+            'daily_limit_exceeded' => $counts['day'] >= ImportService::DAILY_IMPORT_LIMIT,
+            'monthly_limit_exceeded' => $counts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT,
         ]);
     }
 }
