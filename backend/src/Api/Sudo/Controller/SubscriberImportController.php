@@ -2,12 +2,14 @@
 
 namespace App\Api\Sudo\Controller;
 
+use App\Api\Sudo\Object\ImportingSubscriberObject;
 use App\Api\Sudo\Object\SubscriberImportObject;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
 use App\Service\Import\Message\ImportSubscribersMessage;
+use App\Service\Import\Parser\ParserFactory;
 use App\Service\Newsletter\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,6 +23,8 @@ class SubscriberImportController extends AbstractController
     public function __construct(
         private ImportService       $importService,
         private NewsletterService   $newsletterService,
+        private ParserFactory       $parserFactory,
+
         private MessageBusInterface $messageBus,
     )
     {
@@ -51,9 +55,18 @@ class SubscriberImportController extends AbstractController
     }
 
     #[Route('/subscriber-imports/{id}', methods: ['GET'])]
-    public function getImportingSubscribers(SubscriberImport $subscriberImport): JsonResponse
+    public function getImportingSubscribers(SubscriberImport $subscriberImport, Request $request): JsonResponse
     {
-        return new JsonResponse();
+        $limit = $request->query->getInt('limit', 50);
+        $offset = $request->query->getInt('offset', 0);
+
+        $parser = $this->parserFactory->csv();
+        $subscribers = $parser->parse($subscriberImport);
+
+        return new JsonResponse(array_map(
+            fn($subscriber) => new ImportingSubscriberObject($subscriber),
+            array_values($subscribers->slice($offset, $limit))
+        ));
     }
 
     #[Route('/subscriber-imports/{id}', methods: ['POST'])]
