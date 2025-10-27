@@ -13,7 +13,7 @@
             <I18n.T
                     key="homepage.14DayFreeTrial"
                     params={{
-					a: { component: TrialLink }
+					trial: { component: TrialLink }
 				}}
             />
         </div>

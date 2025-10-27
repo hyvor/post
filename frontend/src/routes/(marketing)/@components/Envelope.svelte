@@ -32,7 +32,13 @@
 
 <div class="email-container" class:unread={!isRead} class:expanded={isExpanded}>
     <!-- Email Header -->
-    <div class="email-header" on:click={toggleExpanded}>
+    <div
+            role="button"
+            tabindex="0"
+            class="email-header"
+            on:click={toggleExpanded}
+            on:keydown={(e) => {(e.key === 'Enter') && toggleExpanded()}}
+    >
         <div class="header-left">
             <div class="sender-info">
                 <div class="sender-avatar">
