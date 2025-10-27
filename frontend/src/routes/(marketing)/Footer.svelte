@@ -1,8 +1,5 @@
 <script lang="ts">
     import {FooterLinkList, Footer} from '@hyvor/design/marketing';
-    // import { getMarketingI18n } from './locale';
-
-    // const I18n = getMarketingI18n();
 </script>
 
 <Footer
