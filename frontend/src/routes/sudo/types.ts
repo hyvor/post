@@ -37,4 +37,9 @@ export type SubscriberImport = {
 
 export type ImportingSubscriber = {
     email: string;
+    lists: string[];
+    status: 'pending' | 'subscribed' | 'unsubscribed';
+    subscribed_at: number | null;
+    subscribe_ip: string | null;
+    metadata: Record<string, string> | null;
 }

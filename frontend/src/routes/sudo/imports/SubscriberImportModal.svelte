@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {IconMessage, LoadButton, Modal, SplitControl, toast} from "@hyvor/design/components";
+    import {Divider, IconMessage, LoadButton, Modal, SplitControl, toast} from "@hyvor/design/components";
     import type {ImportingSubscriber, SubscriberImport} from "../types";
     import ImportingSubscriberRow from "./ImportingSubscriberRow.svelte";
     import {onMount} from "svelte";
@@ -65,6 +65,7 @@
             }
         </SplitControl>
 
+        <Divider color=var(--accent-light) margin={2}/>
 
         {#if importingSubscribers.length === 0}
             <IconMessage empty message="No subscribers found in the import file"/>
@@ -94,6 +95,8 @@
     .list {
         flex: 1;
         overflow: auto;
-        padding: 20px 30px;
+    }
+    :global(.inner) {
+        width: 90vw !important;
     }
 </style>
