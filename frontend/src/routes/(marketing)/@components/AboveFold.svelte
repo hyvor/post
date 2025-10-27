@@ -1,299 +1,300 @@
 <script lang="ts">
-	import { Button } from '@hyvor/design/components';
-	import TrialChecks from './TrialChecks.svelte';
-	import MainGraphic from './MainGraphic.svelte';
-	import Envelope from './Envelope.svelte';
-	import { getMarketingI18n } from '../locale';
-	import BrowserWindow from './BrowserWindow.svelte';
-	import emailImg from '../img/email.png';
-	import consoleImg from '../img/console.png';
+    import {Button} from '@hyvor/design/components';
+    import TrialChecks from './TrialChecks.svelte';
+    import MainGraphic from './MainGraphic.svelte';
+    import Envelope from './Envelope.svelte';
+    import {getMarketingI18n} from '../locale';
+    import BrowserWindow from './BrowserWindow.svelte';
+    import emailImg from '../img/email.png';
+    import consoleImg from '../img/console.png';
 
-	const I18n = getMarketingI18n();
+    const I18n = getMarketingI18n();
 </script>
 
 <div class="hds-container above-fold">
-	<div class="left">
-		<h1 id="waitlist">
-			<span class="highlight">Simple, privacy-first</span> <br />
-			{I18n.t('homepage.heading')}
-		</h1>
+    <div class="left">
+        <h1 id="waitlist">
+            <span class="highlight">Simple, privacy-first</span> <br/>
+            {I18n.t('homepage.heading')}
+        </h1>
 
-		<h2>
-			{I18n.t('homepage.subHeading')}
-		</h2>
-		<div class="buttons">
-			<Button as="a" href="/console?signup" size="x-large"
-				>{I18n.t('homepage.cta')}
-				{#snippet end()}
-					&rarr;
-				{/snippet}
-			</Button>
-		</div>
+        <h2>
+            {I18n.t('homepage.subHeading')}
+        </h2>
+        <div class="buttons">
+            <Button as="a" href="/console?signup" size="x-large"
+            >{I18n.t('homepage.cta')}
+                {#snippet end()}
+                    &rarr;
+                {/snippet}
+            </Button>
+        </div>
 
-		<div class="trial-checks">
-			<TrialChecks />
-		</div>
-	</div>
+        <div class="trial-checks">
+            <TrialChecks/>
+        </div>
+    </div>
 
-	<div class="right">
-		<!-- <MainGraphic /> -->
-		<div class="main-browser">
-			<BrowserWindow image={consoleImg} link="console.hyvor.com" />
-		</div>
-		<div class="another-browser">
-			<Envelope emailImage={emailImg} />
-		</div>
+    <div class="right">
+        <!-- <MainGraphic /> -->
+        <div class="main-browser">
+            <BrowserWindow image={consoleImg} link="console.hyvor.com"/>
+        </div>
+        <div class="another-browser">
+            <Envelope emailImage={emailImg}/>
+        </div>
 
-		<div class="main-graphic">
-			<MainGraphic />
-		</div>
-	</div>
+        <div class="main-graphic">
+            <MainGraphic/>
+        </div>
+    </div>
 </div>
 
 <style>
-	:global(body) {
-		overflow-x: hidden;
-	}
-	.above-fold {
-		position: relative;
-		padding-top: 75px;
-		display: flex;
-		width: var(--width);
-		padding-bottom: 75px;
-		max-width: var(--max-width);
-		margin: 0 auto;
-	}
+    :global(body) {
+        overflow-x: hidden;
+    }
 
-	.left {
-		width: 50%;
-	}
+    .above-fold {
+        position: relative;
+        padding-top: 75px;
+        display: flex;
+        width: var(--width);
+        padding-bottom: 75px;
+        max-width: var(--max-width);
+        margin: 0 auto;
+    }
 
-	.right {
-		width: 50%;
-		padding-left: 25px;
-	}
+    .left {
+        width: 50%;
+    }
 
-	.main-browser {
-		width: 150%; /* did this to make it extend over the screen edge */
-		max-width: none; /* did this to remove max-width thing */
-		margin-left: 0;
-		width: clamp(100%, 150%, 900px); /* min, ideal, max */
-		margin-left: 0;
-		animation:
-			heroEnter 1s ease-out,
-			subtleFloat 8s ease-in-out infinite 2s;
-	}
+    .right {
+        width: 50%;
+        padding-left: 25px;
+    }
 
-	/* main-browser scaling for medium screens */
-	@media (max-width: 1280px) and (min-width: 993px) {
-		.main-browser {
-			width: 140%; /* slightly smaller to fit better */
-			margin-left: -10%; /* shift it left to balance clipping */
-		}
+    .main-browser {
+        width: 150%; /* did this to make it extend over the screen edge */
+        max-width: none; /* did this to remove max-width thing */
+        margin-left: 0;
+        width: clamp(100%, 150%, 900px); /* min, ideal, max */
+        margin-left: 0;
+        animation: heroEnter 1s ease-out,
+        subtleFloat 8s ease-in-out infinite 2s;
+    }
 
-		.another-browser {
-			top: 220px; /* adjust vertical position */
-			right: 50px; /* closer to edge for balance */
-		}
-	}
+    /* main-browser scaling for medium screens */
+    @media (max-width: 1280px) and (min-width: 993px) {
+        .main-browser {
+            width: 140%; /* slightly smaller to fit better */
+            margin-left: -10%; /* shift it left to balance clipping */
+        }
 
-	.another-browser {
-		position: absolute;
-		top: 250px;
-		right: 100px;
-		width: 30%;
-		animation:
-			heroEnterDelayed 1.2s ease-out,
-			subtleFloat 6s ease-in-out infinite 3s reverse;
-	}
+        .another-browser {
+            top: 220px; /* adjust vertical position */
+            right: 50px; /* closer to edge for balance */
+        }
+    }
 
-	.main-graphic {
-		display: none;
-	}
+    .another-browser {
+        position: absolute;
+        top: 250px;
+        right: 100px;
+        width: 30%;
+        animation: heroEnterDelayed 1.2s ease-out,
+        subtleFloat 6s ease-in-out infinite 3s reverse;
+    }
 
-	.trial-checks {
-		margin-top: 30px;
-		margin-left: 0;
-		display: flex;
-		justify-content: center;
-	}
+    .main-graphic {
+        display: none;
+    }
 
-	:global(.checks) {
-		flex-direction: column;
-		gap: 15px !important;
-	}
+    .trial-checks {
+        margin-top: 30px;
+        margin-left: 0;
+        display: flex;
+        justify-content: center;
+    }
 
-	@keyframes heroEnter {
-		0% {
-			transform: translateX(30px) translateY(0);
-			/* transform: translateX(60px) translateY(-20px); */
-			opacity: 0.9;
-			/* //filter: blur(2gpx); */
-		}
-		100% {
-			transform: translateX(0) translateY(0);
-			opacity: 1;
-			filter: blur(0);
-		}
-	}
+    :global(.checks) {
+        flex-direction: column;
+        gap: 15px !important;
+    }
 
-	@keyframes heroEnterDelayed {
-		0% {
-			/* //transform: translateX(-40px) translateY(30px); */
-			transform: translateX(0) translateY(30px);
-			opacity: 0.9;
-			/* //filter: blur(1gpx); */
-		}
-		100% {
-			transform: translateX(0) translateY(0);
-			opacity: 1;
-			/* //filter: blur(0); */
-		}
-	}
+    @keyframes heroEnter {
+        0% {
+            transform: translateX(30px) translateY(0);
+            /* transform: translateX(60px) translateY(-20px); */
+            opacity: 0.9;
+            /* //filter: blur(2gpx); */
+        }
+        100% {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+            filter: blur(0);
+        }
+    }
 
-	@keyframes subtleFloat {
-		0%,
-		100% {
-			transform: translateY(0) rotate(0deg);
-		}
-		33% {
-			transform: translateY(-3px) rotate(0.5deg);
-		}
-		66% {
-			transform: translateY(-1px) rotate(-0.3deg);
-		}
-	}
+    @keyframes heroEnterDelayed {
+        0% {
+            /* //transform: translateX(-40px) translateY(30px); */
+            transform: translateX(0) translateY(30px);
+            opacity: 0.9;
+            /* //filter: blur(1gpx); */
+        }
+        100% {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+            /* //filter: blur(0); */
+        }
+    }
 
-	h1 {
-		margin: 0;
-		font-size: 60px;
-		margin-bottom: 10px;
-	}
+    @keyframes subtleFloat {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        33% {
+            transform: translateY(-3px) rotate(0.5deg);
+        }
+        66% {
+            transform: translateY(-1px) rotate(-0.3deg);
+        }
+    }
 
-	h1 .highlight {
-		font-size: 45px;
-	}
+    h1 {
+        margin: 0;
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
 
-	h2 {
-		font-weight: normal;
-		font-size: 28px;
-		color: var(--grey-dark);
-		margin: 0;
-		padding-top: 30px;
-	}
+    h1 .highlight {
+        font-size: 45px;
+    }
 
-	.buttons {
-		display: flex;
-		gap: 10px;
-		margin-top: 40px;
-	}
-	@media (max-width: 992px) {
-		.above-fold {
-			flex-direction: column;
-			text-align: center;
-		}
+    h2 {
+        font-weight: normal;
+        font-size: 28px;
+        color: var(--grey-dark);
+        margin: 0;
+        padding-top: 30px;
+    }
 
-		.left {
-			width: 100%;
-			padding-left: 0;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
+    .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 40px;
+    }
 
-		h1 {
-			margin-top: 20px;
-		}
+    @media (max-width: 992px) {
+        .above-fold {
+            flex-direction: column;
+            text-align: center;
+        }
 
-		h2 {
-			padding-top: 10px;
-		}
+        .left {
+            width: 100%;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-		.right {
-			width: 100%;
-			margin-top: 70px;
-			padding-left: 0;
-		}
+        h1 {
+            margin-top: 20px;
+        }
 
-		.main-browser {
-			display: none;
-		}
-		.buttons {
-			justify-content: center;
-		}
+        h2 {
+            padding-top: 10px;
+        }
 
-		.another-browser {
-			display: none;
-		}
+        .right {
+            width: 100%;
+            margin-top: 70px;
+            padding-left: 0;
+        }
 
-		.main-graphic {
-			display: block;
-			max-width: 80%;
-			margin: auto;
-			padding: 0;
-		}
-	}
+        .main-browser {
+            display: none;
+        }
 
-	@media (max-width: 768px) {
-		.above-fold {
-			padding-top: 40px;
-			padding-bottom: 40px;
-			width: 100%;
-		}
+        .buttons {
+            justify-content: center;
+        }
 
-		h1 {
-			font-size: 40px;
-			line-height: 1.2;
-		}
+        .another-browser {
+            display: none;
+        }
 
-		h1 .highlight {
-			font-size: 28px;
-		}
+        .main-graphic {
+            display: block;
+            max-width: 80%;
+            margin: auto;
+            padding: 0;
+        }
+    }
 
-		h2 {
-			font-size: 20px;
-			padding-top: 15px;
-		}
+    @media (max-width: 768px) {
+        .above-fold {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            width: 100%;
+        }
 
-		.right {
-			width: 100%;
-			margin-top: 70px;
-			padding-left: 0;
-		}
+        h1 {
+            font-size: 40px;
+            line-height: 1.2;
+        }
 
-		.main-browser {
-			display: none;
-		}
+        h1 .highlight {
+            font-size: 28px;
+        }
 
-		.another-browser {
-			display: none;
-		}
+        h2 {
+            font-size: 20px;
+            padding-top: 15px;
+        }
 
-		.main-graphic {
-			display: block;
-			max-width: 80%;
-			margin: auto;
-			padding: 0;
-		}
-	}
+        .right {
+            width: 100%;
+            margin-top: 70px;
+            padding-left: 0;
+        }
 
-	@media (max-width: 480px) {
-		h1 {
-			font-size: 32px;
-		}
+        .main-browser {
+            display: none;
+        }
 
-		h1 .highlight {
-			font-size: 22px;
-			display: block;
-			margin-bottom: 5px;
-		}
+        .another-browser {
+            display: none;
+        }
 
-		h2 {
-			font-size: 18px;
-		}
+        .main-graphic {
+            display: block;
+            max-width: 80%;
+            margin: auto;
+            padding: 0;
+        }
+    }
 
-		.buttons {
-			flex-direction: column;
-		}
-	}
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 32px;
+        }
+
+        h1 .highlight {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        .buttons {
+            flex-direction: column;
+        }
+    }
 </style>
