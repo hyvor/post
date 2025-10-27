@@ -1,7 +1,6 @@
 <script lang="ts">
     import {Button} from '@hyvor/design/components';
     import TrialChecks from './TrialChecks.svelte';
-    import MainGraphic from './MainGraphic.svelte';
     import Envelope from './Envelope.svelte';
     import {getMarketingI18n} from '../locale';
     import BrowserWindow from './BrowserWindow.svelte';
@@ -45,7 +44,7 @@
         </div>
 
         <div class="main-graphic">
-            <MainGraphic/>
+            <img src='/img/main-graphic.svg' alt="Main Graphic"/>
         </div>
     </div>
 </div>
@@ -232,6 +231,11 @@
             max-width: 80%;
             margin: auto;
             padding: 0;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 
