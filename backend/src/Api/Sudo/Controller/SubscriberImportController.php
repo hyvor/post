@@ -61,11 +61,11 @@ class SubscriberImportController extends AbstractController
         $offset = $request->query->getInt('offset', 0);
 
         $parser = $this->parserFactory->csv();
-        $subscribers = $parser->parse($subscriberImport);
+        $subscribers = $parser->parse($subscriberImport, $limit, $offset);
 
         return new JsonResponse(array_map(
             fn($subscriber) => new ImportingSubscriberObject($subscriber),
-            array_values($subscribers->slice($offset, $limit))
+            $subscribers->toArray()
         ));
     }
 
