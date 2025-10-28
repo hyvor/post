@@ -54,9 +54,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t backend-dev . --target backend-dev
 
-      #      - name: Setup tmate session
-      #        uses: mxschmitt/action-tmate@v3
-
       - name: Run Tests
         run: |
           touch coverage.xml
