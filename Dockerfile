@@ -130,6 +130,8 @@ COPY backend/composer.json backend/composer.lock /app/backend/
 RUN composer install --no-interaction
 # set up code and install composer packages
 COPY backend /app/backend/
+COPY shared /app/shared/
+
 COPY meta/image/dev/Caddyfile.dev /etc/caddy/Caddyfile
 COPY meta/image/dev/php.dev.ini /usr/local/etc/php/conf.d/app.ini
 COPY meta/image/dev/run.dev /app/run
