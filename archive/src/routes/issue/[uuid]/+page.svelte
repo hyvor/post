@@ -26,7 +26,7 @@
     }
 
     onMount(() => {
-        getIssueHtml(page.params.uuid).then((res) => {
+        getIssueHtml(page.params.uuid ?? '').then((res) => {
             issue = res;
             setHtml(issue.html);
         });
@@ -42,12 +42,12 @@
 
 <div class="iframe-wrap">
     <iframe
-        width="100%"
-        height="100%"
-        frameborder="0"
-        sandbox="allow-same-origin"
-        title={issue.subject}
-        bind:this={iframeEl}
+            width="100%"
+            height="100%"
+            frameborder="0"
+            sandbox="allow-same-origin"
+            title={issue.subject}
+            bind:this={iframeEl}
     ></iframe>
 </div>
 

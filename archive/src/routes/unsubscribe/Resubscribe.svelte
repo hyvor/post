@@ -35,6 +35,11 @@
     }
 
     function handleSave() {
+        if (!token) {
+            error = 'Invalid resubscription link';
+            return;
+        }
+
         resubscribe(selectedListsIds, token)
             .catch((e) => {
                 error = e.message || 'An unexpected error occurred';
@@ -44,9 +49,9 @@
 
 <div class="resubscribe">
     <div
-        class="lists"
-        transition:slide={{duration: 400}}
-        class:hidden={lists.length === 0}
+            class="lists"
+            transition:slide={{duration: 400}}
+            class:hidden={lists.length === 0}
     >
         {#each lists as list (list.id)}
             <label class="list">
@@ -61,28 +66,28 @@
 
     <div class="select">
         <Button
-            color="var(--hp-accent-text-light)"
-            backgroundColor="transparent"
-            size="x-small"
-            style="font-weight: 500;"
-            onclick={handleSelectAll}
+                color="var(--hp-accent-text-light)"
+                backgroundColor="transparent"
+                size="x-small"
+                style="font-weight: 500;"
+                onclick={handleSelectAll}
         >
             Select all
         </Button>
         <Button
-            color="var(--hp-accent-text-light)"
-            backgroundColor="transparent"
-            size="x-small"
-            style="font-weight: 500;"
-            onclick={handleDeselectAll}
+                color="var(--hp-accent-text-light)"
+                backgroundColor="transparent"
+                size="x-small"
+                style="font-weight: 500;"
+                onclick={handleDeselectAll}
         >
             Deselect all
         </Button>
     </div>
 
     <Button
-        size="small"
-        onclick={handleSave}
+            size="small"
+            onclick={handleSave}
     >
         Save preferences
     </Button>
