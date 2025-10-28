@@ -54,8 +54,8 @@ jobs:
       - name: Build Docker image
         run: docker build -t backend-dev . --target backend-dev
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      #      - name: Setup tmate session
+      #        uses: mxschmitt/action-tmate@v3
 
       - name: Run Tests
         run: |
@@ -67,7 +67,7 @@ jobs:
           backend-dev sh -c "
           php -i | grep memory_limit &&
           php -d memory_limit=1024M bin/console doctrine:migrations:migrate --no-interaction &&
-          php -d memory_limit=1024M ./vendor/bin/phpunit --filter= --coverage-clover /app/coverage.xml"
+          php -d memory_limit=1024M ./vendor/bin/phpunit --coverage-clover /app/coverage.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
