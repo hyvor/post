@@ -202,10 +202,6 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
-        // TODO: Why SubscriberCreatedEvent on update?
-//        $event = new SubscriberCreatedEvent($subscriber);
-//        $this->eventDispatcher->dispatch($event, SubscriberCreatedEvent::class);
-
         return $subscriber;
     }
 
