@@ -88,7 +88,7 @@ class FormSubscribeTest extends WebTestCase
             $this->assertSame("Confirm your subscription to {$newsletter->getName()}", $body['subject']);
             return new JsonMockResponse();
         };
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
             'newsletter_subdomain' => $newsletter->getSubdomain(),
@@ -123,7 +123,7 @@ class FormSubscribeTest extends WebTestCase
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
-        parent::mockRelayClient();
+        $this->mockRelayClient();
 
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::createOne([

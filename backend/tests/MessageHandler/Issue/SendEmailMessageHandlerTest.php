@@ -56,7 +56,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             return new JsonMockResponse();
         };
 
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
     }
 
     public function test_send_job(): void

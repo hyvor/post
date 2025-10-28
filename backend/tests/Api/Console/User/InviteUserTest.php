@@ -25,7 +25,7 @@ class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void
     {
-        parent::mockRelayClient();
+        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
@@ -57,7 +57,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email(): void
     {
-        parent::mockRelayClient();
+        $this->mockRelayClient();
         Clock::set(new MockClock('2025-05-10'));
         $newsletter = NewsletterFactory::createOne();
 
@@ -146,7 +146,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_existing_user(): void
     {
-        parent::mockRelayClient();
+        $this->mockRelayClient();
         Clock::set(new MockClock('2025-05-10'));
         $newsletter = NewsletterFactory::createOne();
 

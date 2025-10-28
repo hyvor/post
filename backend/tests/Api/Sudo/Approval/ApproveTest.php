@@ -26,7 +26,7 @@ class ApproveTest extends WebTestCase
 
             return new JsonMockResponse();
         };
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
 
         $approval = ApprovalFactory::createOne([
             'user_id' => 2,
@@ -67,7 +67,7 @@ class ApproveTest extends WebTestCase
 
             return new JsonMockResponse();
         };
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
 
         $approval = ApprovalFactory::createOne([
             'user_id' => 2,

@@ -42,7 +42,7 @@ class VerifyDomainTest extends WebTestCase
             return new JsonMockResponse();
         };
 
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
     }
 
     public function test_verify_domain(): void

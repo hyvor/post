@@ -46,7 +46,7 @@ class CreateDomainTest extends WebTestCase
             ]);
         };
 
-        parent::mockRelayClient($callback);
+        $this->mockRelayClient($callback);
     }
 
     public function test_create_domain(): void
