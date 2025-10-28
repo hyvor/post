@@ -4,16 +4,13 @@ namespace App\Tests\Api\Console\User;
 
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
-use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\UserFactory;
 use App\Tests\Factory\UserInviteFactory;
 use Hyvor\Internal\Auth\AuthFake;
-use Illuminate\Support\Facades\Date;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -28,6 +25,7 @@ class InviteUserTest extends WebTestCase
 {
     public function test_invite_user_by_username(): void
     {
+        parent::mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([
@@ -59,6 +57,7 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_user_by_email(): void
     {
+        parent::mockRelayClient();
         Clock::set(new MockClock('2025-05-10'));
         $newsletter = NewsletterFactory::createOne();
 
@@ -147,8 +146,8 @@ class InviteUserTest extends WebTestCase
 
     public function test_invite_existing_user(): void
     {
+        parent::mockRelayClient();
         Clock::set(new MockClock('2025-05-10'));
-
         $newsletter = NewsletterFactory::createOne();
 
         AuthFake::databaseAdd([

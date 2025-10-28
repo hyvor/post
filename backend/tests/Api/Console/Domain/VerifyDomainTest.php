@@ -26,13 +26,23 @@ class VerifyDomainTest extends WebTestCase
 {
     private function mockCreateEmailIdentity(): void
     {
-        $response = new JsonMockResponse([
-            'domain' => 'hyvor.com',
-            'status' => 'active',
-            'dkim_verified' => true,
-            'dkim_checked_at' => 1755455400,
-        ]);
-        $this->container->set(HttpClientInterface::class, new MockHttpClient($response));
+        $callback = function ($method, $url, $options): JsonMockResponse {
+            if (str_starts_with($url, 'https://relay.hyvor.com/api/console/domains/verify')) {
+                return new JsonMockResponse([
+                    'domain' => 'hyvor.com',
+                    'status' => 'active',
+                    'dkim_checked_at' => 1755455400,
+                ]);
+            } elseif (str_starts_with($url, 'https://relay.hyvor.com/api/console/sends')) {
+                $body = json_decode($options['body'], true);
+                $this->assertIsArray($body);
+                $this->assertSame('Your domain hyvor.com is verified', $body['subject']);
+                $this->assertStringContainsString("Your domain <strong>hyvor.com</strong> has been successfully verified", $body['body_html']);
+            }
+            return new JsonMockResponse();
+        };
+
+        parent::mockRelayClient($callback);
     }
 
     public function test_verify_domain(): void
@@ -62,14 +72,6 @@ class VerifyDomainTest extends WebTestCase
         $this->assertIsArray($json['domain']);
         $this->assertSame('hyvor.com', $json['domain']['domain']);
         $this->assertSame(RelayDomainStatus::ACTIVE->value, $json['domain']['relay_status']);
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Your domain hyvor.com is verified');
-        $this->assertEmailHtmlBodyContains(
-            $email,
-            'Your domain <strong>hyvor.com</strong> has been successfully verified'
-        );
     }
 
     public function test_error_on_relay_call_fails_and_logs(): void

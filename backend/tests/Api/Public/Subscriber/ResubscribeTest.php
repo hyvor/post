@@ -12,6 +12,8 @@ class ResubscribeTest extends WebTestCase
 {
     public function test_resubscribe(): void
     {
+        parent::mockRelayClient();
+
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,

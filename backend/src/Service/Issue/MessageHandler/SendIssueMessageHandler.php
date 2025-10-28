@@ -17,10 +17,10 @@ use Symfony\Component\Messenger\Stamp\DelayStamp;
 class SendIssueMessageHandler
 {
     public function __construct(
-        private SendService $sendService,
-        private MessageBusInterface $bus,
+        private SendService            $sendService,
+        private MessageBusInterface    $bus,
         private EntityManagerInterface $em,
-        private AppConfig $appConfig,
+        private AppConfig              $appConfig,
     )
     {
     }
@@ -49,13 +49,13 @@ class SendIssueMessageHandler
     }
 
     private function sendJob(
-        Issue $issue,
+        Issue      $issue,
         Subscriber $subscriber,
-        int $index
+        int        $index
     ): void
     {
         $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
-        $delaySeconds = max(((int)floor($index + 1 / $maxPerSecond)) - 1, 0);
+        $delaySeconds = max($index * (1 / $maxPerSecond), 0);
 
         $send = $this->sendService->createSend($issue, $subscriber);
         $this->bus->dispatch(

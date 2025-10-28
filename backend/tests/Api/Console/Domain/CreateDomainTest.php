@@ -46,8 +46,7 @@ class CreateDomainTest extends WebTestCase
             ]);
         };
 
-        $httpClient = new MockHttpClient($callback);
-        $this->container->set(HttpClientInterface::class, $httpClient);
+        parent::mockRelayClient($callback);
     }
 
     public function test_create_domain(): void
