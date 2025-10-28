@@ -54,7 +54,8 @@ class GetNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             999999,
             'GET',
-            '/newsletter'
+            '/newsletter',
+            useSession: true
         );
         $this->assertSame(403, $response->getStatusCode());
     }

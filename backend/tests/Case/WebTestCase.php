@@ -93,26 +93,29 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         bool                $useSession = false
     ): Response
     {
-        if ($newsletter instanceof Newsletter) {
-            $newsletterId = $newsletter->getId();
-        } else if ($newsletter) {
-            $newsletterId = $newsletter;
-            $newsletter = NewsletterFactory::findOrCreate(['id' => $newsletterId]);
-        }
+        $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
 
-        if ($useSession || $newsletter === null) {
+//        if ($newsletter instanceof Newsletter) {
+//            $newsletterId = $newsletter->getId();
+//        } else if ($newsletter) {
+//            $newsletterId = $newsletter;
+//            $newsletter = NewsletterFactory::findOrCreate(['id' => $newsletterId]);
+//        }
+
+        if ($useSession || $newsletterId === null) {
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
-            if ($newsletter) {
-                UserFactory::findOrCreate([
-                    'newsletter' => $newsletter,
-                    'hyvor_user_id' => 1,
-                ]);
+            if ($newsletterId) {
+//                UserFactory::findOrCreate([
+//                    'newsletter' => $newsletter,
+//                    'hyvor_user_id' => 1,
+//                ]);
                 $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;
             }
         } else {
             $apiKey = bin2hex(random_bytes(16));
             $apiKeyHashed = hash('sha256', $apiKey);
-            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
+            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter instanceof Newsletter ? $newsletter : NewsletterFactory::findOrCreate(['id' => $newsletterId])];
+//            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
             if ($scopes !== true) {
                 $apiKeyFactory['scopes'] = array_map(
                     fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
