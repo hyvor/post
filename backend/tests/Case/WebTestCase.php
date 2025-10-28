@@ -95,27 +95,27 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
 
-//        if ($newsletter instanceof Newsletter) {
-//            $newsletterId = $newsletter->getId();
-//        } else if ($newsletter) {
-//            $newsletterId = $newsletter;
-//            $newsletter = NewsletterFactory::findOrCreate(['id' => $newsletterId]);
-//        }
+        if ($newsletter instanceof Newsletter) {
+            $newsletterId = $newsletter->getId();
+        } else if ($newsletter) {
+            $newsletterId = $newsletter;
+            $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
+            $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
+        }
 
-        if ($useSession || $newsletterId === null) {
+        if ($useSession || $newsletter === null) {
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
-            if ($newsletterId) {
-//                UserFactory::findOrCreate([
-//                    'newsletter' => $newsletter,
-//                    'hyvor_user_id' => 1,
-//                ]);
+            if ($newsletter) {
+                UserFactory::findOrCreate([
+                    'newsletter' => $newsletter,
+                    'hyvor_user_id' => 1,
+                ]);
                 $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;
             }
         } else {
             $apiKey = bin2hex(random_bytes(16));
             $apiKeyHashed = hash('sha256', $apiKey);
-            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter instanceof Newsletter ? $newsletter : NewsletterFactory::findOrCreate(['id' => $newsletterId])];
-//            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
+            $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
             if ($scopes !== true) {
                 $apiKeyFactory['scopes'] = array_map(
                     fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
