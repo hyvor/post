@@ -1,4 +1,7 @@
 <script lang="ts">
+    // @ts-nocheck
+    // TODO: Remove ts-nocheck when Footer is fixed in the design system
+
     import {FooterLinkList, Footer} from '@hyvor/design/marketing';
 </script>
 
