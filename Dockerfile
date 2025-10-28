@@ -12,7 +12,7 @@ FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
 FROM node AS frontend-base
 WORKDIR /app/frontend
 # install dependencies
-COPY frontend/package.json frontend/package-lock.json \
+COPY frontend/package.json \
     frontend/svelte.config.js \
     frontend/vite.config.ts \
     frontend/tsconfig.json /app/frontend/
