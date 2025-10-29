@@ -24,8 +24,6 @@ class CreateSubscriberInput
     ])]
     public array $list_ids;
 
-    public ?SubscriberStatus $status = null;
-
     public ?SubscriberSource $source = null;
 
     #[Assert\Ip(version: Assert\Ip::ALL_ONLY_PUBLIC)]

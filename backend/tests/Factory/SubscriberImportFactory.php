@@ -40,6 +40,7 @@ final class SubscriberImportFactory extends PersistentProxyObjectFactory
             'status' => SubscriberImportStatus::REQUIRES_INPUT,
             'fields' => null,
             'error_message' => null,
+            'source' => self::faker()->sentence(10),
         ];
     }
 

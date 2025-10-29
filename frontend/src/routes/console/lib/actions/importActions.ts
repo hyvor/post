@@ -1,10 +1,12 @@
 import consoleApi from "../consoleApi";
-import type {Import} from "../../types";
+import type {Import, ImportLimits} from "../../types";
 
 export const IMPORTS_PER_PAGE = 30;
-export function uploadCsv(file: File | Blob) {
+
+export function uploadCsv(file: File | Blob, source: string) {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('source', source)
 
     return consoleApi.post<Import>({
         endpoint: "imports/upload",
@@ -15,7 +17,7 @@ export function uploadCsv(file: File | Blob) {
 export function subscriberImport(importId: number, mapping: Record<string, string | null>) {
     return consoleApi.post<Import>({
         endpoint: `imports/${importId}`,
-        data: { mapping },
+        data: {mapping},
     });
 }
 
@@ -26,5 +28,11 @@ export function getImports(offset: number = 0) {
             limit: IMPORTS_PER_PAGE,
             offset
         }
+    });
+}
+
+export function getImportLimits() {
+    return consoleApi.get<ImportLimits>({
+        endpoint: "imports/limits",
     });
 }
