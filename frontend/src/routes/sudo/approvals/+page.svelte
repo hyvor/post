@@ -62,7 +62,7 @@
             });
     }
 
-    function handleApproveOrReject(approval: Approval, action: 'approved' | 'rejected') {
+    function handleApproveRejectPending(approval: Approval, action: 'approved' | 'rejected' | 'pending') {
         approve(approval, action)
             .then((data) => {
                 toast.success("Approval status updated");
@@ -93,7 +93,7 @@
             content: 'Are you sure you want to approve this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(approval, 'approved');
+            handleApproveRejectPending(approval, 'approved');
         }
     }
 
@@ -103,7 +103,17 @@
             content: 'Are you sure you want to reject this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(approval, 'rejected');
+            handleApproveRejectPending(approval, 'rejected');
+        }
+    }
+
+    async function onMarkAsPending(approval: Approval) {
+        const confirmation = await confirm({
+            title: 'Confirm mark as pending',
+            content: 'Are you sure you want to mark this request as pending?'
+        })
+        if (confirmation) {
+            handleApproveRejectPending(approval, 'pending');
         }
     }
 
@@ -221,6 +231,7 @@
                     approval={selectingApproval}
                     {onApprove}
                     {onReject}
+                    {onMarkAsPending}
             />
         {/if}
     {/if}

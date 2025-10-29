@@ -17,7 +17,7 @@ final class Version20250722122134 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(
-            "CREATE TYPE approval_status AS ENUM ('reviewing', 'approved', 'rejected');"
+            "CREATE TYPE approval_status AS ENUM ('reviewing', 'approved', 'rejected', 'pending');"
         );
 
         $this->addSql(<<<SQL

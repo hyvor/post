@@ -19,18 +19,19 @@ class ApprovalService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private AuthInterface $auth,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
+        private EntityManagerInterface        $em,
+        private AuthInterface                 $auth,
+        private readonly Environment          $mailTemplate,
+        private readonly StringsFactory       $stringsFactory,
         private SystemNotificationMailService $emailNotificationService,
-    ) {
+    )
+    {
     }
 
     /**
      * @return Approval[]
      */
-    public function getApprovals(?int $userId = null, ?ApprovalStatus $status = null , int $limit = 50, int $offset = 0): array
+    public function getApprovals(?int $userId = null, ?ApprovalStatus $status = null, int $limit = 50, int $offset = 0): array
     {
         $criteria = [];
 
@@ -61,6 +62,7 @@ class ApprovalService
         return $this->em->getRepository(Approval::class)
             ->findOneBy(['user_id' => $user->id]);
     }
+
     public function getApprovalStatusOfUser(AuthUser $user): ApprovalStatus
     {
         $approval = $this->getApprovalOfUser($user);
@@ -68,10 +70,10 @@ class ApprovalService
     }
 
     public function createApproval(
-        int $userId,
-        string $companyName,
-        string $country,
-        string $website,
+        int     $userId,
+        string  $companyName,
+        string  $country,
+        string  $website,
         ?string $socialLinks,
         ?string $typeOfContent,
         ?string $frequency,
@@ -115,9 +117,10 @@ class ApprovalService
     }
 
     public function updateApproval(
-        Approval $approval,
+        Approval          $approval,
         UpdateApprovalDto $updates
-    ): Approval {
+    ): Approval
+    {
         if ($updates->hasProperty('companyName')) {
             $approval->setCompanyName($updates->companyName);
         }
@@ -132,6 +135,10 @@ class ApprovalService
 
         if ($updates->hasProperty('socialLinks')) {
             $approval->setSocialLinks($updates->socialLinks);
+        }
+
+        if ($updates->hasProperty('status')) {
+            $approval->setStatus($updates->status);
         }
 
         $otherInfo = $approval->getOtherInfo() ?? [];
@@ -187,10 +194,10 @@ class ApprovalService
     }
 
     public function changeStatus(
-        Approval $approval,
+        Approval       $approval,
         ApprovalStatus $status,
-        ?string $public_note,
-        ?string $private_note
+        ?string        $public_note,
+        ?string        $private_note
     ): Approval
     {
         $approval->setStatus($status);

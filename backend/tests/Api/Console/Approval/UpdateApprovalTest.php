@@ -97,7 +97,7 @@ class UpdateApprovalTest extends WebTestCase
         $this->assertJson($content);
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertSame('Approval is not in reviewing status', $data['message']);
+        $this->assertSame('Approval is not in pending or reviewing status', $data['message']);
     }
 
     public function test_update_approval_not_found(): void

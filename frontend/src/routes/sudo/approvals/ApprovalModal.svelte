@@ -7,9 +7,12 @@
         approval: Approval;
         onApprove: (approval: Approval) => void;
         onReject: (approval: Approval) => void;
+        onMarkAsPending: (approval: Approval) => void;
     }
 
-    let {show = $bindable(), approval, onApprove, onReject}: Props = $props();
+    let {show = $bindable(), approval, onApprove, onReject, onMarkAsPending}: Props = $props();
+
+
 </script>
 
 <Modal
@@ -109,6 +112,9 @@
 
     {#snippet footer() }
         <div class="footer-buttons">
+            <Button color="input" on:click={() => onMarkAsPending(approval)}>
+                Mark as pending
+            </Button>
             <Button color="red" on:click={ () => onReject(approval) }>
                 Reject
             </Button>

@@ -15,7 +15,7 @@ class CreateApprovalInput
     public string $country;
 
     #[Assert\NotBlank]
-    #[Assert\Url]
+    #[Assert\Length(max: 1024)]
     public string $website;
 
     public ?string $social_links;
