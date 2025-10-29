@@ -340,7 +340,7 @@
         "usernameEmailRequired": "Username or email is required",
         "inviteSent": "Invitation sent",
         "hyvorAccRequired": "Hyvor Account Required",
-        "askAdmin": "Ask your admin to <a>create a HYVOR account</a> before inviting.",
+        "askAdmin": "Ask your admin to <signup>create a HYVOR account</signup> before inviting.",
         "username": "Username or Email",
         "usernameCaption": "Username or email of the admin's HYVOR account",
         "waitBeforeResend": "Please wait a minute before resending an invite",

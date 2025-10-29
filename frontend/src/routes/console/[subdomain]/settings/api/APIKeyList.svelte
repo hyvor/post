@@ -17,7 +17,7 @@
 </script>
 
 {#if apiKeys.length === 0}
-    <IconMessage empty size="large" message={I18n.t('console.settings.api.noKey')}/>
+    <IconMessage empty size="large" message={I18n.t('console.settings.api.noKeys')}/>
 {:else}
     <div class="api-keys-list">
         {#each apiKeys as apiKey (apiKey.id)}
