@@ -189,12 +189,16 @@ class ImportTest extends WebTestCase
         SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
             'created_at' => $date,
+            'status' => SubscriberImportStatus::COMPLETED
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/imports/upload'
+            '/imports/upload',
+            parameters: [
+                'source' => 'test'
+            ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -212,12 +216,16 @@ class ImportTest extends WebTestCase
         SubscriberImportFactory::createMany(5, [
             'newsletter' => $newsletter,
             'created_at' => $date->modify('-7 day'),
+            'status' => SubscriberImportStatus::COMPLETED
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/imports/upload'
+            '/imports/upload',
+            parameters: [
+                'source' => 'test'
+            ]
         );
 
         $this->assertSame(422, $response->getStatusCode());
