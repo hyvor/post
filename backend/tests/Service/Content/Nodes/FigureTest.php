@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service\Content\Nodes;
 
-
 use PHPUnit\Framework\TestCase;
 
 class FigureTest extends TestCase
