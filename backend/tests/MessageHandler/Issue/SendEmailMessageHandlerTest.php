@@ -134,13 +134,16 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
-            'failed_sends' => 0
+            'ok_sends' => 0,
+            'failed_sends' => 0,
+            'total_sends' => 0,
         ]);
 
         $send = SendFactory::createOne([
             'issue' => $issue,
             'subscriber' => $subscriber,
             'email' => 'test_failed@hyvor.com',
+            'status' => SendStatus::PENDING,
         ]);
 
         $message = new SendEmailMessage($send->getId());
