@@ -83,8 +83,9 @@ WORKDIR /app/embed
 COPY embed/package.json embed/package-lock.json \
     embed/vite.config.ts \
     embed/tsconfig*.json \
-    embed/src/ \
     /app/embed/
+
+COPY embed/src /app/embed/src
 
 ###################################################
 FROM embed-base AS embed-dev

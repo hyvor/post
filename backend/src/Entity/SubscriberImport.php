@@ -33,6 +33,9 @@ class SubscriberImport
     #[ORM\Column(type: 'string', enumType: SubscriberImportStatus::class)]
     private SubscriberImportStatus $status;
 
+    #[ORM\Column(type: 'string', length: 1024)]
+    private string $source;
+
     /**
      * @var array<string, string|null> | null
      */
@@ -44,6 +47,9 @@ class SubscriberImport
      */
     #[ORM\Column(type: 'json')]
     private ?array $csv_fields = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $csv_rows = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $imported_subscribers = null;
@@ -127,6 +133,18 @@ class SubscriberImport
         return $this;
     }
 
+    public function getSource(): string
+    {
+        return $this->source;
+    }
+
+    public function setSource(string $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
     /**
      * @return array<string, string|null> | null
      */
@@ -159,6 +177,18 @@ class SubscriberImport
     public function setCsvFields(?array $csv_fields): static
     {
         $this->csv_fields = $csv_fields;
+
+        return $this;
+    }
+
+    public function getCsvRows(): ?int
+    {
+        return $this->csv_rows;
+    }
+
+    public function setCsvRows(?int $csv_rows): static
+    {
+        $this->csv_rows = $csv_rows;
 
         return $this;
     }

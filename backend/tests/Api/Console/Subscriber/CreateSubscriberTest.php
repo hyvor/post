@@ -52,7 +52,7 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('test@email.com', $subscriber->getEmail());
-        $this->assertSame('subscribed', $subscriber->getStatus()->value);
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame('console', $subscriber->getSource()->value);
 
         $subscriberLists = $subscriber->getLists();
@@ -76,7 +76,6 @@ class CreateSubscriberTest extends WebTestCase
             [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [$list->getId()],
-                'status' => 'unsubscribed',
                 'source' => 'form',
                 'subscribe_ip' => '79.255.1.1',
                 'subscribed_at' => $subscribedAt->getTimestamp(),
@@ -89,7 +88,7 @@ class CreateSubscriberTest extends WebTestCase
         $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('supun@hyvor.com', $json['email']);
-        $this->assertSame('unsubscribed', $json['status']);
+        $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
         $this->assertSame('form', $json['source']);
         $this->assertSame('79.255.1.1', $json['subscribe_ip']);
         $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
@@ -99,7 +98,7 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('supun@hyvor.com', $subscriber->getEmail());
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
         $this->assertSame('79.255.1.1', $subscriber->getSubscribeIp());
         $this->assertSame('2021-08-27 12:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
@@ -173,17 +172,12 @@ class CreateSubscriberTest extends WebTestCase
             fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
-                'status' => 'invalid-status',
                 'source' => 'invalid-source',
                 'subscribe_ip' => '127.0.0.1',
                 'subscribed_at' => 'invalid-date',
                 'unsubscribed_at' => 'invalid-date',
             ],
             [
-                [
-                    'property' => 'status',
-                    'message' => 'This value should be of type subscribed|unsubscribed|pending.',
-                ],
                 [
                     'property' => 'source',
                     'message' => 'This value should be of type console|form|import.',

@@ -41,6 +41,7 @@ final class Version20250209024410 extends AbstractMigration
             email VARCHAR(255) NOT NULL,
             status subscriber_status DEFAULT 'pending',
             subscribed_at timestamptz,
+            opt_in_at timestamptz,
             unsubscribed_at timestamptz,
             source subscriber_source DEFAULT 'form',
             source_id VARCHAR(255),
