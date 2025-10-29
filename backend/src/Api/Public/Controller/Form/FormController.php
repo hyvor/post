@@ -31,10 +31,11 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private NewsletterService $newsletterService,
+        private NewsletterService     $newsletterService,
         private NewsletterListService $newsletterListService,
-        private SubscriberService $subscriberService,
-    ) {
+        private SubscriberService     $subscriberService,
+    )
+    {
     }
 
     #[Route('/form/init', methods: 'POST')]
@@ -72,8 +73,9 @@ class FormController extends AbstractController
     #[Route('/form/subscribe', methods: 'POST')]
     public function subscribe(
         #[MapRequestPayload] FormSubscribeInput $input,
-        Request $request,
-    ): JsonResponse {
+        Request                                 $request,
+    ): JsonResponse
+    {
         $ip = $request->getClientIp();
         $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
@@ -98,7 +100,7 @@ class FormController extends AbstractController
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
-            $update->status = SubscriberStatus::PENDING;
+            $update->status = $subscriber->getOptInAt() !== null ? SubscriberStatus::SUBSCRIBED : SubscriberStatus::PENDING;
             $update->lists = $lists;
 
             $this->subscriberService->updateSubscriber(

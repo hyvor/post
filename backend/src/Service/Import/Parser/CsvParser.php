@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 class CsvParser extends ParserAbstract
 {
     public function __construct(
-        private MediaService $mediaService,
+        private MediaService              $mediaService,
         private SubscriberMetadataService $subscriberMetadataService,
     )
     {
@@ -27,7 +27,7 @@ class CsvParser extends ParserAbstract
      * @return Collection<int, ImportingSubscriberDto>
      * @throws ParserException
      */
-    public function parse(SubscriberImport $subscriberImport): Collection
+    public function parse(SubscriberImport $subscriberImport, ?int $limit = null, ?int $offset = null): Collection
     {
         $fieldMapping = $subscriberImport->getFields();
 
@@ -61,6 +61,14 @@ class CsvParser extends ParserAbstract
 
         while (($row = fgetcsv($stream)) !== false) {
             $rowIndex++;
+
+            if ($offset !== null && $rowIndex <= ($offset + 1)) {
+                continue;
+            }
+
+            if ($limit !== null && $rowIndex > ($offset + $limit + 1)) {
+                break;
+            }
 
             if (count($row) !== count($headers)) {
                 $this->warning("Skipping row $rowIndex. Column count mismatch.");

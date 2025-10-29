@@ -176,6 +176,7 @@ export type Subscriber = {
     status: NewsletterSubscriberStatus;
     list_ids: number[];
     source: NewsletterSubscriberSource;
+    is_opted_in: boolean;
     subscribed_at: number;
     unsubscribed_at: number | null;
     metadata: Record<string, string>;
@@ -288,7 +289,7 @@ export type Approval = {
     rejected_at: number | null;
 }
 
-export type ImportStatus = 'requires_input' | 'importing' | 'failed' | 'completed';
+export type ImportStatus = 'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
 
 export type Import = {
     id: number;
@@ -299,6 +300,11 @@ export type Import = {
     imported_subscribers: number | null;
     warnings: string | null;
     error_message: string | null;
+}
+
+export type ImportLimits = {
+    daily_limit_exceeded: boolean,
+    monthly_limit_exceeded: boolean,
 }
 
 export type ApiKey = {

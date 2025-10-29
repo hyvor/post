@@ -157,7 +157,7 @@
                 User ID
             {/snippet}
             {#snippet end()}
-                <div style="display: flex; flex-direction:column; align-items: center; width: 25x;">
+                <div style="display: flex; flex-direction:column; align-items: center; width: 25px;">
                     {#if searchValue}
                         <IconButton size={16} on:click={handleSearchClear}>
                             <IconX size={12}/>

@@ -212,6 +212,7 @@
         "title": "Import",
         "status": {
           "requires_input": "Requires Input",
+          "pending_approval": "Pending Approval",
           "importing": "Importing",
           "completed": "Completed",
           "failed": "Failed"

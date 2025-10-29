@@ -181,6 +181,10 @@ class SubscriberService
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }
 
+        if ($updates->hasProperty('optInAt')) {
+            $subscriber->setOptInAt($updates->optInAt);
+        }
+
         if ($updates->hasProperty('unsubscribedAt')) {
             $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
         }
@@ -202,27 +206,7 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
-        $event = new SubscriberCreatedEvent($subscriber);
-        $this->eventDispatcher->dispatch($event, SubscriberCreatedEvent::class);
-
         return $subscriber;
-    }
-
-    /**
-     * @param array<Subscriber> $subscribers
-     */
-    public function updateSubscribersStatus(array $subscribers, SubscriberStatus $status): void
-    {
-        $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
-
-        $qb = $this->em->createQueryBuilder();
-        $qb->update(Subscriber::class, 's')
-            ->set('s.status', ':status')
-            ->where($qb->expr()->in('s.id', ':ids'))
-            ->setParameter('status', $status->value)
-            ->setParameter('ids', $ids);
-
-        $qb->getQuery()->execute();
     }
 
     public function getSubscriberByEmail(Newsletter $newsletter, string $email): ?Subscriber
@@ -241,6 +225,7 @@ class SubscriberService
         $update = new UpdateSubscriberDto();
 
         $update->status = SubscriberStatus::UNSUBSCRIBED;
+        $update->optInAt = null;
         $update->unsubscribedAt = $at ?? $this->now();
         $update->unsubscribedReason = $reason;
 
@@ -257,10 +242,12 @@ class SubscriberService
 
         $qb->update(Subscriber::class, 's')
             ->set('s.status', ':status')
+            ->set('s.opt_in_at', ':optInAt')
             ->set('s.unsubscribed_at', ':unsubscribedAt')
             ->set('s.unsubscribe_reason', ':reason')
             ->where('s.email = :email')
             ->setParameter('status', SubscriberStatus::UNSUBSCRIBED->value)
+            ->setParameter('optInAt', null)
             ->setParameter('unsubscribedAt', $at ?? $this->now())
             ->setParameter('reason', $reason)
             ->setParameter('email', $email);

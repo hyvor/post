@@ -95,7 +95,7 @@ class RenderTemplateTest extends WebTestCase
         $json = $this->getJson();
 
         $this->assertIsString($json['html']);
-        $this->assertStringContainsString('--accent: #007bff;', $json['html']);
+        $this->assertStringContainsString('--accent: #5A8387;', $json['html']);
         $this->assertStringContainsString('<html lang="en">', $json['html']);
     }
 

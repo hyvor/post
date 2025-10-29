@@ -17,6 +17,7 @@ use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(FormController::class)]
 #[CoversClass(SubscriberObject::class)]
@@ -81,6 +82,14 @@ class FormSubscribeTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
+        $callback = function ($method, $url, $options) use ($newsletter): JsonMockResponse {
+            $body = json_decode($options['body'], true);
+            $this->assertIsArray($body);
+            $this->assertSame("Confirm your subscription to {$newsletter->getName()}", $body['subject']);
+            return new JsonMockResponse();
+        };
+        $this->mockRelayClient($callback);
+
         $response = $this->publicApi('POST', '/form/subscribe', [
             'newsletter_subdomain' => $newsletter->getSubdomain(),
             'email' => 'supun@hyvor.com',
@@ -110,14 +119,12 @@ class FormSubscribeTest extends WebTestCase
         $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
         $this->assertNull($subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
+        $this->mockRelayClient();
+
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
@@ -162,10 +169,5 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
-
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 }

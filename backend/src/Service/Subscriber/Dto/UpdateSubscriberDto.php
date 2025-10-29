@@ -22,6 +22,8 @@ class UpdateSubscriberDto
 
     public ?\DateTimeImmutable $subscribedAt;
 
+    public ?\DateTimeImmutable $optInAt;
+
     public \DateTimeImmutable $unsubscribedAt;
 
     public ?string $unsubscribedReason;

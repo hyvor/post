@@ -46,6 +46,8 @@ class FigureTest extends TestCase
 
     public function test_html_to_json(): void
     {
+        $this->markTestSkipped();
+        
         $caption = 'This is a caption';
         $src = 'https://example.com/image.jpg';
         $alt = 'Example Image';

@@ -3,8 +3,8 @@
 namespace App\Api\Sudo\Controller;
 
 use App\Api\Sudo\Input\Approval\ApproveInput;
-use App\Api\Sudo\Input\Approval\GetApprovalsInput;
 use App\Api\Sudo\Object\ApprovalObject;
+use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,9 @@ class ApprovalController extends AbstractController
 {
     public function __construct(
         private ApprovalService $approvalService
-    ) {}
+    )
+    {
+    }
 
     #[Route('/approvals', methods: ['GET'])]
     public function getApprovals(
@@ -39,15 +41,8 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals/{id}', methods: ['POST'])]
-    public function approve(string $id, #[MapRequestPayload] ApproveInput $input): JsonResponse
+    public function approve(Approval $approval, #[MapRequestPayload] ApproveInput $input): JsonResponse
     {
-        $id = intval($id);
-        $approval = $this->approvalService->getApporvalById($id);
-
-        if ($approval === null) {
-            throw new UnprocessableEntityHttpException('Approval request not found');
-        }
-
         $approval = $this->approvalService->changeStatus(
             $approval,
             $input->status,
