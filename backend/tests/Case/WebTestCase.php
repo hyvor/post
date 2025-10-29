@@ -6,6 +6,7 @@ use App\Api\Console\Authorization\Scope;
 use App\Entity\Newsletter;
 use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
@@ -101,6 +102,13 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             $newsletterId = $newsletter;
             $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
             $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
+        }
+
+        if ($newsletter) {
+            SendingProfileFactory::findOrCreate([
+                'newsletter' => $newsletter,
+                'is_system' => true,
+            ]);
         }
 
         if ($useSession || $newsletter === null) {
