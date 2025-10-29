@@ -61,7 +61,7 @@ class SendIssueMessageHandler
         $this->bus->dispatch(
             new SendEmailMessage($send->getId()),
             [
-                new DelayStamp($delaySeconds * 1000)
+                new DelayStamp((int)floor($delaySeconds * 1000))
             ]
         );
     }

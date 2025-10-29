@@ -52,7 +52,7 @@ class DeleteSendingProfileTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertCount(0, $json);
+        $this->assertCount(1, $json);   // system sending profile
 
         $repository = $this->em->getRepository(SendingProfile::class);
         $deletedSendingProfile = $repository->findOneBy(['id' => $id]);
@@ -85,7 +85,7 @@ class DeleteSendingProfileTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertCount(2, $json);
+        $this->assertCount(3, $json);      // 2 + system sending profile
 
         // @phpstan-ignore-next-line
         $item = $json[0];

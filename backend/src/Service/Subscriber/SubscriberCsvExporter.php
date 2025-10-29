@@ -39,7 +39,7 @@ class SubscriberCsvExporter
             throw new \Exception('Could not create file');
         }
 
-        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['newsletter' => $newsletter]);
+        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
         $headers = ['Email', 'Status', 'Subscribed At', 'Source'];
         foreach ($subscriberMetadata as $sb) {
             $headers[] = $sb->getKey();

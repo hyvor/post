@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service\Content\Nodes;
 
-
 use PHPUnit\Framework\TestCase;
 
 class FigureTest extends TestCase
@@ -46,8 +45,6 @@ class FigureTest extends TestCase
 
     public function test_html_to_json(): void
     {
-        $this->markTestSkipped();
-        
         $caption = 'This is a caption';
         $src = 'https://example.com/image.jpg';
         $alt = 'Example Image';
@@ -64,6 +61,8 @@ class FigureTest extends TestCase
                             'attrs' => [
                                 'src' => $src,
                                 'alt' => $alt,
+                                'width' => null,
+                                'height' => null,
                             ],
                         ],
                         [

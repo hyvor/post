@@ -109,12 +109,12 @@ class ApproveTest extends WebTestCase
             ]
         );
 
-        $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $this->assertJson($content);
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertSame('Approval request not found', $data['message']);
+        $this->assertSame('Entity not found', $data['message']);
     }
 }

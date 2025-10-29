@@ -126,11 +126,6 @@ class FormSubscribeTest extends WebTestCase
         $this->mockRelayClient();
 
         $newsletter = NewsletterFactory::createOne();
-        SendingProfileFactory::createOne([
-            'newsletter' => $newsletter,
-            'is_system' => true,
-        ]);
-
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
@@ -140,6 +135,7 @@ class FormSubscribeTest extends WebTestCase
             'email' => $email,
             'lists' => [$list1],
             'status' => SubscriberStatus::UNSUBSCRIBED,
+            'opt_in_at' => null,
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [

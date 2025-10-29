@@ -46,13 +46,13 @@ class CreateSendingProfileTest extends WebTestCase
         $json = $this->getJson();
 
         $this->assertSame('thibault@hyvor.com', $json['from_email']);
-        $this->assertSame(true, $json['is_default']);
+        $this->assertSame(false, $json['is_default']);
 
         $sendingProfile = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingProfile);
         $this->assertSame('thibault@hyvor.com', $sendingProfile->getFromEmail());
         $this->assertNull($sendingProfile->getFromName());
-        $this->assertSame(true, $sendingProfile->getIsDefault());
+        $this->assertSame(false, $sendingProfile->getIsDefault());
     }
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
