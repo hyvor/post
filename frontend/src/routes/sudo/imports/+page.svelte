@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {IconButton, IconMessage, LoadButton, Loader, TextInput} from "@hyvor/design/components";
+    import {IconButton, IconMessage, LoadButton, Loader, TextInput, toast} from "@hyvor/design/components";
     import {onMount} from "svelte";
     import {subscriberImportStore} from "../lib/stores/sudoStore";
     import SubscriberImportRow from "./SubscriberImportRow.svelte";
     import type {SubscriberImport} from "../types";
     import IconX from "@hyvor/icons/IconX";
     import {ITEMS_PER_PAGE} from "../lib/generalActions";
-    import {getSubscriberImports} from "../lib/actions/subscriberImportActions";
+    import {approveSubscriptionImport, getSubscriberImports} from "../lib/actions/subscriberImportActions";
     import SubscriberImportModal from "./SubscriberImportModal.svelte";
 
     let loading = $state(true);
@@ -50,8 +50,18 @@
         showModal = true;
     }
 
-    function onApprove() {
-        // TODO
+    function onApprove(subscriberImport: SubscriberImport) {
+        approveSubscriptionImport(subscriberImport.id)
+            .then((res) => {
+                toast.success("Subscriber import approved successfully.");
+                subscriberImportStore.update((subscriberImports) =>
+                    subscriberImports.filter((si) => (si.id !== res.id))
+                );
+                showModal = false;
+            })
+            .catch((e) => {
+                toast.error(e.message);
+            });
     }
 
     function handleSearchKeyup(e: any) {

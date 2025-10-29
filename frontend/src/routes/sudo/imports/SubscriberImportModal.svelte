@@ -55,6 +55,15 @@
         {loading}
         title="Subscriber Import: {subscriberImport.newsletter_subdomain}"
         size="large"
+        footer={{
+            cancel: {
+                text: "Close"
+            },
+            confirm: {
+                text: "Approve"
+            }
+        }}
+        on:confirm={() => onApprove(subscriberImport)}
 >
     <div class="content-wrap">
         <SplitControl label="Columns">
@@ -96,6 +105,7 @@
         flex: 1;
         overflow: auto;
     }
+
     :global(.inner) {
         width: 90vw !important;
     }
