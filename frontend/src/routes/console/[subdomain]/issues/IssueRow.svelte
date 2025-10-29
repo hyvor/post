@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { IconButton, toast } from '@hyvor/design/components';
+    import {confirm, IconButton, toast} from '@hyvor/design/components';
     import FriendlyDate from '../../@components/utils/FriendlyDate.svelte';
     import {consoleUrlWithNewsletter} from '../../lib/consoleUrl';
     import type {Issue} from '../../types';
     import IssueStatusTag from './IssueStatusTag.svelte';
     import SentStat from './SentStat.svelte';
-	import IconTrash from '@hyvor/icons/IconTrash';
-	import { deleteIssue } from '../../lib/actions/issueActions';
-	import { issueStore } from '../../lib/stores/newsletterStore';
+    import IconTrash from '@hyvor/icons/IconTrash';
+    import {deleteIssue} from '../../lib/actions/issueActions';
+    import {issueStore} from '../../lib/stores/newsletterStore';
 
     interface Props {
         issue: Issue;
@@ -15,16 +15,27 @@
 
     let {issue}: Props = $props();
 
-    function handleDelete(e: Event) {
+    async function handleDelete(e: Event) {
         e.preventDefault();
         e.stopPropagation();
+
+        const confirmed = await confirm({
+            title: 'Confirm to delete',
+            content: 'Are you sure that you want to delete this draft issue? This action cannot be undone.',
+            confirmText: 'Delete',
+            danger: true
+        });
+
+        if (!confirmed) {
+            return;
+        }
 
         deleteIssue(issue.id)
             .then(() => {
                 toast.success('Issue deleted successfully');
                 issueStore.update((issues) => {
-					return issues.filter((i) => i.id !== issue.id);
-				});
+                    return issues.filter((i) => i.id !== issue.id);
+                });
             })
             .catch(() => {
                 toast.error('Failed to delete the issue');
