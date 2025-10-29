@@ -13,7 +13,7 @@
         loading = true;
         getApproval()
             .then((res) => {
-                res && approvalStore.set(res);
+                res.approval && approvalStore.set(res.approval);
             })
             .catch(() => {
                 toast.error('Failed to load approval data');

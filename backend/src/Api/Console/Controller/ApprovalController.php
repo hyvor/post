@@ -43,13 +43,11 @@ class ApprovalController extends AbstractController
     public function getApproval(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
-
         $approval = $this->approvalService->getApprovalOfUser($user);
 
-        if ($approval === null) {
-            throw new UnprocessableEntityHttpException('No approval found for user');
-        }
-        return new JsonResponse(new ApprovalObject($approval));
+        return new JsonResponse([
+            'approval' => ($approval !== null) ? new ApprovalObject($approval) : null
+        ]);
     }
 
     #[Route('/approvals', methods: 'POST')]
