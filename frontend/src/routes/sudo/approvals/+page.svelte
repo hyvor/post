@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import {onMount} from "svelte";
     import {getApprovals, approve, APPROVAL_STATUS_FILTERS} from "../lib/actions/approvalActions";
     import type {Approval} from "../types";
-	import {
+    import {
         IconMessage,
         LoadButton,
         Loader,
@@ -62,7 +62,7 @@
             });
     }
 
-    function handleApproveOrReject(approval: Approval, action: 'approved' | 'rejected') {
+    function handleApproveRejectPending(approval: Approval, action: 'approved' | 'rejected' | 'pending') {
         approve(approval, action)
             .then((data) => {
                 toast.success("Approval status updated");
@@ -93,7 +93,7 @@
             content: 'Are you sure you want to approve this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(approval, 'approved');
+            handleApproveRejectPending(approval, 'approved');
         }
     }
 
@@ -103,7 +103,17 @@
             content: 'Are you sure you want to reject this request?'
         })
         if (confirmation) {
-            handleApproveOrReject(approval, 'rejected');
+            handleApproveRejectPending(approval, 'rejected');
+        }
+    }
+
+    async function onMarkAsPending(approval: Approval) {
+        const confirmation = await confirm({
+            title: 'Confirm mark as pending',
+            content: 'Are you sure you want to mark this request as pending?'
+        })
+        if (confirmation) {
+            handleApproveRejectPending(approval, 'pending');
         }
     }
 
@@ -137,9 +147,9 @@
 </script>
 
 {#if loading}
-    <Loader full />
+    <Loader full/>
 {:else if error}
-    <IconMessage error message={error} />
+    <IconMessage error message={error}/>
 {:else}
     <div class="top">
         <TextInput type='number' min=1 bind:value={search} on:keyup={handleSearchKeyup} size="small">
@@ -150,7 +160,7 @@
                 <div style="display: flex; flex-direction:column; align-items: center; width: 25x;">
                     {#if searchValue}
                         <IconButton size={16} on:click={handleSearchClear}>
-                            <IconX size={12} />
+                            <IconX size={12}/>
                         </IconButton>
                     {/if}
 
@@ -171,20 +181,20 @@
                     </div>
                     {#if statusFilter}
                         <IconButton
-                            size={14}
-                            style="margin-left:4px;"
-                            color="gray"
-                            on:click={(e) => {
+                                size={14}
+                                style="margin-left:4px;"
+                                color="gray"
+                                on:click={(e) => {
 									e.stopPropagation();
 									statusFilter = undefined;
 									load();
 								}}
                         >
-                            <IconX size={10} />
+                            <IconX size={10}/>
                         </IconButton>
                     {/if}
                     {#snippet end()}
-                        <IconCaretDown size={14} />
+                        <IconCaretDown size={14}/>
                     {/snippet}
                 </Button>
             {/snippet}
@@ -201,26 +211,27 @@
     </div>
 
     {#if $approvalStore.length === 0}
-        <IconMessage empty message="No approvals found" />
+        <IconMessage empty message="No approvals found"/>
     {:else}
         <div class="list">
             {#each $approvalStore as approval (approval.id)}
-                <ApprovalRow {approval} {handleSelect} />
+                <ApprovalRow {approval} {handleSelect}/>
             {/each}
             <LoadButton
-                text="Load More"
-                loading={loadingMore}
-                show={hasMore}
-                on:click={() => load(true)}
+                    text="Load More"
+                    loading={loadingMore}
+                    show={hasMore}
+                    on:click={() => load(true)}
             />
         </div>
 
         {#if showModal && selectingApproval}
             <ApprovalModal
-                bind:show={showModal}
-                approval={selectingApproval}
-                {onApprove}
-                {onReject}
+                    bind:show={showModal}
+                    approval={selectingApproval}
+                    {onApprove}
+                    {onReject}
+                    {onMarkAsPending}
             />
         {/if}
     {/if}
@@ -230,11 +241,13 @@
     .top {
         padding: 20px 0 0 30px;
     }
+
     .list {
         flex: 1;
         overflow: auto;
         padding: 20px 30px;
     }
+
     .dropdown-label {
         font-weight: normal;
     }

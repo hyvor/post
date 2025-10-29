@@ -7,110 +7,114 @@
         approval: Approval;
         onApprove: (approval: Approval) => void;
         onReject: (approval: Approval) => void;
+        onMarkAsPending: (approval: Approval) => void;
     }
 
-    let { show = $bindable(), approval, onApprove, onReject }: Props = $props();
+    let {show = $bindable(), approval, onApprove, onReject, onMarkAsPending}: Props = $props();
 
 
 </script>
 
 <Modal
-    bind:show
-    title="Approval Details"
+        bind:show
+        title="Approval Details"
 >
     <div class="content">
         <SplitControl label="Company name">
             <TextInput
-                bind:value={approval.company_name}
-                disabled
-                block
+                    bind:value={approval.company_name}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Country">
             <TextInput
-                bind:value={approval.country}
-                disabled
-                block
+                    bind:value={approval.country}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Website">
             <TextInput
-                type="url"
-                bind:value={approval.website}
-                disabled
-                block
+                    type="url"
+                    bind:value={approval.website}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Social Links">
         <Textarea
-            bind:value={approval.social_links}
-            disabled
-            block
+                bind:value={approval.social_links}
+                disabled
+                block
         />
         </SplitControl>
 
         <SplitControl label="Type of Content">
             <TextInput
-                bind:value={approval.type_of_content}
-                disabled
-                block
+                    bind:value={approval.type_of_content}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Frequency">
             <TextInput
-                bind:value={approval.frequency}
-                disabled
-                block
+                    bind:value={approval.frequency}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Existing List">
         <Textarea
-            bind:value={approval.existing_list}
-            disabled
-            block
+                bind:value={approval.existing_list}
+                disabled
+                block
         />
         </SplitControl>
 
         <SplitControl label="Sample">
             <TextInput
-                bind:value={approval.sample}
-                disabled
-                block
+                    bind:value={approval.sample}
+                    disabled
+                    block
             />
         </SplitControl>
 
         <SplitControl label="Why Post?">
         <Textarea
-            bind:value={approval.why_post}
-            disabled
-            block
+                bind:value={approval.why_post}
+                disabled
+                block
         />
         </SplitControl>
 
-        <Divider color={"var(--accent-light)"} margin={10} />
+        <Divider color={"var(--accent-light)"} margin={10}/>
 
         <SplitControl label="Public Note">
         <Textarea
-            bind:value={approval.public_note}
-            block
+                bind:value={approval.public_note}
+                block
         />
         </SplitControl>
 
         <SplitControl label="Private Note">
         <Textarea
-            bind:value={approval.private_note}
-            block
+                bind:value={approval.private_note}
+                block
         />
         </SplitControl>
     </div>
 
     {#snippet footer() }
         <div class="footer-buttons">
+            <Button color="input" on:click={() => onMarkAsPending(approval)}>
+                Mark as pending
+            </Button>
             <Button color="red" on:click={ () => onReject(approval) }>
                 Reject
             </Button>
@@ -126,6 +130,7 @@
         height: 70vh;
         overflow-y: auto;
     }
+
     .footer-buttons {
         display: flex;
         gap: 6px;

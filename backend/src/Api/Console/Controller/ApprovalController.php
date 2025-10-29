@@ -95,8 +95,9 @@ class ApprovalController extends AbstractController
         $user = AuthorizationListener::getUser($request);
         $approval = $this->resolveApproval($id);
 
-        if ($this->approvalService->getApprovalStatusOfUser($user) !== ApprovalStatus::REVIEWING) {
-            throw new UnprocessableEntityHttpException('Approval is not in reviewing status');
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfUser($user);
+        if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
+            throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }
 
         $updates = new UpdateApprovalDto();
@@ -137,6 +138,7 @@ class ApprovalController extends AbstractController
             $updates->whyPost = $input->why_post;
         }
 
+        $updates->status = ApprovalStatus::REVIEWING;
         $approval = $this->approvalService->updateApproval($approval, $updates);
 
         return new JsonResponse(new ApprovalObject($approval));

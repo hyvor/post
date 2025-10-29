@@ -73,6 +73,7 @@
       "updatedInfo": "Your information has been updated.",
       "error": "An error occurred while submitting your information. Please try again.",
       "pendingNotice": "Your account must be approved by our team before sending newsletters. Please fill out the following form, and we will review it within 24 hours.",
+      "markedAsPendingNotice": "Your approval request has been marked as pending by our team. You may update your information and resubmit for approval.",
       "reviewNotice": "Your approval request is currently under review. You may make any changes and resubmit if you need to update your information. The review will be completed within 24 hours.",
       "rejectNotice": "Your approval request has been rejected. Please contact support for any further clarifications.",
       "rejectReason": "Reject reason: {reason}",
