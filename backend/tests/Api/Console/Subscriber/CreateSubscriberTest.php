@@ -27,6 +27,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberMinimal(): void
     {
+        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
@@ -63,6 +64,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberWithAllInputs(): void
     {
+        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
