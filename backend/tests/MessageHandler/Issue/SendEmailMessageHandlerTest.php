@@ -11,6 +11,7 @@ use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
+use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -55,8 +56,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             return new JsonMockResponse();
         };
 
-        $httpClient = new MockHttpClient($callback);
-        $this->container->set(HttpClientInterface::class, $httpClient);
+        $this->mockRelayClient($callback);
     }
 
     public function test_send_job(): void

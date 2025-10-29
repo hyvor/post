@@ -15,8 +15,11 @@ use Monolog\Handler\TestHandler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Hyvor\Internal\Bundle\Testing\ApiTestingTrait;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
@@ -52,6 +55,24 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return true;
     }
 
+    protected function mockRelayClient(?callable $callback = null): void
+    {
+        if (!$callback) {
+            $callback = function ($method, $url, $options): JsonMockResponse {
+
+                $this->assertSame('POST', $method);
+                $this->assertStringStartsWith('https://relay.hyvor.com/api/console/', $url);
+                $this->assertContains('Content-Type: application/json', $options['headers']);
+                $this->assertContains('Authorization: Bearer test-relay-key', $options['headers']);
+
+                return new JsonMockResponse();
+            };
+        }
+
+        $httpClient = new MockHttpClient($callback);
+        $this->container->set(HttpClientInterface::class, $httpClient);
+    }
+
     /**
      * @param array<string, mixed> $data
      * @param array<string, mixed> $files
@@ -72,11 +93,14 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         bool                $useSession = false
     ): Response
     {
+        $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
+
         if ($newsletter instanceof Newsletter) {
             $newsletterId = $newsletter->getId();
         } else if ($newsletter) {
             $newsletterId = $newsletter;
-            $newsletter = NewsletterFactory::findOrCreate(['id' => $newsletterId]);
+            $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
+            $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
         }
 
         if ($useSession || $newsletter === null) {

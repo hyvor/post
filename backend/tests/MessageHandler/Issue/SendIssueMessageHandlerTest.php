@@ -51,11 +51,11 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $allMessages = $this->transport('async')->queue()->all();
         $this->assertCount(5, $allMessages);
 
-        // by default, the max emails per second value is 1
+        // by default, the max emails per second value is 8
         $first = $allMessages[0];
         $this->assertSame(0, $first->envelope->last(DelayStamp::class)?->getDelay());
         $second = $allMessages[1];
-        $this->assertSame(1000, $second->envelope->last(DelayStamp::class)?->getDelay());
+        $this->assertSame(125, $second->envelope->last(DelayStamp::class)?->getDelay());
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->findOneBy([

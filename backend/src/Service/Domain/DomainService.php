@@ -22,12 +22,12 @@ class DomainService
     public const DKIM_SELECTOR = 'hyvor-post';
 
     public function __construct(
-        private EntityManagerInterface   $em,
+        private EntityManagerInterface        $em,
         private SystemNotificationMailService $emailNotificationService,
-        private LoggerInterface          $logger,
-        private readonly Environment     $mailTemplate,
-        private readonly StringsFactory  $stringsFactory,
-        private RelayApiClient           $relayApiClient
+        private LoggerInterface               $logger,
+        private readonly Environment          $mailTemplate,
+        private readonly StringsFactory       $stringsFactory,
+        private RelayApiClient                $relayApiClient
     )
     {
     }

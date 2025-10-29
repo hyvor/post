@@ -9,6 +9,7 @@ use App\Service\Approval\ApprovalService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ApprovalFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(ApprovalController::class)]
 #[CoversClass(ApprovalService::class)]
@@ -17,6 +18,16 @@ class ApproveTest extends WebTestCase
 {
     public function test_approve(): void
     {
+        $callback = function ($method, $url, $options): JsonMockResponse {
+            $body = json_decode($options['body'], true);
+            $this->assertIsArray($body);
+            $this->assertSame('Your Hyvor Post account has been approved', $body['subject']);
+            $this->assertStringContainsString("Hyvor Post account has been approved. Now you can upgrade your account", $body['body_html']);
+
+            return new JsonMockResponse();
+        };
+        $this->mockRelayClient($callback);
+
         $approval = ApprovalFactory::createOne([
             'user_id' => 2,
             'status' => ApprovalStatus::REVIEWING,
@@ -43,18 +54,21 @@ class ApproveTest extends WebTestCase
         $this->assertSame(ApprovalStatus::APPROVED, $approval->getStatus());
         $this->assertSame('Looks good!', $approval->getPublicNote());
         $this->assertSame('Approved by admin', $approval->getPrivateNote());
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Your Hyvor Post account has been approved');
-        $this->assertEmailHtmlBodyContains(
-            $email,
-            "Hyvor Post account has been approved. Now you can upgrade your account"
-        );
     }
 
     public function test_reject(): void
     {
+        $callback = function ($method, $url, $options): JsonMockResponse {
+            $body = json_decode($options['body'], true);
+            $this->assertIsArray($body);
+            $this->assertSame('Your Hyvor Post account has been rejected', $body['subject']);
+            $this->assertStringContainsString('We regret to inform you that your Hyvor Post account approval request has been rejected.', $body['body_html']);
+            $this->assertStringContainsString('Reject reason: Not suitable for our platform.', $body['body_html']);
+
+            return new JsonMockResponse();
+        };
+        $this->mockRelayClient($callback);
+
         $approval = ApprovalFactory::createOne([
             'user_id' => 2,
             'status' => ApprovalStatus::REVIEWING,
@@ -81,18 +95,6 @@ class ApproveTest extends WebTestCase
         $this->assertSame(ApprovalStatus::REJECTED, $approval->getStatus());
         $this->assertSame('Not suitable for our platform.', $approval->getPublicNote());
         $this->assertSame('Rejected by admin', $approval->getPrivateNote());
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, 'Your Hyvor Post account has been rejected');
-        $this->assertEmailHtmlBodyContains(
-            $email,
-            'We regret to inform you that your Hyvor Post account approval request has been rejected.'
-        );
-        $this->assertEmailHtmlBodyContains(
-            $email,
-            'Reject reason: Not suitable for our platform.'
-        );
     }
 
     public function test_approval_not_found(): void

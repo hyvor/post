@@ -206,9 +206,6 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
-        $event = new SubscriberCreatedEvent($subscriber);
-        $this->eventDispatcher->dispatch($event, SubscriberCreatedEvent::class);
-
         return $subscriber;
     }
 

@@ -30,8 +30,7 @@ class SendTestIssueTest extends WebTestCase
             return new JsonMockResponse();
         };
 
-        $httpClient = new MockHttpClient($callback);
-        $this->container->set(HttpClientInterface::class, $httpClient);
+        $this->mockRelayClient($callback);
 
         $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne(

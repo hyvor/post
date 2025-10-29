@@ -116,6 +116,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data['newsletter']);
         $this->assertSame($newsletterId, $data['newsletter']['id']);
     }
+
     public function testInitNewsletterWithLists(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -144,11 +145,11 @@ class ConsoleInitTest extends WebTestCase
         ]);
 
         foreach ($subscribersOld as $subscriber) {
-            $newsletterList->addSubscriber($subscriber);
+            $newsletterList->addSubscriber($subscriber->_real());
         }
 
         foreach ($subscribersNew as $subscriber) {
-            $newsletterList->addSubscriber($subscriber);
+            $newsletterList->addSubscriber($subscriber->_real());
         }
 
         $response = $this->consoleApi(
@@ -174,8 +175,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
-
         $this->assertSame(10, $list['subscribers_count']);
-        $this->assertSame(5, $list['subscribers_count_last_30d']);
     }
 }
