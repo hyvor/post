@@ -46,35 +46,35 @@
 </script>
 
 <div
-    class="loader"
-    class:block
-    class:full
-    style:--local-size={size + 'px'}
-    style:padding={block ? padding + 'px' : undefined}
-    {...rest}
+        class="loader"
+        class:block
+        class:full
+        style:--local-size={size + 'px'}
+        style:padding={block ? padding + 'px' : undefined}
+        {...rest}
 >
     <span class="loader-wrap">
         <svg>
             <circle
-                class="track"
-                cx="50%"
-                cy="50%"
-                r={r + 'px'}
-                fill="none"
-                stroke-width={strokeWidth}
-                stroke={colorTrack}
+                    class="track"
+                    cx="50%"
+                    cy="50%"
+                    r={r + 'px'}
+                    fill="none"
+                    stroke-width={strokeWidth}
+                    stroke={colorTrack}
             ></circle>
             <circle
-                class="progress"
-                cx="50%"
-                cy="50%"
-                r={r + 'px'}
-                fill="none"
-                stroke-width={strokeWidth}
-                stroke={color}
-                stroke-linecap="round"
-                stroke-dasharray={strokeDashArray}
-                stroke-dashoffset={strokeDashOffset}
+                    class="progress"
+                    cx="50%"
+                    cy="50%"
+                    r={r + 'px'}
+                    fill="none"
+                    stroke-width={strokeWidth}
+                    stroke={color}
+                    stroke-linecap="round"
+                    stroke-dasharray={strokeDashArray}
+                    stroke-dashoffset={strokeDashOffset}
             ></circle>
         </svg>
     </span>
@@ -101,8 +101,6 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-
-        
     }
 
     .loader.block .message {

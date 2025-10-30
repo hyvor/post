@@ -18,9 +18,11 @@
 </script>
 
 <div class="icon-message">
-    <div class="icon">
-        <Icon size="50px"/>
-    </div>
+    {#if Icon}
+        <div class="icon">
+            <Icon size="50px"/>
+        </div>
+    {/if}
 
     <div class="message">
         <h2>{heading}</h2>
@@ -29,8 +31,8 @@
         </p>
         {#if button}
             <Button
-                as="a"
-                href={buttonLink}
+                    as="a"
+                    href={buttonLink}
             >
                 {buttonText}
             </Button>
