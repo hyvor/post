@@ -32,6 +32,8 @@ class GetApprovalTest extends WebTestCase
         $this->assertJson($content);
         $data = json_decode($content, true);
         $this->assertIsArray($data);
+        $data = $data['approval'];
+        $this->assertIsArray($data);
         $this->assertSame($approval->getId(), $data['id']);
         $this->assertSame($approval->getCompanyName(), $data['company_name']);
         $this->assertSame($approval->getStatus()->value, $data['status']);
@@ -45,12 +47,12 @@ class GetApprovalTest extends WebTestCase
             '/approvals'
         );
 
-        $this->assertSame(422, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
         $content = $response->getContent();
         $this->assertNotFalse($content);
         $this->assertJson($content);
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        $this->assertSame('No approval found for user', $data['message']);
+        $this->assertNull($data['approval']);
     }
 }
