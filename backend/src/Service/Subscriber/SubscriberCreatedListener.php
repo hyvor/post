@@ -5,13 +5,12 @@ namespace App\Service\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Content\ContentService;
 use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
-use Hyvor\Internal\Component\InstanceUrlResolver;
-use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -26,13 +25,12 @@ final class SubscriberCreatedListener
     public function __construct(
         private SendingProfileService   $sendingProfileService,
         private Encryption              $encryption,
+        private NewsletterService       $newsletterService,
         private ContentService          $contentService,
         private TemplateService         $templateService,
         private TemplateVariableService $templateVariableService,
         private HtmlTemplateRenderer    $htmlTemplateRenderer,
         private readonly StringsFactory $stringsFactory,
-        private InstanceUrlResolver     $instanceUrlResolver,
-        private InternalConfig          $internalConfig,
         private RelayApiClient          $relayApiClient,
     )
     {
@@ -85,7 +83,7 @@ final class SubscriberCreatedListener
                 [
                     'type' => 'button',
                     'attrs' => [
-                        'href' => $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . "/newsletter/" . $newsletter->getSubdomain() . "/confirm?token=" . $token,
+                        'href' => $this->newsletterService->getArchiveUrl($newsletter) . "/confirm?token=" . $token,
                     ],
                     'content' => [
                         [
