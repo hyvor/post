@@ -18,6 +18,7 @@
 <Modal
         bind:show
         title="Approval Details"
+        size="large"
 >
     <div class="content">
         <SplitControl label="Company name">
