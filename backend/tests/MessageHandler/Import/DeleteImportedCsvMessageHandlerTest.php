@@ -2,9 +2,9 @@
 
 namespace App\Tests\MessageHandler\Import;
 
-use App\Entity\Media;
 use App\Entity\Type\MediaFolder;
 use App\Entity\Type\SubscriberImportStatus;
+use App\Service\App\Messenger\ClearWorkerMemoryEventListener;
 use App\Service\Import\Message\DeleteImportedCsvMessage;
 use App\Service\Import\MessageHandler\DeleteImportedCsvMessageHandler;
 use App\Service\Media\MediaService;
@@ -16,6 +16,7 @@ use League\Flysystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(DeleteImportedCsvMessageHandler::class)]
+#[CoversClass(ClearWorkerMemoryEventListener::class)]
 class DeleteImportedCsvMessageHandlerTest extends KernelTestCase
 {
     public function test_delete_imported_csv(): void
