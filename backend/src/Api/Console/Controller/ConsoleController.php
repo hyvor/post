@@ -41,7 +41,7 @@ class ConsoleController extends AbstractController
         private SubscriberMetadataService $subscriberMetadataService,
         private SendingProfileService     $sendingProfileService,
         private ApprovalService           $approvalService,
-        private BillingInterface $billing,
+        private BillingInterface          $billing,
     )
     {
     }
@@ -75,7 +75,7 @@ class ConsoleController extends AbstractController
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
             'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
-            // 'license' => $this->billing->license($user->id, null)
+            'license' => (bool)$this->billing->license($user->id, null),
         ]);
     }
 
@@ -103,7 +103,8 @@ class ConsoleController extends AbstractController
                 // can only change branding if no branding is enabled in license
                 $canChangeBranding = $license->allowRemoveBranding === true;
             }
-        } catch (InternalApiCallFailedException) {}
+        } catch (InternalApiCallFailedException) {
+        }
 
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),

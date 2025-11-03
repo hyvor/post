@@ -187,6 +187,7 @@
           }
         },
         "approveBeforeSending": "Your account must be approved to send issues.",
+        "subscriptionBeforeSending": "You must have a valid subscription to send issues.",
         "sendIssue": {
           "title": "Send Issue Confirmation",
           "content": "You are about to send this newsletter issue. Are you sure you want to send this? Please double-check everything before sending as you cannot undo this action.",
@@ -196,7 +197,8 @@
           "validate": {
             "subject": "Subject is required",
             "lists": "At least one list is required",
-            "content": "Content is required"
+            "content": "Content is required",
+            "license": "A valid subscription is required."
           }
         }
       },
