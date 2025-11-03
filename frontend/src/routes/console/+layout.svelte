@@ -13,7 +13,7 @@
     import {onMount} from 'svelte';
     import consoleApi from './lib/consoleApi';
     import {page} from '$app/stores';
-    import {setAppConfig, getAppConfig, userApprovalStatusStore, licenseStore} from './lib/stores/consoleStore';
+    import {setAppConfig, getAppConfig, userApprovalStatusStore} from './lib/stores/consoleStore';
     import {setNewsletterStoreByNewsletterList} from './lib/stores/newsletterStore';
     import {userNewslettersStore} from './lib/stores/userNewslettersStore';
 
@@ -27,7 +27,6 @@
         config: AppConfig;
         newsletters: NewsletterList[];
         user_approval: ApprovalStatus;
-        license: boolean;
     }
 
     let isLoading = $state(true);
@@ -47,7 +46,6 @@
                 }
 
                 userApprovalStatusStore.set(res.user_approval);
-                licenseStore.set(res.license);
 
                 isLoading = false;
             })
