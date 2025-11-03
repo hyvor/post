@@ -6,10 +6,11 @@
     import {goto} from '$app/navigation';
     import {consoleUrlWithNewsletter} from '../../../../lib/consoleUrl';
     import IconSend from '@hyvor/icons/IconSend';
-    import {userApprovalStatusStore, licenseStore} from "../../../../lib/stores/consoleStore";
+    import {userApprovalStatusStore} from "../../../../lib/stores/consoleStore";
     import {getI18n} from '../../../../lib/i18n';
-    import {draftIssueEditingStore, draftStepStore, initDraftStores} from './draftStore';
+    import {draftIssueEditingStore, draftStepStore} from './draftStore';
     import {sendIssue} from "../../../../lib/actions/issueActions";
+    import {newsletterLicenseStore} from "../../../../lib/stores/newsletterStore";
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();
@@ -34,7 +35,7 @@
             return false;
         }
 
-        if (!$licenseStore) {
+        if (!$newsletterLicenseStore) {
             toast.error(I18n.t('console.issues.draft.sendIssue.validate.license'))
             return false;
         }
@@ -117,9 +118,10 @@
                         ? I18n.t('console.issues.draft.approveBeforeSending')
                         : I18n.t('console.issues.draft.subscriptionBeforeSending')
                     }
-                    disabled={$userApprovalStatusStore === 'approved' && $licenseStore}
+                    disabled={$userApprovalStatusStore === 'approved' && $newsletterLicenseStore}
             >
-                <Button onclick={handleSend} disabled={$userApprovalStatusStore !== 'approved' || !$licenseStore}>
+                <Button onclick={handleSend}
+                        disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
                     Send Issue
                     {#snippet end()}
                         <IconSend size={14}/>
