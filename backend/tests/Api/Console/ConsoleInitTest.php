@@ -62,7 +62,7 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::ADMIN
         ]);
 
-        BillingFake::enableForSymfony($this->getContainer(), new PostLicense(emails: 10));
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             null,

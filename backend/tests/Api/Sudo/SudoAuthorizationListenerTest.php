@@ -22,7 +22,7 @@ class SudoAuthorizationListenerTest extends WebTestCase
     public function test_ignores_non_sudo_api_requests(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
-        BillingFake::enableForSymfony($this->getContainer(), new PostLicense(emails: 10));
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             null,

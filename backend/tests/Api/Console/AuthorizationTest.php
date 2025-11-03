@@ -12,6 +12,8 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Clock\Clock;
@@ -230,6 +232,7 @@ class AuthorizationTest extends WebTestCase
     public function test_user_level_endpoint_works(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $newsletter = NewsletterFactory::createOne([
             'user_id' => 1
