@@ -75,7 +75,6 @@ class ConsoleController extends AbstractController
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
             'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
-            'license' => (bool)$this->billing->license($user->id, null),
         ]);
     }
 
@@ -116,6 +115,7 @@ class ConsoleController extends AbstractController
             'permissions' => [
                 'can_change_branding' => $canChangeBranding,
             ],
+            'has_license' => (bool)$this->billing->license($newsletter->getUserId(), null),
         ]);
     }
 

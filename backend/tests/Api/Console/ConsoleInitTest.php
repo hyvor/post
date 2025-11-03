@@ -62,8 +62,6 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::ADMIN
         ]);
 
-        BillingFake::enableForSymfony($this->container, new PostLicense());
-
         $response = $this->consoleApi(
             null,
             'GET',
@@ -101,6 +99,8 @@ class ConsoleInitTest extends WebTestCase
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
+
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -155,6 +155,8 @@ class ConsoleInitTest extends WebTestCase
         foreach ($subscribersNew as $subscriber) {
             $newsletterList->addSubscriber($subscriber->_real());
         }
+
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             $newsletter->getId(),

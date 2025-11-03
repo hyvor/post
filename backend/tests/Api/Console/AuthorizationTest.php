@@ -232,7 +232,6 @@ class AuthorizationTest extends WebTestCase
     public function test_user_level_endpoint_works(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
-        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $newsletter = NewsletterFactory::createOne([
             'user_id' => 1
