@@ -14,6 +14,8 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -59,6 +61,8 @@ class ConsoleInitTest extends WebTestCase
             'hyvor_user_id' => 1,
             'role' => UserRole::ADMIN
         ]);
+
+        BillingFake::enableForSymfony($this->getContainer(), new PostLicense(emails: 10));
 
         $response = $this->consoleApi(
             null,
