@@ -204,6 +204,8 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'status' => SendStatus::SENT,
         ]);
 
+        BillingFake::enableForSymfony($this->container, new PostLicense());
+
         $response = $this->consoleApi(
             $newsletter,
             'GET',
