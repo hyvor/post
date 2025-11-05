@@ -8,8 +8,9 @@
     import IconSend from '@hyvor/icons/IconSend';
     import {userApprovalStatusStore} from "../../../../lib/stores/consoleStore";
     import {getI18n} from '../../../../lib/i18n';
-    import {draftIssueEditingStore, draftStepStore, initDraftStores} from './draftStore';
+    import {draftIssueEditingStore, draftStepStore} from './draftStore';
     import {sendIssue} from "../../../../lib/actions/issueActions";
+    import {newsletterLicenseStore} from "../../../../lib/stores/newsletterStore";
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();
@@ -31,6 +32,11 @@
 
         if ($draftIssueEditingStore.content.trim() === '') {
             toast.error(I18n.t('console.issues.draft.sendIssue.validate.content'));
+            return false;
+        }
+
+        if (!$newsletterLicenseStore) {
+            toast.error(I18n.t('console.issues.draft.sendIssue.validate.license'))
             return false;
         }
 
@@ -108,10 +114,14 @@
     <div class="right">
         {#if $draftStepStore === 'audience'}
             <Tooltip
-                text={I18n.t('console.issues.draft.approveBeforeSending')}
-                disabled={$userApprovalStatusStore === 'approved'}
+                    text={$userApprovalStatusStore !== 'approved'
+                        ? I18n.t('console.issues.draft.approveBeforeSending')
+                        : I18n.t('console.issues.draft.subscriptionBeforeSending')
+                    }
+                    disabled={$userApprovalStatusStore === 'approved' && $newsletterLicenseStore}
             >
-                <Button onclick={handleSend} disabled={$userApprovalStatusStore !== 'approved'}>
+                <Button onclick={handleSend}
+                        disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
                     Send Issue
                     {#snippet end()}
                         <IconSend size={14}/>
@@ -131,9 +141,9 @@
 
 
 <Modal
-    bind:show={showLimitModal}
-    title={I18n.t('console.issues.draft.sendingLimitReached.title')}
-    footer={{
+        bind:show={showLimitModal}
+        title={I18n.t('console.issues.draft.sendingLimitReached.title')}
+        footer={{
 		cancel: {
 			text: I18n.t('console.common.close')
 		},
@@ -141,8 +151,8 @@
 			text: I18n.t('console.issues.draft.sendingLimitReached.upgrade')
 		}
 	}}
-    on:cancel={() => (showLimitModal = false)}
-    on:confirm={() => {
+        on:cancel={() => (showLimitModal = false)}
+        on:confirm={() => {
 		showLimitModal = false;
 		window.location.href = '/console/billing';
 	}}

@@ -201,7 +201,7 @@ class SendIssueTest extends WebTestCase
         ]);
 
         $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->getContainer(), $licence);
+        BillingFake::enableForSymfony($this->container, $licence);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -275,7 +275,7 @@ class SendIssueTest extends WebTestCase
         ]);
 
         $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->getContainer(), $licence);
+        BillingFake::enableForSymfony($this->container, $licence);
 
         $response = $this->consoleApi(
             $newsletter,

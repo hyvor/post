@@ -14,6 +14,8 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -98,6 +100,8 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::OWNER
         ]);
 
+        BillingFake::enableForSymfony($this->container, new PostLicense());
+
         $response = $this->consoleApi(
             $newsletter->getId(),
             'GET',
@@ -151,6 +155,8 @@ class ConsoleInitTest extends WebTestCase
         foreach ($subscribersNew as $subscriber) {
             $newsletterList->addSubscriber($subscriber->_real());
         }
+
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             $newsletter->getId(),

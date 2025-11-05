@@ -110,29 +110,29 @@
             </div>
         {:else}
             <APIKeyList
-                {apiKeys}
-                loading={false}
-                onDelete={handleDeleteApiKey}
-                onEdit={handleEditApiKey}
+                    {apiKeys}
+                    loading={false}
+                    onDelete={handleDeleteApiKey}
+                    onEdit={handleEditApiKey}
             />
         {/if}
     </div>
 </SingleBox>
 
 <CreateApiKeyModal
-    bind:show={showCreateModal}
-    {editingApiKey}
-    onApiKeyCreated={handleApiKeyCreated}
-    onApiKeyUpdated={handleApiKeyUpdated}
+        bind:show={showCreateModal}
+        {editingApiKey}
+        onApiKeyCreated={handleApiKeyCreated}
+        onApiKeyUpdated={handleApiKeyUpdated}
 />
 
 <!-- Show New API Key Modal -->
 {#if showApiKeyModal && newApiKey}
     <Modal
-        title={I18n.t('console.settings.api.newKey')}
-        bind:show={showApiKeyModal}
-        size="medium"
-        footer={{
+            title={I18n.t('console.settings.api.newKey')}
+            bind:show={showApiKeyModal}
+            size="medium"
+            footer={{
 			cancel: {
 				text: I18n.t('console.common.close')
 			},
@@ -150,10 +150,10 @@
                 <div class="key-input-group">
                     <TextInput value={newApiKey.key || ''} readonly block/>
                     <IconButton
-                        size="small"
-                        color="input"
-                        style="margin-left:4px;"
-                        on:click={() => copyAndToast(newApiKey?.key || '', I18n.t('console.common.copied', { field: I18n.t('console.settings.api.apiKey') }))}
+                            size="small"
+                            color="input"
+                            style="margin-left:4px;"
+                            on:click={() => copyAndToast(newApiKey?.key || '', I18n.t('console.common.copied', { value: I18n.t('console.settings.api.apiKey') }))}
                     >
                         <IconCopy size={12}/>
                     </IconButton>

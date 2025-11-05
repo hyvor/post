@@ -50,50 +50,52 @@
     })
 </script>
 
-<Modal
-        bind:show
-        {loading}
-        title="Subscriber Import: {subscriberImport.newsletter_subdomain}"
-        size="large"
-        footer={{
-            cancel: {
-                text: "Close"
-            },
-            confirm: {
-                text: "Approve"
-            }
-        }}
-        on:confirm={() => onApprove(subscriberImport)}
->
-    <div class="content-wrap">
-        <SplitControl label="Columns">
-            {
-                subscriberImport.columns.length === 0
-                    ? "No columns found"
-                    : subscriberImport.columns.join(" | ")
-            }
-        </SplitControl>
+<div class="subscriber-import-modal">
+    <Modal
+            bind:show
+            {loading}
+            title="Subscriber Import: {subscriberImport.newsletter_subdomain}"
+            size="large"
+            footer={{
+                cancel: {
+                    text: "Close"
+                },
+                confirm: {
+                    text: "Approve"
+                }
+            }}
+            on:confirm={() => onApprove(subscriberImport)}
+    >
+        <div class="content-wrap">
+            <SplitControl label="Columns">
+                {
+                    subscriberImport.columns.length === 0
+                        ? "No columns found"
+                        : subscriberImport.columns.join(" | ")
+                }
+            </SplitControl>
 
-        <Divider color=var(--accent-light) margin={2}/>
+            <Divider color=var(--accent-light) margin={2}/>
 
-        {#if importingSubscribers.length === 0}
-            <IconMessage empty message="No subscribers found in the import file"/>
-        {:else}
-            <div class="list">
-                {#each importingSubscribers as importingSubscriber (importingSubscriber.email)}
-                    <ImportingSubscriberRow {importingSubscriber}/>
-                {/each}
+            {#if importingSubscribers.length === 0}
+                <IconMessage empty message="No subscribers found in the import file"/>
+            {:else}
+                <div class="list">
+                    {#each importingSubscribers as importingSubscriber (importingSubscriber.email)}
+                        <ImportingSubscriberRow {importingSubscriber}/>
+                    {/each}
 
-                <LoadButton
-                        text="Load More"
-                        loading={loadingMore}
-                        show={hasMore}
-                        on:click={() => load(true)}
-                />
-            </div>
-        {/if}
-    </div>
-</Modal>
+                    <LoadButton
+                            text="Load More"
+                            loading={loadingMore}
+                            show={hasMore}
+                            on:click={() => load(true)}
+                    />
+                </div>
+            {/if}
+        </div>
+    </Modal>
+</div>
 
 <style>
     .content-wrap {
@@ -106,7 +108,7 @@
         overflow: auto;
     }
 
-    :global(.inner) {
+    .subscriber-import-modal :global(.inner) {
         width: 90vw !important;
     }
 </style>

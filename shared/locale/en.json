@@ -187,6 +187,7 @@
           }
         },
         "approveBeforeSending": "Your account must be approved to send issues.",
+        "subscriptionBeforeSending": "You must have a valid subscription to send issues.",
         "sendIssue": {
           "title": "Send Issue Confirmation",
           "content": "You are about to send this newsletter issue. Are you sure you want to send this? Please double-check everything before sending as you cannot undo this action.",
@@ -196,7 +197,8 @@
           "validate": {
             "subject": "Subject is required",
             "lists": "At least one list is required",
-            "content": "Content is required"
+            "content": "Content is required",
+            "license": "A valid subscription is required."
           }
         }
       },
@@ -360,8 +362,8 @@
       "regards": "Best regards,"
     },
     "userInvite": {
-      "subject": "You have been invited to join {projectName}",
-      "text": "You have been invited to join {projectName} as a {role}. Please click the button below to accept the invitation.",
+      "subject": "You have been invited to join {newsletterName}",
+      "text": "You have been invited to join {newsletterName} as a {role}. Please click the button below to accept the invitation.",
       "buttonText": "Accept Invitation",
       "footerText": "Once you join, you will be able to access the Hyvor Post Console for this project using your HYVOR account."
     },

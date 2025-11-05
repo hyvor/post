@@ -45,7 +45,7 @@
             width="100%"
             height="100%"
             frameborder="0"
-            sandbox="allow-same-origin"
+            sandbox="allow-same-origin allow-popups"
             title={issue.subject}
             bind:this={iframeEl}
     ></iframe>

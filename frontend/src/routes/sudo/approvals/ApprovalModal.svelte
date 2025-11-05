@@ -18,6 +18,7 @@
 <Modal
         bind:show
         title="Approval Details"
+        size="large"
 >
     <div class="content">
         <SplitControl label="Company name">
@@ -112,13 +113,13 @@
 
     {#snippet footer() }
         <div class="footer-buttons">
-            <Button color="input" on:click={() => onMarkAsPending(approval)}>
+            <Button color="input" disabled={approval.status === 'pending'} on:click={() => onMarkAsPending(approval)}>
                 Mark as pending
             </Button>
-            <Button color="red" on:click={ () => onReject(approval) }>
+            <Button color="red" disabled={approval.status === 'rejected'} on:click={ () => onReject(approval) }>
                 Reject
             </Button>
-            <Button on:click={ () => onApprove(approval) }>
+            <Button disabled={approval.status === 'approved'} on:click={ () => onApprove(approval) }>
                 Approve
             </Button>
         </div>
