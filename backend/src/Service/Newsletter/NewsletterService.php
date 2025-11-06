@@ -278,6 +278,10 @@ class NewsletterService
 
     public function isSubdomainTaken(string $subdomain): bool
     {
+        // `/console/new` is reserved
+        if ($subdomain === 'new') {
+            return true;
+        }
         // notifications@ is reserved
         if ($subdomain === SystemNotificationMailService::NOTIFICATIONS_MAIL_USERNAME) {
             return true;
