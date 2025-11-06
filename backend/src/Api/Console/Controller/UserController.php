@@ -84,7 +84,11 @@ class UserController extends AbstractController
         $hyvorUser = null;
 
         if ($input->email !== null) {
-            $hyvorUser = $this->auth->fromEmail($input->email)[0];
+            $authUsers = $this->auth->fromEmail($input->email);
+
+            if (count($authUsers) > 0) {
+                $hyvorUser = $authUsers[0];
+            }
         } else {
             if ($input->username !== null) {
                 $hyvorUser = $this->auth->fromUsername($input->username);

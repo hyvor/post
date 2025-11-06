@@ -21,7 +21,7 @@ class Template
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\OneToOne(inversedBy: 'templates', cascade: ['persist'])]
+    #[ORM\OneToOne(cascade: ['persist'])]
     private Newsletter $newsletter;
 
     #[ORM\Column(type: 'text')]
