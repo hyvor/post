@@ -135,11 +135,11 @@ class SubscriberController extends AbstractController
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
-        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
-
-        if ($lists->count() === 0) {
+        if (count($input->list_ids) === 0) {
             throw new UnprocessableEntityHttpException('At least one list must be provided.');
         }
+
+        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
 
         $updates->lists = $lists;
         $this->subscriberService->updateSubscriber($subscriber, $updates);
