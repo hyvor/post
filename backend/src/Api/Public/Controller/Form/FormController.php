@@ -12,6 +12,7 @@ use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\AppConfig;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
@@ -34,6 +35,7 @@ class FormController extends AbstractController
         private NewsletterService     $newsletterService,
         private NewsletterListService $newsletterListService,
         private SubscriberService     $subscriberService,
+        private AppConfig             $appConfig,
     )
     {
     }
@@ -125,7 +127,8 @@ class FormController extends AbstractController
     public function renderForm(Request $request): Response
     {
         $id = $request->query->get('id');
-        $instance = $request->query->get('instance', 'https://post.hyvor.localhost');
+
+        $instance = $request->query->get('instance', $this->appConfig->getUrlApp());
 
         $newsletter = $this->newsletterService->getNewsletterById(intval($id));
 
