@@ -109,7 +109,7 @@ class UserController extends AbstractController
             $invite = $this->userInviteService->createInvite($newsletter, $hyvorUser->id, UserRole::ADMIN);
         }
 
-        $this->userInviteService->sendEmail($newsletter, $hyvorUser, $invite);
+        $this->userInviteService->sendEmail($hyvorUser, $invite);
 
         return $this->json(
             new UserInviteObject($invite, $hyvorUser),

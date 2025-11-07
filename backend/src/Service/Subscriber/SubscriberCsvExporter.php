@@ -6,7 +6,6 @@ use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
 use Doctrine\ORM\EntityManagerInterface;
-use function PHPUnit\Framework\assertArrayHasKey;
 
 class SubscriberCsvExporter
 {

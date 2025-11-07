@@ -19,14 +19,13 @@
     import SubscriberBulk from './SubscriberBulk.svelte';
     import SubscriberBulkMetadataModal from './SubscriberBulkMetadataModal.svelte';
     import SubscriberBulkStatusModal from './SubscriberBulkStatusModal.svelte';
-    import {listStore} from '../../lib/stores/newsletterStore';
+    import {listStore, subscriberStore} from '../../lib/stores/newsletterStore';
     import {onMount} from 'svelte';
     import IconX from '@hyvor/icons/IconX';
     import {getI18n} from '../../lib/i18n';
     import {consoleUrlWithNewsletter} from '../../lib/consoleUrl';
     import {getSubscribers} from '../../lib/actions/subscriberActions';
 
-    let key = $state(1); // for re-rendering
     let status: NewsletterSubscriberStatus | null = $state(null);
     let statusKey = $derived.by(() =>
         status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'
@@ -47,7 +46,6 @@
     let hasMore = $state(true);
     let loadingMore = $state(false);
     let error: null | string = $state(null);
-    let subscribers: Subscriber[] = $state([]);
 
     const SUBSCRIBERS_PER_PAGE = 25;
 
@@ -94,9 +92,11 @@
     function load(more = false) {
         more ? (loadingMore = true) : (loading = true);
 
-        getSubscribers(status, currentList?.id || null, search === '' ? null : search, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
+        getSubscribers(status, currentList?.id || null, search === '' ? null : search, SUBSCRIBERS_PER_PAGE, more ? $subscriberStore.length : 0)
             .then((data) => {
-                subscribers = more ? [...subscribers, ...data] : data;
+                more
+                    ? subscriberStore.update(subscribers => [...subscribers, ...data])
+                    : subscriberStore.set(data);
                 hasMore = data.length === SUBSCRIBERS_PER_PAGE;
             })
             .catch((e) => {
@@ -109,25 +109,30 @@
     }
 
     function handleDelete(ids: number[]) {
-        subscribers = subscribers.filter(subscriber => !ids.includes(subscriber.id));
+        subscriberStore.update(subscribers => {
+            return subscribers.filter(s => !ids.includes(s.id));
+        });
     }
 
     function handleUpdate(subscriber: Subscriber) {
-        subscribers = subscribers.map(s => (s.id === subscriber.id ? subscriber : s));
+        subscriberStore.update(subscribers => {
+            return subscribers.map(s => (s.id === subscriber.id ? subscriber : s));
+        });
     }
 
     function handleStatusUpdate(ids: number[], status: NewsletterSubscriberStatus) {
-        subscribers = subscribers.map(subscriber => {
-            if (ids.includes(subscriber.id)) {
-                return {...subscriber, status};
-            }
-            return subscriber;
+        subscriberStore.update(subscribers => {
+            return subscribers.map(s => {
+                if (ids.includes(s.id)) {
+                    return {...s, status};
+                }
+                return s;
+            });
         });
     }
 
     $effect(() => {
         status;
-        key;
         search;
         currentList;
 
@@ -242,8 +247,6 @@
 
     <SubscriberList
             {status}
-            {key}
-            {subscribers}
             {loading}
             {loadingMore}
             {hasMore}
@@ -254,14 +257,13 @@
     />
 
     {#if addingManually}
-        <AddSubscribers bind:show={addingManually} add={() => (key += 1)}/>
+        <AddSubscribers bind:show={addingManually}/>
     {/if}
 
     <SubscriberBulk
             onUpdateMetadata={() => (showMetadataModal = true)}
             onUpdateStatus={() => (showStatusModal = true)}
             onDelete={handleDelete}
-            {subscribers}
     />
 
     {#if showMetadataModal}

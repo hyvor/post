@@ -1,6 +1,5 @@
 <script lang="ts">
 	import {
-		Checkbox,
 		FormControl,
 		Modal,
 		SplitControl,
@@ -8,12 +7,11 @@
 		Validation,
 		toast
 	} from '@hyvor/design/components';
-	import { listStore } from '../../lib/stores/newsletterStore';
+	import {listStore, subscriberStore} from '../../lib/stores/newsletterStore';
 	import ListSelector from './ListSelector.svelte';
 	import { createSubscriber } from '../../lib/actions/subscriberActions';
 
 	export let show = false;
-	export let add: () => void;
 
 	let emailsString = '';
 	let selectedList = $listStore.map((list) => list.id);
@@ -50,9 +48,9 @@
 		loading = true;
 		for (const email of emails) {
 			createSubscriber(email, selectedList)
-				.then(() => {
+				.then((data) => {
 					show = false;
-					add();
+					subscriberStore.update(subscriber => [data, ...subscriber]);
 				})
 				.catch((error) => {
 					toast.error(`Failed to add subscriber: ${error.message}.`);

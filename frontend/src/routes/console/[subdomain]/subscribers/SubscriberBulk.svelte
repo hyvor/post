@@ -3,8 +3,7 @@
     import {getI18n} from '../../lib/i18n';
     import {deleteSubscribers} from '../../lib/actions/subscriberActions';
     import {slide} from 'svelte/transition';
-    import {selectedSubscriberIds} from './subscriberStore';
-    import {color} from 'chart.js/helpers';
+    import {selectedSubscriberIdsStore, subscriberStore} from "../../lib/stores/newsletterStore";
 
     const I18n = getI18n();
     const MAX_SELECTABLE_SUBSCRIBERS = 100;
@@ -13,21 +12,20 @@
         onUpdateMetadata: () => void;
         onUpdateStatus: () => void;
         onDelete: (ids: number[]) => void;
-        subscribers: { id: number }[];
     }
 
-    let {onDelete, onUpdateMetadata, onUpdateStatus, subscribers}: Props = $props();
+    let {onDelete, onUpdateMetadata, onUpdateStatus}: Props = $props();
 
     let loading = $state(false);
 
     function handleSelectAll() {
-        const availableSubscribers = subscribers.slice(0, MAX_SELECTABLE_SUBSCRIBERS);
-        if (subscribers.length > MAX_SELECTABLE_SUBSCRIBERS) {
+        const availableSubscribers = $subscriberStore.slice(0, MAX_SELECTABLE_SUBSCRIBERS);
+        if ($subscriberStore.length > MAX_SELECTABLE_SUBSCRIBERS) {
             toast.warning(I18n.t('console.subscribers.bulk.selectAllWarning', {
                 count: MAX_SELECTABLE_SUBSCRIBERS
             }));
         }
-        selectedSubscriberIds.set(availableSubscribers.map(s => s.id));
+        selectedSubscriberIdsStore.set(availableSubscribers.map(s => s.id));
     }
 
     async function handleDelete() {
@@ -42,13 +40,13 @@
         if (!confirmation) return;
 
         loading = true;
-        const ids = $selectedSubscriberIds;
+        const ids = $selectedSubscriberIdsStore;
 
         deleteSubscribers(ids)
             .then(() => {
                 toast.success(I18n.t('console.subscribers.bulk.deleteSuccess'));
                 onDelete(ids)
-                selectedSubscriberIds.set([]);
+                selectedSubscriberIdsStore.set([]);
             })
             .catch((error: unknown) => {
                 if (error instanceof Error) {
@@ -63,18 +61,18 @@
     }
 </script>
 
-{#if $selectedSubscriberIds.length}
+{#if $selectedSubscriberIdsStore.length}
     <div class="selected-subscribers" transition:slide>
         <div class="inner">
             <div class="title">
                 {I18n.t('console.subscribers.count', {
-                    count: $selectedSubscriberIds.length
+                    count: $selectedSubscriberIdsStore.length
                 })}
                 <div class="links">
                     <Link href="javascript:void()" on:click={handleSelectAll}>
                         {I18n.t('console.common.selectAll')}
                     </Link>
-                    <Link href="javascript:void()" on:click={() => selectedSubscriberIds.set([])}>
+                    <Link href="javascript:void()" on:click={() => selectedSubscriberIdsStore.set([])}>
                         {I18n.t('console.subscribers.bulk.deselect')}
                     </Link>
                 </div>

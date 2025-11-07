@@ -9,7 +9,7 @@
 	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
 	import { getI18n } from '../../lib/i18n';
-	import { selectedSubscriberIds } from './subscriberStore';
+	import {selectedSubscriberIdsStore} from "../../lib/stores/newsletterStore";
 
 	interface Props {
 		subscriber: Subscriber;
@@ -20,15 +20,15 @@
 	let { subscriber, handleDelete, handleUpdate }: Props = $props();
 
 	let editing = $state(false);
-	let isSelected = $derived($selectedSubscriberIds.includes(subscriber.id));
+	let isSelected = $derived($selectedSubscriberIdsStore.includes(subscriber.id));
 
 	function toggleSelection() {
 		if (isSelected) {
-			selectedSubscriberIds.update((ids: number[]) =>
+			selectedSubscriberIdsStore.update((ids: number[]) =>
 				ids.filter((id: number) => id !== subscriber.id)
 			);
 		} else {
-			selectedSubscriberIds.update((ids: number[]) => [...ids, subscriber.id]);
+			selectedSubscriberIdsStore.update((ids: number[]) => [...ids, subscriber.id]);
 		}
 	}
 
