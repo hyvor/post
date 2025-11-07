@@ -122,22 +122,21 @@ class FormController extends AbstractController
     }
 
     #[Route('/form/render', methods: 'GET')]
-    public function renderForm(
-        #[MapRequestPayload] FormRenderInput $input,
-    ): Response
+    public function renderForm(Request $request): Response
     {
-        $newsletter = $this->newsletterService->getNewsletterById(intval($input->id));
+        $id = $request->query->get('id');
+        $instance = $request->query->get('instance', 'https://post.hyvor.localhost');
+
+        $newsletter = $this->newsletterService->getNewsletterById(intval($id));
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
         }
 
-        $instance = $input->instance ?? 'https://post.hyvor.localhost';
-
         $response = <<<HTML
             <hyvor-post-form newsletter={$newsletter->getSubdomain()}
             instance={$instance}></hyvor-post-form>
-            <script type="module" src="{$instance}/dev/dev.ts"></script>
+            <script type="module" src="{$instance}/form/embed.js"></script>
         HTML;
 
         return new Response($response);
