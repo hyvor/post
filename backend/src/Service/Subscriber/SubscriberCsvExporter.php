@@ -6,6 +6,7 @@ use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberMetadataDefinition;
 use Doctrine\ORM\EntityManagerInterface;
+use function PHPUnit\Framework\assertArrayHasKey;
 
 class SubscriberCsvExporter
 {
@@ -24,6 +25,11 @@ class SubscriberCsvExporter
         }
 
         $meta = stream_get_meta_data($file);
+
+        if (!isset($meta['uri'])) {
+            throw new \Exception('Could not get temporary file path.');
+        }
+
         $path = $meta['uri'];
         fclose($file);
         return $path . '.' . $extension;

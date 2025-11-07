@@ -9,9 +9,7 @@ use App\Service\ApiKey\ApiKeyService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
-use App\Tests\Factory\UserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use function _PHPStan_f9a2208af\Symfony\Component\String\u;
 
 #[CoversClass(ApiKeyController::class)]
 #[CoversClass(ApiKeyService::class)]

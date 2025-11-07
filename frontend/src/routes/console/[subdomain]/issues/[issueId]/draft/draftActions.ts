@@ -40,6 +40,10 @@ export function updateDraftIssue() {
 
     const keys = Object.keys(changedFields) as (keyof Issue)[];
     if (keys.length === 0) {
+        draftSendableSubscribersCountStore.update((state) => ({
+            ...state,
+            loading: false
+        }));
         return;
     }
 

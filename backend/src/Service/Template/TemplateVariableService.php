@@ -67,21 +67,20 @@ class TemplateVariableService
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT
         );
+        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
         return $variables;
     }
-
 
     public function variablesFromSend(Send $send): TemplateVariables
     {
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
-        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send);
+        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send->getNewsletter(), $send->getId());
         return $variables;
     }
 
-
-    private function getArchiveUnsubscribeUrl(Send $send): string
+    private function getArchiveUnsubscribeUrl(Newsletter $newsletter, ?int $sendId = null): string
     {
-        return $this->newsletterService->getArchiveUrl($send->getNewsletter()) . '/unsubscribe?token=' . $this->encryption->encrypt($send->getId());
+        return $this->newsletterService->getArchiveUrl($newsletter) . '/unsubscribe?token=' . ($sendId ? $this->encryption->encrypt($sendId) : 'preview');
     }
 }

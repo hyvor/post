@@ -13,11 +13,7 @@ class FormRenderTest extends WebTestCase
 
         $response = $this->publicApi(
             'GET',
-            '/form/render',
-            [
-                'id' => (string)$newsletter->getId(),
-                'instance' => 'https://post.hyvor.instance'
-            ]
+            "/form/render?id={$newsletter->getId()}&instance=https://post.hyvor.instance",
         );
 
         $this->assertSame(200, $response->getStatusCode());
