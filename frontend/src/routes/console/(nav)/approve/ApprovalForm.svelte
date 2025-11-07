@@ -174,17 +174,11 @@
     <TextInput bind:value={companyName} maxLength={255} disabled={readOnly} block/>
 </SplitControl>
 
-<SplitControl
-        label={I18n.t('console.approve.country')}
-        caption={`(${I18n.t('console.approve.required')})`}
->
+<SplitControl label={`${I18n.t('console.approve.country')}*`}>
     <TextInput bind:value={country} maxLength={255} disabled={readOnly} block/>
 </SplitControl>
 
-<SplitControl
-        label={I18n.t('console.approve.website')}
-        caption={`(${I18n.t('console.approve.required')})`}
->
+<SplitControl label={`${I18n.t('console.approve.website')}*`}>
     <TextInput bind:value={website} maxLength={1024} disabled={readOnly} block/>
 </SplitControl>
 

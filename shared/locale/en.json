@@ -41,7 +41,6 @@
       "settings": "Settings"
     },
     "approve": {
-      "required": "Required",
       "preferred": "Preferred",
       "companyName": "Company Name",
       "companyNameCaption": "Or, if you are an individual, your full name.",
