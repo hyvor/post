@@ -15,24 +15,24 @@
     {:else}
         <div class="stats">
             <Stat
-                title={I18n.t('console.nav.subscribers')}
-                counts={$newsletterStatsStore.subscribers}
-                href={`/console/${$newsletterStore.id}/subscribers`}
+                    title={I18n.t('console.nav.subscribers')}
+                    counts={$newsletterStatsStore.subscribers}
+                    href={`/console/${$newsletterStore.subdomain}/subscribers`}
             />
             <Stat
-                title={I18n.t('console.nav.issues')}
-                counts={$newsletterStatsStore.issues}
-                href={`/console/${$newsletterStore.id}/issues`}
+                    title={I18n.t('console.nav.issues')}
+                    counts={$newsletterStatsStore.issues}
+                    href={`/console/${$newsletterStore.subdomain}/issues`}
             />
             <Stat
-                title={I18n.t('console.home.stats.bouncedRate')}
-                counts={$newsletterStatsStore.bounced_rate}
-                percent
+                    title={I18n.t('console.home.stats.bouncedRate')}
+                    counts={$newsletterStatsStore.bounced_rate}
+                    percent
             />
             <Stat
-                title={I18n.t('console.home.stats.complainedRate')}
-                counts={$newsletterStatsStore.complained_rate}
-                percent
+                    title={I18n.t('console.home.stats.complaintRate')}
+                    counts={$newsletterStatsStore.complained_rate}
+                    percent
             />
         </div>
     {/if}

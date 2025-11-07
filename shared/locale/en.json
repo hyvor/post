@@ -94,7 +94,7 @@
     "home": {
       "stats": {
         "bouncedRate": "Bounced Rate",
-        "complainedRate": "Complained Rate"
+        "complaintRate": "Complaint Rate"
       }
     },
     "lists": {
