@@ -92,7 +92,7 @@
     function load(more = false) {
         more ? (loadingMore = true) : (loading = true);
 
-        getSubscribers(status, currentList?.id || null, search === '' ? null : search, SUBSCRIBERS_PER_PAGE, more ? subscribers.length : 0)
+        getSubscribers(status, currentList?.id || null, search === '' ? null : search, SUBSCRIBERS_PER_PAGE, more ? $subscriberStore.length : 0)
             .then((data) => {
                 more
                     ? subscriberStore.update(subscribers => [...subscribers, ...data])
