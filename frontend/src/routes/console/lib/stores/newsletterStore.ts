@@ -9,7 +9,8 @@ import {
     type SendingProfile,
     type Import,
     type NewsletterPermissions,
-    type NewsletterList
+    type NewsletterList,
+    type Subscriber
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
@@ -19,6 +20,8 @@ export const newsletterRoleStore = writable<UserRole>();
 export const newsletterPermissionsStore = writable<NewsletterPermissions>();
 export const newsletterStatsStore = writable<NewsletterStats>();
 export const listStore = writable<List[]>([]);
+export const subscriberStore = writable<Subscriber[]>([]);
+export const selectedSubscriberIdsStore = writable<number[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();
 export const issueStore = writable<Issue[]>([]);
 export const sendingProfilesStore = writable<SendingProfile[]>([]);
