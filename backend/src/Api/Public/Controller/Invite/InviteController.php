@@ -43,7 +43,7 @@ class InviteController extends AbstractController
         }
 
         if ($invite->getHyvorUserId() != $user->id) {
-            throw new BadRequestHttpException("This invitation is not for this user");
+            throw new BadRequestHttpException("Invalid invitation");
         }
 
         if ($invite->getExpiresAt() < new \DateTime()) {
