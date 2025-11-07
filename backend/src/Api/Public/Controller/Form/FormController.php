@@ -127,7 +127,6 @@ class FormController extends AbstractController
     public function renderForm(Request $request): Response
     {
         $id = $request->query->get('id');
-
         $instance = $request->query->get('instance', $this->appConfig->getUrlApp());
 
         $newsletter = $this->newsletterService->getNewsletterById(intval($id));
