@@ -24,6 +24,7 @@
     "@types/codemirror": "^5.60.15",
     "eslint": "^9.20.1",
     "globals": "^15.15.0",
+    "patch-package": "^8.0.1",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.3",
     "svelte": "^5.0.0",
