@@ -45,7 +45,6 @@
         margin: 0 auto;
         max-width: 100%;
         height: 100vh;
-        overflow-y: auto;
     }
 
     .header {
