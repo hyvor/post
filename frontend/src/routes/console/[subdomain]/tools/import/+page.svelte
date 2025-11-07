@@ -153,9 +153,9 @@
         {#snippet icon()}
             <IconInfoCircle/>
         {/snippet}
-        To prevent malicious activities, all imports exceeding 50 subscribers will require a manual approval from our
-        team and it may take upto 1 working day. Reach out to us on <a href="mailto:support@post.hyvor.com">
-        support@post.hyvor.com</a> for any inquiries.
+        To prevent abuse, all imports exceeding 50 subscribers will require a manual approval from our
+        team and it may take upto 1 working day. Reach out to us on <a href="mailto:post.support@hyvor.com">
+        post.support@hyvor.com</a> for any inquiries.
     </Callout>
 
     <SplitControl label="New Import">
@@ -195,7 +195,8 @@
 
             <SplitControl
                     label="Source of Import File"
-                    caption="Briefly explain the source of the import file (e.g., exported from Mailchimp, manually created, etc.)"
+                    caption="Briefly explain the source of the import file (e.g., exported from a newsletter platform
+                        or CRM, etc.) and if they have double-opted in."
             >
                 <Tooltip
                         text={
