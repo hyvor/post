@@ -51,10 +51,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(S3Client::class)
         ->arg('$args', [
             'version' => 'latest',
-            'region' => '%env(AWS_REGION)%',
+            'region' => '%env(S3_REGION)%',
+            'endpoint' => '%env(S3_ENDPOINT)%',
+            'use_path_style_endpoint' => true,
             'credentials' => [
-                'key' => '%env(AWS_ACCESS_KEY_ID)%',
-                'secret' => '%env(AWS_SECRET_ACCESS_KEY)%'
+                'key' => '%env(S3_ACCESS_KEY_ID)%',
+                'secret' => '%env(S3_SECRET_ACCESS_KEY)%'
             ]
         ]);
 
@@ -63,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             '%env(FILESYSTEM_ADAPTER)%',
             service(S3Client::class),
-            '%env(AWS_BUCKET)%',
+            '%env(S3_BUCKET)%',
             '%kernel.project_dir%/var/uploads',
         ]);
 };
