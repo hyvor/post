@@ -205,10 +205,10 @@ class GetTemplateTest extends WebTestCase
         }
 
         .content hr {
-            margin:0 0 20px;
-            height:1px;
-            background-color:currentColor;
-            opacity:0.3;
+            margin: 0 0 20px;
+            height: 1px;
+            background-color: currentColor;
+            opacity: 0.3;
         }
 
         .content ul, .content ol {
@@ -223,19 +223,21 @@ class GetTemplateTest extends WebTestCase
             border-radius: 5px;
             margin: 0 0 20px;
         }
+
         .content div.callout > span {
             float: left;
             padding: 10px 12px;
         }
+
         .content div.callout > div {
             padding: 10px 10px 10px 0;
         }
 
         .content hr {
-            margin:0 0 20px;
-            height:1px;
-            background-color:currentColor;
-            opacity:0.3;
+            margin: 0 0 20px;
+            height: 1px;
+            background-color: currentColor;
+            opacity: 0.3;
         }
 
         .content ul, .content ol {
@@ -284,15 +286,18 @@ class GetTemplateTest extends WebTestCase
         ">
     {{ address }}
 
-    <div>
-        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
-    </div>
+    {% if unsubscribe_url %}
+        <div>
+            <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
+        </div>
+    {% endif %}
 </div>
 
 {% if branding %}
     <div style="text-align:center;">
         <a class="branding-tag" target="_blank" href="https://post.hyvor.com?source=mail-branding">
-            [<span style="vertical-align:middle">Sent privately via</span> <strong style="vertical-align:middle">Hyvor Post</strong> <img style="vertical-align:middle" src="https://post.hyvor.com/img/logo.png" width="14" />]
+            [<span style="vertical-align:middle">Sent privately via</span> <strong style="vertical-align:middle">Hyvor
+                Post</strong> <img style="vertical-align:middle" src="https://post.hyvor.com/img/logo.png" width="14"/>]
         </a>
     </div>
 {% endif %}
