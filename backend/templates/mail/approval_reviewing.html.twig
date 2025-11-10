@@ -1,0 +1,28 @@
+{% extends '@Internal/mail/mail.html.twig' %}
+
+{% block title %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block heading %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        {{ strings.greeting }}
+    </p>
+
+    <p>
+        Your approval request is currently under review. We will notify you once the review process is
+        complete. It may take up to 24 business hours to process your request.
+    </p>
+
+    <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+
+    <p>
+        {{ strings.regards }}
+        <br>
+        HYVOR
+    </p>
+{% endblock %}

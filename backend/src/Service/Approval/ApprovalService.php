@@ -5,6 +5,7 @@ namespace App\Service\Approval;
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\Dto\UpdateApprovalDto;
+use App\Service\Approval\Message\CreateApprovalMessage;
 use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -12,6 +13,7 @@ use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Twig\Environment;
 
 class ApprovalService
@@ -24,6 +26,7 @@ class ApprovalService
         private readonly Environment          $mailTemplate,
         private readonly StringsFactory       $stringsFactory,
         private SystemNotificationMailService $emailNotificationService,
+        private MessageBusInterface           $messageBus,
     )
     {
     }
@@ -118,6 +121,8 @@ class ApprovalService
 
         $this->em->persist($approval);
         $this->em->flush();
+
+        $this->messageBus->dispatch(new CreateApprovalMessage($approval->getId()));
 
         return $approval;
     }

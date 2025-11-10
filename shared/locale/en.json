@@ -374,6 +374,9 @@
       "heading": "Confirm your subscription",
       "buttonText": "Confirm Subscription"
     },
+    "approvalReviewing": {
+      "subject": "Your Hyvor Post approval request is under review"
+    },
     "approval": {
       "subject": "Your Hyvor Post account has been {status}",
       "bodyApproved": "We're happy to inform you that your Hyvor Post account has been approved. Now you can upgrade your account to a paid plan and start sending emails via Hyvor Post.",
