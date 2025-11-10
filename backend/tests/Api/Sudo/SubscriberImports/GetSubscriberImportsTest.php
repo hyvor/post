@@ -28,7 +28,7 @@ class GetSubscriberImportsTest extends WebTestCase
 
         $response = $this->sudoApi(
             'GET',
-            '/subscriber-imports'
+            '/subscriber-imports?status=pending_approval'
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -41,10 +41,11 @@ class GetSubscriberImportsTest extends WebTestCase
 
         $subscriberImport = $data[0];
         $this->assertIsArray($subscriberImport);
-        $this->assertCount(6, $subscriberImport);
+        $this->assertCount(7, $subscriberImport);
         $this->assertArrayHasKey('id', $subscriberImport);
         $this->assertArrayHasKey('created_at', $subscriberImport);
         $this->assertArrayHasKey('newsletter_subdomain', $subscriberImport);
+        $this->assertArrayHasKey('status', $subscriberImport);
         $this->assertArrayHasKey('total_rows', $subscriberImport);
         $this->assertArrayHasKey('source', $subscriberImport);
         $this->assertArrayHasKey('columns', $subscriberImport);
@@ -64,7 +65,7 @@ class GetSubscriberImportsTest extends WebTestCase
 
         $response = $this->sudoApi(
             'GET',
-            "/subscriber-imports?subdomain={$newsletter->getSubdomain()}"
+            "/subscriber-imports?subdomain={$newsletter->getSubdomain()}&status=pending_approval"
         );
 
         $this->assertSame(200, $response->getStatusCode());

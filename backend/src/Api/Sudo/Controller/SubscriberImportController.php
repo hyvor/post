@@ -36,6 +36,9 @@ class SubscriberImportController extends AbstractController
     ): JsonResponse
     {
         $subdomain = $request->query->has('subdomain') ? $request->query->getString('subdomain') : null;
+        $status = $request->query->has('status')
+            ? SubscriberImportStatus::tryFrom($request->query->getString('status'))
+            : null;
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
@@ -46,7 +49,7 @@ class SubscriberImportController extends AbstractController
                 fn($import) => new SubscriberImportObject($import),
                 $this->importService->getSubscriberImports(
                     $newsletter,
-                    SubscriberImportStatus::PENDING_APPROVAL,
+                    $status,
                     limit: $limit,
                     offset: $offset
                 )

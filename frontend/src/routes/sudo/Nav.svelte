@@ -4,6 +4,8 @@
     import IconBoxArrowInDown from "@hyvor/icons/IconBoxArrowInDown";
     import NavItem from "../console/@components/Nav/NavItem.svelte";
     import {page} from '$app/stores';
+    import {statsStore} from "./lib/stores/sudoStore.js";
+    import {Tag} from "@hyvor/design/components";
 
 </script>
 
@@ -12,13 +14,27 @@
         <NavLink href="/sudo/approvals" active={$page.url.pathname === '/sudo/approvals'}>
             <NavItem>
                 <IconClipboardCheck slot="icon"/>
-                <span slot="text">Approvals</span>
+                <span slot="text">
+                    Approvals
+                    {#if $statsStore.reviewing_approvals > 0}
+                        <Tag size="x-small" color="orange">
+                            {$statsStore.reviewing_approvals}
+                        </Tag>
+                    {/if}
+                </span>
             </NavItem>
         </NavLink>
         <NavLink href="/sudo/imports" active={$page.url.pathname === '/sudo/imports'}>
             <NavItem>
                 <IconBoxArrowInDown slot="icon"/>
-                <span slot="text">Subscriber Imports</span>
+                <span slot="text">
+                    Subscriber Imports
+                    {#if $statsStore.pending_imports > 0}
+                        <Tag size="x-small" color="orange">
+                            {$statsStore.pending_imports}
+                        </Tag>
+                    {/if}
+                </span>
             </NavItem>
         </NavLink>
     </div>

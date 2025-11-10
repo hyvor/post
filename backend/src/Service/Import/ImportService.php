@@ -170,4 +170,10 @@ class ImportService
             'month' => $result['month_count'] ?? 0
         ];
     }
+
+    public function getPendingSubscriberImportsCount(): int
+    {
+        return $this->em->getRepository(SubscriberImport::class)
+            ->count(['status' => SubscriberImportStatus::PENDING_APPROVAL]);
+    }
 }

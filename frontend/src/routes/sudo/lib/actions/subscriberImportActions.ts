@@ -1,9 +1,10 @@
 import {ITEMS_PER_PAGE} from "../generalActions";
 import sudoApi from "../sudoApi";
-import type {ImportingSubscriber, SubscriberImport} from "../../types";
+import type {ImportingSubscriber, SubscriberImport, SubscriberImportStatus} from "../../types";
 
 export function getSubscriberImports(
     subdomain: string | null = null,
+    status: SubscriberImportStatus | null = null,
     limit: number = ITEMS_PER_PAGE,
     offset: number = 0
 ) {
@@ -11,6 +12,7 @@ export function getSubscriberImports(
         endpoint: 'subscriber-imports',
         data: {
             subdomain,
+            status,
             limit,
             offset
         }
