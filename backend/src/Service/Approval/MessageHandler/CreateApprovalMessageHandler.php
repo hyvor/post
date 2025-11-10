@@ -42,7 +42,7 @@ class CreateApprovalMessageHandler
 
         $mail = $this->mailTemplate->render('mail/approval_reviewing.html.twig', [
             'component' => 'post',
-            'string' => $content,
+            'strings' => $content,
         ]);
 
         $this->emailNotificationService->send(
