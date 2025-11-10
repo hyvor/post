@@ -51,6 +51,12 @@ class ApprovalService
             );
     }
 
+    public function getReviewingApprovalsCount(): int
+    {
+        return $this->em->getRepository(Approval::class)
+            ->count(['status' => ApprovalStatus::REVIEWING]);
+    }
+
     public function getApporvalById(int $id): ?Approval
     {
         return $this->em->getRepository(Approval::class)

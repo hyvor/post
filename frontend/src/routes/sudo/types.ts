@@ -4,6 +4,11 @@ export interface SudoConfig {
     }
 }
 
+export interface SudoStats {
+    reviewing_approvals: number;
+    pending_imports: number;
+}
+
 export type ApprovalStatus = 'pending' | 'reviewing' | 'approved' | 'rejected';
 
 export type Approval = {

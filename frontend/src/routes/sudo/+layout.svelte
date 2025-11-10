@@ -2,8 +2,8 @@
     import Nav from './Nav.svelte';
     import {onMount} from 'svelte';
     import sudoApi from './lib/sudoApi';
-    import type {SudoConfig} from './types';
-    import {configStore} from './lib/stores/sudoStore';
+    import type {SudoConfig, SudoStats} from './types';
+    import {configStore, statsStore} from './lib/stores/sudoStore';
     import {Loader, toast} from '@hyvor/design/components';
     import {onNavigate} from '$app/navigation';
 
@@ -15,6 +15,7 @@
 
     interface InitResponse {
         config: SudoConfig;
+        stats: SudoStats;
     }
 
     let isLoading = $state(true);
@@ -26,6 +27,7 @@
             })
             .then((res) => {
                 configStore.set(res.config);
+                statsStore.set(res.stats);
                 isLoading = false;
             })
             .catch((err) => {
