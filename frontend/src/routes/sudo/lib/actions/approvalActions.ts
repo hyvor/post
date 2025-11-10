@@ -8,6 +8,14 @@ export const APPROVAL_STATUS_FILTERS = {
     rejected: 'Rejected',
 };
 
+export const IMPORT_STATUS_FILTERS = {
+    requires_input: 'Requires Input',
+    pending_approval: 'Pending Approval',
+    importing: 'Importing',
+    failed: 'Failed',
+    completed: 'Completed',
+}
+
 export function getApprovals(
     user_id: number | null = null,
     status: ApprovalStatus | null = null,

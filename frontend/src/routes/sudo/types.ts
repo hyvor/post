@@ -26,10 +26,13 @@ export type Approval = {
     rejected_at: number | null;
 }
 
+export type SubscriberImportStatus = 'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
+
 export type SubscriberImport = {
     id: number;
     created_at: number;
     newsletter_subdomain: string;
+    status: SubscriberImportStatus;
     total_rows: number;
     source: string;
     columns: string[];
