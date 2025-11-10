@@ -8,12 +8,24 @@
     import Message from "./Message.svelte";
 
     interface Props {
-        newsletterUuid: string;
+        newsletterSubdomain: string;
         instance: string;
         shadowRoot: ShadowRoot;
+        lists: string[]; // lists to filter by (empty = no filter)
+        listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
+        listsHidden: boolean; // if true, hide the lists section
     }
 
-    let { newsletterUuid, instance, shadowRoot }: Props = $props();
+    let {
+        newsletterSubdomain,
+        instance,
+        shadowRoot,
+        lists: listsToFilter,
+        listsHidden,
+        listsDefaultUnselected,
+    }: Props = $props();
+
+    let initError = $state("");
     let email = $state("");
     let selectedListsIds: number[] = $state([]);
     let loading = $state(true);
@@ -33,25 +45,61 @@
         lists: List[];
     }
 
-    onMount(() => {
+    function doInit() {
+        loading = true;
+        initError = "";
+
         api<InitResponse>("/init", {
-            newsletter_uuid: newsletterUuid,
+            newsletter_subdomain: newsletterSubdomain,
         })
             .then((response) => {
                 newsletter = response.newsletter;
+
                 lists = response.lists;
+
+                // filter lists
+                if (listsToFilter.length > 0) {
+                    lists = lists.filter((list) =>
+                        listsToFilter.includes(list.name),
+                    );
+                    if (lists.length === 0) {
+                        initError =
+                            "No lists found with the provided list names: " +
+                            listsToFilter.join(", ");
+                        return;
+                    }
+                }
+
                 selectedListsIds = lists.map((list) => list.id);
+
+                // deselect on attribue
+                if (listsDefaultUnselected.length > 0) {
+                    selectedListsIds = selectedListsIds.filter((id) => {
+                        const list = lists.find((list) => list.id === id);
+                        return (
+                            list && !listsDefaultUnselected.includes(list.name)
+                        );
+                    });
+
+                    if (selectedListsIds.length === 0) {
+                        // Select the first list ID if all were unselected
+                        selectedListsIds = [lists[0].id];
+                    }
+                }
+
                 palette = newsletter.palette_light;
 
                 setCustomCss();
             })
             .catch((err) => {
-                console.error("Error loading Hyvor Post form:", err);
+                initError = err.message || "Unable to load signup form.";
             })
             .finally(() => {
                 loading = false;
             });
-    });
+    }
+
+    onMount(doInit);
 
     function onSubscribe(e: Event) {
         e.preventDefault();
@@ -61,11 +109,11 @@
         subscribingError = "";
 
         api<InitResponse>("/subscribe", {
-            newsletter_uuid: newsletterUuid,
+            newsletter_subdomain: newsletterSubdomain,
             email,
             list_ids: selectedListsIds,
         })
-            .then((response) => {
+            .then(() => {
                 subscribingSuccess = true;
                 setTimeout(() => {
                     subscribingSuccess = false;
@@ -86,6 +134,26 @@
             style.textContent = newsletter.form.custom_css;
             shadowRoot.appendChild(style);
         }
+    }
+
+    function handleListSwitch(listId: number) {
+        return (event: Event) => {
+            const checkbox = event.target as HTMLInputElement;
+            if (checkbox.checked) {
+                selectedListsIds.push(listId);
+            } else {
+                selectedListsIds = selectedListsIds.filter(
+                    (id) => id !== listId,
+                );
+                if (selectedListsIds.length === 0) {
+                    // Select the next list ID
+                    const nextList = lists.find((list) => list.id !== listId);
+                    if (nextList) {
+                        selectedListsIds = [nextList.id];
+                    }
+                }
+            }
+        };
     }
 
     export function setPalette(type: "light" | "dark") {
@@ -119,6 +187,16 @@
 
 {#if loading}
     <Skeleton />
+{:else if initError}
+    <div class="form">
+        <Message message={initError} type="error" />
+
+        <div style="text-align:center;margin-top:10px;">
+            <button style="padding: 6px 15px;" onclick={doInit}>
+                Reload
+            </button>
+        </div>
+    </div>
 {:else}
     <div
         class="form"
@@ -132,6 +210,7 @@
             --hp-input-border: {palette.input_border};
             --hp-border-radius: {palette.border_radius}px;
 
+            --hp-accent-light: color-mix(in srgb, var(--hp-accent), transparent 90%);
             --hp-text-light: color-mix(in srgb, var(--hp-text), transparent 50%);
             --hp-link: var(--hp-accent);
         "
@@ -155,7 +234,7 @@
         <div
             class="lists"
             transition:slide={laterElementsAnimation}
-            class:hidden={lists.length === 0}
+            class:hidden={lists.length === 0 || listsHidden}
         >
             {#each lists as list (list.id)}
                 <label class="list">
@@ -163,7 +242,11 @@
                         <div class="list-name">{list.name}</div>
                         <div class="list-description">{list.description}</div>
                     </div>
-                    <Switch checked={true} />
+                    <Switch
+                        checked={selectedListsIds.includes(list.id)}
+                        onchange={handleListSwitch(list.id)}
+                        disabled={subscribing}
+                    />
                 </label>
             {/each}
         </div>
@@ -187,7 +270,7 @@
         {#if subscribingSuccess}
             <Message
                 message={newsletter.form.success_message ||
-                    "Thank you for subscribing!"}
+                    "Please check your email to confirm your subscription."}
                 type="success"
             />
         {/if}

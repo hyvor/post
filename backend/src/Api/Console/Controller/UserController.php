@@ -2,9 +2,10 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\UserInvite\InviteUserInput;
 use App\Api\Console\Object\UserInviteObject;
-use App\Api\Console\Object\UserMiniObject;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
@@ -13,7 +14,6 @@ use App\Entity\UserInvite;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
 use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,16 +24,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
 
-    use HasHyvorUser;
-
     public function __construct(
-        private AuthInterface $auth,
-        private UserService $userService,
+        private AuthInterface     $auth,
+        private UserService       $userService,
         private UserInviteService $userInviteService,
-    ) {
+    )
+    {
     }
 
     #[Route('/users', methods: 'GET')]
+    #[ScopeRequired(Scope::USERS_READ)]
     public function getUsers(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService->getNewsletterUsers($newsletter)
@@ -49,6 +49,7 @@ class UserController extends AbstractController
     }
 
     #[Route('users/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
     {
         $this->userService->deleteUser($newsletter, $user);
@@ -56,6 +57,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'GET')]
+    #[ScopeRequired(Scope::USERS_READ)]
     public function getInvites(Newsletter $newsletter): JsonResponse
     {
         $invites = $this->userInviteService->getNewsletterInvites($newsletter)
@@ -72,6 +74,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites', methods: 'POST')]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function invite(Newsletter $newsletter, #[MapRequestPayload] InviteUserInput $input): JsonResponse
     {
         if (!$input->email && !$input->username) {
@@ -81,7 +84,11 @@ class UserController extends AbstractController
         $hyvorUser = null;
 
         if ($input->email !== null) {
-            $hyvorUser = $this->auth->fromEmail($input->email);
+            $authUsers = $this->auth->fromEmail($input->email);
+
+            if (count($authUsers) > 0) {
+                $hyvorUser = $authUsers[0];
+            }
         } else {
             if ($input->username !== null) {
                 $hyvorUser = $this->auth->fromUsername($input->username);
@@ -102,7 +109,7 @@ class UserController extends AbstractController
             $invite = $this->userInviteService->createInvite($newsletter, $hyvorUser->id, UserRole::ADMIN);
         }
 
-        $this->userInviteService->sendEmail($newsletter, $hyvorUser, $invite);
+        $this->userInviteService->sendEmail($hyvorUser, $invite);
 
         return $this->json(
             new UserInviteObject($invite, $hyvorUser),
@@ -110,6 +117,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/invites/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteInvite(Newsletter $newsletter, UserInvite $userInvite): JsonResponse
     {
         $this->userInviteService->deleteInvite($userInvite);

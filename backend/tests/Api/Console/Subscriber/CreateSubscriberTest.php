@@ -27,6 +27,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberMinimal(): void
     {
+        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
 
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
@@ -52,7 +53,7 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('test@email.com', $subscriber->getEmail());
-        $this->assertSame('subscribed', $subscriber->getStatus()->value);
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame('console', $subscriber->getSource()->value);
 
         $subscriberLists = $subscriber->getLists();
@@ -63,6 +64,7 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberWithAllInputs(): void
     {
+        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
@@ -76,7 +78,6 @@ class CreateSubscriberTest extends WebTestCase
             [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [$list->getId()],
-                'status' => 'unsubscribed',
                 'source' => 'form',
                 'subscribe_ip' => '79.255.1.1',
                 'subscribed_at' => $subscribedAt->getTimestamp(),
@@ -89,7 +90,7 @@ class CreateSubscriberTest extends WebTestCase
         $json = $this->getJson();
         $this->assertIsInt($json['id']);
         $this->assertSame('supun@hyvor.com', $json['email']);
-        $this->assertSame('unsubscribed', $json['status']);
+        $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
         $this->assertSame('form', $json['source']);
         $this->assertSame('79.255.1.1', $json['subscribe_ip']);
         $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
@@ -99,7 +100,7 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('supun@hyvor.com', $subscriber->getEmail());
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
         $this->assertSame('79.255.1.1', $subscriber->getSubscribeIp());
         $this->assertSame('2021-08-27 12:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
@@ -173,7 +174,6 @@ class CreateSubscriberTest extends WebTestCase
             fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
                 'list_ids' => [1],
-                'status' => 'invalid-status',
                 'source' => 'invalid-source',
                 'subscribe_ip' => '127.0.0.1',
                 'subscribed_at' => 'invalid-date',
@@ -181,12 +181,8 @@ class CreateSubscriberTest extends WebTestCase
             ],
             [
                 [
-                    'property' => 'status',
-                    'message' => 'This value should be of type subscribed|unsubscribed|pending.',
-                ],
-                [
                     'property' => 'source',
-                    'message' => 'This value should be of type console|form|import|auto_subscribe.',
+                    'message' => 'This value should be of type console|form|import.',
                 ],
                 [
                     'property' => 'subscribed_at',
@@ -206,7 +202,8 @@ class CreateSubscriberTest extends WebTestCase
     #[TestWith(['169.254.255.255'])] // reserved ip
     public function testValidatesIp(
         string $ip
-    ): void {
+    ): void
+    {
         $this->validateInput(
             fn(Newsletter $newsletter) => [
                 'email' => 'supun@hyvor.com',
@@ -224,13 +221,14 @@ class CreateSubscriberTest extends WebTestCase
 
     /**
      * @param callable(Newsletter): array<string, mixed> $input
-     * @param array<mixed> $violations
+     * @param array<int, array{property: string, message: string}> $violations
      * @return void
      */
     private function validateInput(
         callable $input,
-        array $violations
-    ): void {
+        array    $violations
+    ): void
+    {
         $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
@@ -243,7 +241,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame($violations, $json['violations']);
-        $this->assertSame('Validation failed with ' . count($violations) . ' violations(s)', $json['message']);
+        $this->assertSame($violations[0]['message'], $json['message']);
     }
 
     public function testCreateSubscriberInvalidList(): void

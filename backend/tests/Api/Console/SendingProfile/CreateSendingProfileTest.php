@@ -5,7 +5,8 @@ namespace App\Tests\Api\Console\SendingProfile;
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Entity\Type\RelayDomainStatus;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -17,13 +18,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SendingProfileService::class)]
 class CreateSendingProfileTest extends WebTestCase
 {
-    public function test_create_sending_email(): void
+    public function test_create_sending_profile(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
-        $domain = DomainFactory::createOne([
+        DomainFactory::createOne([
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -33,20 +34,25 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
 
-        $this->assertSame('thibault@hyvor.com', $json['email']);
-        $this->assertSame(true, $json['is_default']);
+        $this->assertSame('thibault@hyvor.com', $json['from_email']);
+        $this->assertSame(false, $json['is_default']);
 
-        $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
-        $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
-        $this->assertSame('thibault@hyvor.com', $sendingEmail->getEmail());
-        $this->assertSame(true, $sendingEmail->getIsDefault());
+        $sendingProfile = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
+        $this->assertInstanceOf(SendingProfile::class, $sendingProfile);
+        $this->assertSame('thibault@hyvor.com', $sendingProfile->getFromEmail());
+        $this->assertNull($sendingProfile->getFromName());
+        $this->assertSame(false, $sendingProfile->getIsDefault());
     }
 
     public function test_it_does_not_make_it_default_when_there_is_already_one(): void
@@ -55,7 +61,7 @@ class CreateSendingProfileTest extends WebTestCase
 
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
-                'verified_in_ses' => true,
+                'relay_status' => RelayDomainStatus::ACTIVE,
                 'user_id' => 1
             ]
         );
@@ -70,7 +76,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
 
@@ -83,7 +93,7 @@ class CreateSendingProfileTest extends WebTestCase
         $this->assertSame(false, $sendingEmail->getIsDefault());
     }
 
-    public function test_create_sending_email_domain_not_found(): void
+    public function test_create_sending_profile_domain_not_found(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
@@ -92,7 +102,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@nonexistent.com'
+                'from_email' => 'thibault@nonexistent.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
@@ -101,12 +115,12 @@ class CreateSendingProfileTest extends WebTestCase
         $this->assertSame('Domain not found', $json['message']);
     }
 
-    public function test_create_sending_email_domain_not_verified(): void
+    public function test_create_sending_profile_domain_not_verified(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        $domain = DomainFactory::createOne([
+        DomainFactory::createOne([
             'domain' => 'hyvor.com',
-            'verified_in_ses' => false,
+            'relay_status' => RelayDomainStatus::PENDING,
             'user_id' => 1
         ]);
         $response = $this->consoleApi(
@@ -114,7 +128,11 @@ class CreateSendingProfileTest extends WebTestCase
             'POST',
             '/sending-profiles',
             [
-                'email' => 'thibault@hyvor.com'
+                'from_email' => 'thibault@hyvor.com',
+                'from_name' => null,
+                'reply_to_email' => null,
+                'brand_name' => null,
+                'brand_logo' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());

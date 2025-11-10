@@ -9,17 +9,11 @@ class UpdateSendDto
 {
     use OptionalPropertyTrait;
 
+    public SendStatus $status;
     public ?\DateTimeImmutable $deliveredAt;
+    public ?\DateTimeImmutable $failedAt;
     public ?\DateTimeImmutable $complainedAt;
-
     public ?\DateTimeImmutable $bouncedAt;
-    public ?\DateTimeImmutable $firstClickedAt;
-    public ?\DateTimeImmutable $lastClickedAt;
-    public ?\DateTimeImmutable $firstOpenedAt;
-    public ?\DateTimeImmutable $lastOpenedAt;
-
     public bool $hardBounce;
-    public int $clickCount;
-    public int $openCount;
 }
 

@@ -5,6 +5,8 @@ namespace App\Service\UserInvite;
 use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\UserInvite;
+use App\Service\AppConfig;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -17,11 +19,13 @@ class UserInviteService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private EmailNotificationService $emailNotificationService,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
-    ) {
+        private EntityManagerInterface        $em,
+        private SystemNotificationMailService $emailNotificationService,
+        private readonly Environment          $mailTemplate,
+        private readonly StringsFactory       $stringsFactory,
+        private readonly AppConfig            $appConfig,
+    )
+    {
     }
 
     /**
@@ -42,9 +46,10 @@ class UserInviteService
 
     public function createInvite(
         Newsletter $newsletter,
-        int $hyvorUserId,
-        UserRole $role,
-    ): UserInvite {
+        int        $hyvorUserId,
+        UserRole   $role,
+    ): UserInvite
+    {
         $userInvite = new UserInvite();
         $userInvite->setCreatedAt(new \DateTimeImmutable());
         $userInvite->setUpdatedAt(new \DateTimeImmutable());
@@ -60,14 +65,13 @@ class UserInviteService
         return $userInvite;
     }
 
-    public function sendEmail(Newsletter $projet, AuthUser $hyvorUser, UserInvite $userInvite): void
+    public function sendEmail(AuthUser $hyvorUser, UserInvite $userInvite): void
     {
         $strings = $this->stringsFactory->create();
 
         $mail = $this->mailTemplate->render('mail/user_invite.html.twig', [
             'component' => 'post',
-            // TODO: URL
-            'buttonUrl' => 'https://post.hyvor.dev/api/public/invite/verify?code=' . $userInvite->getCode(),
+            'buttonUrl' => $this->appConfig->getUrlApp() . '/api/public/invite/verify?code=' . $userInvite->getCode(),
             'strings' => [
                 'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
                 'subject' => $strings->get(

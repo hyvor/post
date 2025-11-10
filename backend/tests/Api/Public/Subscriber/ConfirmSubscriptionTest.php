@@ -3,11 +3,14 @@
 namespace App\Tests\Api\Public\Subscriber;
 
 use App\Api\Public\Controller\Subscriber\SubscriberController;
+use App\Entity\Type\SubscriberStatus;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
@@ -16,12 +19,10 @@ class ConfirmSubscriptionTest extends WebTestCase
     public function test_confirm_subscription(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
-        $subscriber = SubscriberFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-            ]
-        );
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'status' => SubscriberStatus::PENDING
+        ]);
 
         $data = [
             'subscriber_id' => $subscriber->getId(),
@@ -34,8 +35,9 @@ class ConfirmSubscriptionTest extends WebTestCase
             'GET',
             '/subscriber/confirm?token=' . $token,
         );
-
-        $this->assertResponseRedirects('https://post.hyvor.com/newsletter/' . $newsletter->getSlug() . '/confirm?token=' . $token);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertNotNull($subscriber->getSubscribedAt());
     }
 
     public function test_confirm_subscription_with_invalid_token(): void
@@ -56,20 +58,31 @@ class ConfirmSubscriptionTest extends WebTestCase
         $this->assertSame('Invalid confirmation token.', $json['message']);
     }
 
-    public function test_confirm_subscription_with_expired_token(): void
+    public function test_invalid_token(): void
     {
-        $newsletter = NewsletterFactory::createOne();
-
-        $subscriber = SubscriberFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-            ]
+        $response = $this->publicApi(
+            'GET',
+            '/subscriber/confirm?token=test',
         );
 
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('Invalid confirmation token.', $json['message']);
+    }
+
+    public function test_confirm_subscription_with_expired_token(): void
+    {
+        $date = new \DateTimeImmutable('2025-10-09 00:00:00');
+        Clock::set(new MockClock($date));
+
+        $newsletter = NewsletterFactory::createOne();
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+        ]);
 
         $data = [
             'subscriber_id' => $subscriber->getId(),
-            'expires_at' => (new \DateTimeImmutable())->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
+            'expires_at' => $date->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
         $token = $this->encryption->encrypt($data);
@@ -100,6 +113,6 @@ class ConfirmSubscriptionTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('Invalid subscriber ID.', $json['message']);
+        $this->assertSame('Subscriber not found.', $json['message']);
     }
 }

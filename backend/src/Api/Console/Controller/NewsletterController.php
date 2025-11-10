@@ -2,7 +2,12 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
+use App\Api\Console\Authorization\UserLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
+use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -10,45 +15,70 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\UnicodeString;
-use Hyvor\Internal\Bundle\Security\HasHyvorUser;
 
 class NewsletterController extends AbstractController
 {
-    use HasHyvorUser;
-
     public function __construct(
-        private NewsletterService $newsletterService
-    ) {
+        private NewsletterService $newsletterService,
+    )
+    {
+    }
+
+    #[Route('/newsletter/subdomain', methods: 'POST')]
+    #[UserLevelEndpoint]
+    public function getSubdomainAvailability(
+        Request                                         $request,
+        #[MapRequestPayload] SubdomainAvailabilityInput $input
+    ): JsonResponse
+    {
+        if (!$input->subdomain) {
+            throw new UnprocessableEntityHttpException('Subdomain is required.');
+        }
+
+        $available = true;
+
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
+            $available = false;
+        }
+
+        return $this->json([
+            'available' => $available
+        ]);
     }
 
     #[Route('/newsletter', methods: 'POST')]
-    public function createNewsletter(#[MapRequestPayload] CreateNewsletterInput $input): JsonResponse
+    #[UserLevelEndpoint]
+    public function createNewsletter(
+        Request                                    $request,
+        #[MapRequestPayload] CreateNewsletterInput $input
+    ): JsonResponse
     {
-        $user = $this->getHyvorUser();
+        $user = AuthorizationListener::getUser($request);
 
-        $slugger = new AsciiSlugger();
-        while ($this->newsletterService->isUsernameTaken($slugger->slug($input->name))) {
-            $input->name .= ' ' . random_int(1, 100);
+        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
+            throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name);
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name, $input->subdomain);
         return $this->json(new NewsletterObject($newsletter));
     }
 
-    #[Route('/newsletter', methods: 'GET', condition: 'request.headers.get("X-Newsletter-Id") !== null')]
-    public function getNewsletterById(Newsletter $newsletter): JsonResponse
+    #[Route('/newsletter', methods: 'GET')]
+    #[ScopeRequired(Scope::NEWSLETTER_READ)]
+    public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function deleteNewsletter(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
@@ -56,13 +86,21 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'PATCH')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function updateNewsletter(
-        Newsletter $newsletter,
+        Newsletter                                                                                 $newsletter,
         #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $updates = new UpdateNewsletterDto();
         if ($input->hasProperty('name')) {
             $updates->name = $input->name;
+        }
+        if ($input->hasProperty('subdomain')) {
+            if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
+                throw new UnprocessableEntityHttpException('Subdomain is already taken.');
+            }
+            $updates->subdomain = $input->subdomain;
         }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
@@ -79,4 +117,5 @@ class NewsletterController extends AbstractController
 
         return $this->json(new NewsletterObject($newsletter));
     }
+
 }

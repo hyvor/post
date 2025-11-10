@@ -4,8 +4,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Api\Console\Resolver\EntityResolver;
+use App\Api\Sudo\Resolver\EntityResolver as SudoEntityResolver;
 use App\Service\Media\FilesystemFactory;
-use Aws\AwsClient;
 use Aws\S3\S3Client;
 use League\Flysystem\Filesystem;
 
@@ -40,14 +40,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ['name' => 'console_api_resource', 'priority' => 150]
         );
 
+    // ================ SUDO API =================
+    $services->set(SudoEntityResolver::class)
+        ->tag(
+            'controller.argument_value_resolver',
+            ['name' => 'sudo_api_resource', 'priority' => 150]
+        );
+
     // ================ STORAGE =================
     $services->set(S3Client::class)
         ->arg('$args', [
             'version' => 'latest',
-            'region' => '%env(AWS_REGION)%',
+            'region' => '%env(S3_REGION)%',
+            'endpoint' => '%env(S3_ENDPOINT)%',
+            'use_path_style_endpoint' => true,
             'credentials' => [
-                'key' => '%env(AWS_ACCESS_KEY_ID)%',
-                'secret' => '%env(AWS_SECRET_ACCESS_KEY)%'
+                'key' => '%env(S3_ACCESS_KEY_ID)%',
+                'secret' => '%env(S3_SECRET_ACCESS_KEY)%'
             ]
         ]);
 
@@ -56,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             '%env(FILESYSTEM_ADAPTER)%',
             service(S3Client::class),
-            '%env(AWS_BUCKET)%',
+            '%env(S3_BUCKET)%',
             '%kernel.project_dir%/var/uploads',
         ]);
 };

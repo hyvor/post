@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
@@ -26,13 +28,15 @@ class SubscriberController extends AbstractController
 {
 
     public function __construct(
-        private SubscriberService $subscriberService,
-        private NewsletterListService $newsletterListService,
+        private SubscriberService         $subscriberService,
+        private NewsletterListService     $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService
-    ) {
+    )
+    {
     }
 
     #[Route('/subscribers', methods: 'GET')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
     public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -44,8 +48,8 @@ class SubscriberController extends AbstractController
         }
 
         $listId = null;
-        if ($request->query->has('listId')) {
-            $listId = $request->query->getInt('listId');
+        if ($request->query->has('list_id')) {
+            $listId = $request->query->getInt('list_id');
         }
 
         $search = null;
@@ -69,10 +73,12 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
-        Newsletter $newsletter
-    ): JsonResponse {
+        Newsletter                                 $newsletter
+    ): JsonResponse
+    {
         $missingListIds = $this
             ->newsletterListService
             ->getMissingListIdsOfNewsletter($newsletter, $input->list_ids);
@@ -92,7 +98,7 @@ class SubscriberController extends AbstractController
             $newsletter,
             $input->email,
             $lists,
-            $input->status ?? SubscriberStatus::SUBSCRIBED,
+            SubscriberStatus::PENDING,
             $input->source ?? SubscriberSource::CONSOLE,
             $input->subscribe_ip,
             $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
@@ -103,11 +109,13 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function updateSubscriber(
-        Subscriber $subscriber,
-        Newsletter $newsletter,
+        Subscriber                                 $subscriber,
+        Newsletter                                 $newsletter,
         #[MapRequestPayload] UpdateSubscriberInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $updates = new UpdateSubscriberDto();
 
         if ($input->hasProperty('email')) {
@@ -133,6 +141,10 @@ class SubscriberController extends AbstractController
         }
 
         if ($input->hasProperty('status')) {
+            if ($input->status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
+                throw new UnprocessableEntityHttpException('Subscribers without opt-in can not be updated to SUBSCRIBED status.');
+            }
+
             $updates->status = $input->status;
         }
 
@@ -152,6 +164,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
@@ -159,6 +172,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/bulk', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
     {
         if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {
@@ -170,9 +184,11 @@ class SubscriberController extends AbstractController
         // Validate that all subscriber IDs exist in the newsletter
         foreach ($input->subscribers_ids as $subscriberId) {
             $subscriber = array_find($currentSubscribers, fn($s) => $s->getId() === $subscriberId);
+
             if ($subscriber === null) {
                 throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
             }
+
             $subscribers[] = $subscriber;
         }
 
@@ -184,27 +200,44 @@ class SubscriberController extends AbstractController
         if ($input->action == 'status_change') {
             if ($input->status == null)
                 throw new UnprocessableEntityHttpException("Status must be provided for status change action");
-            if (!SubscriberStatus::tryFrom($input->status)) {
+
+            $status = SubscriberStatus::tryFrom($input->status);
+            if (!$status) {
                 throw new UnprocessableEntityHttpException("Invalid status provided");
             }
-            $status = SubscriberStatus::from($input->status);
-            $this->subscriberService->updateSubscribersStatus($subscribers, $status);
+
+            foreach ($subscribers as $subscriber) {
+                $updates = new UpdateSubscriberDto();
+
+                if ($status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
+                    $updates->status = SubscriberStatus::PENDING;
+                } else {
+                    $updates->status = $status;
+                }
+
+                $this->subscriberService->updateSubscriber($subscriber, $updates);
+            }
+
             return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
         }
 
         if ($input->action == 'metadata_update') {
             if ($input->metadata == null)
                 throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
+
             foreach ($subscribers as $subscriber) {
                 $updates = new UpdateSubscriberDto();
+
                 try {
                     $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
                 } catch (\Exception $e) {
                     throw new UnprocessableEntityHttpException($e->getMessage());
                 }
+
                 $updates->metadata = $input->metadata;
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
+
             return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
         }
 

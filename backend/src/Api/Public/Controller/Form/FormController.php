@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
+use App\Api\Public\Input\Form\FormRenderInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\AppConfig;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
@@ -19,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,16 +32,18 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private NewsletterService $newsletterService,
+        private NewsletterService     $newsletterService,
         private NewsletterListService $newsletterListService,
-        private SubscriberService $subscriberService,
-    ) {
+        private SubscriberService     $subscriberService,
+        private AppConfig             $appConfig,
+    )
+    {
     }
 
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
+        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
@@ -70,10 +75,11 @@ class FormController extends AbstractController
     #[Route('/form/subscribe', methods: 'POST')]
     public function subscribe(
         #[MapRequestPayload] FormSubscribeInput $input,
-        Request $request,
-    ): JsonResponse {
+        Request                                 $request,
+    ): JsonResponse
+    {
         $ip = $request->getClientIp();
-        $newsletter = $this->newsletterService->getNewsletterByUuid($input->newsletter_uuid);
+        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
@@ -94,9 +100,9 @@ class FormController extends AbstractController
         $email = $input->email;
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
 
-        if ($subscriber && $subscriber->getStatus() === SubscriberStatus::UNSUBSCRIBED) {
+        if ($subscriber) {
             $update = new UpdateSubscriberDto();
-            $update->status = SubscriberStatus::PENDING;
+            $update->status = $subscriber->getOptInAt() !== null ? SubscriberStatus::SUBSCRIBED : SubscriberStatus::PENDING;
             $update->lists = $lists;
 
             $this->subscriberService->updateSubscriber(
@@ -110,12 +116,32 @@ class FormController extends AbstractController
                 $lists,
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
-                $ip,
-                $this->now(),
+                $ip
             );
         }
 
         return new JsonResponse(new FormSubscriberObject($subscriber));
+    }
+
+    #[Route('/form/render', methods: 'GET')]
+    public function renderForm(Request $request): Response
+    {
+        $id = $request->query->get('id');
+        $instance = $request->query->get('instance', $this->appConfig->getUrlApp());
+
+        $newsletter = $this->newsletterService->getNewsletterById(intval($id));
+
+        if (!$newsletter) {
+            throw new UnprocessableEntityHttpException('Newsletter not found');
+        }
+
+        $response = <<<HTML
+            <hyvor-post-form newsletter={$newsletter->getSubdomain()}
+            instance={$instance}></hyvor-post-form>
+            <script type="module" src="{$instance}/form/embed.js"></script>
+        HTML;
+
+        return new Response($response);
     }
 
 }

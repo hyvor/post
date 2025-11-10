@@ -74,12 +74,12 @@ class TemplateWithTest extends WebTestCase
                   "lang": "en",
                   "subject": "",
                   "content": "",
-                  "logo": "",
+                  "logo": "logo-goes-here",
                   "logo_alt": "",
-                  "brand": "",
+                  "brand": "brand-goes-here",
                   "brand_url": "",
-                  "address": "",
-                  "unsubscribe_url": "",
+                  "address": "address-goes-here",
+                  "unsubscribe_url": "brand-url-goes-here",
                   "unsubscribe_text": "",
                   "color_accent": "#007bff",
                   "color_background": "#f8f9fa",
@@ -107,7 +107,12 @@ class TemplateWithTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $content = $this->getJson();
-        // TODO: add tests
+        $html = $content['html'];
+        $this->assertIsString($html);
 
+        $this->assertStringContainsString("logo-goes-here", $html);
+        $this->assertStringContainsString("brand-goes-here", $html);
+        $this->assertStringContainsString("address-goes-here", $html);
+        $this->assertStringContainsString("brand-url-goes-here", $html);
     }
 }

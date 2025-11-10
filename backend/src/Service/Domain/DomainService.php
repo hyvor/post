@@ -3,9 +3,11 @@
 namespace App\Service\Domain;
 
 use App\Entity\Domain;
-use App\Service\Integration\Aws\AwsDomainService;
-use App\Service\UserInvite\EmailNotificationService;
-use Aws\Exception\AwsException;
+use App\Entity\Type\RelayDomainStatus;
+use App\Service\Domain\Dto\UpdateDomainDto;
+use App\Service\Integration\Relay\Exception\RelayApiException;
+use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -20,13 +22,14 @@ class DomainService
     public const DKIM_SELECTOR = 'hyvor-post';
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private EmailNotificationService $emailNotificationService,
-        private AwsDomainService $awsDomainService,
-        private LoggerInterface $logger,
-        private readonly Environment $mailTemplate,
-        private readonly StringsFactory $stringsFactory,
-    ) {
+        private EntityManagerInterface        $em,
+        private SystemNotificationMailService $emailNotificationService,
+        private LoggerInterface               $logger,
+        private readonly Environment          $mailTemplate,
+        private readonly StringsFactory       $stringsFactory,
+        private RelayApiClient                $relayApiClient
+    )
+    {
     }
 
     public function getDomainByDomainName(string $domain): ?Domain
@@ -45,6 +48,18 @@ class DomainService
     public function getDomainsByUserId(int $userId): array
     {
         return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
+    }
+
+    /**
+     * @return Domain[]
+     */
+    public function getVerifiedDomainsByUserId(int $userId): array
+    {
+        return $this->em->getRepository(Domain::class)
+            ->findBy([
+                'user_id' => $userId,
+                'relay_status' => [RelayDomainStatus::ACTIVE, RelayDomainStatus::PENDING]
+            ]);
     }
 
     public static function getDkimTxtValue(string $publicKey): string
@@ -74,27 +89,11 @@ class DomainService
      */
     public function createDomain(string $domain, int $userId): Domain
     {
-        $privateKey = openssl_pkey_new([
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA
-        ]);
-        assert($privateKey !== false);
-
-        openssl_pkey_export($privateKey, $privateKeyString);
-
-        $details = openssl_pkey_get_details($privateKey);
-        assert($details !== false);
-
-        $publicKey = $details['key'];
 
         try {
-            $this->awsDomainService->createAwsDomain(
-                $domain,
-                self::cleanKey($privateKeyString),
-                self::DKIM_SELECTOR
-            );
-        } catch (AwsException $e) {
-            $this->logger->critical('Failed to create email domain in AWS SES', [
+            $response = $this->relayApiClient->createDomain($domain);
+        } catch (RelayApiException $e) {
+            $this->logger->critical('Failed to create email domain in Hyvor Relay', [
                 'domain' => $domain,
                 'error' => $e,
             ]);
@@ -106,8 +105,9 @@ class DomainService
         $domainEntity->setUserId($userId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
-        $domainEntity->setDkimPublicKey(self::cleanKey($publicKey));
-        $domainEntity->setDkimPrivateKey(self::cleanKey($privateKeyString));
+        $domainEntity->setDkimHost($response->dkim_host);
+        $domainEntity->setDkimTxtvalue($response->dkim_txt_value);
+        $domainEntity->setRelayId($response->id);
         $this->em->persist($domainEntity);
         $this->em->flush();
 
@@ -121,23 +121,21 @@ class DomainService
     public function verifyDomain(Domain $domain, AuthUser $hyvorUser): array
     {
         try {
-            $result = $this->awsDomainService->verifyAwsDomain($domain->getDomain());
-        } catch (AwsException $e) {
-            $this->logger->critical('Failed to create email domain in AWS SES', [
-                'domain' => $domain,
+            $result = $this->relayApiClient->verifyDomain($domain->getRelayId());
+        } catch (RelayApiException $e) {
+            $this->logger->critical('Failed to verify email domain in Hyvor Relay', [
+                'domain' => $domain->getDomain(),
                 'error' => $e,
             ]);
             throw new VerifyDomainException(previous: $e);
         }
 
-        $verified = $result['VerifiedForSendingStatus'];
-        $info = $result['VerificationInfo'];
+        $verified = $result->status === RelayDomainStatus::ACTIVE;
 
         if ($verified) {
             // use a separate method with DTO
-            $domain->setVerifiedInSes(true);
+            $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
-
 
             $strings = $this->stringsFactory->create();
 
@@ -165,10 +163,30 @@ class DomainService
         return [
             'verified' => $verified,
             'debug' => $verified ? null : [
-                'last_checked_at' => $info['LastCheckedTimestamp'] ?? '',
-                'error_type' => $info['ErrorType'] ?? ''
+                'last_checked_at' => (string)$result->dkim_checked_at,
+                'error_type' => $result->dkim_error_message ?? ''
             ]
         ];
+    }
+
+    public function updateDomain(Domain $domain, UpdateDomainDto $updates): Domain
+    {
+        if ($updates->relayStatusSet) {
+            $domain->setRelayStatus($updates->relayStatus);
+        }
+        if ($updates->relayLastCheckedAtSet) {
+            $domain->setRelayLastCheckedAt($updates->relayLastCheckedAt);
+        }
+        if ($updates->relayErrorMessageSet) {
+            $domain->setRelayErrorMessage($updates->relayErrorMessage);
+        }
+
+        $domain->setUpdatedAt($this->now());
+
+        $this->em->persist($domain);
+        $this->em->flush();
+
+        return $domain;
     }
 
     /**
@@ -177,9 +195,9 @@ class DomainService
     public function deleteDomain(Domain $domain): void
     {
         try {
-            $this->awsDomainService->deleteAwsDomain($domain->getDomain());
-        } catch (AwsException $e) {
-            $this->logger->critical('Failed to delete email domain in AWS SES', [
+            $this->relayApiClient->deleteDomain($domain->getDomain());
+        } catch (RelayApiException $e) {
+            $this->logger->critical('Failed to delete email domain in Hyvor Relay', [
                 'domain' => $domain,
                 'error' => $e,
             ]);

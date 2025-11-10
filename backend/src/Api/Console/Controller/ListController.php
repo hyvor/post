@@ -2,6 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\List\CreateListInput;
 use App\Api\Console\Input\List\UpdateListInput;
 use App\Api\Console\Object\ListObject;
@@ -19,10 +21,12 @@ class ListController extends AbstractController
 
     public function __construct(
         private NewsletterListService $newsletterListService
-    ) {
+    )
+    {
     }
 
     #[Route('/lists', methods: 'GET')]
+    #[ScopeRequired(Scope::NEWSLETTER_READ)]
     public function getNewsletterLists(Newsletter $newsletter): JsonResponse
     {
         $lists = $this->newsletterListService
@@ -33,10 +37,12 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'POST')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function createNewsletterList(
-        Newsletter $newsletter,
+        Newsletter                           $newsletter,
         #[MapRequestPayload] CreateListInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $listCounter = $this->newsletterListService->getListCounter($newsletter);
 
         if ($listCounter >= $this->newsletterListService::MAX_LIST_DEFINITIONS_PER_NEWSLETTER) {
@@ -48,7 +54,7 @@ class ListController extends AbstractController
         }
 
         if (!$this->newsletterListService->isNameAvailable($newsletter, $input->name)) {
-            throw new BadRequestHttpException("List name already exists.");
+            throw new BadRequestHttpException("List name \"$input->name\" already exists.");
         }
 
         $list = $this->newsletterListService->createNewsletterList(
@@ -60,16 +66,19 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'GET')]
+    #[ScopeRequired(Scope::NEWSLETTER_READ)]
     public function getById(NewsletterList $list): JsonResponse
     {
         return $this->json(new ListObject($list));
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function updateNewsletterList(
-        NewsletterList $list,
+        NewsletterList                       $list,
         #[MapRequestPayload] UpdateListInput $input
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
@@ -79,6 +88,7 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]
+    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function deleteNewsletterList(NewsletterList $list): JsonResponse
     {
         $this->newsletterListService->deleteNewsletterList($list);

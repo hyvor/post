@@ -49,9 +49,7 @@ class GetIssuesTest extends WebTestCase
         $this->assertArrayHasKey('uuid', $issue);
         $this->assertArrayHasKey('created_at', $issue);
         $this->assertArrayHasKey('subject', $issue);
-        $this->assertArrayHasKey('from_name', $issue);
-        $this->assertArrayHasKey('from_email', $issue);
-        $this->assertArrayHasKey('reply_to_email', $issue);
+        $this->assertArrayHasKey('sending_profile_id', $issue);
         $this->assertArrayHasKey('content', $issue);
         $this->assertArrayHasKey('status', $issue);
         $this->assertArrayHasKey('lists', $issue);
@@ -84,9 +82,7 @@ class GetIssuesTest extends WebTestCase
         $this->assertArrayHasKey('uuid', $issue);
         $this->assertArrayHasKey('created_at', $issue);
         $this->assertArrayHasKey('subject', $issue);
-        $this->assertArrayHasKey('from_name', $issue);
-        $this->assertArrayHasKey('from_email', $issue);
-        $this->assertArrayHasKey('reply_to_email', $issue);
+        $this->assertArrayHasKey('sending_profile_id', $issue);
         $this->assertArrayHasKey('content', $issue);
         $this->assertArrayHasKey('status', $issue);
         $this->assertArrayHasKey('lists', $issue);

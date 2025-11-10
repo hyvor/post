@@ -1,0 +1,99 @@
+{
+	"homepage": {
+		"heading": "Plateforme de newsletter simple",
+		"subHeading": "Newsletters pour votre site Web",
+		"whyHyvorPost": "Pourquoi Hyvor Post ?",
+		"letter": {
+			"s1": "Premièrement",
+			"s1Desc": "Confidentialité",
+			"p1": "Pratiquement toutes les plateformes de newsletter sur le marché proposent des options de suivi, y compris le suivi des ouvertures et des clics. Celles-ci sont conçues pour collecter des données sur le comportement des utilisateurs, souvent sans consentement explicite. Certaines plateformes vont même jusqu'à suivre d'où l'utilisateur a ouvert l'e-mail, quel appareil il a utilisé, et même son adresse IP. Elles sapent l'essence même de la confidentialité, qui est un droit fondamental.",
+			"p2": "Hyvor Post, par conception, n'inclut aucune fonctionnalité de suivi. Vous pouvez envoyer des newsletters en toute confiance sans envahir la vie privée de vos lecteurs. Vos lecteurs peuvent s'abonner à vos newsletters sans craindre d'être suivis.",
+			"s2": "Deuxièmement",
+			"s2Desc": "Simplicité",
+			"p3": "La plupart de nos alternatives sont encombrées de fonctionnalités que vous n'utiliserez peut-être jamais. Elles sont souvent dotées d'interfaces complexes, rendant difficile la concentration sur ce qui compte vraiment : votre contenu. Hyvor Post est conçu pour être simple et direct. Vous pouvez vous concentrer entièrement sur l'écriture et l'envoi !"
+		},
+		"cta": "Installer Hyvor Post",
+		"demo": "Démo",
+		"14DayFreeTrial": "Essai gratuit de 14 jours",
+		"noCreditCardRequired": "No carte de crédit requise",
+		"cancelAnytime": "Annuler à tout moment",
+		"readyToStartYourNewsletter": "Prêt à commencer votre newsletter ?",
+		"startYourNewsletter": "Commencez votre newsletter",
+		"embeddableNewsletterForm": "Formulaire d'inscription personnalisable",
+		"embeddableNewsletterFormDescription": "Formulaire d'inscription personnalisable et intégrable pour collecter les e-mails de vos utilisateurs sur votre site Web.",
+		"listMngmt": "Gestion de plusieurs listes",
+		"listMngmtDescription": "Créez plusieurs listes pour organiser vos abonnés ou créer plusieurs listes. Ex : Mensuel, Hebdomadaire, etc.",
+		"customSendingDomain": "Domaine d'envoi personnalisé",
+		"customSendingDomainDescription": "Renforcez la crédibilité et la reconnaissance de votre marque en envoyant des newsletters depuis votre propre domaine.",
+		"customizableTemplates": "Modèles d'e-mails personnalisables",
+		"customizableTemplatesDescription": "Choisissez parmi une variété de modèles et personnalisez-les pour correspondre à votre marque.",
+		"apiWebhooks": "API & Webhooks",
+		"apiWebhooksDescription": "Intégrez avec vos systèmes existants en utilisant notre API et nos webhooks pour des mises à jour en temps réel.",
+		"teamCollaboration": "Collaboration d'équipe",
+		"teamCollaborationDescription": "Collaborez avec les membres de votre équipe pour gérer efficacement les newsletters, les abonnés et les campagnes.",
+		"automation": "Automatisation (Bientôt disponible)",
+		"automationDescription": "Automatisez vos campagnes d'e-mails avec des déclencheurs, des séquences et du contenu personnalisé.",
+		"migration": "Assistance à la migration",
+		"migrationDescription": "Vous êtes occupé à gérer la migration ? Nous pouvons vous aider à migrer vos abonnés et campagnes existants depuis d'autres plateformes.",
+		"faqs": "Foire aux questions",
+		"faqsDescription": "Vous avez des questions ? Trouvez des réponses à vos questions."
+	},
+
+	"comingSoon": {
+		"heading": "Hyvor Post",
+		"subHeading": "Plateforme de newsletter simple et axée sur la confidentialité",
+		"joinWaitlist": "Rejoindre la liste d'attente",
+		"readytoExplore": "Prêt à explorer Hyvor Post ?"
+	},
+
+	"pricing": {
+		"name": "Tarification",
+		"simpleTransparentPricing": "Tarification simple et transparente",
+		"pricingBasedOnEmails": "Notre tarification est basée sur les e-mails que vous utilisez par mois.",
+		"monthly": "Mensuel",
+		"yearly": "Annuel",
+		"2MonthsOff": "(2 mois de réduction)",
+		"vatIncluded": "Tous les frais de TVA sont inclus dans le prix.",
+		"chooseYourPlan": "Choisissez votre plan",
+		"enterprise": "Entreprise",
+		"monthlyEmail": "E-mails mensuels",
+		"choosePlan": "Choisir le plan",
+		"year": "an",
+		"month": "mois",
+		"faqs": "FAQ",
+		"isThereATrial": "Y a-t-il un essai ?",
+		"isThereATrialAnswer": "Oui, nous proposons un essai de 14 jours avec toutes les fonctionnalités, sauf le domaine d'e-mail personnalisé. Après l'essai, vous pouvez choisir de passer à un plan payant. Veuillez nous contacter si vous souhaitez prolonger votre essai.",
+		"whatHappensIfIExceedTheEmailsLimit": "Que se passe-t-il si je dépasse la limite d'e-mails ?",
+		"whatHappensIfIExceedTheEmailsLimitAnswer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc necultricies ultricies, nunc nunc ultricies ultricies, nunc nunc ultricies",
+		"howDoPaymentsWork": "Comment fonctionnent les paiements ?",
+		"howDoPaymentsWorkAnswer": "Les paiements sont traités en toute sécurité via notre système de facturation interne. Nous acceptons toutes les principales cartes de crédit/débit. Vous pouvez choisir de payer mensuellement ou annuellement.",
+		"canICancelAnytime": "Puis-je annuler à tout moment ?",
+		"canICancelAnytimeAnswer": "Oui, tous les abonnements sont autogérés. Vous pouvez changer de plan ou annuler votre abonnement à tout moment en quelques clics. Pas de questions posées. Nous n'offrons pas de remboursements pour la période restante, sauf pour les renouvellements automatiques non intentionnels.",
+		"priceCompare": "Hyvor Post vs. Autres plateformes",
+		"priceCompareDescription": "Prix pour 100 000 e-mails par mois",
+		"contactUs": "Contactez-nous",
+		"learnMore": "En savoir plus",
+		"featureList": {
+			"unlimitedTeam": "Membres d'équipe illimités",
+			"customEmailDomain": "Domaine d'e-mail personnalisé",
+			"emailAndChatSupport": "Support par e-mail et chat",
+			"customizableTemplates": "Modèles personnalisables",
+			"noBranding": "Pas de marque",
+			"allFeaturesIncluded": "Toutes les fonctionnalités incluses dans les autres plans",
+			"samlSso": "SAML SSO pour les équipes",
+			"customSla": "SLA personnalisé",
+			"dedicatedSupport": "Support dédié via Slack",
+			"customOnboarding": "Intégration personnalisée"
+		},
+		"pricesAsOfJuly2025": "Tarification comparée au 20 juillet 2025"
+	},
+
+	"newsletter": {
+		"confirmation": {
+			"error": "Erreur",
+			"invalidLink": "Lien de confirmation invalide",
+			"success": "Abonnement confirmé !",
+			"successMessage": "Merci d'avoir confirmé votre abonnement. Vous recevrez maintenant nos newsletters."
+		}
+	}
+}

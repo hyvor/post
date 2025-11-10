@@ -5,7 +5,7 @@ namespace App\Tests\Api\Console\SendingProfile;
 use App\Api\Console\Controller\SendingProfileController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
-use App\Service\SendingEmail\SendingProfileService;
+use App\Service\SendingProfile\SendingProfileService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
@@ -21,7 +21,7 @@ class DeleteSendingProfileTest extends WebTestCase
     {
         $newsletter = NewsletterFactory::createOne();
 
-        $sendingEmail = SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'is_system' => true,
         ]);
@@ -29,72 +29,72 @@ class DeleteSendingProfileTest extends WebTestCase
         $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingEmail->getId()
+            '/sending-profiles/' . $sendingProfile->getId()
         );
 
         $this->assertApiFailed(400, 'Cannot delete system sending profile');
     }
 
-    public function test_delete_sending_email(): void
+    public function test_delete_sending_profile(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        $sendingEmail = SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
         ]);
 
-        $id = $sendingEmail->getId();
+        $id = $sendingProfile->getId();
 
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingEmail->getId()
+            '/sending-profiles/' . $sendingProfile->getId()
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertCount(0, $json);
+        $this->assertCount(1, $json);   // system sending profile
 
         $repository = $this->em->getRepository(SendingProfile::class);
-        $deletedSendingEmail = $repository->findOneBy(['id' => $id]);
-        $this->assertNull($deletedSendingEmail);
+        $deletedSendingProfile = $repository->findOneBy(['id' => $id]);
+        $this->assertNull($deletedSendingProfile);
     }
 
     public function test_alters_is_default(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
-        $sendingEmail1 = SendingProfileFactory::createOne([
+        $sendingProfile1 = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
         ]);
 
-        $sendingEmail2 = SendingProfileFactory::createOne([
+        $sendingProfile2 = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
         ]);
 
-        $sendingEmailDefault = SendingProfileFactory::createOne([
+        $sendingProfileDefault = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'is_default' => true,
         ]);
 
-        $sendingEmailDefaultId = $sendingEmailDefault->getId();
+        $sendingProfileDefaultId = $sendingProfileDefault->getId();
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingEmailDefault->getId()
+            '/sending-profiles/' . $sendingProfileDefault->getId()
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertCount(2, $json);
+        $this->assertCount(3, $json);      // 2 + system sending profile
 
         // @phpstan-ignore-next-line
         $item = $json[0];
-        $this->assertSame($sendingEmail1->getId(), $item['id']);
+        $this->assertSame($sendingProfile1->getId(), $item['id']);
         $this->assertTrue($item['is_default']);
 
-        $this->assertTrue($sendingEmail1->getIsDefault());
-        $this->assertFalse($sendingEmail2->getIsDefault());
-        $this->assertNull($this->em->getRepository(SendingProfile::class)->find($sendingEmailDefaultId));
+        $this->assertTrue($sendingProfile1->getIsDefault());
+        $this->assertFalse($sendingProfile2->getIsDefault());
+        $this->assertNull($this->em->getRepository(SendingProfile::class)->find($sendingProfileDefaultId));
     }
 
 

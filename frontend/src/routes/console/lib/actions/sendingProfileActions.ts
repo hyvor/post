@@ -7,22 +7,35 @@ export function getSendingProfilees() {
     });
 }
 
-export function createSendingProfile(email: string) {
-    return consoleApi.post<SendingProfile>({
-        endpoint: 'sending-profiles',
-        data: {
-            email,
-        },
-    });
+export interface createSendingProfileParams {
+    from_email: string;
+    from_name: string | null;
+    reply_to_email: string | null;
+    brand_name: string | null;
+    brand_logo: string | null;
+}
+export function createSendingProfile(params: createSendingProfileParams): Promise<SendingProfile> {
+	return consoleApi.post<SendingProfile>({
+		endpoint: 'sending-profiles',
+		data: params
+	});
 }
 
-export function updateSendingProfile(id: number, email: string, is_default?: boolean) {
+export interface UpdateSendingProfileParams {
+    from_email?: string;
+    from_name?: string;
+    reply_to_email?: string;
+    brand_name?: string;
+    brand_logo?: string;
+    is_default?: boolean;
+}
+export function updateSendingProfile(
+    id: number,
+    params: UpdateSendingProfileParams
+): Promise<SendingProfile> {
     return consoleApi.patch<SendingProfile>({
         endpoint: `sending-profiles/${id}`,
-        data: {
-            email,
-            is_default,
-        },
+        data: params,
     });
 }
 

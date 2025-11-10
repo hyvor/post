@@ -11,7 +11,8 @@ class SubscriberCsvExporter
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
+    )
+    {
     }
 
     protected function getTemporaryFile(string $extension): string
@@ -23,6 +24,11 @@ class SubscriberCsvExporter
         }
 
         $meta = stream_get_meta_data($file);
+
+        if (!isset($meta['uri'])) {
+            throw new \Exception('Could not get temporary file path.');
+        }
+
         $path = $meta['uri'];
         fclose($file);
         return $path . '.' . $extension;
@@ -38,7 +44,7 @@ class SubscriberCsvExporter
             throw new \Exception('Could not create file');
         }
 
-        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['newsletter' => $newsletter]);
+        $subscriberMetadata = $this->em->getRepository(SubscriberMetadataDefinition::class)->findBy(['newsletter' => $newsletter], ['id' => 'ASC']);
         $headers = ['Email', 'Status', 'Subscribed At', 'Source'];
         foreach ($subscriberMetadata as $sb) {
             $headers[] = $sb->getKey();
@@ -67,6 +73,7 @@ class SubscriberCsvExporter
                     $subscriber->getStatus()->value,
                     $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s') ?? '',
                     $subscriber->getSource()->value,
+                    ...array_map(fn($md) => $subscriber->getMetadata()[$md->getKey()] ?? '', $subscriberMetadata),
                 ]);
             }
 

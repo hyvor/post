@@ -43,11 +43,7 @@ final class SendFactory extends PersistentProxyObjectFactory
             'status' => SendStatus::PENDING,
             'error_private' => null,
             'failed_tries' => 0,
-            'open_count' => 0,
-            'click_count' => 0,
             'hard_bounce' => false,
-            'first_clicked_at' => null,
-            'first_opened_at' => null,
         ];
     }
 

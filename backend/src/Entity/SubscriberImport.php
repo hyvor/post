@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Type\SubscriberImportStatus;
-use App\Repository\SubscriberExportRepository;
 use App\Repository\SubscriberImportRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SubscriberExportRepository::class)]
+#[ORM\Entity(repositoryClass: SubscriberImportRepository::class)]
 #[ORM\Table(name: 'subscriber_imports')]
 class SubscriberImport
 {
@@ -23,21 +22,40 @@ class SubscriberImport
     #[ORM\Column]
     private \DateTimeImmutable $updated_at;
 
-    #[ORM\ManyToOne(inversedBy: 'newsletters')]
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Newsletter $newsletter;
 
-    #[ORM\Column(length: 255)]
-    private string $filename;
+    #[ORM\OneToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private Media $media;
 
     #[ORM\Column(type: 'string', enumType: SubscriberImportStatus::class)]
     private SubscriberImportStatus $status;
 
+    #[ORM\Column(type: 'string', length: 1024)]
+    private string $source;
+
     /**
-     * @var array<string, string>
+     * @var array<string, string|null> | null
      */
     #[ORM\Column(type: 'json')]
-    private array $fields = [];
+    private ?array $fields = null;
+
+    /**
+     * @var array<int, string> | null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $csv_fields = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $csv_rows = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $imported_subscribers = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $warnings = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $error_message = null;
@@ -91,14 +109,14 @@ class SubscriberImport
         return $this;
     }
 
-    public function getFilename(): string
+    public function getMedia(): Media
     {
-        return $this->filename;
+        return $this->media;
     }
 
-    public function setFilename(string $filename): static
+    public function setMedia(Media $media): static
     {
-        $this->filename = $filename;
+        $this->media = $media;
 
         return $this;
     }
@@ -115,14 +133,86 @@ class SubscriberImport
         return $this;
     }
 
-    public function getFields(): array
+    public function getSource(): string
+    {
+        return $this->source;
+    }
+
+    public function setSource(string $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, string|null> | null
+     */
+    public function getFields(): ?array
     {
         return $this->fields;
     }
 
-    public function setFields(array $fields): static
+    /**
+     * @param array<string, string|null> | null $fields
+     */
+    public function setFields(?array $fields): static
     {
         $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * @return array<int, string> | null
+     */
+    public function getCsvFields(): ?array
+    {
+        return $this->csv_fields;
+    }
+
+    /**
+     * @param array<int, string> | null $csv_fields
+     */
+    public function setCsvFields(?array $csv_fields): static
+    {
+        $this->csv_fields = $csv_fields;
+
+        return $this;
+    }
+
+    public function getCsvRows(): ?int
+    {
+        return $this->csv_rows;
+    }
+
+    public function setCsvRows(?int $csv_rows): static
+    {
+        $this->csv_rows = $csv_rows;
+
+        return $this;
+    }
+
+    public function getImportedSubscribers(): ?int
+    {
+        return $this->imported_subscribers;
+    }
+
+    public function setImportedSubscribers(?int $imported_subscribers): static
+    {
+        $this->imported_subscribers = $imported_subscribers;
+
+        return $this;
+    }
+
+    public function getWarnings(): ?string
+    {
+        return $this->warnings;
+    }
+
+    public function setWarnings(?string $warnings): static
+    {
+        $this->warnings = $warnings;
 
         return $this;
     }

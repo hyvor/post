@@ -2,14 +2,12 @@
 
 namespace App\Api\Public\Controller\Invite;
 
+use App\Service\AppConfig;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
-use Hyvor\Internal\Auth\Auth;
 use Hyvor\Internal\Auth\AuthInterface;
-use Illuminate\Support\Js;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,19 +19,21 @@ class InviteController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private UserService $userService,
+        private UserService       $userService,
         private UserInviteService $userInviteService,
-        private AuthInterface $auth
-    ) {
+        private AppConfig         $appConfig,
+        private AuthInterface     $auth
+    )
+    {
     }
 
     #[Route('/invite/verify', methods: 'GET')]
     public function verifyInvite(Request $request): RedirectResponse
     {
-        $user = $this->auth->check((string)$request->cookies->get(Auth::HYVOR_SESSION_COOKIE_NAME));
+        $user = $this->auth->check($request);
 
         if (!$user) {
-            return $this->redirect(''); // TODO: Replace login URL
+            return $this->redirect($this->auth->authUrl('login'));
         }
 
         $code = $request->query->getString('code');
@@ -43,7 +43,7 @@ class InviteController extends AbstractController
         }
 
         if ($invite->getHyvorUserId() != $user->id) {
-            throw new BadRequestHttpException("This invitation is not for this user");
+            throw new BadRequestHttpException("Invalid invitation");
         }
 
         if ($invite->getExpiresAt() < new \DateTime()) {
@@ -59,6 +59,6 @@ class InviteController extends AbstractController
 
         $this->userInviteService->deleteInvite($invite);
 
-        return $this->redirect('https://post.hyvor.dev/console/' . $newsletter->getId());
+        return $this->redirect($this->appConfig->getUrlApp() . '/console/' . $newsletter->getId());
     }
 }

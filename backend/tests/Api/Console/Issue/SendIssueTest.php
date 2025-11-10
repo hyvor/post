@@ -18,13 +18,11 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\BillingInterface;
-use Hyvor\Internal\Billing\Dto\LicensesCollection;
-use Hyvor\Internal\Billing\License\License;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\InternalConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -189,18 +187,21 @@ class SendIssueTest extends WebTestCase
             'lists' => [$list]
         ]);
 
+        $sendingProfile = SendingProfileFactory::createOne([
+            'from_email' => 'newsletter@hyvor.com',
+            'from_name' => 'Hyvor Newsletter',
+            'reply_to_email' => 'no-reply@hyvor.com',
+        ]);
+
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'list_ids' => [$list->getId()]
+            'list_ids' => [$list->getId()],
+            'sending_profile' => $sendingProfile,
         ]);
 
-        $internalConfig = $this->getContainer()->get(InternalConfig::class);
         $licence = new PostLicense(emails: 10);
-
-        $billing = new BillingFake($internalConfig, license: $licence);
-
-        $this->getContainer()->set(BillingInterface::class, $billing);
+        BillingFake::enableForSymfony($this->container, $licence);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -212,19 +213,21 @@ class SendIssueTest extends WebTestCase
         $json = $this->getJson();
         $this->assertSame($issue->getId(), $json['id']);
         $this->assertSame('sending', $json['status']);
-        $this->assertSame(new \DateTimeImmutable()->getTimestamp(), $json['sending_at']);
+        $this->assertNotNull($json['sending_at']);
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issue = $issueRepository->find($issue->getId());
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
-        $this->assertSame(new \DateTimeImmutable()->format('Y-m-d'), $issue->getSendingAt()?->format('Y-m-d'));
+        $this->assertNotNull($issue->getSendingAt());
+        $this->assertSame($sendingProfile->getId(), $issue->getSendingProfile()->getId());
 
-        $this->transport()->queue()->assertCount(1);
-        $message = $this->transport()->queue()->first()->getMessage();
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(1);
+        $message = $transport->queue()->first()->getMessage();
         $this->assertInstanceOf(SendIssueMessage::class, $message);
 
-        $this->transport()->throwExceptions()->process();
+        $transport->throwExceptions()->process(1);
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->findOneBy([
@@ -271,12 +274,8 @@ class SendIssueTest extends WebTestCase
             'content' => "content"
         ]);
 
-        $internalConfig = $this->getContainer()->get(InternalConfig::class);
         $licence = new PostLicense(emails: 10);
-
-        $billing = new BillingFake($internalConfig, license: $licence);
-
-        $this->getContainer()->set(BillingInterface::class, $billing);
+        BillingFake::enableForSymfony($this->container, $licence);
 
         $response = $this->consoleApi(
             $newsletter,

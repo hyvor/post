@@ -41,15 +41,9 @@ final class Version20250310193454 extends AbstractMigration
             sent_at timestamptz,
             failed_at timestamptz,
             delivered_at timestamptz,
-            first_opened_at timestamptz,
-            last_opened_at timestamptz,
-            first_clicked_at timestamptz,
-            last_clicked_at timestamptz,
             unsubscribe_at timestamptz,
             bounced_at timestamptz,
             complained_at timestamptz,
-            open_count INT DEFAULT 0 NOT NULL,
-            click_count INT DEFAULT 0 NOT NULL,
             hard_bounce BOOLEAN DEFAULT FALSE NOT NULL
         );
         SQL

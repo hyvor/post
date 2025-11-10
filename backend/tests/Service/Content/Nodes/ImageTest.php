@@ -26,14 +26,33 @@ class ImageTest extends TestCase
         $this->assertIsString($json);
         $html = new ContentService()->getHtmlFromJson($json);
         $this->assertSame(
-            '<img     src="https://example.com/image.png"
-    alt="Alt text"
-    style="
-        display: block;
-        margin: 30px auto;
-        max-width: 100%;
-        height: auto;
-    " />',
+            '<img src="https://example.com/image.png" alt="Alt text" />',
+            trim($html)
+        );
+    }
+
+    public function test_json_to_html_with_width_height(): void
+    {
+        $src = 'https://example.com/image.png';
+        $alt = 'Alt text';
+        $json = json_encode([
+            'type' => 'doc',
+            'content' => [
+                [
+                    'type' => 'image',
+                    'attrs' => [
+                        'src' => $src,
+                        'alt' => $alt,
+                        'width' => '600',
+                        'height' => '400',
+                    ],
+                ],
+            ],
+        ]);
+        $this->assertIsString($json);
+        $html = new ContentService()->getHtmlFromJson($json);
+        $this->assertSame(
+            '<img src="https://example.com/image.png" alt="Alt text" width="600" height="400" />',
             trim($html)
         );
     }
@@ -52,6 +71,8 @@ class ImageTest extends TestCase
                     'attrs' => [
                         'src' => $src,
                         'alt' => $alt,
+                        'width' => null,
+                        'height' => null,
                     ],
                 ],
             ],

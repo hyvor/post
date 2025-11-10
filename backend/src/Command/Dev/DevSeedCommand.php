@@ -3,11 +3,11 @@
 namespace App\Command\Dev;
 
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
+use App\Service\AppConfig;
 use App\Service\Content\ContentDefaultStyle;
-use App\Service\Content\ContentService;
-use App\Service\Template\TemplateService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\IssueFactory;
@@ -17,6 +17,7 @@ use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Sudo\SudoUserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,10 +35,12 @@ class DevSeedCommand extends Command
 {
 
     public function __construct(
-        private KernelInterface $kernel,
-        private ContentDefaultStyle $contentDefaultStyle,
+        private KernelInterface      $kernel,
+        private ContentDefaultStyle  $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
-    ) {
+        private AppConfig $appConfig,
+    )
+    {
         parent::__construct();
     }
 
@@ -49,35 +52,38 @@ class DevSeedCommand extends Command
             return Command::FAILURE;
         }
 
+        SudoUserFactory::createOne([
+            'user_id' => 1
+        ]);
+
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'example.com',
-            'verified_in_ses' => true
+            'relay_status' => RelayDomainStatus::ACTIVE
         ]);
 
         DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'notverified.com',
-            'verified_in_ses' => false
+            'relay_status' => RelayDomainStatus::PENDING
         ]);
 
         $newsletter = NewsletterFactory::createOne([
-            'uuid' => 'c9cb3415-eb28-4a43-932c-550675675852',
             'name' => 'Test Newsletter',
-            'slug' => 'test'
+            'subdomain' => 'test'
         ]);
 
-        SendingProfileFactory::createOne([
+        $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => null,
-            'from_email' => 'test@hvrpst.com',
+            'from_email' => 'test@' . $this->appConfig->getSystemMailDomain(),
             'is_system' => true,
+            'is_default' => true,
         ]);
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
             'domain' => $domainVerified,
             'from_email' => 'supun@example.com',
-            'is_default' => true,
         ]);
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
@@ -132,7 +138,8 @@ class DevSeedCommand extends Command
             'subject' => 'Content Style Guide',
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'content' => $this->contentDefaultStyle->json()
+            'content' => $this->contentDefaultStyle->json(),
+            'sending_profile' => $sendingProfile,
         ]);
         $draftIssue->setHtml($this->htmlEmailTemplateRenderer->renderFromIssue($draftIssue));
 

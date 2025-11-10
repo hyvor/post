@@ -73,7 +73,9 @@ class SendEmailMessageHandler
                     $this->checkCompletion($issue);
                 });
 
-                throw new UnrecoverableMessageHandlingException('Email sending failed after 3 attempts');
+                throw new UnrecoverableMessageHandlingException(
+                    'Email sending failed after 3 attempts: ' . $e->getMessage(),
+                );
             } else {
                 // Redispatch with exponential backoff
                 // 1m, 4m, 16m

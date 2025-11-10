@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Tests\Schedule;
+
+use App\Schedule\Schedule;
+use App\Service\Subscriber\Message\ClearPendingSubscribersMessage;
+use App\Tests\Case\KernelTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Schedule::class)]
+class ScheduleTest extends KernelTestCase
+{
+    public function test_schedule(): void
+    {
+        $schedule = $this->container->get(Schedule::class);
+        assert($schedule instanceof Schedule);
+        $s = $schedule->getSchedule();
+        $messages = $s->getRecurringMessages();
+        $this->assertCount(2, $messages);
+    }
+}

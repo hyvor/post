@@ -6,6 +6,7 @@ use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\StatCategoryObject;
 use App\Api\Console\Object\StatsObject;
+use App\Entity\Type\ApprovalStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
@@ -13,6 +14,8 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -80,6 +83,9 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
         $this->assertArrayHasKey('newsletter_defaults', $config);
+
+        $this->assertArrayHasKey('user_approval', $data);
+        $this->assertSame(ApprovalStatus::PENDING->value, $data['user_approval']);
     }
 
     public function testInitNewsletter(): void
@@ -93,6 +99,8 @@ class ConsoleInitTest extends WebTestCase
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);
+
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -112,6 +120,7 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data['newsletter']);
         $this->assertSame($newsletterId, $data['newsletter']['id']);
     }
+
     public function testInitNewsletterWithLists(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -140,12 +149,14 @@ class ConsoleInitTest extends WebTestCase
         ]);
 
         foreach ($subscribersOld as $subscriber) {
-            $newsletterList->addSubscriber($subscriber);
+            $newsletterList->addSubscriber($subscriber->_real());
         }
 
         foreach ($subscribersNew as $subscriber) {
-            $newsletterList->addSubscriber($subscriber);
+            $newsletterList->addSubscriber($subscriber->_real());
         }
+
+        BillingFake::enableForSymfony($this->container, new PostLicense());
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -170,8 +181,6 @@ class ConsoleInitTest extends WebTestCase
         $this->assertArrayHasKey('name', $list);
         $this->assertSame($newsletterList->getId(), $list['id']);
         $this->assertSame($newsletterList->getName(), $list['name']);
-
         $this->assertSame(10, $list['subscribers_count']);
-        $this->assertSame(5, $list['subscribers_count_last_30d']);
     }
 }

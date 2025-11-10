@@ -14,7 +14,8 @@ class UserService
 
     public function __construct(
         private EntityManagerInterface $em
-    ) {
+    )
+    {
     }
 
     /**
@@ -31,6 +32,19 @@ class UserService
         }
 
         return new ArrayCollection($users);
+    }
+
+    public function hasAccessToNewsletter(Newsletter $newsletter, int $hyvorUserId): bool
+    {
+        $user = $this->em->getRepository(User::class)->findOneBy([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => $hyvorUserId,
+        ]);
+
+        if (!$user) {
+            return false;
+        }
+        return true;
     }
 
     public function isAdmin(Newsletter $newsletter, int $hyvorUserId): bool

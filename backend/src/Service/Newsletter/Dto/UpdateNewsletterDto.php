@@ -9,5 +9,5 @@ class UpdateNewsletterDto
     use OptionalPropertyTrait;
 
     public string $name;
-    public string $slug;
+    public string $subdomain;
 }

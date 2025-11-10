@@ -8,14 +8,24 @@ use App\Service\Content\Marks\Em;
 use App\Service\Content\Marks\Link;
 use App\Service\Content\Marks\Strike;
 use App\Service\Content\Marks\Strong;
+use App\Service\Content\Marks\Sub;
+use App\Service\Content\Marks\Sup;
 use App\Service\Content\Marks\Underline;
 use App\Service\Content\Nodes\Blockquote;
+use App\Service\Content\Nodes\BulletList;
 use App\Service\Content\Nodes\Button;
+use App\Service\Content\Nodes\Callout;
+use App\Service\Content\Nodes\CodeBlock;
+use App\Service\Content\Nodes\CustomHtml;
 use App\Service\Content\Nodes\Doc;
+use App\Service\Content\Nodes\Figcaption;
+use App\Service\Content\Nodes\Figure;
 use App\Service\Content\Nodes\HardBreak;
 use App\Service\Content\Nodes\Heading;
 use App\Service\Content\Nodes\HorizontalRule;
 use App\Service\Content\Nodes\Image;
+use App\Service\Content\Nodes\ListItem;
+use App\Service\Content\Nodes\OrderedList;
 use App\Service\Content\Nodes\Paragraph;
 use App\Service\Content\Nodes\Text;
 use Hyvor\Phrosemirror\Document\Node;
@@ -66,6 +76,12 @@ JSON;
         return $document->toHtml();
     }
 
+    public function getTextFromJson(string $content): string
+    {
+        $document = Document::fromJson($this->getSchema(), $content);
+        return $document->toText();
+    }
+
     public function getJsonFromHtml(string $html, bool $sanitize = true): string
     {
         return $this->getDocumentFromHtml($html, $sanitize)->toJson();
@@ -73,8 +89,9 @@ JSON;
 
     public function getDocumentFromHtml(
         string $html,
-        bool $sanitize = true
-    ): Node {
+        bool   $sanitize = true
+    ): Node
+    {
         $schema = $this->getSchema();
         $parser = HtmlParser::fromSchema($schema);
         return $parser->parse($html, sanitize: $sanitize);
@@ -92,15 +109,24 @@ JSON;
                 new Heading(),
                 new HorizontalRule(),
                 new Blockquote(),
-                new Button()
+                new Button(),
+                new BulletList(),
+                new OrderedList(),
+                new ListItem(),
+                new Figure(),
+                new Figcaption(),
+                new CodeBlock(),
+                new CustomHtml(),
+                new Callout(),
             ],
             [
                 new Em(),
                 new Strong(),
                 new Link(),
-                new Underline(),
                 new Strike(),
                 new Code(),
+                new Sub(),
+                new Sup(),
             ]
         );
     }

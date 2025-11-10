@@ -1,18 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Tag } from '@hyvor/design/components';
 	import type { NewsletterList } from '../../types';
-	import { newsletterStore } from '../../lib/stores/newsletterStore';
-	import { loadNewsletter } from '../../lib/newsletterLoader';
+	import { setNewsletterStoreByNewsletterList } from '../../lib/stores/newsletterStore';
 	import RoleTag from './RoleTag.svelte';
 	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 
 	export let newsletterList: NewsletterList;
 
 	function onClick() {
-		newsletterStore.set(newsletterList.newsletter);
-		goto(`/console/${newsletterList.newsletter.id}`);
-		loadNewsletter(String(newsletterList.newsletter.id));
+		setNewsletterStoreByNewsletterList(newsletterList);
+		goto(`/console/${newsletterList.newsletter.subdomain}`);
 		selectingNewsletter.set(false);
 	}
 </script>
@@ -27,9 +24,7 @@
 	<div class="name-id">
 		<div class="name">{newsletterList.newsletter.name}</div>
 		<div class="id">
-			<span class="id-tag">ID: </span><Tag size="x-small"
-				><strong>{newsletterList.newsletter.id}</strong></Tag
-			>
+			<strong>{newsletterList.newsletter.subdomain}</strong>
 		</div>
 	</div>
 
@@ -58,13 +53,14 @@
 	.name {
 		font-weight: 600;
 	}
-	.id-tag {
-		font-size: 12px;
-		color: var(--text-light);
-		margin-right: 5px;
-	}
 	.role {
 		margin-right: 15px;
+	}
+
+	.id {
+		font-size: 14px;
+		color: var(--text-light);
+		font-weight: normal;
 	}
 
 	@media (max-width: 768px) {

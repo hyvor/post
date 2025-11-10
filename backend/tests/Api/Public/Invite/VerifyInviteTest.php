@@ -1,11 +1,11 @@
 <?php
 
-namespace Api\Public\Invite;
+namespace App\Tests\Api\Public\Invite;
 
-use App\Entity\Newsletter;
-use App\Entity\UserInvite;
+use App\Entity\Type\UserRole;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\UserFactory;
 use App\Tests\Factory\UserInviteFactory;
 
 class VerifyInviteTest extends WebTestCase
@@ -21,12 +21,12 @@ class VerifyInviteTest extends WebTestCase
             'expires_at' => new \DateTime('+1 day'),
         ]);
 
-        $response = $this->publicApi(
+        $this->publicApi(
             'GET',
             '/invite/verify?code=' . $userInvite->getCode(),
         );
 
-        $this->assertResponseRedirects('https://post.hyvor.dev/console/' . $newsletter->getId());
+        $this->assertResponseRedirects('https://post.hyvor.com/console/' . $newsletter->getId());
     }
 
     public function test_verify_invite_not_exist(): void
@@ -37,7 +37,31 @@ class VerifyInviteTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(404);
-        // TODO: Check the error message (ask Supun)
+        $this->assertSame(404, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertSame('No invitation found', $json['message']);
+    }
+
+    public function test_verify_invalid_invite(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $userInvite = UserInviteFactory::createOne([
+            'hyvor_user_id' => 999,
+            'newsletter' => $newsletter,
+            'code' => '3f1e9b8c6d2a4e1f5a7b3c9e8f2d6a4b',
+        ]);
+
+        $response = $this->publicApi(
+            'GET',
+            '/invite/verify?code=' . $userInvite->getCode(),
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertSame('Invalid invitation', $json['message']);
     }
 
     public function test_verify_invite_expired(): void
@@ -45,6 +69,7 @@ class VerifyInviteTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $userInvite = UserInviteFactory::createOne([
+            'hyvor_user_id' => 1,
             'newsletter' => $newsletter,
             'code' => '3f1e9b8c6d2a4e1f5a7b3c9e8f2d6a4b',
             'expires_at' => new \DateTime('-1 day'),
@@ -55,7 +80,35 @@ class VerifyInviteTest extends WebTestCase
             '/invite/verify?code=' . $userInvite->getCode(),
         );
 
-        $this->assertResponseStatusCodeSame(400);
-        // TODO: Check the error message (ask Supun)
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertSame('Invitation expired', $json['message']);
+    }
+
+    public function test_verify_existing_admin(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        UserFactory::findOrCreate([
+            'hyvor_user_id' => 1,
+            'newsletter' => $newsletter,
+            'role' => UserRole::ADMIN,
+        ]);
+        $userInvite = UserInviteFactory::createOne([
+            'hyvor_user_id' => 1,
+            'newsletter' => $newsletter,
+            'code' => '3f1e9b8c6d2a4e1f5a7b3c9e8f2d6a4b',
+            'expires_at' => new \DateTime('+1 day'),
+        ]);
+
+        $response = $this->publicApi(
+            'GET',
+            '/invite/verify?code=' . $userInvite->getCode(),
+        );
+
+        $this->assertSame(400, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertSame('You are already an admin of this newsletter', $json['message']);
     }
 }

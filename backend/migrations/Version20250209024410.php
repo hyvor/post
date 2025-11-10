@@ -38,15 +38,18 @@ final class Version20250209024410 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             newsletter_id BIGINT NOT NULL references newsletters(id) ON DELETE CASCADE,
-            email VARCHAR(255) NOT NULL UNIQUE,
+            email VARCHAR(255) NOT NULL,
             status subscriber_status DEFAULT 'pending',
             subscribed_at timestamptz,
+            opt_in_at timestamptz,
             unsubscribed_at timestamptz,
             source subscriber_source DEFAULT 'form',
             source_id VARCHAR(255),
             subscribe_ip VARCHAR(255),
             unsubscribe_reason VARCHAR(255),
-            metadata JSONB DEFAULT '{}'::jsonb
+            metadata JSONB DEFAULT '{}'::jsonb,
+            
+            UNIQUE (newsletter_id, email)
         );
         SQL
         );

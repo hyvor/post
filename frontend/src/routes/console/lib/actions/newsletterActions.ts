@@ -1,26 +1,43 @@
 import consoleApi from "../consoleApi";
-import type { Newsletter } from "../../types";
+import type {Newsletter} from "../../types";
+import {updateNewsletterStore} from "../stores/newsletterStore";
 
-export function createNewsletter(name: string) {
+export function getSubdomainAvailability(subdomain: string) {
+    return consoleApi.post<{ available: boolean }>({
+        endpoint: 'newsletter/subdomain',
+        data: {subdomain},
+        userApi: true
+    })
+}
+
+export function createNewsletter(name: string, subdomain: string) {
     return consoleApi.post<Newsletter>({
         endpoint: 'newsletter',
         userApi: true,
         data: {
             name,
+            subdomain,
         }
     });
 }
 
-export function updateNewsletter(
-    newsletter: Omit<Newsletter, 'id' | 'created_at'>
+export async function updateNewsletter(
+    newsletter: Partial<Omit<Newsletter, 'id' | 'created_at'>>,
+    updateStore = false,
 ) {
-    return consoleApi.patch<Newsletter>({
+    const res = await consoleApi.patch<Newsletter>({
         endpoint: 'newsletter',
         data: newsletter,
     });
+
+    if (updateStore) {
+        updateNewsletterStore(res);
+    }
+
+    return res;
 }
 
-export function deleteNewsletter(newsletter: Newsletter) {
+export function deleteNewsletter() {
     return consoleApi.delete<Newsletter>({
         endpoint: 'newsletter'
     });

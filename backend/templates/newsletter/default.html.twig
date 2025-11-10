@@ -13,18 +13,15 @@
             box-sizing: border-box;
         }
 
-        html {
-            font-size: {{ font_size }};
-        }
-
         body {
             margin: 0;
-            padding: 20px;
+            padding: 20px 5px;
             font-family: {{ font_family | raw }};
             font-weight: {{ font_weight }};
             line-height: {{ font_line_height }};
             background-color: {{ color_background }};
             color: {{ color_background_text }};
+            font-size: {{ font_size }};
         }
 
         .content-box {
@@ -62,10 +59,6 @@
             font-weight: 600;
         }
 
-        .content h1 {
-            font-size: 20px;
-        }
-
         .content p {
             margin: 0 0 20px;
         }
@@ -81,11 +74,11 @@
         }
 
         .content h1 {
-            font-size: 2rem;
+            font-size: 1.75rem;
         }
 
         .content h2 {
-            font-size: 1.875rem;
+            font-size: 1.75rem;
         }
 
         .content h3 {
@@ -123,13 +116,29 @@
             font-weight: 600;
         }
 
-        .content code {
+        .content :not(pre) code {
             background: rgba(135, 131, 120, 0.15);
             color: #a33a3a;
             border-radius: 3px;
             font-size: 0.85em;
             padding: 0.2em 0.4em;
             font-family: monospace;
+        }
+
+        .content pre code {
+            display: block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #4b3b2f;
+            background-color: #fdf8f4;
+            border: 1px solid #f0e1d2;
+            border-radius: 10px;
+            padding: 14px 18px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 14px 0;
+            box-shadow: 0 1px 3px rgba(120, 90, 70, 0.15);
         }
 
         .content blockquote {
@@ -143,11 +152,74 @@
             margin-bottom: 0;
         }
 
-        .content img {
+        .content figure {
+            margin: 0 0 20px;
+        }
+
+        .content figcaption {
+            padding: 7px;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .content figure img {
             max-width: 100%;
-            margin: 30px auto;
             height: auto;
             display: block;
+            margin: auto;
+        }
+
+        .content hr {
+            margin: 0 0 20px;
+            height: 1px;
+            background-color: currentColor;
+            opacity: 0.3;
+        }
+
+        .content ul, .content ol {
+            margin: 0 0 20px 20px;
+        }
+
+        .content li > * {
+            margin: 5px 0;
+        }
+
+        .content div.callout {
+            border-radius: 5px;
+            margin: 0 0 20px;
+        }
+
+        .content div.callout > span {
+            float: left;
+            padding: 10px 12px;
+        }
+
+        .content div.callout > div {
+            padding: 10px 10px 10px 0;
+        }
+
+        .content hr {
+            margin: 0 0 20px;
+            height: 1px;
+            background-color: currentColor;
+            opacity: 0.3;
+        }
+
+        .content ul, .content ol {
+            margin: 0 0 20px 20px;
+        }
+
+        .content li > * {
+            margin: 5px 0;
+        }
+
+        .branding-tag {
+            display: inline-block;
+            font-size: 14px;
+            opacity: 0.6;
+            color: {{ color_background_text }};
+            text-decoration: none;
         }
     </style>
 </head>
@@ -180,10 +252,21 @@
         ">
     {{ address }}
 
-    <div>
-        <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
-    </div>
+    {% if unsubscribe_url %}
+        <div>
+            <a href="{{ unsubscribe_url }}" target="_blank" style="color: inherit;">{{ unsubscribe_text }}</a>
+        </div>
+    {% endif %}
 </div>
+
+{% if branding %}
+    <div style="text-align:center;">
+        <a class="branding-tag" target="_blank" href="https://post.hyvor.com?source=mail-branding">
+            [<span style="vertical-align:middle">Sent privately via</span> <strong style="vertical-align:middle">Hyvor
+                Post</strong> <img style="vertical-align:middle" src="https://post.hyvor.com/img/logo.png" width="14"/>]
+        </a>
+    </div>
+{% endif %}
 
 </body>
 

@@ -1,22 +1,37 @@
-<script lang="ts">
-	import { browser } from '$app/environment';
-	import { InternationalizationService } from '@hyvor/design/components';
-	import { MARKETING_LANGUAGES } from './[lang]/locale';
-	import { goto } from '$app/navigation';
-
-	if (browser) {
-		const closestLanguage =
-			InternationalizationService.getLocaleFromLocalStorage() ||
-			InternationalizationService.getClosestLanguageCode(
-				window.navigator.language,
-				MARKETING_LANGUAGES.map((lang) => lang.code)
-			) ||
-			MARKETING_LANGUAGES[0].code;
-
-		goto(`/${closestLanguage}`, { replaceState: true });
-	}
+<script>
+	import AboveFold from './@components/AboveFold.svelte';
+	import ArchiveSite from './@components/ArchiveSite.svelte';
+	import CustomEmailDesign from './@components/CustomEmailDesign.svelte';
+	import FaqHome from './@components/FaqHome.svelte';
+	import Letter from './@components/Letter.svelte';
+	import SignupForm from './@components/SignupForm.svelte';
+	import TrialSignUp from './@components/TrialSignUp.svelte';
+	import AllFeatures from './@homepage/AllFeatures.svelte';
 </script>
 
 <svelte:head>
 	<title>Hyvor Post</title>
+	<meta name="description" content="Simple Newsletter Platform" />
+	<link rel="canonical" href="https://post.hyvor.com" />
+
+	<script type="text/javascript">
+		window.$crisp = [];
+		window.CRISP_WEBSITE_ID = '1cab78fb-4baf-497e-a10f-00a3b12cfcfe';
+		(function () {
+			d = document;
+			s = d.createElement('script');
+			s.src = 'https://client.crisp.chat/l.js';
+			s.async = 1;
+			d.getElementsByTagName('head')[0].appendChild(s);
+		})();
+	</script>
 </svelte:head>
+
+<AboveFold />
+<Letter />
+<CustomEmailDesign />
+<ArchiveSite />
+<SignupForm />
+<AllFeatures />
+<FaqHome />
+<TrialSignUp />

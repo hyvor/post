@@ -1,0 +1,33 @@
+{% extends '@Internal/mail/mail.html.twig' %}
+
+{% block title %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block heading %}
+    {{ strings.subject }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        {{ strings.greeting }}
+    </p>
+
+    <p>
+        {{ strings.body}}
+    </p>
+
+    {% if strings.reason is defined %}
+        <p>
+            <strong>{{ strings.reason }}</strong>
+        </p>
+    {% endif %}
+
+    <p>{{ strings.footerText }}</p>
+
+    <p>
+        {{ strings.regards }}
+        <br>
+        HYVOR
+    </p>
+{% endblock %}

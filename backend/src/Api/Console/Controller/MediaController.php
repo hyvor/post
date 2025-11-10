@@ -2,9 +2,13 @@
 
 namespace App\Api\Console\Controller;
 
+use App\Api\Console\Authorization\Scope;
+use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Media\MediaUploadInput;
 use App\Api\Console\Object\MediaObject;
+use App\Entity\Media;
 use App\Entity\Newsletter;
+use App\Entity\Type\MediaFolder;
 use App\Service\Media\MediaService;
 use App\Service\Media\MediaUploadException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,21 +27,21 @@ class MediaController extends AbstractController
 
     public function __construct(
         private ValidatorInterface $validator,
-        private MediaService $mediaService
-    ) {
+        private MediaService       $mediaService
+    )
+    {
     }
 
-    #[Route('/media', methods: 'POST')]
-    public function upload(
+    public function doUpload(
         Newsletter $newsletter,
-        Request $request,
-        #[MapRequestPayload] MediaUploadInput $input
-    ): JsonResponse {
-        $file = $request->files->get('file');
-        $folder = $input->folder;
+        MediaFolder $folder,
+        mixed $file,
+        int $maxSizeMb = 10,
+    ): Media
+    {
 
         $constraint = new Constraints\File(
-            maxSize: '100M',
+            maxSize: $maxSizeMb . 'M',
             extensions: $folder->getAllowedExtensions()
         );
         $errors = $this->validator->validate($file, $constraint);
@@ -54,7 +58,7 @@ class MediaController extends AbstractController
         assert($file instanceof UploadedFile);
 
         try {
-            $media = $this->mediaService->upload(
+            return $this->mediaService->upload(
                 $newsletter,
                 $folder,
                 $file
@@ -62,6 +66,25 @@ class MediaController extends AbstractController
         } catch (MediaUploadException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
+
+    }
+
+    #[Route('/media', methods: 'POST')]
+    #[ScopeRequired(Scope::MEDIA_WRITE)]
+    public function upload(
+        Newsletter                            $newsletter,
+        Request                               $request,
+        #[MapRequestPayload] MediaUploadInput $input
+    ): JsonResponse
+    {
+        $file = $request->files->get(key: 'file');
+        $folder = $input->folder;
+
+        $media = $this->doUpload(
+            $newsletter,
+            $folder,
+            $file,
+        );
 
         return $this->json(
             new MediaObject(

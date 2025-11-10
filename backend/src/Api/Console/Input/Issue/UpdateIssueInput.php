@@ -10,8 +10,6 @@ class UpdateIssueInput
     use OptionalPropertyTrait;
 
     public ?string $subject;
-    public ?string $from_name;
-
     /**
      * @var array<int>
      */
@@ -21,13 +19,6 @@ class UpdateIssueInput
         new Assert\Type('int'),
     ])]
     public array $lists;
-
-    #[Assert\Email]
-    #[Assert\Length(max: 255)]
-    public string $from_email;
-
-    #[Assert\Email]
-    public ?string $reply_to_email;
-
     public ?string $content;
+    public int $sending_profile_id;
 }

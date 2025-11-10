@@ -12,10 +12,12 @@ use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(FormController::class)]
 #[CoversClass(SubscriberObject::class)]
@@ -37,7 +39,7 @@ class FormSubscribeTest extends WebTestCase
     public function test_error_on_missing_newsletter(): void
     {
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'newsletter_uuid' => "577485c0-22c3-4477-b4c2-6286ab2053c0",
+            'newsletter_subdomain' => "test",
             'email' => 'test@hyvor.com',
             'list_ids' => [1],
         ]);
@@ -55,7 +57,7 @@ class FormSubscribeTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['newsletter' => NewsletterFactory::createOne()]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'newsletter_uuid' => $newsletter->getUuid(),
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
             'email' => 'test@hyvor.com',
             'list_ids' => [$list1->getId(), $list2->getId()],
         ]);
@@ -72,12 +74,24 @@ class FormSubscribeTest extends WebTestCase
         Clock::set(new MockClock($date));
 
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
+        $callback = function ($method, $url, $options) use ($newsletter): JsonMockResponse {
+            $body = json_decode($options['body'], true);
+            $this->assertIsArray($body);
+            $this->assertSame("Confirm your subscription to {$newsletter->getName()}", $body['subject']);
+            return new JsonMockResponse();
+        };
+        $this->mockRelayClient($callback);
+
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'newsletter_uuid' => $newsletter->getUuid(),
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
             'email' => 'supun@hyvor.com',
             'list_ids' => [
                 $list1->getId(),
@@ -95,26 +109,23 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], $json['list_ids']);
-        $this->assertSame('pending', $json['status']);
-        $this->assertSame($date->getTimestamp(), $json['subscribed_at']);
-        $this->assertSame(null, $json['unsubscribed_at']);
+        $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
+        $this->assertNull($json['subscribed_at']);
+        $this->assertNull($json['unsubscribed_at']);
 
         $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertNotNull($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
-        $this->assertSame($date->getTimestamp(), $subscriber->getSubscribedAt()?->getTimestamp());
-        $this->assertSame(null, $subscriber->getUnsubscribedAt()?->getTimestamp());
+        $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
+        $this->assertNull($subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $this->mockRelayClient();
 
+        $newsletter = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
@@ -124,10 +135,11 @@ class FormSubscribeTest extends WebTestCase
             'email' => $email,
             'lists' => [$list1],
             'status' => SubscriberStatus::UNSUBSCRIBED,
+            'opt_in_at' => null,
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
-            'newsletter_uuid' => $newsletter->getUuid(),
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
             'email' => $email,
             'list_ids' => [
                 $list1->getId(),
@@ -153,10 +165,5 @@ class FormSubscribeTest extends WebTestCase
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
-
-
-        $email = $this->getMailerMessage();
-        $this->assertNotNull($email);
-        $this->assertEmailSubjectContains($email, "Confirm your subscription to {$newsletter->getName()}");
     }
 }

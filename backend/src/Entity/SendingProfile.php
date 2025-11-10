@@ -27,13 +27,13 @@ class SendingProfile
     private ?Domain $domain;
 
     #[ORM\Column]
-    private string $from_name;
-
-    #[ORM\Column]
     private string $from_email;
 
     #[ORM\Column]
-    private string $reply_to_email;
+    private ?string $from_name;
+
+    #[ORM\Column]
+    private ?string $reply_to_email;
 
     #[ORM\Column]
     private ?string $brand_name;
@@ -107,18 +107,6 @@ class SendingProfile
         return $this;
     }
 
-    public function getFromName(): string
-    {
-        return $this->from_name;
-    }
-
-    public function setFromName(string $from_name): static
-    {
-        $this->from_name = $from_name;
-
-        return $this;
-    }
-
     public function getFromEmail(): string
     {
         return $this->from_email;
@@ -131,12 +119,24 @@ class SendingProfile
         return $this;
     }
 
-    public function getReplyToEmail(): string
+    public function getFromName(): ?string
     {
-        return $this->reply_to_email;
+        return $this->from_name ?? null;
     }
 
-    public function setReplyToEmail(string $reply_to_email): static
+    public function setFromName(?string $from_name): static
+    {
+        $this->from_name = $from_name;
+
+        return $this;
+    }
+
+    public function getReplyToEmail(): ?string
+    {
+        return $this->reply_to_email ?? null;
+    }
+
+    public function setReplyToEmail(?string $reply_to_email): static
     {
         $this->reply_to_email = $reply_to_email;
 
@@ -145,7 +145,7 @@ class SendingProfile
 
     public function getBrandName(): ?string
     {
-        return $this->brand_name;
+        return $this->brand_name ?? null;
     }
 
     public function setBrandName(?string $brand_name): static
@@ -157,7 +157,7 @@ class SendingProfile
 
     public function getBrandLogo(): ?string
     {
-        return $this->brand_logo;
+        return $this->brand_logo ?? null;
     }
 
     public function setBrandLogo(?string $brandLogo): static
