@@ -8,6 +8,7 @@ use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
+use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
@@ -60,6 +61,11 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertCount(2, $subscriberLists);
         $this->assertSame($list1->getId(), $subscriberLists[0]?->getId());
         $this->assertSame($list2->getId(), $subscriberLists[1]?->getId());
+
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(1);
+        $message = $transport->queue()->first()->getMessage();
+        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
     }
 
     public function testCreateSubscriberWithAllInputs(): void
@@ -105,6 +111,11 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('79.255.1.1', $subscriber->getSubscribeIp());
         $this->assertSame('2021-08-27 12:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-29 12:00:00', $subscriber->getUnsubscribedAt()?->format('Y-m-d H:i:s'));
+
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(1);
+        $message = $transport->queue()->first()->getMessage();
+        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
     }
 
     public function testInputValidationEmptyEmailAndListIds(): void
