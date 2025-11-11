@@ -1,6 +1,8 @@
 ## Hyvor Post
 
-[Hyvor Post](https://post.hyvor.com) is a simple, privacy-first newsletter platform. No tracking, just ideas delivered to inboxes. It is based on [Hyvor Relay](https://relay.hyvor.com), an open-source, self-hosted email API for developers.
+*No Tracking, Just Ideas, Delivered.*
+
+[Hyvor Post](https://post.hyvor.com) is a simple, privacy-first newsletter platform. It is based on [Hyvor Relay](https://relay.hyvor.com), an open-source, self-hosted email API for developers.
 
 <p align="center">
   <a href="https://post.hyvor.com">
