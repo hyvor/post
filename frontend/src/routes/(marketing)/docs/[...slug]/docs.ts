@@ -43,21 +43,21 @@ export const categories: Category[] = [
 		]
 	},
 
-	{
-		name: 'Developer',
-		pages: [
-			{
-				slug: 'webhooks',
-				name: 'Webhooks'
-				// component: add component name
-			},
-			{
-				slug: 'api-console',
-				name: 'Console API'
-				// component: add component name
-			}
-		]
-	},
+	// {
+	// 	name: 'Developer',
+	// 	pages: [
+			// {
+			// 	slug: 'webhooks',
+			// 	name: 'Webhooks'
+			// 	// component: add component name
+			// },
+			// {
+			// 	slug: 'api-console',
+			// 	name: 'Console API'
+			// 	// component: add component name
+			// }
+		//]
+	//},
 ];
 
 export const pages = categories.reduce((acc, category) => acc.concat(category.pages), [] as Page[]);

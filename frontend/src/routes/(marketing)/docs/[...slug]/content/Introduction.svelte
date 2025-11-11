@@ -75,6 +75,6 @@
 		born.
 	</li>
 	<li>
-		<strong> October, 2025 </strong>: Launched Hyvor Post.
+		<strong> November, 2025 </strong>: Launched Hyvor Post.
 	</li>
 </ul>

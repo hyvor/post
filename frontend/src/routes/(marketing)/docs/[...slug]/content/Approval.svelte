@@ -1,16 +1,10 @@
 <h1>Approval</h1>
 
 <p>
-	Hyvor Post has a strict approval process to ensure that only high-quality newsletters are sent
-	through our platform. Once you have tested Hyvor Post and are ready to send newsletters to your
+	Hyvor Post has an approval process to ensure that only high-quality newsletters are sent through
+	our platform. Once you have tested Hyvor Post and are ready to send newsletters to your
 	subscribers, request approval by filling out the form at <strong>Console &rarr; Approval</strong
 	>.
-</p>
-
-<h2 id="who-should-not-apply">Who Should NOT Apply?</h2>
-
-<p>
-	<!--  -->
 </p>
 
 <h2 id="approval-requirements">Approval Requirements</h2>
@@ -26,7 +20,6 @@
 		If you plan to import an existing email list, you must provide proof that all subscribers
 		have opted in to receive your newsletters.
 	</li>
-	<li>If you are new</li>
 </ul>
 
 <p>
