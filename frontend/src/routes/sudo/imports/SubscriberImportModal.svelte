@@ -1,5 +1,6 @@
 <script lang="ts">
     import {Divider, IconMessage, LoadButton, Modal, SplitControl, toast} from "@hyvor/design/components";
+    import IconExclamationOctagon from "@hyvor/icons/IconExclamationOctagon"
     import type {ImportingSubscriber, SubscriberImport} from "../types";
     import ImportingSubscriberRow from "./ImportingSubscriberRow.svelte";
     import {onMount} from "svelte";
@@ -17,6 +18,7 @@
     let loading = $state(true);
     let hasMore = $state(true);
     let loadingMore = $state(false);
+    let parseError = $state<string | null>(null);
 
     let importingSubscribers: ImportingSubscriber[] = $state([]);
 
@@ -46,6 +48,12 @@
     }
 
     onMount(() => {
+        if (subscriberImport.status === 'requires_input') {
+            parseError = "File not parsed for subscribers. Import is in REQUIRES_INPUT status.";
+            loading = false;
+            return;
+        }
+
         load();
     })
 </script>
@@ -61,7 +69,10 @@
                     text: "Close"
                 },
                 confirm: {
-                    text: "Approve"
+                    text: "Approve",
+                    props: {
+                        disabled: subscriberImport.status !== 'pending_approval'
+                    }
                 }
             }}
             on:confirm={() => onApprove(subscriberImport)}
@@ -77,7 +88,13 @@
 
             <Divider color=var(--accent-light) margin={2}/>
 
-            {#if importingSubscribers.length === 0}
+            {#if parseError}
+                <IconMessage
+                        icon={IconExclamationOctagon}
+                        iconSize={45}
+                        message={parseError}
+                />
+            {:else if importingSubscribers.length === 0}
                 <IconMessage empty message="No subscribers found in the import file"/>
             {:else}
                 <div class="list">

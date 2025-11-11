@@ -60,6 +60,10 @@ class SubscriberImportController extends AbstractController
     #[Route('/subscriber-imports/{id}', methods: ['GET'])]
     public function getImportingSubscribers(SubscriberImport $subscriberImport, Request $request): JsonResponse
     {
+        if ($subscriberImport->getStatus() === SubscriberImportStatus::REQUIRES_INPUT) {
+            throw new UnprocessableEntityHttpException('Subscriber import is in requires_input status.');
+        }
+
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
