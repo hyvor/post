@@ -8,18 +8,6 @@
 	let loggedIn = $state(false);
 
 	const I18n = getMarketingI18n();
-
-	onMount(() => {
-		fetch('/api/auth/check', {
-			method: 'POST'
-		})
-			.then<{ is_logged_in: boolean }>((res) => res.json())
-			.then((res) => {
-				if (res?.is_logged_in) {
-					loggedIn = true;
-				}
-			});
-	});
 </script>
 
 <Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
@@ -46,12 +34,7 @@
 
 	{#snippet end()}
 		<div class="end">
-			{#if loggedIn}
-				<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
-			{:else}
-				<Button as="a" size="small" href="/console" variant="invisible">Login</Button>
-				<Button as="a" size="small" href="/console?signup">Create a Newsletter</Button>
-			{/if}
+			<Button as="a" size="small" href="/console">Go to Console &rarr;</Button>
 		</div>
 	{/snippet}
 </Header>

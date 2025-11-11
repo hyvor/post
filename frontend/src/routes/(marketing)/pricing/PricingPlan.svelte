@@ -159,11 +159,11 @@
 	<div class="card-footer">
 		<div class="price">
 			{#if !enterprise}
-				<span class="price-amount">{currency}{currentPrice}</span>
-				<span class="price-period">
-					/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}
-					{#if currentPrice === 10}*{/if}</span
+				<span class="price-amount">{currency}{currentPrice}</span><span
+					class="price-period"
 				>
+					/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}
+				</span>
 			{:else}
 				<span class="price-amount">Custom Pricing</span>
 			{/if}
