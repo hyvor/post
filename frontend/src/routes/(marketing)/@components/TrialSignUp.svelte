@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	// import TrialChecks from './TrialChecks.svelte';
 	import { getMarketingI18n } from '../locale';
 	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
 	import TrialLink from './TrialLink.svelte';
@@ -42,9 +41,9 @@
 				<!-- 14-day free trial -->
 				<div>
 					<I18n.T
-						key="14DayFreeTrial"
+						key="homepage.14DayFreeTrial"
 						params={{
-							a: { component: TrialLink }
+							trial: { component: TrialLink }
 						}}
 					/>
 				</div>

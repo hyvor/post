@@ -1,10 +1,13 @@
 <script lang="ts">
 	import BrowserWindow from './BrowserWindow.svelte';
 	import signupImg from '../img/signup.png';
-	import emailImg from '../img/email.png';
-	import Envelope from './Envelope.svelte';
+	// import emailImg from '../img/email.png';
+	// import Envelope from './Envelope.svelte';
 	import IconBullseye from '@hyvor/icons/IconBullseye';
 	import IconLink from '@hyvor/icons/IconLink';
+	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
+	import IconCheckAll from '@hyvor/icons/IconCheckAll';
+	import IconCodeSlash from '@hyvor/icons/IconCodeSlash';
 	// import signupSvg from './img/img/api-webhooks.svg';
 </script>
 
@@ -18,19 +21,37 @@
 		<!-- <img src={signupSvg} alt="Signup Form Illustration" width="300" /> -->
 
 		<div class="bento-grid">
-			<div class="int">
-				<IconBullseye class="int-icon" size={30} />
-				<div class="seo-feature-name">Easy embedding</div>
+			<div class="item">
+				<div class="int">
+					<IconCodeSlash class="int-icon" size={28} />
+					<div class="seo-feature-name">Easy embedding</div>
+				</div>
+				<div class="seo-feature-description">
+					Easily embed the signup form on your website with a simple copy-paste of the
+					generated code snippet.
+				</div>
 			</div>
 
-			<div class="int">
-				<IconLink class="int-icon" size={30} />
-				<div class="seo-feature-name">Double opt-in</div>
+			<div class="item">
+				<div class="int">
+					<IconCheckAll class="int-icon" size={28} />
+					<div class="seo-feature-name">Double opt-in</div>
+				</div>
+				<div class="seo-feature-description">
+					Ensure compliance and improve email deliverability with built-in double opt-in
+					functionality.
+				</div>
 			</div>
 
-			<div class="int">
-				<IconLink class="int-icon" size={30} />
-				<div class="seo-feature-name">Fully-customizable</div>
+			<div class="item">
+				<div class="int">
+					<IconPencilSquare class="int-icon" size={23} />
+					<div class="seo-feature-name">Fully-customizable</div>
+				</div>
+				<div class="seo-feature-description">
+					Customize the appearance and behavior of the signup form to match your website's
+					design and branding.
+				</div>
 			</div>
 		</div>
 	</div>
@@ -51,10 +72,6 @@
 	}
 
 	.signup-form {
-		/* width: var(--width);
-		max-width: var(--max-width);
-		padding: 60px 0;
-		margin: auto 55px; */
 		display: flex;
 		padding-top: 80px;
 		padding-bottom: 80px;
@@ -89,58 +106,52 @@
 		width: 110%; /* did this to make it extend over the screen edge */
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: 0;
-		/* background-color: #191e19; */
-		/* padding-top: 70px;
-		padding-bottom: 70px; */
 		padding-left: 70px;
 		border-radius: 20px;
-		/* filter: blur(1px); */
 		opacity: 0.9;
 	}
 
-	/* .another-browser {
-        position: absolute;
-        width: 400px;
-        bottom: 30px;
-        right: 0;
-        border-radius: 20px;
-        box-shadow: var(--box-shadow);
-    } */
-
 	.bento-grid {
 		display: grid;
-		grid-template-rows: 1fr 1fr;
-		gap: 20px 40px;
+		grid-template-columns: 1fr; /* only one column */
+		gap: 25px;
 		margin-top: 40px;
+	}
+
+	.item {
+		background: #f1f1f1;
+		border-radius: 20px;
+		padding: 25px 30px;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+
+	.item:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 6px 16px var(--box-shadow);
 	}
 
 	.int {
 		display: flex;
 		align-items: center;
-		gap: 15px;
-		/* font-size: 25px; */
-		font-size: 20px;
+		gap: 12px;
 		margin-bottom: 10px;
-		color: var(--gray-dark);
+		color: var(--text);
 	}
 
 	.seo-feature-name {
+		font-weight: 600;
+		font-size: 20px;
+		color: var(--text);
+	}
+
+	.seo-feature-description {
+		font-size: 18px;
+		line-height: 1.6;
 		color: var(--gray-dark);
 	}
 
-	/* h1 {
-        margin: 0;
-        font-size: 40px;
-    } */
-
-	/* h2 {
-        font-weight: normal;
-        /* font-size: 25px; */
-	/* font-size: 20px;
-    color: var(--grey-dark);
-    margin: 0;
-    padding-top: 20px; */
-	/* } */
 	@keyframes heroEnter {
 		0% {
 			/* //transform: translateX(30px) translateY(0) translateZ(20px); */
