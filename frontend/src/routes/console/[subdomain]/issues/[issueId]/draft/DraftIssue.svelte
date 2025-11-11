@@ -1,7 +1,7 @@
 <script lang="ts">
     import type {Issue} from '../../../../types';
     import {onMount} from 'svelte';
-    import {draftStepStore, initDraftStores} from './draftStore';
+    import {draftIssueEditingStore, draftStepStore, initDraftStores} from './draftStore';
     import ContentView from './content/ContentView.svelte';
     import Steps from './Steps.svelte';
     import Audience from './audience/Audience.svelte';
@@ -23,9 +23,9 @@
 
 {#if init}
     <div class="draft-wrap">
-        {#if $draftStepStore === 'content'}
+        {#if $draftStepStore[$draftIssueEditingStore.id] === 'content'}
             <ContentView/>
-        {:else if $draftStepStore === 'audience'}
+        {:else if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
             <Audience/>
         {/if}
 

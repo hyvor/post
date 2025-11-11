@@ -94,9 +94,10 @@ class UserInviteService
         );
     }
 
-    public function isInvited(int $hyvorUserId): bool
+    public function isInvited(Newsletter $newsletter, int $hyvorUserId): bool
     {
         $userInvite = $this->em->getRepository(UserInvite::class)->findBy([
+            'newsletter' => $newsletter,
             'hyvor_user_id' => $hyvorUserId,
         ]);
 

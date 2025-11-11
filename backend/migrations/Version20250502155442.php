@@ -23,10 +23,11 @@ final class Version20250502155442 extends AbstractMigration
             created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
             newsletter_id BIGINT NOT NULL references newsletters(id),
-            hyvor_user_id BIGINT NOT NULL UNIQUE,
+            hyvor_user_id BIGINT NOT NULL,
             code VARCHAR(255) NOT NULL UNIQUE,
             expires_at timestamptz NOT NULL,
-            role user_role NOT NULL
+            role user_role NOT NULL,
+            UNIQUE (newsletter_id, hyvor_user_id)
         );
         SQL
         );

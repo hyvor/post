@@ -44,23 +44,29 @@
     }
 
     function handleBack() {
-        if ($draftStepStore === 'content') {
+        if ($draftStepStore[$draftIssueEditingStore.id] === 'content') {
             goto(consoleUrlWithNewsletter('/issues'));
             return;
         }
 
-        const currentIndex = sections.indexOf($draftStepStore);
+        const currentIndex = sections.indexOf($draftStepStore[$draftIssueEditingStore.id]);
         const previousSection = sections[currentIndex - 1];
 
         if (previousSection) {
-            draftStepStore.set(previousSection);
+            draftStepStore.update((steps) => {
+                steps[$draftIssueEditingStore.id] = previousSection;
+                return steps;
+            });
         }
     }
 
     function handleNext() {
-        const currentIndex = sections.indexOf($draftStepStore);
+        const currentIndex = sections.indexOf($draftStepStore[$draftIssueEditingStore.id]);
         const nextSection = sections[currentIndex + 1] || 'audience';
-        draftStepStore.set(nextSection);
+        draftStepStore.update((steps) => {
+            steps[$draftIssueEditingStore.id] = nextSection;
+            return steps;
+        });
     }
 
     async function handleSend() {
@@ -112,7 +118,7 @@
         <Step key="audience" name={I18n.t('console.issues.draft.steps.audience')}/>
     </div>
     <div class="right">
-        {#if $draftStepStore === 'audience'}
+        {#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
             <Tooltip
                     text={$userApprovalStatusStore !== 'approved'
                         ? I18n.t('console.issues.draft.approveBeforeSending')
