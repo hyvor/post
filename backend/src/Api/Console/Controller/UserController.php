@@ -103,7 +103,7 @@ class UserController extends AbstractController
             throw new BadRequestHttpException("User is already an admin");
         }
 
-        if ($this->userInviteService->isInvited($hyvorUser->id)) {
+        if ($this->userInviteService->isInvited($newsletter, $hyvorUser->id)) {
             $invite = $this->userInviteService->extendInvite($hyvorUser->id);
         } else {
             $invite = $this->userInviteService->createInvite($newsletter, $hyvorUser->id, UserRole::ADMIN);

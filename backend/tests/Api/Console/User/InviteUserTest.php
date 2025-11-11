@@ -179,4 +179,54 @@ class InviteUserTest extends WebTestCase
         $newExpirationDate = $expirationDate->add(new \DateInterval('P1D'));
         $this->assertSame($newExpirationDate->getTimestamp(), $json['expires_at']);
     }
+
+    public function test_invite_same_user_with_multiple_newsletters(): void
+    {
+        $this->mockRelayClient();
+        Clock::set(new MockClock('2025-05-10'));
+        $newsletter1 = NewsletterFactory::createOne();
+        $newsletter2 = NewsletterFactory::createOne();
+
+        AuthFake::databaseAdd([
+            'id' => 15,
+            'username' => 'nadil',
+            'name' => 'Nadil Karunarathna',
+            'email' => 'nadil@hyvor.com'
+        ]);
+
+        UserInviteFactory::createOne([
+            'hyvor_user_id' => 15,
+            'newsletter' => $newsletter1,
+            'expires_at' => new \DateTimeImmutable('2025-05-11 00:00:00'),
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter2,
+            'POST',
+            '/invites',
+            [
+                'email' => 'nadil@hyvor.com',
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $json = $response->getContent();
+        $this->assertNotFalse($json);
+        $data = json_decode($json, true);
+        $this->assertIsArray($data);
+        $this->assertSame('admin', $data['role']);
+        $user = $data['user'];
+        $this->assertIsArray($user);
+        $this->assertSame('nadil', $user['username']);
+
+
+        $userInviteRepository = $this->em->getRepository(UserInvite::class);
+        $userInvites = $userInviteRepository->findBy(
+            ['hyvor_user_id' => 15,],
+            ['newsletter' => 'ASC']
+        );
+        $this->assertCount(2, $userInvites);
+        $this->assertSame($newsletter1->getId(), $userInvites[0]->getNewsletter()->getId());
+        $this->assertSame($newsletter2->getId(), $userInvites[1]->getNewsletter()->getId());
+    }
 }

@@ -94,8 +94,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         bool                $useSession = false
     ): Response
     {
-        $newsletterId = $newsletter instanceof Newsletter ? $newsletter->getId() : $newsletter;
-
         if ($newsletter instanceof Newsletter) {
             $newsletterId = $newsletter->getId();
         } else if ($newsletter) {
