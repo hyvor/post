@@ -17,7 +17,7 @@ export default defineConfig({
         emptyOutDir: false,
         rollupOptions: {
             input: {
-                embed: 'src/form/form.ts'
+                form: 'src/form/form.ts'
             },
             output: {
                 entryFileNames: '[name].js',
