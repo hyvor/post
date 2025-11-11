@@ -1,24 +1,27 @@
 <?php
 
-namespace App\Service\Subscriber;
+namespace App\Service\Subscriber\MessageHandler;
 
+use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Content\ContentService;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
+use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
+use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
 
-#[AsEventListener]
-final class SubscriberCreatedListener
+#[AsMessageHandler]
+class SubscriberCreatedMessageHandler
 {
     use ClockAwareTrait;
 
@@ -32,13 +35,15 @@ final class SubscriberCreatedListener
         private HtmlTemplateRenderer    $htmlTemplateRenderer,
         private readonly StringsFactory $stringsFactory,
         private RelayApiClient          $relayApiClient,
+        private EntityManagerInterface  $em,
     )
     {
     }
 
-    public function __invoke(SubscriberCreatedEvent $event): void
+    public function __invoke(SubscriberCreatedMessage $message): void
     {
-        $subscriber = $event->getSubscriber();
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($message->getSubscriberId());
+        assert($subscriber !== null);
         $newsletter = $subscriber->getNewsletter();
 
         if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
