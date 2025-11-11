@@ -94,11 +94,6 @@
 		background-color: var(--accent-light-mid);
 	}
 
-	/* .content-text a {
-		color: var(--accent);
-		text-decoration: underline;
-	} */
-
 	.icon {
 		display: inline-block;
 		margin-right: 10px;

@@ -5,7 +5,7 @@
 </script>
 
 <div class="letter-section">
-	<div class="wrap" id="letter">
+	<div class="wrap hds-container-max" id="letter">
 		<div class="head">
 			<h1 class="title">{I18n.t('homepage.whyHyvorPost')}</h1>
 		</div>

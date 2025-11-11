@@ -7,7 +7,7 @@
 	import IconLink from '@hyvor/icons/IconLink';
 </script>
 
-<div class="custom-email-design">
+<div class="custom-email-design hds-container-max">
 	<div class="left">
 		<h1>Custom Email Design</h1>
 
@@ -45,11 +45,13 @@
 
 <style>
 	.custom-email-design {
-		width: var(--width);
+		/* width: var(--width);
 		max-width: var(--max-width);
 		padding: 60px 0;
-		margin: auto 55px;
+		margin: auto 55px; */
 		display: flex;
+		padding-top: 80px;
+		padding-bottom: 80px;
 	}
 
 	h1 {
@@ -69,12 +71,14 @@
 
 	.left {
 		flex: 1;
+		/* padding: 60px 0; */
 	}
 
 	.right {
 		flex: 1;
 		padding-left: 55px;
 		position: relative;
+		/* padding: 60px 0; */
 	}
 
 	.bento-grid {
@@ -98,8 +102,8 @@
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: 0;
 		/* background-color: #191e19; */
-		padding-top: 70px;
-		padding-bottom: 70px;
+		/* padding-top: 70px;
+		padding-bottom: 70px; */
 		padding-left: 70px;
 		border-radius: 20px;
 		/* filter: blur(1px); */

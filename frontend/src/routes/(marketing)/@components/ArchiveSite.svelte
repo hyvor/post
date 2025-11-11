@@ -7,7 +7,7 @@
 </script>
 
 <div class="archive-site">
-	<div class="wrap">
+	<div class="wrap hds-container-max">
 		<div class="left">
 			<div class="main-browser">
 				<BrowserWindow image={archiveImg} link="post.hyvor.com/archive" />
@@ -159,15 +159,13 @@
 
 <style>
 	.archive-site {
-		padding: 60px 0;
+		padding-top: 80px;
+		padding-bottom: 80px;
 		background-color: var(--accent-light);
 	}
 
 	.wrap {
 		display: flex;
-		width: var(--width);
-		max-width: var(--max-width);
-		/* margin: auto 55px; */
 		text-align: right;
 		justify-content: center;
 		gap: 40px;
@@ -185,7 +183,7 @@
 		font-size: 20px;
 		color: var(--text);
 		margin: 0;
-		padding-top: 20px;
+		/* padding-top: 20px; */
 		text-align: end;
 	}
 
@@ -193,13 +191,14 @@
 		flex: 1;
 		padding-right: 25px;
 		position: relative;
+		/* padding: 60px 0; */
 	}
 
 	.main-browser {
 		width: 150%;
 		max-width: none;
 		margin-left: -50%;
-		padding: 70px;
+		/* padding: 70px; */
 		border-radius: 20px;
 		opacity: 0.9;
 		animation:
