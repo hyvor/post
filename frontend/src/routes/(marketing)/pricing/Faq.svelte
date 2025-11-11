@@ -15,26 +15,25 @@
 	<FeatureSectionHead title={I18n.t('pricing.faqs')} />
 	<div class="faqs">
 		<Accordion
-			title={I18n.t('pricing.isThereATrial')}
+			title="Do you offer a free trial?"
 			icon={IconArrowClockwise}
-			content={I18n.t('pricing.isThereATrialAnswer')}
+			content="Yes, we offer a 14-days trial with all features included. In this period, you can send test emails to your team members. When you're ready to send emails to your subscribers, you should request an approval and upgrade to a paid plan."
 		/>
 		<Accordion
-			title={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimit')}
-			icon={IconBarChart}
-			content={I18n.t('pricing.whatHappensIfIExceedTheEmailsLimitAnswer')}
-		/>
-		<Accordion
-			title={I18n.t('pricing.howDoPaymentsWork')}
+			title="How do payments work?"
 			icon={IconWallet}
-			content={I18n.t('pricing.howDoPaymentsWorkAnswer')}
+			content="Payments are processed securely through Hyvor Billing, which uses Stripe as the payment gateway. We accept all major credit/debit cards. You can choose to pay monthly or annually. Annual plans come with a discount of 2 months free."
 		/>
 		<Accordion
-			title={I18n.t('pricing.canICancelAnytime')}
-			icon={IconBoxArrowRight}
-			content={I18n.t('pricing.canICancelAnytimeAnswer')}
+			title="What happens if I exceed the email limit?"
+			icon={IconBarChart}
+			content="If you exceed your email limit, you will have to upgrade to the next plan before sending another issue. We do not charge overages."
 		/>
-		<!-- <FAQs /> -->
+		<Accordion
+			title="Can I cancel anytime?"
+			icon={IconBoxArrowRight}
+			content="Yes, you can cancel your subscription anytime. You can also export your subscriber list and easily migrate to another platform if needed."
+		/>
 	</div>
 </div>
 
