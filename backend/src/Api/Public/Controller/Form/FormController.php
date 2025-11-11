@@ -138,7 +138,7 @@ class FormController extends AbstractController
         $response = <<<HTML
             <hyvor-post-form newsletter={$newsletter->getSubdomain()}
             instance={$instance}></hyvor-post-form>
-            <script type="module" src="{$instance}/form/embed.js"></script>
+            <script type="module" src="{$instance}/form/form.js"></script>
         HTML;
 
         return new Response($response);
