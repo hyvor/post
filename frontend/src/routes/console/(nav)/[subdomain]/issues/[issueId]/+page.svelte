@@ -3,16 +3,16 @@
     import {onMount} from 'svelte';
     import {IconMessage, Loader, confirm, toast} from '@hyvor/design/components';
     import {goto} from '$app/navigation';
-    import {consoleUrlWithNewsletter} from '../../../lib/consoleUrl';
-    import {issueStore} from '../../../lib/stores/newsletterStore';
-    import type {Issue} from '../../../types';
-    import {deleteIssue, getIssue} from '../../../lib/actions/issueActions';
+    import {consoleUrlWithNewsletter} from '../../../../lib/consoleUrl';
+    import {issueStore} from '../../../../lib/stores/newsletterStore';
+    import type {Issue} from '../../../../types';
+    import {deleteIssue, getIssue} from '../../../../lib/actions/issueActions';
     import DraftIssue from './draft/DraftIssue.svelte';
     import IssueSending from './sending/IssueSending.svelte';
     import SentIssue from './sent/SentIssue.svelte';
-    import SingleBox from '../../../@components/content/SingleBox.svelte';
+    import SingleBox from '../../../../@components/content/SingleBox.svelte';
     import {draftSendableSubscribersCountStore} from './draft/draftStore';
-    import {getI18n} from '../../../lib/i18n';
+    import {getI18n} from '../../../../lib/i18n';
 
     const id = Number(page.params.issueId);
 

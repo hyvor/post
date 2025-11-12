@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { renderTemplate } from '../../../../../(tools)/design/lib/actions/templateActions';
+	import { renderTemplate } from '../../../../../../(tools)/design/lib/actions/templateActions';
 	import { Loader, toast } from '@hyvor/design/components';
 
 	let iframeEl: HTMLIFrameElement;

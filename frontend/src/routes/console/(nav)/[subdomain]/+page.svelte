@@ -1,5 +1,5 @@
 <script>
-	import SingleBox from '../@components/content/SingleBox.svelte';
+	import SingleBox from '../../@components/content/SingleBox.svelte';
 	import HomeStats from './home/HomeStats.svelte';
 	import ListView from './home/ListView.svelte';
 </script>

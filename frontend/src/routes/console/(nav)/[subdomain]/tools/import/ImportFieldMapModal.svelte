@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Modal, SplitControl, TextInput } from '@hyvor/design/components';
-    import { getI18n } from '../../../lib/i18n';
+    import { getI18n } from '../../../../lib/i18n';
 
     interface Props {
         show: boolean;

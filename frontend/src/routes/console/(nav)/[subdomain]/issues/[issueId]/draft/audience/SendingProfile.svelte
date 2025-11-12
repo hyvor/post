@@ -1,10 +1,10 @@
 <script>
     import {Radio, SplitControl, Tooltip} from '@hyvor/design/components';
-    import {sendingProfilesStore} from '../../../../../lib/stores/newsletterStore';
+    import {sendingProfilesStore} from '../../../../../../lib/stores/newsletterStore.ts';
     import {Tag} from "@hyvor/design/components";
-    import {draftIssueEditingStore, draftIssueStore} from "../draftStore.js";
-    import {debouncedUpdateDraftIssue} from "../draftActions.js";
-    import {getI18n} from "../../../../../lib/i18n.js";
+    import {draftIssueEditingStore, draftIssueStore} from "../draftStore.ts";
+    import {debouncedUpdateDraftIssue} from "../draftActions.ts";
+    import {getI18n} from "../../../../../../lib/i18n.ts";
 
     let sendingProfileId = $state(
         $draftIssueStore.sending_profile_id ??

@@ -1,9 +1,9 @@
 <script lang="ts">
     import {IconMessage, LoadButton, Loader} from '@hyvor/design/components';
     import SubscriberRow from './SubscriberRow.svelte';
-    import type {NewsletterSubscriberStatus, Subscriber} from '../../types';
-    import {getI18n} from '../../lib/i18n';
-    import {subscriberStore} from "../../lib/stores/newsletterStore";
+    import type {NewsletterSubscriberStatus, Subscriber} from '../../../types';
+    import {getI18n} from '../../../lib/i18n';
+    import {subscriberStore} from "../../../lib/stores/newsletterStore";
 
     interface Props {
         status: NewsletterSubscriberStatus | null;

@@ -1,13 +1,13 @@
 import {debounce} from "$lib/helpers/debounce";
 import {get} from "svelte/store";
-import type {Issue} from "../../../../types";
+import type {Issue} from "../../../../../types";
 import {
     draftIssueEditingStore,
     draftIssueStore,
     draftPreviewKey,
     draftSendableSubscribersCountStore
 } from "./draftStore";
-import {updateIssue} from "../../../../lib/actions/issueActions";
+import {updateIssue} from "../../../../../lib/actions/issueActions";
 import {toast} from "@hyvor/design/components";
 
 export const debouncedUpdateDraftIssue = debounce(updateDraftIssue, 800);

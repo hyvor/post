@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Button, Loader, SplitControl } from '@hyvor/design/components';
-	import TopBar from '../../../@components/content/TopBar.svelte';
+	import TopBar from '../../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { getNewsletterInvites, getNewsletterUsers } from '../../../lib/actions/userActions';
+	import { getNewsletterInvites, getNewsletterUsers } from '../../../../lib/actions/userActions';
 	import { onMount } from 'svelte';
-	import type { Invite, User } from '../../../types';
+	import type { Invite, User } from '../../../../types';
 	import InviteRow from './InviteRow.svelte';
 	import UserRow from './UserRow.svelte';
 	import UserInvitationModal from './UserInvitationModal.svelte';
-    import {getI18n} from "../../../lib/i18n";
+    import {getI18n} from "../../../../lib/i18n";
 
 	let loading = true;
 	let users: User[] = [];

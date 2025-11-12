@@ -10,14 +10,14 @@
 	} from '@hyvor/design/components';
 	import SettingsBody from './@components/SettingsBody.svelte';
 	import NewsletterSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
-	import { newsletterEditingStore, newsletterStore } from '../../lib/stores/newsletterStore';
+	import { newsletterEditingStore, newsletterStore } from '../../../lib/stores/newsletterStore';
 	import { goto } from '$app/navigation';
-	import { deleteNewsletter, updateNewsletter } from '../../lib/actions/newsletterActions';
-	import { getI18n } from '../../lib/i18n';
-	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
-	import { getAppConfig } from '../../lib/stores/consoleStore';
-	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
-	import { validateSubdomain } from '../../lib/subdomain';
+	import { deleteNewsletter, updateNewsletter } from '../../../lib/actions/newsletterActions';
+	import { getI18n } from '../../../lib/i18n';
+	import { consoleUrlWithNewsletter } from '../../../lib/consoleUrl';
+	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import { getNewsletterArchiveUrlFromSubdomain } from '../../../lib/archive';
+	import { validateSubdomain } from '../../../lib/subdomain';
 
 	const I18n = getI18n();
 

@@ -1,10 +1,10 @@
 <script lang="ts">
     import {page} from '$app/state';
     import {NavLink} from '@hyvor/design/components';
-    import {newsletterStore} from '../../lib/stores/newsletterStore';
+    import {newsletterStore} from '../../../lib/stores/newsletterStore';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconBoxArrowUp from '@hyvor/icons/IconBoxArrowUp';
-    import {getI18n} from '../../lib/i18n';
+    import {getI18n} from '../../../lib/i18n';
 
     interface Props {
         children?: import('svelte').Snippet;

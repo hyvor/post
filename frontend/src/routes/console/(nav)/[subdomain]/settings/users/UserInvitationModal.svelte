@@ -6,9 +6,9 @@
         Modal,
     } from '@hyvor/design/components';
     import {toast} from '@hyvor/design/components';
-    import {inviteUser} from '../../../lib/actions/userActions';
-    import type {Invite} from '../../../types';
-    import {getI18n} from "../../../lib/i18n";
+    import {inviteUser} from '../../../../lib/actions/userActions';
+    import type {Invite} from '../../../../types';
+    import {getI18n} from "../../../../lib/i18n";
     import CreateAccountLink from './CreateAccountLink.svelte';
 
     export let show: boolean;

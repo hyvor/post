@@ -6,8 +6,8 @@
 		Textarea,
 		TextInput
 	} from '@hyvor/design/components';
-	import { getI18n } from '../../../lib/i18n';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
+	import { getI18n } from '../../../../lib/i18n';
+	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
 	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
 	import FormColors from './FormColors.svelte';
 

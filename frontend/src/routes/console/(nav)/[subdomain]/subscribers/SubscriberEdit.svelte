@@ -9,9 +9,9 @@
         Validation,
         toast
     } from '@hyvor/design/components';
-    import type {Subscriber} from '../../types';
-    import {listStore, subscriberMetadataDefinitionStore} from '../../lib/stores/newsletterStore';
-    import {updateSubscriber} from '../../lib/actions/subscriberActions';
+    import type {Subscriber} from '../../../types';
+    import {listStore, subscriberMetadataDefinitionStore} from '../../../lib/stores/newsletterStore';
+    import {updateSubscriber} from '../../../lib/actions/subscriberActions';
 
     export let subscriber: Subscriber;
     export let show = false;

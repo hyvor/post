@@ -10,8 +10,8 @@
 	import {
 		newsletterEditingStore,
 		newsletterPermissionsStore
-	} from '../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	} from '../../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
 	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
 	import BoxBorder from './BoxBorder.svelte';
 	import BoxRadius from './BoxRadius.svelte';

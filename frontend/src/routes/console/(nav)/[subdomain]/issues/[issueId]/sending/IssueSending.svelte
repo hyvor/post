@@ -1,8 +1,8 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import type {Issue} from "../../../../types";
+    import type {Issue} from "../../../../../types";
     import IconSend from "@hyvor/icons/IconSend";
-    import {getIssueProgress} from "../../../../lib/actions/issueActions";
+    import {getIssueProgress} from "../../../../../lib/actions/issueActions";
 
     export let issue: Issue;
     export let complete: () => void;

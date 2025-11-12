@@ -4,13 +4,13 @@
     import IconArrowRightShort from '@hyvor/icons/IconArrowRightShort';
     import IconArrowLeftShort from '@hyvor/icons/IconArrowLeftShort';
     import {goto} from '$app/navigation';
-    import {consoleUrlWithNewsletter} from '../../../../lib/consoleUrl';
+    import {consoleUrlWithNewsletter} from '../../../../../lib/consoleUrl';
     import IconSend from '@hyvor/icons/IconSend';
-    import {userApprovalStatusStore} from "../../../../lib/stores/consoleStore";
-    import {getI18n} from '../../../../lib/i18n';
+    import {userApprovalStatusStore} from "../../../../../lib/stores/consoleStore";
+    import {getI18n} from '../../../../../lib/i18n';
     import {draftIssueEditingStore, draftStepStore} from './draftStore';
-    import {sendIssue} from "../../../../lib/actions/issueActions";
-    import {newsletterLicenseStore} from "../../../../lib/stores/newsletterStore";
+    import {sendIssue} from "../../../../../lib/actions/issueActions";
+    import {newsletterLicenseStore} from "../../../../../lib/stores/newsletterStore";
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();

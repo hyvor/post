@@ -9,10 +9,10 @@
         ActionListItem,
         IconButton
     } from '@hyvor/design/components';
-    import type {Issue, IssueSend, SendType} from '../../../../types';
-    import {getIssueSends} from '../../../../lib/actions/issueActions';
+    import type {Issue, IssueSend, SendType} from '../../../../../types';
+    import {getIssueSends} from '../../../../../lib/actions/issueActions';
     import SendsRow from './SendsRow.svelte';
-    import Selector from '../../../../@components/content/Selector.svelte';
+    import Selector from '../../../../../@components/content/Selector.svelte';
     import IconX from '@hyvor/icons/IconX';
 
     export let issue: Issue;

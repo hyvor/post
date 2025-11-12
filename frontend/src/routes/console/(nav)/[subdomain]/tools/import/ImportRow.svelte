@@ -1,10 +1,10 @@
 <script lang="ts">
     import {Button} from '@hyvor/design/components';
-    import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
+    import RelativeTime from '../../../../@components/utils/RelativeTime.svelte';
     import ImportStatusBadge from './ImportStatusBadge.svelte';
-    import type {Import} from '../../../types';
+    import type {Import} from '../../../../types';
     import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
-    import {getI18n} from '../../../lib/i18n';
+    import {getI18n} from '../../../../lib/i18n';
 
     interface Props {
         importItem: Import;

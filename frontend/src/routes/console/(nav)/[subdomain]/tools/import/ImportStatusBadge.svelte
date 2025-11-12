@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tag } from '@hyvor/design/components';
-    import type {ExportStatus, ImportStatus} from '../../../types';
-	import { getI18n } from '../../../lib/i18n';
+    import type {ExportStatus, ImportStatus} from '../../../../types';
+	import { getI18n } from '../../../../lib/i18n';
 	export let status: ImportStatus;
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 	$: color = getColor(status);

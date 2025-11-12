@@ -7,13 +7,13 @@
 		toast,
 		Validation
 	} from '@hyvor/design/components';
-	import type { SubscriberMetadataDefinition } from '../../../types';
+	import type { SubscriberMetadataDefinition } from '../../../../types';
 	import {
 		createSubscriberMetadataDefinition,
 		updateSubscriberMetadataDefinition
-	} from '../../../lib/actions/subscriberMetadataActions';
-	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/newsletterStore';
-	import { getI18n } from '../../../lib/i18n';
+	} from '../../../../lib/actions/subscriberMetadataActions';
+	import { subscriberMetadataDefinitionStore } from '../../../../lib/stores/newsletterStore';
+	import { getI18n } from '../../../../lib/i18n';
 
 	interface Props {
 		show?: boolean;

@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { type Issue } from "../../../../types";
+import { type Issue } from "../../../../../types";
 
 export const draftIssueStore = writable<Issue>({} as Issue);
 export const draftIssueEditingStore = writable<Issue>({} as Issue);

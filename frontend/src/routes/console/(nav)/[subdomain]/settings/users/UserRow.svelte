@@ -10,13 +10,13 @@
 		confirm,
 		toast
 	} from '@hyvor/design/components';
-	import type { User } from '../../../types';
-	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
-	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
-	import { newsletterRoleStore, newsletterStore } from '../../../lib/stores/newsletterStore';
+	import type { User } from '../../../../types';
+	import ProfilePicture from '../../../../@components/utils/ProfilePicture.svelte';
+	import RoleTag from '../../../../@components/Nav/RoleTag.svelte';
+	import { newsletterRoleStore, newsletterStore } from '../../../../lib/stores/newsletterStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import { deleteUser } from '../../../lib/actions/userActions';
-    import {getI18n} from "../../../lib/i18n";
+	import { deleteUser } from '../../../../lib/actions/userActions';
+    import {getI18n} from "../../../../lib/i18n";
 	export let refreshUserDelete: (u: User) => void;
 	export let user: User;
     const I = getI18n();

@@ -9,22 +9,22 @@
         Loader,
         IconMessage
     } from '@hyvor/design/components';
-    import Selector from '../../@components/content/Selector.svelte';
-    import type {List, NewsletterSubscriberStatus, Subscriber} from '../../types';
+    import Selector from '../../../@components/content/Selector.svelte';
+    import type {List, NewsletterSubscriberStatus, Subscriber} from '../../../types';
     import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
     import IconPlus from '@hyvor/icons/IconPlus';
-    import SingleBox from '../../@components/content/SingleBox.svelte';
+    import SingleBox from '../../../@components/content/SingleBox.svelte';
     import AddSubscribers from './AddSubscribers.svelte';
     import SubscriberList from './SubscriberList.svelte';
     import SubscriberBulk from './SubscriberBulk.svelte';
     import SubscriberBulkMetadataModal from './SubscriberBulkMetadataModal.svelte';
     import SubscriberBulkStatusModal from './SubscriberBulkStatusModal.svelte';
-    import {listStore, subscriberStore} from '../../lib/stores/newsletterStore';
+    import {listStore, subscriberStore} from '../../../lib/stores/newsletterStore';
     import {onMount} from 'svelte';
     import IconX from '@hyvor/icons/IconX';
-    import {getI18n} from '../../lib/i18n';
-    import {consoleUrlWithNewsletter} from '../../lib/consoleUrl';
-    import {getSubscribers} from '../../lib/actions/subscriberActions';
+    import {getI18n} from '../../../lib/i18n';
+    import {consoleUrlWithNewsletter} from '../../../lib/consoleUrl';
+    import {getSubscribers} from '../../../lib/actions/subscriberActions';
 
     let status: NewsletterSubscriberStatus | null = $state(null);
     let statusKey = $derived.by(() =>

@@ -1,13 +1,13 @@
 <script lang="ts">
     import {Checkbox, Loader, SplitControl, Validation} from '@hyvor/design/components';
-    import {getI18n} from '../../../../../lib/i18n';
+    import {getI18n} from '../../../../../../lib/i18n';
     import {
         draftErrorsStore,
         draftIssueEditingStore,
         draftSendableSubscribersCountStore
     } from '../draftStore';
     import {debouncedUpdateDraftIssue} from '../draftActions';
-    import {listStore} from '../../../../../lib/stores/newsletterStore';
+    import {listStore} from '../../../../../../lib/stores/newsletterStore';
 
     const I18n = getI18n();
 

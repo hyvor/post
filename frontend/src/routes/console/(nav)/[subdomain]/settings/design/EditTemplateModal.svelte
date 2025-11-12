@@ -4,8 +4,8 @@
 		getTemplate,
 		renderTemplate,
 		updateTemplate
-	} from '../../../../(tools)/design/lib/actions/templateActions';
-	import CodemirrorEditor from '../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
+	} from '../../../../../(tools)/design/lib/actions/templateActions';
+	import CodemirrorEditor from '../../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 

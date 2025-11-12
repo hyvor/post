@@ -12,14 +12,14 @@
     } from '@hyvor/design/components';
     import IconPlus from '@hyvor/icons/IconPlus';
     import IconCopy from '@hyvor/icons/IconCopy';
-    import SingleBox from '../../../@components/content/SingleBox.svelte';
+    import SingleBox from '../../../../@components/content/SingleBox.svelte';
     import CreateApiKeyModal from './ApiKeyModal.svelte';
     import APIKeyList from './APIKeyList.svelte';
-    import type {ApiKey} from '../../../types';
-    import {getApiKeys, deleteApiKey} from '../../../lib/actions/apiKeyActions';
+    import type {ApiKey} from '../../../../types';
+    import {getApiKeys, deleteApiKey} from '../../../../lib/actions/apiKeyActions';
     import {copyAndToast} from "$lib/helpers/copy";
     import {onMount} from 'svelte';
-    import {getI18n} from '../../../lib/i18n';
+    import {getI18n} from '../../../../lib/i18n';
 
     let apiKeys: ApiKey[] = $state([]);
     let loading = $state(true);

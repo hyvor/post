@@ -1,9 +1,9 @@
 <script lang="ts">
     import {IconButton, toast, confirm} from '@hyvor/design/components';
-    import {listStore, newsletterStore} from '../../lib/stores/newsletterStore';
-    import type {List} from '../../types';
+    import {listStore, newsletterStore} from '../../../lib/stores/newsletterStore';
+    import type {List} from '../../../types';
     import IconTrash from '@hyvor/icons/IconTrash';
-    import {deleteList} from '../../lib/actions/listActions';
+    import {deleteList} from '../../../lib/actions/listActions';
     import IconPencil from '@hyvor/icons/IconPencil';
     import ListEditionModal from './ListEditionModal.svelte';
 

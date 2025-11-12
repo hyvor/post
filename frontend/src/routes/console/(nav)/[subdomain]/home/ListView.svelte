@@ -1,8 +1,8 @@
 <script lang="ts">
 	import ListRow from './ListRow.svelte';
 	import CreateListButton from './CreateListButton.svelte';
-	import { listStore } from '../../lib/stores/newsletterStore';
-	import { getI18n } from '../../lib/i18n';
+	import { listStore } from '../../../lib/stores/newsletterStore';
+	import { getI18n } from '../../../lib/i18n';
 	import IconInfoCircle from '@hyvor/icons/IconInfoCircle';
 	import { Tooltip } from '@hyvor/design/components';
 

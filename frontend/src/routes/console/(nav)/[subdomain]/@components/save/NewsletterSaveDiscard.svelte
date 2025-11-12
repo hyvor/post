@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { updateNewsletter } from '../../../lib/actions/newsletterActions';
+	import { updateNewsletter } from '../../../../lib/actions/newsletterActions';
 	import {
 		newsletterEditingStore,
 		newsletterStore,
 		updateNewsletterStore
-	} from '../../../lib/stores/newsletterStore';
-	import type { Newsletter } from '../../../types';
+	} from '../../../../lib/stores/newsletterStore';
+	import type { Newsletter } from '../../../../types';
 	import SaveDiscard from './SaveDiscard.svelte';
 
 	interface Props {

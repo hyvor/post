@@ -1,9 +1,9 @@
 <script lang="ts">
     import {Button, IconButton, Modal, SplitControl, Tag, TextInput, toast} from "@hyvor/design/components";
-    import {getI18n} from "../../../../../lib/i18n";
+    import {getI18n} from "../../../../../../lib/i18n";
     import IconX from "@hyvor/icons/IconX";
     import {onMount} from "svelte";
-    import {getIssueTestData, sendIssueTest} from "../../../../../lib/actions/issueActions";
+    import {getIssueTestData, sendIssueTest} from "../../../../../../lib/actions/issueActions";
     import {draftIssueEditingStore} from "../draftStore";
 
     const I18n = getI18n();

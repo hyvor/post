@@ -1,9 +1,9 @@
 <script lang="ts">
     import {ActionList, ActionListItem, confirm, Dropdown, IconButton, Tag, toast, Tooltip} from '@hyvor/design/components';
-    import type {SendingProfile} from '../../../types';
-    import {getI18n} from '../../../lib/i18n';
-    import {sendingProfilesStore} from '../../../lib/stores/newsletterStore';
-    import {deleteSendingProfile, updateSendingProfile} from '../../../lib/actions/sendingProfileActions';
+    import type {SendingProfile} from '../../../../types';
+    import {getI18n} from '../../../../lib/i18n';
+    import {sendingProfilesStore} from '../../../../lib/stores/newsletterStore';
+    import {deleteSendingProfile, updateSendingProfile} from '../../../../lib/actions/sendingProfileActions';
     import AddEditSendingProfileModal from './AddEditSendingProfileModal.svelte';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 

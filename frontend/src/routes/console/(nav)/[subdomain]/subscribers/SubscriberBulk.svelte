@@ -1,9 +1,9 @@
 <script lang="ts">
     import {Button, Link, Loader, toast, confirm} from '@hyvor/design/components';
-    import {getI18n} from '../../lib/i18n';
-    import {deleteSubscribers} from '../../lib/actions/subscriberActions';
+    import {getI18n} from '../../../lib/i18n';
+    import {deleteSubscribers} from '../../../lib/actions/subscriberActions';
     import {slide} from 'svelte/transition';
-    import {selectedSubscriberIdsStore, subscriberStore} from "../../lib/stores/newsletterStore";
+    import {selectedSubscriberIdsStore, subscriberStore} from "../../../lib/stores/newsletterStore";
 
     const I18n = getI18n();
     const MAX_SELECTABLE_SUBSCRIBERS = 100;

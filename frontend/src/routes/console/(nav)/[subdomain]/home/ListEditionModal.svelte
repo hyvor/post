@@ -7,9 +7,9 @@
 		toast,
 		Validation
 	} from '@hyvor/design/components';
-	import type { List } from '../../types';
-	import { createList, updateList } from '../../lib/actions/listActions';
-	import { listStore } from '../../lib/stores/newsletterStore';
+	import type { List } from '../../../types';
+	import { createList, updateList } from '../../../lib/actions/listActions';
+	import { listStore } from '../../../lib/stores/newsletterStore';
 
 	interface Props {
 		modalOpen: boolean;

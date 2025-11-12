@@ -6,9 +6,9 @@
 		SplitControl,
 		Slider
 	} from '@hyvor/design/components';
-	import { getI18n } from '../../../lib/i18n';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import { getI18n } from '../../../../lib/i18n';
+	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
 	import BorderPicker from './BorderPicker.svelte';
 
 	let { palette }: { palette: 'light' | 'dark' } = $props();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getI18n } from '../../lib/i18n';
+	import { getI18n } from '../../../lib/i18n';
 
 	interface Props {
 		href?: string;

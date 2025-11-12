@@ -1,13 +1,13 @@
 <script lang="ts">
     import {confirm, IconButton, toast} from '@hyvor/design/components';
-    import FriendlyDate from '../../@components/utils/FriendlyDate.svelte';
-    import {consoleUrlWithNewsletter} from '../../lib/consoleUrl';
-    import type {Issue} from '../../types';
+    import FriendlyDate from '../../../@components/utils/FriendlyDate.svelte';
+    import {consoleUrlWithNewsletter} from '../../../lib/consoleUrl';
+    import type {Issue} from '../../../types';
     import IssueStatusTag from './IssueStatusTag.svelte';
     import SentStat from './SentStat.svelte';
     import IconTrash from '@hyvor/icons/IconTrash';
-    import {deleteIssue} from '../../lib/actions/issueActions';
-    import {issueStore} from '../../lib/stores/newsletterStore';
+    import {deleteIssue} from '../../../lib/actions/issueActions';
+    import {issueStore} from '../../../lib/stores/newsletterStore';
 
     interface Props {
         issue: Issue;

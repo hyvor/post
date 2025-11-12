@@ -1,12 +1,12 @@
 <script lang="ts">
     import {Button, Loader, IconMessage, toast, ButtonGroup} from '@hyvor/design/components';
-    import SingleBox from '../../../@components/content/SingleBox.svelte';
+    import SingleBox from '../../../../@components/content/SingleBox.svelte';
     import IconBoxArrowUp from '@hyvor/icons/IconBoxArrowUp';
     import {onMount} from 'svelte';
-    import {createExport, listExports} from '../../../lib/actions/exportActions';
-    import type {Export} from '../../../types';
+    import {createExport, listExports} from '../../../../lib/actions/exportActions';
+    import type {Export} from '../../../../types';
     import ExportStatusBadge from './ExportStatusBadge.svelte';
-    import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
+    import RelativeTime from '../../../../@components/utils/RelativeTime.svelte';
     import SettingsTop from '../../settings/@components/SettingsTop.svelte';
 
     let loading = true;

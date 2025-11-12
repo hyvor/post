@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tag } from '@hyvor/design/components';
-	import type { IssueStatus } from '../../types';
+	import type { IssueStatus } from '../../../types';
 
 	export let status: IssueStatus;
 	export let size: 'small' | 'medium' | 'large' = 'medium';

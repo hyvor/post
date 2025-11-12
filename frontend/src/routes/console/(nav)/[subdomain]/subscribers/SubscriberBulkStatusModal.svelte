@@ -1,9 +1,9 @@
 <script lang="ts">
     import {Button, Modal, toast} from '@hyvor/design/components';
-    import {getI18n} from '../../lib/i18n';
-    import {updateSubscribersStatus} from '../../lib/actions/subscriberActions';
-    import {selectedSubscriberIdsStore} from "../../lib/stores/newsletterStore";
-    import type {NewsletterSubscriberStatus} from '../../types';
+    import {getI18n} from '../../../lib/i18n';
+    import {updateSubscribersStatus} from '../../../lib/actions/subscriberActions';
+    import {selectedSubscriberIdsStore} from "../../../lib/stores/newsletterStore";
+    import type {NewsletterSubscriberStatus} from '../../../types';
 
     interface Props {
         show: boolean;

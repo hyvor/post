@@ -7,9 +7,9 @@
 		Validation,
 		toast
 	} from '@hyvor/design/components';
-	import {listStore, subscriberStore} from '../../lib/stores/newsletterStore';
+	import {listStore, subscriberStore} from '../../../lib/stores/newsletterStore';
 	import ListSelector from './ListSelector.svelte';
-	import { createSubscriber } from '../../lib/actions/subscriberActions';
+	import { createSubscriber } from '../../../lib/actions/subscriberActions';
 
 	export let show = false;
 

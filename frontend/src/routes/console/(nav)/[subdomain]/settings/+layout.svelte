@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { NavLink } from '@hyvor/design/components';
 	import IconBrush from '@hyvor/icons/IconBrush';
-	import { newsletterStore } from '../../lib/stores/newsletterStore';
+	import { newsletterStore } from '../../../lib/stores/newsletterStore';
 	import IconEnvelopeAt from '@hyvor/icons/IconEnvelopeAt';
 	import IconPeople from '@hyvor/icons/IconPeople';
 	import IconCardText from '@hyvor/icons/IconCardText';
@@ -10,7 +10,7 @@
 	import IconDatabase from '@hyvor/icons/IconDatabase';
 	import IconSendArrowUp from '@hyvor/icons/IconSendArrowUp';
 	import IconKey from '@hyvor/icons/IconKey';
-	import { getI18n } from '../../lib/i18n';
+	import { getI18n } from '../../../lib/i18n';
 	import { setContext } from 'svelte';
 	import { saveDiscardBoxClassContextName } from '../@components/save/save';
 

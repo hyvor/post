@@ -10,10 +10,10 @@
         confirm
     } from '@hyvor/design/components';
     import IconArrowCounterclockwise from '@hyvor/icons/IconArrowCounterclockwise';
-    import {createApiKey, regenerateApiKey, updateApiKey} from '../../../lib/actions/apiKeyActions';
-    import type {ApiKey} from '../../../types';
-    import {getAppConfig} from "../../../lib/stores/consoleStore";
-    import {getI18n} from '../../../lib/i18n';
+    import {createApiKey, regenerateApiKey, updateApiKey} from '../../../../lib/actions/apiKeyActions';
+    import type {ApiKey} from '../../../../types';
+    import {getAppConfig} from "../../../../lib/stores/consoleStore";
+    import {getI18n} from '../../../../lib/i18n';
 
     interface Props {
         show: boolean;

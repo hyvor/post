@@ -13,14 +13,14 @@
     import IconInfoCircle from '@hyvor/icons/IconInfoCircle';
     import SettingsBody from '../../settings/@components/SettingsBody.svelte';
     import ImportMapping from './ImportMapping.svelte';
-    import {getImportLimits, getImports, IMPORTS_PER_PAGE, uploadCsv} from '../../../lib/actions/importActions';
+    import {getImportLimits, getImports, IMPORTS_PER_PAGE, uploadCsv} from '../../../../lib/actions/importActions';
     import {onMount} from 'svelte';
-    import type {Import, ImportLimits} from '../../../types';
-    import {getI18n} from '../../../lib/i18n';
+    import type {Import, ImportLimits} from '../../../../types';
+    import {getI18n} from '../../../../lib/i18n';
     import ImportFieldMapModal from './ImportFieldMapModal.svelte';
     import WarningsModal from './WarningsModal.svelte';
     import ImportRow from "./ImportRow.svelte";
-    import {importStore} from '../../../lib/stores/newsletterStore';
+    import {importStore} from '../../../../lib/stores/newsletterStore';
 
     let loading = $state(false);
     let hasMore = $state(false);

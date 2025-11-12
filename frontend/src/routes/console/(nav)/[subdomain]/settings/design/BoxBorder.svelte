@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ColorPicker, Slider } from '@hyvor/design/components';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
 
 	const newsletterDefaults = getAppConfig().newsletter_defaults;
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Issue} from '../../../../types';
+    import type {Issue} from '../../../../../types';
     import {onMount} from 'svelte';
     import {draftStepStore, initDraftStores} from './draftStore';
     import ContentView from './content/ContentView.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
     import {Tag} from '@hyvor/design/components';
-    import type {IssueSend} from '../../../../types';
-    import RelativeTime from '../../../../@components/utils/RelativeTime.svelte';
+    import type {IssueSend} from '../../../../../types';
+    import RelativeTime from '../../../../../@components/utils/RelativeTime.svelte';
     import SendDetailsModal from './SendDetailsModal.svelte';
 
     export let send: IssueSend;

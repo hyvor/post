@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FormControl, SplitControl, TextInput, Validation } from '@hyvor/design/components';
-	import { getI18n } from '../../../../lib/i18n';
+	import { getI18n } from '../../../../../lib/i18n';
 	import { draftErrorsStore, draftIssueEditingStore } from './draftStore';
 	import { debouncedUpdateDraftIssue } from './draftActions';
 	import { onMount } from 'svelte';

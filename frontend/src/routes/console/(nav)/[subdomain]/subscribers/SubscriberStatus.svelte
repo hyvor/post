@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tag } from '@hyvor/design/components';
-	import type { NewsletterSubscriberStatus } from '../../types';
+	import type { NewsletterSubscriberStatus } from '../../../types';
 
 	export let status: NewsletterSubscriberStatus;
 

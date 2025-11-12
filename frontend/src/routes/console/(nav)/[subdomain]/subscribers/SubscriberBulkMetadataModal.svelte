@@ -1,8 +1,8 @@
 <script lang="ts">
     import {FormControl, Modal, SplitControl, TextInput, toast} from '@hyvor/design/components';
-    import {selectedSubscriberIdsStore, subscriberMetadataDefinitionStore} from '../../lib/stores/newsletterStore';
-    import {updateSubscribersMetadata} from '../../lib/actions/subscriberActions';
-    import {getI18n} from '../../lib/i18n';
+    import {selectedSubscriberIdsStore, subscriberMetadataDefinitionStore} from '../../../lib/stores/newsletterStore';
+    import {updateSubscribersMetadata} from '../../../lib/actions/subscriberActions';
+    import {getI18n} from '../../../lib/i18n';
 
     interface Props {
         show: boolean;

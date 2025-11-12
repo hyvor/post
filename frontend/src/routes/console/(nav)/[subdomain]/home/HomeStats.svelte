@@ -1,8 +1,8 @@
 <script lang="ts">
     import {Loader} from '@hyvor/design/components';
     import Stat from './Stat.svelte';
-    import {newsletterStatsStore, newsletterStore} from '../../lib/stores/newsletterStore';
-    import {getI18n} from '../../lib/i18n';
+    import {newsletterStatsStore, newsletterStore} from '../../../lib/stores/newsletterStore';
+    import {getI18n} from '../../../lib/i18n';
 
     const I18n = getI18n();
 

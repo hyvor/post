@@ -2,9 +2,9 @@
     import { Editor } from '@hyvor/richtext';
     import {draftIssueEditingStore} from '../draftStore';
     import {debouncedUpdateDraftIssue} from '../draftActions';
-    import {getI18n} from '../../../../../lib/i18n';
-	import { newsletterStore } from '../../../../../lib/stores/newsletterStore';
-	import { uploadImage } from '../../../../../lib/actions/mediaActions';
+    import {getI18n} from '../../../../../../lib/i18n';
+	import { newsletterStore } from '../../../../../../lib/stores/newsletterStore';
+	import { uploadImage } from '../../../../../../lib/actions/mediaActions';
 
     function onContentDocUpdate(doc: string) {
         $draftIssueEditingStore.content = doc;

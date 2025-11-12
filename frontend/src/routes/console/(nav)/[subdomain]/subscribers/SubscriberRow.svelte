@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { Checkbox, IconButton, Tooltip, confirm, toast } from '@hyvor/design/components';
-	import type { Subscriber } from '../../types';
+	import type { Subscriber } from '../../../types';
 	import IconPencil from '@hyvor/icons/IconPencil';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import RelativeTime from '../../@components/utils/RelativeTime.svelte';
+	import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
 	import SubscriberStatus from './SubscriberStatus.svelte';
-	import { listStore } from '../../lib/stores/newsletterStore';
-	import { deleteSubscriber } from '../../lib/actions/subscriberActions';
+	import { listStore } from '../../../lib/stores/newsletterStore';
+	import { deleteSubscriber } from '../../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
-	import { getI18n } from '../../lib/i18n';
-	import {selectedSubscriberIdsStore} from "../../lib/stores/newsletterStore";
+	import { getI18n } from '../../../lib/i18n';
+	import {selectedSubscriberIdsStore} from "../../../lib/stores/newsletterStore";
 
 	interface Props {
 		subscriber: Subscriber;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Checkbox, Validation } from '@hyvor/design/components';
 	import { onMount } from 'svelte';
-	import { listStore } from '../../lib/stores/newsletterStore';
+	import { listStore } from '../../../lib/stores/newsletterStore';
 
 	export let selectedList = [] as number[];
 

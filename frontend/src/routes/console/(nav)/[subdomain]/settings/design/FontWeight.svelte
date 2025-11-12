@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ActionList, ActionListItem, Button, Dropdown } from '@hyvor/design/components';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
+	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 
 	interface Props {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Slider } from '@hyvor/design/components';
-	import { getAppConfig } from '../../../lib/stores/consoleStore';
-	import { newsletterEditingStore } from '../../../lib/stores/newsletterStore';
+	import { getAppConfig } from '../../../../lib/stores/consoleStore';
+	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
 
 	const newsletterDefaults = getAppConfig().newsletter_defaults;
 	const startValue = parseInt(

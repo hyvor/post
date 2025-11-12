@@ -2,9 +2,9 @@
     import {IconButton, Tag, Tooltip} from '@hyvor/design/components';
     import IconTrash from '@hyvor/icons/IconTrash';
     import IconPencil from '@hyvor/icons/IconPencil';
-    import RelativeTime from '../../../@components/utils/RelativeTime.svelte';
-    import type {ApiKey} from '../../../types';
-    import {getI18n} from '../../../lib/i18n';
+    import RelativeTime from '../../../../@components/utils/RelativeTime.svelte';
+    import type {ApiKey} from '../../../../types';
+    import {getI18n} from '../../../../lib/i18n';
 
     interface Props {
         apiKey: ApiKey;

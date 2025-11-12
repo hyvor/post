@@ -3,9 +3,9 @@
 	import SettingsBody from '../@components/SettingsBody.svelte';
 	import SettingsTop from '../@components/SettingsTop.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { sendingProfilesStore } from '../../../lib/stores/newsletterStore';
+	import { sendingProfilesStore } from '../../../../lib/stores/newsletterStore.ts';
 	import SendingProfileRow from './SendingProfileRow.svelte';
-	import { getI18n } from '../../../lib/i18n';
+	import { getI18n } from '../../../../lib/i18n.ts';
 	import AddEditSendingProfileModal from './AddEditSendingProfileModal.svelte';
 
 	let creating = $state(false);

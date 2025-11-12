@@ -10,9 +10,9 @@
         toast
     } from '@hyvor/design/components';
     import {fade} from 'svelte/transition';
-    import {previewIssue} from '../../../../lib/actions/issueActions';
+    import {previewIssue} from '../../../../../lib/actions/issueActions';
     import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
-    import {consoleUrlWithNewsletter} from '../../../../lib/consoleUrl';
+    import {consoleUrlWithNewsletter} from '../../../../../lib/consoleUrl';
     import {
         draftIssueEditingStore,
         draftPreviewKey,

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Nav from '../@components/Nav/Nav.svelte';
+    import Nav from '../../@components/Nav/Nav.svelte';
     import {page} from '$app/state';
-    import {loadNewsletter} from '../lib/newsletterLoader';
+    import {loadNewsletter} from '../../lib/newsletterLoader';
     import {Loader, toast} from '@hyvor/design/components';
-    import NewsletterSelector from '../@components/Nav/NewsletterSelector.svelte';
-    import {userNewslettersStore} from '../lib/stores/userNewslettersStore';
-    import {newsletterStore} from '../lib/stores/newsletterStore';
+    import NewsletterSelector from '../../@components/Nav/NewsletterSelector.svelte';
+    import {userNewslettersStore} from '../../lib/stores/userNewslettersStore';
+    import {newsletterStore} from '../../lib/stores/newsletterStore';
 
     interface Props {
         children?: import('svelte').Snippet;

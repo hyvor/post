@@ -2,12 +2,12 @@
 	import { Button, Tag } from '@hyvor/design/components';
 	import { IconButton } from '@hyvor/design/components';
 	import { toast, confirm } from '@hyvor/design/components';
-	import type { Invite } from '../../../types';
-	import ProfilePicture from '../../../@components/utils/ProfilePicture.svelte';
-	import RoleTag from '../../../@components/Nav/RoleTag.svelte';
+	import type { Invite } from '../../../../types';
+	import ProfilePicture from '../../../../@components/utils/ProfilePicture.svelte';
+	import RoleTag from '../../../../@components/Nav/RoleTag.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
-	import { deleteInvite, inviteUser } from '../../../lib/actions/userActions';
-    import {getI18n} from "../../../lib/i18n";
+	import { deleteInvite, inviteUser } from '../../../../lib/actions/userActions';
+    import {getI18n} from "../../../../lib/i18n";
 
     const I = getI18n();
 	export let invite: Invite;

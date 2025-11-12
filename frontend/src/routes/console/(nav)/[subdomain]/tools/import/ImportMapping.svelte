@@ -9,9 +9,9 @@
         toast
     } from '@hyvor/design/components';
     import IconX from '@hyvor/icons/IconX';
-    import {importStore, subscriberMetadataDefinitionStore} from "../../../lib/stores/newsletterStore";
-    import Selector from "../../../@components/content/Selector.svelte";
-    import {subscriberImport} from "../../../lib/actions/importActions";
+    import {importStore, subscriberMetadataDefinitionStore} from "../../../../lib/stores/newsletterStore";
+    import Selector from "../../../../@components/content/Selector.svelte";
+    import {subscriberImport} from "../../../../lib/actions/importActions";
 
     interface Props {
         show: boolean;

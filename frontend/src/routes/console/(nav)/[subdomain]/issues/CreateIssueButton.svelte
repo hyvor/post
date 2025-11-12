@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button, Loader, toast } from '@hyvor/design/components';
 	import { goto } from '$app/navigation';
-	import { issueStore } from '../../lib/stores/newsletterStore';
-	import { createIssueDraft } from '../../lib/actions/issueActions';
-	import { consoleUrlWithNewsletter } from '../../lib/consoleUrl';
+	import { issueStore } from '../../../lib/stores/newsletterStore';
+	import { createIssueDraft } from '../../../lib/actions/issueActions';
+	import { consoleUrlWithNewsletter } from '../../../lib/consoleUrl';
 	import type { Component } from 'svelte';
 
 	interface Props {

@@ -1,17 +1,17 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import type {Issue} from '../../../../types';
-    import {getIssueReport, type IssueCounts} from '../../../../lib/actions/issueActions';
+    import type {Issue} from '../../../../../types';
+    import {getIssueReport, type IssueCounts} from '../../../../../lib/actions/issueActions';
     import {Callout, IconButton, Loader, TextInput, toast, Tooltip} from '@hyvor/design/components';
     import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
     import IconCopy from '@hyvor/icons/IconCopy';
     import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
     import Sends from './Sends.svelte';
     import SentStat from './SentStat.svelte';
-    import FriendlyDate from '../../../../@components/utils/FriendlyDate.svelte';
+    import FriendlyDate from '../../../../../@components/utils/FriendlyDate.svelte';
     import {copyAndToast} from '$lib/helpers/copy';
-    import {getNewsletterArchiveUrlFromSubdomain} from '../../../../lib/archive';
-    import {newsletterStore} from '../../../../lib/stores/newsletterStore';
+    import {getNewsletterArchiveUrlFromSubdomain} from '../../../../../lib/archive';
+    import {newsletterStore} from '../../../../../lib/stores/newsletterStore';
 
     export let issue: Issue;
 
