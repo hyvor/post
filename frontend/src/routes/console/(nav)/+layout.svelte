@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Nav from '../@components/Nav/Nav.svelte';
+	import NewsletterSelector from '../@components/Nav/NewsletterSelector.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -10,6 +11,7 @@
 
 <div class="main-inner">
 	<Nav />
+	<NewsletterSelector />
 	<div class="content">
 		{@render children?.()}
 	</div>
