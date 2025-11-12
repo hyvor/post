@@ -7,9 +7,9 @@
 		Validation,
 		toast
 	} from '@hyvor/design/components';
-	import { createDomain } from '../lib/actions/domainActions';
+	import { createDomain } from '../../lib/actions/domainActions';
 	import DnsRecordsModal from './DnsRecordsModal.svelte';
-	import type { Domain } from '../types';
+	import type { Domain } from '../../types';
 	import { onMount } from 'svelte';
 
 	interface Props {

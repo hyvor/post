@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	import SingleBox from '../@components/content/SingleBox.svelte';
+	import SingleBox from '../../@components/content/SingleBox.svelte';
 	import CreateDomainModal from './CreateDomainModal.svelte';
 	import DomainList from './DomainList.svelte';
-	import { getI18n } from '../lib/i18n';
+	import { getI18n } from '../../lib/i18n';
 	import IconPlus from '@hyvor/icons/IconPlus';
 
 	let showCreateModal = $state(false);

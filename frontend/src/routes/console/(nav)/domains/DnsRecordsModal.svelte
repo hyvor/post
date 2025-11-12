@@ -1,6 +1,6 @@
 <script lang="ts">
     import {Button, Modal, SplitControl, Table, TableRow} from '@hyvor/design/components';
-    import type {Domain} from '../types';
+    import type {Domain} from '../../types';
     import {copyAndToast} from '$lib/helpers/copy';
 
     export let domain: Domain;

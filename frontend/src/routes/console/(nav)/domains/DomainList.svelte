@@ -1,10 +1,10 @@
 <script lang="ts">
     import {onMount, onDestroy} from 'svelte';
     import DomainRow from './DomainRow.svelte';
-    import {getDomains} from '../lib/actions/domainActions';
-    import type {Domain} from '../types';
+    import {getDomains} from '../../lib/actions/domainActions';
+    import type {Domain} from '../../types';
     import {IconMessage, Loader} from '@hyvor/design/components';
-    import {getI18n} from '../lib/i18n';
+    import {getI18n} from '../../lib/i18n';
     import IconDatabase from '@hyvor/icons/IconDatabase';
 
     let domains: Domain[] = $state([]);

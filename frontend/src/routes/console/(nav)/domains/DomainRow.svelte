@@ -9,12 +9,12 @@
 		confirm,
 		toast
 	} from '@hyvor/design/components';
-	import { deleteDomain, verifyDomain } from '../lib/actions/domainActions';
-	import type { Domain } from '../types';
+	import { deleteDomain, verifyDomain } from '../../lib/actions/domainActions';
+	import type { Domain } from '../../types';
 	import DnsRecordsModal from './DnsRecordsModal.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import DomainStatusTag from './DomainStatusTag.svelte';
-	import RelativeTime from '../@components/utils/RelativeTime.svelte';
+	import RelativeTime from '../../@components/utils/RelativeTime.svelte';
 
 	export let domain: Domain;
 	export let onDelete: () => void;

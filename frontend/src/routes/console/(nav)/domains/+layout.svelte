@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Nav from '../@components/Nav/Nav.svelte';
+	import Nav from '../../@components/Nav/Nav.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
