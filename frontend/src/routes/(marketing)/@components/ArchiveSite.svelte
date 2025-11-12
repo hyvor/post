@@ -14,7 +14,7 @@
 			</div>
 
 			<div class="another-browser">
-				<BrowserWindow image={emailImg} link="pensee.com/fr" />
+				<BrowserWindow image={emailImg} link="weekly-digest.hyvorpost.email/issue/1" />
 			</div>
 		</div>
 

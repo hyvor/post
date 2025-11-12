@@ -137,14 +137,13 @@
 		margin: 20px auto;
 		background: white;
 		border-radius: 20px;
-		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-		border: 1px solid #e1e5e9;
+		box-shadow: var(--box-shadow);
 		overflow: hidden;
 		transition: all 0.3s ease;
 	}
 
 	.email-container:hover {
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+		box-shadow: var(--box-shadow);
 	}
 
 	.email-container.unread {
@@ -164,7 +163,7 @@
 	}
 
 	.email-header:hover {
-		background-color: #f8f9fa;
+		background-color: var(--accent-lightest);
 	}
 
 	.email-container.expanded .email-header {
