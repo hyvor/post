@@ -2,12 +2,6 @@
 	import { Header } from '@hyvor/design/marketing';
 	import { Button } from '@hyvor/design/components';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
-	import { getMarketingI18n } from './locale';
-
-	let loggedIn = $state(false);
-
-	const I18n = getMarketingI18n();
 </script>
 
 <Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
@@ -19,7 +13,7 @@
 				href={`/pricing`}
 				variant={$page.url.pathname === `/pricing` ? 'fill-light' : 'invisible'}
 			>
-				{I18n.t('pricing.name')}
+				Pricing
 			</Button>
 			<Button
 				as="a"
