@@ -5,9 +5,7 @@
         ActionList,
         ActionListItem,
         TextInput,
-        IconButton,
-        Loader,
-        IconMessage
+        IconButton
     } from '@hyvor/design/components';
     import Selector from '../../../@components/content/Selector.svelte';
     import type {List, NewsletterSubscriberStatus, Subscriber} from '../../../types';

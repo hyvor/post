@@ -2,7 +2,7 @@
 	import { Modal, SplitControl, TextInput, toast } from '@hyvor/design/components';
 	import type { SendingProfile } from '../../../../types';
 	import { getI18n } from '../../../../lib/i18n';
-	import { createSendingProfile, updateSendingProfile, type createSendingProfileParams } from '../../../../lib/actions/sendingProfileActions';
+	import { createSendingProfile, updateSendingProfile } from '../../../../lib/actions/sendingProfileActions';
 	import { sendingProfilesStore } from '../../../../lib/stores/newsletterStore';
 	import ImageUploader from '../../../../@components/utils/ImageUploader.svelte';
 
