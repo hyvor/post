@@ -23,13 +23,13 @@ COPY shared /app/shared
 
 ###################################################
 FROM frontend-base AS frontend-dev
-RUN npm install --ignore-scripts
+RUN npm install
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM frontend-base AS frontend-prod
 # build the frontend
-RUN  npm install --ignore-scripts \
+RUN  npm install \
     && npm run build \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
 
