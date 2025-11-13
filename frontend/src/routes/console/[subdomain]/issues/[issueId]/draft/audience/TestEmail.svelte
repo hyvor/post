@@ -101,18 +101,18 @@
 <div class="wrap">
     {I18n.t('console.issues.draft.testEmail.description')}
     <Button
-        color="input"
-        onclick={() => (showTestEmailModal = true)}
+            color="input"
+            onclick={() => (showTestEmailModal = true)}
     >
         {I18n.t('console.issues.draft.testEmail.title')}
     </Button>
 </div>
 
 <Modal
-    bind:show={showTestEmailModal}
-    loading={isLoading}
-    title={I18n.t('console.issues.draft.testEmail.title')}
-    footer={{
+        bind:show={showTestEmailModal}
+        loading={isLoading}
+        title={I18n.t('console.issues.draft.testEmail.title')}
+        footer={{
         confirm: {
             text: I18n.t('console.issues.draft.testEmail.title'),
             props: {
@@ -120,27 +120,27 @@
             }
         }
     }}
-    on:confirm={handleConfirm}
-    closeOnOutsideClick={false}
-    closeOnEscape={false}
+        on:confirm={handleConfirm}
+        closeOnOutsideClick={false}
+        closeOnEscape={false}
 >
     <SplitControl label={I18n.t('console.issues.draft.testEmail.modal.to')}>
         <div class="new-email-wrap">
             <TextInput
-                bind:value={newEmail}
-                placeholder={I18n.t('console.issues.draft.testEmail.modal.toPlaceholder')}
-                on:keydown={newEmailActions.onKeydown}
-                type="email"
-                size="small"
-                block
+                    bind:value={newEmail}
+                    placeholder={I18n.t('console.issues.draft.testEmail.modal.toPlaceholder')}
+                    on:keydown={newEmailActions.onKeydown}
+                    type="email"
+                    size="small"
+                    block
             >
                 {#snippet end()}
                     {#if newEmail.trim() !== ''}
                         <IconButton
-                            variant="invisible"
-                            color="gray"
-                            size={16}
-                            on:click={newEmailActions.onClear}
+                                variant="invisible"
+                                color="gray"
+                                size={16}
+                                on:click={newEmailActions.onClear}
                         >
                             <IconX size={12}/>
                         </IconButton>
@@ -159,10 +159,10 @@
                     {selectedEmail}
                     {#snippet end()}
                         <IconButton
-                            variant="fill"
-                            color="gray"
-                            size={12}
-                            onclick={() => deselectEmail(selectedEmail)}
+                                variant="fill"
+                                color="gray"
+                                size={12}
+                                onclick={() => deselectEmail(selectedEmail)}
                         >
                             <IconX size={10}/>
                         </IconButton>
@@ -174,8 +174,8 @@
     </SplitControl>
 
     <SplitControl
-        label={I18n.t('console.issues.draft.testEmail.modal.suggested')}
-        caption={I18n.t('console.issues.draft.testEmail.modal.suggestedCaption')}
+            label={I18n.t('console.issues.draft.testEmail.modal.suggested')}
+            caption={I18n.t('console.issues.draft.testEmail.modal.suggestedCaption')}
     >
         <div class="suggested-emails">
             {#if suggestedEmails.every(email => selectedEmails.includes(email))}
@@ -184,10 +184,10 @@
                 {#each suggestedEmails as suggestedEmail (suggestedEmail)}
                     {#if !selectedEmails.includes(suggestedEmail)}
                         <Button
-                            size="x-small"
-                            variant="outline-fill"
-                            color="input"
-                            onclick={() => selectEmail(suggestedEmail)}
+                                size="x-small"
+                                variant="outline-fill"
+                                color="input"
+                                onclick={() => selectEmail(suggestedEmail)}
                         >
                             {suggestedEmail}
                         </Button>
@@ -205,7 +205,6 @@
         padding: 15px 30px;
         display: flex;
         gap: 10px;
-        align-items: center;
     }
 
     .new-email-wrap {

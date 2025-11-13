@@ -119,21 +119,13 @@
     </div>
     <div class="right">
         {#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
-            <Tooltip
-                    text={$userApprovalStatusStore !== 'approved'
-                        ? I18n.t('console.issues.draft.approveBeforeSending')
-                        : I18n.t('console.issues.draft.subscriptionBeforeSending')
-                    }
-                    disabled={$userApprovalStatusStore === 'approved' && $newsletterLicenseStore}
-            >
-                <Button onclick={handleSend}
-                        disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
-                    Send Issue
-                    {#snippet end()}
-                        <IconSend size={14}/>
-                    {/snippet}
-                </Button>
-            </Tooltip>
+            <Button onclick={handleSend}
+                    disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
+                Send Issue
+                {#snippet end()}
+                    <IconSend size={14}/>
+                {/snippet}
+            </Button>
         {:else}
             <Button onclick={handleNext}>
                 Next
