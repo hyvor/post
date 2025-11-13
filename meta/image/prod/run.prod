@@ -1,7 +1,14 @@
 #!/bin/sh
 
-# Dynamically export ARCHIVE_HOST
+# Extract archive host from URL_ARCHIVE
 ARCHIVE_HOST=$(echo "$URL_ARCHIVE" | sed -E 's#https?://##' | sed 's#/##g')
 export ARCHIVE_HOST
+
+# Caddy manual TLS configuration
+if [ -f /app/certs/cert.pem ] && [ -f /app/certs/key.pem ]; then
+  export USE_MANUAL_TLS=true
+else
+  export USE_MANUAL_TLS=false
+fi
 
 /usr/bin/supervisord
