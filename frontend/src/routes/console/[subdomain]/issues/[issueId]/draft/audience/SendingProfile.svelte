@@ -1,6 +1,6 @@
 <script>
-    import {Radio, SplitControl, Tooltip} from '@hyvor/design/components';
-    import {sendingProfilesStore} from '../../../../../lib/stores/newsletterStore';
+    import {Radio, SplitControl, Tooltip, Button} from '@hyvor/design/components';
+    import {newsletterStore, sendingProfilesStore} from '../../../../../lib/stores/newsletterStore';
     import {Tag} from "@hyvor/design/components";
     import {draftIssueEditingStore, draftIssueStore} from "../draftStore.js";
     import {debouncedUpdateDraftIssue} from "../draftActions.js";
@@ -75,6 +75,11 @@
             </Radio>
         </div>
     {/each}
+    <div class="new-profile-button">
+        <Button size="small" as="a" href="/console/{$newsletterStore.subdomain}/settings/sending-profiles">
+            {I18n.t('console.issues.draft.sendingProfile.configure')}
+        </Button>
+    </div>
 </SplitControl>
 
 <style>
@@ -133,5 +138,9 @@
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .new-profile-button {
+        margin-top: 12px;
     }
 </style>
