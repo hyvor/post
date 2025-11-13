@@ -1,14 +1,14 @@
 <script>
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { issueStore } from '../../../lib/stores/newsletterStore.ts';
+	import { issueStore } from '../../../lib/stores/newsletterStore.js';
 	import CreateIssueButton from './CreateIssueButton.svelte';
 	import SingleBox from '../../../@components/content/SingleBox.svelte';
 	import IssueRow from './IssueRow.svelte';
 	import { onMount } from 'svelte';
-	import { getIssues } from '../../../lib/actions/issueActions.ts';
+	import { getIssues } from '../../../lib/actions/issueActions.js';
 	import { LoadButton, Loader } from '@hyvor/design/components';
-	import { getI18n } from '../../../lib/i18n.ts';
+	import { getI18n } from '../../../lib/i18n.js';
 
 	let loading = $state(true);
 	let hasMore = $state(true);
