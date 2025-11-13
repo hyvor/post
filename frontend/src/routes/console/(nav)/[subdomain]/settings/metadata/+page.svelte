@@ -2,10 +2,10 @@
 	import { Button, IconMessage, Table, TableRow } from '@hyvor/design/components';
 	import TopBar from '../../../../@components/content/TopBar.svelte';
 	import IconPlus from '@hyvor/icons/IconPlus';
-	import { subscriberMetadataDefinitionStore } from '../../../../lib/stores/newsletterStore.ts';
+	import { subscriberMetadataDefinitionStore } from '../../../../lib/stores/newsletterStore.js';
 	import SettingsBody from '../@components/SettingsBody.svelte';
 	import MetadataRow from './MetadataRow.svelte';
-	import { getI18n } from '../../../../lib/i18n.ts';
+	import { getI18n } from '../../../../lib/i18n.js';
 	import AddUpdateModal from './MetadataAddUpdateModal.svelte';
 
 	const I18n = getI18n();
