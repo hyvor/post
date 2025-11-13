@@ -24,6 +24,7 @@ export const subscriberStore = writable<Subscriber[]>([]);
 export const selectedSubscriberIdsStore = writable<number[]>([]);
 export const subscriberMetadataDefinitionStore = writable<SubscriberMetadataDefinition[]>();
 export const issueStore = writable<Issue[]>([]);
+export const currentIssueStore = writable<Issue>();
 export const sendingProfilesStore = writable<SendingProfile[]>([]);
 export const importStore = writable<Import[]>([]);
 

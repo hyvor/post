@@ -102,8 +102,6 @@ export interface IssueCounts {
     sent: number;
     failed: number;
     pending: number;
-    opened: number;
-    clicked: number;
     unsubscribed: number;
     bounced: number;
     complained: number;

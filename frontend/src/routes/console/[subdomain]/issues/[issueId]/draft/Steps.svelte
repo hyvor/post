@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Button, Tooltip, confirm, toast, Modal} from '@hyvor/design/components';
+    import {Button, confirm, toast, Modal} from '@hyvor/design/components';
     import Step from './Step.svelte';
     import IconArrowRightShort from '@hyvor/icons/IconArrowRightShort';
     import IconArrowLeftShort from '@hyvor/icons/IconArrowLeftShort';
@@ -11,6 +11,12 @@
     import {draftIssueEditingStore, draftStepStore} from './draftStore';
     import {sendIssue} from "../../../../lib/actions/issueActions";
     import {newsletterLicenseStore} from "../../../../lib/stores/newsletterStore";
+
+    interface Props {
+        onStatusChange: () => void;
+    }
+
+    let {onStatusChange}: Props = $props();
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();
@@ -87,6 +93,7 @@
             sendIssue($draftIssueEditingStore.id)
                 .then(() => {
                     toast.success(I18n.t('console.issues.draft.sendIssue.success'));
+                    onStatusChange();
                 })
                 .catch((e) => {
                     if (e.message.includes('would_exceed_limit')) {
