@@ -133,11 +133,12 @@
             bind:show={showApiKeyModal}
             size="medium"
             footer={{
-			cancel: {
-				text: I18n.t('console.common.close')
-			},
-			confirm: false
-		}}
+                cancel: {
+                    text: I18n.t('console.common.close')
+                },
+                confirm: false
+            }}
+            closeOnOutsideClick={false}
     >
         <div class="modal-content">
             <div class="warning-box">
