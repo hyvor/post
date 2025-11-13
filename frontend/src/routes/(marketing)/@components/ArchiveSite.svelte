@@ -2,19 +2,19 @@
 	import archiveImg from '../img/archive.png';
 	import emailImg from '../img/email.png';
 	import BrowserWindow from './BrowserWindow.svelte';
-	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
 </script>
 
 <div class="archive-site">
-	<div class="wrap">
+	<div class="wrap hds-container-max">
 		<div class="left">
 			<div class="main-browser">
 				<BrowserWindow image={archiveImg} link="post.hyvor.com/archive" />
 			</div>
 
 			<div class="another-browser">
-				<BrowserWindow image={emailImg} link="pensee.com/fr" />
+				<BrowserWindow image={emailImg} link="weekly-digest.hyvorpost.email/issue/1" />
 			</div>
 		</div>
 
@@ -23,14 +23,26 @@
 			<h2>This site is for all the emails sent through Hyvor Post.</h2>
 
 			<div class="bento-grid">
-				<div class="int">
-					<IconBullseye class="int-icon" size={30} />
-					<div class="seo-feature-name">Customizable</div>
+				<div class="item">
+					<div class="int">
+						<IconPencilSquare class="int-icon" size={28} />
+						<div class="seo-feature-name">Customizable</div>
+					</div>
+					<div class="seo-feature-description">
+						Design your archive site to match your brand's look and feel with
+						customizable templates.
+					</div>
 				</div>
 
-				<div class="int">
-					<IconLink class="int-icon" size={30} />
-					<div class="seo-feature-name">Free subdomain</div>
+				<div class="item">
+					<div class="int">
+						<IconLink class="int-icon" size={28} />
+						<div class="seo-feature-name">Free subdomain</div>
+					</div>
+					<div class="seo-feature-description">
+						Get a free subdomain (e.g., yourname.hyvorpost.email/archive) to host your
+						archive site without needing your own domain.
+					</div>
 				</div>
 			</div>
 		</div>
@@ -159,15 +171,13 @@
 
 <style>
 	.archive-site {
-		padding: 60px 0;
+		padding-top: 80px;
+		padding-bottom: 80px;
 		background-color: var(--accent-light);
 	}
 
 	.wrap {
 		display: flex;
-		width: var(--width);
-		max-width: var(--max-width);
-		/* margin: auto 55px; */
 		text-align: right;
 		justify-content: center;
 		gap: 40px;
@@ -193,13 +203,14 @@
 		flex: 1;
 		padding-right: 25px;
 		position: relative;
+		/* padding: 60px 0; */
 	}
 
 	.main-browser {
 		width: 150%;
 		max-width: none;
 		margin-left: -50%;
-		padding: 70px;
+		/* padding: 70px; */
 		border-radius: 20px;
 		opacity: 0.9;
 		animation:
@@ -225,25 +236,46 @@
 	}
 
 	.bento-grid {
-		display: grid;
-		grid-template-rows: 1fr 1fr;
-		gap: 20px 40px;
+		gap: 25px;
 		margin-top: 40px;
+		display: grid;
+		grid-template-columns: 1fr; /* only one column */
+	}
+
+	.item {
+		background: #ffffff;
+		border-radius: 20px;
+		padding: 25px 30px;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+
+	.item:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 6px 16px var(--box-shadow);
 	}
 
 	.int {
 		display: flex;
 		align-items: center;
-		gap: 15px;
-		font-size: 20px;
+		gap: 12px;
+		margin-bottom: 10px;
 		color: var(--text);
 		justify-content: flex-end;
 	}
 
 	.seo-feature-name {
+		font-weight: 600;
+		font-size: 20px;
 		color: var(--text);
 	}
 
+	.seo-feature-description {
+		font-size: 18px;
+		line-height: 1.6;
+		color: var(--gray-dark);
+	}
 	@keyframes heroEnter {
 		0% {
 			transform: translateX(30px);

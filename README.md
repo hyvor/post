@@ -48,7 +48,7 @@ While Hyvor Post is open-source, it is not yet ready for self-hosting. There are
 ## Community
 
 - [HYVOR Community](https://hyvor.com/community)
-- [Discord](https://hyvor.com/discord)
+- [Discord](https://hyvor.com/go/discord)
 
 ## Contributing
 

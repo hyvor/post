@@ -1,66 +1,68 @@
 <script>
-    import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
-    import {getMarketingI18n} from '../locale';
-    import TrialLink from './TrialLink.svelte';
+	import IconCheckCircleFill from '@hyvor/icons/IconCheckCircleFill';
+	import { getMarketingI18n } from '../locale';
+	import TrialLink from './TrialLink.svelte';
 
-    const I18n = getMarketingI18n();
+	const I18n = getMarketingI18n();
 </script>
 
 <div class="checks" {...$$restProps}>
-    <div class="check">
-        <IconCheckCircleFill/>
-        <div>
-            <I18n.T
-                    key="homepage.14DayFreeTrial"
-                    params={{
+	<div class="check">
+		<IconCheckCircleFill />
+		<div>
+			<I18n.T
+				key="homepage.14DayFreeTrial"
+				params={{
 					trial: { component: TrialLink }
 				}}
-            />
-        </div>
-    </div>
+			/>
+		</div>
+	</div>
 
-    <div class="check">
-        <IconCheckCircleFill/>
-        {I18n.t('homepage.noCreditCardRequired')}
-    </div>
+	<div class="check">
+		<IconCheckCircleFill />
+		{I18n.t('homepage.noCreditCardRequired')}
+	</div>
 
-    <div class="check">
-        <IconCheckCircleFill/>
-        {I18n.t('homepage.cancelAnytime')}
-    </div>
+	<div class="check">
+		<IconCheckCircleFill />
+		{I18n.t('homepage.cancelAnytime')}
+	</div>
 </div>
 
 <style>
-    .checks {
+	/* .checks {
         display: flex;
         gap: 20px;
         justify-content: space-between;
         width: 700px;
         max-width: 100%;
         margin: auto;
-    }
+    } */
 
-    .check {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 6px;
-    }
+	.check {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-bottom: 6px;
+	}
 
-    .check :global(svg) {
-        color: var(--accent);
-    }
+	.check :global(svg) {
+		color: var(--text-light);
+	}
 
-    @media (max-width: 992px) {
-        .checks {
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            width: auto;
-        }
+	@media (max-width: 992px) {
+		.checks {
+			justify-content: center;
+			flex-direction: column;
+			align-items: center;
+			/* width: auto; */
+		}
 
-        .check {
-            width: auto;
-        }
-    }
+		.check {
+			/* width: auto; */
+			width: 250px;
+			max-width: 100%;
+		}
+	}
 </style>

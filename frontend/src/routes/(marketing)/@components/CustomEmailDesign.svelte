@@ -1,32 +1,49 @@
 <script lang="ts">
 	import BrowserWindow from './BrowserWindow.svelte';
-	import customEmailImg from '../img/custom-email.jpeg';
-	import customEmailImg1 from '../img/custom-email1.jpeg';
-	import IconBullseye from '@hyvor/icons/IconBullseye';
+	import customEmailImg from '../img/custom-email.png';
+	import customEmailImg1 from '../img/custom-email1.png';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
+	import IconFileText from '@hyvor/icons/IconFileText';
 </script>
 
-<div class="custom-email-design">
+<div class="custom-email-design hds-container-max">
 	<div class="left">
 		<h1>Custom Email Design</h1>
 
 		<h2>Choose from a variety of templates and customize them to match your brand</h2>
 
 		<div class="bento-grid">
-			<div class="int">
-				<IconBullseye class="int-icon" size={30} />
-				<div class="seo-feature-name">Customizable Email Templates</div>
+			<div class="item">
+				<div class="int">
+					<IconPencilSquare class="int-icon" size={23} />
+					<div class="seo-feature-name">Customizable Email Templates</div>
+				</div>
+				<div class="seo-feature-description">
+					Choose from a variety of professionally designed email templates that can be
+					easily customized to match your brand's look and feel.
+				</div>
 			</div>
 
-			<div class="int">
-				<IconLink class="int-icon" size={30} />
-				<div class="seo-feature-name">Free subdomain</div>
+			<div class="item">
+				<div class="int">
+					<IconLink class="int-icon" size={28} />
+					<div class="seo-feature-name">Free subdomain</div>
+				</div>
+				<div class="seo-feature-description">
+					Get a free subdomain (e.g., yourname.hyvorpost.io) to send emails without
+					needing your own domain.
+				</div>
 			</div>
 
-			<div class="int">
-				<IconPencilSquare class="int-icon" size={30} />
-				<div class="seo-feature-name">New Templates</div>
+			<div class="item">
+				<div class="int">
+					<IconFileText class="int-icon" size={25} />
+					<div class="seo-feature-name">New Templates</div>
+				</div>
+				<div class="seo-feature-description">
+					Regularly updated templates to keep your email campaigns fresh and engaging.
+				</div>
 			</div>
 		</div>
 	</div>
@@ -34,22 +51,30 @@
 	<div class="right">
 		<!-- You can add images or additional content here if needed -->
 		<div class="form-preview">
-			<BrowserWindow image={customEmailImg} link="https://post.hyvor.com" />
+			<BrowserWindow
+				image={customEmailImg}
+				link="https://post.hyvor.com/console/settings/design"
+			/>
 		</div>
 
 		<div class="another-browser">
-			<BrowserWindow image={customEmailImg1} link="https://post.hyvor.com" />
+			<BrowserWindow
+				image={customEmailImg1}
+				link="https://post.hyvor.com/console/settings/design"
+			/>
 		</div>
 	</div>
 </div>
 
 <style>
 	.custom-email-design {
-		width: var(--width);
+		/* width: var(--width);
 		max-width: var(--max-width);
 		padding: 60px 0;
-		margin: auto 55px;
+		margin: auto 55px; */
 		display: flex;
+		padding-top: 80px;
+		padding-bottom: 80px;
 	}
 
 	h1 {
@@ -69,47 +94,70 @@
 
 	.left {
 		flex: 1;
+		/* padding: 60px 0; */
 	}
 
 	.right {
 		flex: 1;
 		padding-left: 55px;
 		position: relative;
+		/* padding: 60px 0; */
 	}
 
 	.bento-grid {
 		display: grid;
-		grid-template-rows: 1fr 1fr;
-		gap: 20px 40px;
+		grid-template-columns: 1fr; /* only one column */
+		gap: 25px;
 		margin-top: 40px;
+	}
+
+	.item {
+		background: #f1f1f1;
+		border-radius: 20px;
+		padding: 25px 30px;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+
+	.item:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 6px 16px var(--box-shadow);
 	}
 
 	.int {
 		display: flex;
 		align-items: center;
-		gap: 15px;
-		/* font-size: 25px; */
-		font-size: 20px;
+		gap: 12px;
 		margin-bottom: 10px;
+		color: var(--text);
+	}
+
+	.seo-feature-name {
+		font-weight: 600;
+		font-size: 20px;
+		color: var(--text);
+	}
+
+	.seo-feature-description {
+		font-size: 18px;
+		line-height: 1.6;
 		color: var(--gray-dark);
 	}
+
 	.form-preview {
 		width: 120%; /* did this to make it extend over the screen edge */
 		max-width: none; /* did this to remove max-width thing */
 		margin-left: 0;
-		/* background-color: #191e19; */
-		padding-top: 70px;
-		padding-bottom: 70px;
 		padding-left: 70px;
 		border-radius: 20px;
-		/* filter: blur(1px); */
 		opacity: 0.9;
 	}
 
 	.another-browser {
 		position: absolute;
-		width: 500px;
-		bottom: 30px;
+		width: 600px;
+		bottom: 60px;
 		right: 0;
 		border-radius: 20px;
 		box-shadow: var(--box-shadow);
