@@ -120,17 +120,6 @@
         });
     }
 
-    function handleStatusUpdate(ids: number[], status: NewsletterSubscriberStatus) {
-        subscriberStore.update(subscribers => {
-            return subscribers.map(s => {
-                if (ids.includes(s.id)) {
-                    return {...s, status};
-                }
-                return s;
-            });
-        });
-    }
-
     $effect(() => {
         status;
         search;
@@ -271,10 +260,7 @@
     {/if}
 
     {#if showStatusModal}
-        <SubscriberBulkStatusModal
-                bind:show={showStatusModal}
-                onStatusUpdate={handleStatusUpdate}
-        />
+        <SubscriberBulkStatusModal bind:show={showStatusModal}/>
     {/if}
 </SingleBox>
 

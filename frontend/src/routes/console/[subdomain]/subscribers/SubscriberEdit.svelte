@@ -114,7 +114,7 @@
 
     <SplitControl label="Status">
         <FormControl>
-            <Radio bind:group={status} value="subscribed" disabled={subscriber.is_opted_in}>Subscribed</Radio>
+            <Radio bind:group={status} value="subscribed" disabled={!subscriber.is_opted_in}>Subscribed</Radio>
             <Radio bind:group={status} value="unsubscribed">Unsubscribed</Radio>
             <Radio bind:group={status} value="pending">Pending</Radio>
         </FormControl>
