@@ -31,21 +31,26 @@
 
     $effect(() => {
         isUpdating = !!profile &&
-            (fromEmail !== profile.from_email ||
-                fromName !== profile.from_name ||
-                replyToEmail !== profile.reply_to_email ||
-                brandName !== profile.brand_name ||
-                brandLogo !== profile.brand_logo);
+            (fromEmail !== (profile.from_email ?? '') ||
+                fromName !== (profile.from_name ?? '') ||
+                replyToEmail !== (profile.reply_to_email ?? '') ||
+                brandName !== (profile.brand_name ?? '') ||
+                brandLogo !== (profile.brand_logo ?? ''));
     })
 
     $effect(() => {
-        isCreating = !profile &&
-            (!!fromEmail || !!fromName || !!replyToEmail);
+        isCreating = !profile && !!fromEmail;
     })
 
     async function handleConfirm() {
 
         loading = true;
+
+        if (!fromEmail) {
+            toast.error(I.t('console.settings.sendingProfiles.fromEmailRequired'));
+            loading = false;
+            return;
+        }
 
         if (profile) {
 
@@ -128,7 +133,7 @@
         {loading}
         closeOnOutsideClick={false}
 >
-    <SplitControl label='From Email'>
+    <SplitControl label={`${I.t('console.settings.sendingProfiles.fromEmail')}*`}>
         <TextInput
                 placeholder="from@hyvor.com"
                 bind:value={fromEmail}
@@ -136,7 +141,7 @@
         />
     </SplitControl>
 
-    <SplitControl label="From Name">
+    <SplitControl label={I.t('console.settings.sendingProfiles.fromName')}>
         <TextInput
                 placeholder="Hyvor Post"
                 bind:value={fromName}
@@ -144,7 +149,7 @@
         />
     </SplitControl>
 
-    <SplitControl label="Reply-To Email">
+    <SplitControl label={I.t('console.settings.sendingProfiles.replyToEmail')}>
         <TextInput
                 placeholder="to@hyvor.com"
                 bind:value={replyToEmail}
@@ -152,7 +157,7 @@
         />
     </SplitControl>
 
-    <SplitControl label="Brand Name">
+    <SplitControl label={I.t('console.settings.sendingProfiles.brandName')}>
         <TextInput
                 placeholder="HYVOR"
                 bind:value={brandName}
@@ -160,7 +165,7 @@
         />
     </SplitControl>
 
-    <SplitControl label="Brand Logo">
+    <SplitControl label={I.t('console.settings.sendingProfiles.brandLogo')}>
         <ImageUploader
                 url={brandLogo}
                 title="Upload Brand Logo"

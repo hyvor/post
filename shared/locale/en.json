@@ -285,7 +285,13 @@
         "setAsDefault": "Set as Default Sending Profile",
         "setAsDefaultContent": "Are you sure you want to set this sending profile as the default? This will be used to send all future issues unless changed.",
         "deleteSendingProfile": "Delete Sending Profile",
-        "deleteSendingProfileContent": "Are you sure you want to delete this sending profile?"
+        "deleteSendingProfileContent": "Are you sure you want to delete this sending profile?",
+        "fromEmailRequired": "From email is required",
+        "fromEmail": "From Email",
+        "fromName": "From Name",
+        "replyToEmail": "Reply-To Email",
+        "brandName": "Brand Name",
+        "brandLogo": "Brand Logo"
       },
       "api": {
         "apiKey": "API Key",
