@@ -205,6 +205,7 @@
         padding: 15px 30px;
         display: flex;
         gap: 10px;
+        align-items: center;
     }
 
     .new-email-wrap {
