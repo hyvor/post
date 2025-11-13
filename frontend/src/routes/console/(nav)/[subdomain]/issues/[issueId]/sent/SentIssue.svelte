@@ -1,6 +1,5 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import type {Issue} from '../../../../../types';
     import {getIssueReport, type IssueCounts} from '../../../../../lib/actions/issueActions';
     import {Callout, IconButton, Loader, TextInput, toast, Tooltip} from '@hyvor/design/components';
     import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
@@ -11,18 +10,14 @@
     import FriendlyDate from '../../../../../@components/utils/FriendlyDate.svelte';
     import {copyAndToast} from '$lib/helpers/copy';
     import {getNewsletterArchiveUrlFromSubdomain} from '../../../../../lib/archive';
-    import {newsletterStore} from '../../../../../lib/stores/newsletterStore';
+    import {currentIssueStore, newsletterStore} from '../../../../../lib/stores/newsletterStore';
 
-    export let issue: Issue;
-
-    const webUrl = getNewsletterArchiveUrlFromSubdomain($newsletterStore.subdomain) + '/issue/' + issue.uuid;
-
-    let loading = true;
-
-    let counts: IssueCounts;
+    const webUrl = getNewsletterArchiveUrlFromSubdomain($newsletterStore.subdomain) + '/issue/' + $currentIssueStore.uuid;
+    let loading = $state(true);
+    let counts: IssueCounts | undefined = $state();
 
     onMount(() => {
-        getIssueReport(issue.id)
+        getIssueReport($currentIssueStore.id)
             .then((res) => {
                 counts = res.counts;
             })
@@ -36,7 +31,7 @@
 </script>
 
 <div class="wrap">
-    {#if issue.status === 'failed'}
+    {#if $currentIssueStore.status === 'failed'}
         <Callout type="danger" style="margin-bottom:20px;">
             <IconExclamationTriangle/>
             There were some issues while sending this issue. Please contact support for more information.
@@ -45,12 +40,12 @@
     <div class="top">
         <div class="left">
             <div class="title">
-                {issue.subject}
+                {$currentIssueStore.subject}
             </div>
-            {#if issue.sent_at}
+            {#if $currentIssueStore.sent_at}
                 <div class="date">
                     Sent
-                    <FriendlyDate time={issue.sent_at}/>
+                    <FriendlyDate time={$currentIssueStore.sent_at}/>
                 </div>
             {/if}
         </div>
@@ -72,7 +67,7 @@
         </div>
     </div>
     <div class="content">
-        {#if loading}
+        {#if loading || !counts}
             <Loader full/>
         {:else}
             <div class="stats">
@@ -81,7 +76,7 @@
                 <SentStat title="Bounced" value={counts.bounced} total={counts.total}/>
                 <SentStat title="Complaints" value={counts.complained} total={counts.total}/>
             </div>
-            <Sends {issue}/>
+            <Sends/>
         {/if}
     </div>
 </div>

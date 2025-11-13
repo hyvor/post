@@ -1,23 +1,25 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import type {Issue} from "../../../../../types";
     import IconSend from "@hyvor/icons/IconSend";
     import {getIssueProgress} from "../../../../../lib/actions/issueActions";
+	import { currentIssueStore } from "../../../../../lib/stores/newsletterStore";
 
-    export let issue: Issue;
-    export let complete: () => void;
+    interface Props {
+        onStatusChange: () => void;
+    }
 
-    let progress = 2;
-    let currentSend = 0;
-    let total = 0;
+    let {onStatusChange}: Props = $props();
 
-    let updating = false;
-    let autoFetch = true;
+    let progress = $state(2);
+    let currentSend = $state(0);
+    let total = $state(0);
 
+    let updating = $state(false);
+    let autoFetch = $state(true);
 
     function updateProgress() {
         updating = true;
-        getIssueProgress(issue.id)
+        getIssueProgress($currentIssueStore.id)
             .then((res) => {
                 progress = Math.max(2, res.progress);
                 currentSend = res.sent;
@@ -25,7 +27,7 @@
 
                 if (progress === 100) {
                     autoFetch = false;
-                    complete();
+                    onStatusChange();
                 }
             })
             .catch((e) => {

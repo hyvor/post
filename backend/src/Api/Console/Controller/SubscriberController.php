@@ -194,7 +194,11 @@ class SubscriberController extends AbstractController
 
         if ($input->action == 'delete') {
             $this->subscriberService->deleteSubscribers($subscribers);
-            return $this->json(['status' => 'success', 'message' => 'Subscribers deleted successfully']);
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Subscribers deleted successfully',
+                'subscribers' => []
+            ]);
         }
 
         if ($input->action == 'status_change') {
@@ -218,7 +222,11 @@ class SubscriberController extends AbstractController
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
 
-            return $this->json(['status' => 'success', 'message' => 'Subscribers status updated successfully']);
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Subscribers status updated successfully',
+                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers)
+            ]);
         }
 
         if ($input->action == 'metadata_update') {
@@ -238,7 +246,11 @@ class SubscriberController extends AbstractController
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
 
-            return $this->json(['status' => 'success', 'message' => 'Subscribers metadata updated successfully']);
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Subscribers metadata updated successfully',
+                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers)
+            ]);
         }
 
         throw new BadRequestHttpException("Unhandled action");

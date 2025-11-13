@@ -5,9 +5,7 @@
         ActionList,
         ActionListItem,
         TextInput,
-        IconButton,
-        Loader,
-        IconMessage
+        IconButton
     } from '@hyvor/design/components';
     import Selector from '../../../@components/content/Selector.svelte';
     import type {List, NewsletterSubscriberStatus, Subscriber} from '../../../types';
@@ -117,17 +115,6 @@
     function handleUpdate(subscriber: Subscriber) {
         subscriberStore.update(subscribers => {
             return subscribers.map(s => (s.id === subscriber.id ? subscriber : s));
-        });
-    }
-
-    function handleStatusUpdate(ids: number[], status: NewsletterSubscriberStatus) {
-        subscriberStore.update(subscribers => {
-            return subscribers.map(s => {
-                if (ids.includes(s.id)) {
-                    return {...s, status};
-                }
-                return s;
-            });
         });
     }
 
@@ -271,10 +258,7 @@
     {/if}
 
     {#if showStatusModal}
-        <SubscriberBulkStatusModal
-                bind:show={showStatusModal}
-                onStatusUpdate={handleStatusUpdate}
-        />
+        <SubscriberBulkStatusModal bind:show={showStatusModal}/>
     {/if}
 </SingleBox>
 
@@ -291,6 +275,7 @@
 
     .selectors {
         display: inline-flex;
+        gap: 6px;
         padding-bottom: 6px;
     }
 

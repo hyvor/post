@@ -1,22 +1,21 @@
 <script lang="ts">
-    import type {Issue} from '../../../../../types';
     import {onMount} from 'svelte';
     import {draftIssueEditingStore, draftStepStore, initDraftStores} from './draftStore';
     import ContentView from './content/ContentView.svelte';
     import Steps from './Steps.svelte';
     import Audience from './audience/Audience.svelte';
+	import { currentIssueStore } from '../../../../../lib/stores/newsletterStore';
 
     interface Props {
-        issue: Issue;
-        send: (e: Issue) => void;
+        onStatusChange: () => void;
     }
 
-    let {issue, send}: Props = $props();
+    let {onStatusChange}: Props = $props();
 
     let init = $state(false);
 
     onMount(() => {
-        initDraftStores(issue);
+        initDraftStores($currentIssueStore);
         init = true;
     });
 </script>
@@ -29,7 +28,7 @@
             <Audience/>
         {/if}
 
-        <Steps/>
+        <Steps {onStatusChange}/>
     </div>
 {/if}
 

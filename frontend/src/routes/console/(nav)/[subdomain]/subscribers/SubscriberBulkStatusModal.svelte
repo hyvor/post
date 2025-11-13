@@ -2,28 +2,29 @@
     import {Button, Modal, toast} from '@hyvor/design/components';
     import {getI18n} from '../../../lib/i18n';
     import {updateSubscribersStatus} from '../../../lib/actions/subscriberActions';
-    import {selectedSubscriberIdsStore} from "../../../lib/stores/newsletterStore";
+    import {selectedSubscriberIdsStore, subscriberStore} from "../../../lib/stores/newsletterStore";
     import type {NewsletterSubscriberStatus} from '../../../types';
 
     interface Props {
         show: boolean;
-        onStatusUpdate: (ids: number[], status: NewsletterSubscriberStatus) => void;
     }
 
-    let {show = $bindable(), onStatusUpdate}: Props = $props();
+    let {show = $bindable()}: Props = $props();
 
     let loading = $state(false);
 
     async function handleStatusChange(status: NewsletterSubscriberStatus) {
         loading = true;
-        const ids = $selectedSubscriberIdsStore;
-
-        updateSubscribersStatus(ids, status)
-            .then(() => {
+        updateSubscribersStatus($selectedSubscriberIdsStore, status)
+            .then((res) => {
                 toast.success(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
                 selectedSubscriberIdsStore.set([]);
                 show = false;
-                onStatusUpdate(ids, status);
+
+                const updatedMap = new Map(res.subscribers.map(s => [s.id, s.status]));
+                subscriberStore.update(subscribers =>
+                    subscribers.map(s => updatedMap.has(s.id) ? {...s, status: updatedMap.get(s.id)!} : s)
+                );
             })
             .catch((error: unknown) => {
                 if (error instanceof Error) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Button, Tooltip, confirm, toast, Modal} from '@hyvor/design/components';
+    import {Button, confirm, toast, Modal} from '@hyvor/design/components';
     import Step from './Step.svelte';
     import IconArrowRightShort from '@hyvor/icons/IconArrowRightShort';
     import IconArrowLeftShort from '@hyvor/icons/IconArrowLeftShort';
@@ -11,6 +11,12 @@
     import {draftIssueEditingStore, draftStepStore} from './draftStore';
     import {sendIssue} from "../../../../../lib/actions/issueActions";
     import {newsletterLicenseStore} from "../../../../../lib/stores/newsletterStore";
+
+    interface Props {
+        onStatusChange: () => void;
+    }
+
+    let {onStatusChange}: Props = $props();
 
     const sections = ['content', 'audience'] as const;
     const I18n = getI18n();
@@ -87,6 +93,7 @@
             sendIssue($draftIssueEditingStore.id)
                 .then(() => {
                     toast.success(I18n.t('console.issues.draft.sendIssue.success'));
+                    onStatusChange();
                 })
                 .catch((e) => {
                     if (e.message.includes('would_exceed_limit')) {
@@ -119,21 +126,13 @@
     </div>
     <div class="right">
         {#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
-            <Tooltip
-                    text={$userApprovalStatusStore !== 'approved'
-                        ? I18n.t('console.issues.draft.approveBeforeSending')
-                        : I18n.t('console.issues.draft.subscriptionBeforeSending')
-                    }
-                    disabled={$userApprovalStatusStore === 'approved' && $newsletterLicenseStore}
-            >
-                <Button onclick={handleSend}
-                        disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
-                    Send Issue
-                    {#snippet end()}
-                        <IconSend size={14}/>
-                    {/snippet}
-                </Button>
-            </Tooltip>
+            <Button onclick={handleSend}
+                    disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}>
+                Send Issue
+                {#snippet end()}
+                    <IconSend size={14}/>
+                {/snippet}
+            </Button>
         {:else}
             <Button onclick={handleNext}>
                 Next

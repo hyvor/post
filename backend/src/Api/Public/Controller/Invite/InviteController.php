@@ -5,7 +5,6 @@ namespace App\Api\Public\Controller\Invite;
 use App\Service\AppConfig;
 use App\Service\User\UserService;
 use App\Service\UserInvite\UserInviteService;
-use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,7 +21,6 @@ class InviteController extends AbstractController
         private UserService       $userService,
         private UserInviteService $userInviteService,
         private AppConfig         $appConfig,
-        private AuthInterface     $auth
     )
     {
     }
@@ -30,20 +28,11 @@ class InviteController extends AbstractController
     #[Route('/invite/verify', methods: 'GET')]
     public function verifyInvite(Request $request): RedirectResponse
     {
-        $user = $this->auth->check($request);
-
-        if (!$user) {
-            return $this->redirect($this->auth->authUrl('login'));
-        }
-
         $code = $request->query->getString('code');
         $invite = $this->userInviteService->getInviteFromCode($code);
-        if (!$invite) {
-            throw new NotFoundHttpException("No invitation found");
-        }
 
-        if ($invite->getHyvorUserId() != $user->id) {
-            throw new BadRequestHttpException("Invalid invitation");
+        if (!$invite) {
+            throw new NotFoundHttpException("No invitation found or it has been already accepted");
         }
 
         if ($invite->getExpiresAt() < new \DateTime()) {
@@ -56,7 +45,6 @@ class InviteController extends AbstractController
         }
 
         $this->userService->createUser($newsletter, $invite->getHyvorUserId());
-
         $this->userInviteService->deleteInvite($invite);
 
         return $this->redirect($this->appConfig->getUrlApp() . '/console/' . $newsletter->getId());

@@ -40,28 +40,7 @@ class VerifyInviteTest extends WebTestCase
         $this->assertSame(404, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertIsString($json['message']);
-        $this->assertSame('No invitation found', $json['message']);
-    }
-
-    public function test_verify_invalid_invite(): void
-    {
-        $newsletter = NewsletterFactory::createOne();
-
-        $userInvite = UserInviteFactory::createOne([
-            'hyvor_user_id' => 999,
-            'newsletter' => $newsletter,
-            'code' => '3f1e9b8c6d2a4e1f5a7b3c9e8f2d6a4b',
-        ]);
-
-        $response = $this->publicApi(
-            'GET',
-            '/invite/verify?code=' . $userInvite->getCode(),
-        );
-
-        $this->assertSame(400, $response->getStatusCode());
-        $json = $this->getJson();
-        $this->assertIsString($json['message']);
-        $this->assertSame('Invalid invitation', $json['message']);
+        $this->assertSame('No invitation found or it has been already accepted', $json['message']);
     }
 
     public function test_verify_invite_expired(): void

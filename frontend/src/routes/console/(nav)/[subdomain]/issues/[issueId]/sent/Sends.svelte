@@ -9,13 +9,13 @@
         ActionListItem,
         IconButton
     } from '@hyvor/design/components';
-    import type {Issue, IssueSend, SendType} from '../../../../../types';
+    import type {IssueSend, SendType} from '../../../../../types';
     import {getIssueSends} from '../../../../../lib/actions/issueActions';
     import SendsRow from './SendsRow.svelte';
     import Selector from '../../../../../@components/content/Selector.svelte';
     import IconX from '@hyvor/icons/IconX';
+	import { currentIssueStore } from '../../../../../lib/stores/newsletterStore';
 
-    export let issue: Issue;
 
     let searchVal: string = '';
     let search: string = '';
@@ -33,7 +33,7 @@
 
     function load(more = false) {
         more ? (loadingMore = true) : (loading = true);
-        getIssueSends(issue.id, SENDS_LIMIT, more ? sends.length : 0, search, type)
+        getIssueSends($currentIssueStore.id, SENDS_LIMIT, more ? sends.length : 0, search, type)
             .then((res) => {
                 sends = more ? [...sends, ...res] : res;
                 hasMore = res.length === SENDS_LIMIT;
