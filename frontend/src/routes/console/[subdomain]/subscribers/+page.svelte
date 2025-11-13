@@ -277,6 +277,7 @@
 
     .selectors {
         display: inline-flex;
+        gap: 6px;
         padding-bottom: 6px;
     }
 
