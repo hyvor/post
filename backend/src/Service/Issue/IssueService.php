@@ -162,19 +162,15 @@ class IssueService
     public function getIssueCounts(Issue $issue): array
     {
         $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
-        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
 
-        // TODO: Implement the rest of the counts
         return [
             'total' => $issue->getTotalSends(),
             'sent' => $issue->getOkSends(),
             'failed' => $issue->getFailedSends(),
-            'pending' => $pendingCount,
-            'opened' => 0,
-            'clicked' => 0,
-            'unsubscribed' => 0,
-            'bounced' => 0,
-            'complained' => 0,
+            'pending' => count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING)),
+            'unsubscribed' => count(array_filter($issueSends, fn(Send $send) => $send->getUnsubscribeAt() !== null)),
+            'bounced' => count(array_filter($issueSends, fn(Send $send) => $send->getBouncedAt() !== null)),
+            'complained' => count(array_filter($issueSends, fn(Send $send) => $send->getComplainedAt() !== null)),
         ];
     }
 
