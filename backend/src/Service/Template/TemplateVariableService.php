@@ -32,7 +32,8 @@ class TemplateVariableService
             name: $newsletter->getName(),
             subdomain: $newsletter->getSubdomain(),
             logo: $meta->logo ?? '',
-            logo_url: $meta->template_logo_url ?? '',
+            logo_url: $meta->logo_url ?? '',
+            logo_alt: $meta->logo_alt ?? $newsletter->getName(),
 
             address: $meta->address ?? '',
             unsubscribe_url: '',
