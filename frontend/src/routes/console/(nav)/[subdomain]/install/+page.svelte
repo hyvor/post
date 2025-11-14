@@ -32,7 +32,7 @@
                     <CodeBlock
                             language="html"
                             code={`
-                            <script src="https://post.hyvor.com/form/form.js" async><` + `/script>
+                            <script src="https://post.hyvor.com/form/form.js" type="module" async><` + `/script>
 
                             <hyvor-post-form newsletter="${$newsletterStore.subdomain}"></hyvor-post-form>
                         `}

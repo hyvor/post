@@ -35,7 +35,7 @@
 <CodeBlock
         code={`
     <` +
-		`script src="https://post.hyvor.com/form/form.js" async><` +
+		`script src="https://post.hyvor.com/form/form.js" type="module" async><` +
 		`/script>
 `}
 />
