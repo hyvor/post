@@ -282,10 +282,6 @@ class NewsletterService
         if ($subdomain === 'new') {
             return true;
         }
-        // notifications@ is reserved
-        if ($subdomain === SystemNotificationMailService::NOTIFICATIONS_MAIL_USERNAME) {
-            return true;
-        }
 
         $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
         return $newsletter !== null;

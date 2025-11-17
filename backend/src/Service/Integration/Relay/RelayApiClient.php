@@ -64,7 +64,7 @@ class RelayApiClient
                         'max_redirects' => 3,
                         'headers' => array_merge(
                             [
-                                'Authorization' => 'Bearer ' . $isSystemNotification ? $this->appConfig->getNotificationRelayApiKey() : $this->appConfig->getRelayApiKey(),
+                                'Authorization' => 'Bearer ' . ($isSystemNotification ? $this->appConfig->getNotificationRelayApiKey() : $this->appConfig->getRelayApiKey()),
                             ],
                             $headers
                         ),
