@@ -4,6 +4,7 @@ namespace App\Service\Approval;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
+use App\Service\AppConfig;
 use App\Service\Approval\Dto\UpdateApprovalDto;
 use App\Service\Approval\Message\CreateApprovalMessage;
 use App\Service\SystemMail\SystemNotificationMailService;
@@ -27,6 +28,7 @@ class ApprovalService
         private readonly StringsFactory       $stringsFactory,
         private SystemNotificationMailService $emailNotificationService,
         private MessageBusInterface           $messageBus,
+        private AppConfig                     $appConfig
     )
     {
     }
@@ -238,6 +240,10 @@ class ApprovalService
 
     private function sendApprovalMail(Approval $approval, ApprovalStatus $status, AuthUser $user): void
     {
+        $renderContext = [
+            'component' => 'post',
+        ];
+
         $strings = $this->stringsFactory->create();
         $subject = $strings->get('mail.approval.subject', ['status' => $status->value]);
         $content = [
@@ -250,6 +256,9 @@ class ApprovalService
         if ($status === ApprovalStatus::APPROVED) {
 
             $content['body'] = $strings->get('mail.approval.bodyApproved');
+            $content['buttonText'] = $strings->get('mail.approval.buttonText');
+
+            $renderContext['buttonUrl'] = $this->appConfig->getUrlApp() . '/console';
 
         } elseif ($status === ApprovalStatus::REJECTED) {
 
@@ -261,11 +270,9 @@ class ApprovalService
         } else {
             return;
         }
-        $mail = $this->mailTemplate->render('mail/approval.html.twig', [
-                'component' => 'post',
-                'strings' => $content
-            ]
-        );
+
+        $renderContext['strings'] = $content;
+        $mail = $this->mailTemplate->render('mail/approval.html.twig', $renderContext);
 
         $this->emailNotificationService->send(
             $user->email,

@@ -14,8 +14,14 @@
     </p>
 
     <p>
-        {{ strings.body}}
+        {{ strings.body }}
     </p>
+
+    {% if buttonUrl is defined %}
+        <twig:mail:button href="{{ buttonUrl }}">
+            {{ strings.buttonText }}
+        </twig:mail:button>
+    {% endif %}
 
     {% if strings.reason is defined %}
         <p>
