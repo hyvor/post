@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\SystemMail;
+namespace App\Service\NotificationMail;
 
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\RelayApiClient;
@@ -10,7 +10,7 @@ use Symfony\Component\Mime\Email;
 /**
  * Service to send system notification emails like domain verification, etc.
  */
-class SystemNotificationMailService
+class NotificationMailService
 {
     public function __construct(
         private RelayApiClient $relayApiClient,

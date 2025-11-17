@@ -7,7 +7,7 @@ use App\Entity\Type\ApprovalStatus;
 use App\Service\AppConfig;
 use App\Service\Approval\Dto\UpdateApprovalDto;
 use App\Service\Approval\Message\CreateApprovalMessage;
-use App\Service\SystemMail\SystemNotificationMailService;
+use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -22,13 +22,13 @@ class ApprovalService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface        $em,
-        private AuthInterface                 $auth,
-        private readonly Environment          $mailTemplate,
-        private readonly StringsFactory       $stringsFactory,
-        private SystemNotificationMailService $emailNotificationService,
-        private MessageBusInterface           $messageBus,
-        private AppConfig                     $appConfig
+        private EntityManagerInterface  $em,
+        private AuthInterface           $auth,
+        private readonly Environment    $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
+        private NotificationMailService $emailNotificationService,
+        private MessageBusInterface     $messageBus,
+        private AppConfig               $appConfig
     )
     {
     }
