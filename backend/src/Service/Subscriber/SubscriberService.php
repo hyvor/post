@@ -15,6 +15,7 @@ use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
+use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -85,7 +86,7 @@ class SubscriberService
         $this->em->flush();
 
         $event = new SubscriberCreatedEvent($subscriber);
-        $this->eventDispatcher->dispatch($event, SubscriberCreatedEvent::class);
+        $this->messageBus->dispatch(new SubscriberCreatedMessage($subscriber->getId()));
 
         return $subscriber;
     }
