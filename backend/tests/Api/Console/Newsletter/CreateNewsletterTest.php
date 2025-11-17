@@ -118,7 +118,7 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertHasViolation('name', 'This value is too long. It should have 255 characters or less.');
     }
 
-    #[TestWith(['notifications'])]
+    #[TestWith(['new'])]
     #[TestWith(['other', true])]
     public function test_subdomain_taken(string $subdomain, bool $create = false): void
     {

@@ -56,15 +56,15 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return true;
     }
 
-    protected function mockRelayClient(?callable $callback = null): void
+    protected function mockRelayClient(?callable $callback = null, bool $forSystemNotification = false): void
     {
         if (!$callback) {
-            $callback = function ($method, $url, $options): JsonMockResponse {
+            $callback = function ($method, $url, $options) use ($forSystemNotification): JsonMockResponse {
 
                 $this->assertSame('POST', $method);
                 $this->assertStringStartsWith('https://relay.hyvor.com/api/console/', $url);
                 $this->assertContains('Content-Type: application/json', $options['headers']);
-                $this->assertContains('Authorization: Bearer test-relay-key', $options['headers']);
+                $this->assertContains('Authorization: Bearer ' . ($forSystemNotification ? 'test-notification-relay-key' : 'test-relay-key'), $options['headers']);
 
                 return new JsonMockResponse();
             };
