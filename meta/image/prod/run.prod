@@ -11,8 +11,11 @@ else
   export CADDY_ADDRESS="$URL_APP"
 fi
 
-# Caddy TLS configuration
-if [ -f /app/certs/cert.pem ] && [ -f /app/certs/key.pem ]; then
+# Caddy custom TLS configuration
+if [ -n "$APP_TLS_CERT" ] && [ -n "$APP_TLS_KEY" ]; then
+  mkdir -p /app/certs
+  printf "%s" "$APP_TLS_CERT" > /app/certs/cert.pem
+  printf "%s" "$APP_TLS_KEY" > /app/certs/key.pem
   export CADDY_TLS_CONFIG="tls /app/certs/cert.pem /app/certs/key.pem"
 fi
 
