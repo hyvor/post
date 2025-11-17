@@ -13,7 +13,6 @@ use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
-use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +32,6 @@ class SubscriberService
         private EntityManagerInterface   $em,
         private SubscriberRepository     $subscriberRepository,
         private MessageBusInterface      $messageBus,
-        private EventDispatcherInterface $eventDispatcher,
     )
     {
     }
@@ -85,7 +83,6 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
-        $event = new SubscriberCreatedEvent($subscriber);
         $this->messageBus->dispatch(new SubscriberCreatedMessage($subscriber->getId()));
 
         return $subscriber;
