@@ -4,11 +4,16 @@
 ARCHIVE_HOST=$(echo "$URL_ARCHIVE" | sed -E 's#https?://##' | sed 's#/##g')
 export ARCHIVE_HOST
 
-# Caddy manual TLS configuration
-if [ -f /app/certs/cert.pem ] && [ -f /app/certs/key.pem ]; then
-  export USE_MANUAL_TLS=true
+# Caddy address
+if [ "$APP_LISTEN" = "insecure" ]; then
+  export CADDY_ADDRESS=":80"
 else
-  export USE_MANUAL_TLS=false
+  export CADDY_ADDRESS="$URL_APP"
+fi
+
+# Caddy TLS configuration
+if [ -f /app/certs/cert.pem ] && [ -f /app/certs/key.pem ]; then
+  export CADDY_TLS_CONFIG="tls /app/certs/cert.pem /app/certs/key.pem"
 fi
 
 /usr/bin/supervisord
