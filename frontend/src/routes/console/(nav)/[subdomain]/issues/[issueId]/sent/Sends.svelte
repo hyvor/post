@@ -7,14 +7,15 @@
         TextInput,
         ActionList,
         ActionListItem,
-        IconButton
+        IconButton,
+        IconMessage
     } from '@hyvor/design/components';
     import type {IssueSend, SendType} from '../../../../../types';
     import {getIssueSends} from '../../../../../lib/actions/issueActions';
     import SendsRow from './SendsRow.svelte';
     import Selector from '../../../../../@components/content/Selector.svelte';
     import IconX from '@hyvor/icons/IconX';
-	import { currentIssueStore } from '../../../../../lib/stores/newsletterStore';
+    import {currentIssueStore} from '../../../../../lib/stores/newsletterStore';
 
 
     let searchVal: string = '';
@@ -81,7 +82,7 @@
 
 <div class="wrap">
     {#if loading}
-        <Loader full padding={100}/>
+        <Loader block padding={100}/>
     {:else}
         <Selector
                 name="Status"
@@ -146,19 +147,21 @@
 				</span>
             {/if}
         </div>
-        {#if sends.length === 0}
-            No sends found
-        {:else}
-            {#each sends as send}
-                <SendsRow {send}/>
-            {/each}
-            <LoadButton
-                    show={hasMore}
-                    loading={loadingMore}
-                    on:click={() => load(true)}
-                    text="Load more"
-            />
-        {/if}
+        <div class="sends-wrap">
+            {#if sends.length === 0}
+                <IconMessage message="No sends found" empty/>
+            {:else}
+                {#each sends as send}
+                    <SendsRow {send}/>
+                {/each}
+                <LoadButton
+                        show={hasMore}
+                        loading={loadingMore}
+                        on:click={() => load(true)}
+                        text="Load more"
+                />
+            {/if}
+        </div>
     {/if}
 </div>
 
@@ -176,5 +179,9 @@
         :global(input) {
             font-size: 14px;
         }
+    }
+
+    .sends-wrap {
+        padding: 10px;
     }
 </style>
