@@ -14,6 +14,7 @@ use App\Service\Newsletter\Constraint\SubdomainValidator;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -54,6 +55,8 @@ class CreateNewsletterTest extends WebTestCase
 
     public function testCreateNewsletterValid(): void
     {
+        ResourceFake::enableForSymfony($this->container);
+
         $response = $this->consoleApi(
             null,
             'POST',
@@ -92,6 +95,8 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertSame('valid-newsletter-subdomain@hyvorpost.email', $sendingProfiles[0]->getFromEmail());
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
         $this->assertTrue($sendingProfiles[0]->getIsDefault());
+
+        ResourceFake::assertRegistered($newsletter->getUserId(), $newsletter->getId());
     }
 
     public function testCreateNewsletterInvalid(): void

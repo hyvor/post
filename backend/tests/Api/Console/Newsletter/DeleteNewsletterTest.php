@@ -9,6 +9,7 @@ use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(NewsletterController::class)]
@@ -21,6 +22,8 @@ class DeleteNewsletterTest extends WebTestCase
     // TODO: tests for authentication
     public function testDeleteNewsletterFound(): void
     {
+        ResourceFake::enableForSymfony($this->container);
+
         $newsletter = NewsletterFactory::createOne();
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
@@ -48,6 +51,8 @@ class DeleteNewsletterTest extends WebTestCase
         $repository = $this->em->getRepository(Newsletter::class);
         $find = $repository->find($newsletter_id);
         $this->assertNull($find);
+
+        ResourceFake::assertDeleted($newsletter_id);
     }
 
     public function testDeleteNewsletterNotFound(): void
