@@ -7,7 +7,6 @@ use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
-use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
@@ -19,12 +18,10 @@ use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use App\Service\SendingProfile\SendingProfileService;
-use App\Service\SystemMail\SystemNotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Resource\Resource;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Uid\Uuid;
 
 class NewsletterService
 {
@@ -33,7 +30,8 @@ class NewsletterService
     public function __construct(
         private EntityManagerInterface $em,
         private AppConfig              $config,
-        private SendingProfileService  $sendingProfileService
+        private SendingProfileService  $sendingProfileService,
+        private Resource               $resource
     )
     {
     }
@@ -45,51 +43,62 @@ class NewsletterService
         string $subdomain
     ): Newsletter
     {
-        $newsletter = new Newsletter()
-            ->setName($name)
-            ->setUserId($userId)
-            ->setMeta(new NewsletterMeta())
-            ->setSubdomain($subdomain)
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now());
+        return $this->em->wrapInTransaction(function () use ($userId, $name, $subdomain) {
+            $newsletter = new Newsletter()
+                ->setName($name)
+                ->setUserId($userId)
+                ->setMeta(new NewsletterMeta())
+                ->setSubdomain($subdomain)
+                ->setCreatedAt($this->now())
+                ->setUpdatedAt($this->now());
 
-        $user = new User()
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setHyvorUserId($userId)
-            ->setNewsletter($newsletter)
-            ->setRole(UserRole::OWNER);
+            $user = new User()
+                ->setCreatedAt($this->now())
+                ->setUpdatedAt($this->now())
+                ->setHyvorUserId($userId)
+                ->setNewsletter($newsletter)
+                ->setRole(UserRole::OWNER);
 
-        $list = new NewsletterList()
-            ->setName('Default List')
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now())
-            ->setNewsletter($newsletter);
+            $list = new NewsletterList()
+                ->setName('Default List')
+                ->setCreatedAt($this->now())
+                ->setUpdatedAt($this->now())
+                ->setNewsletter($newsletter);
 
-        $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+            $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
 
-        $this->sendingProfileService
-            ->createSendingProfile(
-                $newsletter,
-                null,
-                fromEmail: $systemAddress,
-                fromName: $newsletter->getName(),
-                system: true,
-                flush: false
-            );
+            $this->sendingProfileService
+                ->createSendingProfile(
+                    $newsletter,
+                    null,
+                    fromEmail: $systemAddress,
+                    fromName: $newsletter->getName(),
+                    system: true,
+                    flush: false
+                );
 
-        $this->em->persist($user);
-        $this->em->persist($newsletter);
-        $this->em->persist($list);
-        $this->em->flush();
+            $this->em->persist($user);
+            $this->em->persist($newsletter);
+            $this->em->persist($list);
+            $this->em->flush();
 
-        return $newsletter;
+            $this->resource->register($userId, $newsletter->getId());
+
+            return $newsletter;
+        });
     }
 
     public function deleteNewsletter(Newsletter $newsletter): void
     {
-        $this->em->remove($newsletter);
-        $this->em->flush();
+        $this->em->wrapInTransaction(function () use ($newsletter) {
+
+            $newsletterId = $newsletter->getId();
+
+            $this->em->remove($newsletter);
+            $this->em->flush();
+
+            $this->resource->delete($newsletterId);
+        });
     }
 
     public function getNewsletterById(int $id): ?Newsletter
