@@ -4,6 +4,7 @@ namespace App\Service\SystemMail;
 
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\RelayApiClient;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
@@ -11,12 +12,9 @@ use Symfony\Component\Mime\Email;
  */
 class SystemNotificationMailService
 {
-
-    public const string NOTIFICATIONS_MAIL_USERNAME = 'notifications';
-
     public function __construct(
         private RelayApiClient $relayApiClient,
-        private AppConfig $appConfig,
+        private AppConfig      $appConfig,
     )
     {
     }
@@ -27,19 +25,16 @@ class SystemNotificationMailService
         string $content,
     ): void
     {
-        $fromEmail = self::NOTIFICATIONS_MAIL_USERNAME . '@' . $this->appConfig->getSystemMailDomain();
-
         $email = new Email()
-            ->from($fromEmail)
+            ->from(new Address(
+                address: $this->appConfig->getNotificationMailFromAddress(),
+                name: $this->appConfig->getNotificationMailFromName()
+            ))
+            ->replyTo($this->appConfig->getNotificationMailReplyTo())
             ->to($emailAddress)
             ->subject($subject)
             ->html($content);
 
-        $replyTo = $this->appConfig->getSystemMailReplyTo();
-        if ($replyTo) {
-            $email->replyTo($replyTo);
-        }
-
-        $this->relayApiClient->sendEmail($email);
+        $this->relayApiClient->sendEmail($email, isSystemNotification: true);
     }
 }

@@ -49,7 +49,8 @@ class RelayApiClient
         string $classToDeserialize,
         array  $data = [],
         array  $headers = [],
-        array  $backoffSeconds = self::BACKOFF
+        array  $backoffSeconds = self::BACKOFF,
+        bool   $isSystemNotification = false
     )
     {
         $attempts = 0;
@@ -63,7 +64,7 @@ class RelayApiClient
                         'max_redirects' => 3,
                         'headers' => array_merge(
                             [
-                                'Authorization' => 'Bearer ' . $this->appConfig->getRelayApiKey(),
+                                'Authorization' => 'Bearer ' . $isSystemNotification ? $this->appConfig->getNotificationRelayApiKey() : $this->appConfig->getRelayApiKey(),
                             ],
                             $headers
                         ),
@@ -168,7 +169,11 @@ class RelayApiClient
     /**
      * @throws RelayApiException
      */
-    public function sendEmail(Email $email, ?int $idempotencyKey = null): SendEmailResponse
+    public function sendEmail(
+        Email $email,
+        ?int  $idempotencyKey = null,
+        bool  $isSystemNotification = false
+    ): SendEmailResponse
     {
         $additionalHeaders = [];
 
@@ -205,7 +210,8 @@ class RelayApiClient
             [
                 'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
             ],
-            backoffSeconds: self::EMAIL_BACKOFF
+            backoffSeconds: self::EMAIL_BACKOFF,
+            isSystemNotification: $isSystemNotification
         );
     }
 }
