@@ -66,6 +66,16 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
                 $this->assertContains('Content-Type: application/json', $options['headers']);
                 $this->assertContains('Authorization: Bearer ' . ($forSystemNotification ? 'test-notification-relay-key' : 'test-relay-key'), $options['headers']);
 
+                if ($forSystemNotification) {
+                    $body = json_decode($options['body'], true);
+                    $this->assertIsArray($body);
+                    $this->assertIsArray($body['from']);
+                    $this->assertSame('from@example.com', $body['from']['email']);
+                    $this->assertSame('Hyvor Post', $body['from']['name']);
+                    $this->assertIsArray($body['headers']);
+                    $this->assertSame('reply-to@example.com', $body['headers']['Reply-To']);
+                }
+
                 return new JsonMockResponse();
             };
         }
