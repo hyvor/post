@@ -8,19 +8,9 @@
 	reverse_proxy 127.0.0.1:3000
 }
 
-:80, {$URL_APP} {
+{$CADDY_ADDRESS} {
 
-    route {
-        # Use manual TLS if the env variable is true
-        @manualTLS expression {env.USE_MANUAL_TLS} == "true"
-        handle @manualTLS {
-            tls /caddy/certs/cert.pem /caddy/certs/key.pem
-        }
-        # otherwise use normal TLS
-        handle {
-            tls
-        }
-    }
+    {$CADDY_TLS_CONFIG}
 
 	# backend
 	@backend {
