@@ -73,10 +73,6 @@
 	}
 
 	@media (max-width: 992px) {
-		.main-inner {
-			display: block;
-		}
-
 		.content {
 			padding-bottom: 150px;
 			height: initial;
