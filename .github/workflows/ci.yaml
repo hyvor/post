@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-
   frontend-check:
     name: "Frontend Check"
     runs-on: ubuntu-latest
@@ -99,3 +98,25 @@ jobs:
 
       - name: Run Svelte Check
         run: docker run archive-dev npm run check
+
+  prettier:
+    name: "Prettier"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24.9.0"
+
+      - name: Archive
+        run: cd archive && npm ci && npm run lint
+
+      - name: Embed
+        run: cd embed && npm ci && npm run lint
+
+      - name: Frontend
+        run: cd frontend && npm ci && npm run lint
