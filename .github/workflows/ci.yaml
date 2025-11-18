@@ -100,7 +100,7 @@ jobs:
         run: docker run archive-dev npm run check
 
   prettier:
-    name: "Archive Prettier"
+    name: "Prettier"
     runs-on: ubuntu-latest
 
     steps:

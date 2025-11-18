@@ -63,7 +63,9 @@ Directory structure:
 
 ## License
 
-Hyvor Post is licensed under the [AGPL-3.0 License](https://github.com/hyvor/post/blob/main/LICENSE). When self-hosting is available, we will also offer [enterprise licenses](https://hyvor.com/enterprise) for organizations that require a commercial license or do not wish to comply with the AGPLv3 terms. See [Self-Hosting License FAQ](https://hyvor.com/docs/hosting-license) for more information.
+Hyvor Post is licensed under the [AGPL-3.0 License](https://github.com/hyvor/post/blob/main/LICENSE). 
+
+[//]: # (When self-hosting is available, we will also offer [enterprise licenses]&#40;https://hyvor.com/enterprise&#41; for organizations that require a commercial license or do not wish to comply with the AGPLv3 terms. See [Self-Hosting License FAQ]&#40;https://hyvor.com/docs/hosting-license&#41; for more information.)
 
 ![HYVOR Banner](https://raw.githubusercontent.com/hyvor/relay/refs/heads/main/meta/assets/hyvor-banner.svg)
 
