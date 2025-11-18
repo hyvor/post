@@ -1,9 +1,8 @@
 import { mount } from "svelte";
 import Form from "./Form.svelte";
-import formCss from './form.css?inline'
+import formCss from "./form.css?inline";
 
 class HyvorPostForm extends HTMLElement {
-
     private form: Record<string, any> | null = null;
 
     constructor() {
@@ -15,19 +14,22 @@ class HyvorPostForm extends HTMLElement {
         const newsletterSubdomain = this.getAttribute("newsletter");
 
         if (!newsletterSubdomain) {
-            throw new Error('project-uuid is required for Hyvor Post form.');
+            throw new Error("project-uuid is required for Hyvor Post form.");
         }
 
         this.form = mount(Form, {
             target: this.shadowRoot!,
             props: {
                 newsletterSubdomain,
-                instance: this.getAttribute("instance") || "https://post.hyvor.com",
+                instance:
+                    this.getAttribute("instance") || "https://post.hyvor.com",
                 shadowRoot: this.shadowRoot!,
                 lists: this.getListsArr("lists"),
-                listsDefaultUnselected: this.getListsArr("lists-default-unselected"),
+                listsDefaultUnselected: this.getListsArr(
+                    "lists-default-unselected",
+                ),
                 listsHidden: this.hasAttribute("lists-hidden"),
-            }
+            },
         });
 
         const style = document.createElement("style");
@@ -40,15 +42,15 @@ class HyvorPostForm extends HTMLElement {
         if (!attr) {
             return [];
         }
-        return attr.split(",").map(item => item.trim());
+        return attr.split(",").map((item) => item.trim());
     }
 
     static get observedAttributes() {
-        return ['colors'];
+        return ["colors"];
     }
 
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
-        if (name === 'colors' && oldVal !== newVal) {
+        if (name === "colors" && oldVal !== newVal) {
             this.form?.setPalette(newVal as any);
         }
     }

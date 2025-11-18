@@ -24,7 +24,7 @@ services:
     networks:
       - hyvor-network
 
-    profiles: [ dev ]
+    profiles: [dev]
 
   hyvor-post-backend:
     container_name: hyvor-post-backend
@@ -46,7 +46,7 @@ services:
       traefik.http.services.hyvor-post-backend.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
+    profiles: [dev]
     healthcheck:
       test: ls
       disable: true
@@ -58,7 +58,6 @@ services:
       target: embed-dev
     volumes:
       - ./embed:/app/embed
-      - /app/embed/node_modules
     labels:
       traefik.enable: true
       # embed
@@ -69,7 +68,7 @@ services:
       traefik.http.services.hyvor-post-embed.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
+    profiles: [dev]
 
   hyvor-post-archive:
     container_name: hyvor-post-archive
@@ -91,7 +90,7 @@ services:
       traefik.http.services.hyvor-post-archive.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
+    profiles: [dev]
 
 networks:
   hyvor-network:

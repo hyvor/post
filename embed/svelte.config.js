@@ -6,6 +6,6 @@ export default {
     preprocess: vitePreprocess(),
 
     compilerOptions: {
-        cssHash: ({ hash, css }) => 'hp-' + hash(css),
-    }
+        cssHash: ({ hash, css }) => "hp-" + hash(css),
+    },
 };
