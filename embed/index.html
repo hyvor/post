@@ -1,75 +1,72 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Hyvor Post Embed</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Hyvor Post Embed</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net" />
-        <link
-            href="https://fonts.bunny.net/css?family=readex-pro:400,600"
-            rel="stylesheet"
-        />
+		<link rel="preconnect" href="https://fonts.bunny.net" />
+		<link href="https://fonts.bunny.net/css?family=readex-pro:400,600" rel="stylesheet" />
 
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                background-color: #fafafa;
-                font-family: "Readex Pro", sans-serif;
-                font-size: 18px;
-            }
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #fafafa;
+				font-family: 'Readex Pro', sans-serif;
+				font-size: 18px;
+			}
 
-            #header {
-                height: 75px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
+			#header {
+				height: 75px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+			}
 
-            #app {
-                width: 100%;
-                height: calc(100vh - 75px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        </style>
+			#app {
+				width: 100%;
+				height: calc(100vh - 75px);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
 
-        <script>
-            function setFormColors(colors) {
-                const form = document.querySelector("hyvor-post-form");
-                if (form) {
-                    form.setAttribute("colors", colors);
-                }
-            }
+		<script>
+			function setFormColors(colors) {
+				const form = document.querySelector('hyvor-post-form');
+				if (form) {
+					form.setAttribute('colors', colors);
+				}
+			}
 
-            function setLight() {
-                document.body.style.backgroundColor = "#fafafa";
-                setFormColors("light");
-            }
+			function setLight() {
+				document.body.style.backgroundColor = '#fafafa';
+				setFormColors('light');
+			}
 
-            function setDark() {
-                document.body.style.backgroundColor = "#000";
-                setFormColors("dark");
-            }
-        </script>
-    </head>
+			function setDark() {
+				document.body.style.backgroundColor = '#000';
+				setFormColors('dark');
+			}
+		</script>
+	</head>
 
-    <body>
-        <div id="header">
-            <button onclick="setLight()">Light</button>
-            <button onclick="setDark()">Dark</button>
-        </div>
-        <div id="app">
-            <hyvor-post-form
-                newsletter="test"
-                instance="https://post.hyvor.localhost"
-                lists-default-unselected="Product Announcements"
-                lists-hidden
-            ></hyvor-post-form>
-        </div>
-        <script type="module" src="/dev/dev.ts"></script>
-    </body>
+	<body>
+		<div id="header">
+			<button onclick="setLight()">Light</button>
+			<button onclick="setDark()">Dark</button>
+		</div>
+		<div id="app">
+			<hyvor-post-form
+				newsletter="test"
+				instance="https://post.hyvor.localhost"
+				lists-default-unselected="Product Announcements"
+				lists-hidden
+			></hyvor-post-form>
+		</div>
+		<script type="module" src="/dev/dev.ts"></script>
+	</body>
 </html>
