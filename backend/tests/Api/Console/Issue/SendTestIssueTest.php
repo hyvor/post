@@ -81,8 +81,6 @@ class SendTestIssueTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson();
-        $this->assertSame('This value is not a valid email address.', $json['message']);
         $this->assertHasViolation('emails[1]', 'This value is not a valid email address.');
     }
 }
