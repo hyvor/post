@@ -113,10 +113,10 @@ jobs:
           node-version: "24.9.0"
 
       - name: Archive
-        run: cd archive && npm ci && npm run lint
+        run: cd archive && npm ci && npm run format
 
       - name: Embed
-        run: cd embed && npm ci && npm run lint
+        run: cd embed && npm ci && npm run format
 
       - name: Frontend
-        run: cd frontend && npm ci && npm run lint
+        run: cd frontend && npm ci && npm run format
