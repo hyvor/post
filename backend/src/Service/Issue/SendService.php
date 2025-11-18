@@ -25,7 +25,8 @@ class SendService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository   $subscriberRepository,
-        private SendRepository         $sendRepository
+        private SendRepository         $sendRepository,
+        private IssueService           $issueService
     )
     {
     }
@@ -131,21 +132,17 @@ class SendService
      */
     public function getIssueProgress(Issue $issue): ?array
     {
-        $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
+        $counts = $this->issueService->getIssueStats($issue);
 
-        if (empty($issueSends)) {
+        if ($counts['total'] === 0) {
             return null;
         }
 
-        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
-
         return [
-            'total' => $issue->getTotalSends(),
-            'pending' => $pendingCount,
-            'sent' => $issue->getOkSends(),
-            'progress' => $issue->getTotalSends() > 0
-                ? (int)round($issue->getOkSends() / $issue->getTotalSends() * 100)
-                : 0,
+            'total' => $counts['total'],
+            'pending' => $counts['pending'],
+            'sent' => $counts['sent'],
+            'progress' => (int)round($counts['sent'] / $counts['total'] * 100)
         ];
     }
 

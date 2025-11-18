@@ -291,7 +291,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getIssueReport(Issue $issue): JsonResponse
     {
-        $counts = $this->issueService->getIssueCounts($issue);
+        $counts = $this->issueService->getIssueStats($issue, full: true);
         return $this->json(
             [
                 'counts' => $counts
