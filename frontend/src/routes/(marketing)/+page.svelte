@@ -13,7 +13,7 @@
 	<title>Hyvor Post - Simple, Privacy-First Newsletter Platform</title>
 	<meta
 		name="description"
-		content="Hyvor Post is a simply, privacy-first newsletter platform. No Tracking. Just Ideas, Delivered."
+		content="Hyvor Post is a simple, privacy-first newsletter platform. No Tracking. Just Ideas, Delivered."
 	/>
 	<link rel="canonical" href="https://post.hyvor.com" />
 
