@@ -25,10 +25,10 @@ class SendEmailMessageHandler
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueService $issueService,
-        private EmailSenderService $emailSenderService,
-        private MessageBusInterface $messageBus,
-    ) {
+        private EmailSenderService     $emailSenderService,
+        private MessageBusInterface    $messageBus,
+    )
+    {
     }
 
     public function __invoke(SendEmailMessage $message): void
@@ -40,16 +40,10 @@ class SendEmailMessageHandler
         try {
             $this->emailSenderService->send($issue, $send);
 
-            $this->em->wrapInTransaction(function () use ($send, $issue) {
+            $this->em->wrapInTransaction(function () use ($send) {
                 $send->setStatus(SendStatus::SENT);
                 $send->setSentAt($this->now());
-
-                $this->em->createQuery('UPDATE App\Entity\Issue i SET i.ok_sends = i.ok_sends + 1 WHERE i.id = :id')
-                    ->setParameter('id', $issue->getId())
-                    ->execute();
-
                 $this->em->flush();
-                $this->checkCompletion($issue);
             });
         } catch (\Exception $e) {
             $attempts = $message->getAttempt();
@@ -70,7 +64,6 @@ class SendEmailMessageHandler
                         ->execute();
 
                     $this->em->flush();
-                    $this->checkCompletion($issue);
                 });
 
                 throw new UnrecoverableMessageHandlingException(
@@ -90,28 +83,6 @@ class SendEmailMessageHandler
                     [new DelayStamp($delaySeconds * 1000)]
                 );
             }
-        }
-    }
-
-    /**
-     * After any send, the issue sending job might fully complete. We check if it's the case here.
-     */
-    private function checkCompletion(Issue $issue): void
-    {
-        $this->em->refresh($issue);
-
-        // Check if all sends are completed
-        if ($issue->getOkSends() + $issue->getFailedSends() >= $issue->getTotalSends()) {
-            $updates = new UpdateIssueDto();
-            if ($issue->getFailedSends() > 0) {
-                $updates->status = IssueStatus::FAILED;
-                $updates->failedAt = $this->now();
-            } else {
-                $updates->status = IssueStatus::SENT;
-                $updates->sentAt = $this->now();
-            }
-
-            $this->issueService->updateIssue($issue, $updates);
         }
     }
 }

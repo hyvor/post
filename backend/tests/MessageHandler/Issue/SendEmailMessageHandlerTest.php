@@ -11,7 +11,6 @@ use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
-use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -21,11 +20,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
-use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
-use Symfony\Component\Mime\Email;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(SendEmailMessageHandler::class)]
 #[CoversClass(SendEmailMessage::class)]
@@ -105,12 +101,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
-
-        // Test checkCompletion method
-        $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame(1, $issueDB->getOkSends());
-        $this->assertSame(IssueStatus::SENT, $issueDB->getStatus());
-        $this->assertSame("2025-02-21 00:00:00", $issueDB->getSentAt()?->format('Y-m-d H:i:s'));
     }
 
     public function test_send_job_with_exception(): void
@@ -166,12 +156,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
         $issueRepository = $this->em->getRepository(Issue::class);
         $issueDB = $issueRepository->find($issue->getId());
-
-        // Test checkCompletion method
-        $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame(1, $issueDB->getFailedSends());
-        $this->assertSame(IssueStatus::FAILED, $issueDB->getStatus());
-        $this->assertSame("2025-02-21 00:00:00", $issueDB->getFailedAt()?->format('Y-m-d H:i:s'));
 
         $this->assertEmailCount(0);
     }

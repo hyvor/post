@@ -6,11 +6,9 @@ use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
-use App\Entity\SendingProfile;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
-use App\Repository\SendRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
@@ -98,8 +96,8 @@ class IssueService
             $issue->setTotalSends($updates->totalSends);
         }
 
-        if ($updates->hasProperty('okSends')) {
-            $issue->setOkSends($updates->okSends);
+        if ($updates->hasProperty('createdSends')) {
+            $issue->setCreatedSends($updates->createdSends);
         }
 
         if ($updates->hasProperty('failedSends')) {
@@ -108,10 +106,6 @@ class IssueService
 
         if ($updates->hasProperty('sentAt')) {
             $issue->setSentAt($updates->sentAt);
-        }
-
-        if ($updates->hasProperty('failedAt')) {
-            $issue->setFailedAt($updates->failedAt);
         }
 
         $issue->setUpdatedAt($this->now());
@@ -178,7 +172,7 @@ class IssueService
 
         $returnArray = [
             'total' => $issue->getTotalSends(),
-            'sent' => $issue->getOkSends(),
+            'sent' => $issue->getCreatedSends(),
             'pending' => (int)$queryResults['pendingCount']
         ];
 

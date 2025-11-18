@@ -65,13 +65,10 @@ class Issue
     private int $total_sends = 0;
 
     #[ORM\Column]
-    private int $ok_sends = 0;
+    private int $created_sends = 0;
 
     #[ORM\Column]
     private int $failed_sends = 0;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $failed_at = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
@@ -274,14 +271,14 @@ class Issue
         return $this;
     }
 
-    public function getOkSends(): int
+    public function getCreatedSends(): int
     {
-        return $this->ok_sends;
+        return $this->created_sends;
     }
 
-    public function setOkSends(int $ok_sends): static
+    public function setCreatedSends(int $created_sends): static
     {
-        $this->ok_sends = $ok_sends;
+        $this->created_sends = $created_sends;
 
         return $this;
     }
@@ -294,18 +291,6 @@ class Issue
     public function setFailedSends(int $failed_sends): static
     {
         $this->failed_sends = $failed_sends;
-
-        return $this;
-    }
-
-    public function getFailedAt(): ?\DateTimeImmutable
-    {
-        return $this->failed_at;
-    }
-
-    public function setFailedAt(?\DateTimeImmutable $failed_at): static
-    {
-        $this->failed_at = $failed_at;
 
         return $this;
     }

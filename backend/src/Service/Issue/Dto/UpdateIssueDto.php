@@ -26,7 +26,7 @@ class UpdateIssueDto
     public \DateTimeImmutable $failedAt;
 
     public int $totalSends;
-    public int $okSends;
+    public int $createdSends;
 
     public int $failedSends;
     public string $error_private;
