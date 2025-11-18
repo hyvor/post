@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-
   frontend-check:
     name: "Frontend Check"
     runs-on: ubuntu-latest
@@ -23,6 +22,20 @@ jobs:
 
       - name: Run Svelte Check
         run: docker run frontend-dev npm run check
+
+  frontend-prettier:
+    name: "Frontend Prettier"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t frontend-dev . --target frontend-dev
+
+      - name: Run Prettier
+        run: docker run frontend-dev npm run lint
 
   phpstan:
     name: PHPStan
@@ -86,6 +99,20 @@ jobs:
       - name: Run Svelte Check
         run: docker run embed-dev npm run check
 
+  embed-prettier:
+    name: "Embed Prettier"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t embed-dev . --target embed-dev
+
+      - name: Run Prettier
+        run: docker run embed-dev npm run lint
+
   archive-check:
     name: "Archive Check"
     runs-on: ubuntu-latest
@@ -99,3 +126,17 @@ jobs:
 
       - name: Run Svelte Check
         run: docker run archive-dev npm run check
+
+  archive-prettier:
+    name: "Archive Prettier"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t archive-dev . --target archive-dev
+
+      - name: Run Prettier
+        run: docker run archive-dev npm run lint
