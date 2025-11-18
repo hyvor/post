@@ -35,7 +35,7 @@ class TemplateWithTest extends WebTestCase
                     align-items: center;
                     gap: 6px;
                 ">
-                    <a href="{{ brand_url }}" target="_blank"
+                    <a href="{{ logo_url }}" target="_blank"
                        style="
                        display:inline-flex;
                        align-items:center;
@@ -44,7 +44,7 @@ class TemplateWithTest extends WebTestCase
                    ">
                         <img src="{{ logo }}" alt="{{ logo_alt }}" style="max-height: 26px; width: auto;">
                         <span class="name" style="font-weight: 600; padding-left: 6px;">
-                            {{ brand }}
+                            {{ name }}
                         </span>
                     </a>
                 </div>
@@ -76,8 +76,6 @@ class TemplateWithTest extends WebTestCase
                   "content": "",
                   "logo": "logo-goes-here",
                   "logo_alt": "",
-                  "brand": "brand-goes-here",
-                  "brand_url": "",
                   "address": "address-goes-here",
                   "unsubscribe_url": "brand-url-goes-here",
                   "unsubscribe_text": "",
@@ -111,7 +109,6 @@ class TemplateWithTest extends WebTestCase
         $this->assertIsString($html);
 
         $this->assertStringContainsString("logo-goes-here", $html);
-        $this->assertStringContainsString("brand-goes-here", $html);
         $this->assertStringContainsString("address-goes-here", $html);
         $this->assertStringContainsString("brand-url-goes-here", $html);
     }
