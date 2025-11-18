@@ -3,94 +3,93 @@ FORM
 */
 
 .form {
-    width: 425px;
-    margin: 0 auto;
-    max-width: 100%;
-    color: var(--hp-text);
+	width: 425px;
+	margin: 0 auto;
+	max-width: 100%;
+	color: var(--hp-text);
 
+	--hp-color-green: #5d995d;
+	--hp-color-red: #ab2525;
 
-    --hp-color-green: #5d995d;
-    --hp-color-red: #ab2525;
-
-    /* default if the init fails */
-    --hp-accent: #dcdee2;
-    --hp-accent-text: #000;
+	/* default if the init fails */
+	--hp-accent: #dcdee2;
+	--hp-accent-text: #000;
 }
 
 .form * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .form a {
-    color: var(--hp-accent);
+	color: var(--hp-accent);
 }
 
 .form .title.hidden,
 .form .lists.hidden,
 .form .description.hidden {
-    display: none;
+	display: none;
 }
 
 .form .title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 1rem;
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 1rem;
 }
 
 .form .description {
-    margin-top: -0.8rem;
-    font-size: 16px;
-    color: var(--hp-text-light);
-    margin-bottom: 1.2rem;
+	margin-top: -0.8rem;
+	font-size: 16px;
+	color: var(--hp-text-light);
+	margin-bottom: 1.2rem;
 }
 
 .form .input {
-    position: relative;
-    background-color: var(--hp-input);
-    box-shadow: var(--hp-input-box-shadow);
-    border-radius: var(--hp-border-radius);
-    border: var(--hp-input-border);
-    display: flex;
-    padding: 3px;
+	position: relative;
+	background-color: var(--hp-input);
+	box-shadow: var(--hp-input-box-shadow);
+	border-radius: var(--hp-border-radius);
+	border: var(--hp-input-border);
+	display: flex;
+	padding: 3px;
 }
 
 .form .input.focused {
-    outline: 2px solid var(--hp-accent);
+	outline: 2px solid var(--hp-accent);
 }
 
 .form .email-input {
-    padding: 6px 20px;
-    border: none;
-    flex: 1;
-    font-family: inherit;
-    color: var(--hp-input-text);
-    background-color: transparent;
+	padding: 6px 20px;
+	border: none;
+	flex: 1;
+	font-family: inherit;
+	color: var(--hp-input-text);
+	background-color: transparent;
 }
 
 .form .email-input::placeholder {
-    color: color-mix(in srgb, var(--hp-input-text), transparent 50%);
+	color: color-mix(in srgb, var(--hp-input-text), transparent 50%);
 }
 
 .form .email-input:focus {
-    outline: none;
+	outline: none;
 }
 
 .form button {
-    background-color: var(--hp-accent);
-    color: var(--hp-accent-text);
-    border: none;
-    border-radius: var(--hp-border-radius);
-    cursor: pointer;
-    font-family: inherit;
-    padding: 0 25px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+	background-color: var(--hp-accent);
+	color: var(--hp-accent-text);
+	border: none;
+	border-radius: var(--hp-border-radius);
+	cursor: pointer;
+	font-family: inherit;
+	padding: 0 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .form button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
 /* .form .success-message {
@@ -100,48 +99,48 @@ FORM
 } */
 
 .form .lists {
-    margin-bottom: 1.2rem;
+	margin-bottom: 1.2rem;
 }
 
 .form .footer {
-    padding-top: 1rem;
-    font-size: 14px;
-    color: var(--hp-text-light);
+	padding-top: 1rem;
+	font-size: 14px;
+	color: var(--hp-text-light);
 }
 
 .form .list {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8em;
-    cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.8em;
+	cursor: pointer;
 }
 
 .form .list-name {
-    font-size: 16px;
-    font-weight: 600;
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .form .list-description {
-    font-size: 14px;
-    color: var(--hp-text-light);
+	font-size: 14px;
+	color: var(--hp-text-light);
 }
 
 .form .message {
-    margin-top: 1rem;
-    padding: 10px 23px;
-    border-radius: var(--hp-border-radius);
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	margin-top: 1rem;
+	padding: 10px 23px;
+	border-radius: var(--hp-border-radius);
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .form .message.success {
-    background-color: var(--hp-color-green);
-    color: #fff;
+	background-color: var(--hp-color-green);
+	color: #fff;
 }
 
 .form .message.error {
-    background-color: var(--hp-color-red);
-    color: #fff;
+	background-color: var(--hp-color-red);
+	color: #fff;
 }

@@ -12,9 +12,9 @@
 
 <svelte:head>
 	<title>
-		{data.name} - Hyvor Post Docs
+		{data.name} | Hyvor Post
 	</title>
-	<link rel="canonical" href="https://blogs.hyvor.com/docs{data.slug ? '/' + data.slug : ''}" />
+	<link rel="canonical" href="https://post.hyvor.com/docs{data.slug ? '/' + data.slug : ''}" />
 </svelte:head>
 
 <div class="docs-wrap">

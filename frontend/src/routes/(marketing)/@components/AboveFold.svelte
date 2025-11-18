@@ -37,7 +37,7 @@
 	<div class="right">
 		<!-- <MainGraphic /> -->
 		<div class="main-browser">
-			<BrowserWindow image={consoleImg} link="console.hyvor.com" />
+			<BrowserWindow image={consoleImg} link="post.hyvor.com/console" />
 		</div>
 		<div class="another-browser">
 			<Envelope emailImage={emailImg} />
@@ -112,23 +112,16 @@
 	}
 
 	.trial-checks {
-		margin-top: 30px;
+		margin-top: 40px;
 		margin-left: 0;
 		display: flex;
-		/* justify-content: center; */
-	}
-
-	:global(.checks) {
-		flex-direction: column;
-		gap: 15px !important;
+		text-align: left;
 	}
 
 	@keyframes heroEnter {
 		0% {
 			transform: translateX(30px) translateY(0);
-			/* transform: translateX(60px) translateY(-20px); */
 			opacity: 0.9;
-			/* //filter: blur(2gpx); */
 		}
 		100% {
 			transform: translateX(0) translateY(0);
@@ -139,15 +132,12 @@
 
 	@keyframes heroEnterDelayed {
 		0% {
-			/* //transform: translateX(-40px) translateY(30px); */
 			transform: translateX(0) translateY(30px);
 			opacity: 0.9;
-			/* //filter: blur(1gpx); */
 		}
 		100% {
 			transform: translateX(0) translateY(0);
 			opacity: 1;
-			/* //filter: blur(0); */
 		}
 	}
 

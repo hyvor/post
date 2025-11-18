@@ -10,7 +10,8 @@
 </script>
 
 <svelte:head>
-	<title>Pricing - Hyvor Post</title>
+	<title>Pricing | Hyvor Post</title>
+	<link rel="canonical" href="https://post.hyvor.com/pricing" />
 </svelte:head>
 <div class="hds-container">
 	<FeatureSectionHead

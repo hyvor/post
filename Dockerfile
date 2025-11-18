@@ -82,7 +82,9 @@ WORKDIR /app/embed
 # install dependencies
 COPY embed/package.json embed/package-lock.json \
     embed/vite.config.ts \
-    embed/tsconfig*.json \
+    embed/tsconfig.json \
+    embed/tsconfig.app.json \
+    embed/tsconfig.node.json \
     /app/embed/
 
 COPY embed/src /app/embed/src
@@ -118,13 +120,6 @@ RUN install-php-extensions zip intl pdo_pgsql opcache apcu
 
 ###################################################
 FROM backend-base AS backend-dev
-
-ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
-
-# symfony cli
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
-    && apt install -y symfony-cli
-RUN echo "memory_limit=1024M" >> /usr/local/etc/php/conf.d/app.ini
 # pcov for coverage
 RUN install-php-extensions pcov
 COPY backend/composer.json backend/composer.lock /app/backend/
@@ -140,12 +135,11 @@ CMD ["sh", "/app/run"]
 
 ###################################################
 FROM backend-base AS final
-
-ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
-
-RUN apt update && apt install -y supervisor
-
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+# supervisor
+# nodejs for archive
+RUN apt update \
+    && apt install -y supervisor \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt install -y nodejs
 
 COPY backend /app/backend

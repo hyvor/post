@@ -1,85 +1,86 @@
 <script lang="ts">
-    import Nav from './Nav.svelte';
-    import {onMount} from 'svelte';
-    import sudoApi from './lib/sudoApi';
-    import type {SudoConfig, SudoStats} from './types';
-    import {configStore, statsStore} from './lib/stores/sudoStore';
-    import {Loader, toast} from '@hyvor/design/components';
-    import {onNavigate} from '$app/navigation';
+	import Nav from './Nav.svelte';
+	import { onMount } from 'svelte';
+	import sudoApi from './lib/sudoApi';
+	import type { SudoConfig, SudoStats } from './types';
+	import { configStore, statsStore } from './lib/stores/sudoStore';
+	import { Loader, toast } from '@hyvor/design/components';
+	import { onNavigate } from '$app/navigation';
 
-    interface Props {
-        children?: import('svelte').Snippet;
-    }
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-    let {children}: Props = $props();
+	let { children }: Props = $props();
 
-    interface InitResponse {
-        config: SudoConfig;
-        stats: SudoStats;
-    }
+	interface InitResponse {
+		config: SudoConfig;
+		stats: SudoStats;
+	}
 
-    let isLoading = $state(true);
+	let isLoading = $state(true);
 
-    onMount(() => {
-        sudoApi
-            .get<InitResponse>({
-                endpoint: '/init'
-            })
-            .then((res) => {
-                configStore.set(res.config);
-                statsStore.set(res.stats);
-                isLoading = false;
-            })
-            .catch((err) => {
-                toast.error(err.message);
-            });
-    });
+	onMount(() => {
+		sudoApi
+			.get<InitResponse>({
+				endpoint: '/init'
+			})
+			.then((res) => {
+				configStore.set(res.config);
+				statsStore.set(res.stats);
+				isLoading = false;
+			})
+			.catch((err) => {
+				toast.error(err.message);
+			});
+	});
 
-    onNavigate((nav) => {
-        if (window.parent) {
-            window.parent.postMessage(
-                {
-                    type: 'navigate',
-                    to: nav.to?.url.pathname
-                },
-                '*'
-            );
-        }
-    });
+	onNavigate((nav) => {
+		if (window.parent) {
+			window.parent.postMessage(
+				{
+					type: 'navigate',
+					to: nav.to?.url.pathname
+				},
+				'*'
+			);
+		}
+	});
 </script>
+
 <svelte:head>
-    <title>Sudo · Hyvor Post</title>
-    <meta name="robots" content="noindex"/>
+	<title>Sudo · Hyvor Post</title>
+	<meta name="robots" content="nofollow, noindex" />
 </svelte:head>
 
 <div class="main-inner">
-    {#if isLoading}
-        <Loader full/>
-    {:else}
-        <Nav/>
-        <div class="content hds-box">
-            {@render children?.()}
-        </div>
-    {/if}
+	{#if isLoading}
+		<Loader full />
+	{:else}
+		<Nav />
+		<div class="content hds-box">
+			{@render children?.()}
+		</div>
+	{/if}
 </div>
 
 <style>
-    .main-inner {
-        display: flex;
-        flex: 1;
-        width: 100%;
-        height: 100vh;
-        min-height: 0;
-    }
+	.main-inner {
+		display: flex;
+		flex: 1;
+		width: 100%;
+		height: 100vh;
+		min-height: 0;
+	}
 
-    .content {
-        display: flex;
-        flex-direction: column;
-        margin: 15px;
-        padding: 15px;
-        flex: 1;
-        width: 100%;
-        height: calc(100vh - 30px);
-        min-width: 0;
-    }
+	.content {
+		display: flex;
+		flex-direction: column;
+		margin: 15px;
+		padding: 15px;
+		flex: 1;
+		width: 100%;
+		height: calc(100vh - 30px);
+		min-width: 0;
+	}
 </style>

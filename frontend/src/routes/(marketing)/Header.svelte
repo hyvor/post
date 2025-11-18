@@ -2,6 +2,8 @@
 	import { Header } from '@hyvor/design/marketing';
 	import { Button } from '@hyvor/design/components';
 	import { page } from '$app/stores';
+	import IconGithub from '@hyvor/icons/IconGithub';
+	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 </script>
 
 <Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
@@ -23,6 +25,21 @@
 			>
 				Docs
 			</Button>
+			<Button
+				as="a"
+				target="_blank"
+				size="small"
+				href="https://github.com/hyvor/post"
+				variant="invisible"
+			>
+				{#snippet start()}
+					<IconGithub size={14} />
+				{/snippet}
+				Github
+				{#snippet end()}
+					<IconBoxArrowUpRight size={10} />
+				{/snippet}
+			</Button>
 		</div>
 	{/snippet}
 
@@ -42,6 +59,12 @@
 		display: flex;
 		align-items: center;
 		gap: 5px;
+	}
+
+	.center {
+		display: flex;
+		gap: 5px;
+		align-items: center;
 	}
 
 	/* mobile styles */

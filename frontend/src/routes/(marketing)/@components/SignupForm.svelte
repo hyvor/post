@@ -1,14 +1,9 @@
 <script lang="ts">
 	import BrowserWindow from './BrowserWindow.svelte';
 	import signupImg from '../img/signup.png';
-	// import emailImg from '../img/email.png';
-	// import Envelope from './Envelope.svelte';
-	import IconBullseye from '@hyvor/icons/IconBullseye';
-	import IconLink from '@hyvor/icons/IconLink';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconCheckAll from '@hyvor/icons/IconCheckAll';
 	import IconCodeSlash from '@hyvor/icons/IconCodeSlash';
-	// import signupSvg from './img/img/api-webhooks.svg';
 </script>
 
 <div class="signup-form hds-container-max">
@@ -57,12 +52,8 @@
 	</div>
 	<div class="right">
 		<div class="form-preview">
-			<BrowserWindow image={signupImg} link="https://post.hyvor.com" />
+			<BrowserWindow image={signupImg} link="example.com" />
 		</div>
-
-		<!-- <div class="another-browser">
-            <Envelope emailImage={emailImg} />
-        </div> -->
 	</div>
 </div>
 

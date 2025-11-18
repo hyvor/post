@@ -10,8 +10,11 @@
 </script>
 
 <svelte:head>
-	<title>Hyvor Post</title>
-	<meta name="description" content="Simple Newsletter Platform" />
+	<title>Hyvor Post - Simple, Privacy-First Newsletter Platform</title>
+	<meta
+		name="description"
+		content="Hyvor Post is a simple, privacy-first newsletter platform. No Tracking. Just Ideas, Delivered."
+	/>
 	<link rel="canonical" href="https://post.hyvor.com" />
 
 	<script type="text/javascript">
