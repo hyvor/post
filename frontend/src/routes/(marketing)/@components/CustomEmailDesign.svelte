@@ -51,17 +51,11 @@
 	<div class="right">
 		<!-- You can add images or additional content here if needed -->
 		<div class="form-preview">
-			<BrowserWindow
-				image={customEmailImg}
-				link="https://post.hyvor.com/console/settings/design"
-			/>
+			<BrowserWindow image={customEmailImg} link="post.hyvor.com/console/settings/design" />
 		</div>
 
 		<div class="another-browser">
-			<BrowserWindow
-				image={customEmailImg1}
-				link="https://post.hyvor.com/console/settings/design"
-			/>
+			<BrowserWindow image={customEmailImg1} link="post.hyvor.com/console/settings/design" />
 		</div>
 	</div>
 </div>

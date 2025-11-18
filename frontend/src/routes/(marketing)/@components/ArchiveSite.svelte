@@ -10,7 +10,7 @@
 	<div class="wrap hds-container-max">
 		<div class="left">
 			<div class="main-browser">
-				<BrowserWindow image={archiveImg} link="post.hyvor.com/archive" />
+				<BrowserWindow image={archiveImg} link="archive.hyvorpost.io" />
 			</div>
 
 			<div class="another-browser">
