@@ -31,9 +31,9 @@ class TemplateVariableService
 
             name: $newsletter->getName(),
             subdomain: $newsletter->getSubdomain(),
-            logo: $meta->logo ?? '',
-            logo_url: $meta->logo_url ?? '',
-            logo_alt: $meta->logo_alt ?? $newsletter->getName(),
+            logo: '',
+            logo_url: '',
+            logo_alt: $newsletter->getName(),
 
             address: $meta->address ?? '',
             unsubscribe_url: '',
@@ -61,14 +61,27 @@ class TemplateVariableService
         );
     }
 
+    public function variablesFromIssueSendingProfile(Issue $issue, TemplateVariables $variables): TemplateVariables
+    {
+        $defaultSendingProfile = $issue->getSendingProfile();
+        $variables->logo = $defaultSendingProfile->getBrandLogo() ?? $variables->logo;
+        $variables->logo_alt = $defaultSendingProfile->getBrandName() ?? $variables->logo_alt;
+        // TODO: logo_url
+
+        return $variables;
+    }
+
     public function variablesFromIssue(Issue $issue): TemplateVariables
     {
         $variables = $this->variablesFromNewsletter($issue->getNewsletter());
+        $variables = $this->variablesFromIssueSendingProfile($issue, $variables);
+
         $variables->subject = (string)$issue->getSubject();
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT
         );
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
+
         return $variables;
     }
 
