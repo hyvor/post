@@ -16,10 +16,10 @@
 	import { newsletterRoleStore, newsletterStore } from '../../../../lib/stores/newsletterStore';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteUser } from '../../../../lib/actions/userActions';
-    import {getI18n} from "../../../../lib/i18n";
+	import { getI18n } from '../../../../lib/i18n';
 	export let refreshUserDelete: (u: User) => void;
 	export let user: User;
-    const I = getI18n();
+	const I = getI18n();
 	async function handleRemove() {
 		const confirmation = await confirm({
 			title: I.t('console.settings.users.removeAdminTitle'),

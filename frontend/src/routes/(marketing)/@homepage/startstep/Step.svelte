@@ -6,7 +6,7 @@
 		title: string;
 		description: string;
 		topLine?: boolean;
-	} 
+	}
 
 	let { icon, number, title, description, topLine = true }: Props = $props();
 

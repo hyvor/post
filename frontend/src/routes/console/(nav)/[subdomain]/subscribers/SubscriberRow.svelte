@@ -9,7 +9,7 @@
 	import { deleteSubscriber } from '../../../lib/actions/subscriberActions';
 	import SubscriberEdit from './SubscriberEdit.svelte';
 	import { getI18n } from '../../../lib/i18n';
-	import {selectedSubscriberIdsStore} from "../../../lib/stores/newsletterStore";
+	import { selectedSubscriberIdsStore } from '../../../lib/stores/newsletterStore';
 
 	interface Props {
 		subscriber: Subscriber;

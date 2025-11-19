@@ -1,70 +1,70 @@
 <script lang="ts">
-    import {
-        Caption,
-        IconButton,
-        Tooltip,
-        Label,
-        Link,
-        SplitControl,
-        Loader,
-        toast
-    } from '@hyvor/design/components';
-    import {fade} from 'svelte/transition';
-    import {previewIssue} from '../../../../../lib/actions/issueActions';
-    import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
-    import {consoleUrlWithNewsletter} from '../../../../../lib/consoleUrl';
-    import {
-        draftIssueEditingStore,
-        draftPreviewKey,
-        draftSendableSubscribersCountStore
-    } from './draftStore';
-    import {onMount} from 'svelte';
+	import {
+		Caption,
+		IconButton,
+		Tooltip,
+		Label,
+		Link,
+		SplitControl,
+		Loader,
+		toast
+	} from '@hyvor/design/components';
+	import { fade } from 'svelte/transition';
+	import { previewIssue } from '../../../../../lib/actions/issueActions';
+	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
+	import { consoleUrlWithNewsletter } from '../../../../../lib/consoleUrl';
+	import {
+		draftIssueEditingStore,
+		draftPreviewKey,
+		draftSendableSubscribersCountStore
+	} from './draftStore';
+	import { onMount } from 'svelte';
 
-    let html = $state('');
-    let iframe: HTMLIFrameElement = $state({} as HTMLIFrameElement);
-    let reloading = $state(false);
+	let html = $state('');
+	let iframe: HTMLIFrameElement = $state({} as HTMLIFrameElement);
+	let reloading = $state(false);
 
-    function resizeIframe() {
-        if (!iframe) return;
-        iframe.style.height = iframe.contentWindow!.document.body.scrollHeight + 'px';
-    }
+	function resizeIframe() {
+		if (!iframe) return;
+		iframe.style.height = iframe.contentWindow!.document.body.scrollHeight + 'px';
+	}
 
-    function refresh() {
-        reloading = true;
-        fetchPreview();
-    }
+	function refresh() {
+		reloading = true;
+		fetchPreview();
+	}
 
-    function fetchPreview() {
-        // Don't fetch preview if the component is destroyed or issue is deleted
-        if (!iframe) return;
+	function fetchPreview() {
+		// Don't fetch preview if the component is destroyed or issue is deleted
+		if (!iframe) return;
 
-        reloading = true;
+		reloading = true;
 
-        previewIssue($draftIssueEditingStore.id)
-            .then((res) => {
-                html = res.html;
-                resizeIframe();
-            })
-            .catch((e) => {
-                toast.error(e.message);
-            })
-            .finally(() => {
-                reloading = false;
-            });
-    }
+		previewIssue($draftIssueEditingStore.id)
+			.then((res) => {
+				html = res.html;
+				resizeIframe();
+			})
+			.catch((e) => {
+				toast.error(e.message);
+			})
+			.finally(() => {
+				reloading = false;
+			});
+	}
 
-    let previewUpdateTimeout: ReturnType<typeof setTimeout>;
+	let previewUpdateTimeout: ReturnType<typeof setTimeout>;
 
-    draftPreviewKey.subscribe((key) => {
-        if (previewUpdateTimeout) {
-            clearTimeout(previewUpdateTimeout);
-        }
-        previewUpdateTimeout = setTimeout(fetchPreview, 1000);
+	draftPreviewKey.subscribe((key) => {
+		if (previewUpdateTimeout) {
+			clearTimeout(previewUpdateTimeout);
+		}
+		previewUpdateTimeout = setTimeout(fetchPreview, 1000);
 
-        return () => previewUpdateTimeout && clearTimeout(previewUpdateTimeout);
-    });
+		return () => previewUpdateTimeout && clearTimeout(previewUpdateTimeout);
+	});
 
-    onMount(fetchPreview);
+	onMount(fetchPreview);
 </script>
 
 <!-- <SplitControl column>
@@ -90,48 +90,48 @@
 </SplitControl> -->
 
 <div class="preview">
-    <iframe
-        srcdoc={html}
-        title="Issue preview"
-        frameborder="0"
-        scrolling="no"
-        height={600}
-        width="100%"
-        bind:this={iframe}
-        onload={resizeIframe}
-    ></iframe>
+	<iframe
+		srcdoc={html}
+		title="Issue preview"
+		frameborder="0"
+		scrolling="no"
+		height={600}
+		width="100%"
+		bind:this={iframe}
+		onload={resizeIframe}
+	></iframe>
 
-    {#if reloading}
-        <div class="loader" transition:fade>
-            <Loader size="large" colorTrack="transparent"/>
-        </div>
-    {/if}
+	{#if reloading}
+		<div class="loader" transition:fade>
+			<Loader size="large" colorTrack="transparent" />
+		</div>
+	{/if}
 </div>
 
 <style>
-    .preview {
-        height: 100%;
-        overflow: auto;
-        position: relative;
-        flex: 1;
-        width: 50%;
-        border-left: 1px solid var(--border);
-    }
+	.preview {
+		height: 100%;
+		overflow: auto;
+		position: relative;
+		flex: 1;
+		width: 50%;
+		border-left: 1px solid var(--border);
+	}
 
-    iframe {
-        min-height: 100%;
-    }
+	iframe {
+		min-height: 100%;
+	}
 
-    .loader {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.04);
-    }
+	.loader {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: rgba(0, 0, 0, 0.04);
+	}
 </style>

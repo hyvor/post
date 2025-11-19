@@ -25,7 +25,7 @@
 						display: false,
 						labels: {
 							font: {
-								family: "'Readex Pro', sans-serif",
+								family: "'Readex Pro', sans-serif"
 							}
 						}
 					},
@@ -89,11 +89,11 @@
 </script>
 
 <div>
-    <canvas bind:this={canvas}></canvas>
+	<canvas bind:this={canvas}></canvas>
 </div>
 
 <style>
-    div {
-        padding: 20px 15px;
-    }
+	div {
+		padding: 20px 15px;
+	}
 </style>

@@ -1,17 +1,17 @@
 <script lang="ts">
-    import Content from './Content.svelte';
-    import Preview from '../Preview.svelte';
+	import Content from './Content.svelte';
+	import Preview from '../Preview.svelte';
 </script>
 
 <div class="split">
-    <Content/>
-    <Preview/>
+	<Content />
+	<Preview />
 </div>
 
 <style>
-    .split {
-        display: flex;
-        height: 100%;
-        overflow: hidden;
-    }
+	.split {
+		display: flex;
+		height: 100%;
+		overflow: hidden;
+	}
 </style>

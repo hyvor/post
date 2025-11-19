@@ -41,22 +41,22 @@ export const categories: Category[] = [
 				component: Import
 			}
 		]
-	},
+	}
 
 	// {
 	// 	name: 'Developer',
 	// 	pages: [
-			// {
-			// 	slug: 'webhooks',
-			// 	name: 'Webhooks'
-			// 	// component: add component name
-			// },
-			// {
-			// 	slug: 'api-console',
-			// 	name: 'Console API'
-			// 	// component: add component name
-			// }
-		//]
+	// {
+	// 	slug: 'webhooks',
+	// 	name: 'Webhooks'
+	// 	// component: add component name
+	// },
+	// {
+	// 	slug: 'api-console',
+	// 	name: 'Console API'
+	// 	// component: add component name
+	// }
+	//]
 	//},
 ];
 

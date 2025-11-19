@@ -3,17 +3,17 @@
 	import Plans from './Plans.svelte';
 	import Usage from './Usage.svelte';
 	import { getI18n } from '../../lib/i18n';
-    import {userApprovalStatusStore} from "../../lib/stores/consoleStore";
-    import {goto} from "$app/navigation";
-    import {toast} from "@hyvor/design/components";
+	import { userApprovalStatusStore } from '../../lib/stores/consoleStore';
+	import { goto } from '$app/navigation';
+	import { toast } from '@hyvor/design/components';
 
 	const I18n = getI18n();
 
 	onMount(() => {
-        if ($userApprovalStatusStore !== 'approved') {
-            toast.info(I18n.t('console.billing.approvalRequired'));
-            goto('/console/approve');
-        }
+		if ($userApprovalStatusStore !== 'approved') {
+			toast.info(I18n.t('console.billing.approvalRequired'));
+			goto('/console/approve');
+		}
 		// if ($ownerStore) getBillingData().then((r) => (data = r));
 	});
 </script>

@@ -1,16 +1,16 @@
-import {writable} from 'svelte/store';
+import { writable } from 'svelte/store';
 import {
-    type NewsletterStats,
-    type Newsletter,
-    type List,
-    type Issue,
-    type UserRole,
-    type SubscriberMetadataDefinition,
-    type SendingProfile,
-    type Import,
-    type NewsletterPermissions,
-    type NewsletterList,
-    type Subscriber
+	type NewsletterStats,
+	type Newsletter,
+	type List,
+	type Issue,
+	type UserRole,
+	type SubscriberMetadataDefinition,
+	type SendingProfile,
+	type Import,
+	type NewsletterPermissions,
+	type NewsletterList,
+	type Subscriber
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
@@ -29,24 +29,24 @@ export const sendingProfilesStore = writable<SendingProfile[]>([]);
 export const importStore = writable<Import[]>([]);
 
 export function setNewsletterStoreByNewsletterList(list: NewsletterList) {
-    setNewsletterStore(list.newsletter);
-    newsletterRoleStore.set(list.role);
+	setNewsletterStore(list.newsletter);
+	newsletterRoleStore.set(list.role);
 }
 
 export function setNewsletterStore(newsletter: Newsletter) {
-    newsletterStore.set(newsletter);
-    newsletterEditingStore.set({...newsletter});
+	newsletterStore.set(newsletter);
+	newsletterEditingStore.set({ ...newsletter });
 }
 
 export function updateNewsletterStore(
-    newsletter: Partial<Newsletter> | ((currentnewsletter: Newsletter) => Partial<Newsletter>)
+	newsletter: Partial<Newsletter> | ((currentnewsletter: Newsletter) => Partial<Newsletter>)
 ) {
-    const stores = [newsletterStore, newsletterEditingStore];
+	const stores = [newsletterStore, newsletterEditingStore];
 
-    stores.forEach((store) => {
-        store.update((b) => {
-            const val = typeof newsletter === 'function' ? newsletter(b) : newsletter;
-            return {...b, ...val};
-        });
-    });
+	stores.forEach((store) => {
+		store.update((b) => {
+			const val = typeof newsletter === 'function' ? newsletter(b) : newsletter;
+			return { ...b, ...val };
+		});
+	});
 }

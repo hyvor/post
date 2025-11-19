@@ -7,7 +7,7 @@
 		Validation,
 		toast
 	} from '@hyvor/design/components';
-	import {listStore, subscriberStore} from '../../../lib/stores/newsletterStore';
+	import { listStore, subscriberStore } from '../../../lib/stores/newsletterStore';
 	import ListSelector from './ListSelector.svelte';
 	import { createSubscriber } from '../../../lib/actions/subscriberActions';
 
@@ -50,7 +50,7 @@
 			createSubscriber(email, selectedList)
 				.then((data) => {
 					show = false;
-					subscriberStore.update(subscriber => [data, ...subscriber]);
+					subscriberStore.update((subscriber) => [data, ...subscriber]);
 				})
 				.catch((error) => {
 					toast.error(`Failed to add subscriber: ${error.message}.`);
@@ -77,7 +77,8 @@
 	{loading}
 >
 	<p>
-		Subscribers will receive an email to confirm their opt-in and will be added only upon confirmation.
+		Subscribers will receive an email to confirm their opt-in and will be added only upon
+		confirmation.
 	</p>
 
 	<SplitControl label="Emails" caption="Add one email per line">
