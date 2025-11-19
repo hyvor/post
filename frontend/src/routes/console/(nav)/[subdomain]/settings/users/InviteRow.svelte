@@ -7,11 +7,11 @@
 	import RoleTag from '../../../../@components/Nav/RoleTag.svelte';
 	import IconTrash from '@hyvor/icons/IconTrash';
 	import { deleteInvite, inviteUser } from '../../../../lib/actions/userActions';
-    import {getI18n} from "../../../../lib/i18n";
+	import { getI18n } from '../../../../lib/i18n';
 
-    const I = getI18n();
+	const I = getI18n();
 	export let invite: Invite;
-    export let refreshInviteDelete: (i: Invite) => void;
+	export let refreshInviteDelete: (i: Invite) => void;
 
 	let lastResentTime = 0;
 
@@ -25,14 +25,14 @@
 		}
 		lastResentTime = Date.now();
 
-        const inviteData = {
+		const inviteData = {
 			username: invite.user.username!,
-			role : 'admin', // Hardcoded for now
+			role: 'admin' // Hardcoded for now
 		};
 
 		try {
 			const invite = await inviteUser(inviteData);
-            toast.success(I.t('console.settings.users.resendInviteSuccess'));
+			toast.success(I.t('console.settings.users.resendInviteSuccess'));
 		} catch (e: any) {
 			toast.error(e.message);
 		}
@@ -47,18 +47,18 @@
 			danger: true
 		});
 
-        if (confirmation) {
-            const toastId = toast.loading('Deleting invite...');
+		if (confirmation) {
+			const toastId = toast.loading('Deleting invite...');
 
-            deleteInvite(invite.id)
-                .then(() => {
-                    refreshInviteDelete(invite);
-                    toast.success('Invite deleted', { id: toastId });
-                })
-                .catch(() => {
-                    toast.error('Failed to delete invite', { id: toastId });
-                });
-        }
+			deleteInvite(invite.id)
+				.then(() => {
+					refreshInviteDelete(invite);
+					toast.success('Invite deleted', { id: toastId });
+				})
+				.catch(() => {
+					toast.error('Failed to delete invite', { id: toastId });
+				});
+		}
 	}
 </script>
 
@@ -72,12 +72,10 @@
 		</div>
 
 		<div class="buttons">
-			<Button style="light" on:click={handleResend} size="small">
-                Resend
-            </Button>
+			<Button style="light" on:click={handleResend} size="small">Resend</Button>
 			<IconButton size={27} on:click={handleDelete}>
-                <IconTrash size={13} />
-            </IconButton>
+				<IconTrash size={13} />
+			</IconButton>
 		</div>
 	</div>
 </div>

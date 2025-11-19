@@ -1,6 +1,5 @@
-import type { Invite, User } from "../../types";
-import consoleApi from "../consoleApi";
-
+import type { Invite, User } from '../../types';
+import consoleApi from '../consoleApi';
 
 export function getNewsletterUsers() {
 	return consoleApi.get<User[]>({
@@ -9,9 +8,9 @@ export function getNewsletterUsers() {
 }
 
 export function getNewsletterInvites() {
-    return consoleApi.get<Invite[]>({
-        endpoint: 'invites'
-    });
+	return consoleApi.get<Invite[]>({
+		endpoint: 'invites'
+	});
 }
 
 interface InviteUserInput {
@@ -27,13 +26,13 @@ export function inviteUser(data: InviteUserInput) {
 }
 
 export function deleteInvite(id: number) {
-    return consoleApi.delete({
-        endpoint: `invites/${id}`
-    });
+	return consoleApi.delete({
+		endpoint: `invites/${id}`
+	});
 }
 
 export function deleteUser(id: number) {
-    return consoleApi.delete({
-        endpoint: `users/${id}`
-    });
+	return consoleApi.delete({
+		endpoint: `users/${id}`
+	});
 }

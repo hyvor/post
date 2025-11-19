@@ -71,7 +71,7 @@
 <EditContentModal
 	bind:show={showEditContentModal}
 	content={getContentFromVariables()}
-	updateContent={updateContent}
+	{updateContent}
 />
 
 <div class="demo-view">

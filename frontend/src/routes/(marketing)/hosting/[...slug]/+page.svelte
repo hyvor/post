@@ -15,10 +15,7 @@
 	<title>
 		{data.name} - Hyvor Post Hosting
 	</title>
-	<link
-		rel="canonical"
-		href="https://post.hyvor.com/hosting{data.slug ? '/' + data.slug : ''}"
-	/>
+	<link rel="canonical" href="https://post.hyvor.com/hosting{data.slug ? '/' + data.slug : ''}" />
 </svelte:head>
 
 <div class="docs-wrap">

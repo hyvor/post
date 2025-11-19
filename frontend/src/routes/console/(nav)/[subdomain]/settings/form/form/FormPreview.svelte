@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resizeIframe } from "./iframe";
+	import { resizeIframe } from './iframe';
 
 	let iframe: HTMLIFrameElement | undefined = $state();
 

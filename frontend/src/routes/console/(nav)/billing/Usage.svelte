@@ -36,9 +36,8 @@
 {#if error}
 	<IconMessage error message={error} />
 {:else if usage}
-
 	<Usage
-		name="Emails" 
+		name="Emails"
 		current={usage.emails.this_month}
 		limit={usage.emails.limit}
 		notIncludedText={I18n.t('console.billing.usage.licenseDoesNotIncludeEmails')}
@@ -47,7 +46,6 @@
 	{#if usage.emails.limit > 0 || Object.values(usage.emails.last_12_months).reduce((a, b) => a + b, 0) > 0}
 		<EmailsChart data={usage.emails.last_12_months} max={usage.emails.limit} />
 	{/if}
-
 {:else}
 	<Loader padding={20} full />
 {/if}

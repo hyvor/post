@@ -7,15 +7,15 @@
 		title?: string;
 		preview_size?: number | 'small' | 'medium' | 'large';
 		square_avatar?: boolean;
-        change?: (url: string | null) => void;
+		change?: (url: string | null) => void;
 	}
 
-	let { 
+	let {
 		url = $bindable(null),
 		title = 'Upload Image',
 		preview_size = 'large',
 		square_avatar = false,
-        change = () => {}  
+		change = () => {}
 	}: Props = $props();
 
 	let showModal = $state(false);
@@ -81,11 +81,12 @@
 	<Button on:click={() => (showModal = true)}>{title}</Button>
 {/if}
 {#if url}
-	<button class:square-avatar={square_avatar} onclick={() => (showModal = true)}><Avatar src={url} size={preview_size} /></button>
+	<button class:square-avatar={square_avatar} onclick={() => (showModal = true)}
+		><Avatar src={url} size={preview_size} /></button
+	>
 {/if}
 
-<Modal title={title} bind:show={showModal} loading={isUploading} closeOnOutsideClick={false}>
-
+<Modal {title} bind:show={showModal} loading={isUploading} closeOnOutsideClick={false}>
 	<div class="text">
 		<input
 			type="file"
