@@ -170,9 +170,9 @@ class RelayApiClient
      * @throws RelayApiException
      */
     public function sendEmail(
-        Email $email,
-        ?int  $idempotencyKey = null,
-        bool  $isSystemNotification = false
+        Email   $email,
+        ?string $idempotencyKey = null,
+        bool    $isSystemNotification = false
     ): SendEmailResponse
     {
         $additionalHeaders = [];
@@ -208,8 +208,7 @@ class RelayApiClient
                 "headers" => $additionalHeaders,
             ],
             [
-                // TODO: remove prefix here
-                'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
+                'X-Idempotency-Key' => $idempotencyKey ?: '',
             ],
             backoffSeconds: self::EMAIL_BACKOFF,
             isSystemNotification: $isSystemNotification

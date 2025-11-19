@@ -61,8 +61,10 @@ class EmailSenderService
             ->addTextHeader('List-Unsubscribe', "<{$this->unsubscribeApiUrl($send)}>")
             ->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
 
-        // TODO: prefix idempotency key by newsletter-send-
-        $this->relayApiClient->sendEmail($emailObject, $send?->getId());
+        $this->relayApiClient->sendEmail(
+            $emailObject,
+            $send ? "newsletter-send-{$send->getId()}" : null
+        );
     }
 
     private function unsubscribeApiUrl(?Send $send): string
