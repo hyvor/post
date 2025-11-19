@@ -1,7 +1,6 @@
 export interface Newsletter {
 	slug: string;
 	name: string;
-	logo: string | null;
 }
 
 export interface IssueList {

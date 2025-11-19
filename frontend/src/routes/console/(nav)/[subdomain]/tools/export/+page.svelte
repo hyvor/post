@@ -2,6 +2,7 @@
     import {Button, Loader, IconMessage, toast, ButtonGroup} from '@hyvor/design/components';
     import SingleBox from '../../../../@components/content/SingleBox.svelte';
     import IconBoxArrowUp from '@hyvor/icons/IconBoxArrowUp';
+    import IconCloudDownload from '@hyvor/icons/IconCloudDownload';
     import {onMount} from 'svelte';
     import {createExport, listExports} from '../../../../lib/actions/exportActions';
     import type {Export} from '../../../../types';
@@ -80,7 +81,7 @@
                             <Button size="small" color="input" as="a" href={exportItem.url} target="_blank">
                                 Download
                                 {#snippet end()}
-                                    <IconBoxArrowUp size={12}/>
+                                    <IconCloudDownload size={12}/>
                                 {/snippet}
                             </Button>
                         {/if}

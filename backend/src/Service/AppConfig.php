@@ -27,8 +27,19 @@ readonly class AppConfig
         #[Autowire('%env(string:SYSTEM_MAIL_DOMAIN)%')]
         private string $systemMailDomain,
 
-        #[Autowire('%env(string:SYSTEM_MAIL_REPLY_TO)%')]
-        private string $systemMailReplyTo,
+        #[Autowire('%env(string:NOTIFICATION_MAIL_FROM_ADDRESS)%')]
+        private string $notificationMailFromAddress,
+
+        #[Autowire('%env(string:NOTIFICATION_MAIL_FROM_NAME)%')]
+        private string $notificationMailFromName,
+
+        #[Autowire('%env(string:NOTIFICATION_MAIL_REPLY_TO)%')]
+        private string $notificationMailReplyTo,
+
+        #[Autowire('%env(string:NOTIFICATION_RELAY_API_KEY)%')]
+        private string $notificationRelayApiKey,
+
+
     )
     {
     }
@@ -63,9 +74,25 @@ readonly class AppConfig
         return $this->relayApiKey;
     }
 
-    public function getSystemMailReplyTo(): string
+    public function getNotificationMailFromAddress(): string
     {
-        return $this->systemMailReplyTo;
+        return $this->notificationMailFromAddress;
     }
+
+    public function getNotificationMailFromName(): string
+    {
+        return $this->notificationMailFromName;
+    }
+
+    public function getNotificationMailReplyTo(): string
+    {
+        return $this->notificationMailReplyTo;
+    }
+
+    public function getNotificationRelayApiKey(): string
+    {
+        return $this->notificationRelayApiKey ?: $this->relayApiKey;
+    }
+
 
 }

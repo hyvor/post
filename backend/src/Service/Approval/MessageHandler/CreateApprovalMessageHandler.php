@@ -4,7 +4,7 @@ namespace App\Service\Approval\MessageHandler;
 
 use App\Entity\Approval;
 use App\Service\Approval\Message\CreateApprovalMessage;
-use App\Service\SystemMail\SystemNotificationMailService;
+use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Internationalization\StringsFactory;
@@ -15,11 +15,11 @@ use Twig\Environment;
 class CreateApprovalMessageHandler
 {
     public function __construct(
-        private EntityManagerInterface        $em,
-        private AuthInterface                 $auth,
-        private StringsFactory                $stringsFactory,
-        private Environment                   $mailTemplate,
-        private SystemNotificationMailService $emailNotificationService,
+        private EntityManagerInterface  $em,
+        private AuthInterface           $auth,
+        private StringsFactory          $stringsFactory,
+        private Environment             $mailTemplate,
+        private NotificationMailService $emailNotificationService,
     )
     {
     }

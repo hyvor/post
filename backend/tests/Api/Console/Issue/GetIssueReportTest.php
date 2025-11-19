@@ -27,8 +27,7 @@ class GetIssueReportTest extends WebTestCase
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-                'total_sends' => 1,
-                'ok_sends' => 1,
+                'total_sendable' => 1,
             ]
         );
 

@@ -250,9 +250,7 @@ class CreateSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $json = $this->getJson();
-        $this->assertSame($violations, $json['violations']);
-        $this->assertSame($violations[0]['message'], $json['message']);
+        $this->assertHasViolation($violations[0]['property'], $violations[0]['message']);
     }
 
     public function testCreateSubscriberInvalidList(): void

@@ -30,7 +30,7 @@ class UpdateNewsletterTest extends WebTestCase
         Clock::set(new MockClock('2025-02-21'));
 
         $meta = new NewsletterMeta();
-        $meta->logo = 'https://example.com/logo.png';
+        $meta->unsubscribe_text = 'unsubscribe here';
         $newsletter = NewsletterFactory::createOne([
             'meta' => $meta
         ]);
@@ -49,7 +49,7 @@ class UpdateNewsletterTest extends WebTestCase
                 'name' => 'UpdateName',
                 'template_color_accent' => '#ff0000',
                 'template_box_radius' => '10px',
-                'logo' => null,
+                'unsubscribe_text' => null,
                 'form_title' => 'Subscribe to newsletter'
             ]
         );
@@ -59,7 +59,7 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('UpdateName', $json['name']);
         $this->assertSame('#ff0000', $json['template_color_accent']);
         $this->assertSame('10px', $json['template_box_radius']);
-        $this->assertNull($json['logo']);
+        $this->assertNull($json['unsubscribe_text']);
 
         $repository = $this->em->getRepository(Newsletter::class);
         $newsletter = $repository->find($json['id']);
@@ -71,7 +71,7 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertInstanceOf(NewsletterMeta::class, $newsletterMeta);
         $this->assertSame('#ff0000', $newsletterMeta->template_color_accent);
         $this->assertSame('10px', $newsletterMeta->template_box_radius);
-        $this->assertSame(null, $newsletterMeta->logo);
+        $this->assertSame(null, $newsletterMeta->unsubscribe_text);
         $this->assertSame('Subscribe to newsletter', $newsletterMeta->form_title);
     }
 

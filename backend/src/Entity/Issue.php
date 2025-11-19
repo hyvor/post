@@ -62,16 +62,7 @@ class Issue
     private array $list_ids;
 
     #[ORM\Column]
-    private int $total_sends = 0;
-
-    #[ORM\Column]
-    private int $ok_sends = 0;
-
-    #[ORM\Column]
-    private int $failed_sends = 0;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $failed_at = null;
+    private int $total_sendable = 0;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
@@ -262,50 +253,14 @@ class Issue
         return $this;
     }
 
-    public function getTotalSends(): int
+    public function getTotalSendable(): int
     {
-        return $this->total_sends;
+        return $this->total_sendable;
     }
 
-    public function setTotalSends(int $total_sends): static
+    public function setTotalSendable(int $total_sendable): static
     {
-        $this->total_sends = $total_sends;
-
-        return $this;
-    }
-
-    public function getOkSends(): int
-    {
-        return $this->ok_sends;
-    }
-
-    public function setOkSends(int $ok_sends): static
-    {
-        $this->ok_sends = $ok_sends;
-
-        return $this;
-    }
-
-    public function getFailedSends(): int
-    {
-        return $this->failed_sends;
-    }
-
-    public function setFailedSends(int $failed_sends): static
-    {
-        $this->failed_sends = $failed_sends;
-
-        return $this;
-    }
-
-    public function getFailedAt(): ?\DateTimeImmutable
-    {
-        return $this->failed_at;
-    }
-
-    public function setFailedAt(?\DateTimeImmutable $failed_at): static
-    {
-        $this->failed_at = $failed_at;
+        $this->total_sendable = $total_sendable;
 
         return $this;
     }

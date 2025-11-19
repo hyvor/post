@@ -10,7 +10,6 @@ use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
-use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\Dto\UpdateSendDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +24,7 @@ class SendService
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriberRepository   $subscriberRepository,
-        private SendRepository         $sendRepository
+        private SendRepository         $sendRepository,
     )
     {
     }
@@ -131,21 +130,16 @@ class SendService
      */
     public function getIssueProgress(Issue $issue): ?array
     {
-        $issueSends = $this->sendRepository->findBy(['issue' => $issue]);
+        $counts = $this->getIssueStats($issue);
 
-        if (empty($issueSends)) {
+        if ($counts['total'] === 0) {
             return null;
         }
 
-        $pendingCount = count(array_filter($issueSends, fn(Send $send) => $send->getStatus() === SendStatus::PENDING));
-
         return [
-            'total' => $issue->getTotalSends(),
-            'pending' => $pendingCount,
-            'sent' => $issue->getOkSends(),
-            'progress' => $issue->getTotalSends() > 0
-                ? (int)round($issue->getOkSends() / $issue->getTotalSends() * 100)
-                : 0,
+            'total' => $counts['total'],
+            'sent' => $counts['createdSends'],
+            'progress' => (int)round($counts['createdSends'] / $counts['total'] * 100)
         ];
     }
 
@@ -179,6 +173,53 @@ class SendService
         $this->em->flush();
 
         return $send;
+    }
+
+
+    /**
+     * @return array<string, int>
+     */
+    public function getIssueStats(Issue $issue, bool $full = false): array
+    {
+        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s')
+            ->where('s.issue = :issue')
+            ->setParameter('issue', $issue);
+
+        if ($full) {
+            $q->select(
+                'SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount',
+                'SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount',
+                'SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount',
+                'SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount',
+                'SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount',
+                'SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount'
+            )
+                ->setParameter('pending', SendStatus::PENDING)
+                ->setParameter('sent', SendStatus::SENT)
+                ->setParameter('failed', SendStatus::FAILED);
+        } else {
+            $q->select('COUNT(s.id) as createdSendsCount');
+        }
+
+        /** @var array<string, string> $queryResults */
+        $queryResults = $q->getQuery()->getSingleResult();
+
+        $returnArray = [
+            'total' => $issue->getTotalSendable(),
+        ];
+
+        if ($full) {
+            $returnArray['pending'] = (int)$queryResults['pendingCount'];
+            $returnArray['sent'] = (int)$queryResults['sentCount'];
+            $returnArray['failed'] = (int)$queryResults['failedCount'];
+            $returnArray['unsubscribed'] = (int)$queryResults['unsubscribedCount'];
+            $returnArray['bounced'] = (int)$queryResults['bouncedCount'];
+            $returnArray['complained'] = (int)$queryResults['complainedCount'];
+        } else {
+            $returnArray['createdSends'] = (int)$queryResults['createdSendsCount'];
+        }
+
+        return $returnArray;
     }
 
     public function getSendsCountThisMonthOfUser(int $hyvorUserId): int

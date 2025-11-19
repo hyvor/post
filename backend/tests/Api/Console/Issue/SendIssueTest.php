@@ -238,7 +238,7 @@ class SendIssueTest extends WebTestCase
         $issueDB = $issueRepository->find($send->getIssue()->getId());
         $this->assertNotNull($issueDB);
         $this->assertInstanceOf(Issue::class, $issueDB);
-        $this->assertSame($issueDB->getTotalSends(), 1);
+        $this->assertSame($issueDB->getTotalSendable(), 1);
     }
 
     public function test_send_issue_rate_limit(): void

@@ -14,13 +14,19 @@
     </p>
 
     <p>
-        {{ strings.body}}
+        {{ strings.body }}
     </p>
 
-    {% if strings.reason is defined %}
+    {% if strings.note is defined %}
         <p>
-            <strong>{{ strings.reason }}</strong>
+            <strong>{{ strings.note }}</strong>
         </p>
+    {% endif %}
+
+    {% if buttonUrl is defined %}
+        <twig:mail:button href="{{ buttonUrl }}">
+            {{ strings.buttonText }}
+        </twig:mail:button>
     {% endif %}
 
     <p>{{ strings.footerText }}</p>

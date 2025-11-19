@@ -14,6 +14,7 @@ use App\Service\Newsletter\Constraint\SubdomainValidator;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -48,12 +49,17 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422);
 
         $json = $this->getJson();
-        $this->assertIsString($json['message']);
-        $this->assertStringStartsWith('Subdomain', $json['message']);
+        $this->assertIsArray($json['violations']);
+        $violation = $json['violations'][0];
+        $this->assertIsArray($violation);
+        $this->assertIsString($violation['message']);
+        $this->assertStringStartsWith('Subdomain', $violation['message']);
     }
 
     public function testCreateNewsletterValid(): void
     {
+        $resource = ResourceFake::enableForSymfony($this->container);
+
         $response = $this->consoleApi(
             null,
             'POST',
@@ -92,6 +98,8 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertSame('valid-newsletter-subdomain@hyvorpost.email', $sendingProfiles[0]->getFromEmail());
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
         $this->assertTrue($sendingProfiles[0]->getIsDefault());
+
+        $resource->assertRegistered($newsletter->getUserId(), $newsletter->getId());
     }
 
     public function testCreateNewsletterInvalid(): void
@@ -118,7 +126,7 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertHasViolation('name', 'This value is too long. It should have 255 characters or less.');
     }
 
-    #[TestWith(['notifications'])]
+    #[TestWith(['new'])]
     #[TestWith(['other', true])]
     public function test_subdomain_taken(string $subdomain, bool $create = false): void
     {

@@ -4,9 +4,10 @@ namespace App\Service\Approval;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
+use App\Service\AppConfig;
 use App\Service\Approval\Dto\UpdateApprovalDto;
 use App\Service\Approval\Message\CreateApprovalMessage;
-use App\Service\SystemMail\SystemNotificationMailService;
+use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
@@ -21,12 +22,13 @@ class ApprovalService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface        $em,
-        private AuthInterface                 $auth,
-        private readonly Environment          $mailTemplate,
-        private readonly StringsFactory       $stringsFactory,
-        private SystemNotificationMailService $emailNotificationService,
-        private MessageBusInterface           $messageBus,
+        private EntityManagerInterface  $em,
+        private AuthInterface           $auth,
+        private readonly Environment    $mailTemplate,
+        private readonly StringsFactory $stringsFactory,
+        private NotificationMailService $emailNotificationService,
+        private MessageBusInterface     $messageBus,
+        private AppConfig               $appConfig
     )
     {
     }
@@ -238,6 +240,10 @@ class ApprovalService
 
     private function sendApprovalMail(Approval $approval, ApprovalStatus $status, AuthUser $user): void
     {
+        $renderContext = [
+            'component' => 'post',
+        ];
+
         $strings = $this->stringsFactory->create();
         $subject = $strings->get('mail.approval.subject', ['status' => $status->value]);
         $content = [
@@ -247,25 +253,30 @@ class ApprovalService
             'regards' => $strings->get('mail.common.regards'),
         ];
 
+        $publicNote = $approval->getPublicNote();
+
         if ($status === ApprovalStatus::APPROVED) {
 
             $content['body'] = $strings->get('mail.approval.bodyApproved');
+            $content['buttonText'] = $strings->get('mail.approval.buttonText');
+            $renderContext['buttonUrl'] = $this->appConfig->getUrlApp() . '/console';
 
-        } elseif ($status === ApprovalStatus::REJECTED) {
+            if ($publicNote) {
+                $content['note'] = $strings->get('mail.approval.note', ['note' => $publicNote]);
+            }
+        }
+
+        if ($status === ApprovalStatus::REJECTED) {
 
             $content['body'] = $strings->get('mail.approval.bodyRejected');
 
-            if ($approval->getPublicNote()) {
-                $content['reason'] = $strings->get('mail.approval.reason', ['reason' => $approval->getPublicNote()]);
+            if ($publicNote) {
+                $content['note'] = $strings->get('mail.approval.reason', ['reason' => $publicNote]);
             }
-        } else {
-            return;
         }
-        $mail = $this->mailTemplate->render('mail/approval.html.twig', [
-                'component' => 'post',
-                'strings' => $content
-            ]
-        );
+
+        $renderContext['strings'] = $content;
+        $mail = $this->mailTemplate->render('mail/approval.html.twig', $renderContext);
 
         $this->emailNotificationService->send(
             $user->email,

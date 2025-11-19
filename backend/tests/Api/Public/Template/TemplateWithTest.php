@@ -42,9 +42,9 @@ class TemplateWithTest extends WebTestCase
                        text-decoration: none;
                        color:inherit
                    ">
-                        <img src="{{ logo }}" alt="{{ logo_alt }}" style="max-height: 26px; width: auto;">
+                        <img src="{{ brand_logo }}" alt="{{ brand_logo_alt }}" style="max-height: 26px; width: auto;">
                         <span class="name" style="font-weight: 600; padding-left: 6px;">
-                            {{ brand }}
+                            {{ name }}
                         </span>
                     </a>
                 </div>
@@ -74,10 +74,8 @@ class TemplateWithTest extends WebTestCase
                   "lang": "en",
                   "subject": "",
                   "content": "",
-                  "logo": "logo-goes-here",
-                  "logo_alt": "",
-                  "brand": "brand-goes-here",
-                  "brand_url": "",
+                  "brand_logo": "logo-goes-here",
+                  "brand_logo_alt": "",
                   "address": "address-goes-here",
                   "unsubscribe_url": "brand-url-goes-here",
                   "unsubscribe_text": "",
@@ -111,7 +109,6 @@ class TemplateWithTest extends WebTestCase
         $this->assertIsString($html);
 
         $this->assertStringContainsString("logo-goes-here", $html);
-        $this->assertStringContainsString("brand-goes-here", $html);
         $this->assertStringContainsString("address-goes-here", $html);
         $this->assertStringContainsString("brand-url-goes-here", $html);
     }

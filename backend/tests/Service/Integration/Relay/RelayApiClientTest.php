@@ -65,7 +65,7 @@ class RelayApiClientTest extends KernelTestCase
         $this->container->set(HttpClientInterface::class, new MockHttpClient($response));
 
         $apiClient = $this->getApiClient();
-        $result = $apiClient->sendEmail($email, 8395);
+        $result = $apiClient->sendEmail($email, 'newsletter-send-8395');
 
         $this->assertContains('X-Idempotency-Key: newsletter-send-8395', $response->getRequestOptions()['headers']);
         $this->assertSame(12345, $result->id);

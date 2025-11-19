@@ -189,7 +189,7 @@ class IssueController extends AbstractController
         $updates->sendingAt = new \DateTimeImmutable();
         $updates->html = $this->htmlTemplateRenderer->renderFromIssue($issue);
         $updates->text = $this->textTemplateRenderer->renderFromIssue($issue);
-        $updates->totalSends = $subscribersCount;
+        $updates->totalSendable = $subscribersCount;
         $updates->sendingProfile = $issue->getSendingProfile();
 
         $issue = $this->issueService->updateIssue($issue, $updates);
@@ -291,7 +291,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getIssueReport(Issue $issue): JsonResponse
     {
-        $counts = $this->issueService->getIssueCounts($issue);
+        $counts = $this->sendService->getIssueStats($issue, full: true);
         return $this->json(
             [
                 'counts' => $counts

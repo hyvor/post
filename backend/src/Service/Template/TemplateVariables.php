@@ -22,10 +22,8 @@ class TemplateVariables
         // header
         public string $name = '',
         public string $subdomain = '',
-        public string $logo = '',
-        public string $logo_url = '',
-        public string $logo_alt = '',
-        public string $brand = '',
+        public string $brand_logo = '',
+        public string $brand_logo_alt = '',
         public string $brand_url = '',
 
         // footer

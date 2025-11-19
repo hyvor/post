@@ -4,13 +4,11 @@ namespace App\Tests\Api\Console\Issue;
 
 use App\Api\Console\Controller\IssueController;
 use App\Entity\Send;
-use App\Entity\Type\SendStatus;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
-use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -20,23 +18,16 @@ class GetIssueProgressTest extends WebTestCase
     public function test_issue_progress_pending(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'total_sendable' => 20
+        ]);
 
-        $issue = IssueFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-                'total_sends' => 20,
-                'ok_sends' => 15,
-            ]
-        );
-
-        SendFactory::createMany(5,
-            [
-                'issue' => $issue,
-                'status' => SendStatus::PENDING
-            ]
-        );
+        SendFactory::createMany(15, [
+            'issue' => $issue,
+        ]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -46,33 +37,24 @@ class GetIssueProgressTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
-
         $this->assertSame(20, $json['total']);
         $this->assertSame(15, $json['sent']);
-        $this->assertSame(5, $json['pending']);
         $this->assertSame(75, $json['progress']);
     }
 
     public function test_issue_progress_success(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'total_sendable' => 1
+        ]);
 
-        $issue = IssueFactory::createOne(
-            [
-                'newsletter' => $newsletter,
-                'total_sends' => 1,
-                'ok_sends' => 1,
-            ]
-        );
-
-        $send = SendFactory::createOne(
-            [
-                'issue' => $issue,
-                'status' => SendStatus::SENT
-            ]
-        );
+        SendFactory::createOne([
+            'issue' => $issue,
+        ]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -85,7 +67,6 @@ class GetIssueProgressTest extends WebTestCase
 
         $this->assertSame(1, $json['total']);
         $this->assertSame(1, $json['sent']);
-        $this->assertSame(0, $json['pending']);
         $this->assertSame(100, $json['progress']);
     }
 }
