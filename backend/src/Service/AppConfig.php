@@ -91,7 +91,7 @@ readonly class AppConfig
 
     public function getNotificationRelayApiKey(): string
     {
-        return $this->notificationRelayApiKey;
+        return $this->notificationRelayApiKey ?: $this->relayApiKey;
     }
 
 
