@@ -58,7 +58,7 @@ class CreateNewsletterTest extends WebTestCase
 
     public function testCreateNewsletterValid(): void
     {
-        ResourceFake::enableForSymfony($this->container);
+        $resource = ResourceFake::enableForSymfony($this->container);
 
         $response = $this->consoleApi(
             null,
@@ -99,7 +99,7 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
         $this->assertTrue($sendingProfiles[0]->getIsDefault());
 
-        ResourceFake::assertRegistered($newsletter->getUserId(), $newsletter->getId());
+        $resource->assertRegistered($newsletter->getUserId(), $newsletter->getId());
     }
 
     public function testCreateNewsletterInvalid(): void
