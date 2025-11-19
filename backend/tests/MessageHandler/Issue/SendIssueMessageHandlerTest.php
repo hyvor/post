@@ -66,5 +66,7 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame($issue->getId(), $send->getIssue()->getId());
         $this->assertSame($subscribers[0]->getId(), $send->getSubscriber()->getId());
+
+        $this->assertSame(IssueStatus::SENT, $issue->getStatus());
     }
 }

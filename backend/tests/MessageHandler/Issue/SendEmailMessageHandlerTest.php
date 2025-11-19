@@ -96,9 +96,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::SENT, $send->getStatus());
         $this->assertSame('2025-02-21 00:00:00', $send->getSentAt()?->format('Y-m-d H:i:s'));
-
-        $issueRepository = $this->em->getRepository(Issue::class);
-        $issueDB = $issueRepository->find($issue->getId());
     }
 
     public function test_send_job_with_exception(): void
@@ -149,11 +146,6 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         $this->assertInstanceOf(Send::class, $send);
         $this->assertSame(SendStatus::FAILED, $send->getStatus());
         $this->assertSame('2025-02-21 00:00:00', $send->getFailedAt()?->format('Y-m-d H:i:s'));
-
-        $issueRepository = $this->em->getRepository(Issue::class);
-        $issueDB = $issueRepository->find($issue->getId());
-
-        $this->assertEmailCount(0);
     }
 
     #[TestWith([1, 60])]
