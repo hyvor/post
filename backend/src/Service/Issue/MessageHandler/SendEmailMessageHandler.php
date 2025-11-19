@@ -7,6 +7,7 @@ use App\Entity\Type\SendStatus;
 use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
@@ -23,6 +24,7 @@ class SendEmailMessageHandler
         private EntityManagerInterface $em,
         private EmailSenderService     $emailSenderService,
         private MessageBusInterface    $messageBus,
+        private LoggerInterface        $logger,
     )
     {
     }
@@ -65,7 +67,12 @@ class SendEmailMessageHandler
                     [new DelayStamp($delaySeconds * 1000)]
                 );
 
-                // TODO: add logging here
+                $this->logger->error('Error sending email', [
+                    'exception' => $e,
+                    'sendId' => $send->getId(),
+                    'attempts' => $attempts,
+                    'reattemptInSeconds' => $delaySeconds,
+                ]);
             }
         }
     }
