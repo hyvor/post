@@ -138,8 +138,8 @@ class SendService
 
         return [
             'total' => $counts['total'],
-            'sent' => $counts['sendsCreated'],
-            'progress' => (int)round($counts['sendsCreated'] / $counts['total'] * 100)
+            'sent' => $counts['createdSends'],
+            'progress' => (int)round($counts['createdSends'] / $counts['total'] * 100)
         ];
     }
 
@@ -181,26 +181,24 @@ class SendService
      */
     public function getIssueStats(Issue $issue, bool $full = false): array
     {
-        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s');
-
-        if ($full) {
-            $q->addSelect('SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount')
-                ->addSelect('SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount')
-                ->addSelect('SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount')
-                ->addSelect('SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount')
-                ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount')
-                ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount');
-        } else {
-            $q->addSelect('COUNT(s.id) as createdSendsCount');
-        }
-
-        $q->where('s.issue = :issue')
+        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s')
+            ->where('s.issue = :issue')
             ->setParameter('issue', $issue);
 
         if ($full) {
-            $q->setParameter('pending', SendStatus::PENDING)
+            $q->select(
+                'SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount',
+                'SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount',
+                'SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount',
+                'SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount',
+                'SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount',
+                'SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount'
+            )
+                ->setParameter('pending', SendStatus::PENDING)
                 ->setParameter('sent', SendStatus::SENT)
                 ->setParameter('failed', SendStatus::FAILED);
+        } else {
+            $q->select('COUNT(s.id) as createdSendsCount');
         }
 
         /** @var array<string, string> $queryResults */

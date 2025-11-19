@@ -76,9 +76,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
             'subject' => 'First Newsletter Issue!',
-            'ok_sends' => 0,
-            'failed_sends' => 0,
-            'total_sends' => 1,
+            'total_sendable' => 1,
         ]);
 
         $send = SendFactory::createOne([
@@ -124,9 +122,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             'newsletter' => $newsletter,
             'listIds' => [$list->getId()],
             'status' => IssueStatus::SENDING,
-            'ok_sends' => 0,
-            'failed_sends' => 0,
-            'total_sends' => 0,
+            'total_sendable' => 0,
         ]);
 
         $send = SendFactory::createOne([

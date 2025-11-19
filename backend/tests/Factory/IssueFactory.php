@@ -55,7 +55,6 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'sending_profile' => SendingProfileFactory::new(),
             'error_private' => self::faker()->text(255),
-            'failed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'html' => self::faker()->text(),
             'scheduled_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'sending_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -65,9 +64,7 @@ final class IssueFactory extends PersistentProxyObjectFactory
             'text' => self::faker()->text(),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'list_ids' => [],
-            'total_sends' => $total,
-            'ok_sends' => self::faker()->randomNumber(),
-            'failed_sends' => self::faker()->randomNumber(),
+            'total_sendable' => $total,
         ];
     }
 
