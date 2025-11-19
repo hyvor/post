@@ -65,12 +65,6 @@ class Issue
     private int $total_sends = 0;
 
     #[ORM\Column]
-    private int $created_sends = 0;
-
-    #[ORM\Column]
-    private int $failed_sends = 0;
-
-    #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
 
     public function getId(): int
@@ -267,30 +261,6 @@ class Issue
     public function setTotalSends(int $total_sends): static
     {
         $this->total_sends = $total_sends;
-
-        return $this;
-    }
-
-    public function getCreatedSends(): int
-    {
-        return $this->created_sends;
-    }
-
-    public function setCreatedSends(int $created_sends): static
-    {
-        $this->created_sends = $created_sends;
-
-        return $this;
-    }
-
-    public function getFailedSends(): int
-    {
-        return $this->failed_sends;
-    }
-
-    public function setFailedSends(int $failed_sends): static
-    {
-        $this->failed_sends = $failed_sends;
 
         return $this;
     }

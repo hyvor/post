@@ -26,7 +26,8 @@ final class Version20251118102335 extends AbstractMigration
                 DROP COLUMN clicked_sends,
 
                 DROP COLUMN failed_at,
-                RENAME COLUMN ok_sends TO created_sends; 
+                DROP COLUMN ok_sends,
+                DROP COLUMN failed_sends;
         SQL
         );
     }

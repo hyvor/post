@@ -18,16 +18,9 @@ class UpdateIssueDto
      * @var array<int>
      */
     public array $lists;
-
     public string $html;
     public string $text;
     public \DateTimeImmutable $sendingAt;
     public \DateTimeImmutable $sentAt;
-    public \DateTimeImmutable $failedAt;
-
     public int $totalSends;
-    public int $createdSends;
-
-    public int $failedSends;
-    public string $error_private;
 }

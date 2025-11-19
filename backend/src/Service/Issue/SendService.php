@@ -10,7 +10,6 @@ use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SendRepository;
 use App\Repository\SubscriberRepository;
-use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\Dto\UpdateSendDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +25,6 @@ class SendService
         private EntityManagerInterface $em,
         private SubscriberRepository   $subscriberRepository,
         private SendRepository         $sendRepository,
-        private IssueService           $issueService
     )
     {
     }
@@ -132,7 +130,7 @@ class SendService
      */
     public function getIssueProgress(Issue $issue): ?array
     {
-        $counts = $this->issueService->getIssueStats($issue);
+        $counts = $this->getIssueStats($issue);
 
         if ($counts['total'] === 0) {
             return null;
@@ -176,6 +174,51 @@ class SendService
         $this->em->flush();
 
         return $send;
+    }
+
+
+    /**
+     * @return array<string, int>
+     */
+    public function getIssueStats(Issue $issue, bool $full = false): array
+    {
+        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s')
+            ->select('SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount')
+            ->addSelect('SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount');
+
+        if ($full) {
+            $q->addSelect('SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount')
+                ->addSelect('SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount')
+                ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount')
+                ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount');
+        }
+
+        $q->where('s.issue = :issue')
+            ->setParameter('issue', $issue)
+            ->setParameter('pending', SendStatus::PENDING)
+            ->setParameter('sent', SendStatus::SENT);
+
+        if ($full) {
+            $q->setParameter('failed', SendStatus::FAILED);
+        }
+
+        /** @var array<string, string> $queryResults */
+        $queryResults = $q->getQuery()->getSingleResult();
+
+        $returnArray = [
+            'total' => $issue->getTotalSends(),
+            'sent' => (int)$queryResults['sentCount'],
+            'pending' => (int)$queryResults['pendingCount']
+        ];
+
+        if ($full) {
+            $returnArray['failed'] = (int)$queryResults['failedCount'];
+            $returnArray['unsubscribed'] = (int)$queryResults['unsubscribedCount'];
+            $returnArray['bounced'] = (int)$queryResults['bouncedCount'];
+            $returnArray['complained'] = (int)$queryResults['complainedCount'];
+        }
+
+        return $returnArray;
     }
 
     public function getSendsCountThisMonthOfUser(int $hyvorUserId): int

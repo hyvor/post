@@ -5,9 +5,7 @@ namespace App\Service\Issue;
 use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
-use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
-use App\Entity\Type\SendStatus;
 use App\Repository\IssueRepository;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
@@ -96,14 +94,6 @@ class IssueService
             $issue->setTotalSends($updates->totalSends);
         }
 
-        if ($updates->hasProperty('createdSends')) {
-            $issue->setCreatedSends($updates->createdSends);
-        }
-
-        if ($updates->hasProperty('failedSends')) {
-            $issue->setFailedSends($updates->failedSends);
-        }
-
         if ($updates->hasProperty('sentAt')) {
             $issue->setSentAt($updates->sentAt);
         }
@@ -147,43 +137,6 @@ class IssueService
     {
         $this->em->remove($issue);
         $this->em->flush();
-    }
-
-    /**
-     * @return array<string, int>
-     */
-    public function getIssueStats(Issue $issue, bool $full = false): array
-    {
-        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s')
-            ->select('SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount');
-
-        if ($full) {
-            $q->addSelect('SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount')
-                ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount')
-                ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount');
-        }
-
-        $q->where('s.issue = :issue')
-            ->setParameter('issue', $issue)
-            ->setParameter('pending', SendStatus::PENDING);
-
-        /** @var array<string, string> $queryResults */
-        $queryResults = $q->getQuery()->getSingleResult();
-
-        $returnArray = [
-            'total' => $issue->getTotalSends(),
-            'sent' => $issue->getCreatedSends(),
-            'pending' => (int)$queryResults['pendingCount']
-        ];
-
-        if ($full) {
-            $returnArray['failed'] = $issue->getFailedSends();
-            $returnArray['unsubscribed'] = (int)$queryResults['unsubscribedCount'];
-            $returnArray['bounced'] = (int)$queryResults['bouncedCount'];
-            $returnArray['complained'] = (int)$queryResults['complainedCount'];
-        }
-
-        return $returnArray;
     }
 
     /**

@@ -2,14 +2,10 @@
 
 namespace App\Service\Issue\MessageHandler;
 
-use App\Entity\Issue;
 use App\Entity\Send;
-use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
-use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\EmailSenderService;
 use App\Service\Issue\Message\SendEmailMessage;
-use App\Service\Issue\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -47,23 +43,10 @@ class SendEmailMessageHandler
             $attempts = $message->getAttempt();
 
             if ($attempts >= 4) {
-                $this->em->wrapInTransaction(function () use ($send, $issue, $e) {
-                    $send->setStatus(SendStatus::FAILED);
-                    $send->setFailedAt($this->now());
-                    $send->setErrorPrivate($e->getMessage());
-                    $this->em->flush();
-
-                    // TODO: remove this
-                    $this->em->createQueryBuilder()
-                        ->update(Issue::class, 'i')
-                        ->set('i.failed_sends', 'i.failed_sends + 1')
-                        ->where('i.id = :id')
-                        ->setParameter('id', $issue->getId())
-                        ->getQuery()
-                        ->execute();
-
-                    $this->em->flush();
-                });
+                $send->setStatus(SendStatus::FAILED);
+                $send->setFailedAt($this->now());
+                $send->setErrorPrivate($e->getMessage());
+                $this->em->flush();
 
                 throw new UnrecoverableMessageHandlingException(
                     'Email sending failed after 3 attempts: ' . $e->getMessage(),
