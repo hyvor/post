@@ -391,6 +391,7 @@
       "bodyRejected": "We regret to inform you that your Hyvor Post account approval request has been rejected.",
       "buttonText": "Go to Console",
       "footerText": "If you have any questions or need assistance, please don't hesitate to contact our support team by replying to this email.",
+      "note": "Note: {note}",
       "reason": "Reject reason: {reason}"
     }
   }

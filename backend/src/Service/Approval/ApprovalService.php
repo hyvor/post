@@ -253,22 +253,26 @@ class ApprovalService
             'regards' => $strings->get('mail.common.regards'),
         ];
 
+        $publicNote = $approval->getPublicNote();
+
         if ($status === ApprovalStatus::APPROVED) {
 
             $content['body'] = $strings->get('mail.approval.bodyApproved');
             $content['buttonText'] = $strings->get('mail.approval.buttonText');
-
             $renderContext['buttonUrl'] = $this->appConfig->getUrlApp() . '/console';
 
-        } elseif ($status === ApprovalStatus::REJECTED) {
+            if ($publicNote) {
+                $content['note'] = $strings->get('mail.approval.note', ['note' => $publicNote]);
+            }
+        }
+
+        if ($status === ApprovalStatus::REJECTED) {
 
             $content['body'] = $strings->get('mail.approval.bodyRejected');
 
-            if ($approval->getPublicNote()) {
-                $content['reason'] = $strings->get('mail.approval.reason', ['reason' => $approval->getPublicNote()]);
+            if ($publicNote) {
+                $content['note'] = $strings->get('mail.approval.reason', ['reason' => $publicNote]);
             }
-        } else {
-            return;
         }
 
         $renderContext['strings'] = $content;
