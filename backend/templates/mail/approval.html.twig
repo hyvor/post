@@ -17,16 +17,16 @@
         {{ strings.body }}
     </p>
 
-    {% if buttonUrl is defined %}
-        <twig:mail:button href="{{ buttonUrl }}">
-            {{ strings.buttonText }}
-        </twig:mail:button>
-    {% endif %}
-
     {% if strings.note is defined %}
         <p>
             <strong>{{ strings.note }}</strong>
         </p>
+    {% endif %}
+
+    {% if buttonUrl is defined %}
+        <twig:mail:button href="{{ buttonUrl }}">
+            {{ strings.buttonText }}
+        </twig:mail:button>
     {% endif %}
 
     <p>{{ strings.footerText }}</p>
