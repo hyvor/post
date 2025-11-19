@@ -15,6 +15,7 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
+use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -60,6 +61,10 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         Clock::set(new MockClock('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::findOrCreate([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
@@ -103,6 +108,10 @@ class SendEmailMessageHandlerTest extends KernelTestCase
         Clock::set(new MockClock('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::findOrCreate([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
