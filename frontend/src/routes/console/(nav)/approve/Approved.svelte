@@ -14,9 +14,17 @@
 			{#snippet icon()}
 				<IconPersonFillCheck size={18} />
 			{/snippet}
-			{I18n.t('console.approve.approvedNotice', {
-				date: dayjs.unix($approvalStore.approved_at).format('MMM D, YYYY')
-			})}
+			<strong>
+				{I18n.t('console.approve.approvedNotice', {
+					date: dayjs.unix($approvalStore.approved_at).format('MMM D, YYYY')
+				})}
+			</strong>
+			{#if $approvalStore.public_note}
+				<div>
+					<br />
+					{$approvalStore.public_note}
+				</div>
+			{/if}
 		</Callout>
 	{/if}
 </div>
@@ -27,5 +35,11 @@
 		align-items: center;
 		justify-content: center;
 		height: 100%;
+		max-width: 50vw;
+
+		:global(.icon) {
+			margin-right: 16px !important;
+			margin-top: 1px !important;
+		}
 	}
 </style>
