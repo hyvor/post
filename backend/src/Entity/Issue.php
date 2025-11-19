@@ -62,7 +62,7 @@ class Issue
     private array $list_ids;
 
     #[ORM\Column]
-    private int $total_sends = 0;
+    private int $total_sendable = 0;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
@@ -253,14 +253,14 @@ class Issue
         return $this;
     }
 
-    public function getTotalSends(): int
+    public function getTotalSendable(): int
     {
-        return $this->total_sends;
+        return $this->total_sendable;
     }
 
-    public function setTotalSends(int $total_sends): static
+    public function setTotalSendable(int $total_sendable): static
     {
-        $this->total_sends = $total_sends;
+        $this->total_sendable = $total_sendable;
 
         return $this;
     }

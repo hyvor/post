@@ -74,7 +74,7 @@ export function sendIssueTest(id: number, emails: string[]) {
 }
 
 export function getIssueProgress(id: number) {
-    return consoleApi.get<{ total: number; pending: number; sent: number; progress: number }>({
+    return consoleApi.get<{ total: number; sent: number; progress: number }>({
         endpoint: `issues/${id}/progress`
     });
 }

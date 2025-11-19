@@ -90,8 +90,8 @@ class IssueService
             $issue->setSendingAt($updates->sendingAt);
         }
 
-        if ($updates->hasProperty('totalSends')) {
-            $issue->setTotalSends($updates->totalSends);
+        if ($updates->hasProperty('totalSendable')) {
+            $issue->setTotalSendable($updates->totalSendable);
         }
 
         if ($updates->hasProperty('sentAt')) {

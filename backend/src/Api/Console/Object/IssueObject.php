@@ -44,7 +44,7 @@ class IssueObject
         $this->scheduled_at = $issue->getScheduledAt()?->getTimestamp();
         $this->sending_at = $issue->getSendingAt()?->getTimestamp();
         $this->sent_at = $issue->getSentAt()?->getTimestamp();
-        $this->total_sends = $issue->getTotalSends();
+        $this->total_sends = $issue->getTotalSendable();
         $this->sendable_subscribers_count = $sendableSubscribersCount;
     }
 }

@@ -138,9 +138,8 @@ class SendService
 
         return [
             'total' => $counts['total'],
-            'pending' => $counts['pending'],
-            'sent' => $counts['sent'],
-            'progress' => (int)round($counts['sent'] / $counts['total'] * 100)
+            'sent' => $counts['sendsCreated'],
+            'progress' => (int)round($counts['sendsCreated'] / $counts['total'] * 100)
         ];
     }
 
@@ -182,40 +181,44 @@ class SendService
      */
     public function getIssueStats(Issue $issue, bool $full = false): array
     {
-        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s')
-            ->select('SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount')
-            ->addSelect('SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount');
+        $q = $this->em->getRepository(Send::class)->createQueryBuilder('s');
 
         if ($full) {
-            $q->addSelect('SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount')
+            $q->addSelect('SUM(CASE WHEN s.status = :pending THEN 1 ELSE 0 END) as pendingCount')
+                ->addSelect('SUM(CASE WHEN s.status = :sent THEN 1 ELSE 0 END) as sentCount')
+                ->addSelect('SUM(CASE WHEN s.status = :failed THEN 1 ELSE 0 END) as failedCount')
                 ->addSelect('SUM(CASE WHEN s.unsubscribe_at IS NOT NULL THEN 1 ELSE 0 END) as unsubscribedCount')
                 ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedCount')
                 ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedCount');
+        } else {
+            $q->addSelect('COUNT(s.id) as createdSendsCount');
         }
 
         $q->where('s.issue = :issue')
-            ->setParameter('issue', $issue)
-            ->setParameter('pending', SendStatus::PENDING)
-            ->setParameter('sent', SendStatus::SENT);
+            ->setParameter('issue', $issue);
 
         if ($full) {
-            $q->setParameter('failed', SendStatus::FAILED);
+            $q->setParameter('pending', SendStatus::PENDING)
+                ->setParameter('sent', SendStatus::SENT)
+                ->setParameter('failed', SendStatus::FAILED);
         }
 
         /** @var array<string, string> $queryResults */
         $queryResults = $q->getQuery()->getSingleResult();
 
         $returnArray = [
-            'total' => $issue->getTotalSends(),
-            'sent' => (int)$queryResults['sentCount'],
-            'pending' => (int)$queryResults['pendingCount']
+            'total' => $issue->getTotalSendable(),
         ];
 
         if ($full) {
+            $returnArray['pending'] = (int)$queryResults['pendingCount'];
+            $returnArray['sent'] = (int)$queryResults['sentCount'];
             $returnArray['failed'] = (int)$queryResults['failedCount'];
             $returnArray['unsubscribed'] = (int)$queryResults['unsubscribedCount'];
             $returnArray['bounced'] = (int)$queryResults['bouncedCount'];
             $returnArray['complained'] = (int)$queryResults['complainedCount'];
+        } else {
+            $returnArray['createdSends'] = (int)$queryResults['createdSendsCount'];
         }
 
         return $returnArray;

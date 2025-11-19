@@ -22,5 +22,5 @@ class UpdateIssueDto
     public string $text;
     public \DateTimeImmutable $sendingAt;
     public \DateTimeImmutable $sentAt;
-    public int $totalSends;
+    public int $totalSendable;
 }
