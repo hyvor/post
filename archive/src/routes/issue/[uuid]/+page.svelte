@@ -41,14 +41,14 @@
 </svelte:head>
 
 <div class="iframe-wrap">
-    <iframe
-            width="100%"
-            height="100%"
-            frameborder="0"
-            sandbox="allow-same-origin allow-scripts allow-popups"
-            title={issue.subject}
-            bind:this={iframeEl}
-    ></iframe>
+	<iframe
+		width="100%"
+		height="100%"
+		frameborder="0"
+		sandbox="allow-same-origin allow-scripts allow-popups"
+		title={issue.subject}
+		bind:this={iframeEl}
+	></iframe>
 </div>
 
 <div class="popup hds-box">
