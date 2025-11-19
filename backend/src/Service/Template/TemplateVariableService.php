@@ -5,17 +5,20 @@ namespace App\Service\Template;
 use App\Entity\Issue;
 use App\Entity\Newsletter;
 use App\Entity\Send;
+use App\Entity\SendingProfile;
 use App\Service\Content\ContentService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\SendingProfile\SendingProfileService;
 use Hyvor\Internal\Util\Crypt\Encryption;
 
 class TemplateVariableService
 {
     public function __construct(
-        private ContentService    $contentService,
-        private NewsletterService $newsletterService,
-        private Encryption        $encryption,
+        private ContentService        $contentService,
+        private NewsletterService     $newsletterService,
+        private SendingProfileService $sendingProfileService,
+        private Encryption            $encryption,
     )
     {
     }
@@ -24,16 +27,16 @@ class TemplateVariableService
     {
         $meta = $newsletter->getMeta();
 
-        return new TemplateVariables(
+        $variables = new TemplateVariables(
             lang: 'en',
             subject: '',
             content: '',
 
             name: $newsletter->getName(),
             subdomain: $newsletter->getSubdomain(),
-            logo: '',
-            logo_url: '',
-            logo_alt: $newsletter->getName(),
+            brand_logo: '',
+            brand_logo_alt: $newsletter->getName(),
+            brand_url: '',
 
             address: $meta->address ?? '',
             unsubscribe_url: '',
@@ -59,15 +62,19 @@ class TemplateVariableService
             box_shadow: $meta->template_box_shadow ?? NewsletterDefaults::TEMPLATE_BOX_SHADOW,
             box_border: $meta->template_box_border ?? NewsletterDefaults::TEMPLATE_BOX_BORDER,
         );
+
+        return $this->setVariablesFromSendingProfile(
+            $variables,
+            $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter)
+        );
     }
 
     public function variablesFromIssue(Issue $issue): TemplateVariables
     {
         $variables = $this->variablesFromNewsletter($issue->getNewsletter());
 
-        $defaultSendingProfile = $issue->getSendingProfile();
-        $variables->logo = $defaultSendingProfile->getBrandLogo() ?? $variables->logo;
-        $variables->logo_alt = $defaultSendingProfile->getBrandName() ?? $variables->logo_alt;
+        $issueSendingProfile = $issue->getSendingProfile();
+        $variables = $this->setVariablesFromSendingProfile($variables, $issueSendingProfile);
 
         $variables->subject = (string)$issue->getSubject();
         $variables->content = $this->contentService->getHtmlFromJson(
@@ -83,6 +90,15 @@ class TemplateVariableService
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send->getNewsletter(), $send->getId());
+        return $variables;
+    }
+
+    private function setVariablesFromSendingProfile(TemplateVariables $variables, SendingProfile $sendingProfile): TemplateVariables
+    {
+        $variables->name = $sendingProfile->getFromName() ?: $variables->name;
+        $variables->brand_logo = $sendingProfile->getBrandLogo() ?: $variables->brand_logo;
+        $variables->brand_logo_alt = $sendingProfile->getBrandName() ?: $variables->brand_logo_alt;
+
         return $variables;
     }
 

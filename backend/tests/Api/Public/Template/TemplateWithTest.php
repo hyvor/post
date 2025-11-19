@@ -35,14 +35,14 @@ class TemplateWithTest extends WebTestCase
                     align-items: center;
                     gap: 6px;
                 ">
-                    <a href="{{ logo_url }}" target="_blank"
+                    <a href="{{ brand_url }}" target="_blank"
                        style="
                        display:inline-flex;
                        align-items:center;
                        text-decoration: none;
                        color:inherit
                    ">
-                        <img src="{{ logo }}" alt="{{ logo_alt }}" style="max-height: 26px; width: auto;">
+                        <img src="{{ brand_logo }}" alt="{{ brand_logo_alt }}" style="max-height: 26px; width: auto;">
                         <span class="name" style="font-weight: 600; padding-left: 6px;">
                             {{ name }}
                         </span>
@@ -74,8 +74,8 @@ class TemplateWithTest extends WebTestCase
                   "lang": "en",
                   "subject": "",
                   "content": "",
-                  "logo": "logo-goes-here",
-                  "logo_alt": "",
+                  "brand_logo": "logo-goes-here",
+                  "brand_logo_alt": "",
                   "address": "address-goes-here",
                   "unsubscribe_url": "brand-url-goes-here",
                   "unsubscribe_text": "",
