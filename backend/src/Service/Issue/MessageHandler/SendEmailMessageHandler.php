@@ -40,11 +40,9 @@ class SendEmailMessageHandler
         try {
             $this->emailSenderService->send($issue, $send);
 
-            $this->em->wrapInTransaction(function () use ($send) {
-                $send->setStatus(SendStatus::SENT);
-                $send->setSentAt($this->now());
-                $this->em->flush();
-            });
+            $send->setStatus(SendStatus::SENT);
+            $send->setSentAt($this->now());
+            $this->em->flush();
         } catch (\Exception $e) {
             $attempts = $message->getAttempt();
 
@@ -55,6 +53,7 @@ class SendEmailMessageHandler
                     $send->setErrorPrivate($e->getMessage());
                     $this->em->flush();
 
+                    // TODO: remove this
                     $this->em->createQueryBuilder()
                         ->update(Issue::class, 'i')
                         ->set('i.failed_sends', 'i.failed_sends + 1')
@@ -82,6 +81,8 @@ class SendEmailMessageHandler
                     $redispatch,
                     [new DelayStamp($delaySeconds * 1000)]
                 );
+
+                // TODO: add logging here
             }
         }
     }

@@ -17,6 +17,11 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 
+/**
+ * TODO: This can take too long or use too much memory if there are many subscribers.
+ * We need tests to make sure this works for large lists (100k+ subscribers).
+ * Check symfony docs for timeouts and memory limits for message handlers.
+ */
 #[AsMessageHandler]
 class SendIssueMessageHandler
 {

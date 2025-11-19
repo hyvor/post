@@ -208,6 +208,7 @@ class RelayApiClient
                 "headers" => $additionalHeaders,
             ],
             [
+                // TODO: remove prefix here
                 'X-Idempotency-Key' => $idempotencyKey ? "newsletter-send-{$idempotencyKey}" : '',
             ],
             backoffSeconds: self::EMAIL_BACKOFF,
