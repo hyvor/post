@@ -61,20 +61,13 @@ class TemplateVariableService
         );
     }
 
-    public function variablesFromIssueSendingProfile(Issue $issue, TemplateVariables $variables): TemplateVariables
-    {
-        $defaultSendingProfile = $issue->getSendingProfile();
-        $variables->logo = $defaultSendingProfile->getBrandLogo() ?? $variables->logo;
-        $variables->logo_alt = $defaultSendingProfile->getBrandName() ?? $variables->logo_alt;
-        // TODO: logo_url
-
-        return $variables;
-    }
-
     public function variablesFromIssue(Issue $issue): TemplateVariables
     {
         $variables = $this->variablesFromNewsletter($issue->getNewsletter());
-        $variables = $this->variablesFromIssueSendingProfile($issue, $variables);
+
+        $defaultSendingProfile = $issue->getSendingProfile();
+        $variables->logo = $defaultSendingProfile->getBrandLogo() ?? $variables->logo;
+        $variables->logo_alt = $defaultSendingProfile->getBrandName() ?? $variables->logo_alt;
 
         $variables->subject = (string)$issue->getSubject();
         $variables->content = $this->contentService->getHtmlFromJson(
