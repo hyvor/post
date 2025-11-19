@@ -166,6 +166,10 @@ class SendEmailMessageHandlerTest extends KernelTestCase
     ): void
     {
         $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::findOrCreate([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
 
         $list = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
