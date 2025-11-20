@@ -85,6 +85,10 @@ class RelayWebhookController extends AbstractController
         $send = $payload['send'];
         $attempt = $payload['attempt'];
 
+        if (!isset($send['headers']['X-Newsletter-Send-ID'])) {
+            return;
+        }
+
         $sendId = $send['headers']['X-Newsletter-Send-ID'];
         $send = $this->sendService->getSendById((int)$sendId);
 
