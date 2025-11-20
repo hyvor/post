@@ -14,6 +14,7 @@ class SendingProfileObject
     public ?string $reply_to_email;
     public ?string $brand_name;
     public ?string $brand_logo;
+    public ?string $brand_url;
     public bool $is_default;
     public bool $is_system;
 
@@ -28,5 +29,6 @@ class SendingProfileObject
         $this->reply_to_email = $sendingProfile->getReplyToEmail();
         $this->brand_name = $sendingProfile->getBrandName();
         $this->brand_logo = $sendingProfile->getBrandLogo();
+        $this->brand_url = $sendingProfile->getBrandUrl();
     }
 }
