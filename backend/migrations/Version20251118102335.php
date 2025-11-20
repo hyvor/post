@@ -36,6 +36,14 @@ final class Version20251118102335 extends AbstractMigration
             ALTER TABLE issues RENAME COLUMN total_sends TO total_sendable;
         SQL
         );
+
+        $this->addSql(
+            <<<SQL
+            ALTER TABLE approvals
+                ALTER COLUMN public_note TYPE TEXT,
+                ALTER COLUMN private_note TYPE TEXT;
+        SQL
+        );
     }
 
     public function down(Schema $schema): void

@@ -131,152 +131,161 @@
 	});
 </script>
 
-{#if !$approvalStore}
-	<Callout type="warning">
-		{#snippet icon()}
-			<IconCardChecklist />
-		{/snippet}
-		{I18n.t('console.approve.pendingNotice')}
-	</Callout>
-{:else if $approvalStore?.status === 'pending'}
-	<Callout type="warning">
-		{#snippet icon()}
-			<IconCardChecklist />
-		{/snippet}
-		{I18n.t('console.approve.markedAsPendingNotice')}
-	</Callout>
-{:else if $approvalStore?.status === 'reviewing'}
-	<Callout type="info">
-		{#snippet icon()}
-			<IconHourglassSplit />
-		{/snippet}
-		{I18n.t('console.approve.reviewNotice')}
-	</Callout>
-{:else if $approvalStore?.status === 'rejected'}
-	<Callout type="danger">
-		{#snippet icon()}
-			<IconXCircle />
-		{/snippet}
-		{I18n.t('console.approve.rejectNotice')}
-		{#if $approvalStore?.public_note}
-			<p>
-				<strong>
-					{I18n.t('console.approve.rejectReason', {
-						reason: $approvalStore?.public_note
-					})}
-				</strong>
-			</p>
-		{/if}
-	</Callout>
-{/if}
+<div class="approval-form-wrap">
+	{#if !$approvalStore}
+		<Callout type="warning">
+			{#snippet icon()}
+				<IconCardChecklist />
+			{/snippet}
+			{I18n.t('console.approve.pendingNotice')}
+		</Callout>
+	{:else if $approvalStore?.status === 'pending'}
+		<Callout type="warning">
+			{#snippet icon()}
+				<IconCardChecklist />
+			{/snippet}
+			{I18n.t('console.approve.markedAsPendingNotice')}
+		</Callout>
+	{:else if $approvalStore?.status === 'reviewing'}
+		<Callout type="info">
+			{#snippet icon()}
+				<IconHourglassSplit />
+			{/snippet}
+			{I18n.t('console.approve.reviewNotice')}
+		</Callout>
+	{:else if $approvalStore?.status === 'rejected'}
+		<Callout type="danger">
+			{#snippet icon()}
+				<IconXCircle />
+			{/snippet}
+			{I18n.t('console.approve.rejectNotice')}
+			{#if $approvalStore?.public_note}
+				<p>
+					<strong>
+						{I18n.t('console.approve.rejectReason', {
+							reason: $approvalStore?.public_note
+						})}
+					</strong>
+				</p>
+			{/if}
+		</Callout>
+	{/if}
 
-<SplitControl
-	label={`${I18n.t('console.approve.companyName')}*`}
-	caption={I18n.t('console.approve.companyNameCaption')}
->
-	<TextInput bind:value={companyName} maxLength={255} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl
+		label={`${I18n.t('console.approve.companyName')}*`}
+		caption={I18n.t('console.approve.companyNameCaption')}
+	>
+		<TextInput bind:value={companyName} maxLength={255} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl label={`${I18n.t('console.approve.country')}*`}>
-	<TextInput bind:value={country} maxLength={255} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl label={`${I18n.t('console.approve.country')}*`}>
+		<TextInput bind:value={country} maxLength={255} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl label={`${I18n.t('console.approve.website')}*`}>
-	<TextInput bind:value={website} maxLength={1024} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl label={`${I18n.t('console.approve.website')}*`}>
+		<TextInput bind:value={website} maxLength={1024} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.socialLinks')}
-	caption={`(${I18n.t('console.approve.preferred')})`}
->
-	<Textarea bind:value={socialLinks} maxLength={1024} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.socialLinks')}
+		caption={`(${I18n.t('console.approve.preferred')})`}
+	>
+		<Textarea bind:value={socialLinks} maxLength={1024} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.typeOfContent')}
-	caption={I18n.t('console.approve.typeOfContentCaption')}
->
-	<TextInput
-		bind:value={typeOfContent}
-		maxLength={1024}
-		disabled={readOnly}
-		block
-		placeholder={readOnly ? '' : I18n.t('console.approve.typeOfContentPlaceholder')}
-	/>
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.typeOfContent')}
+		caption={I18n.t('console.approve.typeOfContentCaption')}
+	>
+		<TextInput
+			bind:value={typeOfContent}
+			maxLength={1024}
+			disabled={readOnly}
+			block
+			placeholder={readOnly ? '' : I18n.t('console.approve.typeOfContentPlaceholder')}
+		/>
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.frequency')}
-	caption={I18n.t('console.approve.frequencyCaption')}
->
-	<TextInput
-		placeholder={readOnly ? '' : I18n.t('console.approve.frequencyPlaceholder')}
-		maxLength={1024}
-		bind:value={frequency}
-		disabled={readOnly}
-		block
-	/>
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.frequency')}
+		caption={I18n.t('console.approve.frequencyCaption')}
+	>
+		<TextInput
+			placeholder={readOnly ? '' : I18n.t('console.approve.frequencyPlaceholder')}
+			maxLength={1024}
+			bind:value={frequency}
+			disabled={readOnly}
+			block
+		/>
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.existingList')}
-	caption={I18n.t('console.approve.existingListCaption')}
->
-	<Textarea bind:value={existingList} maxLength={1024} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.existingList')}
+		caption={I18n.t('console.approve.existingListCaption')}
+	>
+		<Textarea bind:value={existingList} maxLength={1024} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.sample')}
-	caption={I18n.t('console.approve.sampleCaption')}
->
-	<TextInput bind:value={sample} maxLength={1024} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.sample')}
+		caption={I18n.t('console.approve.sampleCaption')}
+	>
+		<TextInput bind:value={sample} maxLength={1024} disabled={readOnly} block />
+	</SplitControl>
 
-<SplitControl
-	label={I18n.t('console.approve.whyPost')}
-	caption={I18n.t('console.approve.whyPostCaption')}
->
-	<Textarea bind:value={whyPost} maxLength={1024} disabled={readOnly} block />
-</SplitControl>
+	<SplitControl
+		label={I18n.t('console.approve.whyPost')}
+		caption={I18n.t('console.approve.whyPostCaption')}
+	>
+		<Textarea bind:value={whyPost} maxLength={1024} disabled={readOnly} block />
+	</SplitControl>
 
-{#if !$approvalStore}
-	<div class="checkboxes">
-		<Checkbox bind:checked={checkbox1}>
-			<I18n.T key="console.approve.checkbox1" params={{ strong: { element: 'strong' } }} />
-		</Checkbox>
-		<Checkbox bind:checked={checkbox2}>
-			<I18n.T
-				key="console.approve.checkbox2"
-				params={{
-					termsLink: {
-						element: 'a',
-						props: {
-							href: '/terms',
-							target: '_blank',
-							class: 'hds-link'
+	{#if !$approvalStore}
+		<div class="checkboxes">
+			<Checkbox bind:checked={checkbox1}>
+				<I18n.T
+					key="console.approve.checkbox1"
+					params={{ strong: { element: 'strong' } }}
+				/>
+			</Checkbox>
+			<Checkbox bind:checked={checkbox2}>
+				<I18n.T
+					key="console.approve.checkbox2"
+					params={{
+						termsLink: {
+							element: 'a',
+							props: {
+								href: '/terms',
+								target: '_blank',
+								class: 'hds-link'
+							}
+						},
+						privacyLink: {
+							element: 'a',
+							props: {
+								href: '/privacy',
+								target: '_blank',
+								class: 'hds-link'
+							}
 						}
-					},
-					privacyLink: {
-						element: 'a',
-						props: {
-							href: '/privacy',
-							target: '_blank',
-							class: 'hds-link'
-						}
-					}
-				}}
-			/>
-		</Checkbox>
+					}}
+				/>
+			</Checkbox>
+		</div>
+	{/if}
+
+	<div class="submit">
+		<Button size="medium" on:click={onSubmit} disabled={$approvalStore && !isUpdating}>
+			{$approvalStore ? I18n.t('console.approve.update') : I18n.t('console.approve.submit')}
+		</Button>
 	</div>
-{/if}
-
-<div class="submit">
-	<Button size="medium" on:click={onSubmit} disabled={$approvalStore && !isUpdating}>
-		{$approvalStore ? I18n.t('console.approve.update') : I18n.t('console.approve.submit')}
-	</Button>
 </div>
 
 <style>
+	.approval-form-wrap {
+		width: 100%;
+	}
+
 	.submit {
 		display: flex;
 		justify-content: center;
