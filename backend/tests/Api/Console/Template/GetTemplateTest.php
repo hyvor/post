@@ -296,7 +296,7 @@ class GetTemplateTest extends WebTestCase
 {% if branding %}
     <div style="text-align:center;">
         <a class="branding-tag" target="_blank"
-           href="https://post.hyvor.com?source=mail-branding&source-subdomain={{ subdomain }}">
+           href="https://post.hyvor.com?source=mail-branding&newsletter={{ subdomain }}">
             [<span style="vertical-align:middle">Sent privately via</span> <strong style="vertical-align:middle">Hyvor
                 Post</strong> <img style="vertical-align:middle" src="https://post.hyvor.com/img/logo.png" width="14"/>]
         </a>
