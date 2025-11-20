@@ -4,9 +4,8 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
-use App\Api\Console\Object\StatCategoryObject;
-use App\Api\Console\Object\StatsObject;
 use App\Entity\Type\ApprovalStatus;
+use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
@@ -135,10 +134,18 @@ class ConsoleInitTest extends WebTestCase
             'newsletter' => $newsletter,
         ]);
 
+        $subscribersOldUnsubscribed = SubscriberFactory::createMany(2, [
+            'newsletter' => $newsletter,
+            'lists' => [$newsletterList],
+            'created_at' => new \DateTimeImmutable('2021-01-01'),
+            'status' => SubscriberStatus::UNSUBSCRIBED
+        ]);
+
         $subscribersOld = SubscriberFactory::createMany(5, [
             'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable('2021-01-01'),
+            'status' => SubscriberStatus::SUBSCRIBED
         ]);
 
 
@@ -146,7 +153,12 @@ class ConsoleInitTest extends WebTestCase
             'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable(),
+            'status' => SubscriberStatus::SUBSCRIBED
         ]);
+
+        foreach ($subscribersOldUnsubscribed as $subscriber) {
+            $newsletterList->addSubscriber($subscriber->_real());
+        }
 
         foreach ($subscribersOld as $subscriber) {
             $newsletterList->addSubscriber($subscriber->_real());
