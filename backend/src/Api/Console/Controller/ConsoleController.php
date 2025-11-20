@@ -20,6 +20,7 @@ use App\Service\AppConfig;
 use App\Service\Approval\ApprovalService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
@@ -35,6 +36,7 @@ class ConsoleController extends AbstractController
 {
     public function __construct(
         private NewsletterService         $newsletterService,
+        private NewsletterListService     $listService,
         private ListRepository            $listRepository,
         private InternalConfig            $internalConfig,
         private AppConfig                 $appConfig,
@@ -89,6 +91,8 @@ class ConsoleController extends AbstractController
                 'deleted_at' => null,
             ]
         );
+        $listIds = array_map(fn($list) => $list->getId(), $lists);
+        $subscriberCounts = $this->listService->getSubscriberCountOfLists($listIds);
 
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
@@ -107,7 +111,7 @@ class ConsoleController extends AbstractController
 
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
-            'lists' => array_map(fn($list) => new ListObject($list), $lists),
+            'lists' => array_map(fn($list) => new ListObject($list, $subscriberCounts[$list->getId()]), $lists),
             'sending_profiles' => array_map(fn($address) => new SendingProfileObject($address), $this->sendingProfileService->getSendingProfiles($newsletter)),
             'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
                 $subscriberMetadataDefinitions),

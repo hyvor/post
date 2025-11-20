@@ -25,17 +25,6 @@ class ListController extends AbstractController
     {
     }
 
-    #[Route('/lists', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
-    public function getNewsletterLists(Newsletter $newsletter): JsonResponse
-    {
-        $lists = $this->newsletterListService
-            ->getListsOfNewsletter($newsletter)
-            ->map(fn(NewsletterList $list) => new ListObject($list));
-
-        return $this->json($lists);
-    }
-
     #[Route('/lists', methods: 'POST')]
     #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
     public function createNewsletterList(
@@ -62,14 +51,7 @@ class ListController extends AbstractController
             $input->name,
             $input->description
         );
-        return $this->json(new ListObject($list));
-    }
-
-    #[Route('/lists/{id}', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
-    public function getById(NewsletterList $list): JsonResponse
-    {
-        return $this->json(new ListObject($list));
+        return $this->json(new ListObject($list, 0));
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
@@ -84,7 +66,10 @@ class ListController extends AbstractController
             $input->name ?? $list->getName(),
             $input->description ?? $list->getDescription()
         );
-        return $this->json(new ListObject($list));
+
+        $subscriberCounts = $this->newsletterListService->getSubscriberCountOfLists([$list->getId()]);
+
+        return $this->json(new ListObject($list, $subscriberCounts[$list->getId()]));
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]
