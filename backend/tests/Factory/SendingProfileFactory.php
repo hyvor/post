@@ -42,7 +42,8 @@ final class SendingProfileFactory extends PersistentProxyObjectFactory
             'from_email' => self::faker()->email(),
             'reply_to_email' => self::faker()->email(),
             'brand_name' => self::faker()->company(),
-            'brand_logo' => "https://picsum.photos/200"
+            'brand_logo' => "https://picsum.photos/200",
+            'brand_url' => self::faker()->url(),
         ];
     }
 

@@ -24,7 +24,9 @@ class CreateSendingProfileInput
     #[Assert\Type('string')]
     public ?string $brand_name;
 
-    #[Assert\Length(max: 1024)]
     #[Assert\Url]
     public ?string $brand_logo;
+
+    #[Assert\Url]
+    public ?string $brand_url;
 }
