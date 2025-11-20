@@ -233,4 +233,29 @@ class ImportTest extends WebTestCase
         $this->assertNotFalse($content);
         $this->assertStringContainsString('Monthly import limit reached.', $content);
     }
+
+
+    public function test_import_upload_small(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $file = new UploadedFile(
+            dirname(__DIR__, 3) . '/Service/Import/importsmall.csv',
+            'import.csv',
+        );
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/imports/upload',
+            files: [
+                'file' => $file
+            ],
+            parameters: [
+                'source' => 'test'
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
 }
