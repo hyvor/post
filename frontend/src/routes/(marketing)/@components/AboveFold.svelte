@@ -4,8 +4,6 @@
 	import Envelope from './Envelope.svelte';
 	import { getMarketingI18n } from '../locale';
 	import BrowserWindow from './BrowserWindow.svelte';
-	import emailImg from '../img/email.png';
-	import consoleImg from '../img/console.png';
 
 	const I18n = getMarketingI18n();
 </script>
@@ -37,10 +35,10 @@
 	<div class="right">
 		<!-- <MainGraphic /> -->
 		<div class="main-browser">
-			<BrowserWindow image={consoleImg} link="post.hyvor.com/console" />
+			<BrowserWindow image='/img/console.png' link="post.hyvor.com/console" />
 		</div>
 		<div class="another-browser">
-			<Envelope emailImage={emailImg} />
+			<Envelope emailImage='/img/email.png' />
 		</div>
 
 		<div class="main-graphic">
