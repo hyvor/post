@@ -324,4 +324,22 @@ class RelayWebhookTest extends WebTestCase
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber3->getStatus());
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber4->getStatus());
     }
+
+    public function test_ignore_webhooks_for_emails_without_send_id(): void
+    {
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => []
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+    }
 }
