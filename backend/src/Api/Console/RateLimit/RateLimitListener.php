@@ -32,11 +32,6 @@ class RateLimitListener
         return str_starts_with($request->getPathInfo(), '/api/console');
     }
 
-    private function isPublicApiRequest(Request $request): bool
-    {
-        return str_starts_with($request->getPathInfo(), '/api/public');
-    }
-
     private function isSubscribePostRequest(Request $request): bool
     {
         return $request->getMethod() === 'POST'
@@ -95,6 +90,10 @@ class RateLimitListener
     {
         $content = $request->getContent();
         $data = json_decode($content, true);
+
+        if (!is_array($data)) {
+            return;
+        }
 
         if (!isset($data['email']) || !is_string($data['email'])) {
             return; // Skip rate limiting if email is not provided or invalid

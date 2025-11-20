@@ -104,6 +104,7 @@ class RateLimitTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(429);
         $json = $this->getJson();
+        $this->assertIsString($json['message']);
         $this->assertStringContainsString('You have recently requested a subscription confirm link', $json['message']);
         $this->assertStringContainsString('seconds', $json['message']);
     }
@@ -173,6 +174,7 @@ class RateLimitTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(429);
         $json = $this->getJson();
+        $this->assertIsString($json['message']);
         $this->assertStringContainsString('You have recently requested a subscription confirm link', $json['message']);
         $this->assertStringContainsString('seconds', $json['message']);
     }
