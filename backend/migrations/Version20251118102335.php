@@ -44,6 +44,13 @@ final class Version20251118102335 extends AbstractMigration
                 ALTER COLUMN private_note TYPE TEXT;
         SQL
         );
+
+        $this->addSql(
+            <<<SQL
+            ALTER TABLE sending_profiles ADD COLUMN brand_url TEXT DEFAULT NULL;
+        SQL
+        );
+
     }
 
     public function down(Schema $schema): void

@@ -67,7 +67,8 @@ class SendingProfileController extends AbstractController
             $input->from_name,
             $input->reply_to_email,
             $input->brand_name,
-            $input->brand_logo
+            $input->brand_logo,
+            $input->brand_url
         );
 
         return $this->json(new SendingProfileObject($sendingProfile));
@@ -102,6 +103,10 @@ class SendingProfileController extends AbstractController
 
         if ($input->hasProperty('brand_logo')) {
             $updates->brandLogo = $input->brand_logo;
+        }
+
+        if ($input->hasProperty('brand_url')) {
+            $updates->brandUrl = $input->brand_url;
         }
 
         if ($input->hasProperty('is_default')) {

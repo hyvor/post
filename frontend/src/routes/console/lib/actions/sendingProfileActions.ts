@@ -13,7 +13,9 @@ export interface createSendingProfileParams {
 	reply_to_email: string | null;
 	brand_name: string | null;
 	brand_logo: string | null;
+	brand_url: string | null;
 }
+
 export function createSendingProfile(params: createSendingProfileParams): Promise<SendingProfile> {
 	return consoleApi.post<SendingProfile>({
 		endpoint: 'sending-profiles',
@@ -27,8 +29,10 @@ export interface UpdateSendingProfileParams {
 	reply_to_email?: string;
 	brand_name?: string;
 	brand_logo?: string;
+	brand_url?: string;
 	is_default?: boolean;
 }
+
 export function updateSendingProfile(
 	id: number,
 	params: UpdateSendingProfileParams
