@@ -25,11 +25,22 @@ class RateLimitListener
     ) {
     }
 
-    private const string RATE_LIMIT_HEADERS_ATTRIBUTE_KEY = 'console_api_rate_limit_headers';
+    private const string CONSOLE_RATE_LIMIT_HEADERS_KEY = 'console_api_rate_limit_headers';
+    private const string PUBLIC_RATE_LIMIT_HEADERS_KEY = 'public_api_rate_limit_headers';
+
+    private function isPublicApiRequest(Request $request): bool
+    {
+        return str_starts_with($request->getPathInfo(), '/api/public');
+    }
 
     private function isConsoleApiRequest(Request $request): bool
     {
         return str_starts_with($request->getPathInfo(), '/api/console');
+    }
+
+    private function isMachineApiRequest(Request $request): bool
+    {
+        return str_starts_with($request->getPathInfo(), '/api/machine');
     }
 
     private function isSubscribePostRequest(Request $request): bool
@@ -79,21 +90,53 @@ class RateLimitListener
 
         $request = $controllerEvent->getRequest();
 
-        // Apply subscribe-specific rate limiting for public form submissions
-        if ($this->isSubscribePostRequest($request)) {
-            $this->applySubscribeRateLimit($request);
-            return; // Skip general rate limiting for this endpoint
-        }
+        // Unified rate limiting logic
+        if ($this->isPublicApiRequest($request)) {
+            if ($this->isSubscribePostRequest($request)) {
+                $this->applySubscribeRateLimit($request);
+            }
 
-        if (!$this->isConsoleApiRequest($request)) {
+            $this->applyPublicApiRateLimit($request);
+
+        } else if ($this->isConsoleApiRequest($request)) {
+            $this->applyConsoleApiRateLimit($request);
+
+        } else if ($this->isMachineApiRequest($request)) {
+            // Machine API - no rate limiting
             return;
         }
+        // Other API endpoints - no rate limiting
+    }
 
+    private function applyPublicApiRateLimit(Request $request): void
+    {
+        $limiter = $this->rateLimiterProvider->rateLimiter(
+            $this->rateLimit->publicApi(),
+            'public_ip:' . $request->getClientIp()
+        );
+        $limit = $limiter->consume();
+
+        $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
+        $request->attributes->set(self::PUBLIC_RATE_LIMIT_HEADERS_KEY, [
+            'RateLimit-Limit' => $limit->getLimit(),
+            'RateLimit-Remaining' => $limit->getRemainingTokens(),
+            'RateLimit-Reset' => $resetIn,
+        ]);
+
+        if ($limit->isAccepted() === false) {
+            throw new TooManyRequestsHttpException(
+                message: 'Rate limit exceeded. Please try again in ' . $resetIn . ' seconds.',
+            );
+        }
+    }
+
+    private function applyConsoleApiRateLimit(Request $request): void
+    {
         $limiter = $this->getRateLimiter($request);
         $limit = $limiter->consume();
 
         $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
-        $request->attributes->set(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY, [
+        $request->attributes->set(self::CONSOLE_RATE_LIMIT_HEADERS_KEY, [
             'X-RateLimit-Limit' => $limit->getLimit(),
             'X-RateLimit-Remaining' => $limit->getRemainingTokens(),
             'X-RateLimit-Reset' => $resetIn,
@@ -142,17 +185,27 @@ class RateLimitListener
         }
 
         $request = $responseEvent->getRequest();
-        if (!$this->isConsoleApiRequest($request)) {
-            return;
-        }
-
         $response = $responseEvent->getResponse();
 
-        if ($request->attributes->has(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY)) {
-            /** @var array<string, string|int> $rateLimitHeaders */
-            $rateLimitHeaders = $request->attributes->get(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY);
-            foreach ($rateLimitHeaders as $header => $value) {
-                $response->headers->set($header, (string)$value);
+        // Add rate limit headers for Console API
+        if ($this->isConsoleApiRequest($request)) {
+            if ($request->attributes->has(self::CONSOLE_RATE_LIMIT_HEADERS_KEY)) {
+                /** @var array<string, string|int> $rateLimitHeaders */
+                $rateLimitHeaders = $request->attributes->get(self::CONSOLE_RATE_LIMIT_HEADERS_KEY);
+                foreach ($rateLimitHeaders as $header => $value) {
+                    $response->headers->set($header, (string)$value);
+                }
+            }
+        }
+
+        // Add rate limit headers for Public API
+        if ($this->isPublicApiRequest($request)) {
+            if ($request->attributes->has(self::PUBLIC_RATE_LIMIT_HEADERS_KEY)) {
+                /** @var array<string, string|int> $rateLimitHeaders */
+                $rateLimitHeaders = $request->attributes->get(self::PUBLIC_RATE_LIMIT_HEADERS_KEY);
+                foreach ($rateLimitHeaders as $header => $value) {
+                    $response->headers->set($header, (string)$value);
+                }
             }
         }
     }

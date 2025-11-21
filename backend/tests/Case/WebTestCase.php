@@ -184,10 +184,15 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $uri,
         array $data = [],
         array $headers = [],
+        ?string $clientIp = null,
     ): Response {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
+
+        if ($clientIp !== null) {
+            $server['REMOTE_ADDR'] = $clientIp;
+        }
 
         foreach ($headers as $key => $value) {
             $server['HTTP_' . strtoupper(str_replace('-', '_', $key))] = $value;

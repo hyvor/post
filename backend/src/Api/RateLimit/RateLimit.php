@@ -51,6 +51,21 @@ class RateLimit
     }
 
     /**
+     * Rate limit for public API per IP.
+     * 30 per minute per IP
+     * @return RateLimitConfig
+     */
+    public function publicApi(): array
+    {
+        return [
+            'id' => 'public_api',
+            'policy' => 'fixed_window',
+            'limit' => $this->isDev ? 1000 : 30,
+            'interval' => '1 minute',
+        ];
+    }
+
+    /**
      * Rate limit for the POST /subscribers endpoint.
      * 1 subscribe per email per minute
      * @return RateLimitConfig
