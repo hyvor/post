@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="main-graphic">
-			<img src="/img/main-graphic.svg" alt="Main Graphic" />
+			<img src="/img/home/main-graphic.svg" alt="Main Graphic" />
 		</div>
 	</div>
 </div>

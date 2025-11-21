@@ -3,7 +3,7 @@
 	import IconReply from '@hyvor/icons/IconReply';
 	import IconForward from '@hyvor/icons/IconForward';
 	import IconArchive from '@hyvor/icons/IconArchive';
-	import ppImg from '../../../../static/img/pp.svg';
+	import ppImg from '../../../../static/img/home/pp.svg';
 	import { Avatar } from '@hyvor/design/components';
 
 	export let emailImage = '';
