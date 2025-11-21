@@ -324,4 +324,36 @@ class RelayWebhookTest extends WebTestCase
         $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber3->getStatus());
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber4->getStatus());
     }
+
+    public function test_machine_api_has_no_rate_limits(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'delivered_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        // Make 40 requests (more than the public API limit of 30)
+        for ($i = 0; $i < 40; $i++) {
+            $response = $this->callWebhook($data);
+            $this->assertSame(200, $response->getStatusCode());
+
+            $this->assertFalse($response->headers->has('RateLimit-Limit'));
+            $this->assertFalse($response->headers->has('RateLimit-Remaining'));
+            $this->assertFalse($response->headers->has('RateLimit-Reset'));
+        }
+    }
 }
