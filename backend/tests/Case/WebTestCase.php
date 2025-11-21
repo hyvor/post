@@ -170,15 +170,20 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      * @param array<string, string> $headers
      */
     public function publicApi(
-        string $method,
-        string $uri,
-        array  $data = [],
-        array  $headers = [],
+        string  $method,
+        string  $uri,
+        array   $data = [],
+        array   $headers = [],
+        ?string $clientIp = null,
     ): Response
     {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
+
+        if ($clientIp !== null) {
+            $server['REMOTE_ADDR'] = $clientIp;
+        }
 
         foreach ($headers as $key => $value) {
             $server['HTTP_' . strtoupper(str_replace('-', '_', $key))] = $value;

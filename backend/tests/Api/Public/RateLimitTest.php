@@ -2,12 +2,16 @@
 
 namespace App\Tests\Api\Public;
 
-use App\Api\Public\Listener\RateLimiterListener;
+use App\Api\RateLimit\RateLimit;
+use App\Api\RateLimit\RateLimitListener;
+use App\Service\App\RateLimit\RateLimiterProvider;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(RateLimiterListener::class)]
+#[CoversClass(RateLimitListener::class)]
+#[CoversClass(RateLimit::class)]
+#[CoversClass(RateLimiterProvider::class)]
 class RateLimitTest extends WebTestCase
 {
     public function test_adds_rate_limit_headers(): void
