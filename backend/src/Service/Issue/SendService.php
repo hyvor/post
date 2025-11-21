@@ -108,21 +108,34 @@ class SendService
         }
     }
 
-    public function createSend(Issue $issue, Subscriber $subscriber): Send
+    public function createSend(Issue $issue, Subscriber $subscriber): int|false
     {
-        $send = new Send()
-            ->setIssue($issue)
-            ->setSubscriber($subscriber)
-            ->setNewsletter($issue->getNewsletter())
-            ->setEmail($subscriber->getEmail())
-            ->setStatus(SendStatus::PENDING)
-            ->setCreatedAt($this->now())
-            ->setUpdatedAt($this->now());
+        $query = <<<SQL
+                INSERT INTO sends (
+                    issue_id, subscriber_id, newsletter_id, email,
+                    status, created_at, updated_at
+                ) VALUES (
+                    :issue_id, :subscriber_id, :newsletter_id, :email,
+                    :status, :created_at, :updated_at
+                )
+                ON CONFLICT (issue_id, subscriber_id) DO NOTHING
+                RETURNING id
+            SQL;
 
-        $this->em->persist($send);
-        $this->em->flush();
+        $params = [
+            'issue_id' => $issue->getId(),
+            'subscriber_id' => $subscriber->getId(),
+            'newsletter_id' => $issue->getNewsletter()->getId(),
+            'email' => $subscriber->getEmail(),
+            'status' => SendStatus::PENDING->value,
+            'created_at' => $this->now()->format('Y-m-d H:i:s'),
+            'updated_at' => $this->now()->format('Y-m-d H:i:s'),
+        ];
 
-        return $send;
+        /** @var int|false $createdSendId */
+        $createdSendId = $this->em->getConnection()->fetchOne($query, $params);
+
+        return $createdSendId;
     }
 
     /**
