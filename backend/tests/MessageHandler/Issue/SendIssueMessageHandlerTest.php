@@ -4,8 +4,8 @@ namespace App\Tests\MessageHandler\Issue;
 
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
+use App\Entity\Type\SendStatus;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\Message\SendIssueMessage;
 use App\Service\Issue\MessageHandler\SendIssueMessageHandler;
 use App\Service\Issue\SendService;
@@ -13,6 +13,7 @@ use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -68,5 +69,49 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $this->assertSame($subscribers[0]->getId(), $send->getSubscriber()->getId());
 
         $this->assertSame(IssueStatus::SENT, $issue->getStatus());
+    }
+
+    public function test_handle_on_issue_id_subscriber_id_conflict(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $list = NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+        ]);
+
+        $subscribers = SubscriberFactory::createMany(3, [
+            'newsletter' => $newsletter,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        SendFactory::createOne([
+            'issue' => $issue,
+            'subscriber' => $subscribers[0],
+            'newsletter' => $newsletter,
+            'status' => SendStatus::PENDING
+        ]);
+
+        $message = new SendIssueMessage($issue->getId());
+        $this->getMessageBus()->dispatch($message);
+
+        $this->transport('async')->throwExceptions()->process(1);
+
+        $allMessages = $this->transport('async')->queue()->all();
+        // New messages should be dispatched only to 2 subscribers
+        $this->assertCount(2, $allMessages);
+
+        $sendRepository = $this->em->getRepository(Send::class);
+        $sends = $sendRepository->findBy([
+            'issue' => $issue->getId(),
+            'newsletter' => $newsletter->getId(),
+        ]);
+        $this->assertCount(3, $sends);
     }
 }
