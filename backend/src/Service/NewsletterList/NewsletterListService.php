@@ -156,7 +156,7 @@ class NewsletterListService
         /** @var array<int, array<string, string>> $result */
         $result = $qb->getQuery()->getScalarResult();
 
-        $subscriberCounts = [];
+        $subscriberCounts = array_fill_keys($listIds, 0);
         foreach ($result as $row) {
             $subscriberCounts[(int)$row['list_id']] = (int)$row['subscriber_count'];
         }
