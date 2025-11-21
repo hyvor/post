@@ -90,6 +90,16 @@ class RateLimitTest extends WebTestCase
             ]
         );
 
+        $response = $this->publicApi(
+            'POST',
+            '/form/subscribe',
+            [
+                'newsletter_subdomain' => $newsletter->getSubdomain(),
+                'email' => 'test@example.com',
+                'list_ids' => [$list->getId()]
+            ]
+        );
+
         $this->assertResponseStatusCodeSame(200);
 
         $response = $this->publicApi(
@@ -156,7 +166,7 @@ class RateLimitTest extends WebTestCase
 
         // Consume the hourly limit (6 requests)
         $perHourLimiter = $rateLimiterProvider->rateLimiter(
-            $rateLimit->subscriberPerHour(),
+            $rateLimit->subscriberPerEmailPerHour(),
             'subscriber_email:' . $email
         );
         $perHourLimiter->consume(6);
