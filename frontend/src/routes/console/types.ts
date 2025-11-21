@@ -253,6 +253,7 @@ export type SendingProfile = {
 	reply_to_email: string | null;
 	brand_name: string | null;
 	brand_logo: string | null;
+	brand_url: string | null;
 	is_default: boolean;
 	is_system: boolean;
 };

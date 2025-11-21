@@ -42,6 +42,9 @@ class SendingProfile
     private ?string $brand_logo;
 
     #[ORM\Column]
+    private ?string $brand_url;
+
+    #[ORM\Column]
     private bool $is_default = false;
 
     #[ORM\Column]
@@ -163,6 +166,18 @@ class SendingProfile
     public function setBrandLogo(?string $brandLogo): static
     {
         $this->brand_logo = $brandLogo;
+
+        return $this;
+    }
+
+    public function getBrandUrl(): ?string
+    {
+        return $this->brand_url ?? null;
+    }
+
+    public function setBrandUrl(?string $brandUrl): static
+    {
+        $this->brand_url = $brandUrl;
 
         return $this;
     }

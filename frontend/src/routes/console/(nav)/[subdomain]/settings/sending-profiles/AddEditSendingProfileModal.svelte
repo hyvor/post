@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, SplitControl, TextInput, toast } from '@hyvor/design/components';
+	import { Modal, SplitControl, TextInput, Textarea, toast } from '@hyvor/design/components';
 	import type { SendingProfile } from '../../../../types';
 	import { getI18n } from '../../../../lib/i18n';
 	import {
@@ -22,6 +22,7 @@
 	let replyToEmail = $state(profile?.reply_to_email ?? '');
 	let brandName = $state(profile?.brand_name ?? '');
 	let brandLogo = $state(profile?.brand_logo ?? '');
+	let brandUrl = $state(profile?.brand_url ?? '');
 
 	let isCreating = $state(false);
 	let isUpdating = $state(false);
@@ -36,7 +37,8 @@
 				fromName !== (profile.from_name ?? '') ||
 				replyToEmail !== (profile.reply_to_email ?? '') ||
 				brandName !== (profile.brand_name ?? '') ||
-				brandLogo !== (profile.brand_logo ?? ''));
+				brandLogo !== (profile.brand_logo ?? '') ||
+				brandUrl !== (profile.brand_url ?? ''));
 	});
 
 	$effect(() => {
@@ -58,7 +60,8 @@
 				from_name: fromName === '' ? null : fromName,
 				reply_to_email: replyToEmail === '' ? null : replyToEmail,
 				brand_name: brandName === '' ? null : brandName,
-				brand_logo: brandLogo === '' ? null : brandLogo
+				brand_logo: brandLogo === '' ? null : brandLogo,
+				brand_url: brandUrl === '' ? null : brandUrl
 			};
 
 			const params = Object.fromEntries(
@@ -91,7 +94,8 @@
 				from_name: fromName === '' ? null : fromName,
 				reply_to_email: replyToEmail === '' ? null : replyToEmail,
 				brand_name: brandName === '' ? null : brandName,
-				brand_logo: brandLogo === '' ? null : brandLogo
+				brand_logo: brandLogo === '' ? null : brandLogo,
+				brand_url: brandUrl === '' ? null : brandUrl
 			})
 				.then((res) => {
 					toast.success(
@@ -150,6 +154,10 @@
 
 	<SplitControl label={I.t('console.settings.sendingProfiles.brandName')}>
 		<TextInput placeholder="HYVOR" bind:value={brandName} block />
+	</SplitControl>
+
+	<SplitControl label={I.t('console.settings.sendingProfiles.brandUrl')}>
+		<Textarea placeholder="https://post.hyvor.com" bind:value={brandUrl} block />
 	</SplitControl>
 
 	<SplitControl label={I.t('console.settings.sendingProfiles.brandLogo')}>

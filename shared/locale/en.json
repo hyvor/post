@@ -292,7 +292,8 @@
         "fromName": "From Name",
         "replyToEmail": "Reply-To Email",
         "brandName": "Brand Name",
-        "brandLogo": "Brand Logo"
+        "brandLogo": "Brand Logo",
+        "brandUrl": "Brand URL"
       },
       "api": {
         "apiKey": "API Key",

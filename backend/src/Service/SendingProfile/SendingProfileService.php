@@ -48,14 +48,15 @@ class SendingProfileService
 
     public function createSendingProfile(
         Newsletter $newsletter,
-        ?Domain     $customDomain,
+        ?Domain    $customDomain,
         string     $fromEmail,
         ?string    $fromName = null,
         ?string    $replyToEmail = null,
         ?string    $brandName = null,
         ?string    $brandLogo = null,
-        bool $system = false,
-        bool $flush = true,
+        ?string    $brandUrl = null,
+        bool       $system = false,
+        bool       $flush = true,
     ): SendingProfile
     {
         $sendingProfile = new SendingProfile();
@@ -68,6 +69,7 @@ class SendingProfileService
         $sendingProfile->setReplyToEmail($replyToEmail);
         $sendingProfile->setBrandName($brandName);
         $sendingProfile->setBrandLogo($brandLogo);
+        $sendingProfile->setBrandUrl($brandUrl);
         $sendingProfile->setIsDefault($this->getSendingProfilesCount($newsletter) === 0);
         $sendingProfile->setIsSystem($system);
 
@@ -102,6 +104,10 @@ class SendingProfileService
 
         if ($updates->hasProperty('brandLogo')) {
             $sendingProfile->setBrandLogo($updates->brandLogo);
+        }
+
+        if ($updates->hasProperty('brandUrl')) {
+            $sendingProfile->setBrandUrl($updates->brandUrl);
         }
 
         if ($updates->hasProperty('customDomain')) {
