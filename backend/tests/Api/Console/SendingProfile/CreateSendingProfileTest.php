@@ -39,6 +39,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
+                'brand_url' => null
             ],
         );
 
@@ -81,6 +82,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
+                'brand_url' => null
             ],
         );
 
@@ -107,6 +109,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
+                'brand_url' => null
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
@@ -133,6 +136,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
+                'brand_url' => null
             ],
         );
         $this->assertSame(400, $response->getStatusCode());

@@ -14,7 +14,10 @@ enum MediaFolder: string
     case EXPORT = 'export';
 
     /**
-     * @return string[]
+     * See https://symfony.com/doc/current/reference/constraints/File.html#extensions
+     * We can explicitly set mime types for specific extensions if needed.
+     *
+     * @return array<int|string, string[]|string>
      */
     public function getAllowedExtensions(): array
     {
@@ -22,7 +25,9 @@ enum MediaFolder: string
 
         return match ($this) {
             self::ISSUE_IMAGES, self::NEWSLETTER_IMAGES => $imageExtensions,
-            self::IMPORT, self::EXPORT => ['csv'],
+            self::IMPORT, self::EXPORT => [
+                'csv' => ['text/csv', 'text/plain']
+            ],
         };
     }
 

@@ -47,6 +47,12 @@ final class Version20251118102335 extends AbstractMigration
 
         $this->addSql(
             <<<SQL
+            ALTER TABLE sending_profiles ADD COLUMN brand_url TEXT DEFAULT NULL;
+        SQL
+        );
+
+        $this->addSql(
+            <<<SQL
             ALTER TABLE sends
                 ADD CONSTRAINT sends_issue_id_subscriber_id_key UNIQUE (issue_id, subscriber_id);
         SQL

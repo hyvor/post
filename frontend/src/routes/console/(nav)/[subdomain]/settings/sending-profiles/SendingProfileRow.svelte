@@ -134,6 +134,11 @@
 					<span class="brand-name">{profile.brand_name}</span>
 				{/if}
 			</div>
+			{#if profile.brand_url}
+				<div class="brand-url">
+					({profile.brand_url})
+				</div>
+			{/if}
 		{/if}
 	</div>
 
@@ -223,6 +228,12 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+	}
+
+	.brand-url {
+		font-size: 14px;
+		color: var(--text-light);
+		margin-top: 2px;
 	}
 
 	.action {

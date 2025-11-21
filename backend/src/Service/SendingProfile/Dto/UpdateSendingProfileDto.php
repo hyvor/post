@@ -14,6 +14,7 @@ class UpdateSendingProfileDto
     public ?string $replyToEmail;
     public ?string $brandName;
     public ?string $brandLogo;
+    public ?string $brandUrl;
     public Domain $customDomain;
     public bool $isDefault;
 }

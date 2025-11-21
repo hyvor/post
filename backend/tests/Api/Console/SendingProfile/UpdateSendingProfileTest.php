@@ -57,6 +57,7 @@ class UpdateSendingProfileTest extends WebTestCase
             [
                 'from_email' => 'thibault@gmail.com',
                 'brand_name' => 'Hyvor Post',
+                'brand_url' => 'https://post.hyvor.com'
             ]
         );
 
@@ -64,12 +65,14 @@ class UpdateSendingProfileTest extends WebTestCase
         $json = $this->getJson();
         $this->assertSame('thibault@gmail.com', $json['from_email']);
         $this->assertSame('Hyvor Post', $json['brand_name']);
+        $this->assertSame('https://post.hyvor.com', $json['brand_url']);
         $this->assertSame(false, $json['is_default']);
 
         $sendingEmail = $this->em->getRepository(SendingProfile::class)->findOneBy(['id' => $json['id']]);
         $this->assertInstanceOf(SendingProfile::class, $sendingEmail);
         $this->assertSame('thibault@gmail.com', $sendingEmail->getFromEmail());
         $this->assertSame('Hyvor Post', $sendingEmail->getBrandName());
+        $this->assertSame('https://post.hyvor.com', $sendingEmail->getBrandUrl());
         $this->assertNotNull($sendingEmail->getDomain());
         $this->assertSame($domain2->getId(), $sendingEmail->getDomain()->getId());
         $this->assertSame(false, $sendingEmail->getIsDefault());
