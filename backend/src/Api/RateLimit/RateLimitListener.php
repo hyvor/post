@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Console\RateLimit;
+namespace App\Api\RateLimit;
 
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Service\App\RateLimit\RateLimiterProvider;

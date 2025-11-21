@@ -3,8 +3,8 @@
 namespace App\Tests\Api\Console;
 
 
-use App\Api\Console\RateLimit\RateLimit;
-use App\Api\Console\RateLimit\RateLimitListener;
+use App\Api\RateLimit\RateLimit;
+use App\Api\RateLimit\RateLimitListener;
 use App\Service\App\RateLimit\RateLimiterProvider;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
