@@ -51,6 +51,26 @@ class RateLimitListener
         return $this->rateLimiterProvider->rateLimiter($this->rateLimit->apiKey(), 'api_key:' . $apiKey->getId());
     }
 
+
+    /**
+     * @param array{id: string, policy: string, limit: int, interval: string} $rateLimitConfig
+     * @param string $identifier
+     * @param string $errorMessage Message with %d placeholder for resetIn seconds
+     * @return void
+     */
+    private function checkRateLimit(array $rateLimitConfig, string $identifier, string $errorMessage): void
+    {
+        $limiter = $this->rateLimiterProvider->rateLimiter($rateLimitConfig, $identifier);
+        $limit = $limiter->consume();
+
+        if ($limit->isAccepted() === false) {
+            $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
+            throw new TooManyRequestsHttpException(
+                message: sprintf($errorMessage, $resetIn),
+            );
+        }
+    }
+
     public function onController(ControllerEvent $controllerEvent): void
     {
         if ($controllerEvent->isMainRequest() === false) {
@@ -100,32 +120,19 @@ class RateLimitListener
         }
 
         $email = $data['email'];
+        $identifier = 'subscriber_email:' . $email;
 
-        $perMinuteLimiter = $this->rateLimiterProvider->rateLimiter(
-            $this->rateLimit->subscriberPerMinute(),
-            'subscriber_email:' . $email
+        $this->checkRateLimit(
+            $this->rateLimit->subscriberPerEmailPerMinute(),
+            $identifier,
+            'You have recently requested a subscription confirm link. Please try again in %d seconds.'
         );
-        $perMinuteLimit = $perMinuteLimiter->consume();
 
-        if ($perMinuteLimit->isAccepted() === false) {
-            $resetIn = max($perMinuteLimit->getRetryAfter()->getTimestamp() - time(), 0);
-            throw new TooManyRequestsHttpException(
-                message: 'You have recently requested a subscription confirm link. Please try again in ' . $resetIn . ' seconds.',
-            );
-        }
-
-        $perHourLimiter = $this->rateLimiterProvider->rateLimiter(
-            $this->rateLimit->subscriberPerHour(),
-            'subscriber_email:' . $email
+        $this->checkRateLimit(
+            $this->rateLimit->subscriberPerEmailPerHour(),
+            $identifier,
+            'You have recently requested a subscription confirm link. Please try again in %d seconds.'
         );
-        $perHourLimit = $perHourLimiter->consume();
-
-        if ($perHourLimit->isAccepted() === false) {
-            $resetIn = max($perHourLimit->getRetryAfter()->getTimestamp() - time(), 0);
-            throw new TooManyRequestsHttpException(
-                message: 'You have recently requested a subscription confirm link. Please try again in ' . $resetIn . ' seconds.',
-            );
-        }
     }
 
     public function onResponse(ResponseEvent $responseEvent): void

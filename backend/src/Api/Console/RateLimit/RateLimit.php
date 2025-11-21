@@ -51,31 +51,16 @@ class RateLimit
     }
 
     /**
-     * Rate limit for the /sends endpoint.
-     * 10 per second
-     * @return RateLimitConfig
-     */
-    public function subsciber(): array
-    {
-        return [
-            'id' => 'console_api_sends',
-            'policy' => 'fixed_window',
-            'limit' => 10,
-            'interval' => '1 second',
-        ];
-    }
-
-    /**
      * Rate limit for the POST /subscribers endpoint.
      * 1 subscribe per email per minute
      * @return RateLimitConfig
      */
-    public function subscriberPerMinute(): array
+    public function subscriberPerEmailPerMinute(): array
     {
         return [
-            'id' => 'console_api_subscriber_per_minute',
+            'id' => 'public_api_subscriber_per_minute',
             'policy' => 'fixed_window',
-            'limit' => 1,
+            'limit' => 2,
             'interval' => '1 minute',
         ];
     }
@@ -85,10 +70,10 @@ class RateLimit
      * 6 subscribes per email per hour
      * @return RateLimitConfig
      */
-    public function subscriberPerHour(): array
+    public function subscriberPerEmailPerHour(): array
     {
         return [
-            'id' => 'console_api_subscriber_per_hour',
+            'id' => 'public_api_subscriber_per_hour',
             'policy' => 'fixed_window',
             'limit' => 6,
             'interval' => '1 hour',
