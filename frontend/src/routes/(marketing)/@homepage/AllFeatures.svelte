@@ -7,24 +7,24 @@
 		{
 			title: I18n.t('homepage.listMngmt'),
 			description: I18n.t('homepage.listMngmtDescription'),
-			image: '/img/multiple-segments.svg'
+			image: '/img/home/multiple-segments.svg'
 		},
 
 		{
 			title: I18n.t('homepage.apiWebhooks'),
 			description: I18n.t('homepage.apiWebhooksDescription'),
-			image: '/img/api-webhooks.svg'
+			image: '/img/home/api-webhooks.svg'
 		},
 		{
 			title: I18n.t('homepage.teamCollaboration'),
 			description: I18n.t('homepage.teamCollaborationDescription'),
-			image: '/img/team-collaboration.svg'
+			image: '/img/home/team-collaboration.svg'
 		},
 
 		{
 			title: I18n.t('homepage.migration'),
 			description: I18n.t('homepage.migrationDescription'),
-			image: '/img/migration.svg'
+			image: '/img/home/migration.svg'
 		}
 	];
 </script>

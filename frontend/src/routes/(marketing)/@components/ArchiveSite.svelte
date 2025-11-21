@@ -1,6 +1,4 @@
 <script lang="ts">
-	import archiveImg from '../img/archive.png';
-	import emailImg from '../img/email.png';
 	import BrowserWindow from './BrowserWindow.svelte';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
@@ -10,11 +8,14 @@
 	<div class="wrap hds-container-max">
 		<div class="left">
 			<div class="main-browser">
-				<BrowserWindow image={archiveImg} link="archive.hyvorpost.io" />
+				<BrowserWindow image="/img/home/archive.png" link="archive.hyvorpost.io" />
 			</div>
 
 			<div class="another-browser">
-				<BrowserWindow image={emailImg} link="weekly-digest.hyvorpost.email/issue/1" />
+				<BrowserWindow
+					image="/img/home/email.png"
+					link="weekly-digest.hyvorpost.email/issue/1"
+				/>
 			</div>
 		</div>
 

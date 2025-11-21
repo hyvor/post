@@ -3,7 +3,7 @@
 	import IconReply from '@hyvor/icons/IconReply';
 	import IconForward from '@hyvor/icons/IconForward';
 	import IconArchive from '@hyvor/icons/IconArchive';
-	import ppImg from '../img/pp.svg';
+	import ppImg from '../../../../static/img/home/pp.svg';
 	import { Avatar } from '@hyvor/design/components';
 
 	export let emailImage = '';
@@ -45,7 +45,7 @@
 			<div class="sender-info">
 				<div class="sender-avatar">
 					<div class="avatar-icon">
-						<Avatar src={ppImg} size="medium" />
+						<Avatar src="/img/home/pp.svg" size="medium" />
 					</div>
 				</div>
 				<div class="sender-details">
