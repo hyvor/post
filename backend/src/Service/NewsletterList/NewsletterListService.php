@@ -4,6 +4,7 @@ namespace App\Service\NewsletterList;
 
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
+use App\Entity\Type\SubscriberStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -15,7 +16,8 @@ class NewsletterListService
 
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
+    )
+    {
     }
 
     public const int MAX_LIST_DEFINITIONS_PER_NEWSLETTER = 20;
@@ -30,8 +32,9 @@ class NewsletterListService
 
     public function isNameAvailable(
         Newsletter $newsletter,
-        string $name
-    ): bool {
+        string     $name
+    ): bool
+    {
         return $this->em->getRepository(NewsletterList::class)
                 ->count([
                     'newsletter' => $newsletter,
@@ -41,9 +44,10 @@ class NewsletterListService
 
     public function createNewsletterList(
         Newsletter $newsletter,
-        string $name,
-        ?string $description
-    ): NewsletterList {
+        string     $name,
+        ?string    $description
+    ): NewsletterList
+    {
         $list = new NewsletterList()
             ->setNewsletter($newsletter)
             ->setName($name)
@@ -131,5 +135,32 @@ class NewsletterListService
         return new ArrayCollection(
             $this->em->getRepository(NewsletterList::class)->findBy(['id' => $listIds])
         );
+    }
+
+    /**
+     * @param int[] $listIds
+     * @return array<int, int>  key: list_id, value: subscriber_count
+     */
+    public function getSubscriberCountOfLists(array $listIds): array
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('l.id AS list_id, COUNT(s.id) AS subscriber_count')
+            ->from(NewsletterList::class, 'l')
+            ->leftJoin('l.subscribers', 's', 'WITH', 's.status = :subscribed')
+            ->where($qb->expr()->in('l.id', ':listIds'))
+            ->setParameter('subscribed', SubscriberStatus::SUBSCRIBED)
+            ->setParameter('listIds', $listIds)
+            ->groupBy('l.id');
+
+        /** @var array<int, array<string, string>> $result */
+        $result = $qb->getQuery()->getScalarResult();
+
+        $subscriberCounts = array_fill_keys($listIds, 0);
+        foreach ($result as $row) {
+            $subscriberCounts[(int)$row['list_id']] = (int)$row['subscriber_count'];
+        }
+
+        return $subscriberCounts;
     }
 }

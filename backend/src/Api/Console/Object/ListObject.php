@@ -13,12 +13,12 @@ class ListObject
     public ?string $description;
     public int $subscribers_count;
 
-    public function __construct(NewsletterList $newsletterList)
+    public function __construct(NewsletterList $newsletterList, int $subscribersCount)
     {
         $this->id = $newsletterList->getId();
         $this->created_at = $newsletterList->getCreatedAt()->getTimestamp();
         $this->name = $newsletterList->getName();
         $this->description = $newsletterList->getDescription();
-        $this->subscribers_count = $newsletterList->getSubscribers()->count();
+        $this->subscribers_count = $subscribersCount;
     }
 }
