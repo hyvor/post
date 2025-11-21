@@ -35,10 +35,10 @@
 	<div class="right">
 		<!-- <MainGraphic /> -->
 		<div class="main-browser">
-			<BrowserWindow image='/img/console.png' link="post.hyvor.com/console" />
+			<BrowserWindow image="/img/console.png" link="post.hyvor.com/console" />
 		</div>
 		<div class="another-browser">
-			<Envelope emailImage='/img/email.png' />
+			<Envelope emailImage="/img/email.png" />
 		</div>
 
 		<div class="main-graphic">
