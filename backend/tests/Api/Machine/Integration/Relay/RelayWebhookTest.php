@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Api\Public\Integration\Relay;
+namespace App\Tests\Api\Machine\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SendStatus;
@@ -25,7 +25,7 @@ class RelayWebhookTest extends WebTestCase
             $headers['X-Signature'] = hash_hmac('sha256', $body, self::WEBHOOK_SECRET);
         }
 
-        return $this->publicApi(
+        return $this->machineApi(
             'POST',
             '/integration/relay/webhook',
             $data,

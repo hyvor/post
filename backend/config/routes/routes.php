@@ -19,6 +19,11 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/sudo')
         ->namePrefix('api_sudo_');
 
+    // machine API
+    $routes->import('../../src/Api/Machine/Controller', 'attribute')
+        ->prefix('/api/machine')
+        ->namePrefix('api_machine_');
+
     // root API
     $routes->import('../../src/Api/Root', 'attribute')
         ->prefix('/api');
