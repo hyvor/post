@@ -8,12 +8,12 @@
 	<div class="wrap hds-container-max">
 		<div class="left">
 			<div class="main-browser">
-				<BrowserWindow image="/img/archive.png" link="archive.hyvorpost.io" />
+				<BrowserWindow image="/img/home/archive.png" link="archive.hyvorpost.io" />
 			</div>
 
 			<div class="another-browser">
 				<BrowserWindow
-					image="/img/email.png"
+					image="/img/home/email.png"
 					link="weekly-digest.hyvorpost.email/issue/1"
 				/>
 			</div>

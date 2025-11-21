@@ -40,14 +40,14 @@
 		<!-- You can add images or additional content here if needed -->
 		<div class="form-preview">
 			<BrowserWindow
-				image="/img/custom-email.png"
+				image="/img/home/custom-email.png"
 				link="post.hyvor.com/console/settings/design"
 			/>
 		</div>
 
 		<div class="another-browser">
 			<BrowserWindow
-				image="/img/custom-email1.png"
+				image="/img/home/custom-email1.png"
 				link="post.hyvor.com/console/settings/design"
 			/>
 		</div>

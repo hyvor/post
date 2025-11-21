@@ -51,7 +51,7 @@
 	</div>
 	<div class="right">
 		<div class="form-preview">
-			<BrowserWindow image="/img/signup.png" link="example.com" />
+			<BrowserWindow image="/img/home/signup.png" link="example.com" />
 		</div>
 	</div>
 </div>

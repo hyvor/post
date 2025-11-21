@@ -45,7 +45,7 @@
 			<div class="sender-info">
 				<div class="sender-avatar">
 					<div class="avatar-icon">
-						<Avatar src="/img/pp.svg" size="medium" />
+						<Avatar src="/img/home/pp.svg" size="medium" />
 					</div>
 				</div>
 				<div class="sender-details">
