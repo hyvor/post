@@ -74,12 +74,20 @@ class SendIssueMessageHandler
         $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
         $delaySeconds = max($index * (1 / $maxPerSecond), 0);
 
-        $send = $this->sendService->createSend($issue, $subscriber);
-        $this->bus->dispatch(
-            new SendEmailMessage($send->getId()),
-            [
-                new DelayStamp((int)floor($delaySeconds * 1000))
-            ]
-        );
+        $this->em->wrapInTransaction(function () use ($issue, $subscriber, $delaySeconds) {
+            $createdSendId = $this->sendService->createSend($issue, $subscriber);
+
+            if ($createdSendId === false) {
+                // Send already exists
+                return;
+            }
+
+            $this->bus->dispatch(
+                new SendEmailMessage($createdSendId),
+                [
+                    new DelayStamp((int)floor($delaySeconds * 1000))
+                ]
+            );
+        });
     }
 }

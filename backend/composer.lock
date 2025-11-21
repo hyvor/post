@@ -2011,16 +2011,16 @@
         },
         {
             "name": "hyvor/internal",
-            "version": "3.1.13",
+            "version": "3.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyvor/internal.git",
-                "reference": "fea0d15d6f9238c1c283d12e8755a18e9064cac4"
+                "reference": "7783c9de037694daf54d9d313816208ac79b71e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyvor/internal/zipball/fea0d15d6f9238c1c283d12e8755a18e9064cac4",
-                "reference": "fea0d15d6f9238c1c283d12e8755a18e9064cac4",
+                "url": "https://api.github.com/repos/hyvor/internal/zipball/7783c9de037694daf54d9d313816208ac79b71e3",
+                "reference": "7783c9de037694daf54d9d313816208ac79b71e3",
                 "shasum": ""
             },
             "require": {
@@ -2079,9 +2079,9 @@
             "description": "Internal Package for HYVOR Applications",
             "support": {
                 "issues": "https://github.com/hyvor/internal/issues",
-                "source": "https://github.com/hyvor/internal/tree/3.1.13"
+                "source": "https://github.com/hyvor/internal/tree/3.1.14"
             },
-            "time": "2025-11-19T08:23:12+00:00"
+            "time": "2025-11-20T18:36:13+00:00"
         },
         {
             "name": "hyvor/phrosemirror",
