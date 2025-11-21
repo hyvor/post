@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Console\RateLimit;
+namespace App\Api\RateLimit;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
