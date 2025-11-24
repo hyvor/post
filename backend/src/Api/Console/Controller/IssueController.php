@@ -210,7 +210,7 @@ class IssueController extends AbstractController
         $newsletterUserEmails = array_map(fn($authUser) => $authUser->email, $this->authService->fromIds($newsletterUserIds));
 
         $testSentEmails = $newsletter->getTestSentEmails() ?? [];
-        $suggestedEmails = array_merge($newsletterUserEmails, $testSentEmails);
+        $suggestedEmails = array_unique(array_merge($newsletterUserEmails, $testSentEmails));
 
         return $this->json([
             'verified_domains' => array_map(fn($domain) => $domain->getDomain(), $verifiedDomains),

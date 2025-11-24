@@ -43,7 +43,7 @@ class ApprovalController extends AbstractController
     #[Route('/approvals/{id}', methods: ['POST'])]
     public function approve(Approval $approval, #[MapRequestPayload] ApproveInput $input): JsonResponse
     {
-        $approval = $this->approvalService->changeStatus(
+        $approval = $this->approvalService->approvalSudoAction(
             $approval,
             $input->status,
             $input->public_note,

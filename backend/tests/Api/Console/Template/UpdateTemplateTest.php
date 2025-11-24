@@ -23,8 +23,8 @@ class UpdateTemplateTest extends WebTestCase
 
         $response = $this->consoleApi(
             $newsletter,
-            'POST',
-            '/templates/update',
+            'PATCH',
+            '/templates',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -51,8 +51,8 @@ class UpdateTemplateTest extends WebTestCase
 
         $response = $this->consoleApi(
             $newsletter,
-            'POST',
-            '/templates/update',
+            'PATCH',
+            '/templates',
             [
                 'template' => '<!DOCTYPE html>
                     <html>
@@ -98,8 +98,8 @@ class UpdateTemplateTest extends WebTestCase
 
         $response = $this->consoleApi(
             $newsletter,
-            'POST',
-            '/templates/update',
+            'PATCH',
+            '/templates',
             [
                 'template' => null
             ]

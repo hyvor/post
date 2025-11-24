@@ -206,7 +206,7 @@ class ApprovalService
         return $approval;
     }
 
-    public function changeStatus(
+    public function approvalSudoAction(
         Approval       $approval,
         ApprovalStatus $status,
         ?string        $public_note,
@@ -230,7 +230,9 @@ class ApprovalService
             throw new HttpException(422, "User not found");
         }
 
-        $this->sendApprovalMail($approval, $status, $user);
+        if ($status === ApprovalStatus::APPROVED || $status === ApprovalStatus::REJECTED) {
+            $this->sendApprovalMail($approval, $status, $user);
+        }
 
         $this->em->persist($approval);
         $this->em->flush();
