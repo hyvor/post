@@ -1,6 +1,5 @@
 <script lang="ts">
 	import BrowserWindow from './BrowserWindow.svelte';
-	import signupImg from '../img/signup.png';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconCheckAll from '@hyvor/icons/IconCheckAll';
 	import IconCodeSlash from '@hyvor/icons/IconCodeSlash';
@@ -52,7 +51,7 @@
 	</div>
 	<div class="right">
 		<div class="form-preview">
-			<BrowserWindow image={signupImg} link="example.com" />
+			<BrowserWindow image="/img/home/signup.png" link="example.com" />
 		</div>
 	</div>
 </div>
