@@ -1,7 +1,5 @@
 <script lang="ts">
 	import BrowserWindow from './BrowserWindow.svelte';
-	import customEmailImg from '../img/custom-email.png';
-	import customEmailImg1 from '../img/custom-email1.png';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
 	import IconFileText from '@hyvor/icons/IconFileText';
@@ -35,27 +33,23 @@
 					needing your own domain.
 				</div>
 			</div>
-
-			<div class="item">
-				<div class="int">
-					<IconFileText class="int-icon" size={25} />
-					<div class="seo-feature-name">New Templates</div>
-				</div>
-				<div class="seo-feature-description">
-					Regularly updated templates to keep your email campaigns fresh and engaging.
-				</div>
-			</div>
 		</div>
 	</div>
 
 	<div class="right">
 		<!-- You can add images or additional content here if needed -->
 		<div class="form-preview">
-			<BrowserWindow image={customEmailImg} link="post.hyvor.com/console/settings/design" />
+			<BrowserWindow
+				image="/img/home/custom-email.png"
+				link="post.hyvor.com/console/settings/design"
+			/>
 		</div>
 
 		<div class="another-browser">
-			<BrowserWindow image={customEmailImg1} link="post.hyvor.com/console/settings/design" />
+			<BrowserWindow
+				image="/img/home/custom-email1.png"
+				link="post.hyvor.com/console/settings/design"
+			/>
 		</div>
 	</div>
 </div>
