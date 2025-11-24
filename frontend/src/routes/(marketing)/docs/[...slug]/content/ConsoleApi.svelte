@@ -62,9 +62,7 @@
 	<li><a href="#export">Export</a></li>
 </ul>
 
-
 <!-- ############################## CATEGORIES ################################# -->
-
 
 <h3 id="newsletter">Newsletter</h3>
 
@@ -639,7 +637,8 @@ appearance of your newsletters.
 <h3 id="user">User</h3>
 
 <p>
-    The owner of the newsletter can invite other users as Admins to collaborate on managing the newsletter.
+	The owner of the newsletter can invite other users as Admins to collaborate on managing the
+	newsletter.
 </p>
 
 <p>Endpoints:</p>
@@ -700,7 +699,9 @@ appearance of your newsletters.
 <code>POST /invites</code>
 
 <p>
-    You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer">HYVOR account</a> before sending an invitation.
+	You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer"
+		>HYVOR account</a
+	> before sending an invitation.
 </p>
 
 <CodeBlock
@@ -716,7 +717,9 @@ appearance of your newsletters.
 
 <Callout type="info">
 	<ul>
-		<li>Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.</li>
+		<li>
+			Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.
+		</li>
 	</ul>
 </Callout>
 
@@ -725,26 +728,25 @@ appearance of your newsletters.
 <code>DELETE /invites/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
 />
-
 
 <h3 id="media">Media</h3>
 
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#upload-media"><code>POST /media</code></a> - Upload media</li>
+	<li><a href="#upload-media"><code>POST /media</code></a> - Upload media</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#media-object">Media Object</a></li>
+	<li><a href="#media-object">Media Object</a></li>
 </ul>
 
 <h4 id="upload-media">Upload media</h4>
@@ -752,8 +754,8 @@ appearance of your newsletters.
 <code>POST /media</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             // max size: 10MB
             // supported formats: jpg, jpeg, png, gif, webp
@@ -764,20 +766,19 @@ appearance of your newsletters.
     `}
 />
 
-
 <h3 id="export">Export</h3>
 
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-exports"><code>GET /export</code></a> - Get subscriber exports</li>
-    <li><a href="#create-export"><code>POST /export</code></a> - Create a subscriber export</li>
+	<li><a href="#get-exports"><code>GET /export</code></a> - Get subscriber exports</li>
+	<li><a href="#create-export"><code>POST /export</code></a> - Create a subscriber export</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#subscriber-export-object">Subscriber Export Object</a></li>
+	<li><a href="#subscriber-export-object">Subscriber Export Object</a></li>
 </ul>
 
 <h4 id="get-exports">Get subscriber exports</h4>
@@ -785,8 +786,8 @@ appearance of your newsletters.
 <code>GET /export</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = SubscriberExport[]
     `}
@@ -797,16 +798,14 @@ appearance of your newsletters.
 <code>POST /export</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = SubscriberExport
     `}
 />
 
-
 <!-- ############################### OBJECTS ################################## -->
-
 
 <h2 id="objects">Objects</h2>
 
@@ -1013,8 +1012,8 @@ appearance of your newsletters.
 <h3 id="user-mini-object">User Mini Object</h3>
 
 <CodeBlock
-    language="ts"   
-    code={`
+	language="ts"
+	code={`
         interface UserMiniObject {
             name: string;
             email: string;
@@ -1027,8 +1026,8 @@ appearance of your newsletters.
 <h3 id="user-object">User Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface User {
             id: number;
             role: 'owner' | 'admin';
@@ -1041,8 +1040,8 @@ appearance of your newsletters.
 <h3 id="user-invite-object">User Invite Object</h3>
 
 <CodeBlock
-    language="ts"   
-    code={`
+	language="ts"
+	code={`
         interface UserInvite {
             id: number;
             created_at: number; // unix timestamp
@@ -1056,8 +1055,8 @@ appearance of your newsletters.
 <h3 id="media-object">Media Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Media {
             id: number;
             created_at: number; // unix timestamp
@@ -1072,8 +1071,8 @@ appearance of your newsletters.
 <h3 id="subscriber-export-object">Subscriber Export Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface SubscriberExport {
             id: number;
             created_at: number; // unix timestamp
