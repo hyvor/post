@@ -4,6 +4,7 @@ import type { Component } from 'svelte';
 import SignupForm from './content/SignupForm.svelte';
 import Import from './content/Import/Import.svelte';
 import Approval from './content/Approval.svelte';
+import ConsoleApi from './content/ConsoleApi.svelte';
 
 export const categories: Category[] = [
 	{
@@ -41,23 +42,22 @@ export const categories: Category[] = [
 				component: Import
 			}
 		]
+	},
+	{
+		name: 'Developer',
+		pages: [
+			// {
+			// 	slug: 'webhooks',
+			// 	name: 'Webhooks'
+			// 	// component: add component name
+			// },
+			{
+				slug: 'api-console',
+				name: 'Console API',
+				component: ConsoleApi
+			}
+		]
 	}
-
-	// {
-	// 	name: 'Developer',
-	// 	pages: [
-	// {
-	// 	slug: 'webhooks',
-	// 	name: 'Webhooks'
-	// 	// component: add component name
-	// },
-	// {
-	// 	slug: 'api-console',
-	// 	name: 'Console API'
-	// 	// component: add component name
-	// }
-	//]
-	//},
 ];
 
 export const pages = categories.reduce((acc, category) => acc.concat(category.pages), [] as Page[]);
