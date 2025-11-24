@@ -45,7 +45,7 @@ class TemplateController extends AbstractController
         return $this->json(new TemplateObject($template));
     }
 
-    #[Route('/templates/update', methods: 'POST')]
+    #[Route('/templates', methods: 'PATCH')]
     #[ScopeRequired(Scope::TEMPLATES_WRITE)]
     public function updateTemplate(
         Newsletter                               $newsletter,
