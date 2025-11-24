@@ -578,7 +578,7 @@ appearance of your newsletters.
 <ul>
 	<li><a href="#get-template"><code>GET /templates</code></a> - Get newsletter template</li>
 	<li>
-		<a href="#update-template"><code>POST /templates/update</code></a> - Update newsletter template
+		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
 	</li>
 	<li>
 		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
@@ -606,7 +606,7 @@ appearance of your newsletters.
 
 <h4 id="update-template">Update newsletter template</h4>
 
-<code>POST /templates/update</code>
+<code>PATCH /templates</code>
 
 <CodeBlock
 	language="ts"
