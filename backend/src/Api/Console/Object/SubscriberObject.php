@@ -3,14 +3,16 @@
 namespace App\Api\Console\Object;
 
 use App\Entity\Subscriber;
+use App\Entity\Type\SubscriberSource;
+use App\Entity\Type\SubscriberStatus;
 
 class SubscriberObject
 {
 
     public int $id;
     public string $email;
-    public string $source;
-    public string $status;
+    public SubscriberSource $source;
+    public SubscriberStatus $status;
     /**
      * @var array<int>
      */
@@ -29,8 +31,8 @@ class SubscriberObject
     {
         $this->id = $subscriber->getId();
         $this->email = $subscriber->getEmail();
-        $this->source = $subscriber->getSource()->value;
-        $this->status = $subscriber->getStatus()->value;
+        $this->source = $subscriber->getSource();
+        $this->status = $subscriber->getStatus();
         $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
         $this->subscribe_ip = $subscriber->getSubscribeIp();
         $this->is_opted_in = $subscriber->getOptInAt() !== null;
