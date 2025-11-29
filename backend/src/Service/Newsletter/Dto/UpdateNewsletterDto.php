@@ -10,4 +10,9 @@ class UpdateNewsletterDto
 
     public string $name;
     public string $subdomain;
+
+    /**
+     * @var string[]|null
+     */
+    public array $allowed_domains;
 }

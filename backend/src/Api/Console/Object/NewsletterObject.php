@@ -12,6 +12,10 @@ class NewsletterObject extends NewsletterMeta
     public string $subdomain;
     public int $created_at; // unix timestamp
     public string $name;
+    /**
+     * @var string[]|null
+     */
+    public array $allowed_domains;
 
     public function __construct(Newsletter $newsletter)
     {
@@ -19,6 +23,7 @@ class NewsletterObject extends NewsletterMeta
         $this->subdomain = $newsletter->getSubdomain();
         $this->created_at = $newsletter->getCreatedAt()->getTimestamp();
         $this->name = $newsletter->getName();
+        $this->allowed_domains = $newsletter->getAllowedDomains() ?? [];
 
         $meta = $newsletter->getMeta();
         foreach (get_object_vars($meta) as $property => $value) {

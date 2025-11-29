@@ -39,6 +39,7 @@ final class NewsletterFactory extends PersistentProxyObjectFactory
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'user_id' => self::faker()->randomNumber(),
             'meta' => new NewsletterMeta(),
+            'allowed_domains' => [],
         ];
     }
 
