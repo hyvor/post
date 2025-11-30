@@ -6,7 +6,7 @@
 	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 </script>
 
-<Header logo="/img/logo.png" subName="Post" darkToggle={false} href="/">
+<Header product="post" subName="Post" darkToggle={false} href="/">
 	{#snippet center()}
 		<div class="center">
 			<Button
