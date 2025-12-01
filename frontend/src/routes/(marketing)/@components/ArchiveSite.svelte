@@ -244,20 +244,6 @@
 		.seo-feature-description {
 			word-break: break-word;
 		}
-		/* .bento-grid {
-			grid-template-columns: 1fr;
-			gap: 20px;
-			width: 100%;
-			justify-content: center; 
-			flex-wrap: wrap; 
-			width: 100%;
-		}
-
-		.int {
-			justify-content: center;
-			width: 100%;
-			max-width: 420px;
-		} */
 	}
 
 	@media (max-width: 767px) {
