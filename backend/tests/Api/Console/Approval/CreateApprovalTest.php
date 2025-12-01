@@ -68,9 +68,10 @@ class CreateApprovalTest extends WebTestCase
         $this->assertArrayNotHasKey('sample', $otherInfo);
         $this->assertSame('HYVOR is the best!', $otherInfo['why_post']);
     }
+
     public function test_account_already_approved(): void
     {
-         ApprovalFactory::createOne([
+        ApprovalFactory::createOne([
             'user_id' => 1,
             'status' => ApprovalStatus::APPROVED,
         ]);
@@ -83,6 +84,7 @@ class CreateApprovalTest extends WebTestCase
                 'company_name' => 'HYVOR',
                 'country' => 'FR',
                 'website' => 'https://hyvor.com',
+                'type_of_content' => 'Tech',
             ]
         );
 
@@ -97,7 +99,7 @@ class CreateApprovalTest extends WebTestCase
 
     public function test_account_already_rejected(): void
     {
-         ApprovalFactory::createOne([
+        ApprovalFactory::createOne([
             'user_id' => 1,
             'status' => ApprovalStatus::REJECTED,
         ]);
@@ -110,6 +112,7 @@ class CreateApprovalTest extends WebTestCase
                 'company_name' => 'HYVOR',
                 'country' => 'FR',
                 'website' => 'https://hyvor.com',
+                'type_of_content' => 'Tech',
             ]
         );
 

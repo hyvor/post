@@ -67,6 +67,7 @@
       "companyNameRequired": "Company name is required",
       "countryRequired": "Country is required",
       "websiteRequired": "Website is required",
+      "typeOfContentRequired": "Type of Content is required",
       "websiteInvalid": "Website URL is invalid",
       "checkboxRequired": "You must agree to the terms and conditions",
       "submittedForApproval": "Your information has been submitted for approval.",
