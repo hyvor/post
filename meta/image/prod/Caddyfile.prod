@@ -12,6 +12,16 @@
 
     {$CADDY_TLS_CONFIG}
 
+	# form
+	handle /form/*.js {
+		root * /app/static
+		file_server
+		encode zstd gzip
+		header Content-Type text/javascript
+        header Cache-Control "max-age=60"
+        header Access-Control-Allow-Origin "*"
+	}
+
 	# backend
 	@backend {
 		path /api/*
