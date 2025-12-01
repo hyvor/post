@@ -260,7 +260,7 @@
 		} */
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.archive-site {
 			padding: 40px 0;
 			width: auto;
