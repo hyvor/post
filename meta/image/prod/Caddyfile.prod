@@ -14,7 +14,7 @@
 
 	# form
 	handle /form/*.js {
-		root * /app/static/form
+		root * /app/static
 		file_server
 		encode zstd gzip
 		header Content-Type text/javascript
