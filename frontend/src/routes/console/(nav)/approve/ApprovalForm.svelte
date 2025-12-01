@@ -48,6 +48,10 @@
 			error = I18n.t('console.approve.websiteRequired');
 			return false;
 		}
+		if (typeOfContent === '') {
+			error = I18n.t('console.approve.typeOfContentRequired');
+			return false;
+		}
 		if (!approval && !(checkbox1 && checkbox2)) {
 			error = I18n.t('console.approve.checkboxRequired');
 			return false;
@@ -194,7 +198,7 @@
 	</SplitControl>
 
 	<SplitControl
-		label={I18n.t('console.approve.typeOfContent')}
+		label={`${I18n.t('console.approve.typeOfContent')}*`}
 		caption={I18n.t('console.approve.typeOfContentCaption')}
 	>
 		<TextInput

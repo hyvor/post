@@ -20,6 +20,7 @@ class CreateApprovalInput
 
     public ?string $social_links;
 
+    #[Assert\NotBlank]
     public ?string $type_of_content;
 
     public ?string $frequency;
