@@ -22,11 +22,6 @@
 			{title}
 		</div>
 
-		<!-- <div class="button-wrap">
-			<Button as="a" size="x-large" href={`/#waitlist`}
-				>{I18n.t('comingSoon.joinWaitlist')}</Button
-			>
-		</div> -->
 		<div class="button">
 			<Button as="a" size="x-large" href="/console?signup"
 				>{I18n.t('homepage.startYourNewsletter')}</Button
@@ -37,9 +32,9 @@
 			<TrialChecks /> -->
 		<div class="checks" {...rest}>
 			<div class="check">
-				<IconCheckCircleFill color="#fffff" />
+				<IconCheckCircleFill color="#fffff" width={18} height={18} />
 				<!-- 14-day free trial -->
-				<div>
+				<div style="text-align: start;">
 					<I18n.T
 						key="homepage.14DayFreeTrial"
 						params={{
@@ -111,7 +106,7 @@
 			align-items: center;
 		}
 		.check {
-			width: 250px;
+			width: 300px;
 			max-width: 100%;
 			text-align: center;
 		}

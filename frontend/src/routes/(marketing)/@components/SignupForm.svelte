@@ -144,11 +144,9 @@
 
 	@keyframes heroEnter {
 		0% {
-			/* //transform: translateX(30px) translateY(0) translateZ(20px); */
 			transform: translateX(300px) translateY(0) translateZ(20px);
 		}
 		100% {
-			/* //transform: translateX(0) translateY(0) translateZ(0); */
 			transform: translateX(0) translateY(0) translateZ(0);
 			opacity: 1;
 			filter: blur(0);
@@ -158,14 +156,11 @@
 	@keyframes heroEnterDelayed {
 		0% {
 			transform: translateX(200px) translateY(30px) translateZ(10px);
-			/* transform: translateX(0) translateY(30px) translateZ(10px); */
 			opacity: 0.1;
 		}
 		100% {
-			/* transform: translateX(0) translateY(0) translateZ(0); */
 			opacity: 1;
 			transform: translateX(0) translateY(0) translateZ(0);
-			/* filter: blur(0); */
 		}
 	}
 
@@ -184,13 +179,6 @@
 			heroEnter 1s ease-out,
 			subtleFloat 8s ease-in-out infinite 2s;
 	}
-
-	/* .another-browser {
-        animation:
-            heroEnterDelayed 3s ease-out,
-            subtleFloat 6s ease-in-out infinite 3s reverse;
-        /* differed the appearance and float animation a bit using different timings
-    } */
 
 	@media (max-width: 992px) {
 		.signup-form {
@@ -238,7 +226,7 @@
 		.bento-grid {
 			grid-template-columns: 1fr;
 			gap: 20px;
-			justify-items: center;
+			/* justify-items: center; */
 		}
 
 		.int {
@@ -253,7 +241,7 @@
 		}
 
 		h2 {
-			font-size: 16px;
+			font-size: 18px;
 			max-width: 90%;
 		}
 
@@ -264,12 +252,12 @@
 
 	@media (max-width: 480px) {
 		h1 {
-			font-size: 30px;
+			font-size: 40px;
 		}
 
 		h2 {
-			font-size: 15px;
-			padding-top: 5px;
+			font-size: 18px;
+			padding-top: 20px;
 		}
 
 		.bento-grid {
@@ -278,7 +266,7 @@
 		}
 
 		.int {
-			font-size: 16px;
+			font-size: 18px;
 			gap: 10px;
 		}
 	}

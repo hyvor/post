@@ -91,6 +91,7 @@
 	@media (max-width: 992px) {
 		.plans {
 			flex-direction: column;
+			flex-wrap: unset !important;
 		}
 	}
 </style>

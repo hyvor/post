@@ -313,4 +313,13 @@
 		font-size: 15px;
 		color: var(--text-light);
 	}
+
+	/* Responsive */
+	@media (max-width: 480px) {
+		.plan-toggle,
+		.plan-yearly-only {
+			width: 100%;
+			flex-direction: column;
+		}
+	}
 </style>

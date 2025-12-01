@@ -39,13 +39,6 @@
 		padding: 100px 0;
 	}
 
-	/* larger screens */
-	/* @media (min-width: 1200px) {
-		.letter-section {
-			padding: 150px 0;
-		}
-	} */
-
 	.wrap {
 		z-index: 1;
 		font-style: normal;
@@ -70,7 +63,6 @@
 		line-height: 60px;
 		margin-top: 0;
 		margin-bottom: 0;
-		/* color: #b7f9ff; */
 	}
 
 	p {
@@ -79,10 +71,6 @@
 		font-size: 20px;
 		line-height: 32px;
 	}
-
-	/* p :global(strong) {
-		color: #b7f9ff;
-	} */
 
 	@media (max-width: 768px) {
 		.letter-section {
