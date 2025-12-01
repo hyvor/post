@@ -106,7 +106,7 @@
 			align-items: center;
 		}
 		.check {
-			width: 250px;
+			width: 300px;
 			max-width: 100%;
 			text-align: center;
 		}

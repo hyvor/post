@@ -248,8 +248,6 @@
 		.bento-grid {
 			grid-template-columns: 1fr;
 			gap: 20px;
-			justify-items: center;
-			/* justify-items: stretch;  */
 			width: 100%;
 		}
 
@@ -258,7 +256,6 @@
 		}
 
 		.another-browser {
-			/* display: flex; */
 			display: none;
 		}
 	}

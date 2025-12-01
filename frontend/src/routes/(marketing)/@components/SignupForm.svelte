@@ -226,7 +226,7 @@
 		.bento-grid {
 			grid-template-columns: 1fr;
 			gap: 20px;
-			justify-items: center;
+			/* justify-items: center; */
 		}
 
 		.int {

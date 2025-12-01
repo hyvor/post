@@ -53,11 +53,9 @@
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
-			/* width: auto; */
 		}
 
 		.check {
-			/* width: auto; */
 			width: 300px;
 			max-width: 100%;
 		}
