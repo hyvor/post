@@ -238,7 +238,6 @@
 		.int {
 			width: 100%;
 			max-width: 420px;
-			/* justify-content: center; */
 		}
 
 		.seo-feature-description {
