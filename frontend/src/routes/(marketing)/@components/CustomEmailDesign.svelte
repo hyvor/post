@@ -208,7 +208,7 @@
 		.custom-email-design {
 			flex-direction: column;
 			padding: 20px 0;
-			margin: auto 20px;
+			margin: auto;
 		}
 		.wrap {
 			flex-direction: column;
@@ -228,6 +228,11 @@
 
 		h2 {
 			font-size: 18px;
+		}
+
+		h1,
+		h2 {
+			text-align: center !important;
 		}
 
 		.right {

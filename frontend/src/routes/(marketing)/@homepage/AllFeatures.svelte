@@ -163,7 +163,7 @@
 
 	@media (max-width: 480px) {
 		.feature-wrapper {
-			padding: 0 0.5rem;
+			padding: 0 1rem;
 			width: auto;
 		}
 

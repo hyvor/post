@@ -117,10 +117,6 @@
 	<h2 id="data-sharing">5. Data Sharing</h2>
 	<ul>
 		<li>
-			Your data is shared with service providers such as email delivery to provide the Hyvor
-			Post services.
-		</li>
-		<li>
 			Your data can be shared with law enforcement or regulatory bodies when required by law
 			or to protect our rights.
 		</li>

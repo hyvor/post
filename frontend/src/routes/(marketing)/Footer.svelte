@@ -69,5 +69,9 @@
 		.row :global(.links) {
 			align-items: center;
 		}
+
+		:global(.footer-top) {
+			text-align: center;
+		}
 	}
 </style>

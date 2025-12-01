@@ -254,7 +254,7 @@
 		}
 
 		h1 {
-			font-size: 36px;
+			font-size: 40px;
 			line-height: 1.2;
 		}
 
@@ -269,12 +269,12 @@
 
 	@media (max-width: 480px) {
 		h1 {
-			font-size: 30px;
+			font-size: 40px;
 		}
 
 		h2 {
 			font-size: 18px;
-			padding-top: 5px;
+			padding-top: 20px;
 		}
 
 		.bento-grid {

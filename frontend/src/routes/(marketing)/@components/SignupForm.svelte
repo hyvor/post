@@ -253,7 +253,7 @@
 		}
 
 		h2 {
-			font-size: 16px;
+			font-size: 18px;
 			max-width: 90%;
 		}
 
@@ -264,12 +264,12 @@
 
 	@media (max-width: 480px) {
 		h1 {
-			font-size: 30px;
+			font-size: 40px;
 		}
 
 		h2 {
-			font-size: 15px;
-			padding-top: 5px;
+			font-size: 18px;
+			padding-top: 20px;
 		}
 
 		.bento-grid {
@@ -278,7 +278,7 @@
 		}
 
 		.int {
-			font-size: 16px;
+			font-size: 18px;
 			gap: 10px;
 		}
 	}
