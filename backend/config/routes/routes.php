@@ -28,5 +28,4 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/local')
         ->condition('env("APP_ENV") in ["dev", "test"]')
         ->namePrefix('api_local_');
-
 };
