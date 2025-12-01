@@ -12,9 +12,8 @@
 	const I18n = getMarketingI18n();
 </script>
 
-<FeatureSectionHead title={I18n.t('homepage.faqs')} wrapStyle="padding: 0 0 50px 0" />
-
 <div class="faq-accordion hds-container hds-container-max">
+	<FeatureSectionHead title={I18n.t('homepage.faqs')} wrapStyle="padding: 0 0 50px 0" />
 	<Accordion
 		title="Can I start sending newsletters right away?"
 		icon={IconHourglass}
@@ -83,8 +82,8 @@
 
 	@media (max-width: 768px) {
 		.faq-accordion {
-			padding: 0 20px 60px 20px;
 			max-width: 100%;
+			margin: auto;
 		}
 	}
 </style>

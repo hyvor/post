@@ -48,7 +48,7 @@
 <style>
 	.outer-box {
 		background-color: var(--accent-light);
-		/* padding: 60px 0; */
+		padding: 60px 0;
 	}
 	.feature-wrapper {
 		margin: 70px 40px;
@@ -135,11 +135,12 @@
 		margin: 0;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 978px) {
 		.feature-wrapper {
 			grid-template-columns: 1fr;
 			gap: 1.5rem;
 			margin: 2rem auto;
+			width: auto;
 		}
 
 		.feature {
@@ -162,7 +163,8 @@
 
 	@media (max-width: 480px) {
 		.feature-wrapper {
-			padding: 0 0.5rem;
+			padding: 0 1rem;
+			width: auto;
 		}
 
 		.feature {

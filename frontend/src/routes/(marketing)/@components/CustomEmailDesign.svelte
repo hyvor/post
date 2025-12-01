@@ -2,54 +2,49 @@
 	import BrowserWindow from './BrowserWindow.svelte';
 	import IconPencilSquare from '@hyvor/icons/IconPencilSquare';
 	import IconLink from '@hyvor/icons/IconLink';
-	import IconFileText from '@hyvor/icons/IconFileText';
 </script>
 
-<div class="custom-email-design hds-container-max">
-	<div class="left">
-		<h1>Custom Email Design</h1>
+<div class="custom-email-design">
+	<div class="wrap hds-container-max">
+		<div class="left">
+			<h1>Custom Email Design</h1>
 
-		<h2>Choose from a variety of templates and customize them to match your brand</h2>
+			<h2>Choose from a variety of templates and customize them to match your brand</h2>
 
-		<div class="bento-grid">
-			<div class="item">
-				<div class="int">
-					<IconPencilSquare class="int-icon" size={23} />
-					<div class="seo-feature-name">Customizable Email Templates</div>
+			<div class="bento-grid">
+				<div class="item">
+					<div class="int">
+						<IconPencilSquare class="int-icon" size={23} />
+						<div class="seo-feature-name">Customizable Email Templates</div>
+					</div>
+					<div class="seo-feature-description">
+						Choose from a variety of professionally designed email templates that can be
+						easily customized to match your brand's look and feel.
+					</div>
 				</div>
-				<div class="seo-feature-description">
-					Choose from a variety of professionally designed email templates that can be
-					easily customized to match your brand's look and feel.
-				</div>
-			</div>
 
-			<div class="item">
-				<div class="int">
-					<IconLink class="int-icon" size={28} />
-					<div class="seo-feature-name">Free subdomain</div>
-				</div>
-				<div class="seo-feature-description">
-					Get a free subdomain (e.g., yourname.hyvorpost.io) to send emails without
-					needing your own domain.
+				<div class="item">
+					<div class="int">
+						<IconLink class="int-icon" size={28} />
+						<div class="seo-feature-name">Free subdomain</div>
+					</div>
+					<div class="seo-feature-description">
+						Get a free subdomain (e.g., yourname.hyvorpost.io) to send emails without
+						needing your own domain.
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="right">
-		<!-- You can add images or additional content here if needed -->
-		<div class="form-preview">
-			<BrowserWindow
-				image="/img/home/custom-email.png"
-				link="post.hyvor.com/console/settings/design"
-			/>
-		</div>
+		<div class="right">
+			<!-- You can add images or additional content here if needed -->
+			<div class="form-preview">
+				<BrowserWindow image="/img/home/custom-email.png" link="/settings/design" />
+			</div>
 
-		<div class="another-browser">
-			<BrowserWindow
-				image="/img/home/custom-email1.png"
-				link="post.hyvor.com/console/settings/design"
-			/>
+			<div class="another-browser">
+				<BrowserWindow image="/img/home/custom-email1.png" link="/settings/design" />
+			</div>
 		</div>
 	</div>
 </div>
@@ -63,6 +58,13 @@
 		display: flex;
 		padding-top: 80px;
 		padding-bottom: 80px;
+	}
+
+	.wrap {
+		display: flex;
+		text-align: right;
+		justify-content: center;
+		gap: 40px;
 	}
 
 	h1 {
@@ -206,7 +208,13 @@
 		.custom-email-design {
 			flex-direction: column;
 			padding: 20px 0;
-			margin: auto 20px;
+			margin: auto;
+		}
+		.wrap {
+			flex-direction: column;
+			text-align: center;
+			margin: 20px auto;
+			gap: 30px;
 		}
 
 		.left {
@@ -222,17 +230,25 @@
 			font-size: 18px;
 		}
 
+		h1,
+		h2 {
+			text-align: center !important;
+		}
+
 		.right {
 			padding: 30px 0 0 0;
 		}
 
 		.form-preview {
-			display: none;
+			width: 100%;
+			margin-left: 0;
+			padding: 0;
 		}
+
 		.bento-grid {
 			grid-template-columns: 1fr;
 			gap: 20px;
-			justify-items: center;
+			width: 100%;
 		}
 
 		.int {
@@ -240,7 +256,6 @@
 		}
 
 		.another-browser {
-			/* display: flex; */
 			display: none;
 		}
 	}
