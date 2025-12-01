@@ -125,7 +125,9 @@
 	<h2 id="data-processors">6. Data Processors</h2>
 	<p>
 		We use GDPR-compliant sub-processors (e.g., email delivery providers) to send newsletters
-		and ensure platform stability. A full list is available at https://hyvor.com/sub.
+		and ensure platform stability. A full list is available at <a href="https://hyvor.com/sub"
+			>sub-processors of HYVOR</a
+		>.
 	</p>
 
 	<hr />

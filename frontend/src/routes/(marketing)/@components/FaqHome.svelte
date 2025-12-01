@@ -82,7 +82,6 @@
 
 	@media (max-width: 768px) {
 		.faq-accordion {
-			/* padding: 0 20px 60px 20px; */
 			max-width: 100%;
 			margin: auto;
 		}

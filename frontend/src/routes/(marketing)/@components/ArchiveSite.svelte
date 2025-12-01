@@ -38,8 +38,8 @@
 						<div class="seo-feature-name">Free subdomain</div>
 					</div>
 					<div class="seo-feature-description">
-						Get a free subdomain (e.g., yourname.hyvorpost.email) to host your archive
-						site without needing your own domain.
+						Get a free subdomain (e.g., yoursubdomain.hyvorpost.email) to host your
+						archive site without needing your own domain.
 					</div>
 				</div>
 			</div>
@@ -81,14 +81,13 @@
 		flex: 1;
 		padding-right: 25px;
 		position: relative;
-		/* padding: 60px 0; */
 	}
 
 	.main-browser {
 		width: 150%;
 		max-width: none;
 		margin-left: -50%;
-		/* padding: 70px; */
+
 		border-radius: 20px;
 		opacity: 0.9;
 		animation:
@@ -221,9 +220,6 @@
 		}
 
 		.main-browser {
-			/* width: 100%;
-			margin-left: 0;
-			padding: 40px 20px; */
 			width: 100% !important;
 			margin-left: 0 !important;
 		}
