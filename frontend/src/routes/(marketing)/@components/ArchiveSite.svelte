@@ -238,7 +238,7 @@
 		.int {
 			width: 100%;
 			max-width: 420px;
-			justify-content: center;
+			/* justify-content: center; */
 		}
 
 		.seo-feature-description {
@@ -277,6 +277,10 @@
 
 		.main-browser {
 			padding: 30px 15px;
+		}
+
+		.int {
+			justify-content: center;
 		}
 	}
 
