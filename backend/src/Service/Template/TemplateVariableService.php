@@ -95,7 +95,7 @@ class TemplateVariableService
 
     private function setVariablesFromSendingProfile(TemplateVariables $variables, SendingProfile $sendingProfile): TemplateVariables
     {
-        $variables->name = $sendingProfile->getFromName() ?: $variables->name;
+        $variables->name = $sendingProfile->getBrandName() ?: ($sendingProfile->getFromName() ?: $variables->name);
         $variables->brand_logo = $sendingProfile->getBrandLogo() ?: $variables->brand_logo;
         $variables->brand_logo_alt = $sendingProfile->getBrandName() ?: $variables->brand_logo_alt;
         $variables->brand_url = $sendingProfile->getBrandUrl() ?: $variables->brand_url;
