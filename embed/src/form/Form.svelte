@@ -226,7 +226,7 @@
 		<div
 			class="lists"
 			transition:slide={laterElementsAnimation}
-			class:hidden={lists.length === 0 || lists.length === 1 || listsHidden}
+			class:hidden={lists.length <= 1 || listsHidden}
 		>
 			{#each lists as list (list.id)}
 				<label class="list">
