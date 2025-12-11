@@ -5,7 +5,7 @@
 
 	export let selectedList = [] as number[];
 
-	function onSegmentChange(id: number) {
+	function onListChange(id: number) {
 		if (selectedList.includes(id)) {
 			selectedList = selectedList.filter((s) => s !== id);
 		} else {
@@ -20,10 +20,7 @@
 
 {#each $listStore as list}
 	<div class="list">
-		<Checkbox
-			checked={selectedList.includes(list.id)}
-			on:change={() => onSegmentChange(list.id)}
-		>
+		<Checkbox checked={selectedList.includes(list.id)} on:change={() => onListChange(list.id)}>
 			{list.name}
 		</Checkbox>
 	</div>

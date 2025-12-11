@@ -58,7 +58,7 @@
 			});
 	}
 
-	let segmentsText = $derived(
+	let listsText = $derived(
 		subscriber.list_ids
 			.map((s) => {
 				return $listStore.find((l) => l.id === s)?.name || 'Unknown';
@@ -76,9 +76,9 @@
 
 	<div class="email-wrap">
 		<div class="email">{subscriber.email}</div>
-		<div class="segments">
-			<Tooltip text={segmentsText}>
-				<span class="segments-text">
+		<div class="lists">
+			<Tooltip text={listsText}>
+				<span class="lists-text">
 					{I18n.t('console.subscribers.lists_count', {
 						count: subscriber.list_ids.length
 					})}
@@ -154,10 +154,10 @@
 	.email {
 		font-weight: 600;
 	}
-	.segments {
+	.lists {
 		font-size: 14px;
 	}
-	.segments-text {
+	.lists-text {
 		cursor: pointer;
 		text-decoration: underline;
 		text-decoration-style: dotted;

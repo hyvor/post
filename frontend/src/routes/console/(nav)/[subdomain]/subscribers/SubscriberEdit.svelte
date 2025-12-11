@@ -29,7 +29,7 @@
 
 	let loading = false;
 
-	function onSegmentChange(id: number) {
+	function onListChange(id: number) {
 		if (selectedList.includes(id)) {
 			selectedList = selectedList.filter((l) => l !== id);
 		} else {
@@ -49,7 +49,7 @@
 		}
 
 		if (selectedList.sort().join(',') !== subscriber.list_ids.sort().join(',')) {
-			data.segments = selectedList;
+			data.list_ids = selectedList;
 		}
 
 		if (JSON.stringify(metadata) !== JSON.stringify(subscriber.metadata)) {
@@ -101,12 +101,12 @@
 		</FormControl>
 	</SplitControl>
 
-	<SplitControl label="Segments">
+	<SplitControl label="Lists">
 		{#each $listStore as list}
-			<div class="segment">
+			<div class="list">
 				<Checkbox
 					checked={selectedList.includes(list.id)}
-					on:change={() => onSegmentChange(list.id)}
+					on:change={() => onListChange(list.id)}
 					disabled={selectedList.length === 1 && selectedList[0] === list.id}
 				>
 					{list.name}
@@ -118,8 +118,8 @@
 	<SplitControl label="Status">
 		<FormControl>
 			<Radio bind:group={status} value="subscribed" disabled={!subscriber.is_opted_in}
-				>Subscribed</Radio
-			>
+				>Subscribed
+			</Radio>
 			<Radio bind:group={status} value="unsubscribed">Unsubscribed</Radio>
 			<Radio bind:group={status} value="pending">Pending</Radio>
 		</FormControl>
@@ -145,7 +145,7 @@
 </Modal>
 
 <style>
-	.segment {
+	.list {
 		margin-bottom: 6px;
 	}
 </style>
