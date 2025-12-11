@@ -97,7 +97,7 @@ other@example.org
 			{/if}
 		</FormControl>
 	</SplitControl>
-	<SplitControl label="Segments">
+	<SplitControl label="Lists">
 		<ListSelector bind:selectedList />
 	</SplitControl>
 </Modal>

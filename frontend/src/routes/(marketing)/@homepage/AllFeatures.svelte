@@ -7,7 +7,7 @@
 		{
 			title: I18n.t('homepage.listMngmt'),
 			description: I18n.t('homepage.listMngmtDescription'),
-			image: '/img/home/multiple-segments.svg'
+			image: '/img/home/multiple-lists.svg'
 		},
 
 		{
@@ -50,14 +50,15 @@
 		background-color: var(--accent-light);
 		padding: 60px 0;
 	}
+
 	.feature-wrapper {
 		margin: 70px 40px;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 2rem;
 		/* width: auto;
-		width: var(--width);
-		max-width: var(--max-width); */
+        width: var(--width);
+        max-width: var(--max-width); */
 		/* width: auto; */
 		max-width: 100%;
 	}
@@ -183,6 +184,7 @@
 		.outer-box {
 			padding: 100px 0;
 		}
+
 		.feature-wrapper {
 			margin: auto;
 		}
