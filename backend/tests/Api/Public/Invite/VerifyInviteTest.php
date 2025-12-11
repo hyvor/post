@@ -26,7 +26,7 @@ class VerifyInviteTest extends WebTestCase
             '/invite/verify?code=' . $userInvite->getCode(),
         );
 
-        $this->assertResponseRedirects('https://post.hyvor.com/console/' . $newsletter->getId());
+        $this->assertResponseRedirects('https://post.hyvor.com/console/' . $newsletter->getSubdomain());
     }
 
     public function test_verify_invite_not_exist(): void
