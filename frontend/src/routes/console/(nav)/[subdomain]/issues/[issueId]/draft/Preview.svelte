@@ -93,6 +93,7 @@
 	<iframe
 		srcdoc={html}
 		title="Issue preview"
+		sandbox="allow-same-origin"
 		frameborder="0"
 		scrolling="no"
 		height={600}
