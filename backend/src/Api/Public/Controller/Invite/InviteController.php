@@ -47,6 +47,6 @@ class InviteController extends AbstractController
         $this->userService->createUser($newsletter, $invite->getHyvorUserId());
         $this->userInviteService->deleteInvite($invite);
 
-        return $this->redirect($this->appConfig->getUrlApp() . '/console/' . $newsletter->getId());
+        return $this->redirect($this->appConfig->getUrlApp() . '/console/' . $newsletter->getSubdomain());
     }
 }
