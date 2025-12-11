@@ -29,7 +29,7 @@
 
     let loading = false;
 
-    function onSegmentChange(id: number) {
+    function onListChange(id: number) {
         if (selectedList.includes(id)) {
             selectedList = selectedList.filter((l) => l !== id);
         } else {
@@ -49,7 +49,7 @@
         }
 
         if (selectedList.sort().join(',') !== subscriber.list_ids.sort().join(',')) {
-            data.segments = selectedList;
+            data.list_ids = selectedList;
         }
 
         if (JSON.stringify(metadata) !== JSON.stringify(subscriber.metadata)) {
@@ -106,7 +106,7 @@
             <div class="list">
                 <Checkbox
                         checked={selectedList.includes(list.id)}
-                        on:change={() => onSegmentChange(list.id)}
+                        on:change={() => onListChange(list.id)}
                         disabled={selectedList.length === 1 && selectedList[0] === list.id}
                 >
                     {list.name}
