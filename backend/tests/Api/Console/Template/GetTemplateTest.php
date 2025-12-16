@@ -233,7 +233,7 @@ class GetTemplateTest extends WebTestCase
         }
 
         .content ul, .content ol {
-            margin: 0 0 20px 0px;
+            margin: 0 0 20px 0;
         }
 
         .content li > * {
