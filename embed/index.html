@@ -51,6 +51,16 @@
 				document.body.style.backgroundColor = '#000';
 				setFormColors('dark');
 			}
+
+			function simulateNavigation() {
+				const app = document.getElementById('app');
+				const form = document.querySelector('hyvor-post-form');
+
+				if (form) {
+					form.remove();
+					app.appendChild(form);
+				}
+			}
 		</script>
 	</head>
 
@@ -58,6 +68,7 @@
 		<div id="header">
 			<button onclick="setLight()">Light</button>
 			<button onclick="setDark()">Dark</button>
+			<button onclick="simulateNavigation()">Simulate Navigation</button>
 		</div>
 		<div id="app">
 			<hyvor-post-form
