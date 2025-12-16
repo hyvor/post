@@ -211,14 +211,6 @@ class GetTemplateTest extends WebTestCase
             opacity: 0.3;
         }
 
-        .content ul, .content ol {
-            margin: 0 0 20px 20px;
-        }
-
-        .content li > * {
-            margin: 5px 0;
-        }
-
         .content div.callout {
             border-radius: 5px;
             margin: 0 0 20px;
@@ -241,7 +233,7 @@ class GetTemplateTest extends WebTestCase
         }
 
         .content ul, .content ol {
-            margin: 0 0 20px 20px;
+            margin: 0 0 20px 0px;
         }
 
         .content li > * {
