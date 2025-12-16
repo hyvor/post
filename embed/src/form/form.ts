@@ -1,4 +1,4 @@
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 import Form from './Form.svelte';
 import formCss from './form.css?inline';
 
@@ -8,6 +8,10 @@ class HyvorPostForm extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({ mode: 'open' });
+
+		const style = document.createElement('style');
+		style.textContent = formCss;
+		this.shadowRoot!.appendChild(style);
 	}
 
 	connectedCallback() {
@@ -28,10 +32,13 @@ class HyvorPostForm extends HTMLElement {
 				listsHidden: this.hasAttribute('lists-hidden')
 			}
 		});
+	}
 
-		const style = document.createElement('style');
-		style.textContent = formCss;
-		this.shadowRoot!.appendChild(style);
+	disconnectedCallback() {
+		if (this.form) {
+			unmount(this.form);
+			this.form = null;
+		}
 	}
 
 	private getListsArr(attrName: string): string[] {
