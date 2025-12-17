@@ -189,7 +189,8 @@
 	<TableRow>
 		<div><code>colors</code></div>
 		<div>
-			Set attribute as <code>light</code> for the light palette and <code>dark</code> for the dark palette
+			Set attribute as <code>light</code> for the light palette and <code>dark</code> for the dark
+			palette
 		</div>
 	</TableRow>
 </Table>
