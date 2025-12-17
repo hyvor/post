@@ -15,6 +15,7 @@
 		lists: string[]; // lists to filter by (empty = no filter)
 		listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
 		listsHidden: boolean; // if true, hide the lists section
+		colors: 'light' | 'dark';
 	}
 
 	let {
@@ -24,7 +25,8 @@
 		shadowRoot,
 		lists: listsToFilter,
 		listsHidden,
-		listsDefaultUnselected
+		listsDefaultUnselected,
+		colors
 	}: Props = $props();
 
 	let initError = $state('');
@@ -84,7 +86,11 @@
 					}
 				}
 
-				palette = newsletter.palette_light;
+				if (colors === 'dark') {
+					palette = newsletter.palette_dark;
+				} else {
+					palette = newsletter.palette_light;
+				}
 
 				setCustomCss();
 			})
