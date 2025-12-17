@@ -14,7 +14,7 @@
 		lists: string[]; // lists to filter by (empty = no filter)
 		listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
 		listsHidden: boolean; // if true, hide the lists section
-		colors: 'light' | 'dark';
+		colors: string;
 	}
 
 	let {
