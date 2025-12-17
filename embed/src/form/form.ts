@@ -29,7 +29,8 @@ class HyvorPostForm extends HTMLElement {
 				shadowRoot: this.shadowRoot!,
 				lists: this.getListsArr('lists'),
 				listsDefaultUnselected: this.getListsArr('lists-default-unselected'),
-				listsHidden: this.hasAttribute('lists-hidden')
+				listsHidden: this.hasAttribute('lists-hidden'),
+				colors: this.getAttribute('colors') || 'light'
 			}
 		});
 	}
