@@ -95,7 +95,7 @@
 
 <CodeBlock
 	code={`
-<hyvor-post-form 
+<hyvor-post-form
 	newsletter="{subdomain}"
 	lists="Product Announcements"
 ></hyvor-post-form>
@@ -184,6 +184,12 @@
 		<div>
 			If set, the list selection will be hidden and users will be subscribed to all lists by
 			default. To subscribe to specific lists, use the <code>lists</code> attribute.
+		</div>
+	</TableRow>
+	<TableRow>
+		<div><code>colors</code></div>
+		<div>
+			Set attribute as <code>light</code> for the light palette and <code>dark</code> for the dark palette
 		</div>
 	</TableRow>
 </Table>
