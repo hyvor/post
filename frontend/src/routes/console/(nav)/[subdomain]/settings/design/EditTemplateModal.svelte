@@ -109,11 +109,11 @@
 	$: if (show) {
 		fetchTemplate();
 		fetchPreview();
-	} else {
-		if (previewInterval) {
-			clearInterval(previewInterval);
-			previewInterval = null;
-		}
+	}
+
+	$: if (!show && previewInterval) {
+		clearInterval(previewInterval);
+		previewInterval = null;
 	}
 
 	onDestroy(() => {
