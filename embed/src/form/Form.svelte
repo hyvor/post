@@ -14,7 +14,7 @@
 		lists: string[]; // lists to filter by (empty = no filter)
 		listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
 		listsHidden: boolean; // if true, hide the lists section
-		colors: string;
+		colors: 'light' | 'dark' | 'os';
 	}
 
 	let {
@@ -85,11 +85,7 @@
 					}
 				}
 
-				if (colors === 'dark') {
-					palette = newsletter.palette_dark;
-				} else {
-					palette = newsletter.palette_light;
-				}
+				setPalette(colors);
 
 				setCustomCss();
 			})
@@ -156,8 +152,13 @@
 		};
 	}
 
-	export function setPalette(type: 'light' | 'dark') {
-		if (type === 'dark') {
+	export function setPalette(type: 'light' | 'dark' | 'os') {
+		if (type === 'os') {
+			palette =
+				window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+					? newsletter.palette_dark
+					: newsletter.palette_light;
+		} else if (type === 'dark') {
 			palette = newsletter.palette_dark;
 		} else {
 			palette = newsletter.palette_light;
