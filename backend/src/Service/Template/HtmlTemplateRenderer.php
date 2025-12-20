@@ -42,6 +42,11 @@ class HtmlTemplateRenderer
 
     public function render(string $template, TemplateVariables $variables): string
     {
+        if (!empty($variables->content)) {
+            $contentTemplate = $this->twig->createTemplate($variables->content);
+            $variables->content = $contentTemplate->render((array)$variables);
+        }
+
         $template = $this->twig->createTemplate($template);
         return $template->render((array)$variables);
     }
