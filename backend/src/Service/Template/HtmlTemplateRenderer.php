@@ -3,11 +3,10 @@
 namespace App\Service\Template;
 
 use App\Entity\Send;
-use App\Service\Content\ContentService;
 use App\Entity\Issue;
-use App\Service\Newsletter\NewsletterService;
-use Hyvor\Internal\Util\Crypt\Encryption;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
 
 class HtmlTemplateRenderer
 {
@@ -43,11 +42,26 @@ class HtmlTemplateRenderer
     public function render(string $template, TemplateVariables $variables): string
     {
         if (!empty($variables->content)) {
-            $contentTemplate = $this->twig->createTemplate($variables->content);
-            $variables->content = $contentTemplate->render((array)$variables);
+            try {
+                $contentTemplate = $this->twig->createTemplate($variables->content);
+                $variables->content = $contentTemplate->render((array)$variables);
+            } catch (RuntimeError $e) {
+                throw new UnprocessableEntityHttpException($this->formatTwigError($e));
+            }
         }
 
         $template = $this->twig->createTemplate($template);
         return $template->render((array)$variables);
+    }
+
+    private function formatTwigError(RuntimeError $e): string
+    {
+        $message = $e->getRawMessage();
+
+        if (preg_match('/Variable "([^"]+)" does not exist/', $message, $matches)) {
+            return "Unknown Twig variable: {{ {$matches[1]} }}";
+        }
+
+        return "Twig error: $message";
     }
 }
