@@ -42,26 +42,13 @@ class HtmlTemplateRenderer
     public function render(string $template, TemplateVariables $variables): string
     {
         if (!empty($variables->content)) {
-            try {
-                $contentTemplate = $this->twig->createTemplate($variables->content);
-                $variables->content = $contentTemplate->render((array)$variables);
-            } catch (RuntimeError $e) {
-                throw new UnprocessableEntityHttpException($this->formatTwigError($e));
-            }
+            $template = str_replace('{{ content }}', $variables->content, $template);
         }
-
-        $template = $this->twig->createTemplate($template);
-        return $template->render((array)$variables);
-    }
-
-    private function formatTwigError(RuntimeError $e): string
-    {
-        $message = $e->getRawMessage();
-
-        if (preg_match('/Variable "([^"]+)" does not exist/', $message, $matches)) {
-            return "Unknown Twig variable: {{ {$matches[1]} }}";
+        try {
+            $twigTemplate = $this->twig->createTemplate($template);
+            return $twigTemplate->render((array)$variables);
+        } catch (RuntimeError $e) {
+            throw new UnprocessableEntityHttpException($e->getRawMessage());
         }
-
-        return "Twig error: $message";
     }
 }
