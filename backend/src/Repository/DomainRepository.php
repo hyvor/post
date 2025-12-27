@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Domain;
+use App\Entity\Type\RelayDomainStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,49 @@ class DomainRepository extends ServiceEntityRepository
         parent::__construct($registry, Domain::class);
     }
 
-//    /**
-//     * @return Domain[] Returns an array of Domain objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Checks if a user has a matching domain for the given embed domain.
+     * A match occurs if the user has:
+     * - The exact domain, OR
+     * - A parent domain (e.g., user has example.com, embed is sub.example.com)
+     *
+     * Only checks active domains.
+     */
+    public function hasMatchingDomain(int $userId, string $embedDomain): bool
+    {
+        $embedDomain = strtolower(trim($embedDomain));
+        $domainLikePattern = '%.' . $embedDomain;
 
-//    public function findOneBySomeField($value): ?Domain
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        // Query: user_id = :userid AND (domain = :domain OR :domain LIKE CONCAT('%.', domain))
+        // Since SQL LIKE with parameter on left side is complex, we use a different approach:
+        // domain = :domain OR domain LIKE :pattern (for subdomains of user domain)
+        // But we need the inverse: check if embedDomain is a subdomain of user's domain
+        //
+        // We fetch active domains and check in PHP for reliability
+        $domains = $this->createQueryBuilder('d')
+            ->select('d.domain')
+            ->where('d.user_id = :userId')
+            ->andWhere('d.relay_status IN (:statuses)')
+            ->setParameter('userId', $userId)
+            ->setParameter('statuses', [RelayDomainStatus::ACTIVE, RelayDomainStatus::WARNING])
+            ->getQuery()
+            ->getArrayResult();
+
+        /** @var array{domain: string} $row */
+        foreach ($domains as $row) {
+            $userDomain = strtolower(trim($row['domain']));
+
+            // Exact match
+            if ($embedDomain === $userDomain) {
+                return true;
+            }
+
+            // Subdomain match: embedDomain ends with ".userDomain"
+            if (str_ends_with($embedDomain, '.' . $userDomain)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

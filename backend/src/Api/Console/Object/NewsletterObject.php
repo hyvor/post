@@ -15,7 +15,7 @@ class NewsletterObject extends NewsletterMeta
     /**
      * @var string[]|null
      */
-    public array $allowed_domains;
+    public ?array $allowed_domains;
 
     public function __construct(Newsletter $newsletter)
     {

@@ -23,7 +23,7 @@ class UpdateNewsletterInput extends NewsletterObject
     /**
      * @var string[]|null
      */
-    public array $allowed_domains;
+    public ?array $allowed_domains;
 
     public function __construct()
     {

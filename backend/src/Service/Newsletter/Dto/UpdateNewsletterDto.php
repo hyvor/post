@@ -14,5 +14,5 @@ class UpdateNewsletterDto
     /**
      * @var string[]|null
      */
-    public array $allowed_domains;
+    public ?array $allowed_domains;
 }
