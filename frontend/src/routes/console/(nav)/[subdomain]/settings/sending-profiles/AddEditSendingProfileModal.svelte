@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, SplitControl, TextInput, Textarea, toast } from '@hyvor/design/components';
+	import { Modal, SplitControl, TextInput, toast } from '@hyvor/design/components';
 	import type { SendingProfile } from '../../../../types';
 	import { getI18n } from '../../../../lib/i18n';
 	import {
@@ -157,7 +157,7 @@
 	</SplitControl>
 
 	<SplitControl label={I.t('console.settings.sendingProfiles.brandUrl')}>
-		<Textarea placeholder="https://post.hyvor.com" bind:value={brandUrl} block />
+		<TextInput placeholder="https://post.hyvor.com" bind:value={brandUrl} block />
 	</SplitControl>
 
 	<SplitControl label={I.t('console.settings.sendingProfiles.brandLogo')}>
