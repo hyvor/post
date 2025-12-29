@@ -7,7 +7,7 @@
 		Link,
 		SplitControl,
 		Loader,
-		toast
+		Validation
 	} from '@hyvor/design/components';
 	import { fade } from 'svelte/transition';
 	import { previewIssue } from '../../../../../lib/actions/issueActions';
@@ -23,6 +23,7 @@
 	let html = $state('');
 	let iframe: HTMLIFrameElement = $state({} as HTMLIFrameElement);
 	let reloading = $state(false);
+	let error: string | null = $state(null);
 
 	function resizeIframe() {
 		if (!iframe) return;
@@ -43,10 +44,11 @@
 		previewIssue($draftIssueEditingStore.id)
 			.then((res) => {
 				html = res.html;
+				error = null;
 				resizeIframe();
 			})
 			.catch((e) => {
-				toast.error(e.message);
+				error = e.message;
 			})
 			.finally(() => {
 				reloading = false;
@@ -90,6 +92,12 @@
 </SplitControl> -->
 
 <div class="preview">
+	{#if error}
+		<div class="error-container">
+			<Validation state="error">{error}</Validation>
+		</div>
+	{/if}
+
 	<iframe
 		srcdoc={html}
 		title="Issue preview"
@@ -99,6 +107,7 @@
 		width="100%"
 		bind:this={iframe}
 		onload={resizeIframe}
+		class:hidden={!!error}
 	></iframe>
 
 	{#if reloading}
@@ -118,8 +127,16 @@
 		border-left: 1px solid var(--border);
 	}
 
+	.error-container {
+		padding: 20px;
+	}
+
 	iframe {
 		min-height: 100%;
+	}
+
+	iframe.hidden {
+		display: none;
 	}
 
 	.loader {
