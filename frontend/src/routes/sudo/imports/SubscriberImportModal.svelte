@@ -83,6 +83,7 @@
 			}
 		}}
 		on:confirm={() => onApprove(subscriberImport)}
+		closeOnOutsideClick={false}
 	>
 		<div class="content-wrap">
 			<SplitControl label="Columns">
