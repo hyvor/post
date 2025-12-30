@@ -146,10 +146,10 @@ FORM
 }
 
 /* RTL Support */
-.form[dir="rtl"] {
+.form[dir='rtl'] {
 	text-align: right;
 }
 
-.form[dir="rtl"] .email-input {
+.form[dir='rtl'] .email-input {
 	text-align: right;
 }
