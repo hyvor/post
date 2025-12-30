@@ -3,11 +3,10 @@
 namespace App\Service\Template;
 
 use App\Entity\Send;
-use App\Service\Content\ContentService;
 use App\Entity\Issue;
-use App\Service\Newsletter\NewsletterService;
-use Hyvor\Internal\Util\Crypt\Encryption;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
 
 class HtmlTemplateRenderer
 {
@@ -42,7 +41,14 @@ class HtmlTemplateRenderer
 
     public function render(string $template, TemplateVariables $variables): string
     {
-        $template = $this->twig->createTemplate($template);
-        return $template->render((array)$variables);
+        if (!empty($variables->content)) {
+            $template = str_replace('{{ content }}', $variables->content, $template);
+        }
+        try {
+            $twigTemplate = $this->twig->createTemplate($template);
+            return $twigTemplate->render((array)$variables);
+        } catch (RuntimeError $e) {
+            throw new UnprocessableEntityHttpException($e->getRawMessage());
+        }
     }
 }
