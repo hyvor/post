@@ -5,7 +5,9 @@ namespace App\Tests\Api\Public\Form;
 use App\Api\Public\Controller\Form\FormController;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
+use App\Entity\Type\RelayDomainStatus;
 use App\Tests\Case\WebTestCase;
+use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +22,7 @@ class FormInitTest extends WebTestCase
     {
         $response = $this->publicApi('POST', '/form/init', [
             'newsletter_subdomain' => 'test',
-        ]);
+        ], ['Referer' => 'https://post.hyvor.com']);
 
         $this->assertResponseStatusCodeSame(422, $response);
         $json = $this->getJson();
@@ -37,7 +39,7 @@ class FormInitTest extends WebTestCase
         $subdomain = $newsletter->getSubdomain();
         $response = $this->publicApi('POST', '/form/init', [
             'newsletter_subdomain' => $subdomain,
-        ]);
+        ], ['Referer' => 'https://post.hyvor.com']);
 
         $this->assertResponseStatusCodeSame(200, $response);
         $json = $this->getJson();
@@ -66,7 +68,7 @@ class FormInitTest extends WebTestCase
         $response = $this->publicApi('POST', '/form/init', [
             'newsletter_subdomain' => $subdomain,
             'list_ids' => [$list1->getId()],
-        ]);
+        ], ['Referer' => 'https://post.hyvor.com']);
 
         $this->assertResponseStatusCodeSame(200, $response);
         $json = $this->getJson();
@@ -89,7 +91,7 @@ class FormInitTest extends WebTestCase
         $response = $this->publicApi('POST', '/form/init', [
             'newsletter_subdomain' => $subdomain,
             'list_ids' => [$list1->getId(), $list2->getId()],
-        ]);
+        ], ['Referer' => 'https://post.hyvor.com']);
 
         $this->assertResponseStatusCodeSame(422, $response);
         $json = $this->getJson();
@@ -97,6 +99,64 @@ class FormInitTest extends WebTestCase
         // error
         $list2Id = $list2->getId();
         $this->assertSame("List with id $list2Id not found", $json['message']);
+    }
+
+    // Domain validation tests
+
+    public function test_allows_app_domain_for_preview(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'allowed_domains' => ['example.com'],
+        ]);
+
+        $response = $this->publicApi('POST', '/form/init', [
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
+        ], ['Referer' => 'https://post.hyvor.com/console/1/settings']);
+
+        $this->assertResponseStatusCodeSame(200, $response);
+    }
+
+    public function test_allows_exact_domain_match(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'allowed_domains' => ['example.com'],
+        ]);
+
+        $response = $this->publicApi('POST', '/form/init', [
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
+        ], ['Referer' => 'https://example.com/page']);
+
+        $this->assertResponseStatusCodeSame(200, $response);
+    }
+
+    public function test_allows_subdomain_of_allowed_domain(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'allowed_domains' => ['example.com'],
+        ]);
+
+        $response = $this->publicApi('POST', '/form/init', [
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
+        ], ['Referer' => 'https://sub.example.com/page']);
+
+        $this->assertResponseStatusCodeSame(200, $response);
+    }
+
+    public function test_rejects_domain_not_in_allowed_list(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'allowed_domains' => ['example.com'],
+        ]);
+
+        $response = $this->publicApi('POST', '/form/init', [
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
+        ], ['Referer' => 'https://other.com/page']);
+
+        $this->assertResponseStatusCodeSame(422, $response);
+        $json = $this->getJson();
+        $this->assertIsString($json['message']);
+        $this->assertStringContainsString('not allowed', $json['message']);
+        $this->assertStringContainsString('Settings:', $json['message']);
     }
 
 }

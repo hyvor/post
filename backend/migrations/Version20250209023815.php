@@ -26,7 +26,8 @@ final class Version20250209023815 extends AbstractMigration
             user_id BIGINT NOT NULL,
             meta JSONB,
             name VARCHAR(255) NOT NULL,
-            test_sent_emails JSONB
+            test_sent_emails JSONB,
+            allowed_domains JSONB
         );
         SQL
         );

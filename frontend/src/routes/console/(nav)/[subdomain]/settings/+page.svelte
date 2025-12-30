@@ -8,6 +8,7 @@
 		Callout,
 		Validation
 	} from '@hyvor/design/components';
+	import IconX from '@hyvor/icons/IconX';
 	import SettingsBody from './@components/SettingsBody.svelte';
 	import NewsletterSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
 	import { newsletterEditingStore, newsletterStore } from '../../../lib/stores/newsletterStore';
@@ -24,8 +25,45 @@
 	let deleting = $state(false);
 	let subdomainError = $state('');
 	let subdomainUpdating = $state(false);
+	let newDomain = $state('');
 
 	const appConfig = getAppConfig();
+
+	function normalizeDomain(input: string): string {
+		let domain = input.trim();
+		// Remove protocol
+		domain = domain.replace(/^https?:\/\//, '');
+		// Remove path, query, and fragment
+		domain = domain.split('/')[0].split('?')[0].split('#')[0];
+		return domain.toLowerCase();
+	}
+
+	function addDomain() {
+		const domain = normalizeDomain(newDomain);
+		if (!domain) return;
+
+		const currentDomains = $newsletterEditingStore.allowed_domains || [];
+		if (currentDomains.includes(domain)) {
+			toast.error('Domain already added');
+			return;
+		}
+
+		$newsletterEditingStore.allowed_domains = [...currentDomains, domain];
+		newDomain = '';
+	}
+
+	function removeDomain(domain: string) {
+		$newsletterEditingStore.allowed_domains = (
+			$newsletterEditingStore.allowed_domains || []
+		).filter((d) => d !== domain);
+	}
+
+	function handleDomainKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			addDomain();
+		}
+	}
 
 	async function onDelete() {
 		const confirmation = await confirm({
@@ -161,6 +199,26 @@
 		{/if}
 	</SplitControl>
 
+	<SplitControl label="Allowed Domains">
+		<div class="domains-input-container">
+			{#each $newsletterEditingStore.allowed_domains || [] as domain (domain)}
+				<span class="domain-tag">
+					https://{domain}
+					<button class="domain-remove" on:click={() => removeDomain(domain)}>
+						<IconX size={10} />
+					</button>
+				</span>
+			{/each}
+			<input
+				type="text"
+				class="domain-inline-input"
+				bind:value={newDomain}
+				placeholder="Add a domain ↵"
+				on:keydown={handleDomainKeydown}
+			/>
+		</div>
+	</SplitControl>
+
 	<SplitControl label={I18n.t('console.settings.newsletter.delete')}>
 		<Button color="red" on:click={onDelete} loading={deleting}>
 			{I18n.t('console.settings.newsletter.delete')}
@@ -168,7 +226,7 @@
 	</SplitControl>
 </SettingsBody>
 
-<NewsletterSaveDiscard keys={['name']} />
+<NewsletterSaveDiscard keys={['name', 'allowed_domains']} />
 
 <style>
 	.newsletter-subdomain-row {
@@ -176,5 +234,65 @@
 		align-items: center;
 		gap: 10px;
 		margin-bottom: 6px;
+	}
+
+	.domains-input-container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border: 1px solid var(--input-border);
+		border-radius: var(--input-radius);
+		background: var(--input-background-filled);
+		min-height: 42px;
+	}
+
+	.domains-input-container:focus-within {
+		border-color: var(--accent);
+		box-shadow: 0 0 0 2px var(--accent-light);
+	}
+
+	.domain-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 4px 8px;
+		background: var(--box-background);
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		font-size: 14px;
+		color: var(--text);
+	}
+
+	.domain-remove {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+		color: var(--text-light);
+		transition: color 0.15s;
+	}
+
+	.domain-remove:hover {
+		color: var(--text);
+	}
+
+	.domain-inline-input {
+		flex: 1;
+		min-width: 120px;
+		border: none;
+		background: transparent;
+		outline: none;
+		font-size: 14px;
+		font-family: inherit;
+		color: var(--text);
+	}
+
+	.domain-inline-input::placeholder {
+		color: var(--text-light);
 	}
 </style>

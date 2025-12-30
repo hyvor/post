@@ -50,7 +50,7 @@ class UpdateNewsletterTest extends WebTestCase
                 'template_color_accent' => '#ff0000',
                 'template_box_radius' => '10px',
                 'unsubscribe_text' => null,
-                'form_title' => 'Subscribe to newsletter'
+                'form_title' => 'Subscribe to newsletter',
             ]
         );
 
@@ -160,5 +160,31 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertSame('Subdomain is already taken.', $json['message']);
+    }
+
+    public function test_update_newsletter_allowed_domains(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'allowed_domains' => ['example.com']
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'PATCH',
+            '/newsletter',
+            [
+                'allowed_domains' => ['example.org', 'example.net'],
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertSame(['example.org', 'example.net'], $json['allowed_domains']);
+
+        $repository = $this->em->getRepository(Newsletter::class);
+        $newsletter = $repository->find($json['id']);
+        $this->assertNotNull($newsletter);
+        $this->assertSame(['example.org', 'example.net'], $newsletter->getAllowedDomains());
     }
 }

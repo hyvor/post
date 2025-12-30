@@ -132,6 +132,7 @@ export type Newsletter = {
 	subdomain: string;
 	created_at: number;
 	name: string;
+	allowed_domains: string[];
 } & NewsletterMeta;
 
 export type NewsletterPermissions = {
