@@ -170,7 +170,10 @@
 		/>
 	</SplitControl>
 
-	<SplitControl label="Right-to-Left (RTL)" caption="Enable for RTL languages like Arabic, Hebrew">
+	<SplitControl
+		label="Right-to-Left (RTL)"
+		caption="Enable for RTL languages like Arabic, Hebrew"
+	>
 		<Switch bind:checked={$newsletterEditingStore.is_rtl} />
 	</SplitControl>
 
