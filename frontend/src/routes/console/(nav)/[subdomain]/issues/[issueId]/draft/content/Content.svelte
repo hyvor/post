@@ -50,7 +50,7 @@
 	});
 </script>
 
-<div class="content-wrap">
+<div class="content-wrap" dir={$newsletterStore.is_rtl ? 'rtl' : 'ltr'}>
 	<div class="content-inner">
 		<input
 			type="text"

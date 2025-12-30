@@ -6,7 +6,8 @@
 		toast,
 		confirm,
 		Callout,
-		Validation
+		Validation,
+		Switch
 	} from '@hyvor/design/components';
 	import SettingsBody from './@components/SettingsBody.svelte';
 	import NewsletterSaveDiscard from '../@components/save/NewsletterSaveDiscard.svelte';
@@ -161,6 +162,18 @@
 		{/if}
 	</SplitControl>
 
+	<SplitControl label="Language Code" caption="e.g., en, ar, he, fa">
+		<TextInput
+			bind:value={$newsletterEditingStore.language_code}
+			placeholder="en"
+			maxlength={10}
+		/>
+	</SplitControl>
+
+	<SplitControl label="Right-to-Left (RTL)" caption="Enable for RTL languages like Arabic, Hebrew">
+		<Switch bind:checked={$newsletterEditingStore.is_rtl} />
+	</SplitControl>
+
 	<SplitControl label={I18n.t('console.settings.newsletter.delete')}>
 		<Button color="red" on:click={onDelete} loading={deleting}>
 			{I18n.t('console.settings.newsletter.delete')}
@@ -168,7 +181,7 @@
 	</SplitControl>
 </SettingsBody>
 
-<NewsletterSaveDiscard keys={['name']} />
+<NewsletterSaveDiscard keys={['name', 'language_code', 'is_rtl']} />
 
 <style>
 	.newsletter-subdomain-row {

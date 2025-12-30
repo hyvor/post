@@ -8,6 +8,7 @@ class FormNewsletterObject
 {
 
     public string $subdomain;
+    public string $direction;
     public FormObject $form;
     public PaletteObject $palette_light;
     public PaletteObject $palette_dark;
@@ -15,6 +16,7 @@ class FormNewsletterObject
     public function __construct(Newsletter $newsletter)
     {
         $this->subdomain = $newsletter->getSubdomain();
+        $this->direction = $newsletter->isRtl() ? 'rtl' : 'ltr';
         $meta = $newsletter->getMeta();
         $this->form = new FormObject($meta);
 

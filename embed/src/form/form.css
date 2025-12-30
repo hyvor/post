@@ -144,3 +144,12 @@ FORM
 	background-color: var(--hp-color-red);
 	color: #fff;
 }
+
+/* RTL Support */
+.form[dir="rtl"] {
+	text-align: right;
+}
+
+.form[dir="rtl"] .email-input {
+	text-align: right;
+}

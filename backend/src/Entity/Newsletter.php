@@ -30,6 +30,12 @@ class Newsletter
     #[ORM\Column(length: 255)]
     private string $name;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $language_code = null;
+
+    #[ORM\Column]
+    private bool $is_rtl = false;
+
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"newsletters_meta"}'])]
     private NewsletterMeta $meta;
 
@@ -119,6 +125,30 @@ class Newsletter
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLanguageCode(): ?string
+    {
+        return $this->language_code;
+    }
+
+    public function setLanguageCode(?string $language_code): static
+    {
+        $this->language_code = $language_code;
+
+        return $this;
+    }
+
+    public function isRtl(): bool
+    {
+        return $this->is_rtl;
+    }
+
+    public function setIsRtl(bool $is_rtl): static
+    {
+        $this->is_rtl = $is_rtl;
 
         return $this;
     }

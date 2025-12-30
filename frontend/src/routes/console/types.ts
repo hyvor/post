@@ -132,6 +132,8 @@ export type Newsletter = {
 	subdomain: string;
 	created_at: number;
 	name: string;
+	language_code: string | null;
+	is_rtl: boolean;
 } & NewsletterMeta;
 
 export type NewsletterPermissions = {

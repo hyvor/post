@@ -1,5 +1,6 @@
 export interface Newsletter {
 	id: number;
+	direction: 'ltr' | 'rtl';
 
 	form: {
 		width: number | null;
