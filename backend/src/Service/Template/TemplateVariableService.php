@@ -28,7 +28,8 @@ class TemplateVariableService
         $meta = $newsletter->getMeta();
 
         $variables = new TemplateVariables(
-            lang: 'en',
+            lang: $newsletter->getLanguageCode() ?? 'en',
+            direction: $newsletter->isRtl() ? 'rtl' : 'ltr',
             subject: '',
             content: '',
 

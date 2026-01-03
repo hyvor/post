@@ -13,6 +13,9 @@ class TemplateVariables
         // language code to be used in <html> tag
         public string $lang = NewsletterDefaults::TEMPLATE_LANG,
 
+        // text direction (ltr or rtl) to be used in <html> tag
+        public string $direction = 'ltr',
+
         // subject of the email to be used in <title> tag
         public string $subject = '',
 

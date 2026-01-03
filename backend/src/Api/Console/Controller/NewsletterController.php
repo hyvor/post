@@ -102,6 +102,12 @@ class NewsletterController extends AbstractController
             }
             $updates->subdomain = $input->subdomain;
         }
+        if ($input->hasProperty('language_code')) {
+            $updates->language_code = $input->language_code;
+        }
+        if ($input->hasProperty('is_rtl')) {
+            $updates->is_rtl = $input->is_rtl;
+        }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();

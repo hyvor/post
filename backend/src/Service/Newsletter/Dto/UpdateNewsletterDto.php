@@ -10,4 +10,6 @@ class UpdateNewsletterDto
 
     public string $name;
     public string $subdomain;
+    public ?string $language_code;
+    public bool $is_rtl;
 }

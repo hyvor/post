@@ -35,7 +35,7 @@ class GetTemplateTest extends WebTestCase
             '{% apply inline_css %}
 
 <!DOCTYPE html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" dir="{{ direction }}">
 
 <head>
     <meta charset="UTF-8">
@@ -246,6 +246,25 @@ class GetTemplateTest extends WebTestCase
             opacity: 0.6;
             color: {{ color_background_text }};
             text-decoration: none;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] .content blockquote {
+            border-left: none;
+            border-right: 4px solid {{ color_accent }};
+        }
+
+        [dir="rtl"] .content div.callout > span {
+            float: right;
+        }
+
+        [dir="rtl"] .content div.callout > div {
+            padding: 10px 0 10px 10px;
+        }
+
+        [dir="rtl"] .brand-wrap img {
+            padding-right: 0;
+            padding-left: 6px;
         }
     </style>
 </head>
