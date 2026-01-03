@@ -49,8 +49,8 @@
 	<h2 id="definitions">1. Definitions</h2>
 	<ul>
 		<li>
-			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content and
-			newsletters.
+			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content
+			and newsletters.
 		</li>
 		<li>
 			<strong>Subscriber:</strong> A person who subscribes to a newsletter created by a Hyvor Post
@@ -75,8 +75,8 @@
 			forms.
 		</li>
 		<li>
-			<strong>Email Analytics (Optional):</strong> If enabled, we collect email open rates and click-through
-			rates for performance analytics.
+			<strong>Email Analytics (Optional):</strong> If enabled, we collect email open rates and
+			click-through rates for performance analytics.
 		</li>
 		<li>
 			<strong>Content Data:</strong> Nnewsletters, drafts, and metadata you create within the Hyvor

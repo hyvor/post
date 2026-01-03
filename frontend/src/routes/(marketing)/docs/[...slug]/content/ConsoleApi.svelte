@@ -486,11 +486,12 @@
 		<a href="#get-sending-profiles"><code>GET /sending-profiles</code></a> - Get sending profiles
 	</li>
 	<li>
-		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
+		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending
+		profile
 	</li>
 	<li>
-		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
-		sending profile
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update
+		a sending profile
 	</li>
 	<li>
 		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete

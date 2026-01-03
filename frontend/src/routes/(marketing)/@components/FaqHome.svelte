@@ -27,8 +27,8 @@
 		our <a href="/terms" class="hds-link">Terms of Service</a>. The approval process is quick,
 		and you will usually get a response within 1 business day (usually much faster).
 		<br /><br />
-		Note that before getting approval, you can collect or import subscribers, prepare your first newsletter
-		issue, and test it with your own email address.
+		Note that before getting approval, you can collect or import subscribers, prepare your first
+		newsletter issue, and test it with your own email address.
 	</Accordion>
 
 	<Accordion
