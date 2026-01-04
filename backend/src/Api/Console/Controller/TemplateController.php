@@ -11,8 +11,10 @@ use App\Entity\Newsletter;
 use App\Service\Content\ContentDefaultStyle;
 use App\Service\Template\Dto\UpdateTemplateDto;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TemplateRenderException;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -82,7 +84,11 @@ class TemplateController extends AbstractController
 
         $template = $input->template ?? $this->templateService->getTemplateStringFromNewsletter($newsletter);
 
-        $html = $this->htmlTemplateRenderer->render($template, $variables);
+        try {
+            $html = $this->htmlTemplateRenderer->render($template, $variables);
+        } catch (TemplateRenderException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
 
         return $this->json(['html' => $html]);
     }

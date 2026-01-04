@@ -19,6 +19,7 @@ use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
+use App\Service\Template\TemplateRenderException;
 use App\Service\Template\TextTemplateRenderer;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -187,7 +188,11 @@ class IssueController extends AbstractController
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
         $updates->sendingAt = new \DateTimeImmutable();
-        $updates->html = $this->htmlTemplateRenderer->renderFromIssue($issue);
+        try {
+            $updates->html = $this->htmlTemplateRenderer->renderFromIssue($issue);
+        } catch (TemplateRenderException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
         $updates->text = $this->textTemplateRenderer->renderFromIssue($issue);
         $updates->totalSendable = $subscribersCount;
         $updates->sendingProfile = $issue->getSendingProfile();
@@ -249,7 +254,11 @@ class IssueController extends AbstractController
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function previewIssue(Issue $issue): JsonResponse
     {
-        $preview = $this->htmlTemplateRenderer->renderFromIssue($issue);
+        try {
+            $preview = $this->htmlTemplateRenderer->renderFromIssue($issue);
+        } catch (TemplateRenderException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
 
         return $this->json([
             'html' => $preview,
