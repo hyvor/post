@@ -7,7 +7,6 @@ use App\Service\Content\ContentService;
 use App\Entity\Issue;
 use App\Service\Newsletter\NewsletterService;
 use Hyvor\Internal\Util\Crypt\Encryption;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Twig\Environment;
 use Twig\Error\Error as TwigError;
 
@@ -48,7 +47,7 @@ class HtmlTemplateRenderer
             $twigTemplate = $this->twig->createTemplate($template);
             return $twigTemplate->render((array)$variables);
         } catch (TwigError $e) {
-            throw new UnprocessableEntityHttpException($e->getRawMessage());
+            throw new TemplateRenderException($e->getRawMessage());
         }
     }
 }
