@@ -7,6 +7,7 @@ use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\SendingProfile;
 use App\Service\Content\ContentService;
+use App\Service\Content\CustomHtmlTwigProcessor;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
@@ -15,12 +16,12 @@ use Hyvor\Internal\Util\Crypt\Encryption;
 class TemplateVariableService
 {
     public function __construct(
-        private ContentService        $contentService,
-        private NewsletterService     $newsletterService,
-        private SendingProfileService $sendingProfileService,
-        private Encryption            $encryption,
-    )
-    {
+        private ContentService            $contentService,
+        private NewsletterService         $newsletterService,
+        private SendingProfileService     $sendingProfileService,
+        private Encryption                $encryption,
+        private CustomHtmlTwigProcessor   $customHtmlTwigProcessor,
+    ) {
     }
 
     public function variablesFromNewsletter(Newsletter $newsletter): TemplateVariables
@@ -77,10 +78,13 @@ class TemplateVariableService
         $variables = $this->setVariablesFromSendingProfile($variables, $issueSendingProfile);
 
         $variables->subject = (string)$issue->getSubject();
-        $variables->content = $this->contentService->getHtmlFromJson(
+        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
+
+        // Generate HTML from content and process CustomHtml Twig blocks
+        $rawHtml = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT
         );
-        $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
+        $variables->content = $this->customHtmlTwigProcessor->process($rawHtml, $variables);
 
         return $variables;
     }
@@ -90,6 +94,12 @@ class TemplateVariableService
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send->getNewsletter(), $send->getId());
+
+        $rawHtml = $this->contentService->getHtmlFromJson(
+            $issue->getContent() ?? ContentService::DEFAULT_CONTENT
+        );
+        $variables->content = $this->customHtmlTwigProcessor->process($rawHtml, $variables);
+
         return $variables;
     }
 
