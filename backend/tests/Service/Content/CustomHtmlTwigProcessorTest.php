@@ -14,7 +14,9 @@ class CustomHtmlTwigProcessorTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->processor = $this->container->get(CustomHtmlTwigProcessor::class);
+        /** @var CustomHtmlTwigProcessor $processor */
+        $processor = $this->container->get(CustomHtmlTwigProcessor::class);
+        $this->processor = $processor;
     }
 
     public function test_processes_twig_variables_in_custom_html(): void
