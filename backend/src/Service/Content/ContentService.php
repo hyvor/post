@@ -70,9 +70,9 @@ JSON;
         return $document->toText();
     }
 
-    public function getHtmlFromJson(string $content): string
+    public function getHtmlFromJson(string $content, ?CustomHtmlTwigProcessor $processor = null): string
     {
-        $document = Document::fromJson($this->getSchema(), $content);
+        $document = Document::fromJson($this->getSchema($processor), $content);
         return $document->toHtml();
     }
 
@@ -97,7 +97,7 @@ JSON;
         return $parser->parse($html, sanitize: $sanitize);
     }
 
-    public function getSchema(): Schema
+    public function getSchema(?CustomHtmlTwigProcessor $processor = null): Schema
     {
         return new Schema(
             [
@@ -116,7 +116,7 @@ JSON;
                 new Figure(),
                 new Figcaption(),
                 new CodeBlock(),
-                new CustomHtml(),
+                new CustomHtml($processor),
                 new Callout(),
             ],
             [
