@@ -80,11 +80,11 @@ class TemplateVariableService
         $variables->subject = (string)$issue->getSubject();
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
 
-        // Generate HTML from content and process CustomHtml Twig blocks
-        $rawHtml = $this->contentService->getHtmlFromJson(
-            $issue->getContent() ?? ContentService::DEFAULT_CONTENT
+        // Generate HTML from content with Twig processing in CustomHtml blocks
+        $variables->content = $this->contentService->getHtmlFromJson(
+            $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
+            $this->customHtmlTwigProcessor->with($variables)
         );
-        $variables->content = $this->customHtmlTwigProcessor->process($rawHtml, $variables);
 
         return $variables;
     }
@@ -95,10 +95,11 @@ class TemplateVariableService
         $variables = $this->variablesFromIssue($issue);
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send->getNewsletter(), $send->getId());
 
-        $rawHtml = $this->contentService->getHtmlFromJson(
-            $issue->getContent() ?? ContentService::DEFAULT_CONTENT
+        // Re-render content with send-specific variables (e.g., unsubscribe_url)
+        $variables->content = $this->contentService->getHtmlFromJson(
+            $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
+            $this->customHtmlTwigProcessor->with($variables)
         );
-        $variables->content = $this->customHtmlTwigProcessor->process($rawHtml, $variables);
 
         return $variables;
     }
