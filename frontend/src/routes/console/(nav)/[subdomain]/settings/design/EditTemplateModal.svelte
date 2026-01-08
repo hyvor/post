@@ -213,6 +213,7 @@
 		margin: 0 10px;
 		flex-shrink: 0;
 		min-width: 0;
+		min-height: 0;
 	}
 	.column:nth-child(3) {
 		flex: 3;
