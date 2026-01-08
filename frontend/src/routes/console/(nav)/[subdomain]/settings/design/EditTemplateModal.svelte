@@ -6,14 +6,19 @@
 		updateTemplate
 	} from '../../../../../(tools)/design/lib/actions/templateActions';
 	import CodemirrorEditor from '../../../../lib/components/CodemirrorEditor/CodemirrorEditor.svelte';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, untrack } from 'svelte';
 	import IconArrowClockwise from '@hyvor/icons/IconArrowClockwise';
 
-	export let show: boolean;
+	interface Props {
+		show: boolean;
+	}
 
-	let previewHtml: string;
-	let templateLoaded = false;
-	let template = '';
+	let { show = $bindable() }: Props = $props();
+
+	let previewHtml = $state('');
+	let templateLoaded = $state(false);
+	let template = $state('');
+
 	let typingTimeout: number | null | undefined = null;
 	let previewInterval: number | null | undefined = null;
 
@@ -106,15 +111,19 @@
 		fetchPreview();
 	});
 
-	$: if (show) {
-		fetchTemplate();
-		fetchPreview();
-	} else {
-		if (previewInterval) {
-			clearInterval(previewInterval);
-			previewInterval = null;
+	$effect(() => {
+		if (show) {
+			untrack(() => {
+				fetchTemplate();
+				fetchPreview();
+			});
+		} else {
+			if (previewInterval) {
+				clearInterval(previewInterval);
+				previewInterval = null;
+			}
 		}
-	}
+	});
 
 	onDestroy(() => {
 		if (previewInterval) {
@@ -191,6 +200,10 @@
 	.preview {
 		width: 50%;
 		padding: 1rem;
+
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
 	}
 
 	.column {
@@ -200,6 +213,7 @@
 		margin: 0 10px;
 		flex-shrink: 0;
 		min-width: 0;
+		min-height: 0;
 	}
 	.column:nth-child(3) {
 		flex: 3;
