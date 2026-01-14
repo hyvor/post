@@ -28,6 +28,7 @@ use App\Service\Content\Nodes\ListItem;
 use App\Service\Content\Nodes\OrderedList;
 use App\Service\Content\Nodes\Paragraph;
 use App\Service\Content\Nodes\Text;
+use App\Service\Template\TemplateVariables;
 use Hyvor\Phrosemirror\Document\Node;
 use Hyvor\Phrosemirror\Converters\HtmlParser\HtmlParser;
 use Hyvor\Phrosemirror\Document\Document;
@@ -37,7 +38,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class ContentService
 {
 
-    public function __construct()
+    public function __construct(
+        private CustomHtmlTwigProcessorFactory $customHtmlTwigProcessorFactory
+    )
     {
     }
 
@@ -47,32 +50,13 @@ class ContentService
 }
 JSON;
 
-    public function htmlFromIssue(Issue $issue): string
+    /**
+     * @param TemplateVariables|null $variables set this to variables except content to use those variables
+     *                                          when rendering in the Custom HTML/Twig block
+     */
+    public function getHtmlFromJson(string $content, ?TemplateVariables $variables = null): string
     {
-        $content = $issue->getContent();
-
-        if (!$content) {
-            return '';
-        }
-
-        return $this->getHtmlFromJson($content);
-    }
-
-    public function textFromIssue(Issue $issue): string
-    {
-        $content = $issue->getContent();
-
-        if (!$content) {
-            return '';
-        }
-
-        $document = Document::fromJson($this->getSchema(), $content);
-        return $document->toText();
-    }
-
-    public function getHtmlFromJson(string $content): string
-    {
-        $document = Document::fromJson($this->getSchema(), $content);
+        $document = Document::fromJson($this->getSchema($variables), $content);
         return $document->toHtml();
     }
 
@@ -97,8 +81,10 @@ JSON;
         return $parser->parse($html, sanitize: $sanitize);
     }
 
-    public function getSchema(): Schema
+    public function getSchema(?TemplateVariables $variables = null): Schema
     {
+        $twigProcessor = $this->customHtmlTwigProcessorFactory->create($variables);
+
         return new Schema(
             [
                 new Doc(),
@@ -116,7 +102,7 @@ JSON;
                 new Figure(),
                 new Figcaption(),
                 new CodeBlock(),
-                new CustomHtml(),
+                new CustomHtml($twigProcessor),
                 new Callout(),
             ],
             [

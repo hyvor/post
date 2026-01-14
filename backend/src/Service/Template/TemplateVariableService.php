@@ -7,6 +7,7 @@ use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\SendingProfile;
 use App\Service\Content\ContentService;
+use App\Service\Content\CustomHtmlTwigProcessor;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
@@ -15,12 +16,11 @@ use Hyvor\Internal\Util\Crypt\Encryption;
 class TemplateVariableService
 {
     public function __construct(
-        private ContentService        $contentService,
-        private NewsletterService     $newsletterService,
-        private SendingProfileService $sendingProfileService,
-        private Encryption            $encryption,
-    )
-    {
+        private ContentService            $contentService,
+        private NewsletterService         $newsletterService,
+        private SendingProfileService     $sendingProfileService,
+        private Encryption                $encryption,
+    ) {
     }
 
     public function variablesFromNewsletter(Newsletter $newsletter): TemplateVariables
@@ -77,10 +77,13 @@ class TemplateVariableService
         $variables = $this->setVariablesFromSendingProfile($variables, $issueSendingProfile);
 
         $variables->subject = (string)$issue->getSubject();
-        $variables->content = $this->contentService->getHtmlFromJson(
-            $issue->getContent() ?? ContentService::DEFAULT_CONTENT
-        );
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($issue->getNewsletter());
+
+        // Generate HTML from content with Twig processing in CustomHtml blocks
+        $variables->content = $this->contentService->getHtmlFromJson(
+            $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
+            $variables
+        );
 
         return $variables;
     }
@@ -90,6 +93,13 @@ class TemplateVariableService
         $issue = $send->getIssue();
         $variables = $this->variablesFromIssue($issue);
         $variables->unsubscribe_url = $this->getArchiveUnsubscribeUrl($send->getNewsletter(), $send->getId());
+
+        // Re-render content with send-specific variables (e.g., unsubscribe_url)
+        $variables->content = $this->contentService->getHtmlFromJson(
+            $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
+            $variables
+        );
+
         return $variables;
     }
 

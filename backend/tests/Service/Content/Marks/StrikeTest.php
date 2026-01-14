@@ -3,56 +3,59 @@
 namespace App\Tests\Service\Content\Marks;
 
 use App\Service\Content\ContentService;
-use PHPUnit\Framework\TestCase;
+use App\Tests\Case\KernelTestCase;
 
-class StrikeTest extends TestCase
+class StrikeTest extends KernelTestCase
 {
     public function test_json_to_html(): void
     {
-        $content = 'Strikethrough';
+        $content = "Strikethrough";
         $json = json_encode([
-            'type' => 'doc',
-            'content' => [
+            "type" => "doc",
+            "content" => [
                 [
-                    'type' => 'paragraph',
-                    'content' => [
+                    "type" => "paragraph",
+                    "content" => [
                         [
-                            'type' => 'text',
-                            'text' => $content,
-                            'marks' => [
-                                ['type' => 'strike'],
-                            ],
+                            "type" => "text",
+                            "text" => $content,
+                            "marks" => [["type" => "strike"]],
                         ],
                     ],
                 ],
             ],
         ]);
         $this->assertIsString($json);
-        $html = new ContentService()->getHtmlFromJson($json);
-        $this->assertSame('<p><s>Strikethrough</s></p>', $html);
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $html = $contentService->getHtmlFromJson($json);
+        $this->assertSame("<p><s>Strikethrough</s></p>", $html);
     }
 
     public function test_html_to_json(): void
     {
-        $content = 'Strikethrough';
+        $content = "Strikethrough";
         $html = "<p><s>$content</s></p>";
-        $json = (new ContentService())->getJsonFromHtml($html);
-        $this->assertSame(json_encode([
-            'type' => 'doc',
-            'content' => [
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => $content,
-                            'marks' => [
-                                ['type' => 'strike'],
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $json = $contentService->getJsonFromHtml($html);
+        $this->assertSame(
+            json_encode([
+                "type" => "doc",
+                "content" => [
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            [
+                                "type" => "text",
+                                "text" => $content,
+                                "marks" => [["type" => "strike"]],
                             ],
                         ],
                     ],
                 ],
-            ],
-        ]), $json);
+            ]),
+            $json,
+        );
     }
 }

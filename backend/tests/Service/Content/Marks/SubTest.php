@@ -3,26 +3,25 @@
 namespace App\Tests\Service\Content\Marks;
 
 use App\Service\Content\ContentService;
-use PHPUnit\Framework\TestCase;
+use App\Tests\Case\KernelTestCase;
 
-class SubTest extends TestCase
+class SubTest extends KernelTestCase
 {
-
     public function test_json_to_html(): void
     {
-        $text = 'subscript';
+        $text = "subscript";
         $json = json_encode([
-            'type' => 'doc',
-            'content' => [
+            "type" => "doc",
+            "content" => [
                 [
-                    'type' => 'paragraph',
-                    'content' => [
+                    "type" => "paragraph",
+                    "content" => [
                         [
-                            'type' => 'text',
-                            'text' => $text,
-                            'marks' => [
+                            "type" => "text",
+                            "text" => $text,
+                            "marks" => [
                                 [
-                                    'type' => 'sub',
+                                    "type" => "sub",
                                 ],
                             ],
                         ],
@@ -31,34 +30,40 @@ class SubTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = new ContentService()->getHtmlFromJson($json);
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $html = $contentService->getHtmlFromJson($json);
         $this->assertSame("<p><sub>$text</sub></p>", $html);
     }
 
     public function test_html_to_json(): void
     {
-        $text = 'subscript';
+        $text = "subscript";
         $html = "<sub>$text</sub>";
-        $json = (new ContentService())->getJsonFromHtml($html);
-        $this->assertSame(json_encode([
-            'type' => 'doc',
-            'content' => [
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => $text,
-                            'marks' => [
-                                [
-                                    'type' => 'sub',
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $json = $contentService->getJsonFromHtml($html);
+        $this->assertSame(
+            json_encode([
+                "type" => "doc",
+                "content" => [
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            [
+                                "type" => "text",
+                                "text" => $text,
+                                "marks" => [
+                                    [
+                                        "type" => "sub",
+                                    ],
                                 ],
                             ],
                         ],
                     ],
                 ],
-            ],
-        ]), $json);
+            ]),
+            $json,
+        );
     }
-
 }
