@@ -7,35 +7,23 @@ use Twig\Environment;
 
 class CustomHtmlTwigProcessor
 {
-    private ?TemplateVariables $variables = null;
 
     public function __construct(
         private Environment $twig,
+        /**
+         * @var array<mixed>
+         */
+        private array $variables,
     ) {
     }
 
-    /**
-     * Create a new processor instance with the given variables.
-     */
-    public function with(TemplateVariables $variables): self
-    {
-        $new = new self($this->twig);
-        $new->variables = $variables;
-        return $new;
-    }
-
-    /**
-     * Render Twig syntax in the given content.
-     */
     public function render(string $content): string
     {
-        if ($this->variables === null) {
-            return $content;
-        }
-
         try {
             $template = $this->twig->createTemplate($content);
-            return $template->render((array) $this->variables);
+            return $template->render($this->variables);
+        } catch (\Twig\Error\Error $e) {
+            return 'Unable to render twig: ' . $e->getMessage();
         } catch (\Throwable) {
             return $content;
         }

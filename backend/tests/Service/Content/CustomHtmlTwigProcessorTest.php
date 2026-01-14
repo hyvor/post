@@ -3,41 +3,46 @@
 namespace App\Tests\Service\Content;
 
 use App\Service\Content\CustomHtmlTwigProcessor;
+use App\Service\Content\CustomHtmlTwigProcessorFactory;
 use App\Service\Template\TemplateVariables;
 use App\Tests\Case\KernelTestCase;
 
 class CustomHtmlTwigProcessorTest extends KernelTestCase
 {
-    private CustomHtmlTwigProcessor $processor;
+    private CustomHtmlTwigProcessorFactory $processorFactory;
 
     protected function setUp(): void
     {
         parent::setUp();
-        /** @var CustomHtmlTwigProcessor $processor */
-        $processor = $this->container->get(CustomHtmlTwigProcessor::class);
-        $this->processor = $processor;
+        /** @var CustomHtmlTwigProcessorFactory $processor */
+        $processor = $this->container->get(CustomHtmlTwigProcessorFactory::class);
+        $this->processorFactory = $processor;
     }
 
     public function test_with_returns_new_instance(): void
     {
         $variables = new TemplateVariables(name: 'Test');
-        $newProcessor = $this->processor->with($variables);
+        $newProcessor = $this->processorFactory->create($variables);
 
-        $this->assertNotSame($this->processor, $newProcessor);
+        $this->assertNotSame($this->processorFactory, $newProcessor);
     }
 
-    public function test_render_without_variables_returns_original(): void
+    public function test_render_without_variables_shows_error(): void
     {
         $content = '<div>{{ name }}</div>';
-        $result = $this->processor->render($content);
+        $processor = $this->processorFactory->create(null);
+        $result = $processor->render($content);
 
-        $this->assertSame($content, $result);
+        $this->assertStringContainsString(
+            'Unable to render twig: Variable "name" does not exist',
+            $result
+        );
     }
 
     public function test_render_with_variables_processes_twig(): void
     {
         $variables = new TemplateVariables(name: 'Test Newsletter');
-        $processor = $this->processor->with($variables);
+        $processor = $this->processorFactory->create($variables);
 
         $result = $processor->render('<div>Welcome to {{ name }}</div>');
 
@@ -47,10 +52,13 @@ class CustomHtmlTwigProcessorTest extends KernelTestCase
     public function test_render_handles_invalid_twig(): void
     {
         $variables = new TemplateVariables();
-        $processor = $this->processor->with($variables);
+        $processor = $this->processorFactory->create($variables);
 
         $result = $processor->render('{{ invalid_syntax');
 
-        $this->assertSame('{{ invalid_syntax', $result);
+        $this->assertStringContainsString(
+            'Unable to render twig: Unexpected token',
+            $result
+        );
     }
 }

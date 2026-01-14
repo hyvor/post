@@ -13,13 +13,13 @@ class CustomHtml extends NodeType
     public string $group = 'block';
 
     public function __construct(
-        private ?CustomHtmlTwigProcessor $processor = null
+        private CustomHtmlTwigProcessor $processor
     ) {
     }
 
     public function toHtml(Node $node, string $children): string
     {
         $code = $node->allText();
-        return $this->processor?->render($code) ?? $code;
+        return $this->processor->render($code);
     }
 }

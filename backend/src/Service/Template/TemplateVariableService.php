@@ -20,7 +20,6 @@ class TemplateVariableService
         private NewsletterService         $newsletterService,
         private SendingProfileService     $sendingProfileService,
         private Encryption                $encryption,
-        private CustomHtmlTwigProcessor   $customHtmlTwigProcessor,
     ) {
     }
 
@@ -83,7 +82,7 @@ class TemplateVariableService
         // Generate HTML from content with Twig processing in CustomHtml blocks
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
-            $this->customHtmlTwigProcessor->with($variables)
+            $variables
         );
 
         return $variables;
@@ -98,7 +97,7 @@ class TemplateVariableService
         // Re-render content with send-specific variables (e.g., unsubscribe_url)
         $variables->content = $this->contentService->getHtmlFromJson(
             $issue->getContent() ?? ContentService::DEFAULT_CONTENT,
-            $this->customHtmlTwigProcessor->with($variables)
+            $variables
         );
 
         return $variables;
