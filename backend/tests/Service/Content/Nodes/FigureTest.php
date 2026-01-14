@@ -2,35 +2,35 @@
 
 namespace App\Tests\Service\Content\Nodes;
 
-use PHPUnit\Framework\TestCase;
+use App\Service\Content\ContentService;
+use App\Tests\Case\KernelTestCase;
 
-class FigureTest extends TestCase
+class FigureTest extends KernelTestCase
 {
-
     public function test_json_to_html(): void
     {
-        $caption = 'This is a caption';
-        $src = 'https://example.com/image.jpg';
-        $alt = 'Example Image';
+        $caption = "This is a caption";
+        $src = "https://example.com/image.jpg";
+        $alt = "Example Image";
         $json = json_encode([
-            'type' => 'doc',
-            'content' => [
+            "type" => "doc",
+            "content" => [
                 [
-                    'type' => 'figure',
-                    'content' => [
+                    "type" => "figure",
+                    "content" => [
                         [
-                            'type' => 'image',
-                            'attrs' => [
-                                'src' => $src,
-                                'alt' => $alt,
+                            "type" => "image",
+                            "attrs" => [
+                                "src" => $src,
+                                "alt" => $alt,
                             ],
                         ],
                         [
-                            'type' => 'figcaption',
-                            'content' => [
+                            "type" => "figcaption",
+                            "content" => [
                                 [
-                                    'type' => 'text',
-                                    'text' => $caption,
+                                    "type" => "text",
+                                    "text" => $caption,
                                 ],
                             ],
                         ],
@@ -39,45 +39,54 @@ class FigureTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = new \App\Service\Content\ContentService()->getHtmlFromJson($json);
-        $this->assertSame("<figure><img src=\"$src\" alt=\"$alt\" /><figcaption>$caption</figcaption></figure>", $html);
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $html = $contentService->getHtmlFromJson($json);
+        $this->assertSame(
+            "<figure><img src=\"$src\" alt=\"$alt\" /><figcaption>$caption</figcaption></figure>",
+            $html,
+        );
     }
 
     public function test_html_to_json(): void
     {
-        $caption = 'This is a caption';
-        $src = 'https://example.com/image.jpg';
-        $alt = 'Example Image';
+        $caption = "This is a caption";
+        $src = "https://example.com/image.jpg";
+        $alt = "Example Image";
         $html = "<figure><img src=\"$src\" alt=\"$alt\" /><figcaption>$caption</figcaption></figure>";
-        $json = new \App\Service\Content\ContentService()->getJsonFromHtml($html);
-        $this->assertSame(json_encode([
-            'type' => 'doc',
-            'content' => [
-                [
-                    'type' => 'figure',
-                    'content' => [
-                        [
-                            'type' => 'image',
-                            'attrs' => [
-                                'src' => $src,
-                                'alt' => $alt,
-                                'width' => null,
-                                'height' => null,
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $json = $contentService->getJsonFromHtml($html);
+        $this->assertSame(
+            json_encode([
+                "type" => "doc",
+                "content" => [
+                    [
+                        "type" => "figure",
+                        "content" => [
+                            [
+                                "type" => "image",
+                                "attrs" => [
+                                    "src" => $src,
+                                    "alt" => $alt,
+                                    "width" => null,
+                                    "height" => null,
+                                ],
                             ],
-                        ],
-                        [
-                            'type' => 'figcaption',
-                            'content' => [
-                                [
-                                    'type' => 'text',
-                                    'text' => $caption,
+                            [
+                                "type" => "figcaption",
+                                "content" => [
+                                    [
+                                        "type" => "text",
+                                        "text" => $caption,
+                                    ],
                                 ],
                             ],
                         ],
                     ],
                 ],
-            ],
-        ]), $json);
+            ]),
+            $json,
+        );
     }
-
 }

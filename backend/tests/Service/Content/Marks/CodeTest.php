@@ -3,9 +3,9 @@
 namespace App\Tests\Service\Content\Marks;
 
 use App\Service\Content\ContentService;
-use PHPUnit\Framework\TestCase;
+use App\Tests\Case\KernelTestCase;
 
-class CodeTest extends TestCase
+class CodeTest extends KernelTestCase
 {
     public function test_json_to_html(): void
     {
@@ -25,7 +25,10 @@ class CodeTest extends TestCase
             ],
         ]);
         $this->assertIsString($json);
-        $html = new ContentService()->getHtmlFromJson($json);
+
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $html = $contentService->getHtmlFromJson($json);
         $this->assertStringContainsString(
             '<code>Example Text</code>',
             $html
@@ -36,7 +39,10 @@ class CodeTest extends TestCase
     {
         $content = 'Inline code';
         $html = "<p><code>$content</code></p>";
-        $json = (new ContentService())->getJsonFromHtml($html);
+
+        /** @var ContentService $contentService */
+        $contentService = $this->container->get(ContentService::class);
+        $json = $contentService->getJsonFromHtml($html);
         $this->assertSame(json_encode([
             'type' => 'doc',
             'content' => [

@@ -50,6 +50,10 @@ class ContentService
 }
 JSON;
 
+    /**
+     * @param TemplateVariables|null $variables set this to variables except content to use those variables
+     *                                          when rendering in the Custom HTML/Twig block
+     */
     public function getHtmlFromJson(string $content, ?TemplateVariables $variables = null): string
     {
         $document = Document::fromJson($this->getSchema($variables), $content);
