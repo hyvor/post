@@ -8,6 +8,7 @@ use App\Entity\Issue;
 use App\Service\Newsletter\NewsletterService;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Twig\Environment;
+use Twig\Error\Error as TwigError;
 
 class HtmlTemplateRenderer
 {
@@ -42,7 +43,11 @@ class HtmlTemplateRenderer
 
     public function render(string $template, TemplateVariables $variables): string
     {
-        $template = $this->twig->createTemplate($template);
-        return $template->render((array)$variables);
+        try {
+            $twigTemplate = $this->twig->createTemplate($template);
+            return $twigTemplate->render((array)$variables);
+        } catch (TwigError $e) {
+            throw new TemplateRenderException($e->getRawMessage());
+        }
     }
 }
