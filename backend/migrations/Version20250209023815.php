@@ -26,9 +26,7 @@ final class Version20250209023815 extends AbstractMigration
             user_id BIGINT NOT NULL,
             meta JSONB,
             name VARCHAR(255) NOT NULL,
-            test_sent_emails JSONB,
-            language_code VARCHAR(10) DEFAULT NULL,
-            is_rtl BOOLEAN NOT NULL DEFAULT FALSE
+            test_sent_emails JSONB
         );
         SQL
         );
