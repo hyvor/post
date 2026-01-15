@@ -162,17 +162,21 @@
 		{/if}
 	</SplitControl>
 
-	<SplitControl label="Language Code" caption="e.g., en, ar, he, fa">
+	<SplitControl
+		label="Language Code"
+		caption="Used in the lang tag in emails and archive site. e.g., en, fr, de"
+	>
 		<TextInput
 			bind:value={$newsletterEditingStore.language_code}
 			placeholder="en"
 			maxlength={10}
+			block
 		/>
 	</SplitControl>
 
 	<SplitControl
 		label="Right-to-Left (RTL)"
-		caption="Enable for RTL languages like Arabic, Hebrew"
+		caption="Enabling this will set the editor and newsletter layout to right-to-left."
 	>
 		<Switch bind:checked={$newsletterEditingStore.is_rtl} />
 	</SplitControl>
