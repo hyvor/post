@@ -20,6 +20,11 @@ class UpdateNewsletterInput extends NewsletterObject
         'created_at',
     ];
 
+    /**
+     * @var string[]|null
+     */
+    public ?array $allowed_domains;
+
     public function __construct()
     {
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
-use App\Api\Public\Input\Form\FormRenderInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
@@ -13,6 +12,7 @@ use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\AppConfig;
+use App\Service\Domain\DomainValidationService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
@@ -32,21 +32,36 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private NewsletterService     $newsletterService,
-        private NewsletterListService $newsletterListService,
-        private SubscriberService     $subscriberService,
-        private AppConfig             $appConfig,
+        private NewsletterService         $newsletterService,
+        private NewsletterListService     $newsletterListService,
+        private SubscriberService         $subscriberService,
+        private AppConfig                 $appConfig,
+        private DomainValidationService   $domainValidationService,
     )
     {
     }
 
     #[Route('/form/init', methods: 'POST')]
-    public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
+    public function init(
+        #[MapRequestPayload] FormInitInput $input,
+        Request $request
+    ): JsonResponse
     {
         $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
+        }
+
+        $referer = $request->headers->get('referer');
+        $domain = $referer ? $this->domainValidationService->extractDomainFromUrl($referer) : null;
+        $validationResult = $this->domainValidationService->validateDomain($newsletter, $domain);
+
+        if (!$validationResult->isAllowed) {
+            $settingsUrl = $this->appConfig->getUrlApp() . '/console/' . $newsletter->getId() . '/settings';
+            throw new UnprocessableEntityHttpException(
+                $validationResult->message . ' Settings: ' . $settingsUrl
+            );
         }
 
         $listIds = $input->list_ids;

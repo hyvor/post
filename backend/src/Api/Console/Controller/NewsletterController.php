@@ -102,6 +102,9 @@ class NewsletterController extends AbstractController
             }
             $updates->subdomain = $input->subdomain;
         }
+        if ($input->hasProperty('allowed_domains')) {
+            $updates->allowed_domains = $input->allowed_domains;
+        }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();

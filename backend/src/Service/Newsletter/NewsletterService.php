@@ -278,6 +278,10 @@ class NewsletterService
                 ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
+        if ($updates->hasProperty('allowed_domains')) {
+            $newsletter->setAllowedDomains($updates->allowed_domains);
+        }
+
         $newsletter->setUpdatedAt($this->now());
         $this->em->persist($newsletter);
         $this->em->flush();

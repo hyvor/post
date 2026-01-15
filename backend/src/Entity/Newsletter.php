@@ -39,6 +39,12 @@ class Newsletter
     #[ORM\Column(type: 'json')]
     private ?array $test_sent_emails = null;
 
+    /**
+     * @var string[]|null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $allowed_domains = null;
+
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -137,6 +143,24 @@ class Newsletter
     public function setTestSentEmails(?array $test_sent_emails): static
     {
         $this->test_sent_emails = $test_sent_emails;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getAllowedDomains(): ?array
+    {
+        return $this->allowed_domains;
+    }
+
+    /**
+     * @param string[]|null $allowed_domains
+     */
+    public function setAllowedDomains(?array $allowed_domains): static
+    {
+        $this->allowed_domains = $allowed_domains;
 
         return $this;
     }
