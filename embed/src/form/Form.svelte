@@ -192,6 +192,7 @@
 {:else}
 	<div
 		class="form"
+		dir={newsletter.direction}
 		style="
             --hp-text: {palette.text};
             --hp-accent: {palette.accent};

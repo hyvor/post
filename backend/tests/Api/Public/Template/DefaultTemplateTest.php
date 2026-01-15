@@ -23,11 +23,13 @@ class DefaultTemplateTest extends WebTestCase
 
         $template = $json['template'];
         $this->assertIsString($template);
-        $this->assertStringContainsString('<html lang="{{ lang }}">', $template);
+        $this->assertStringContainsString('<html lang="{{ lang }}" dir="{{ direction }}">', $template);
 
         $variables = $json['variables'];
         $this->assertIsArray($variables);
         $this->assertIsString($variables['lang']);
         $this->assertSame("en", $variables['lang']);
+        $this->assertIsString($variables['direction']);
+        $this->assertSame("ltr", $variables['direction']);
     }
 }

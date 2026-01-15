@@ -47,7 +47,7 @@
 		<span class="label">Border color</span>
 		<ColorPicker
 			color={currentState.color}
-			on:input={(e: CustomEvent<string>) => handleBoxBorderColorChange(e.detail)}
+			on:input={(e: CustomEvent) => handleBoxBorderColorChange(e.detail)}
 		/>
 	</div>
 </div>

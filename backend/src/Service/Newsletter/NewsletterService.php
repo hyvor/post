@@ -278,6 +278,14 @@ class NewsletterService
                 ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
+        if ($updates->hasProperty('language_code')) {
+            $newsletter->setLanguageCode($updates->language_code);
+        }
+
+        if ($updates->hasProperty('is_rtl')) {
+            $newsletter->setIsRtl($updates->is_rtl);
+        }
+
         $newsletter->setUpdatedAt($this->now());
         $this->em->persist($newsletter);
         $this->em->flush();
