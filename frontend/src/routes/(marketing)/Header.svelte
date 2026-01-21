@@ -25,6 +25,15 @@
 			>
 				Docs
 			</Button>
+
+			<Button
+				as="a"
+				size="small"
+				href="/integrations"
+				variant={$page.url.pathname.startsWith(`/integrations`) ? 'fill-light' : 'invisible'}
+			>
+				Integrations
+			</Button>
 			<Button
 				as="a"
 				target="_blank"

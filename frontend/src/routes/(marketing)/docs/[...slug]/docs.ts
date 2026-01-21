@@ -5,6 +5,7 @@ import SignupForm from './content/SignupForm.svelte';
 import Import from './content/Import/Import.svelte';
 import Approval from './content/Approval.svelte';
 import ConsoleApi from './content/ConsoleApi.svelte';
+import InstallDoc from './content/InstallDoc.svelte';
 
 export const categories: Category[] = [
 	{
@@ -19,6 +20,12 @@ export const categories: Category[] = [
 				slug: 'approval',
 				name: 'Approval',
 				component: Approval
+			},
+
+			{
+				slug: 'install',
+				name: 'Install',
+				component: InstallDoc
 			}
 		]
 	},
@@ -70,6 +77,6 @@ interface Category {
 interface Page {
 	slug: string;
 	name: string;
-	component?: Component;
+	component?: Component<any>;
 	parent?: string;
 }
