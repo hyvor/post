@@ -19,13 +19,15 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/sudo')
         ->namePrefix('api_sudo_');
 
+    $routes->import('../../src/Api/Machine/Controller', 'attribute')
+        ->prefix('/api/machine')
+        ->namePrefix('api_machine_');
+
     // root API
     $routes->import('../../src/Api/Root', 'attribute')
         ->prefix('/api')
         ->namePrefix('api_root_');
 
-
-    // local API (dev and test only)
     $routes->import('../../src/Api/Local', 'attribute')
         ->prefix('/api/local')
         ->condition('env("APP_ENV") in ["dev", "test"]')

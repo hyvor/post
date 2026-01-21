@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Api\Public\Integration\Relay;
+namespace App\Tests\Api\Machine\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SendStatus;
@@ -19,7 +19,7 @@ class RelayWebhookTest extends WebTestCase
     private function callWebhook(array $data): Response
     {
 
-        return $this->publicApi(
+        return $this->machineApi(
             'POST',
             '/integration/relay/webhook',
             $data
@@ -341,5 +341,37 @@ class RelayWebhookTest extends WebTestCase
 
         $response = $this->callWebhook($data);
         $this->assertSame(200, $response->getStatusCode());
+    }
+
+    public function test_machine_api_has_no_rate_limits(): void
+    {
+        $send = SendFactory::createOne([
+            'status' => SendStatus::PENDING,
+            'delivered_at' => null
+        ]);
+
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => $send->getId()
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        // Make 40 requests (more than the public API limit of 30)
+        for ($i = 0; $i < 40; $i++) {
+            $response = $this->callWebhook($data);
+            $this->assertSame(200, $response->getStatusCode());
+
+            $this->assertFalse($response->headers->has('RateLimit-Limit'));
+            $this->assertFalse($response->headers->has('RateLimit-Remaining'));
+            $this->assertFalse($response->headers->has('RateLimit-Reset'));
+        }
     }
 }
