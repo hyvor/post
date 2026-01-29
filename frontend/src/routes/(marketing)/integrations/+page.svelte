@@ -17,8 +17,3 @@ import FeatureSectionHead from "../@homepage/FeatureSectionHead.svelte";
 </div>
 
 <Integrations />
-
-
-
-
-

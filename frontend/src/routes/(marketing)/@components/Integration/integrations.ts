@@ -68,27 +68,27 @@ export const integrations: Integration[] = [
         color: '#0055ff'
     },
 
-    {
-        name: 'Google Forms',
-        category: 'Services',
-        logo: "/img/integrations/google-forms.png",
-        url: '/docs/install/google-forms',
-        color: '#34a853'
-    },
-    {
-        name: 'Typeform',
-        category: 'Services',
-        logo: "/img/integrations/typeform.png",
-        url: '/docs/install/typeform',
-        color: '#000000'
-    },
-    {
-        name: 'Shopify',
-        category: 'E-Commerce',
-        logo: "/img/integrations/shopify.png",
-        url: '/docs/install/shopify',
-        color: '#96bf48'
-    }
+    // {
+    //     name: 'Google Forms',
+    //     category: 'Services',
+    //     logo: "/img/integrations/google-forms.png",
+    //     url: '/docs/install/google-forms',
+    //     color: '#34a853'
+    // },
+    // {
+    //     name: 'Typeform',
+    //     category: 'Services',
+    //     logo: "/img/integrations/typeform.png",
+    //     url: '/docs/install/typeform',
+    //     color: '#000000'
+    // },
+    // {
+    //     name: 'Shopify',
+    //     category: 'E-Commerce',
+    //     logo: "/img/integrations/shopify.png",
+    //     url: '/docs/install/shopify',
+    //     color: '#96bf48'
+    // }
     
 ];
 

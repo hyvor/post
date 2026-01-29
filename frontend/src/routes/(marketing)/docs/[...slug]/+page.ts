@@ -6,9 +6,8 @@ export async function load({ params }) {
 	const slug = params.slug;
 
 	let page = null;
-	let installPlatform = null;
-console.log('--- DEBUG ---');
-    console.log('Raw Param Slug:', slug);
+	let installPlatform = 'html';
+
 	if (slug === undefined) {
 		page = pages[0];
 	} else if (slug.startsWith('install')) {
