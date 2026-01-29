@@ -5,7 +5,7 @@
 <div class="items-wrap hds-container">
 	<div class="items">
 		{#each categories as category}
-			<div role="heading" aria-level="2" class="category-name">{category.title}</div>
+			<!-- <div role="heading" aria-level="2" class="category-name">{category.title}</div> -->
 			<div class="cards-wrap">
 				{#each category.integrations as integration}
 					<a class="integration hds-box" href={integration.url}>

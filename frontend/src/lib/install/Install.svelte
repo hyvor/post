@@ -6,10 +6,12 @@
     interface Props {
         platform: string; 
         prefix: string;
-        websiteId?: null | number;
+        websiteId?: null | number | string;
     }
 
-    let { platform, prefix, websiteId = null }: Props = $props();
+    // let { platform, prefix, websiteId = null }: Props = $props();
+    let { platform = 'html', prefix, websiteId = null }: Props = $props();
+
 
     // 1. Safely derive platform data
     let platformData = $derived(platforms[platform]);
@@ -33,6 +35,8 @@
             </div>
         {/if}
     </DocsContent> -->
+    <p style="opacity:0.6">platform = "{platform}"</p>
+
 	<DocsContent>
 		{@const SvelteComponent = component}
 		<SvelteComponent />
