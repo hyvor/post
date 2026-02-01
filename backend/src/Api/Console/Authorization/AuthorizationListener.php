@@ -10,6 +10,7 @@ use App\Service\Newsletter\NewsletterService;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Auth\AuthUserOrganization;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class AuthorizationListener
     public const string RESOLVED_NEWSLETTER_ATTRIBUTE_KEY = 'console_api_resolved_newsletter';
     public const string RESOLVED_API_KEY_ATTRIBUTE_KEY = 'console_api_resolved_api_key';
     public const string RESOLVED_USER_ATTRIBUTE_KEY = 'console_api_resolved_user';
+    public const string RESOLVED_ORGANIZATION_ATTRIBUTE_KEY = 'console_api_resolved_organization';
 
     public function __construct(
         private AuthInterface     $auth,
@@ -96,9 +98,9 @@ class AuthorizationListener
         $newsletterId = $request->headers->get('x-newsletter-id');
         $isUserLevelEndpoint = count($event->getAttributes(UserLevelEndpoint::class)) > 0;
 
-        $user = $this->auth->check($request);
+        $me = $this->auth->me($request);
 
-        if ($user === false) {
+        if ($me === null) {
             throw new DataCarryingHttpException(
                 401,
                 [
@@ -108,6 +110,9 @@ class AuthorizationListener
                 'Unauthorized'
             );
         }
+
+        $user = $me->getUser();
+        $organization = $me->getOrganization();
 
         // user-level endpoints do not have a newsletter ID
         if ($isUserLevelEndpoint === false) {
@@ -129,6 +134,10 @@ class AuthorizationListener
         }
 
         $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
+
+        if ($organization) {
+            $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
+        }
     }
 
     /**
@@ -177,6 +186,19 @@ class AuthorizationListener
         $newsletter = $request->attributes->get(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY);
         assert($newsletter instanceof Newsletter);
         return $newsletter;
+    }
+
+    public static function hasOrganization(Request $request): bool
+    {
+        return $request->attributes->has(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY);
+    }
+
+    // make sure the organization is set before calling this
+    public static function getOrganization(Request $request): AuthUserOrganization
+    {
+        $organization = $request->attributes->get(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY);
+        assert($organization instanceof AuthUserOrganization);
+        return $organization;
     }
 
     // make sure the API key is set before calling this
