@@ -25,6 +25,7 @@ use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\InternalApi\Exceptions\InternalApiCallFailedException;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,6 +64,8 @@ class ConsoleController extends AbstractController
 
         return new JsonResponse([
             'newsletters' => $newsletters,
+            'user' => $user,
+            'organizations' => AuthorizationListener::getOrganization($request),
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -96,12 +99,16 @@ class ConsoleController extends AbstractController
 
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
+        $organization = $newsletter->getOrganizationId();
+        assert($organization !== null);
         $canChangeBranding = false;
+
         try {
-            $license = $this->billing->license(
-                $newsletter->getUserId(),
-                $newsletter->getId(),
+            $resolvedLicense = $this->billing->license(
+                $organization,
+                Component::POST,
             );
+            $license = $resolvedLicense->license;
             if ($license instanceof PostLicense) {
                 // can only change branding if no branding is enabled in license
                 $canChangeBranding = $license->allowRemoveBranding === true;
