@@ -12,7 +12,12 @@
     import {onMount} from 'svelte';
     import consoleApi from './lib/consoleApi';
     import {page} from '$app/state';
-    import {setAppConfig, getAppConfig, userApprovalStatusStore} from './lib/stores/consoleStore';
+    import {
+        setAppConfig,
+        getAppConfig,
+        userApprovalStatusStore,
+        authUserOrganizationStore
+    } from './lib/stores/consoleStore';
     import {setNewsletterStoreByNewsletterList} from './lib/stores/newsletterStore';
     import {userNewslettersStore} from './lib/stores/userNewslettersStore';
     import {goto} from "$app/navigation";
@@ -46,6 +51,7 @@
                 user = res.user;
                 organization = res.organization;
 
+                authUserOrganizationStore.set(organization);
                 userNewslettersStore.set(res.newsletters);
                 if (res.newsletters.length > 0) {
                     setNewsletterStoreByNewsletterList(res.newsletters[0]);

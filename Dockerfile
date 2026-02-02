@@ -23,7 +23,7 @@ COPY shared /app/shared
 
 ###################################################
 FROM frontend-base AS frontend-dev
-RUN npm install
+RUN npm install --force
 CMD ["npm", "run", "dev"]
 
 ###################################################

@@ -7,11 +7,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class InviteUserInput
 {
-
-    public ?string $username = null;
-
-    #[Assert\Email]
-    public ?string $email = null;
+    #[Assert\NotBlank]
+    #[Assert\Type('integer')]
+    #[Assert\Positive]
+    public int $userId;
 
 //    #[Assert\NotBlank]
 //    public UserRole $role;

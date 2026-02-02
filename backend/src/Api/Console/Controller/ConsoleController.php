@@ -25,6 +25,7 @@ use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
 use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\InternalApi\Exceptions\InternalApiCallFailedException;
 use Hyvor\Internal\InternalConfig;
@@ -65,7 +66,9 @@ class ConsoleController extends AbstractController
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
-            'organization' => AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null,
+            'organization' => AuthorizationListener::hasOrganization($request)
+                ? AuthorizationListener::getOrganization($request)
+                : null,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -99,21 +102,17 @@ class ConsoleController extends AbstractController
 
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
-        $organization = $newsletter->getOrganizationId();
-        assert($organization !== null);
+        $organizationId = $newsletter->getOrganizationId();
+        assert($organizationId !== null);
         $canChangeBranding = false;
 
         try {
-            $resolvedLicense = $this->billing->license(
-                $organization,
-                Component::POST,
-            );
-            $license = $resolvedLicense->license;
+            $license = $this->billing->license($organizationId)->license;
             if ($license instanceof PostLicense) {
                 // can only change branding if no branding is enabled in license
                 $canChangeBranding = $license->allowRemoveBranding === true;
             }
-        } catch (InternalApiCallFailedException) {
+        } catch (CommsApiFailedException) {
             $license = null;
         }
 

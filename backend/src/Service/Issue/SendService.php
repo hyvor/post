@@ -235,40 +235,22 @@ class SendService
         return $returnArray;
     }
 
-    public function getSendsCountThisMonthOfUser(int $hyvorUserId): int
+    public function getSendsCountThisMonthOfOrganization(int $organizationId): int
     {
         $query = <<<DQL
         SELECT COUNT(s.id)
         FROM App\Entity\Send s
         JOIN App\Entity\Newsletter p WITH s.newsletter = p.id
         WHERE
-            p.user_id = :hyvorUserId AND
+            p.organization_id = :organizationId AND
             s.created_at >= :startOfMonth AND
             s.created_at <= :endOfMonth
         DQL;
 
         $qb = $this->em->createQuery($query);
-        $qb->setParameter('hyvorUserId', $hyvorUserId);
+        $qb->setParameter('organizationId', $organizationId);
         $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
         $qb->setParameter('endOfMonth', $this->now()->modify('last day of this month'));
-
-        return (int)$qb->getSingleScalarResult();
-    }
-
-    public function getSendsCountThisMonthOfNewsletter(Newsletter $newsletter): int
-    {
-        $query = <<<DQL
-        SELECT COUNT(s.id)
-        FROM App\Entity\Send s
-        WHERE
-            s.newsletter = :newsletter AND
-            s.created_at >= :startOfMonth AND
-            s.status != 'failed'
-        DQL;
-
-        $qb = $this->em->createQuery($query);
-        $qb->setParameter('newsletter', $newsletter);
-        $qb->setParameter('startOfMonth', $this->now()->modify('first day of this month'));
 
         return (int)$qb->getSingleScalarResult();
     }
@@ -276,7 +258,7 @@ class SendService
     /**
      * @return array<string, int>
      */
-    public function getSendsCountLast12MonthsOfUser(int $hyvorUserId): array
+    public function getSendsCountLast12MonthsOfOrganization(int $organizationId): array
     {
         $now = $this->now();
         $date12MonthsAgo = $now->modify('-11 months'); // 11 months since we have to include this month
@@ -288,14 +270,14 @@ class SendService
         FROM sends
         INNER JOIN newsletters ON sends.newsletter_id = newsletters.id
         WHERE
-            newsletters.user_id = :hyvorUserId AND
+            newsletters.organization_id = :organizationId AND
             sends.created_at >= :startDate
         GROUP BY month
         SQL;
 
         $conn = $this->em->getConnection();
         $stmt = $conn->prepare($query);
-        $stmt->bindValue('hyvorUserId', $hyvorUserId);
+        $stmt->bindValue('organizationId', $organizationId);
         $stmt->bindValue('startDate', $date12MonthsAgo->format('Y-m-d H:i:s'));
 
         /** @var array<array{month: string, count: scalar}> $results */
