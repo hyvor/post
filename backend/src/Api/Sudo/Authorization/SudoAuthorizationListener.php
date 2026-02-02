@@ -29,9 +29,9 @@ class SudoAuthorizationListener
         }
 
         $request = $event->getRequest();
-        $user = $this->auth->check($request);
+        $user = $this->auth->me($request)?->getUser();
 
-        if ($user === false) {
+        if ($user === null) {
             throw new AccessDeniedHttpException('Not logged in');
         }
 
