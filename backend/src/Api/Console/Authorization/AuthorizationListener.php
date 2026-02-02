@@ -112,6 +112,7 @@ class AuthorizationListener
         }
 
         $user = $me->getUser();
+        $organization = $me->getOrganization();
 
         // user-level endpoints do not have a newsletter ID
         if ($isUserLevelEndpoint === false) {
@@ -133,7 +134,10 @@ class AuthorizationListener
         }
 
         $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
-        $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $me->getOrganization());
+
+        if ($organization !== null) {
+            $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
+        }
     }
 
     /**

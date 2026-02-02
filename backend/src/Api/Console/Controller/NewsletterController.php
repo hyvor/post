@@ -60,13 +60,14 @@ class NewsletterController extends AbstractController
         #[MapRequestPayload] CreateNewsletterInput $input
     ): JsonResponse
     {
-        $user = AuthorizationListener::getOrganization($request);
+        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
         if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name, $input->subdomain);
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $organization->id, $input->name, $input->subdomain);
         return $this->json(new NewsletterObject($newsletter));
     }
 

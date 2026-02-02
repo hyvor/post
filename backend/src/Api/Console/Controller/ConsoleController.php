@@ -65,7 +65,7 @@ class ConsoleController extends AbstractController
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
-            'organizations' => AuthorizationListener::getOrganization($request),
+            'organization' => AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -114,6 +114,7 @@ class ConsoleController extends AbstractController
                 $canChangeBranding = $license->allowRemoveBranding === true;
             }
         } catch (InternalApiCallFailedException) {
+            $license = null;
         }
 
         return new JsonResponse([
@@ -126,8 +127,7 @@ class ConsoleController extends AbstractController
             'permissions' => [
                 'can_change_branding' => $canChangeBranding,
             ],
-            'has_license' => (bool)$this->billing->license($newsletter->getUserId(), null),
+            'has_license' => (bool)$license
         ]);
     }
-
 }
