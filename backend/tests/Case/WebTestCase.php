@@ -24,8 +24,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
-
-    use AllTestCaseTrait;
     use ApiTestingTrait;
 
     protected KernelBrowser $client;

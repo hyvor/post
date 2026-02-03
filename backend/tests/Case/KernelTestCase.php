@@ -3,6 +3,7 @@
 namespace App\Tests\Case;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Bundle\Testing\BaseTestingTrait;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -10,8 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class KernelTestCase extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 {
-
-    use AllTestCaseTrait;
+    use BaseTestingTrait;
 
     protected Container $container;
     protected EntityManagerInterface $em;
