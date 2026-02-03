@@ -33,19 +33,6 @@ final class Version20260201120000 extends AbstractMigration
             ALTER TABLE approvals ADD COLUMN organization_id BIGINT DEFAULT NULL;
             SQL
         );
-        $this->addSql(
-            <<<SQL
-            ALTER TABLE users ADD COLUMN organization_id BIGINT DEFAULT NULL;
-            SQL
-        );
-        $this->addSql(
-            <<<SQL
-            ALTER TABLE users
-                DROP CONSTRAINT users_newsletter_id_hyvor_user_id_key,
-                ADD CONSTRAINT users_newsletter_id_hyvor_user_id_organization_id_key
-                    UNIQUE (newsletter_id, hyvor_user_id, organization_id);
-            SQL
-        );
     }
 
     public function down(Schema $schema): void

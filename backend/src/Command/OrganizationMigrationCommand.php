@@ -39,6 +39,7 @@ class OrganizationMigrationCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         while (true) {
+
             /** @var User[] $ownersWithoutOrg */
             $ownersWithoutOrg = $this->em->getRepository(User::class)
                 ->createQueryBuilder('u')
@@ -46,45 +47,36 @@ class OrganizationMigrationCommand extends Command
                 ->andWhere('u.organization_id IS NULL')
                 ->setParameter('owner', UserRole::OWNER)
                 ->orderBy('u.id', 'ASC')
-                ->setMaxResults(1000)
+                ->setMaxResults(100)
                 ->getQuery()
                 ->getResult();
 
-            if (count($ownersWithoutOrg) === 0) {
-                $output->writeln("{$this->now()}: No more users to update. Exiting.");
-                break;
-            }
-
             foreach ($ownersWithoutOrg as $owner) {
 
-                $initOrgEvent = new InitOrg($owner->getHyvorUserId());
+                $this->em->wrapInTransaction(function () use ($owner, $output) {
 
-                try {
+                    try {
 
-                    /** @var InitOrgResponse $initOrgResponse */
-                    $initOrgResponse = $this->comms->send($initOrgEvent);
-                    $createdOrgId = $initOrgResponse->orgId;
+                        $initOrgEvent = new InitOrg($owner->getHyvorUserId());
+                        /** @var InitOrgResponse $initOrgResponse */
+                        $initOrgResponse = $this->comms->send($initOrgEvent);
+                        $createdOrgId = $initOrgResponse->orgId;
 
-                    $owner->setOrganizationId($createdOrgId);
-                    $this->em->persist($owner);
+                        $this->migrateEntitiesToOrganization($owner, $createdOrgId);
+                        $this->ensureMembersOfOrganization($createdOrgId);
 
-                    $this->migrateEntitiesToOrganization($owner, $createdOrgId);
-                    $this->migrateResourceUsersToOrganization($owner, $createdOrgId);
+                    } catch (CommsApiFailedException|\Exception $e) {
 
-                } catch (CommsApiFailedException|\Exception $e) {
+                        $output->writeln('<error>Error occurred while migrating to organization. User ID: ' . $owner->getId() . '</error>');
+                        $output->writeln("<error>{$e->getMessage()}</error>");
 
-                    $output->writeln('<error>Error occurred while migrating to organization. User ID: ' . $owner->getId() . '</error>');
-                    $output->writeln("<error>{$e->getMessage()}</error>");
-                    continue;
-
-                }
+                    }
+                });
             }
 
             $output->writeln("{$this->now()}: Updated " . count($ownersWithoutOrg) . " users");
             sleep(2);
         }
-
-        return Command::SUCCESS;
     }
 
     private function migrateEntitiesToOrganization(User $owner, int $organizationId): void
@@ -115,19 +107,19 @@ class OrganizationMigrationCommand extends Command
     /**
      * @throws CommsApiFailedException|Exception
      */
-    private function migrateResourceUsersToOrganization(User $owner, int $organizationId): void
+    private function ensureMembersOfOrganization(int $organizationId): void
     {
         $conn = $this->em->getConnection();
         $userIds = $conn->fetchFirstColumn(
             <<<SQL
-                UPDATE users
-                SET organization_id = :orgId
-                WHERE newsletter_id = :newsletterId AND organization_id IS NULL
-                RETURNING id
+                SELECT u.id
+                FROM users u
+                JOIN newsletters n ON n.id = u.newsletter_id
+                WHERE n.organization_id = :orgId
+                  AND u.organization_id IS NULL
             SQL,
             [
                 'orgId' => $organizationId,
-                'newsletterId' => $owner->getNewsletter()->getId(),
             ]
         );
 

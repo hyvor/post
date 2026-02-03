@@ -27,7 +27,7 @@ class DomainController extends AbstractController
 
     public function __construct(
         private DomainService $domainService,
-        private AppConfig $appConfig,
+        private AppConfig     $appConfig,
     )
     {
     }
@@ -61,6 +61,7 @@ class DomainController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
         if ($input->domain === $this->appConfig->getSystemMailDomain()) {
             throw new BadRequestException('This domain is reserved and cannot be registered');
@@ -77,7 +78,7 @@ class DomainController extends AbstractController
         }
 
         try {
-            $domain = $this->domainService->createDomain($input->domain, $user->id);
+            $domain = $this->domainService->createDomain($input->domain, $user->id, $organization->id);
             return $this->json(new DomainObject($domain));
         } catch (CreateDomainException) {
             throw new BadRequestException('Failed to create domain. Contact support for more details');
