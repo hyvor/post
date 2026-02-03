@@ -58,6 +58,8 @@ class CreateNewsletterTest extends WebTestCase
 
     public function testCreateNewsletterValid(): void
     {
+        // TODO: Fix
+        // @phpstan-ignore-next-line
         $resource = ResourceFake::enableForSymfony($this->container);
 
         $response = $this->consoleApi(

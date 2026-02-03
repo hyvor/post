@@ -22,6 +22,8 @@ class DeleteNewsletterTest extends WebTestCase
     // TODO: tests for authentication
     public function testDeleteNewsletterFound(): void
     {
+        // TODO: Fix
+        // @phpstan-ignore-next-line
         $resource = ResourceFake::enableForSymfony($this->container);
 
         $newsletter = NewsletterFactory::createOne();

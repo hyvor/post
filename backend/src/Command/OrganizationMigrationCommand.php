@@ -14,6 +14,7 @@ use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\EnsureMembers;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrg;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrgResponse;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
+use phpDocumentor\Reflection\Types\ClassString;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -38,6 +39,7 @@ class OrganizationMigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // @phpstan-ignore-next-line
         while (true) {
 
             /** @var User[] $ownersWithoutOrg */
@@ -74,7 +76,7 @@ class OrganizationMigrationCommand extends Command
                 });
             }
 
-            $output->writeln("{$this->now()}: Updated " . count($ownersWithoutOrg) . " users");
+            $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users");
             sleep(2);
         }
     }
@@ -92,6 +94,9 @@ class OrganizationMigrationCommand extends Command
         }
     }
 
+    /**
+     * @param class-string $entityClass
+     */
     private function updateEntityOfUser(string $entityClass, User $owner, int $organizationId): void
     {
         $this->em->createQueryBuilder()
@@ -122,6 +127,15 @@ class OrganizationMigrationCommand extends Command
                 'orgId' => $organizationId,
             ]
         );
+
+        if (count($userIds) === 0) {
+            return;
+        }
+
+        $userIds = array_map(function ($id) {
+            /** @var int|string $id */
+            return intval($id);
+        }, $userIds);
 
         $ensureMembersEvent = new EnsureMembers(
             $organizationId,
