@@ -27,6 +27,9 @@ class User
     #[ORM\Column]
     private int $hyvor_user_id;
 
+    #[ORM\Column]
+    private int $organization_id;
+
     #[ORM\Column(nullable: false, enumType: UserRole::class)]
     private UserRole $role;
 
@@ -86,6 +89,18 @@ class User
     public function setHyvorUserId(int $hyvor_user_id): static
     {
         $this->hyvor_user_id = $hyvor_user_id;
+
+        return $this;
+    }
+
+    public function getOrganizationId(): int
+    {
+        return $this->organization_id;
+    }
+
+    public function setOrganizationId(int $organization_id): static
+    {
+        $this->organization_id = $organization_id;
 
         return $this;
     }

@@ -49,7 +49,7 @@ class UserController extends AbstractController
     #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
     {
-        $this->userService->deleteUser($newsletter, $user);
+        $this->userService->deleteUser($user);
         return $this->json([]);
     }
 
