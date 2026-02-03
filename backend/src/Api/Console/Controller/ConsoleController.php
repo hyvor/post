@@ -70,7 +70,7 @@ class ConsoleController extends AbstractController
             'newsletters' => $newsletters,
             'user' => $user,
             'organization' => $organization,
-            'resolved_license' => $this->billing->license($organization->id),
+            'resolved_license' => $organization ? $this->billing->license($organization->id) : null,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),

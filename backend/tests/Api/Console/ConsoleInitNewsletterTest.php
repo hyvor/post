@@ -15,6 +15,8 @@ use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -27,7 +29,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
     {
         BillingFake::enableForSymfony(
             $this->container,
-            license: new PostLicense(allowRemoveBranding: true)
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
         );
 
         $newsletter = NewsletterFactory::createOne();
@@ -123,7 +125,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
     {
         BillingFake::enableForSymfony(
             $this->container,
-            license: new PostLicense(allowRemoveBranding: false)
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, false))]
         );
 
         $newsletter = NewsletterFactory::createOne();
@@ -204,7 +206,10 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'status' => SendStatus::SENT,
         ]);
 
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter,
@@ -228,6 +233,4 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $this->assertSame(13.64, $complainedRate['total']);
         $this->assertSame(12.5, $complainedRate['last_30_days']);
     }
-
-
 }

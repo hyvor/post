@@ -171,12 +171,15 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
         }
 
-        $license = $this->billing->license($issue->getNewsletter()->getOrganizationId())->license;
+        $organizationId = $issue->getNewsletter()->getOrganizationId();
+        assert($organizationId !== null);
+
+        $license = $this->billing->license($organizationId)->license;
         if (!$license instanceof PostLicense) {
             throw new UnprocessableEntityHttpException("License not found or invalid.");
         }
 
-        $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($issue->getNewsletter()->getOrganizationId());
+        $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);
         if ($sendCountThisMonth + $subscribersCount >= $license->emails)
             return $this->json([
                 'message' => 'would_exceed_limit',

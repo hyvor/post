@@ -6,7 +6,10 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\BlogsLicense;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 
@@ -17,7 +20,10 @@ class GetUsageTest extends WebTestCase
     {
         $date = new \DateTimeImmutable('2025-05-10');
         Clock::set(new MockClock($date));
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
 
         // current user sends
         $currentUserNewsletter = NewsletterFactory::createOne(['user_id' => 1]);

@@ -23,6 +23,8 @@ use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\InternalConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -200,8 +202,10 @@ class SendIssueTest extends WebTestCase
             'sending_profile' => $sendingProfile,
         ]);
 
-        $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->container, $licence);
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(10, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter,
@@ -274,8 +278,10 @@ class SendIssueTest extends WebTestCase
             'content' => "content"
         ]);
 
-        $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->container, $licence);
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter,
