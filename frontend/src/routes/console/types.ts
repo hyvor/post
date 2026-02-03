@@ -114,12 +114,30 @@ export type User = {
     user: UserMini;
 };
 
+export type AuthUser = {
+    id: number;
+    name: string | null;
+    username?: string;
+    email: string;
+    picture_url: string | null;
+}
+
 export type OrganizationRole = 'admin' | 'manager' | 'member' | 'billing';
 
 export type Organization = {
     id: number;
     name: string;
     role: OrganizationRole;
+}
+
+export interface ResolvedLicense {
+    type: 'enterprise_contract' | 'subscription' | 'trial' | 'expired' | 'none';
+    license: Record<string, number | boolean> | null;
+    subscription: null | {
+        plan_readable_name: string;
+        cancel_at: null | number;
+    };
+    trial_ends_at: null | number;
 }
 
 export type NewsletterList = {

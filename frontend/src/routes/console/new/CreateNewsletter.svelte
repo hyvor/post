@@ -1,15 +1,12 @@
 <script lang="ts">
     import {goto} from '$app/navigation';
     import {
-        Button,
         FormControl,
-        Loader,
         SplitControl,
         TextInput,
         toast,
         Validation
     } from '@hyvor/design/components';
-    import IconCaretLeft from '@hyvor/icons/IconCaretLeft';
     import {addUserNewsletter, userNewslettersStore} from '../lib/stores/userNewslettersStore';
     import {createNewsletter, getSubdomainAvailability} from '../lib/actions/newsletterActions';
     import {validateSubdomain} from '../lib/subdomain';
@@ -103,7 +100,7 @@
         }
     }
 
-    function handleCreate() {
+    async function handleCreate(): Promise<boolean> {
         let valid = true;
 
         if (name.trim() === '') {
@@ -117,22 +114,23 @@
         }
 
         if (!valid) {
-            return;
+            return false;
         }
 
         isCreating = true;
 
-        createNewsletter(name, subdomain)
-            .then((res) => {
-                const list: NewsletterList = {role: 'owner', newsletter: res};
-                addUserNewsletter(list);
-                setNewsletterStoreByNewsletterList(list);
-                goto('/console/' + res.subdomain);
-            })
-            .catch((e) => {
-                toast.error(e.message);
-                isCreating = false;
-            });
+        try {
+            const res = await createNewsletter(name, subdomain);
+            const list: NewsletterList = {role: 'owner', newsletter: res};
+            addUserNewsletter(list);
+            setNewsletterStoreByNewsletterList(list);
+            goto('/console/' + res.subdomain);
+            return true;
+        } catch (e: any) {
+            toast.error(e.message);
+            isCreating = false;
+            return false;
+        }
     }
 </script>
 
@@ -151,7 +149,7 @@
                     bind:value={name}
                     on:input={handleNameInput}
                     on:keydown={(e) => e.key === 'Enter' && handleCreate()}
-                    maxlength="255"
+                    maxlength={255}
                     state={nameError ? 'error' : undefined}
                     autofocus
             />
@@ -169,7 +167,7 @@
                     block
                     bind:value={subdomain}
                     on:input={handleSubdomainInput}
-                    maxlength="50"
+                    maxlength={50}
                     state={subdomainError
 								? 'error'
 								: subdomainSuccess
@@ -198,124 +196,7 @@
     </SplitControl>
 </ResourceCreator>
 
-<!--<div class="wrap">-->
-<!--    <div class="inner hds-box">-->
-<!--        <div class="back">-->
-<!--            <Button size="small" color="input" on:click={handleBack} disabled={isCreating}>-->
-<!--                {#snippet start()}-->
-<!--                    <IconCaretLeft size={14}/>-->
-<!--                {/snippet}-->
-<!--                Back-->
-<!--            </Button>-->
-<!--        </div>-->
-
-<!--        {#if isCreating}-->
-<!--            <Loader block padding={130}>Creating your newsletter...</Loader>-->
-<!--        {:else}-->
-<!--            <div class="title">Start a new newsletter</div>-->
-
-<!--            <div class="form">-->
-<!--                <SplitControl label="Name" caption="A name for your newsletter">-->
-<!--                    <FormControl>-->
-<!--                        <TextInput-->
-<!--                                block-->
-<!--                                bind:value={name}-->
-<!--                                on:input={handleNameInput}-->
-<!--                                on:keydown={(e) => e.key === 'Enter' && handleCreate()}-->
-<!--                                maxlength="255"-->
-<!--                                state={nameError ? 'error' : undefined}-->
-<!--                                autofocus-->
-<!--                        />-->
-
-<!--                        {#if nameError}-->
-<!--                            <Validation state="error">-->
-<!--                                {nameError}-->
-<!--                            </Validation>-->
-<!--                        {/if}-->
-<!--                    </FormControl>-->
-<!--                </SplitControl>-->
-<!--                <SplitControl label="Subdomain" caption="Only a-z, 0-9, and hyphens (-)">-->
-<!--                    <FormControl>-->
-<!--                        <TextInput-->
-<!--                                block-->
-<!--                                bind:value={subdomain}-->
-<!--                                on:input={handleSubdomainInput}-->
-<!--                                maxlength="50"-->
-<!--                                state={subdomainError-->
-<!--								? 'error'-->
-<!--								: subdomainSuccess-->
-<!--									? 'success'-->
-<!--									: undefined}-->
-<!--                        >-->
-<!--                            {#snippet end()}-->
-<!--								<span class="archive-hostname"-->
-<!--                                >.{getArchiveUrlAsUrl().hostname}</span-->
-<!--                                >-->
-<!--                            {/snippet}-->
-<!--                        </TextInput>-->
-
-<!--                        {#if subdomainError}-->
-<!--                            <Validation state="error">-->
-<!--                                {subdomainError}-->
-<!--                            </Validation>-->
-<!--                        {/if}-->
-
-<!--                        {#if subdomainSuccess}-->
-<!--                            <Validation state="success">-->
-<!--                                {subdomainSuccess}-->
-<!--                            </Validation>-->
-<!--                        {/if}-->
-<!--                    </FormControl>-->
-<!--                </SplitControl>-->
-<!--            </div>-->
-
-<!--            <div class="footer">-->
-<!--                <Button size="large" on:click={handleCreate}>Create Newsletter</Button>-->
-<!--            </div>-->
-<!--        {/if}-->
-<!--    </div>-->
-<!--</div>-->
-
 <style>
-    .back {
-        position: absolute;
-        bottom: 100%;
-        left: 0;
-        padding: 15px 0;
-    }
-
-    .wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100vh;
-    }
-
-    .title {
-        padding: 25px;
-        font-weight: 600;
-        font-size: 22px;
-        text-align: center;
-    }
-
-    .inner {
-        width: 650px;
-        max-width: 100%;
-        position: relative;
-    }
-
-    .form {
-        padding: 0 20px;
-    }
-
-    .footer {
-        padding: 20px;
-        padding-bottom: 30px;
-        text-align: center;
-    }
-
     .archive-hostname {
         color: var(--text-light);
         font-size: 14px;

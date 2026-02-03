@@ -55,6 +55,9 @@ class ConsoleController extends AbstractController
     public function initConsole(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::hasOrganization($request)
+            ? AuthorizationListener::getOrganization($request)
+            : null;
 
         $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);
         $newsletters = array_map(
@@ -66,9 +69,8 @@ class ConsoleController extends AbstractController
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
-            'organization' => AuthorizationListener::hasOrganization($request)
-                ? AuthorizationListener::getOrganization($request)
-                : null,
+            'organization' => $organization,
+            'resolved_license' => $this->billing->license($organization->id),
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),

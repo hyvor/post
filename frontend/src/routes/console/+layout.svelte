@@ -8,7 +8,7 @@
     import {CloudContext, type CloudContextOrganization, type CloudContextUser, HyvorBar} from '@hyvor/design/cloud';
     import en from '../../../../shared/locale/en.json';
     import fr from '../../../../shared/locale/fr.json';
-    import type {AppConfig, ApprovalStatus, NewsletterList} from './types';
+    import type {AppConfig, ApprovalStatus, NewsletterList, ResolvedLicense} from './types';
     import {onMount} from 'svelte';
     import consoleApi from './lib/consoleApi';
     import {page} from '$app/state';
@@ -16,7 +16,7 @@
         setAppConfig,
         getAppConfig,
         userApprovalStatusStore,
-        authUserOrganizationStore
+        authUserOrganizationStore, authUserStore, resolvedLicenseStore
     } from './lib/stores/consoleStore';
     import {setNewsletterStoreByNewsletterList} from './lib/stores/newsletterStore';
     import {userNewslettersStore} from './lib/stores/userNewslettersStore';
@@ -32,13 +32,12 @@
         config: AppConfig;
         user: CloudContextUser
         organization: CloudContextOrganization;
+        resolved_license: ResolvedLicense;
         newsletters: NewsletterList[];
         user_approval: ApprovalStatus;
     }
 
     let isLoading = $state(true);
-    let user: CloudContextUser | null = $state(null);
-    let organization: CloudContextOrganization | null = $state(null);
 
     function startConsole(switchingOrg = false) {
         consoleApi
@@ -48,10 +47,10 @@
             })
             .then((res) => {
                 setAppConfig(res.config);
-                user = res.user;
-                organization = res.organization;
 
-                authUserOrganizationStore.set(organization);
+                authUserOrganizationStore.set(res.organization);
+                authUserStore.set(res.user);
+                resolvedLicenseStore.set(res.resolved_license);
                 userNewslettersStore.set(res.newsletters);
                 if (res.newsletters.length > 0) {
                     setNewsletterStoreByNewsletterList(res.newsletters[0]);
@@ -113,8 +112,9 @@
 						component: 'post',
 						deployment: 'cloud',
 						instance: getAppConfig().hyvor.instance,
-						user: user,
-						organization,
+						user: $authUserStore,
+						organization: $authUserOrganizationStore,
+						license: $resolvedLicenseStore,
 						callbacks: {
 							onOrganizationSwitch: (switcher) => {
 								isLoading = true;
