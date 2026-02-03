@@ -119,4 +119,4 @@ jobs:
         run: cd embed && npm ci && npm run lint
 
       - name: Frontend
-        run: cd frontend && npm ci && npm run lint
+        run: cd frontend && npm ci --force && npm run lint

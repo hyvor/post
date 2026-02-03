@@ -1,11 +1,11 @@
 :root {
-	--accent: #5a8387 !important;
-	--width: 95vw;
-	--max-width: 1440px;
+  --accent: #5a8387 !important;
+  --width: 95vw;
+  --max-width: 1440px;
 }
 
 :root:not(.dark) {
-	--accent-light: #e5f1f2;
-	--accent-lightest: #fbfdff;
-	--accent-light-mid: #eaf1f2;
+  --accent-light: #e5f1f2;
+  --accent-lightest: #fbfdff;
+  --accent-light-mid: #eaf1f2;
 }

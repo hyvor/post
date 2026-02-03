@@ -1,9 +1,9 @@
 export interface TemplateResponse {
-	template: string;
-	variables: Record<string, any>;
+  template: string;
+  variables: Record<string, any>;
 }
 
 export interface TemplateTestClass {
-	template: string;
-	variables: string;
+  template: string;
+  variables: string;
 }
