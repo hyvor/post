@@ -25,7 +25,7 @@ class GetNewsletterTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         UserFactory::createOne([
-            'newsletter' => $newsletter,
+            'newsletter_id' => $newsletter->getId(),
             'hyvor_user_id' => 1,
             'role' => UserRole::OWNER
         ]);

@@ -62,7 +62,7 @@ class NewsletterService
                 ->setCreatedAt($this->now())
                 ->setUpdatedAt($this->now())
                 ->setHyvorUserId($userId)
-                ->setNewsletter($newsletter)
+                ->setNewsletterId($newsletter->getId())
                 ->setRole(UserRole::OWNER);
 
             $list = new NewsletterList()
@@ -129,28 +129,63 @@ class NewsletterService
         return $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
     }
 
+//    /**
+//     * @return array<array{newsletter: Newsletter, user: User}>
+//     */
+//    public function getNewslettersOfUser(int $hyvorUserId): array
+//    {
+//        $query = <<<DQL
+//            SELECT u, p
+//            FROM App\Entity\User u
+//            JOIN u.newsletter p
+//            WHERE u.hyvor_user_id = :hyvor_user_id
+//        DQL;
+//
+//        $query = $this->em->createQuery($query);
+//        $query->setParameter('hyvor_user_id', $hyvorUserId);
+//        /** @var User[] $users */
+//        $users = $query->getResult();
+//
+//        $newsletters = [];
+//        foreach ($users as $user) {
+//            $newsletters[] = [
+//                'newsletter_id' => $user->getNewsletterId(),
+//                'user' => $user,
+//            ];
+//        }
+//        return $newsletters;
+//    }
+
     /**
      * @return array<array{newsletter: Newsletter, user: User}>
      */
     public function getNewslettersOfUser(int $hyvorUserId): array
     {
-        $query = <<<DQL
-            SELECT u, p
-            FROM App\Entity\User u
-            JOIN u.newsletter p
-            WHERE u.hyvor_user_id = :hyvor_user_id
-        DQL;
+        $qb = $this->em->createQueryBuilder()
+            ->select('u', 'n')
+            ->from(User::class, 'u')
+            ->innerJoin(
+                Newsletter::class,
+                'n',
+                'WITH',
+                'n.id = u.newsletter_id'
+            )
+            ->where('u.hyvor_user_id = :hyvorUserId')
+            ->setParameter('hyvorUserId', $hyvorUserId);
 
-        $query = $this->em->createQuery($query);
-        $query->setParameter('hyvor_user_id', $hyvorUserId);
-        /** @var User[] $users */
-        $users = $query->getResult();
+        /** @var array<int, User|Newsletter> $results */
+        $results = $qb->getQuery()->getResult();
 
         $newsletters = [];
-        foreach ($users as $user) {
+        for ($i = 0; $i < count($results); $i += 2) {
+            $user = $results[$i];
+            $newsletter = $results[$i + 1];
+
+            assert($user instanceof User && $newsletter instanceof Newsletter);
+
             $newsletters[] = [
-                'newsletter' => $user->getNewsletter(),
                 'user' => $user,
+                'newsletter' => $newsletter,
             ];
         }
         return $newsletters;

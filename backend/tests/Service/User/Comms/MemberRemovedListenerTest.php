@@ -15,25 +15,56 @@ class MemberRemovedListenerTest extends WebTestCase
 {
     public function test_delete_users(): void
     {
-        $deletingMemberUserId = 12345;
-        $deletingMemberOrganizationId = 1;
+        $removingMemberUserId = 12345;
+        $removingMemberOrganizationId = 1;
 
-        UserFactory::createMany(2, [
-            'newsletter' => NewsletterFactory::new(),
-            'hyvor_user_id' => $deletingMemberUserId,
-            'organization_id' => $deletingMemberOrganizationId,
+        $newsletters = NewsletterFactory::createMany(2, [
+            'created_by_user_id' => $removingMemberUserId,
+            'organization_id' => $removingMemberOrganizationId,
         ]);
-        UserFactory::createMany(3, [
-            'newsletter' => NewsletterFactory::new(),
-            'hyvor_user_id' => $deletingMemberUserId,
+        UserFactory::createOne([
+            'newsletter_id' => $newsletters[0]->getId(),
+            'hyvor_user_id' => $removingMemberUserId
+        ]);
+        UserFactory::createOne([
+            'newsletter_id' => $newsletters[1]->getId(),
+            'hyvor_user_id' => $removingMemberUserId
+        ]);
+
+        $moreNewsletters1 = NewsletterFactory::createMany(3, [
+            'created_by_user_id' => $removingMemberUserId,
             'organization_id' => 2,
         ]);
-        UserFactory::createMany(4, [
-            'newsletter' => NewsletterFactory::createOne(),
-            'organization_id' => $deletingMemberOrganizationId
+        UserFactory::createOne([
+            'newsletter_Id' => $moreNewsletters1[0]->getId(),
+            'hyvor_user_id' => $removingMemberUserId
+        ]);
+        UserFactory::createOne([
+            'newsletter_Id' => $moreNewsletters1[1]->getId(),
+            'hyvor_user_id' => $removingMemberUserId
+        ]);
+        UserFactory::createOne([
+            'newsletter_Id' => $moreNewsletters1[2]->getId(),
+            'hyvor_user_id' => $removingMemberUserId
         ]);
 
-        $this->getEd()->dispatch(new MemberRemoved($deletingMemberOrganizationId, $deletingMemberUserId));
+        $moreNewsletters2 = NewsletterFactory::createMany(4, [
+            'organization_id' => $removingMemberOrganizationId,
+        ]);
+        UserFactory::createOne([
+            'newsletter_id' => $moreNewsletters2[0]->getId(),
+        ]);
+        UserFactory::createOne([
+            'newsletter_id' => $moreNewsletters2[1]->getId(),
+        ]);
+        UserFactory::createOne([
+            'newsletter_id' => $moreNewsletters2[2]->getId(),
+        ]);
+        UserFactory::createOne([
+            'newsletter_id' => $moreNewsletters2[3]->getId(),
+        ]);
+
+        $this->getEd()->dispatch(new MemberRemoved($removingMemberOrganizationId, $removingMemberUserId));
 
         $remainingUsers = $this->getEm()->getRepository(User::class)->findAll();
         $this->assertCount(7, $remainingUsers);

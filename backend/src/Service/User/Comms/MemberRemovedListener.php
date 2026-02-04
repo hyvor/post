@@ -2,6 +2,7 @@
 
 namespace App\Service\User\Comms;
 
+use App\Entity\Newsletter;
 use App\Entity\User;
 use App\Service\User\UserService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,11 +21,21 @@ class MemberRemovedListener
 
     public function __invoke(MemberRemoved $event): void
     {
-        $users = $this->em->getRepository(User::class)
-            ->findBy([
-                'organization_id' => $event->getOrganizationId(),
-                'hyvor_user_id' => $event->getUserId(),
-            ]);
+        /** @var User[] $users */
+        $users = $this->em->createQueryBuilder()
+            ->select('u')
+            ->from(User::class, 'u')
+            ->innerJoin(
+                Newsletter::class,
+                'n',
+                'WITH',
+                'n.id = u.newsletter_id AND n.organization_id = :organizationId'
+            )
+            ->where('u.hyvor_user_id = :userId')
+            ->setParameter('organizationId', $event->getOrganizationId())
+            ->setParameter('userId', $event->getUserId())
+            ->getQuery()
+            ->getResult();
 
         foreach ($users as $user) {
             $this->userService->deleteUser($user, flush: false);

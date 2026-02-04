@@ -24,7 +24,7 @@ class UserService
     public function getNewsletterUsers(Newsletter $newsletter): ArrayCollection
     {
         $users = $this->em->getRepository(User::class)->findBy([
-            'newsletter' => $newsletter,
+            'newsletter_id' => $newsletter->getId(),
         ]);
 
         if (!$users) {
@@ -37,7 +37,7 @@ class UserService
     public function hasAccessToNewsletter(Newsletter $newsletter, int $hyvorUserId): bool
     {
         $user = $this->em->getRepository(User::class)->findOneBy([
-            'newsletter' => $newsletter,
+            'newsletter_id' => $newsletter->getId(),
             'hyvor_user_id' => $hyvorUserId,
         ]);
 
@@ -50,7 +50,7 @@ class UserService
     public function isAdmin(Newsletter $newsletter, int $hyvorUserId): bool
     {
         $user = $this->em->getRepository(User::class)->findBy([
-            'newsletter' => $newsletter,
+            'newsletter_id' => $newsletter->getId(),
             'hyvor_user_id' => $hyvorUserId,
             'role' => UserRole::ADMIN->value
         ]);
@@ -66,7 +66,7 @@ class UserService
         $user = new User();
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
-        $user->setNewsletter($newsletter);
+        $user->setNewsletterId($newsletter->getId());
         $user->setHyvorUserId($hyvorUserId);
         $user->setRole(UserRole::ADMIN); // Hardcoded for now
 

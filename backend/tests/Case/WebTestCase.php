@@ -121,7 +121,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));
             if ($newsletter) {
                 UserFactory::findOrCreate([
-                    'newsletter' => $newsletter,
+                    'newsletter_id' => $newsletter->getId(),
                     'hyvor_user_id' => 1,
                 ]);
                 $server['HTTP_X_NEWSLETTER_ID'] = (string)$newsletterId;
