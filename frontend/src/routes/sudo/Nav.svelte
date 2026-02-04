@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { statsStore } from './lib/stores/sudoStore.js';
 	import { Tag } from '@hyvor/design/components';
+	import IconSend from '@hyvor/icons/IconSend';
 </script>
 
 <div class="nav">
@@ -40,7 +41,10 @@
 		<Divider margin={10} />
 
 		<NavLink href="/sudo/messenger" active={$page.url.pathname === '/sudo/messenger'}>
-			Messenger
+			<NavItem>
+				<IconSend slot="icon" />
+				<span slot="text"> Messenger </span>
+			</NavItem>
 		</NavLink>
 	</div>
 </div>
