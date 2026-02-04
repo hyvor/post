@@ -967,6 +967,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     faker?: array{ // Configure the faker used by your factories.
  *         locale?: scalar|Param|null, // The default locale to use for faker. // Default: null
  *         seed?: scalar|Param|null, // Deprecated: The "faker.seed" configuration is deprecated and will be removed in 3.0. Use environment variable "FOUNDRY_FAKER_SEED" instead. // Random number generator seed to produce the same fake values every run. // Default: null
+ *         manage_seed?: bool|Param, // Automatically manage faker seed to ensure consistent data between test runs. // Default: true
  *         service?: scalar|Param|null, // Service id for custom faker instance. // Default: null
  *     },
  *     instantiator?: array{ // Configure the default instantiator used by your object factories.
@@ -1303,6 +1304,18 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         ...<mixed>
  *     },
  * }
+ * @psalm-type ZenstruckMessengerMonitorConfig = array{
+ *     storage?: array{
+ *         exclude?: list<scalar|Param|null>,
+ *         orm?: array{
+ *             entity_class?: scalar|Param|null, // Your Doctrine entity class that extends "Zenstruck\Messenger\Monitor\History\Model\ProcessedMessage"
+ *         },
+ *     },
+ *     cache?: array{
+ *         pool?: scalar|Param|null, // Cache pool to use for worker cache. // Default: "cache.app"
+ *         expired_worker_ttl?: int|Param, // How long to keep expired workers in cache (in seconds). // Default: 3600
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1317,6 +1330,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     nelmio_cors?: NelmioCorsConfig,
  *     twig_component?: TwigComponentConfig,
  *     twig_extra?: TwigExtraConfig,
+ *     zenstruck_messenger_monitor?: ZenstruckMessengerMonitorConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1334,6 +1348,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         nelmio_cors?: NelmioCorsConfig,
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
+ *         zenstruck_messenger_monitor?: ZenstruckMessengerMonitorConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1349,6 +1364,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         nelmio_cors?: NelmioCorsConfig,
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
+ *         zenstruck_messenger_monitor?: ZenstruckMessengerMonitorConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1367,6 +1383,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         nelmio_cors?: NelmioCorsConfig,
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
+ *         zenstruck_messenger_monitor?: ZenstruckMessengerMonitorConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
