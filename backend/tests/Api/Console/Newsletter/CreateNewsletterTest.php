@@ -58,10 +58,6 @@ class CreateNewsletterTest extends WebTestCase
 
     public function testCreateNewsletterValid(): void
     {
-        // TODO: Fix
-        // @phpstan-ignore-next-line
-        $resource = ResourceFake::enableForSymfony($this->container);
-
         $response = $this->consoleApi(
             null,
             'POST',
@@ -101,7 +97,7 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
         $this->assertTrue($sendingProfiles[0]->getIsDefault());
 
-        $resource->assertRegistered($newsletter->getUserId(), $newsletter->getId());
+        // TODO: Make sure if the rosource is created in CORE
     }
 
     public function testCreateNewsletterInvalid(): void

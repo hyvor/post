@@ -27,13 +27,15 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_stats_subscribers_and_issues(): void
     {
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
+        $otherNewsletter = NewsletterFactory::createOne();
+
         BillingFake::enableForSymfony(
             $this->container,
             [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
         );
-
-        $newsletter = NewsletterFactory::createOne();
-        $otherNewsletter = NewsletterFactory::createOne();
 
         // --- subscribers
 
@@ -123,12 +125,14 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_when_can_no_permissions_to_change_branding(): void
     {
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
+
         BillingFake::enableForSymfony(
             $this->container,
             [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, false))]
         );
-
-        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -146,7 +150,9 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_stats_bounced_complained_rates(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $issueThisMonth = IssueFactory::createOne([
             'newsletter' => $newsletter,

@@ -63,6 +63,11 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::ADMIN
         ]);
 
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
+
         $response = $this->consoleApi(
             null,
             'GET',
@@ -91,7 +96,9 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitNewsletter(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $newsletterId = $newsletter->getId();
 
@@ -127,7 +134,9 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitNewsletterWithLists(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
