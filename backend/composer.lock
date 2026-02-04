@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33d461a621e7e7e95d262568f8c90d82",
+    "content-hash": "a63533e25599f837b1cb7462a25a950e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9775,6 +9775,156 @@
             "time": "2025-12-07T01:59:12+00:00"
         },
         {
+            "name": "zenstruck/bytes",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zenstruck/bytes.git",
+                "reference": "c1f173d65b2a4adf5d24af8c7aa8965e44ce029a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zenstruck/bytes/zipball/c1f173d65b2a4adf5d24af8c7aa8965e44ce029a",
+                "reference": "c1f173d65b2a4adf5d24af8c7aa8965e44ce029a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^9.6.0",
+                "symfony/phpunit-bridge": "^6.4|^7.0|^8.0",
+                "symfony/var-dumper": "^6.4|^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zenstruck\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Bond",
+                    "email": "kevinbond@gmail.com"
+                }
+            ],
+            "description": "Parse, manipulate, humanize, and format bytes.",
+            "homepage": "https://github.com/zenstruck/bytes",
+            "keywords": [
+                "information",
+                "unit"
+            ],
+            "support": {
+                "issues": "https://github.com/zenstruck/bytes/issues",
+                "source": "https://github.com/zenstruck/bytes/tree/v1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nikophil",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-07T03:43:30+00:00"
+        },
+        {
+            "name": "zenstruck/collection",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zenstruck/collection.git",
+                "reference": "c0cf465bf5366efca12bd30c0e1479514db8e01f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zenstruck/collection/zipball/c0cf465bf5366efca12bd30c0e1479514db8e01f",
+                "reference": "c0cf465bf5366efca12bd30c0e1479514db8e01f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "composer-runtime-api": "^2.0",
+                "doctrine/collections": "^2.1",
+                "doctrine/dbal": ">=3.0",
+                "doctrine/doctrine-bundle": "^2.7|^3.0",
+                "doctrine/orm": "^2.20.7|^3.5.3",
+                "pagerfanta/pagerfanta": "^1.0|^2.0|^3.0|^4.0",
+                "phpstan/phpstan": "^2.1.17",
+                "phpunit/phpunit": "^9.6.21",
+                "symfony/expression-language": "^6.4|^7.0|^8.0",
+                "symfony/framework-bundle": "^6.4|^7.0|^8.0",
+                "symfony/phpunit-bridge": "^6.3|^7.0|^8.0",
+                "symfony/var-dumper": "^6.4|^7.0|^8.0",
+                "zenstruck/foundry": "^2.0",
+                "zenstruck/uri": "^2.3"
+            },
+            "suggest": {
+                "doctrine/collections": "To use CollectionDecorator.",
+                "doctrine/orm": "To use ORM implementation and batch utilities (>=2.20.7).",
+                "pagerfanta/pagerfanta": "To use CollectionAdapter."
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Zenstruck\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Bond",
+                    "email": "kevinbond@gmail.com"
+                }
+            ],
+            "description": "Helpers for iterating/paginating/filtering collections (with Doctrine ORM/DBAL implementations and batch processing utilities).",
+            "homepage": "https://github.com/zenstruck/collection",
+            "keywords": [
+                "batch",
+                "collection",
+                "dbal",
+                "doctrine",
+                "iterate",
+                "orm",
+                "pager",
+                "paginate"
+            ],
+            "support": {
+                "issues": "https://github.com/zenstruck/collection/issues",
+                "source": "https://github.com/zenstruck/collection/tree/v0.8.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nikophil",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-08T02:34:26+00:00"
+        },
+        {
             "name": "zenstruck/foundry",
             "version": "v2.9.0",
             "source": {
@@ -9897,6 +10047,89 @@
                 }
             ],
             "time": "2026-02-04T10:34:12+00:00"
+        },
+        {
+            "name": "zenstruck/messenger-monitor-bundle",
+            "version": "v0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zenstruck/messenger-monitor-bundle.git",
+                "reference": "9917c0b87744246d69b8baa963f5b100c1e9c6a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zenstruck/messenger-monitor-bundle/zipball/9917c0b87744246d69b8baa963f5b100c1e9c6a5",
+                "reference": "9917c0b87744246d69b8baa963f5b100c1e9c6a5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/framework-bundle": "^6.4.1|^7.0|^8.0",
+                "symfony/messenger": "^6.4|^7.0|^8.0",
+                "zenstruck/bytes": "^1.0",
+                "zenstruck/collection": "^0.8"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "^2.10|^3.0",
+                "doctrine/orm": "^2.15|^3.1",
+                "knplabs/knp-time-bundle": "^1.20|^2.0",
+                "lorisleiva/cron-translator": "^0.4.3",
+                "matthiasnoback/symfony-dependency-injection-test": "^4.3|^5.0|^6.0",
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^9.6.0|^10.0",
+                "symfony/config": "^6.4|^7.0|^8.0",
+                "symfony/console": "^6.4|^7.0|^8.0",
+                "symfony/http-client-contracts": "^3.3",
+                "symfony/mailer": "^6.4|^7.0|^8.0",
+                "symfony/phpunit-bridge": "^6.1|^7.0|^8.0",
+                "symfony/process": "^6.4|^7.0|^8.0",
+                "symfony/scheduler": "^6.4|^7.0|^8.0",
+                "symfony/security-bundle": "^6.4|^7.0|^8.0",
+                "symfony/serializer": "^6.4|^7.0|^8.0",
+                "symfony/var-dumper": "^6.4|^7.0|^8.0",
+                "zenstruck/console-test": "^1.5",
+                "zenstruck/foundry": "^2.2",
+                "zenstruck/messenger-test": "^1.11"
+            },
+            "suggest": {
+                "knplabs/knp-time-bundle": "For human readable timestamps and durations on your dashboard.",
+                "lorisleiva/cron-translator": "For human readable cron expressions on your dashboard."
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Zenstruck\\Messenger\\Monitor\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Bond",
+                    "email": "kevinbond@gmail.com"
+                }
+            ],
+            "description": "Batteries included UI to monitor your Messenger workers, transports, schedules, and messages.",
+            "homepage": "https://github.com/zenstruck/messenger-monitor-bundle",
+            "support": {
+                "issues": "https://github.com/zenstruck/messenger-monitor-bundle/issues",
+                "source": "https://github.com/zenstruck/messenger-monitor-bundle/tree/v0.6.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nikophil",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-08T16:38:05+00:00"
         },
         {
             "name": "zenstruck/messenger-test",
