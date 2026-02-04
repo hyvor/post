@@ -44,7 +44,8 @@
         "symfony/yaml": "7.3.*",
         "twig/cssinliner-extra": "^3.21",
         "twig/extra-bundle": "^3.21",
-        "symfony/dom-crawler": "7.3.*"
+        "symfony/dom-crawler": "7.3.*",
+        "zenstruck/messenger-monitor-bundle": "^0.6.0"
     },
     "bump-after-update": true,
     "sort-packages": true,
