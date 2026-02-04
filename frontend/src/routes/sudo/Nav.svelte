@@ -1,11 +1,12 @@
 <script>
-	import { NavLink } from '@hyvor/design/components';
+	import { Divider, NavLink } from '@hyvor/design/components';
 	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 	import NavItem from '../console/@components/Nav/NavItem.svelte';
 	import { page } from '$app/stores';
 	import { statsStore } from './lib/stores/sudoStore.js';
 	import { Tag } from '@hyvor/design/components';
+	import IconSend from '@hyvor/icons/IconSend';
 </script>
 
 <div class="nav">
@@ -34,6 +35,15 @@
 						</Tag>
 					{/if}
 				</span>
+			</NavItem>
+		</NavLink>
+
+		<Divider margin={10} />
+
+		<NavLink href="/sudo/messenger" active={$page.url.pathname === '/sudo/messenger'}>
+			<NavItem>
+				<IconSend slot="icon" />
+				<span slot="text"> Messenger </span>
 			</NavItem>
 		</NavLink>
 	</div>

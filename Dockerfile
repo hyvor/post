@@ -116,6 +116,7 @@ WORKDIR /app/backend
 # install php and dependencies
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 RUN install-php-extensions zip intl pdo_pgsql opcache apcu
+RUN apt update && apt install -y supervisor
 
 
 ###################################################
@@ -129,6 +130,7 @@ COPY backend /app/backend/
 COPY shared /app/shared/
 
 COPY meta/image/dev/Caddyfile.dev /etc/caddy/Caddyfile
+COPY meta/image/dev/supervisord.dev.conf /etc/supervisor/conf.d/supervisord.conf
 COPY meta/image/dev/php.dev.ini /usr/local/etc/php/conf.d/app.ini
 COPY meta/image/dev/run.dev /app/run
 CMD ["sh", "/app/run"]
@@ -138,7 +140,6 @@ FROM backend-base AS final
 # supervisor
 # nodejs for archive
 RUN apt update \
-    && apt install -y supervisor \
     && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt install -y nodejs
 

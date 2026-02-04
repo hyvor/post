@@ -21,9 +21,7 @@ return static function (RoutingConfigurator $routes): void {
 
     // root API
     $routes->import('../../src/Api/Root', 'attribute')
-        ->prefix('/api')
-        ->namePrefix('api_root_');
-
+        ->prefix('/api');
 
     // local API (dev and test only)
     $routes->import('../../src/Api/Local', 'attribute')
