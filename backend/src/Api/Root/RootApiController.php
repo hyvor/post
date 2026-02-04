@@ -12,7 +12,7 @@ class RootApiController
     {
     }
 
-    #[Route('/health', methods: ['GET'])]
+    #[Route('/api/health', methods: ['GET'])]
     public function health(): JsonResponse
     {
         // to force database connection

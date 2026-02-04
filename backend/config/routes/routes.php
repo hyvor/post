@@ -20,9 +20,7 @@ return static function (RoutingConfigurator $routes): void {
         ->namePrefix('api_sudo_');
 
     // root API
-    $routes->import('../../src/Api/Root', 'attribute')
-        ->prefix('/api')
-        ->namePrefix('api_root_');
+    $routes->import('../../src/Api/Root', 'attribute');
 
 
     // local API (dev and test only)

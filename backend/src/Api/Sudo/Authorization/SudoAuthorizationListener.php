@@ -24,7 +24,10 @@ class SudoAuthorizationListener
     public function __invoke(ControllerEvent $event): void
     {
         // sudo API requests only
-        if (!str_starts_with($event->getRequest()->getPathInfo(), '/api/sudo')) {
+        if (
+            !str_starts_with($event->getRequest()->getPathInfo(), '/api/sudo') &&
+            !str_starts_with($event->getRequest()->getPathInfo(), '/api/messenger')
+        ) {
             return;
         }
 
