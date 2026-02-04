@@ -14,12 +14,12 @@ use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\EnsureMembers;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrg;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrgResponse;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
-use phpDocumentor\Reflection\Types\ClassString;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'organization:migrate',
@@ -32,6 +32,7 @@ class OrganizationMigrationCommand extends Command
     public function __construct(
         private EntityManagerInterface $em,
         private CommsInterface         $comms,
+        private KernelInterface        $kernel,
     )
     {
         parent::__construct();
@@ -45,15 +46,21 @@ class OrganizationMigrationCommand extends Command
             /** @var User[] $ownersWithoutOrg */
             $ownersWithoutOrg = $this->em->getRepository(User::class)
                 ->createQueryBuilder('u')
+                ->join(Newsletter::class, 'n', 'WITH', 'u.newsletter = n.id AND n.organization_id IS NULL')
                 ->where('u.role = :owner')
-                ->andWhere('u.organization_id IS NULL')
                 ->setParameter('owner', UserRole::OWNER)
                 ->orderBy('u.id', 'ASC')
                 ->setMaxResults(100)
                 ->getQuery()
                 ->getResult();
 
+            if ($this->kernel->getEnvironment() === 'test' && count($ownersWithoutOrg) === 0) {
+                $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: No more users to update. Exiting.");
+                break;
+            }
+
             foreach ($ownersWithoutOrg as $owner) {
+
 
                 $this->em->wrapInTransaction(function () use ($owner, $output) {
 
@@ -62,6 +69,7 @@ class OrganizationMigrationCommand extends Command
                         $initOrgEvent = new InitOrg($owner->getHyvorUserId());
                         /** @var InitOrgResponse $initOrgResponse */
                         $initOrgResponse = $this->comms->send($initOrgEvent);
+
                         $createdOrgId = $initOrgResponse->orgId;
 
                         $this->migrateEntitiesToOrganization($owner, $createdOrgId);
@@ -79,6 +87,8 @@ class OrganizationMigrationCommand extends Command
             $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users");
             sleep(2);
         }
+
+        return Command::SUCCESS;
     }
 
     private function migrateEntitiesToOrganization(User $owner, int $organizationId): void
@@ -104,7 +114,7 @@ class OrganizationMigrationCommand extends Command
             ->set('e.organization_id', ':orgId')
             ->where('e.user_id = :userId')
             ->setParameter('orgId', $organizationId)
-            ->setParameter('userId', $owner->getId())
+            ->setParameter('userId', $owner->getHyvorUserId())
             ->getQuery()
             ->execute();
     }
@@ -117,11 +127,10 @@ class OrganizationMigrationCommand extends Command
         $conn = $this->em->getConnection();
         $userIds = $conn->fetchFirstColumn(
             <<<SQL
-                SELECT u.id
+                SELECT u.hyvor_user_id
                 FROM users u
                 JOIN newsletters n ON n.id = u.newsletter_id
                 WHERE n.organization_id = :orgId
-                  AND u.organization_id IS NULL
             SQL,
             [
                 'orgId' => $organizationId,
