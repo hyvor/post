@@ -22,18 +22,13 @@ class MemberRemovedListener
     public function __invoke(MemberRemoved $event): void
     {
         /** @var User[] $users */
-        $users = $this->em->createQueryBuilder()
-            ->select('u')
-            ->from(User::class, 'u')
-            ->innerJoin(
-                Newsletter::class,
-                'n',
-                'WITH',
-                'n.id = u.newsletter_id AND n.organization_id = :organizationId'
-            )
-            ->where('u.hyvor_user_id = :userId')
-            ->setParameter('organizationId', $event->getOrganizationId())
-            ->setParameter('userId', $event->getUserId())
+        $users = $this->em
+            ->getRepository(User::class)
+            ->createQueryBuilder('u')
+            ->join('u.newsletter', 'n', 'WITH', 'n.organization_id = :orgId')
+            ->where('u.hyvor_user_id = :hyvorUserId')
+            ->setParameter('orgId', $event->getOrganizationId())
+            ->setParameter('hyvorUserId', $event->getUserId())
             ->getQuery()
             ->getResult();
 

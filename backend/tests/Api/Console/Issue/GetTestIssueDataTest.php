@@ -37,7 +37,7 @@ class GetTestIssueDataTest extends WebTestCase
         );
 
         UserFactory::createOne([
-            'newsletter_id' => $newsletter->getId(),
+            'newsletter' => $newsletter,
             'hyvor_user_id' => 15,
             'role' => UserRole::OWNER
         ]);

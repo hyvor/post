@@ -17,48 +17,16 @@ class UserDeletedListenerTest extends WebTestCase
     {
         $deletingUserId = 12345;
 
-        $newsletters = NewsletterFactory::createMany(2, [
-            'organization_id' => 250,
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $newsletters[0]->getId(),
+        UserFactory::createMany(2, [
+            'newsletter' => NewsletterFactory::new(),
             'hyvor_user_id' => $deletingUserId
         ]);
-        UserFactory::createOne([
-            'newsletter_id' => $newsletters[1]->getId(),
+        UserFactory::createMany(3, [
+            'newsletter' => NewsletterFactory::new(),
             'hyvor_user_id' => $deletingUserId
         ]);
-
-        $otherNewsletters1 = NewsletterFactory::createMany(3, [
-            'organization_id' => 251,
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters1[0]->getId(),
-            'hyvor_user_id' => $deletingUserId
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters1[1]->getId(),
-            'hyvor_user_id' => $deletingUserId
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters1[2]->getId(),
-            'hyvor_user_id' => $deletingUserId
-        ]);
-
-        $otherNewsletters2 = NewsletterFactory::createMany(4, [
-            'organization_id' => 250,
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters2[0]->getId(),
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters2[1]->getId(),
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters2[2]->getId(),
-        ]);
-        UserFactory::createOne([
-            'newsletter_id' => $otherNewsletters2[3]->getId(),
+        UserFactory::createMany(4, [
+            'newsletter' => NewsletterFactory::createOne()
         ]);
 
         $this->getEd()->dispatch(new UserDeleted($deletingUserId));
