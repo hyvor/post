@@ -33,7 +33,7 @@ class ImportSubscribersMessageHandler
 
     public function __invoke(ImportSubscribersMessage $message): void
     {
-        ini_set('memory_limit', '150M');
+        ini_set('memory_limit', '800M');
 
         $subscriberImport = $this->em->getRepository(SubscriberImport::class)->find($message->getSubscriberImportId());
         assert($subscriberImport !== null);
