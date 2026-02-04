@@ -1,5 +1,5 @@
 <script>
-	import { NavLink } from '@hyvor/design/components';
+	import { Divider, NavLink } from '@hyvor/design/components';
 	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
 	import IconBoxArrowInDown from '@hyvor/icons/IconBoxArrowInDown';
 	import NavItem from '../console/@components/Nav/NavItem.svelte';
@@ -35,6 +35,12 @@
 					{/if}
 				</span>
 			</NavItem>
+		</NavLink>
+
+		<Divider margin={10} />
+
+		<NavLink href="/sudo/messenger" active={$page.url.pathname === '/sudo/messenger'}>
+			Messenger
 		</NavLink>
 	</div>
 </div>
