@@ -101,6 +101,7 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $message = new SendIssueMessage($issue->getId());
         $this->getMessageBus()->dispatch($message);
 
+        $this->em->clear();
         $this->transport('async')->throwExceptions()->process(1);
 
         $allMessages = $this->transport('async')->queue()->all();
@@ -113,5 +114,31 @@ class SendIssueMessageHandlerTest extends KernelTestCase
             'newsletter' => $newsletter->getId(),
         ]);
         $this->assertCount(3, $sends);
+    }
+
+    public function test_paginates(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscribers = SubscriberFactory::createMany(3, [
+            'newsletter' => $newsletter,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $transport = $this->transport('async')->throwExceptions();
+        $transport->send(new SendIssueMessage($issue->getId(), paginationSize: 2));
+        $transport->processOrFail(1);
+
+        $messages = $transport->queue()->all();
+        $this->assertCount(3, $messages);
     }
 }

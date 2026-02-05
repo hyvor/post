@@ -8,12 +8,18 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 readonly class SendIssueMessage
 {
     public function __construct(
-        private int $issueId
+        private int $issueId,
+        private int $paginationSize = 1000,
     ) {
     }
 
     public function getIssueId(): int
     {
         return $this->issueId;
+    }
+
+    public function getPaginationSize(): int
+    {
+        return $this->paginationSize;
     }
 }
