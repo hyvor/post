@@ -56,14 +56,17 @@ class OrganizationMigrationCommandTest extends KernelTestCase
         $this->assertSame(0, $exitCode);
 
         $this->getComms()->assertSent(InitOrg::class, Component::CORE);
+
+        /** @var array<int, array{event: EnsureMembers}> $sentEvents */
         $sentEvents = $this->getComms()->getSentsByEventClass(EnsureMembers::class);
+        $this->assertCount(3, $sentEvents);
 
         foreach ($shouldReceiveEnsureMembers as $receivable) {
 
             $event = array_values(array_filter(
                 $sentEvents,
                 fn(array $item) => $item['event']->orgId === $receivable['newsletter']->getOrganizationId()
-            ))[0] ?? null;
+            ))[0];
 
             $this->assertSame($receivable['userIds'], $event['event']->userIds);
         }
