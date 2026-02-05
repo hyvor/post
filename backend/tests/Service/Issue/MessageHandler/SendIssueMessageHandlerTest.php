@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\MessageHandler\Issue;
+namespace Service\Issue\MessageHandler;
 
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
@@ -11,8 +11,8 @@ use App\Service\Issue\MessageHandler\SendIssueMessageHandler;
 use App\Service\Issue\SendService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -101,6 +101,7 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $message = new SendIssueMessage($issue->getId());
         $this->getMessageBus()->dispatch($message);
 
+        $this->em->clear();
         $this->transport('async')->throwExceptions()->process(1);
 
         $allMessages = $this->transport('async')->queue()->all();
@@ -113,5 +114,31 @@ class SendIssueMessageHandlerTest extends KernelTestCase
             'newsletter' => $newsletter->getId(),
         ]);
         $this->assertCount(3, $sends);
+    }
+
+    public function test_paginates(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscribers = SubscriberFactory::createMany(3, [
+            'newsletter' => $newsletter,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $transport = $this->transport('async')->throwExceptions();
+        $transport->send(new SendIssueMessage($issue->getId(), paginationSize: 2));
+        $transport->processOrFail(1);
+
+        $messages = $transport->queue()->all();
+        $this->assertCount(3, $messages);
     }
 }
