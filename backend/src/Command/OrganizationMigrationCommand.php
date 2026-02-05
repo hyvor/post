@@ -40,7 +40,6 @@ class OrganizationMigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // @phpstan-ignore-next-line
         while (true) {
 
             /** @var User[] $ownersWithoutOrg */
