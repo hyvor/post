@@ -57,7 +57,7 @@
 			user.
 		</li>
 		<li>
-			<strong>You:</strong> A customer or subscriber or entity who visits our Services.
+			<strong>You:</strong> A customer, subscriber, or entity who visits our Services.
 		</li>
 	</ul>
 
@@ -75,11 +75,7 @@
 			forms.
 		</li>
 		<li>
-			<strong>Email Analytics (Optional):</strong> If enabled, we collect email open rates and
-			click-through rates for performance analytics.
-		</li>
-		<li>
-			<strong>Content Data:</strong> Nnewsletters, drafts, and metadata you create within the Hyvor
+			<strong>Content Data:</strong> Newsletters, drafts, and metadata you create within the Hyvor
 			Post platform.
 		</li>
 	</ul>
@@ -88,12 +84,11 @@
 	<ul>
 		<li>To deliver your newsletters to your subscribers.</li>
 		<li>To help you manage, export, or delete your subscriber list.</li>
-		<li>To provide engagement analytics if you enable them.</li>
 		<li>To improve our service and diagnose issues.</li>
 	</ul>
 
 	<p>
-		We do not sell, rent, or use your data and your subscribers' data for any advertising
+		We do not sell, rent, or use your data or your subscribers' data for any advertising
 		purposes.
 	</p>
 	<hr />
@@ -125,8 +120,8 @@
 	<h2 id="data-processors">6. Data Processors</h2>
 	<p>
 		We use GDPR-compliant sub-processors (e.g., email delivery providers) to send newsletters
-		and ensure platform stability. A full list is available at <a href="https://hyvor.com/sub"
-			>sub-processors of HYVOR</a
+		and ensure platform stability. A full list is available at the <a
+			href="https://hyvor.com/sub">sub-processors of HYVOR</a
 		>.
 	</p>
 
