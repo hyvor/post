@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\MessageHandler\Issue;
+namespace Service\Issue\MessageHandler;
 
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
@@ -11,8 +11,8 @@ use App\Service\Issue\MessageHandler\SendIssueMessageHandler;
 use App\Service\Issue\SendService;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
