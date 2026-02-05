@@ -7,12 +7,12 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 #[AsMessage('async')]
 readonly class SendIssueMessage
 {
-    
-    public const PAGINATION_SIZE = 1000;
+
+    public const int PAGINATION_SIZE = 1000;
 
     public function __construct(
         private int $issueId,
-        private int $paginationSize = 1000,
+        private int $paginationSize = self::PAGINATION_SIZE,
     ) {
     }
 
