@@ -15,6 +15,7 @@ class RetryIssueCommandTest extends KernelTestCase {
     public function test_retries(): void
     {
 
+        $this->assertNotNull(self::$kernel);
         $application = new Application(self::$kernel);
         $command = $application->find('issue:retry');
 
