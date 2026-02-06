@@ -49,8 +49,8 @@
 	<h2 id="definitions">1. Definitions</h2>
 	<ul>
 		<li>
-			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content
-			and newsletters.
+			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content and
+			newsletters.
 		</li>
 		<li>
 			<strong>Subscriber:</strong> A person who subscribes to a newsletter created by a Hyvor Post

@@ -22,6 +22,12 @@ const config = {
 
 			entries: ['*', '/hosting']
 		}
+	},
+
+	compilerOptions: {
+		experimental: {
+			async: true
+		}
 	}
 };
 

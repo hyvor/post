@@ -23,6 +23,8 @@ use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\InternalConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
@@ -177,8 +179,9 @@ class SendIssueTest extends WebTestCase
     {
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
-
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1
+        ]);
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
@@ -200,8 +203,10 @@ class SendIssueTest extends WebTestCase
             'sending_profile' => $sendingProfile,
         ]);
 
-        $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->container, $licence);
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(10, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter,
@@ -243,8 +248,11 @@ class SendIssueTest extends WebTestCase
 
     public function test_send_issue_rate_limit(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        Clock::set(new MockClock('2025-02-21'));
 
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1
+        ]);
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
@@ -264,7 +272,7 @@ class SendIssueTest extends WebTestCase
             'status' => SendStatus::SENT,
             'issue' => $issueSent,
             'newsletter' => $newsletter,
-            'created_at' => new \DateTimeImmutable(),
+            'created_at' => new \DateTimeImmutable('2025-02-21'),
         ]);
 
         $issue = IssueFactory::createOne([
@@ -274,8 +282,10 @@ class SendIssueTest extends WebTestCase
             'content' => "content"
         ]);
 
-        $licence = new PostLicense(emails: 10);
-        BillingFake::enableForSymfony($this->container, $licence);
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(10, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter,

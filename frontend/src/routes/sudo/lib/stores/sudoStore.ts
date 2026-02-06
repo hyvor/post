@@ -2,7 +2,10 @@ import { writable } from 'svelte/store';
 import type { Approval, SubscriberImport, SudoConfig, SudoStats } from '../../types';
 
 export const configStore = writable<SudoConfig>();
-export const statsStore = writable<SudoStats>({ reviewing_approvals: 0, pending_imports: 0 });
+export const statsStore = writable<SudoStats>({
+	reviewing_approvals: 0,
+	pending_imports: 0
+});
 export const approvalStore = writable<Approval[]>([]);
 export const subscriberImportStore = writable<SubscriberImport[]>([]);
 

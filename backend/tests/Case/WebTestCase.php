@@ -10,6 +10,7 @@ use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Sudo\SudoUserFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Monolog\Handler\TestHandler;
@@ -24,8 +25,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
-
-    use AllTestCaseTrait;
     use ApiTestingTrait;
 
     protected KernelBrowser $client;
@@ -40,7 +39,15 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $this->container = static::getContainer();
         if ($this->shouldEnableAuthFake()) {
-            AuthFake::enableForSymfony($this->container, ['id' => 1]);
+            AuthFake::enableForSymfony(
+                $this->container,
+                ['id' => 1],
+                new AuthUserOrganization(
+                    id: 1,
+                    name: 'Fake Organization',
+                    role: 'admin',
+                )
+            );
         }
         /** @var EntityManagerInterface $em */
         $em = $this->container->get(EntityManagerInterface::class);
