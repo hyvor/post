@@ -46,7 +46,7 @@ class SendIssueMessageHandler
 
         $this->sendService->paginateSendableSubscribers(
             $issue,
-            1000,
+            $message->getPaginationSize(),
             function (Issue $issue, Subscriber $subscriber) use (&$currentIndex) {
 
                 $this->sendJob(
@@ -65,6 +65,7 @@ class SendIssueMessageHandler
         $this->issueService->updateIssue($issue, $updates);
     }
 
+    // this is idempotent
     private function sendJob(
         Issue      $issue,
         Subscriber $subscriber,

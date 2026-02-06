@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\MessageHandler\Issue;
+namespace Service\Issue\MessageHandler;
 
 use App\Entity\Issue;
 use App\Entity\Send;
@@ -12,8 +12,8 @@ use App\Service\Issue\Message\SendEmailMessage;
 use App\Service\Issue\MessageHandler\SendEmailMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;

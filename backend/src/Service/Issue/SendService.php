@@ -95,17 +95,33 @@ class SendService
 
     public function paginateSendableSubscribers(Issue $issue, int $size, callable $callback): void
     {
-        $query = $this->getSendableSubscribersQuery($issue)
-            ->select('s')
-            ->orderBy('s.id', 'ASC')
-            ->setFirstResult(0)
-            ->setMaxResults($size)
-            ->getQuery();
+        $offset = 0;
 
-        $paginator = new Paginator($query);
-        foreach ($paginator as $subscriber) {
-            $callback($issue, $subscriber);
-        }
+        do {
+            $query = $this
+                ->getSendableSubscribersQuery($issue)
+                ->select('s')
+                ->orderBy('s.id', 'ASC')
+                ->setFirstResult($offset)
+                ->setMaxResults($size)
+                ->getQuery();
+
+            /** @var Subscriber[] $results */
+            $results = $query->getResult();
+
+            if (count($results) === 0) {
+                break;
+            }
+
+            foreach ($results as $subscriber) {
+                $callback($issue, $subscriber);
+
+                // prevent memory leak in doctrine cache
+                $this->em->detach($subscriber);
+            }
+
+            $offset += $size;
+        } while (true);
     }
 
     public function createSend(Issue $issue, Subscriber $subscriber): int|false
