@@ -82,6 +82,7 @@ class ApprovalService
 
     public function createApproval(
         int     $userId,
+        int     $organizationId,
         string  $companyName,
         string  $country,
         string  $website,
@@ -112,6 +113,7 @@ class ApprovalService
 
         $approval = new Approval();
         $approval->setUserId($userId)
+            ->setOrganizationId($organizationId)
             ->setStatus(ApprovalStatus::REVIEWING)
             ->setCompanyName($companyName)
             ->setCountry($country)

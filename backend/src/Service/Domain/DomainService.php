@@ -87,7 +87,11 @@ class DomainService
     /**
      * @throws CreateDomainException
      */
-    public function createDomain(string $domain, int $userId): Domain
+    public function createDomain(
+        string $domain,
+        int    $userId,
+        int    $organizationId
+    ): Domain
     {
 
         try {
@@ -103,6 +107,7 @@ class DomainService
         $domainEntity = new Domain();
         $domainEntity->setDomain($domain);
         $domainEntity->setUserId($userId);
+        $domainEntity->setOrganizationId($organizationId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
         $domainEntity->setDkimHost($response->dkim_host);

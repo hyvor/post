@@ -74,7 +74,6 @@ class User
     public function setNewsletter(Newsletter $newsletter): static
     {
         $this->newsletter = $newsletter;
-
         return $this;
     }
 

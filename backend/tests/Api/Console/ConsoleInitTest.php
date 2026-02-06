@@ -15,6 +15,8 @@ use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -61,6 +63,11 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::ADMIN
         ]);
 
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
+
         $response = $this->consoleApi(
             null,
             'GET',
@@ -89,7 +96,9 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitNewsletter(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $newsletterId = $newsletter->getId();
 
@@ -99,7 +108,10 @@ class ConsoleInitTest extends WebTestCase
             'role' => UserRole::OWNER
         ]);
 
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -122,7 +134,9 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitNewsletterWithLists(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
@@ -168,7 +182,10 @@ class ConsoleInitTest extends WebTestCase
             $newsletterList->addSubscriber($subscriber->_real());
         }
 
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+        );
 
         $response = $this->consoleApi(
             $newsletter->getId(),

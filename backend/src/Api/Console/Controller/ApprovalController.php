@@ -58,6 +58,7 @@ class ApprovalController extends AbstractController
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
         if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('Account already approved');
@@ -69,6 +70,7 @@ class ApprovalController extends AbstractController
 
         $approval = $this->approvalService->createApproval(
             userId: $user->id,
+            organizationId: $organization->id,
             companyName: $input->company_name,
             country: $input->country,
             website: $input->website,

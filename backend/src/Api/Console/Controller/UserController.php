@@ -4,17 +4,15 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Input\UserInvite\InviteUserInput;
-use App\Api\Console\Object\UserInviteObject;
+use App\Api\Console\Input\UserInvite\CreateUserInput;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Newsletter;
-use App\Entity\Type\UserRole;
 use App\Entity\User;
-use App\Entity\UserInvite;
 use App\Service\User\UserService;
-use App\Service\UserInvite\UserInviteService;
 use Hyvor\Internal\Auth\AuthInterface;
-use InvalidArgumentException;
+use Hyvor\Internal\Bundle\Comms\CommsInterface;
+use Hyvor\Internal\Bundle\Comms\Event\ToCore\Organization\VerifyMember;
+use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -23,11 +21,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
-
     public function __construct(
-        private AuthInterface     $auth,
-        private UserService       $userService,
-        private UserInviteService $userInviteService,
+        private AuthInterface  $auth,
+        private UserService    $userService,
+        private CommsInterface $comms,
     )
     {
     }
@@ -52,75 +49,46 @@ class UserController extends AbstractController
     #[ScopeRequired(Scope::USERS_WRITE)]
     public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
     {
-        $this->userService->deleteUser($newsletter, $user);
+        $this->userService->deleteUser($user);
         return $this->json([]);
     }
 
-    #[Route('/invites', methods: 'GET')]
-    #[ScopeRequired(Scope::USERS_READ)]
-    public function getInvites(Newsletter $newsletter): JsonResponse
-    {
-        $invites = $this->userInviteService->getNewsletterInvites($newsletter)
-            ->map(function ($invite) {
-                // N+1 problem
-                $user = $this->auth->fromId($invite->getHyvorUserId());
-                if ($user === null) {
-                    throw new \RuntimeException("AuthUser not found for invite");
-                }
-
-                return new UserInviteObject($invite, $user);
-            });
-        return $this->json($invites);
-    }
-
-    #[Route('/invites', methods: 'POST')]
+    #[Route('/users', methods: 'POST')]
     #[ScopeRequired(Scope::USERS_WRITE)]
-    public function invite(Newsletter $newsletter, #[MapRequestPayload] InviteUserInput $input): JsonResponse
+    public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
-        if (!$input->email && !$input->username) {
-            throw new InvalidArgumentException('Either email or username must be provided.');
-        }
-
-        $hyvorUser = null;
-
-        if ($input->email !== null) {
-            $authUsers = $this->auth->fromEmail($input->email);
-
-            if (count($authUsers) > 0) {
-                $hyvorUser = $authUsers[0];
-            }
-        } else {
-            if ($input->username !== null) {
-                $hyvorUser = $this->auth->fromUsername($input->username);
-            }
-        }
+        $hyvorUser = $this->auth->fromId($input->userId);
 
         if (!$hyvorUser) {
             throw new BadRequestHttpException("User does not exists");
+        }
+
+        $organizationId = $newsletter->getOrganizationId();
+        assert($organizationId !== null);
+
+        try {
+            $verification = $this->comms->send(
+                new VerifyMember(
+                    $organizationId,
+                    $hyvorUser->id,
+                ),
+            );
+        } catch (CommsApiFailedException) {
+            throw new BadRequestHttpException('Unable to verify the user. Please try again later.');
+        }
+
+        if (!$verification->isMember()) {
+            throw new BadRequestHttpException('Unable to find the user in the organization');
         }
 
         if ($this->userService->isAdmin($newsletter, $hyvorUser->id)) {
             throw new BadRequestHttpException("User is already an admin");
         }
 
-        if ($this->userInviteService->isInvited($newsletter, $hyvorUser->id)) {
-            $invite = $this->userInviteService->extendInvite($hyvorUser->id);
-        } else {
-            $invite = $this->userInviteService->createInvite($newsletter, $hyvorUser->id, UserRole::ADMIN);
-        }
-
-        $this->userInviteService->sendEmail($hyvorUser, $invite);
+        $newsletterUser = $this->userService->createUser($newsletter, $hyvorUser->id);
 
         return $this->json(
-            new UserInviteObject($invite, $hyvorUser),
+            new UserObject($newsletterUser, $hyvorUser),
         );
-    }
-
-    #[Route('/invites/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::USERS_WRITE)]
-    public function deleteInvite(Newsletter $newsletter, UserInvite $userInvite): JsonResponse
-    {
-        $this->userInviteService->deleteInvite($userInvite);
-        return $this->json([]);
     }
 }

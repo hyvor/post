@@ -76,9 +76,18 @@ class UserService
         return $user;
     }
 
-    public function deleteUser(Newsletter $newsletter, User $user): void
+    /**
+     * Make sure if the user has access to the newsletter before calling this method
+     */
+    public function deleteUser(
+        User $user,
+        bool $flush = true
+    ): void
     {
         $this->em->remove($user);
-        $this->em->flush();
+
+        if ($flush) {
+            $this->em->flush();
+        }
     }
 }

@@ -22,32 +22,23 @@ class InternalFake extends \Hyvor\Internal\InternalFake
             [
                 'id' => 1,
                 'username' => 'supun',
-                'name' => 'Supun Wimalasena',
+                'name' => 'Supun Wimalasena'
             ],
             [
                 'id' => 2,
                 'username' => 'ishini',
-                'name' => 'Ishini Senanayake',
+                'name' => 'Ishini Senanayake'
             ],
             [
                 'id' => 3,
                 'username' => 'nadil',
-                'name' => 'Nadil Karunaratne',
+                'name' => 'Nadil Karunaratne'
             ],
             [
                 'id' => 4,
                 'username' => 'thibault',
-                'name' => 'Thibault Boutet',
+                'name' => 'Thibault Boutet'
             ]
         ];
     }
-
-    public function license(int $userId, ?int $resourceId, Component $component): ?License
-    {
-        return new PostLicense(
-            emails: 20000,
-            allowRemoveBranding: false
-        );
-    }
-
 }

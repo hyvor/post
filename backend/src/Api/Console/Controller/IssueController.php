@@ -25,6 +25,7 @@ use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Component\Component;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -170,12 +171,15 @@ class IssueController extends AbstractController
             throw new UnprocessableEntityHttpException("No subscribers to send to.");
         }
 
-        $license = $this->billing->license($issue->getNewsletter()->getUserId(), $issue->getNewsletter()->getId());
+        $organizationId = $issue->getNewsletter()->getOrganizationId();
+        assert($organizationId !== null);
+
+        $license = $this->billing->license($organizationId)->license;
         if (!$license instanceof PostLicense) {
             throw new UnprocessableEntityHttpException("License not found or invalid.");
         }
 
-        $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfNewsletter($issue->getNewsletter());
+        $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);
         if ($sendCountThisMonth + $subscribersCount >= $license->emails)
             return $this->json([
                 'message' => 'would_exceed_limit',

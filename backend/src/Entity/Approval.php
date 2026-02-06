@@ -22,8 +22,10 @@ class Approval
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
-    #[ORM\OneToOne(targetEntity: User::class)]
     private int $user_id;
+
+    #[ORM\Column]
+    private int $organization_id;
 
     #[ORM\Column(nullable: false, enumType: ApprovalStatus::class)]
     private ApprovalStatus $status;
@@ -104,6 +106,18 @@ class Approval
     public function getUserId(): int
     {
         return $this->user_id;
+    }
+
+    public function setOrganizationId(int $organization_id): static
+    {
+        $this->organization_id = $organization_id;
+
+        return $this;
+    }
+
+    public function getOrganizationId(): int
+    {
+        return $this->organization_id;
     }
 
     public function setStatus(ApprovalStatus $status): static
