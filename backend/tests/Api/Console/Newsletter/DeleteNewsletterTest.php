@@ -49,8 +49,6 @@ class DeleteNewsletterTest extends WebTestCase
         $repository = $this->em->getRepository(Newsletter::class);
         $find = $repository->find($newsletter_id);
         $this->assertNull($find);
-
-        // TODO: Make sure if the resource is removed in CORE
     }
 
     public function testDeleteNewsletterNotFound(): void

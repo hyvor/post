@@ -4,7 +4,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Input\UserInvite\InviteUserInput;
+use App\Api\Console\Input\UserInvite\CreateUserInput;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Newsletter;
 use App\Entity\User;
@@ -53,9 +53,9 @@ class UserController extends AbstractController
         return $this->json([]);
     }
 
-    #[Route('/invites', methods: 'POST')]
+    #[Route('/users', methods: 'POST')]
     #[ScopeRequired(Scope::USERS_WRITE)]
-    public function invite(Newsletter $newsletter, #[MapRequestPayload] InviteUserInput $input): JsonResponse
+    public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
         $hyvorUser = $this->auth->fromId($input->userId);
 

@@ -99,16 +99,8 @@ class NewsletterService
 
     public function deleteNewsletter(Newsletter $newsletter): void
     {
-        $this->em->wrapInTransaction(function () use ($newsletter) {
-
-            $newsletterId = $newsletter->getId();
-
-            $this->em->remove($newsletter);
-            $this->em->flush();
-
-            // TODO
-//            $this->resource->delete($newsletterId);
-        });
+        $this->em->remove($newsletter);
+        $this->em->flush();
     }
 
     public function getNewsletterById(int $id): ?Newsletter
