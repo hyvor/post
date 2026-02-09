@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed18dd92c71d6181e9abe1203152c3e0",
+    "content-hash": "bdefea3884d2d0c8f7ee789e108da2a2",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -121,16 +121,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.369.27",
+            "version": "3.369.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f844afab2a74eb3cf881970a9c31de460510eb74"
+                "reference": "068195b2980cf5cf4ade2515850d461186db3310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f844afab2a74eb3cf881970a9c31de460510eb74",
-                "reference": "f844afab2a74eb3cf881970a9c31de460510eb74",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/068195b2980cf5cf4ade2515850d461186db3310",
+                "reference": "068195b2980cf5cf4ade2515850d461186db3310",
                 "shasum": ""
             },
             "require": {
@@ -212,9 +212,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.27"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.29"
             },
-            "time": "2026-02-04T19:07:08+00:00"
+            "time": "2026-02-06T19:08:50+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -487,29 +487,29 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38"
+                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
-                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0"
             },
             "conflict": {
-                "phpunit/phpunit": "<=7.5 || >=13"
+                "phpunit/phpunit": "<=7.5 || >=14"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9 || ^12 || ^13",
-                "phpstan/phpstan": "1.4.10 || 2.1.11",
+                "doctrine/coding-standard": "^9 || ^12 || ^14",
+                "phpstan/phpstan": "1.4.10 || 2.1.30",
                 "phpstan/phpstan-phpunit": "^1.0 || ^2",
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6 || ^10.5 || ^11.5 || ^12",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6 || ^10.5 || ^11.5 || ^12.4 || ^13.0",
                 "psr/log": "^1 || ^2 || ^3"
             },
             "suggest": {
@@ -529,9 +529,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/1.1.5"
+                "source": "https://github.com/doctrine/deprecations/tree/1.1.6"
             },
-            "time": "2025-04-07T20:06:18+00:00"
+            "time": "2026-02-07T07:09:04+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1352,16 +1352,16 @@
         },
         {
             "name": "doctrine/sql-formatter",
-            "version": "1.5.3",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7"
+                "reference": "9563949f5cd3bd12a17d12fb980528bc141c5806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/a8af23a8e9d622505baa2997465782cbe8bb7fc7",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/9563949f5cd3bd12a17d12fb980528bc141c5806",
+                "reference": "9563949f5cd3bd12a17d12fb980528bc141c5806",
                 "shasum": ""
             },
             "require": {
@@ -1401,40 +1401,40 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
-                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.3"
+                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.4"
             },
-            "time": "2025-10-26T09:35:14+00:00"
+            "time": "2026-02-08T16:21:46+00:00"
         },
         {
             "name": "dunglas/doctrine-json-odm",
-            "version": "v1.4.2",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dunglas/doctrine-json-odm.git",
-                "reference": "c76280318ffb60aecceaf7f178298727c3dc35a5"
+                "reference": "d5162f5f3fb2568bd96b0966148ec21688ab4632"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dunglas/doctrine-json-odm/zipball/c76280318ffb60aecceaf7f178298727c3dc35a5",
-                "reference": "c76280318ffb60aecceaf7f178298727c3dc35a5",
+                "url": "https://api.github.com/repos/dunglas/doctrine-json-odm/zipball/d5162f5f3fb2568bd96b0966148ec21688ab4632",
+                "reference": "d5162f5f3fb2568bd96b0966148ec21688ab4632",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": "^2.6.3 || ^3.0.0",
+                "doctrine/orm": "^2.6.3 || ^3.0",
                 "php": ">=8.1",
-                "symfony/property-access": "^5.4 || ^6.0 || ^7.0",
-                "symfony/property-info": "^5.4 || ^6.0 || ^7.0",
-                "symfony/serializer": "^5.4 || ^6.0 || ^7.0"
+                "symfony/property-access": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+                "symfony/property-info": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+                "symfony/serializer": "^5.4 || ^6.4 || ^7.4 || ^8.0"
             },
             "require-dev": {
-                "doctrine/annotations": "^1.0 || ^2.0.0",
+                "doctrine/annotations": "^1.0 || ^2.0",
                 "doctrine/dbal": "^2.7 || ^3.3 || ^4.0.0",
-                "doctrine/doctrine-bundle": "^1.12.13 || ^2.2",
-                "symfony/finder": "^5.4 || ^6.0 || ^7.0",
-                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0",
-                "symfony/phpunit-bridge": "^6.0 || ^7.0",
-                "symfony/uid": "^5.4 || ^6.0 || ^7.0",
-                "symfony/validator": "^5.4 || ^6.0 || ^7.0"
+                "doctrine/doctrine-bundle": "^1.12.13 || ^2.2 || ^3.0",
+                "symfony/finder": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+                "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+                "symfony/phpunit-bridge": "^8.0",
+                "symfony/uid": "^5.4 || ^6.4 || ^7.4 || ^8.0",
+                "symfony/validator": "^5.4 || ^6.4 || ^7.4 || ^8.0"
             },
             "suggest": {
                 "scienta/doctrine-json-functions": "To add support for JSON functions in DQL.",
@@ -1458,12 +1458,12 @@
             "authors": [
                 {
                     "name": "Kévin Dunglas",
-                    "email": "kevin@dunglas.fr",
-                    "homepage": "https://dunglas.fr"
+                    "email": "kevin@dunglas.dev",
+                    "homepage": "https://dunglas.dev"
                 }
             ],
             "description": "An object document mapper for Doctrine ORM using JSON types of modern RDBMS.",
-            "homepage": "https://dunglas.fr",
+            "homepage": "https://dunglas.dev",
             "keywords": [
                 "database",
                 "json",
@@ -1475,7 +1475,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dunglas/doctrine-json-odm/issues",
-                "source": "https://github.com/dunglas/doctrine-json-odm/tree/v1.4.2"
+                "source": "https://github.com/dunglas/doctrine-json-odm/tree/v1.5.0"
             },
             "funding": [
                 {
@@ -1487,7 +1487,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-26T13:57:21+00:00"
+            "time": "2026-01-06T22:15:42+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2009,16 +2009,16 @@
         },
         {
             "name": "hyvor/internal",
-            "version": "4.0.2-beta.2",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyvor/internal.git",
-                "reference": "18eb4539c2cf6d7e52b3e42239f1d3d963597842"
+                "reference": "d55422a76c1ab363a0c5685c5f79d3a54dea4816"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyvor/internal/zipball/18eb4539c2cf6d7e52b3e42239f1d3d963597842",
-                "reference": "18eb4539c2cf6d7e52b3e42239f1d3d963597842",
+                "url": "https://api.github.com/repos/hyvor/internal/zipball/d55422a76c1ab363a0c5685c5f79d3a54dea4816",
+                "reference": "d55422a76c1ab363a0c5685c5f79d3a54dea4816",
                 "shasum": ""
             },
             "require": {
@@ -2078,9 +2078,9 @@
             "description": "Internal Package for HYVOR Applications",
             "support": {
                 "issues": "https://github.com/hyvor/internal/issues",
-                "source": "https://github.com/hyvor/internal/tree/4.0.2-beta.2"
+                "source": "https://github.com/hyvor/internal/tree/4.0.2"
             },
-            "time": "2026-02-05T04:13:37+00:00"
+            "time": "2026-02-06T19:08:21+00:00"
         },
         {
             "name": "hyvor/phrosemirror",
@@ -9926,16 +9926,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.9.0",
+            "version": "v2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "93328d425758fb38f520255acf8d7d87ec3484f6"
+                "reference": "304e5333e62745a8f1b70e40b284c1d278b61cf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/93328d425758fb38f520255acf8d7d87ec3484f6",
-                "reference": "93328d425758fb38f520255acf8d7d87ec3484f6",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/304e5333e62745a8f1b70e40b284c1d278b61cf0",
+                "reference": "304e5333e62745a8f1b70e40b284c1d278b61cf0",
                 "shasum": ""
             },
             "require": {
@@ -9964,7 +9964,7 @@
                 "doctrine/mongodb-odm-bundle": "^4.6|^5.0",
                 "doctrine/orm": "^2.16|^3.0",
                 "doctrine/persistence": "^2.0|^3.0|^4.0",
-                "phpunit/phpunit": "^9.5.0 || ^10.0 || ^11.0 || ^12.0",
+                "phpunit/phpunit": "^9.5.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0",
                 "symfony/browser-kit": "^6.4|^7.0|^8.0",
                 "symfony/console": "^6.4|^7.0|^8.0",
                 "symfony/dotenv": "^6.4|^7.0|^8.0",
@@ -10034,7 +10034,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.9.0"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.9.1"
             },
             "funding": [
                 {
@@ -10046,7 +10046,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-04T10:34:12+00:00"
+            "time": "2026-02-08T14:53:41+00:00"
         },
         {
             "name": "zenstruck/messenger-monitor-bundle",
@@ -10853,16 +10853,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.50",
+            "version": "11.5.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fdfc727f0fcacfeb8fcb30c7e5da173125b58be3"
+                "reference": "b287d32c26f78768e391843c5a59395f24b62605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fdfc727f0fcacfeb8fcb30c7e5da173125b58be3",
-                "reference": "fdfc727f0fcacfeb8fcb30c7e5da173125b58be3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b287d32c26f78768e391843c5a59395f24b62605",
+                "reference": "b287d32c26f78768e391843c5a59395f24b62605",
                 "shasum": ""
             },
             "require": {
@@ -10877,7 +10877,7 @@
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.2",
                 "phpunit/php-code-coverage": "^11.0.12",
-                "phpunit/php-file-iterator": "^5.1.0",
+                "phpunit/php-file-iterator": "^5.1.1",
                 "phpunit/php-invoker": "^5.0.1",
                 "phpunit/php-text-template": "^4.0.1",
                 "phpunit/php-timer": "^7.0.1",
@@ -10889,6 +10889,7 @@
                 "sebastian/exporter": "^6.3.2",
                 "sebastian/global-state": "^7.0.2",
                 "sebastian/object-enumerator": "^6.0.1",
+                "sebastian/recursion-context": "^6.0.3",
                 "sebastian/type": "^5.1.3",
                 "sebastian/version": "^5.0.2",
                 "staabm/side-effects-detector": "^1.0.5"
@@ -10934,7 +10935,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.50"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.52"
             },
             "funding": [
                 {
@@ -10958,7 +10959,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T05:59:18+00:00"
+            "time": "2026-02-08T07:05:14+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -42,8 +42,8 @@ class ApprovalController extends AbstractController
     #[OrganizationLevelEndpoint]
     public function getApproval(Request $request): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
-        $approval = $this->approvalService->getApprovalOfUser($user);
+        $organization = AuthorizationListener::getOrganization($request);
+        $approval = $this->approvalService->getApprovalOfOrganization($organization);
 
         return new JsonResponse([
             'approval' => ($approval !== null) ? new ApprovalObject($approval) : null
@@ -60,11 +60,11 @@ class ApprovalController extends AbstractController
         $user = AuthorizationListener::getUser($request);
         $organization = AuthorizationListener::getOrganization($request);
 
-        if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::APPROVED) {
+        if ($this->approvalService->getApprovalStatusOfOrganization($organization) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('Account already approved');
         }
 
-        if ($this->approvalService->getApprovalStatusOfUser($user) === ApprovalStatus::REJECTED) {
+        if ($this->approvalService->getApprovalStatusOfOrganization($organization) === ApprovalStatus::REJECTED) {
             throw new UnprocessableEntityHttpException('Account already rejected');
         }
 
@@ -95,7 +95,7 @@ class ApprovalController extends AbstractController
         $user = AuthorizationListener::getUser($request);
         $approval = $this->resolveApproval($id);
 
-        $userApprovalStatus = $this->approvalService->getApprovalStatusOfUser($user);
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($user);
         if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
             throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }

@@ -124,17 +124,17 @@ class NewsletterService
     /**
      * @return array<array{newsletter: Newsletter, user: User}>
      */
-    public function getNewslettersOfUser(int $hyvorUserId): array
+    public function getNewslettersOfOrganization(int $organizationId): array
     {
         $query = <<<DQL
             SELECT u, p
             FROM App\Entity\User u
             JOIN u.newsletter p
-            WHERE u.hyvor_user_id = :hyvor_user_id
+            WHERE p.organization_id = :organization_id
         DQL;
 
         $query = $this->em->createQuery($query);
-        $query->setParameter('hyvor_user_id', $hyvorUserId);
+        $query->setParameter('organization_id', $organizationId);
         /** @var User[] $users */
         $users = $query->getResult();
 

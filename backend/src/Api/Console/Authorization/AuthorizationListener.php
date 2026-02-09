@@ -97,6 +97,7 @@ class AuthorizationListener
         $request = $event->getRequest();
         $newsletterId = $request->headers->get('x-newsletter-id');
         $isOrganizationLevelEndpoint = count($event->getAttributes(OrganizationLevelEndpoint::class)) > 0;
+        $noOrganizationRequired = count($event->getAttributes(NoOrganizationRequired::class)) > 0;
 
         $me = $this->auth->me($request);
 
@@ -113,16 +114,26 @@ class AuthorizationListener
 
         $user = $me->getUser();
         $organization = $me->getOrganization();
+        $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
 
-        if ($organization !== null) {
-            $organizationFromFrontend = (int)$request->headers->get('x-organization-id');
-
-            if ($organizationFromFrontend !== $organization->id) {
-                throw new AccessDeniedHttpException('org_mismatch');
+        if ($noOrganizationRequired) {
+            if ($organization !== null) {
+                $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
             }
-
-            $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
+            return;
         }
+
+        if ($organization === null) {
+            throw new AccessDeniedHttpException('Organization is required.');
+        }
+
+        $organizationFromFrontend = (int)$request->headers->get('x-organization-id');
+
+        if ($organizationFromFrontend !== $organization->id) {
+            throw new AccessDeniedHttpException('org_mismatch');
+        }
+
+        $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
 
         // organization-level endpoints do not have a newsletter ID
         if ($isOrganizationLevelEndpoint === false) {
@@ -136,8 +147,8 @@ class AuthorizationListener
                 throw new AccessDeniedHttpException('Invalid newsletter ID.');
             }
 
-            if ($organization !== null && $newsletter->getOrganizationId() !== $organization->id) {
-                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
+            if ($newsletter->getOrganizationId() !== $organization->id) {
+                throw new AccessDeniedHttpException('does_not_belong_the_resource');
             }
 
             if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
@@ -147,7 +158,6 @@ class AuthorizationListener
             $request->attributes->set(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
         }
 
-        $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
     }
 
     /**

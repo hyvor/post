@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\NoOrganizationRequired;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\OrganizationLevelEndpoint;
@@ -30,6 +31,7 @@ use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
@@ -50,25 +52,29 @@ class ConsoleController extends AbstractController
 
     #[Route('/init', methods: 'GET')]
     #[OrganizationLevelEndpoint]
+    #[NoOrganizationRequired]
     public function initConsole(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::hasOrganization($request)
-            ? AuthorizationListener::getOrganization($request)
-            : null;
 
-        $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);
+        if (!AuthorizationListener::hasOrganization($request)) {
+            throw new BadRequestHttpException('no_organization');
+        }
+
+        $organization = AuthorizationListener::getOrganization($request);
+
+        $newslettersUsers = $this->newsletterService->getNewslettersOfOrganization($organization->id);
         $newsletters = array_map(
             fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
             $newslettersUsers
         );
-        $userApproval = $this->approvalService->getApprovalOfUser($user);
+        $userApproval = $this->approvalService->getApprovalOfOrganization($organization);
 
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
             'organization' => $organization,
-            'resolved_license' => $organization ? $this->billing->license($organization->id) : null,
+            'resolved_license' => $this->billing->license($organization->id),
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),

@@ -46,12 +46,10 @@ function getConsoleApi() {
 			headers['X-Newsletter-Id'] = newsletterId.toString();
 		}
 
-		if (endpoint.startsWith('/organization/')) {
-			const currentOrg = get(authOrganizationStore);
+		const currentOrg = get(authOrganizationStore);
 
-			if (currentOrg) {
-				headers['X-Organization-ID'] = String(currentOrg.id);
-			}
+		if (currentOrg) {
+			headers['X-Organization-ID'] = String(currentOrg.id);
 		}
 
 		if (!(data instanceof FormData)) {
@@ -93,8 +91,13 @@ function getConsoleApi() {
 			 * we redirect the user to account
 			 */
 			if (error === 'org_mismatch') {
-				location.href = '/account';
+				location.href = '/console';
 				throw new Error('Current organization changed, redirecting...');
+			} else if (error === 'does_not_belong_the_resource') {
+				location.href = '/console';
+				throw new Error(
+					'This newsletter does not belong to your current organization, redirecting...'
+				);
 			}
 
 			throw toThrow;
