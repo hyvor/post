@@ -18,12 +18,11 @@
 			</span>
 		</h2>
 		<Install
-	platform={platform}
-	prefix={`/console/${$newsletterStore.subdomain}/install`}
-	websiteId={$newsletterStore.subdomain}
-/>
+			{platform}
+			prefix={`/console/${$newsletterStore.subdomain}/install`}
+			websiteId={$newsletterStore.subdomain}
+		/>
 	</div>
-	
 </SingleBox>
 
 <style>
