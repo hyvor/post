@@ -60,6 +60,7 @@ class OrganizationMigrationCommand extends Command
 
             foreach ($ownersWithoutOrg as $owner) {
 
+                $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updating User => ID: {$owner->getId()} | HTID: {$owner->getHyvorUserId()}");
 
                 $this->em->wrapInTransaction(function () use ($owner, $output) {
 
@@ -83,7 +84,7 @@ class OrganizationMigrationCommand extends Command
                 });
             }
 
-            $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users");
+            $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users\n\n\n");
             sleep(2);
         }
 
