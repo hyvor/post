@@ -13,16 +13,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RelayWebhookTest extends WebTestCase
 {
+    private const WEBHOOK_SECRET = 'test-relay-webhook-secret';
+
     /**
      * @param array<string, mixed> $data
+     * @param array<string, string> $headers
      */
-    private function callWebhook(array $data): Response
+    private function callWebhook(array $data, array $headers = []): Response
     {
+        if (!isset($headers['X-Signature'])) {
+            $body = json_encode($data, JSON_THROW_ON_ERROR);
+            $headers['X-Signature'] = hash_hmac('sha256', $body, self::WEBHOOK_SECRET);
+        }
 
         return $this->publicApi(
             'POST',
             '/integration/relay/webhook',
-            $data
+            $data,
+            $headers,
         );
     }
 
@@ -341,5 +349,45 @@ class RelayWebhookTest extends WebTestCase
 
         $response = $this->callWebhook($data);
         $this->assertSame(200, $response->getStatusCode());
+    }
+
+    public function test_webhook_rejected_when_signature_missing(): void
+    {
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => []
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->publicApi(
+            'POST',
+            '/integration/relay/webhook',
+            $data,
+        );
+        $this->assertSame(401, $response->getStatusCode());
+    }
+
+    public function test_webhook_rejected_when_signature_invalid(): void
+    {
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => []
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data, ['X-Signature' => 'invalid-signature']);
+        $this->assertSame(401, $response->getStatusCode());
     }
 }

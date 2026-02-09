@@ -6,6 +6,7 @@ use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SendStatus;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\Dto\UpdateDomainDto;
+use App\Service\AppConfig;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
 use App\Service\Subscriber\SubscriberService;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -37,6 +39,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class RelayWebhookController extends AbstractController
 {
     public function __construct(
+        private AppConfig         $appConfig,
         private DomainService     $domainService,
         private SubscriberService $subscriberService,
         private SendService       $sendService,
@@ -48,14 +51,23 @@ class RelayWebhookController extends AbstractController
     public function handleWebhook(Request $request): JsonResponse
     {
         $content = $request->getContent();
+
+        $signature = $request->headers->get('X-Signature');
+        if ($signature === null) {
+            throw new UnauthorizedHttpException('', 'Missing webhook signature');
+        }
+
+        $expected = hash_hmac('sha256', $content, $this->appConfig->getRelayWebhookSecret());
+        if (!hash_equals($expected, $signature)) {
+            throw new UnauthorizedHttpException('', 'Invalid webhook signature');
+        }
+
         /** @var array{
          *     'event': string,
          *     'payload': array<string, mixed>
          *  } $data
          */
         $data = json_decode($content, true);
-
-        // TODO: Validate the webhook
 
         $event = $data['event'];
         $payload = $data['payload'];
