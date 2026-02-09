@@ -51,7 +51,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
@@ -79,7 +79,7 @@ class VerifyDomainTest extends WebTestCase
         $httpClient = new MockHttpClient(new MockResponse(info: ['error' => 'host unreachable']));
         $this->container->set(HttpClientInterface::class, $httpClient);
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
@@ -114,7 +114,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
@@ -142,7 +142,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -162,7 +162,7 @@ class VerifyDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [

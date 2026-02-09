@@ -27,7 +27,7 @@ class DeleteDomainTest extends WebTestCase
     public function testDeleteDomain(): void
     {
         $this->mockDeleteDomainEntity();
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
@@ -55,7 +55,7 @@ class DeleteDomainTest extends WebTestCase
 
     public function testDeleteDomainNotFound(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -74,7 +74,7 @@ class DeleteDomainTest extends WebTestCase
     public function test_user_can_only_delete_their_domains(): void
     {
         $this->mockDeleteDomainEntity();
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [

@@ -55,7 +55,7 @@ class CreateDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -85,7 +85,7 @@ class CreateDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -108,7 +108,7 @@ class CreateDomainTest extends WebTestCase
 
         Clock::set(new MockClock('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,

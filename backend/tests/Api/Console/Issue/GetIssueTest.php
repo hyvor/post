@@ -47,7 +47,7 @@ class GetIssueTest extends WebTestCase
 
     public function testGetSpecificIssueNotFound(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
