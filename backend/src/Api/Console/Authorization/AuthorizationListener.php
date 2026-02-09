@@ -136,10 +136,9 @@ class AuthorizationListener
                 throw new AccessDeniedHttpException('Invalid newsletter ID.');
             }
 
-            // TODO: add current_organization_id to AuthUser
-//            if ($newsletter->getOrganizationId() !== $user->current_organization_id) {
-//                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
-//            }
+            if ($organization !== null && $newsletter->getOrganizationId() !== $organization->id) {
+                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
+            }
 
             if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
                 throw new AccessDeniedHttpException('You do not have access to this newsletter.');
