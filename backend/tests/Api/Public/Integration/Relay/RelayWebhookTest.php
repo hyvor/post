@@ -325,6 +325,37 @@ class RelayWebhookTest extends WebTestCase
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber4->getStatus());
     }
 
+    public function test_suppression_created_with_long_description(): void
+    {
+        $subscriber = SubscriberFactory::createOne([
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'email' => 'suppressed@example.com'
+        ]);
+
+        $longDescription = str_repeat('a', 300);
+
+        $data = [
+            "event" => "suppression.created",
+            "payload" => [
+                "suppression" => [
+                    "id" => 5,
+                    "created_at" => 1758220942,
+                    "email" => "suppressed@example.com",
+                    "project" => "sample project",
+                    "reason" => "bounce",
+                    "description" => $longDescription
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
+        $this->assertNotNull($subscriber->getUnsubscribeReason());
+        $this->assertLessThanOrEqual(255, strlen($subscriber->getUnsubscribeReason()));
+    }
+
     public function test_ignore_webhooks_for_emails_without_send_id(): void
     {
         $data = [
