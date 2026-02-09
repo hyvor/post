@@ -18,27 +18,38 @@ class MemberRemovedListenerTest extends WebTestCase
         $removingMemberUserId = 12345;
         $removingMemberOrganizationId = 1;
 
-        UserFactory::createMany(2, [
+        $removingUsers = UserFactory::createMany(2, [
             'newsletter' => NewsletterFactory::new([
                 'organization_id' => $removingMemberOrganizationId
             ]),
             'hyvor_user_id' => $removingMemberUserId
         ]);
-        UserFactory::createMany(3, [
+        $removingUserId = $removingUsers[0]->getId();
+
+        $nonRemovingUsers1 = UserFactory::createMany(3, [
             'newsletter' => NewsletterFactory::new([
                 'organization_id' => 2
             ]),
             'hyvor_user_id' => $removingMemberUserId
         ]);
-        UserFactory::createMany(4, [
+        $nonRemovingUserId1 = $nonRemovingUsers1[0]->getId();
+
+        $nonRemovingUsers2 = UserFactory::createMany(4, [
             'newsletter' => NewsletterFactory::new([
                 'organization_id' => $removingMemberOrganizationId
             ])
         ]);
+        $nonRemovingUserId2 = $nonRemovingUsers2[0]->getId();
 
         $this->getEd()->dispatch(new MemberRemoved($removingMemberOrganizationId, $removingMemberUserId));
 
-        $remainingUsers = $this->getEm()->getRepository(User::class)->findAll();
+        $userRepository = $this->getEm()->getRepository(User::class);
+
+        $remainingUsers = $userRepository->findAll();
         $this->assertCount(7, $remainingUsers);
+
+        $this->assertNull($userRepository->findOneBy(['id' => $removingUserId]));
+        $this->assertNotNull($userRepository->findOneBy(['id' => $nonRemovingUserId1]));
+        $this->assertNotNull($userRepository->findOneBy(['id' => $nonRemovingUserId2]));
     }
 }
