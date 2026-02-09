@@ -92,10 +92,10 @@ class ApprovalController extends AbstractController
         #[MapRequestPayload] UpdateApprovalInput $input
     ): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
         $approval = $this->resolveApproval($id);
 
-        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($user);
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($organization);
         if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
             throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }
