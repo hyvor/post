@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { CodeBlock, Link } from '@hyvor/design/components';
-	import SingleBox from '../../../@components/content/SingleBox.svelte';
-	import { newsletterStore } from '../../../lib/stores/newsletterStore';
+	import { page } from '$app/stores';
+	import SingleBox from '../../../../@components/content/SingleBox.svelte';
+	import { newsletterStore } from '../../../../lib/stores/newsletterStore';
 	import IconEnvelope from '@hyvor/icons/IconEnvelope';
+	import Install from '$lib/install/Install.svelte';
+
+	$: platform = $page.params.platform ?? 'html';
 </script>
 
 <SingleBox>
@@ -14,29 +17,11 @@
 				<IconEnvelope size={25} />
 			</span>
 		</h2>
-
-		<p>
-			Embed our newsletter signup form to collect emails from your website visitors. Visit the
-			<Link href="/docs/form">Signup Form</Link>
-			page for more information.
-		</p>
-
-		<ol>
-			<li>
-				<p>Add the following code to your website's HTML code:</p>
-				<div class="code">
-					<CodeBlock
-						language="html"
-						code={`
-                            <script src="https://post.hyvor.com/form/form.js" type="module" async><` +
-							`/script>
-
-                            <hyvor-post-form newsletter="${$newsletterStore.subdomain}"></hyvor-post-form>
-                        `}
-					/>
-				</div>
-			</li>
-		</ol>
+		<Install
+			{platform}
+			prefix={`/console/${$newsletterStore.subdomain}/install`}
+			websiteId={$newsletterStore.subdomain}
+		/>
 	</div>
 </SingleBox>
 
