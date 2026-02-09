@@ -33,7 +33,7 @@
 		"vite": "^7.3"
 	},
 	"dependencies": {
-		"@hyvor/design": "^2.0.1",
+		"@hyvor/design": "^2.0.3",
 		"@hyvor/icons": "^1.1.0",
 		"@hyvor/richtext": "^0.0.14",
 		"chart.js": "^4.4.9",
