@@ -87,6 +87,16 @@ function getConsoleApi() {
 				toThrow.message = e.violations.map((v: any) => v.message).join(', ');
 			}
 
+			/**
+			 * requested organization is not the user's current organization
+			 * (changed from another tab / session)
+			 * we redirect the user to account
+			 */
+			if (error === 'org_mismatch') {
+				location.href = '/account';
+				throw new Error('Current organization changed, redirecting...');
+			}
+
 			throw toThrow;
 		}
 
