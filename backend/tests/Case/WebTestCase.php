@@ -125,6 +125,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
                 'is_system' => true,
             ]);
         }
+        $server['HTTP_X_ORGANIZATION_ID'] = $newsletter ? (string)$newsletter->getOrganizationId() : '1';
 
         if ($useSession || $newsletter === null) {
             $this->client->getCookieJar()->set(new Cookie('authsess', 'test'));

@@ -115,7 +115,7 @@ class AuthorizationListener
         $organization = $me->getOrganization();
 
         if ($organization !== null) {
-            $organizationFromFrontend = (int)$request->headers->get('X-Organization-Id');
+            $organizationFromFrontend = (int)$request->headers->get('x-organization-id');
 
             if ($organizationFromFrontend !== $organization->id) {
                 throw new AccessDeniedHttpException('org_mismatch');
@@ -137,9 +137,9 @@ class AuthorizationListener
             }
 
             // TODO: add current_organization_id to AuthUser
-            if ($newsletter->getOrganizationId() !== $user->current_organization_id) {
-                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
-            }
+//            if ($newsletter->getOrganizationId() !== $user->current_organization_id) {
+//                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
+//            }
 
             if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
                 throw new AccessDeniedHttpException('You do not have access to this newsletter.');

@@ -14,6 +14,8 @@ use App\Service\Newsletter\Constraint\SubdomainValidator;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
+use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -97,7 +99,13 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertTrue($sendingProfiles[0]->getIsSystem());
         $this->assertTrue($sendingProfiles[0]->getIsDefault());
 
-        // TODO: Make sure if the rosource is created in CORE
+        $this->getComms()->assertSent(
+            ResourceCreated::class,
+            Component::CORE,
+            eventValidator: function (ResourceCreated $event) use ($newsletter) {
+                $this->assertSame($newsletter->getOrganizationId(), $event->getOrganizationId());
+            }
+        );
     }
 
     public function testCreateNewsletterInvalid(): void
@@ -148,5 +156,4 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertSame('Subdomain is already taken.', $this->getJson()['message']);
 
     }
-
 }
