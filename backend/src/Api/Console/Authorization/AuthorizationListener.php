@@ -96,7 +96,7 @@ class AuthorizationListener
     {
         $request = $event->getRequest();
         $newsletterId = $request->headers->get('x-newsletter-id');
-        $isUserLevelEndpoint = count($event->getAttributes(UserLevelEndpoint::class)) > 0;
+        $isOrganizationLevelEndpoint = count($event->getAttributes(OrganizationLevelEndpoint::class)) > 0;
 
         $me = $this->auth->me($request);
 
@@ -114,8 +114,18 @@ class AuthorizationListener
         $user = $me->getUser();
         $organization = $me->getOrganization();
 
-        // user-level endpoints do not have a newsletter ID
-        if ($isUserLevelEndpoint === false) {
+        if ($organization !== null) {
+            $organizationFromFrontend = (int)$request->headers->get('X-Organization-Id');
+
+            if ($organizationFromFrontend !== $organization->id) {
+                throw new AccessDeniedHttpException('org_mismatch');
+            }
+
+            $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
+        }
+
+        // organization-level endpoints do not have a newsletter ID
+        if ($isOrganizationLevelEndpoint === false) {
             if ($newsletterId === null) {
                 throw new AccessDeniedHttpException('X-Newsletter-ID is required for this endpoint.');
             }
@@ -126,6 +136,11 @@ class AuthorizationListener
                 throw new AccessDeniedHttpException('Invalid newsletter ID.');
             }
 
+            // TODO: add current_organization_id to AuthUser
+            if ($newsletter->getOrganizationId() !== $user->current_organization_id) {
+                throw new AccessDeniedHttpException('This newsletter does not belong to your current organization.');
+            }
+
             if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
                 throw new AccessDeniedHttpException('You do not have access to this newsletter.');
             }
@@ -134,10 +149,6 @@ class AuthorizationListener
         }
 
         $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
-
-        if ($organization !== null) {
-            $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
-        }
     }
 
     /**

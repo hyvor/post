@@ -3,10 +3,9 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Service\Issue\SendService;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Component\Component;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +22,7 @@ class BillingController extends AbstractController
     }
 
     #[Route('/billing/usage', methods: 'GET')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function getUsage(Request $request, BillingInterface $billing): JsonResponse
     {
         $organization = AuthorizationListener::getOrganization($request);

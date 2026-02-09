@@ -7,7 +7,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -26,8 +26,6 @@ use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
-use Hyvor\Internal\Component\Component;
-use Hyvor\Internal\InternalApi\Exceptions\InternalApiCallFailedException;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,7 +49,7 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/init', methods: 'GET')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function initConsole(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);

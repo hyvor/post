@@ -1,19 +1,19 @@
 <script lang="ts">
-    import {onMount} from 'svelte';
-    import {goto} from '$app/navigation';
-    import {canAccessBilling} from "../../orgPermission";
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { canAccessBilling } from '../../orgPermission';
 
-    interface Props {
-        children?: import('svelte').Snippet;
-    }
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-    let {children}: Props = $props();
+	let { children }: Props = $props();
 
-    onMount(() => {
-        if (!canAccessBilling()) {
-            goto('/console');
-        }
-    });
+	onMount(() => {
+		if (!canAccessBilling()) {
+			goto('/console');
+		}
+	});
 </script>
 
 {@render children?.()}

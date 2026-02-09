@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { newsletterStore } from './stores/newsletterStore';
+import { authOrganizationStore } from './stores/consoleStore';
 
 export interface ConsoleApiOptions {
 	endpoint: string;
@@ -43,6 +44,14 @@ function getConsoleApi() {
 			headers['X-Newsletter-Id'] = newsletter.id.toString();
 		} else if (newsletterId) {
 			headers['X-Newsletter-Id'] = newsletterId.toString();
+		}
+
+		if (endpoint.startsWith('/organization/')) {
+			const currentOrg = get(authOrganizationStore);
+
+			if (currentOrg) {
+				headers['X-Organization-ID'] = String(currentOrg.id);
+			}
 		}
 
 		if (!(data instanceof FormData)) {

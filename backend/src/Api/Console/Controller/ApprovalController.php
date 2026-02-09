@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Input\Approval\UpdateApprovalInput;
 use App\Api\Console\Object\ApprovalObject;
@@ -39,7 +39,7 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals', methods: 'GET')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function getApproval(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
@@ -51,7 +51,7 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals', methods: 'POST')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function approve(
         Request                                  $request,
         #[MapRequestPayload] CreateApprovalInput $input
@@ -85,7 +85,7 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals/{id}', methods: 'PATCH')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function updateApproval(
         Request                                  $request,
         string                                   $id,
