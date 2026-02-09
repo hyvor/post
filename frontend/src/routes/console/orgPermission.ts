@@ -1,17 +1,21 @@
-import type { OrganizationRole } from '@hyvor/design/cloud';
-import { authOrganizationStore } from './lib/stores/consoleStore';
-import { get } from 'svelte/store';
+import type {OrganizationRole} from '@hyvor/design/cloud';
+import {authOrganizationStore} from './lib/stores/consoleStore';
+import {get} from 'svelte/store';
 
-export function getOrganizationRole(): OrganizationRole {
-	return get(authOrganizationStore).role;
+function canAccess(allowedRoles: OrganizationRole[]): boolean {
+    const role = get(authOrganizationStore)?.role;
+
+    if (role === null) {
+        return false;
+    }
+
+    return allowedRoles.includes(role);
 }
 
 export function canAccessBilling() {
-	const role = getOrganizationRole();
-	return role === 'admin' || role === 'billing';
+    return canAccess(['admin', 'billing']);
 }
 
 export function canAccessSettings() {
-	const role = getOrganizationRole();
-	return role === 'admin';
+    return canAccess(['admin']);
 }
