@@ -5,6 +5,11 @@ namespace App\Tests\Api\Sudo;
 use App\Api\Sudo\Authorization\SudoAuthorizationListener;
 use App\Tests\Case\WebTestCase;
 use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Auth\AuthUserOrganization;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\Sudo\SudoUserFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
@@ -19,7 +24,19 @@ class SudoAuthorizationListenerTest extends WebTestCase
 
     public function test_ignores_non_sudo_api_requests(): void
     {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
 
         $response = $this->consoleApi(
             null,

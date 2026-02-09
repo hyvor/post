@@ -72,7 +72,7 @@ class CreateApprovalTest extends WebTestCase
     public function test_account_already_approved(): void
     {
         ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::APPROVED,
         ]);
 
@@ -100,7 +100,7 @@ class CreateApprovalTest extends WebTestCase
     public function test_account_already_rejected(): void
     {
         ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::REJECTED,
         ]);
 

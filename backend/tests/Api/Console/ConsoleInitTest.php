@@ -31,7 +31,7 @@ class ConsoleInitTest extends WebTestCase
     public function testInitConsole(): void
     {
         $newsletters = NewsletterFactory::createMany(10, [
-            'user_id' => 1,
+            'organization_id' => 1,
         ]);
 
         foreach ($newsletters as $newsletter) {
@@ -53,7 +53,7 @@ class ConsoleInitTest extends WebTestCase
         ]);
 
         $newsletterAdmin = NewsletterFactory::createOne([
-            'user_id' => 1
+            'organization_id' => 1
         ]);
 
         // admin
