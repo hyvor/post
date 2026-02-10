@@ -14,6 +14,7 @@
 		lists: string[]; // lists to filter by (empty = no filter)
 		listsDefaultUnselected: string[]; // lists to be default unselected (empty = all selected)
 		listsHidden: boolean; // if true, hide the lists section
+		colors: 'light' | 'dark' | 'os';
 	}
 
 	let {
@@ -22,7 +23,8 @@
 		shadowRoot,
 		lists: listsToFilter,
 		listsHidden,
-		listsDefaultUnselected
+		listsDefaultUnselected,
+		colors
 	}: Props = $props();
 
 	let initError = $state('');
@@ -83,7 +85,7 @@
 					}
 				}
 
-				palette = newsletter.palette_light;
+				setPalette(colors);
 
 				setCustomCss();
 			})
@@ -150,8 +152,13 @@
 		};
 	}
 
-	export function setPalette(type: 'light' | 'dark') {
-		if (type === 'dark') {
+	export function setPalette(type: 'light' | 'dark' | 'os') {
+		if (type === 'os') {
+			palette =
+				window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+					? newsletter.palette_dark
+					: newsletter.palette_light;
+		} else if (type === 'dark') {
 			palette = newsletter.palette_dark;
 		} else {
 			palette = newsletter.palette_light;
