@@ -147,9 +147,11 @@ class RelayWebhookController extends AbstractController
         $reason = $suppression['reason'];
         $description = $suppression['description'] ?? null;
 
+        $reasonText = "$reason" . ($description ? " - $description" : '');
+
         $this->subscriberService->unsubscribeByEmail(
             $suppressedEmail,
-            reason: "$reason" . ($description ? " - $description" : '')
+            reason: mb_substr($reasonText, 0, 255)
         );
     }
 }
