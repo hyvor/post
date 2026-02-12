@@ -97,7 +97,7 @@ class UpdateSubscriberTest extends WebTestCase
             [
                 [
                     'property' => 'status',
-                    'message' => 'This value should be of type subscribed|unsubscribed|pending.',
+                    'message' => 'This value should be of type int|string.',
                 ],
             ]
         );
