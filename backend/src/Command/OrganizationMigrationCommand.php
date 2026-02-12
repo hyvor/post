@@ -67,7 +67,6 @@ class OrganizationMigrationCommand extends Command
                     try {
 
                         $initOrgEvent = new InitOrg($owner->getHyvorUserId());
-                        /** @var InitOrgResponse $initOrgResponse */
                         $initOrgResponse = $this->comms->send($initOrgEvent);
 
                         $createdOrgId = $initOrgResponse->orgId;
