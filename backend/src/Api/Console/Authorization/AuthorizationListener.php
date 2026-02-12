@@ -115,11 +115,10 @@ class AuthorizationListener
         $user = $me->getUser();
         $organization = $me->getOrganization();
         $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
+        $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
 
         if ($noOrganizationRequired) {
-            if ($organization !== null) {
-                $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
-            }
+            assert($isOrganizationLevelEndpoint === true);
             return;
         }
 
@@ -132,8 +131,6 @@ class AuthorizationListener
         if ($organizationFromFrontend !== $organization->id) {
             throw new AccessDeniedHttpException('org_mismatch');
         }
-
-        $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
 
         // organization-level endpoints do not have a newsletter ID
         if ($isOrganizationLevelEndpoint === false) {
@@ -210,7 +207,8 @@ class AuthorizationListener
 
     public static function hasOrganization(Request $request): bool
     {
-        return $request->attributes->has(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY);
+        return $request->attributes->has(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY)
+            && $request->attributes->get(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY) instanceof AuthUserOrganization;
     }
 
     // make sure the organization is set before calling this
