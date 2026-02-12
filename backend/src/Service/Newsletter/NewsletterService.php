@@ -51,7 +51,6 @@ class NewsletterService
             $newsletter = new Newsletter()
                 ->setName($name)
                 ->setUserId($userId)
-                ->setCreatedByUserId($userId)
                 ->setOrganizationId($organizationId)
                 ->setMeta(new NewsletterMeta())
                 ->setSubdomain($subdomain)
