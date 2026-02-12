@@ -203,9 +203,12 @@ class SendIssueTest extends WebTestCase
             'sending_profile' => $sendingProfile,
         ]);
 
+        $license = PostLicense::trial();
+        $license->emails = 10;
+
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(10, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
         );
 
         $response = $this->consoleApi(
@@ -282,9 +285,12 @@ class SendIssueTest extends WebTestCase
             'content' => "content"
         ]);
 
+        $license = PostLicense::trial();
+        $license->emails = 10;
+
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(10, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
         );
 
         $response = $this->consoleApi(

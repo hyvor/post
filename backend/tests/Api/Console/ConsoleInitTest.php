@@ -178,7 +178,7 @@ class ConsoleInitTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(
@@ -252,7 +252,7 @@ class ConsoleInitTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(
