@@ -60,17 +60,24 @@ class ConsoleController extends AbstractController
         $user = AuthorizationListener::getUser($request);
         $organization = AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null;
 
-        $newsletters = $organization ? array_map(
-            fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
-            $this->newsletterService->getNewslettersOfOrganization($organization->id)
-        ) : null;
-        $userApproval = $organization ? $this->approvalService->getApprovalOfOrganization($organization) : null;
+        $newsletters = [];
+        $license = new ResolvedLicense(ResolvedLicenseType::NONE);
+        $organizationApproval = null;
+
+        if ($organization) {
+            $newsletters = array_map(
+                fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
+                $this->newsletterService->getUserNewslettersOfOrganization($user->id, $organization->id)
+            );
+            $license = $this->billing->license($organization->id);
+            $organizationApproval = $this->approvalService->getApprovalOfOrganization($organization);
+        }
 
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
             'organization' => $organization,
-            'resolved_license' => $organization ? $this->billing->license($organization->id) : new ResolvedLicense(ResolvedLicenseType::NONE),
+            'resolved_license' => $license,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -84,7 +91,7 @@ class ConsoleController extends AbstractController
                 ],
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
-            'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
+            'user_approval' => $organizationApproval ? $organizationApproval->getStatus() : ApprovalStatus::PENDING,
         ]);
     }
 

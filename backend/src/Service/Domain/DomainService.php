@@ -143,6 +143,8 @@ class DomainService
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
 
+            // TODO: Mail should be sent to the organization
+            // https://github.com/hyvor/core/issues/493
             $authUser = $this->auth->fromId($domain->getUserId());
 
             if ($authUser) {

@@ -68,7 +68,6 @@ class ConsoleInitTest extends WebTestCase
         assert($doctrine instanceof \Doctrine\Bundle\DoctrineBundle\Registry);
         $doctrine->getManager()->clear();
 
-
         // other user
         NewsletterFactory::createMany(1, [
             'user_id' => 2,
@@ -83,6 +82,15 @@ class ConsoleInitTest extends WebTestCase
             'newsletter' => $newsletterAdmin,
             'hyvor_user_id' => 1,
             'role' => UserRole::ADMIN
+        ]);
+
+        $noAccessNewsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
+        UserFactory::createOne([
+            'newsletter' => $noAccessNewsletter,
+            'hyvor_user_id' => 2,
+            'role' => UserRole::OWNER
         ]);
 
         BillingFake::enableForSymfony(
@@ -143,7 +151,8 @@ class ConsoleInitTest extends WebTestCase
         $data = json_decode($content, true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('newsletters', $data);
-        $this->assertNull($data['newsletters']);
+        $this->assertIsArray($data['newsletters']);
+        $this->assertCount(0, $data['newsletters']);
 
         $this->assertArrayHasKey('user', $data);
         $this->assertIsArray($data['user']);
