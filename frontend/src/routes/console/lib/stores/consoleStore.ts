@@ -1,6 +1,10 @@
 import { writable } from 'svelte/store';
-import type { AppConfig, Approval, ApprovalStatus, ResolvedLicense } from '../../types';
-import type { CloudContextOrganization, CloudContextUser } from '@hyvor/design/cloud';
+import type { AppConfig, Approval, ApprovalStatus } from '../../types';
+import type {
+	CloudContextOrganization,
+	CloudContextUser,
+	ResolvedLicense
+} from '@hyvor/design/cloud';
 
 export const selectingNewsletter = writable(false);
 export const approvalStore = writable<Approval>();

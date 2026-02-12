@@ -8,7 +8,7 @@ export function getNewsletterUsers() {
 }
 
 interface AddUserInput {
-	userId: number;
+	user_id: number;
 	role: string;
 }
 

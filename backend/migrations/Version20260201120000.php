@@ -18,19 +18,21 @@ final class Version20260201120000 extends AbstractMigration
     {
         $this->addSql(
             <<<SQL
-            ALTER TABLE domains ADD COLUMN organization_id BIGINT DEFAULT NULL;
-            SQL
-        );
-        $this->addSql(
-            <<<SQL
-            ALTER TABLE newsletters 
+            ALTER TABLE domains 
                 ADD COLUMN organization_id BIGINT DEFAULT NULL,
-                ADD COLUMN created_by_user_id BIGINT DEFAULT NULL;
+                ALTER COLUMN user_id DROP NOT NULL;
             SQL
         );
         $this->addSql(
             <<<SQL
-            ALTER TABLE approvals ADD COLUMN organization_id BIGINT DEFAULT NULL;
+            ALTER TABLE newsletters ADD COLUMN organization_id BIGINT DEFAULT NULL;
+            SQL
+        );
+        $this->addSql(
+            <<<SQL
+            ALTER TABLE approvals 
+                ADD COLUMN organization_id BIGINT DEFAULT NULL,
+                ALTER COLUMN user_id DROP NOT NULL;
             SQL
         );
     }

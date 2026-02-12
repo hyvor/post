@@ -30,9 +30,6 @@ class Newsletter
     #[ORM\Column(nullable: true)]
     private ?int $organization_id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $created_by_user_id = null;
-
     #[ORM\Column(length: 255)]
     private string $name;
 
@@ -112,18 +109,6 @@ class Newsletter
     public function setOrganizationId(?int $organization_id): static
     {
         $this->organization_id = $organization_id;
-
-        return $this;
-    }
-
-    public function getCreatedByUserId(): ?int
-    {
-        return $this->created_by_user_id;
-    }
-
-    public function setCreatedByUserId(?int $created_by_user_id): static
-    {
-        $this->created_by_user_id = $created_by_user_id;
 
         return $this;
     }

@@ -13,6 +13,8 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\UserFactory;
+use Hyvor\Internal\Auth\AuthFake;
+use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
@@ -28,8 +30,28 @@ class ConsoleInitTest extends WebTestCase
     // TODO: tests for input validation
     // TODO: tests for authentication
 
+    protected function shouldEnableAuthFake(): bool
+    {
+        return false;
+    }
+
+    private function enableAuthFake(bool $withOrganization = true): void
+    {
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            $withOrganization ? new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            ) : null
+        );
+    }
+
     public function testInitConsole(): void
     {
+        $this->enableAuthFake();
+
         $newsletters = NewsletterFactory::createMany(10, [
             'organization_id' => 1,
         ]);
@@ -86,6 +108,50 @@ class ConsoleInitTest extends WebTestCase
         $this->assertIsArray($data['newsletters']);
         $this->assertSame(11, count($data['newsletters']));
 
+        $this->assertArrayHasKey('user', $data);
+        $this->assertIsArray($data['user']);
+        $this->assertCount(9, $data['user']);
+
+        $this->assertArrayHasKey('organization', $data);
+        $this->assertIsArray($data['organization']);
+        $this->assertCount(3, $data['organization']);
+
+        $this->assertArrayHasKey('config', $data);
+        $config = $data['config'];
+        $this->assertArrayHasKey('newsletter_defaults', $config);
+
+        $this->assertArrayHasKey('user_approval', $data);
+        $this->assertSame(ApprovalStatus::PENDING->value, $data['user_approval']);
+    }
+
+    public function testInitConsoleWithoutOrg(): void
+    {
+        $this->enableAuthFake(false);
+
+        $response = $this->consoleApi(
+            null,
+            'GET',
+            '/init'
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertNotFalse($content);
+        $this->assertJson($content);
+
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('newsletters', $data);
+        $this->assertNull($data['newsletters']);
+
+        $this->assertArrayHasKey('user', $data);
+        $this->assertIsArray($data['user']);
+        $this->assertCount(9, $data['user']);
+
+        $this->assertArrayHasKey('organization', $data);
+        $this->assertNull($data['organization']);
+
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
         $this->assertArrayHasKey('newsletter_defaults', $config);
@@ -96,6 +162,8 @@ class ConsoleInitTest extends WebTestCase
 
     public function testInitNewsletter(): void
     {
+        $this->enableAuthFake();
+
         $newsletter = NewsletterFactory::createOne([
             'organization_id' => 1,
         ]);
@@ -110,7 +178,7 @@ class ConsoleInitTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(
@@ -184,7 +252,7 @@ class ConsoleInitTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(

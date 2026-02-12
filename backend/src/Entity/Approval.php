@@ -24,8 +24,8 @@ class Approval
     #[ORM\Column]
     private int $user_id;
 
-    #[ORM\Column]
-    private int $organization_id;
+    #[ORM\Column(nullable: true)]
+    private ?int $organization_id = null;
 
     #[ORM\Column(nullable: false, enumType: ApprovalStatus::class)]
     private ApprovalStatus $status;
@@ -108,14 +108,14 @@ class Approval
         return $this->user_id;
     }
 
-    public function setOrganizationId(int $organization_id): static
+    public function setOrganizationId(?int $organization_id): static
     {
         $this->organization_id = $organization_id;
 
         return $this;
     }
 
-    public function getOrganizationId(): int
+    public function getOrganizationId(): ?int
     {
         return $this->organization_id;
     }

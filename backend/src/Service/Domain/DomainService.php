@@ -9,7 +9,7 @@ use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -27,7 +27,8 @@ class DomainService
         private LoggerInterface         $logger,
         private readonly Environment    $mailTemplate,
         private readonly StringsFactory $stringsFactory,
-        private RelayApiClient          $relayApiClient
+        private RelayApiClient          $relayApiClient,
+        private AuthInterface           $auth
     )
     {
     }
@@ -45,9 +46,9 @@ class DomainService
     /**
      * @return Domain[]
      */
-    public function getDomainsByUserId(int $userId): array
+    public function getDomainsByOrganizationId(int $organizationId): array
     {
-        return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
+        return $this->em->getRepository(Domain::class)->findBy(['organization_id' => $organizationId]);
     }
 
     /**
@@ -123,7 +124,7 @@ class DomainService
      * @return array{verified: bool, debug: null | array{last_checked_at: string, error_type: string}}
      * @throws VerifyDomainException
      */
-    public function verifyDomain(Domain $domain, AuthUser $hyvorUser): array
+    public function verifyDomain(Domain $domain): array
     {
         try {
             $result = $this->relayApiClient->verifyDomain($domain->getRelayId());
@@ -136,8 +137,9 @@ class DomainService
         }
 
         $verified = $result->status === RelayDomainStatus::ACTIVE;
+        $authUser = $this->auth->fromId($domain->getUserId());
 
-        if ($verified) {
+        if ($verified && $authUser !== null) {
             // use a separate method with DTO
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
@@ -147,7 +149,7 @@ class DomainService
             $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
                     'component' => 'post',
                     'strings' => [
-                        'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
+                        'greeting' => $strings->get('mail.common.greeting', ['name' => $authUser->name]),
                         'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
                         ),
                         'domain' => $domain->getDomain(),
@@ -156,7 +158,7 @@ class DomainService
             );
 
             $this->emailNotificationService->send(
-                $hyvorUser->email,
+                $authUser->email,
                 $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
                 $mail,
             );

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\NoOrganizationRequired;
+use App\Api\Console\Authorization\OrganizationOptional;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\OrganizationLevelEndpoint;
@@ -26,6 +26,8 @@ use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,29 +54,23 @@ class ConsoleController extends AbstractController
 
     #[Route('/init', methods: 'GET')]
     #[OrganizationLevelEndpoint]
-    #[NoOrganizationRequired]
+    #[OrganizationOptional]
     public function initConsole(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null;
 
-        if (!AuthorizationListener::hasOrganization($request)) {
-            throw new BadRequestHttpException('no_organization');
-        }
-
-        $organization = AuthorizationListener::getOrganization($request);
-
-        $newslettersUsers = $this->newsletterService->getNewslettersOfOrganization($organization->id);
-        $newsletters = array_map(
+        $newsletters = $organization ? array_map(
             fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
-            $newslettersUsers
-        );
-        $userApproval = $this->approvalService->getApprovalOfOrganization($organization);
+            $this->newsletterService->getNewslettersOfOrganization($organization->id)
+        ) : null;
+        $userApproval = $organization ? $this->approvalService->getApprovalOfOrganization($organization) : null;
 
         return new JsonResponse([
             'newsletters' => $newsletters,
             'user' => $user,
             'organization' => $organization,
-            'resolved_license' => $this->billing->license($organization->id),
+            'resolved_license' => $organization ? $this->billing->license($organization->id) : new ResolvedLicense(ResolvedLicenseType::NONE),
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),

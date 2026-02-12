@@ -34,8 +34,8 @@ class Domain
     #[ORM\Column]
     private int $user_id;
 
-    #[ORM\Column]
-    private int $organization_id;
+    #[ORM\Column(nullable: true)]
+    private ?int $organization_id = null;
 
     #[ORM\Column]
     private int $relay_id;
@@ -133,12 +133,12 @@ class Domain
         return $this;
     }
 
-    public function getOrganizationId(): int
+    public function getOrganizationId(): ?int
     {
         return $this->organization_id;
     }
 
-    public function setOrganizationId(int $organization_id): static
+    public function setOrganizationId(?int $organization_id): static
     {
         $this->organization_id = $organization_id;
 

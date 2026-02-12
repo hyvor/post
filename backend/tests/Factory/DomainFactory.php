@@ -40,6 +40,7 @@ final class DomainFactory extends PersistentProxyObjectFactory
             'dkim_txt_value' => self::faker()->text(),
             'domain' => self::faker()->domainName(),
             'user_id' => self::faker()->randomNumber(),
+            'organization_id' => self::faker()->randomNumber(),
             'relay_id' => self::faker()->randomNumber(),
         ];
     }

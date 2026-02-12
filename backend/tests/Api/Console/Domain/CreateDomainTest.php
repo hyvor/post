@@ -77,6 +77,8 @@ class CreateDomainTest extends WebTestCase
         $domain = $domainRepository->find($domainId);
         $this->assertNotNull($domain);
         $this->assertSame('hyvor.com', $domain->getDomain());
+        $this->assertSame(1, $domain->getOrganizationId());
+        $this->assertSame(1, $domain->getUserId());
     }
 
     public function test_create_system_domain_fails(): void
@@ -139,7 +141,7 @@ class CreateDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => $current ? 1 : 2
+                'organization_id' => $current ? 1 : 2
             ]
         );
 
@@ -156,7 +158,7 @@ class CreateDomainTest extends WebTestCase
         $this->assertSame(
             $current ?
                 'This domain is already registered' :
-                'This domain is already registered by another user',
+                'This domain is already registered by another organization',
             $json['message']
         );
     }

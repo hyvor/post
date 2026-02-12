@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(UserController::class)]
 #[CoversClass(UserService::class)]
 #[CoversClass(UserObject::class)]
-class DeleteUser extends WebTestCase
+class DeleteUserTest extends WebTestCase
 {
     public function test_delete_user(): void
     {

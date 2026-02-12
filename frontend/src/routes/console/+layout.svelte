@@ -9,11 +9,12 @@
 		CloudContext,
 		type CloudContextOrganization,
 		type CloudContextUser,
+		type ResolvedLicense,
 		HyvorBar
 	} from '@hyvor/design/cloud';
 	import en from '../../../../shared/locale/en.json';
 	import fr from '../../../../shared/locale/fr.json';
-	import type { AppConfig, ApprovalStatus, NewsletterList, ResolvedLicense } from './types';
+	import type { AppConfig, ApprovalStatus, NewsletterList } from './types';
 	import { onMount } from 'svelte';
 	import consoleApi from './lib/consoleApi';
 	import { page } from '$app/state';

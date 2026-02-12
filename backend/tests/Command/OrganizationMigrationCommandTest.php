@@ -45,9 +45,13 @@ class OrganizationMigrationCommandTest extends KernelTestCase
                 'newsletter' => $newsletter,
                 'role' => UserRole::ADMIN
             ]);
+
+            $userIds = [$user->getHyvorUserId(), $admin->getHyvorUserId()];
+            sort($userIds);
+
             $shouldReceiveEnsureMembers[] = [
                 'newsletter' => $newsletter,
-                'userIds' => [$user->getHyvorUserId(), $admin->getHyvorUserId()]
+                'userIds' => $userIds
             ];
         }
 
@@ -87,6 +91,52 @@ class OrganizationMigrationCommandTest extends KernelTestCase
             'organization_id' => null,
         ]);
         $this->assertCount(0, $pendingApprovals);
+    }
+
+    public function test_update_organization_id(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => null,
+        ]);
+
+        $orgId = rand();
+        $this->getComms()->addResponse(InitOrg::class, function () use ($orgId) {
+            return new InitOrgResponse($orgId);
+        });
+
+        $user = UserFactory::createOne([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => $newsletter->getUserId(),
+            'role' => UserRole::OWNER
+        ]);
+        DomainFactory::createOne([
+            'user_id' => $user->getHyvorUserId()
+        ]);
+        ApprovalFactory::createOne([
+            'user_id' => $user->getHyvorUserId()
+        ]);
+
+        $command = $this->commandTester('organization:migrate');
+        $exitCode = $command->execute([]);
+        $this->assertSame(0, $exitCode);
+
+        $this->getComms()->assertSent(InitOrg::class, Component::CORE);
+
+        // Assert everything is updated
+        $updatedNewsletters = $this->getEm()->getRepository(Newsletter::class)->findOneBy([
+            'organization_id' => $orgId,
+        ]);
+        $this->assertNotNull($updatedNewsletters);
+
+        $updatedDomains = $this->getEm()->getRepository(Domain::class)->findOneBy([
+            'organization_id' => $orgId,
+        ]);
+        $this->assertNotNull($updatedDomains);
+        
+        $updatedApprovals = $this->getEm()->getRepository(Approval::class)->findOneBy([
+            'organization_id' => $orgId,
+        ]);
+        $this->assertNotNull($updatedApprovals);
     }
 
     public function test_does_not_update_migrated_organizations(): void

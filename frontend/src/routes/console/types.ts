@@ -114,16 +114,6 @@ export type User = {
 	user: UserMini;
 };
 
-export interface ResolvedLicense {
-	type: 'enterprise_contract' | 'subscription' | 'trial' | 'expired' | 'none';
-	license: Record<string, number | boolean> | null;
-	subscription: null | {
-		plan_readable_name: string;
-		cancel_at: null | number;
-	};
-	trial_ends_at: null | number;
-}
-
 export type NewsletterList = {
 	role: UserRole;
 	newsletter: Newsletter;

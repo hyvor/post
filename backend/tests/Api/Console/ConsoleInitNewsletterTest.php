@@ -32,9 +32,12 @@ class ConsoleInitNewsletterTest extends WebTestCase
         ]);
         $otherNewsletter = NewsletterFactory::createOne();
 
+        $license = PostLicense::trial();
+        $license->allowRemoveBranding = true;
+
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
         );
 
         // --- subscribers
@@ -131,7 +134,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, false))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(
@@ -214,7 +217,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, new PostLicense(1000, true))]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
 
         $response = $this->consoleApi(

@@ -22,7 +22,7 @@
 		isInviting = true;
 
 		addUser({
-			userId: invitingUserId,
+			user_id: invitingUserId,
 			role: 'admin' // Hardcoded for now
 		})
 			.then((user) => {

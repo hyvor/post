@@ -10,7 +10,7 @@ class CreateUserInput
     #[Assert\NotBlank]
     #[Assert\Type('integer')]
     #[Assert\Positive]
-    public int $userId;
+    public int $user_id;
 
 //    #[Assert\NotBlank]
 //    public UserRole $role;
