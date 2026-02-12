@@ -125,9 +125,10 @@ class OrganizationMigrationCommand extends Command
     private function ensureMembersOfOrganization(int $organizationId): void
     {
         $conn = $this->em->getConnection();
-        $userIds = $conn->fetchFirstColumn(
+        /** @var string[] $rawUserIds */
+        $rawUserIds = $conn->fetchFirstColumn(
             <<<SQL
-                SELECT u.hyvor_user_id
+                SELECT DISTINCT u.hyvor_user_id
                 FROM users u
                 JOIN newsletters n ON n.id = u.newsletter_id
                 WHERE n.organization_id = :orgId
@@ -137,14 +138,12 @@ class OrganizationMigrationCommand extends Command
             ]
         );
 
-        if (count($userIds) === 0) {
+        if (count($rawUserIds) === 0) {
             return;
         }
 
-        $userIds = array_map(function ($id) {
-            /** @var int|string $id */
-            return intval($id);
-        }, $userIds);
+        /** @var int[] $userIds */
+        $userIds = array_map('intval', $rawUserIds);
 
         $ensureMembersEvent = new EnsureMembers(
             $organizationId,
