@@ -15,11 +15,16 @@ use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\EnsureMembers;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrg;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrgResponse;
 use Hyvor\Internal\Component\Component;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 class OrganizationMigrationCommandTest extends KernelTestCase
 {
+    use ClockSensitiveTrait;
+
     public function test_organization_migration(): void
     {
+        $this->mockTime();
+
         $newsletters = NewsletterFactory::createMany(3, [
             'organization_id' => null,
         ]);
@@ -72,7 +77,10 @@ class OrganizationMigrationCommandTest extends KernelTestCase
                 fn(array $item) => $item['event']->orgId === $receivable['newsletter']->getOrganizationId()
             ))[0];
 
-            $this->assertSame($receivable['userIds'], $event['event']->userIds);
+            $eventUserIds = $event['event']->userIds;
+            sort($eventUserIds);
+
+            $this->assertSame($receivable['userIds'], $eventUserIds);
         }
 
         // Assert everything is updated
@@ -95,6 +103,8 @@ class OrganizationMigrationCommandTest extends KernelTestCase
 
     public function test_update_organization_id(): void
     {
+        $this->mockTime();
+
         $newsletter = NewsletterFactory::createOne([
             'organization_id' => null,
         ]);
@@ -132,7 +142,7 @@ class OrganizationMigrationCommandTest extends KernelTestCase
             'organization_id' => $orgId,
         ]);
         $this->assertNotNull($updatedDomains);
-        
+
         $updatedApprovals = $this->getEm()->getRepository(Approval::class)->findOneBy([
             'organization_id' => $orgId,
         ]);
@@ -141,6 +151,8 @@ class OrganizationMigrationCommandTest extends KernelTestCase
 
     public function test_does_not_update_migrated_organizations(): void
     {
+        $this->mockTime();
+
         $newsletters = NewsletterFactory::createMany(3, [
             'organization_id' => null,
         ]);

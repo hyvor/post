@@ -12,9 +12,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Bundle\Comms\CommsInterface;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\EnsureMembers;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrg;
-use Hyvor\Internal\Bundle\Comms\Event\ToCore\OrgMigration\InitOrgResponse;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
-use Symfony\Component\Clock\ClockAwareTrait;
+use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,12 +26,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
 )]
 class OrganizationMigrationCommand extends Command
 {
-    use ClockAwareTrait;
 
     public function __construct(
         private EntityManagerInterface $em,
         private CommsInterface         $comms,
         private KernelInterface        $kernel,
+        private ClockInterface $clock,
     )
     {
         parent::__construct();
@@ -54,13 +53,13 @@ class OrganizationMigrationCommand extends Command
                 ->getResult();
 
             if ($this->kernel->getEnvironment() === 'test' && count($ownersWithoutOrg) === 0) {
-                $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: No more users to update. Exiting.");
+                $output->writeln("{$this->clock->now()->format('Y-m-d H:i:s')}: No more users to update. Exiting.");
                 break;
             }
 
             foreach ($ownersWithoutOrg as $owner) {
 
-                $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updating User => ID: {$owner->getId()} | HTID: {$owner->getHyvorUserId()}");
+                $output->writeln("{$this->clock->now()->format('Y-m-d H:i:s')}: Updating User => ID: {$owner->getId()} | HTID: {$owner->getHyvorUserId()}");
 
                 $this->em->wrapInTransaction(function () use ($owner, $output) {
 
@@ -83,8 +82,9 @@ class OrganizationMigrationCommand extends Command
                 });
             }
 
-            $output->writeln("{$this->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users\n\n\n");
-            sleep(2);
+            $output->writeln("{$this->clock->now()->format('Y-m-d H:i:s')}: Updated " . count($ownersWithoutOrg) . " users\n\n\n");
+
+            $this->clock->sleep(2);
         }
 
         return Command::SUCCESS;

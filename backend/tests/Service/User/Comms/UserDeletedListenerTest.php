@@ -15,7 +15,7 @@ class UserDeletedListenerTest extends WebTestCase
 {
     public function test_delete_users(): void
     {
-        $deletingUserId = 12345;
+        $deletingUserId = rand();
 
         $deletingUsers1 = UserFactory::createMany(2, [
             'newsletter' => NewsletterFactory::new(),
@@ -30,7 +30,7 @@ class UserDeletedListenerTest extends WebTestCase
         $deletingUserId2 = $deletingUsers2[0]->getId();
 
         $nonDeletingUsers = UserFactory::createMany(4, [
-            'newsletter' => NewsletterFactory::createOne()
+            'newsletter' => NewsletterFactory::new(),
         ]);
         $nonDeletingUserId = $nonDeletingUsers[0]->getId();
 
