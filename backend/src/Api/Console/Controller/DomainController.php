@@ -45,9 +45,9 @@ class DomainController extends AbstractController
     #[OrganizationLevelEndpoint]
     public function getDomains(Request $request): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
-        $domains = $this->domainService->getDomainsByUserId($user->id);
+        $domains = $this->domainService->getDomainsByOrganizationId($organization->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
 
@@ -69,9 +69,9 @@ class DomainController extends AbstractController
 
         if ($domainInDb) {
             throw new BadRequestHttpException(
-                $domainInDb->getUserId() === $user->id ?
+                $domainInDb->getOrganizationId() === $organization->id ?
                     'This domain is already registered' :
-                    'This domain is already registered by another user'
+                    'This domain is already registered by another organization'
             );
         }
 
@@ -87,11 +87,11 @@ class DomainController extends AbstractController
     #[OrganizationLevelEndpoint]
     public function verifyDomain(Request $request, string $id): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
         $domain = $this->resolveDomainEntity($id);
 
-        if ($domain->getUserId() !== $user->id) {
-            throw new BadRequestHttpException('You are not the owner of this domain');
+        if ($domain->getOrganizationId() !== $organization->id) {
+            throw new BadRequestHttpException('Your current organization does not own this domain');
         }
 
         if ($domain->isVerifiedInRelay()) {
@@ -99,7 +99,7 @@ class DomainController extends AbstractController
         }
 
         try {
-            $result = $this->domainService->verifyDomain($domain, $user);
+            $result = $this->domainService->verifyDomain($domain);
             return $this->json([
                 'data' => $result,
                 'domain' => new DomainObject($domain),
@@ -113,11 +113,11 @@ class DomainController extends AbstractController
     #[OrganizationLevelEndpoint]
     public function deleteDomain(Request $request, string $id): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
         $domain = $this->resolveDomainEntity($id);
 
-        if ($domain->getUserId() !== $user->id) {
-            throw new BadRequestHttpException('You are not the owner of this domain');
+        if ($domain->getOrganizationId() !== $organization->id) {
+            throw new BadRequestHttpException('Your current organization does not own this domain');
         }
 
         try {
