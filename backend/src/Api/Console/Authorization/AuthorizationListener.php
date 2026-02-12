@@ -97,7 +97,7 @@ class AuthorizationListener
         $request = $event->getRequest();
         $newsletterId = $request->headers->get('x-newsletter-id');
         $isOrganizationLevelEndpoint = count($event->getAttributes(OrganizationLevelEndpoint::class)) > 0;
-        $noOrganizationRequired = count($event->getAttributes(NoOrganizationRequired::class)) > 0;
+        $noOrganizationRequired = count($event->getAttributes(OrganizationOptional::class)) > 0;
 
         $me = $this->auth->me($request);
 
