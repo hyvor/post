@@ -6,21 +6,30 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\BlogsLicense;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 class GetUsageTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     public function test_get_usage(): void
     {
         $date = new \DateTimeImmutable('2025-05-10');
-        Clock::set(new MockClock($date));
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        static::mockTime($date);
+
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
 
         // current user sends
-        $currentUserNewsletter = NewsletterFactory::createOne(['user_id' => 1]);
+        $currentUserNewsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $firstDayThisMonth = $date->modify('first day of this month')->modify('+1 day');
         SendFactory::createMany(3, [
             'newsletter' => $currentUserNewsletter,
@@ -38,7 +47,7 @@ class GetUsageTest extends WebTestCase
         ]);
 
         // other user
-        $otherUserNewsletter = NewsletterFactory::createOne(['user_id' => 2]);
+        $otherUserNewsletter = NewsletterFactory::createOne(['organization_id' => 2]);
         SendFactory::createMany(5, [
             'newsletter' => $otherUserNewsletter,
             'created_at' => $firstDayThisMonth,

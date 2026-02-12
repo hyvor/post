@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -27,6 +28,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[CoversClass(DomainObject::class)]
 class CreateDomainTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     private function mockHttpClient(): void
     {
@@ -53,9 +55,9 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -77,15 +79,17 @@ class CreateDomainTest extends WebTestCase
         $domain = $domainRepository->find($domainId);
         $this->assertNotNull($domain);
         $this->assertSame('hyvor.com', $domain->getDomain());
+        $this->assertSame(1, $domain->getOrganizationId());
+        $this->assertSame(1, $domain->getUserId());
     }
 
     public function test_create_system_domain_fails(): void
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -106,9 +110,9 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -134,12 +138,12 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => $current ? 1 : 2
+                'organization_id' => $current ? 1 : 2
             ]
         );
 
@@ -156,7 +160,7 @@ class CreateDomainTest extends WebTestCase
         $this->assertSame(
             $current ?
                 'This domain is already registered' :
-                'This domain is already registered by another user',
+                'This domain is already registered by another organization',
             $json['message']
         );
     }

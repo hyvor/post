@@ -17,7 +17,7 @@ class GetApprovalTest extends WebTestCase
     public function test_get_approvals(): void
     {
         $approval = ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
         ]);
 
         $response = $this->consoleApi(

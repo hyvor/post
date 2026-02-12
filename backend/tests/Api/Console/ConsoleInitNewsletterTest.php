@@ -15,6 +15,8 @@ use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ConsoleController::class)]
@@ -25,13 +27,18 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_stats_subscribers_and_issues(): void
     {
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
+        $otherNewsletter = NewsletterFactory::createOne();
+
+        $license = PostLicense::trial();
+        $license->allowRemoveBranding = true;
+
         BillingFake::enableForSymfony(
             $this->container,
-            license: new PostLicense(allowRemoveBranding: true)
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
         );
-
-        $newsletter = NewsletterFactory::createOne();
-        $otherNewsletter = NewsletterFactory::createOne();
 
         // --- subscribers
 
@@ -121,12 +128,14 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_when_can_no_permissions_to_change_branding(): void
     {
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
+
         BillingFake::enableForSymfony(
             $this->container,
-            license: new PostLicense(allowRemoveBranding: false)
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
         );
-
-        $newsletter = NewsletterFactory::createOne();
 
         $response = $this->consoleApi(
             $newsletter->getId(),
@@ -144,7 +153,9 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
     public function test_stats_bounced_complained_rates(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1,
+        ]);
 
         $issueThisMonth = IssueFactory::createOne([
             'newsletter' => $newsletter,
@@ -204,7 +215,10 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'status' => SendStatus::SENT,
         ]);
 
-        BillingFake::enableForSymfony($this->container, new PostLicense());
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
+        );
 
         $response = $this->consoleApi(
             $newsletter,
@@ -228,6 +242,4 @@ class ConsoleInitNewsletterTest extends WebTestCase
         $this->assertSame(13.64, $complainedRate['total']);
         $this->assertSame(12.5, $complainedRate['last_30_days']);
     }
-
-
 }

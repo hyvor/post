@@ -27,12 +27,12 @@ class DeleteDomainTest extends WebTestCase
     public function testDeleteDomain(): void
     {
         $this->mockDeleteDomainEntity();
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 1,
+                'organization_id' => 1,
             ]
         );
 
@@ -55,7 +55,7 @@ class DeleteDomainTest extends WebTestCase
 
     public function testDeleteDomainNotFound(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -74,12 +74,12 @@ class DeleteDomainTest extends WebTestCase
     public function test_user_can_only_delete_their_domains(): void
     {
         $this->mockDeleteDomainEntity();
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 2,
+                'organization_id' => 2,
             ]
         );
 
@@ -94,6 +94,6 @@ class DeleteDomainTest extends WebTestCase
         $this->assertSame(400, $response->getStatusCode());
 
         $json = $this->getJson();
-        $this->assertSame('You are not the owner of this domain', $json['message']);
+        $this->assertSame('Your current organization does not own this domain', $json['message']);
     }
 }

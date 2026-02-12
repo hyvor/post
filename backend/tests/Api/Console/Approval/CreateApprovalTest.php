@@ -55,6 +55,8 @@ class CreateApprovalTest extends WebTestCase
         $approval = $this->em->getRepository(Approval::class)
             ->findOneBy(['id' => $data['id']]);
         $this->assertNotNull($approval);
+        $this->assertSame(1, $approval->getOrganizationId());
+        $this->assertSame(1, $approval->getUserId());
         $this->assertSame(ApprovalStatus::REVIEWING, $approval->getStatus());
         $this->assertSame('HYVOR', $approval->getCompanyName());
         $this->assertSame('FR', $approval->getCountry());
@@ -72,7 +74,7 @@ class CreateApprovalTest extends WebTestCase
     public function test_account_already_approved(): void
     {
         ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::APPROVED,
         ]);
 
@@ -100,7 +102,7 @@ class CreateApprovalTest extends WebTestCase
     public function test_account_already_rejected(): void
     {
         ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::REJECTED,
         ]);
 

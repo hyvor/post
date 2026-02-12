@@ -114,14 +114,6 @@ export type User = {
 	user: UserMini;
 };
 
-export type Invite = {
-	id: number;
-	created_at: number;
-	role: UserRole;
-	user: UserMini;
-	expires_at: number;
-};
-
 export type NewsletterList = {
 	role: UserRole;
 	newsletter: Newsletter;
