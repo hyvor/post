@@ -57,7 +57,7 @@ class UserController extends AbstractController
     #[ScopeRequired(Scope::USERS_WRITE)]
     public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
-        $hyvorUser = $this->auth->fromId($input->userId);
+        $hyvorUser = $this->auth->fromId($input->user_id);
 
         if (!$hyvorUser) {
             throw new BadRequestHttpException("User does not exists");
