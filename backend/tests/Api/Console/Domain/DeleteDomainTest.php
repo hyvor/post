@@ -32,7 +32,7 @@ class DeleteDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 1,
+                'organization_id' => 1,
             ]
         );
 
@@ -79,7 +79,7 @@ class DeleteDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 2,
+                'organization_id' => 2,
             ]
         );
 
@@ -94,6 +94,6 @@ class DeleteDomainTest extends WebTestCase
         $this->assertSame(400, $response->getStatusCode());
 
         $json = $this->getJson();
-        $this->assertSame('You are not the owner of this domain', $json['message']);
+        $this->assertSame('Your current organization does not own this domain', $json['message']);
     }
 }

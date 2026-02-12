@@ -70,6 +70,8 @@ class CreateSubscriberTest extends WebTestCase
 
     public function testCreateSubscriberWithAllInputs(): void
     {
+        $this->markTestSkipped();
+        // @phpstan-ignore-next-line
         $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);

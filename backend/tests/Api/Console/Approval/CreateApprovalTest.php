@@ -55,6 +55,8 @@ class CreateApprovalTest extends WebTestCase
         $approval = $this->em->getRepository(Approval::class)
             ->findOneBy(['id' => $data['id']]);
         $this->assertNotNull($approval);
+        $this->assertSame(1, $approval->getOrganizationId());
+        $this->assertSame(1, $approval->getUserId());
         $this->assertSame(ApprovalStatus::REVIEWING, $approval->getStatus());
         $this->assertSame('HYVOR', $approval->getCompanyName());
         $this->assertSame('FR', $approval->getCountry());
