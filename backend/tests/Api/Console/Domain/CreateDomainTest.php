@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -27,6 +28,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[CoversClass(DomainObject::class)]
 class CreateDomainTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     private function mockHttpClient(): void
     {
@@ -53,7 +55,7 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
@@ -85,7 +87,7 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
@@ -108,7 +110,7 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
@@ -136,7 +138,7 @@ class CreateDomainTest extends WebTestCase
     {
         $this->mockHttpClient();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $domain = DomainFactory::createOne(
             [

@@ -11,11 +11,14 @@ use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
 class ConfirmSubscriptionTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     public function test_confirm_subscription(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -73,7 +76,7 @@ class ConfirmSubscriptionTest extends WebTestCase
     public function test_confirm_subscription_with_expired_token(): void
     {
         $date = new \DateTimeImmutable('2025-10-09 00:00:00');
-        Clock::set(new MockClock($date));
+        static::mockTime($date);
 
         $newsletter = NewsletterFactory::createOne();
         $subscriber = SubscriberFactory::createOne([

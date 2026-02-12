@@ -11,19 +11,21 @@ use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(ListController::class)]
 #[CoversClass(NewsletterListService::class)]
 #[CoversClass(NewsletterList::class)]
 class DeleteListTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     // TODO: tests for input validation (when the newsletter is not found)
     // TODO: tests for authentication
 
     public function testDeleteNewsletterListFound(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
 

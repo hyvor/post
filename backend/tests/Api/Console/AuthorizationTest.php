@@ -22,11 +22,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(AuthorizationListener::class)]
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     protected function shouldEnableAuthFake(): bool
     {
@@ -265,7 +267,7 @@ class AuthorizationTest extends WebTestCase
 
     public function test_authorizes_via_api_key_and_updates_last_usage(): void
     {
-        Clock::set(new MockClock('2025-06-01 00:00:00'));
+        static::mockTime(new \DateTimeImmutable('2025-06-01 00:00:00'));
 
         $newsletter = NewsletterFactory::createOne();
         $this->consoleApi(

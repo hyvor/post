@@ -29,6 +29,7 @@ use Hyvor\Internal\InternalConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]
@@ -38,6 +39,8 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(SendService::class)]
 class SendIssueTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     // Input validation tests
     // TODO: Refactor validation test into one
     public function testSendNonDraftIssue(): void
@@ -177,7 +180,7 @@ class SendIssueTest extends WebTestCase
 
     public function testSendIssueUpdate(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
             'organization_id' => 1
@@ -251,7 +254,7 @@ class SendIssueTest extends WebTestCase
 
     public function test_send_issue_rate_limit(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
             'organization_id' => 1

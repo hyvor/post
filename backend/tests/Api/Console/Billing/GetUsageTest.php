@@ -12,14 +12,16 @@ use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 class GetUsageTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     public function test_get_usage(): void
     {
         $date = new \DateTimeImmutable('2025-05-10');
-        Clock::set(new MockClock($date));
+        static::mockTime($date);
 
         BillingFake::enableForSymfony(
             $this->container,

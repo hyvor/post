@@ -16,6 +16,7 @@ use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
@@ -23,12 +24,13 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(Subscriber::class)]
 class UpdateSubscriberTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     // TODO: tests for authentication
 
     public function testUpdateList(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
         $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
@@ -88,9 +90,6 @@ class UpdateSubscriberTest extends WebTestCase
 
     public function testValidatesStatus(): void
     {
-
-        $this->markTestSkipped();
-        // @phpstan-ignore-next-line
         $this->validateInput(
             fn(Newsletter $newsletter) => [
                 'status' => 'invalid',

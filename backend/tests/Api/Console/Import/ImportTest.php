@@ -11,10 +11,13 @@ use App\Entity\Type\SubscriberImportStatus;
 use App\Tests\Factory\NewsletterFactory;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImportTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     /** @var array<string, string> */
     const array MAPPING = [
         'email' => 'email',
@@ -183,7 +186,7 @@ class ImportTest extends WebTestCase
     public function test_daily_import_limit(): void
     {
         $date = new \DateTimeImmutable('2025-10-23 12:00:00');
-        Clock::set(new MockClock($date));
+        static::mockTime($date);
 
         $newsletter = NewsletterFactory::createOne();
         SubscriberImportFactory::createOne([
@@ -210,7 +213,7 @@ class ImportTest extends WebTestCase
     public function test_monthly_import_limit(): void
     {
         $date = new \DateTimeImmutable('2025-10-23 12:00:00');
-        Clock::set(new MockClock($date));
+        static::mockTime($date);
 
         $newsletter = NewsletterFactory::createOne();
         SubscriberImportFactory::createMany(5, [
