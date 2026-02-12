@@ -123,7 +123,7 @@ class AuthorizationListener
         }
 
         if ($organization === null) {
-            throw new AccessDeniedHttpException('Organization is required.');
+            throw new AccessDeniedHttpException('Current organization is missing.');
         }
 
         $organizationFromFrontend = (int)$request->headers->get('x-organization-id');
