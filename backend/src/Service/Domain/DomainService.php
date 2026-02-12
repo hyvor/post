@@ -137,31 +137,34 @@ class DomainService
         }
 
         $verified = $result->status === RelayDomainStatus::ACTIVE;
-        $authUser = $this->auth->fromId($domain->getUserId());
 
-        if ($verified && $authUser !== null) {
+        if ($verified) {
             // use a separate method with DTO
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
 
-            $strings = $this->stringsFactory->create();
+            $authUser = $this->auth->fromId($domain->getUserId());
 
-            $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
-                    'component' => 'post',
-                    'strings' => [
-                        'greeting' => $strings->get('mail.common.greeting', ['name' => $authUser->name]),
-                        'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
-                        ),
-                        'domain' => $domain->getDomain(),
+            if ($authUser) {
+                $strings = $this->stringsFactory->create();
+
+                $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
+                        'component' => 'post',
+                        'strings' => [
+                            'greeting' => $strings->get('mail.common.greeting', ['name' => $authUser->name]),
+                            'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
+                            ),
+                            'domain' => $domain->getDomain(),
+                        ]
                     ]
-                ]
-            );
+                );
 
-            $this->emailNotificationService->send(
-                $authUser->email,
-                $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
-                $mail,
-            );
+                $this->emailNotificationService->send(
+                    $authUser->email,
+                    $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
+                    $mail,
+                );
+            }
         }
 
         $this->em->persist($domain);
