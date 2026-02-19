@@ -28,4 +28,7 @@ return static function (RoutingConfigurator $routes): void {
         ->prefix('/api/local')
         ->condition('env("APP_ENV") in ["dev", "test"]')
         ->namePrefix('api_local_');
+
+    // internal API routes
+    $routes->import('@InternalBundle/src', 'attribute');
 };
