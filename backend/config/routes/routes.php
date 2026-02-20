@@ -30,5 +30,5 @@ return static function (RoutingConfigurator $routes): void {
         ->namePrefix('api_local_');
 
     // internal API routes
-    $routes->import('@InternalBundle/src', 'attribute');
+    $routes->import('@InternalBundle/src/Comms/Controller', 'attribute');
 };
