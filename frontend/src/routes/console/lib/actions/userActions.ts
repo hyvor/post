@@ -14,7 +14,7 @@ interface AddUserInput {
 
 export function addUser(data: AddUserInput) {
 	return consoleApi.post<User>({
-		endpoint: 'invites',
+		endpoint: 'users',
 		data
 	});
 }

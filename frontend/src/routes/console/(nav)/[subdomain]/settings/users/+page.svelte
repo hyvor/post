@@ -43,10 +43,7 @@
 	</Button>
 
 	{#if inviterOpen}
-		<UserInvitationModal
-			bind:show={inviterOpen}
-			refreshUsers={(u: User) => (users = [...users, u])}
-		/>
+		<UserInvitationModal bind:show={inviterOpen} onadd={(u: User) => (users = [...users, u])} />
 	{/if}
 </TopBar>
 
