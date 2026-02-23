@@ -62,7 +62,7 @@ class CreateUserTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseFailed(400, "User is already an admin");
+        $this->assertResponseFailed(400, "User is already added to the newsletter");
     }
 
     public function test_when_not_an_organization_member(): void
