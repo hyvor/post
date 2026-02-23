@@ -52,13 +52,10 @@ class UserService
         $user = $this->em->getRepository(User::class)->findBy([
             'newsletter' => $newsletter,
             'hyvor_user_id' => $hyvorUserId,
-            'role' => UserRole::ADMIN->value
+            'role' => UserRole::ADMIN
         ]);
 
-        if (!$user) {
-            return false;
-        }
-        return true;
+        return !!$user;
     }
 
     public function createUser(Newsletter $newsletter, int $hyvorUserId): User

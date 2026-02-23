@@ -66,6 +66,10 @@ class UserController extends AbstractController
         $organizationId = $newsletter->getOrganizationId();
         assert($organizationId !== null);
 
+        if ($this->userService->hasAccessToNewsletter($newsletter, $hyvorUser->id)) {
+            throw new BadRequestHttpException('User is already added to the newsletter');
+        }
+
         try {
             $verification = $this->comms->send(
                 new VerifyMember(
@@ -79,10 +83,6 @@ class UserController extends AbstractController
 
         if (!$verification->isMember()) {
             throw new BadRequestHttpException('Unable to find the user in the organization');
-        }
-
-        if ($this->userService->isAdmin($newsletter, $hyvorUser->id)) {
-            throw new BadRequestHttpException("User is already an admin");
         }
 
         $newsletterUser = $this->userService->createUser($newsletter, $hyvorUser->id);
