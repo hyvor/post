@@ -6,59 +6,62 @@
 	import { OrganizationMemberSearch } from '@hyvor/design/cloud';
 	import type { User } from '../../../../types';
 
-	export let show: boolean;
-	export let refreshUsers: (u: User) => void;
+	interface Props {
+		show: boolean;
+		onadd: (u: User) => void;
+	}
 
-	let isInviting = false;
-	let invitingUserId: number | undefined = undefined;
+	let { show = $bindable(), onadd }: Props = $props();
+
+	let isInviting = $state(false);
+	let addingUserId: number | undefined = $state(undefined);
 
 	const I = getI18n();
 
 	async function handleInvite() {
-		if (!invitingUserId) {
+		if (!addingUserId) {
+			toast.error('Please choose a member');
 			return;
 		}
 
 		isInviting = true;
 
 		addUser({
-			user_id: invitingUserId,
+			user_id: addingUserId,
 			role: 'admin' // Hardcoded for now
 		})
 			.then((user) => {
-				refreshUsers(user);
-				toast.success(I.t('console.settings.users.inviteSent'));
+				onadd(user);
+				toast.success(I.t('console.settings.users.added'));
+				show = false;
 			})
 			.catch((e) => {
 				toast.error(e.message);
 			})
 			.finally(() => {
 				isInviting = false;
-				show = false;
 			});
 	}
 </script>
 
 <Modal
-	title={I.t('console.settings.users.inviteNewAdmin')}
+	title={I.t('console.settings.users.add')}
 	bind:show
 	footer={{
 		cancel: {
 			text: I.t('console.common.cancel')
 		},
 		confirm: {
-			text: I.t('console.settings.users.invite')
+			text: I.t('console.settings.users.add')
 		}
 	}}
 	on:confirm={handleInvite}
+	loading={isInviting}
 >
 	<SplitControl
-		label={I.t('console.settings.users.username')}
-		caption={I.t('console.settings.users.usernameCaption')}
+		label={I.t('console.settings.users.member')}
+		caption={I.t('console.settings.users.memberCaption')}
 	>
-		<OrganizationMemberSearch bind:selectedUserId={invitingUserId} />
+		<OrganizationMemberSearch bind:selectedUserId={addingUserId} />
 	</SplitControl>
 </Modal>
-
-<style>
-</style>
