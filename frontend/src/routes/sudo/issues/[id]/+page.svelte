@@ -1,5 +1,14 @@
 <script lang="ts">
-	import { Button, Divider, IconMessage, Loader, SplitControl, Tag, TextInput, toast } from '@hyvor/design/components';
+	import {
+		Button,
+		Divider,
+		IconMessage,
+		Loader,
+		SplitControl,
+		Tag,
+		TextInput,
+		toast
+	} from '@hyvor/design/components';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getIssue } from '../../lib/actions/issueActions';

@@ -148,7 +148,8 @@
 			{#snippet content()}
 				<ActionList>
 					{#each Object.entries(ISSUE_STATUS_FILTERS) as [key, value]}
-						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem>
+						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem
+						>
 					{/each}
 				</ActionList>
 			{/snippet}

@@ -51,11 +51,7 @@
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
-		getNewsletters(
-			search ?? null,
-			ITEMS_PER_PAGE,
-			more ? $newsletterStore.length : 0
-		)
+		getNewsletters(search ?? null, ITEMS_PER_PAGE, more ? $newsletterStore.length : 0)
 			.then((data) => {
 				if (more) {
 					newsletterStore.update((newsletters) => [...newsletters, ...data]);
@@ -143,7 +139,12 @@
 			{#snippet content()}
 				<ActionList>
 					{#each Object.entries(SORT_OPTIONS) as [key, value]}
-						<ActionListItem on:select={() => { sortBy = key; sortDropdownShow = false; }}>{value}</ActionListItem>
+						<ActionListItem
+							on:select={() => {
+								sortBy = key;
+								sortDropdownShow = false;
+							}}>{value}</ActionListItem
+						>
 					{/each}
 				</ActionList>
 			{/snippet}

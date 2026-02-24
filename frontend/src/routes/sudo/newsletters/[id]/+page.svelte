@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Button, Divider, IconMessage, Loader, SplitControl, TextInput, toast } from '@hyvor/design/components';
+	import {
+		Button,
+		Divider,
+		IconMessage,
+		Loader,
+		SplitControl,
+		TextInput,
+		toast
+	} from '@hyvor/design/components';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getNewsletter } from '../../lib/actions/newsletterActions';
@@ -63,7 +71,13 @@
 			</SplitControl>
 
 			<SplitControl label="Organization ID">
-				<TextInput value={newsletter.organization_id != null ? String(newsletter.organization_id) : '—'} disabled block />
+				<TextInput
+					value={newsletter.organization_id != null
+						? String(newsletter.organization_id)
+						: '—'}
+					disabled
+					block
+				/>
 			</SplitControl>
 
 			<SplitControl label="Language">
@@ -83,7 +97,9 @@
 			<h3>Stats</h3>
 
 			<SplitControl label="Subscribers">
-				<span>{stats.subscribers.total} total / {stats.subscribers.last_30_days} last 30d</span>
+				<span
+					>{stats.subscribers.total} total / {stats.subscribers.last_30_days} last 30d</span
+				>
 			</SplitControl>
 
 			<SplitControl label="Issues (sent)">
@@ -91,11 +107,16 @@
 			</SplitControl>
 
 			<SplitControl label="Bounce rate">
-				<span>{stats.bounced_rate.total}% total / {stats.bounced_rate.last_30_days}% last 30d</span>
+				<span
+					>{stats.bounced_rate.total}% total / {stats.bounced_rate.last_30_days}% last 30d</span
+				>
 			</SplitControl>
 
 			<SplitControl label="Complaint rate">
-				<span>{stats.complained_rate.total}% total / {stats.complained_rate.last_30_days}% last 30d</span>
+				<span
+					>{stats.complained_rate.total}% total / {stats.complained_rate.last_30_days}%
+					last 30d</span
+				>
 			</SplitControl>
 
 			<SplitControl label="Lists">

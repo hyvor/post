@@ -1,5 +1,12 @@
 import { writable } from 'svelte/store';
-import type { Approval, SubscriberImport, SudoConfig, SudoIssue, SudoNewsletter, SudoStats } from '../../types';
+import type {
+	Approval,
+	SubscriberImport,
+	SudoConfig,
+	SudoIssue,
+	SudoNewsletter,
+	SudoStats
+} from '../../types';
 
 export const configStore = writable<SudoConfig>();
 export const statsStore = writable<SudoStats>({
