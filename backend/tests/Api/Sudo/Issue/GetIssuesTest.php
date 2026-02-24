@@ -32,7 +32,6 @@ class GetIssuesTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertCount(3, $data);
 
         $issue = $data[0];
@@ -68,7 +67,6 @@ class GetIssuesTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertCount(1, $data);
 
         $item = $data[0];

@@ -118,6 +118,7 @@ class NewsletterService
                 ->setParameter('name', '%' . $name . '%');
         }
 
+        /** @var Newsletter[] */
         return $qb->getQuery()->getResult();
     }
 
@@ -183,7 +184,7 @@ class NewsletterService
     }
 
     /**
-     * @return array<string, array{total: int|float, last_30_days: int|float}>
+     * @return array{subscribers: array{total: int, last_30_days: int}, issues: array{total: int, last_30_days: int}, bounced_rate: array{total: float, last_30_days: float}, complained_rate: array{total: float, last_30_days: float}, lists_count: int, sending_profiles_count: int}
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {

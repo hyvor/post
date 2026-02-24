@@ -25,7 +25,6 @@ class GetNewslettersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertCount(5, $data);
 
         $newsletter = $data[0];
@@ -55,7 +54,6 @@ class GetNewslettersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertCount(1, $data);
 
         $item = $data[0];

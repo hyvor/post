@@ -25,7 +25,6 @@ class GetIssueTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('created_at', $data);
         $this->assertArrayHasKey('uuid', $data);

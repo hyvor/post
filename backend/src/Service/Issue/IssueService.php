@@ -134,6 +134,7 @@ class IssueService
                 ->setParameter('status', $status);
         }
 
+        /** @var Issue[] */
         return $qb->getQuery()->getResult();
     }
 

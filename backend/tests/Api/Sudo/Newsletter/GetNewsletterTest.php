@@ -25,7 +25,6 @@ class GetNewsletterTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertIsArray($data);
         $this->assertArrayHasKey('newsletter', $data);
         $this->assertArrayHasKey('stats', $data);
     }
