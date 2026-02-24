@@ -102,6 +102,24 @@ class NewsletterService
         $this->em->flush();
     }
 
+    /**
+     * @return Newsletter[]
+     */
+    public function getNewsletters(?string $name, int $limit, int $offset): array
+    {
+        $qb = $this->em->getRepository(Newsletter::class)->createQueryBuilder('n')
+            ->orderBy('n.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if ($name) {
+            $qb->andWhere('LOWER(n.name) LIKE LOWER(:name)')
+                ->setParameter('name', '%' . $name . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function getNewsletterById(int $id): ?Newsletter
     {
         return $this->em->getRepository(Newsletter::class)->find($id);
