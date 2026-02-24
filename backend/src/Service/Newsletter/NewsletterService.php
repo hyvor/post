@@ -7,6 +7,7 @@ use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
+use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
@@ -242,6 +243,20 @@ class NewsletterService
         $bouncedRateLast30d = $totalSendsLast30d > 0 ? round(($bouncedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
         $complainedRateLast30d = $totalSendsLast30d > 0 ? round(($complainedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
 
+        $listsCount = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->where('l.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $sendingProfilesCount = (int) $this->em->getRepository(SendingProfile::class)->createQueryBuilder('sp')
+            ->select('COUNT(sp.id)')
+            ->where('sp.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
+            ->getQuery()
+            ->getSingleScalarResult();
+
         return [
             'subscribers' => [
                 'total' => $subscribers,
@@ -259,6 +274,8 @@ class NewsletterService
                 'total' => $complainedRate,
                 'last_30_days' => $complainedRateLast30d,
             ],
+            'lists_count' => $listsCount,
+            'sending_profiles_count' => $sendingProfilesCount,
         ];
     }
 

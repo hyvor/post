@@ -4,10 +4,7 @@ namespace App\Api\Sudo\Controller;
 
 use App\Api\Sudo\Object\NewsletterObject;
 use App\Entity\Newsletter;
-use App\Entity\NewsletterList;
-use App\Entity\SendingProfile;
 use App\Service\Newsletter\NewsletterService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class NewsletterController extends AbstractController
 {
     public function __construct(
-        private NewsletterService      $newsletterService,
-        private EntityManagerInterface $em,
+        private NewsletterService $newsletterService,
     )
     {
     }
@@ -40,28 +36,9 @@ class NewsletterController extends AbstractController
     #[Route('/newsletters/{id}', methods: ['GET'])]
     public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
-        $stats = $this->newsletterService->getNewsletterStats($newsletter);
-
-        $listsCount = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
-            ->select('COUNT(l.id)')
-            ->where('l.newsletter = :newsletter')
-            ->setParameter('newsletter', $newsletter)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        $sendingProfilesCount = (int) $this->em->getRepository(SendingProfile::class)->createQueryBuilder('sp')
-            ->select('COUNT(sp.id)')
-            ->where('sp.newsletter = :newsletter')
-            ->setParameter('newsletter', $newsletter)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        $stats['lists_count'] = $listsCount;
-        $stats['sending_profiles_count'] = $sendingProfilesCount;
-
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
-            'stats' => $stats,
+            'stats' => $this->newsletterService->getNewsletterStats($newsletter),
         ]);
     }
 }
