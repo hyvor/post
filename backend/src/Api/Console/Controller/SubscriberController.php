@@ -5,6 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
+use App\Api\Console\Input\Subscriber\CreateSubscriberIfExists;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
@@ -79,6 +80,7 @@ class SubscriberController extends AbstractController
         Newsletter                                 $newsletter
     ): JsonResponse
     {
+
         $missingListIds = $this
             ->newsletterListService
             ->getMissingListIdsOfNewsletter($newsletter, $input->list_ids);
@@ -87,23 +89,38 @@ class SubscriberController extends AbstractController
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
-        $subscriberDB = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
-        if ($subscriberDB !== null) {
-            throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
-        }
-
+        $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
         $lists = $this->newsletterListService->getListsByIds($input->list_ids);
 
-        $subscriber = $this->subscriberService->createSubscriber(
-            $newsletter,
-            $input->email,
-            $lists,
-            SubscriberStatus::PENDING,
-            $input->source ?? SubscriberSource::CONSOLE,
-            $input->subscribe_ip,
-            $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
-            $input->unsubscribed_at ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null,
-        );
+        if ($subscriber === null) {
+
+            // create subscriber
+            $subscriber = $this->subscriberService->createSubscriber(
+                $newsletter,
+                $input->email,
+                $lists,
+                SubscriberStatus::PENDING,
+                source: $input->source ?? SubscriberSource::CONSOLE,
+                subscribeIp: $input->subscribe_ip ?? null,
+                subscribedAt: $input->has('subscribed_at') ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
+                unsubscribedAt: $input->has('unsubscribed_at') ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null,
+            );
+
+        } elseif ($input->if_exists === CreateSubscriberIfExists::UPDATE) {
+
+            // update
+            $updates = new UpdateSubscriberDto();
+            $updates->lists = $lists;
+            $updates->status = $input->status;
+            $updates->subscribedAt = $input->subscribed_at;
+            $updates->unsubscribedAt = $input->unsubscribed_at;
+
+            // TODO:
+
+
+        } else {
+            throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
+        }
 
         return $this->json(new SubscriberObject($subscriber));
     }
@@ -118,7 +135,7 @@ class SubscriberController extends AbstractController
     {
         $updates = new UpdateSubscriberDto();
 
-        if ($input->hasProperty('email')) {
+        if ($input->has('email')) {
             $subscriberDB = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
             if ($subscriberDB !== null) {
                 throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
@@ -127,7 +144,7 @@ class SubscriberController extends AbstractController
             $updates->email = $input->email;
         }
 
-        if ($input->hasProperty('list_ids')) {
+        if ($input->has('list_ids')) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
                 $newsletter,
                 $input->list_ids
@@ -140,7 +157,7 @@ class SubscriberController extends AbstractController
             $updates->lists = $this->newsletterListService->getListsByIds($input->list_ids);
         }
 
-        if ($input->hasProperty('status')) {
+        if ($input->has('status')) {
             if ($input->status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
                 throw new UnprocessableEntityHttpException('Subscribers without opt-in can not be updated to SUBSCRIBED status.');
             }
@@ -150,7 +167,7 @@ class SubscriberController extends AbstractController
 
         $metadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
-        if ($input->hasProperty('metadata')) {
+        if ($input->has('metadata')) {
             try {
                 $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
             } catch (\Exception $e) {

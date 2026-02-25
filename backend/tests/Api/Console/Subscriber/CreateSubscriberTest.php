@@ -24,7 +24,25 @@ use PHPUnit\Framework\Attributes\TestWith;
 class CreateSubscriberTest extends WebTestCase
 {
 
-    // TODO: tests for authentication
+    public function test_test(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'list_ids' => [$list->getId()],
+                'subscribe_ip' => null, //  '222.222.222.222'
+            ]
+        );
+
+        dd($response->getContent());
+
+    }
 
     public function testCreateSubscriberMinimal(): void
     {

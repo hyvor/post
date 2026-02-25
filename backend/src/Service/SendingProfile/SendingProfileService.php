@@ -86,35 +86,35 @@ class SendingProfileService
         UpdateSendingProfileDto $updates
     ): SendingProfile
     {
-        if ($updates->hasProperty('fromEmail')) {
+        if ($updates->has('fromEmail')) {
             $sendingProfile->setFromEmail($updates->fromEmail);
         }
 
-        if ($updates->hasProperty('fromName')) {
+        if ($updates->has('fromName')) {
             $sendingProfile->setFromName($updates->fromName);
         }
 
-        if ($updates->hasProperty('replyToEmail')) {
+        if ($updates->has('replyToEmail')) {
             $sendingProfile->setReplyToEmail($updates->replyToEmail);
         }
 
-        if ($updates->hasProperty('brandName')) {
+        if ($updates->has('brandName')) {
             $sendingProfile->setBrandName($updates->brandName);
         }
 
-        if ($updates->hasProperty('brandLogo')) {
+        if ($updates->has('brandLogo')) {
             $sendingProfile->setBrandLogo($updates->brandLogo);
         }
 
-        if ($updates->hasProperty('brandUrl')) {
+        if ($updates->has('brandUrl')) {
             $sendingProfile->setBrandUrl($updates->brandUrl);
         }
 
-        if ($updates->hasProperty('customDomain')) {
+        if ($updates->has('customDomain')) {
             $sendingProfile->setDomain($updates->customDomain);
         }
 
-        if ($updates->hasProperty('isDefault')) {
+        if ($updates->has('isDefault')) {
             // only true is supported
             assert($updates->isDefault === true);
             $sendingProfile->setIsDefault($updates->isDefault);

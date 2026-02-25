@@ -266,11 +266,11 @@ class NewsletterService
 
     public function updateNewsletter(Newsletter $newsletter, UpdateNewsletterDto $updates): Newsletter
     {
-        if ($updates->hasProperty('name')) {
+        if ($updates->has('name')) {
             $newsletter->setName($updates->name);
         }
 
-        if ($updates->hasProperty('subdomain')) {
+        if ($updates->has('subdomain')) {
             $newsletter->setSubdomain($updates->subdomain);
 
             $systemSendingProfile = $this->sendingProfileService->getSystemSendingProfileOfNewsletter($newsletter);
@@ -281,11 +281,11 @@ class NewsletterService
                 ->updateSendingProfile($systemSendingProfile, $sendingProfileUpdates);
         }
 
-        if ($updates->hasProperty('language_code')) {
+        if ($updates->has('language_code')) {
             $newsletter->setLanguageCode($updates->language_code);
         }
 
-        if ($updates->hasProperty('is_rtl')) {
+        if ($updates->has('is_rtl')) {
             $newsletter->setIsRtl($updates->is_rtl);
         }
 
