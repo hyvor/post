@@ -60,43 +60,43 @@ class IssueService
 
     public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
     {
-        if ($updates->hasProperty('subject')) {
+        if ($updates->has('subject')) {
             $issue->setSubject($updates->subject);
         }
 
-        if ($updates->hasProperty('content')) {
+        if ($updates->has('content')) {
             $issue->setContent($updates->content);
         }
 
-        if ($updates->hasProperty('sendingProfile')) {
+        if ($updates->has('sendingProfile')) {
             $issue->setSendingProfile($updates->sendingProfile);
         }
 
-        if ($updates->hasProperty('status')) {
+        if ($updates->has('status')) {
             $issue->setStatus($updates->status);
         }
 
-        if ($updates->hasProperty('lists')) {
+        if ($updates->has('lists')) {
             $issue->setListids($updates->lists);
         }
 
-        if ($updates->hasProperty('html')) {
+        if ($updates->has('html')) {
             $issue->setHtml($updates->html);
         }
 
-        if ($updates->hasProperty('text')) {
+        if ($updates->has('text')) {
             $issue->setText($updates->text);
         }
 
-        if ($updates->hasProperty('sendingAt')) {
+        if ($updates->has('sendingAt')) {
             $issue->setSendingAt($updates->sendingAt);
         }
 
-        if ($updates->hasProperty('totalSendable')) {
+        if ($updates->has('totalSendable')) {
             $issue->setTotalSendable($updates->totalSendable);
         }
 
-        if ($updates->hasProperty('sentAt')) {
+        if ($updates->has('sentAt')) {
             $issue->setSentAt($updates->sentAt);
         }
 

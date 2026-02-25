@@ -157,15 +157,15 @@ class SubscriberService
 
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {
-        if ($updates->hasProperty('email')) {
+        if ($updates->has('email')) {
             $subscriber->setEmail($updates->email);
         }
 
-        if ($updates->hasProperty('status')) {
+        if ($updates->has('status')) {
             $subscriber->setStatus($updates->status);
         }
 
-        if ($updates->hasProperty('lists')) {
+        if ($updates->has('lists')) {
             // Clear & re-add lists
             foreach ($subscriber->getLists() as $list) {
                 $subscriber->removeList($list);
@@ -175,23 +175,23 @@ class SubscriberService
             }
         }
 
-        if ($updates->hasProperty('subscribedAt')) {
+        if ($updates->has('subscribedAt')) {
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }
 
-        if ($updates->hasProperty('optInAt')) {
+        if ($updates->has('optInAt')) {
             $subscriber->setOptInAt($updates->optInAt);
         }
 
-        if ($updates->hasProperty('unsubscribedAt')) {
+        if ($updates->has('unsubscribedAt')) {
             $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
         }
 
-        if ($updates->hasProperty('unsubscribedReason')) {
+        if ($updates->has('unsubscribedReason')) {
             $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
         }
 
-        if ($updates->hasProperty('metadata')) {
+        if ($updates->has('metadata')) {
             $metadata = $subscriber->getMetadata();
             foreach ($updates->metadata as $key => $value) {
                 $metadata[$key] = $value;

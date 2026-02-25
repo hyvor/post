@@ -83,33 +83,33 @@ class SendingProfileController extends AbstractController
     {
 
         $updates = new UpdateSendingProfileDto();
-        if ($input->hasProperty('from_email')) {
+        if ($input->has('from_email')) {
             $domain = $this->getDomainFromEmail($input->from_email);
             $updates->customDomain = $domain;
             $updates->fromEmail = $input->from_email;
         }
 
-        if ($input->hasProperty('from_name')) {
+        if ($input->has('from_name')) {
             $updates->fromName = $input->from_name;
         }
 
-        if ($input->hasProperty('reply_to_email')) {
+        if ($input->has('reply_to_email')) {
             $updates->replyToEmail = $input->reply_to_email;
         }
 
-        if ($input->hasProperty('brand_name')) {
+        if ($input->has('brand_name')) {
             $updates->brandName = $input->brand_name;
         }
 
-        if ($input->hasProperty('brand_logo')) {
+        if ($input->has('brand_logo')) {
             $updates->brandLogo = $input->brand_logo;
         }
 
-        if ($input->hasProperty('brand_url')) {
+        if ($input->has('brand_url')) {
             $updates->brandUrl = $input->brand_url;
         }
 
-        if ($input->hasProperty('is_default')) {
+        if ($input->has('is_default')) {
             $updates->isDefault = $input->is_default;
         }
 
