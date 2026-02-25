@@ -54,13 +54,13 @@ class ApiKeyController extends AbstractController
     public function updateApiKey(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
     {
         $updates = new UpdateApiKeyDto();
-        if ($input->hasProperty('is_enabled')) {
+        if ($input->has('is_enabled')) {
             $updates->enabled = $input->is_enabled;
         }
-        if ($input->hasProperty('scopes')) {
+        if ($input->has('scopes')) {
             $updates->scopes = $input->scopes;
         }
-        if ($input->hasProperty('name')) {
+        if ($input->has('name')) {
             $updates->name = $input->name;
         }
 
