@@ -4,9 +4,13 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
+use App\Api\Console\Input\Subscriber\AddSubscriberListInput;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberIfExists;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
+use App\Api\Console\Input\Subscriber\RemoveSubscriberListInput;
+use App\Api\Console\Input\Subscriber\RemoveSubscriberListReason;
+use App\Api\Console\Input\Subscriber\SubscriberListIfUnsubscribed;
 use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
@@ -31,7 +35,7 @@ class SubscriberController extends AbstractController
     public function __construct(
         private SubscriberService         $subscriberService,
         private NewsletterListService     $newsletterListService,
-        private SubscriberMetadataService $subscriberMetadataService
+        private SubscriberMetadataService $subscriberMetadataService,
     )
     {
     }
@@ -271,5 +275,63 @@ class SubscriberController extends AbstractController
         }
 
         throw new BadRequestHttpException("Unhandled action");
+    }
+
+    #[Route('/subscribers/{id}/lists', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    public function addSubscriberList(
+        Subscriber                                  $subscriber,
+        Newsletter                                  $newsletter,
+        #[MapRequestPayload] AddSubscriberListInput $input
+    ): JsonResponse
+    {
+        if ($input->id === null && $input->name === null) {
+            throw new UnprocessableEntityHttpException('Either id or name must be provided');
+        }
+
+        $list = $this->newsletterListService->getListByIdOrName($newsletter, $input->id, $input->name);
+
+        if ($list === null) {
+            throw new UnprocessableEntityHttpException('List not found');
+        }
+
+        try {
+            $this->subscriberService->addSubscriberToList(
+                $subscriber,
+                $list,
+                $input->if_unsubscribed === SubscriberListIfUnsubscribed::ERROR
+            );
+        } catch (\RuntimeException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+
+        return $this->json(new SubscriberObject($subscriber));
+    }
+
+    #[Route('/subscribers/{id}/lists', methods: 'DELETE')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    public function removeSubscriberList(
+        Subscriber                                    $subscriber,
+        Newsletter                                    $newsletter,
+        #[MapRequestPayload] RemoveSubscriberListInput $input
+    ): JsonResponse
+    {
+        if ($input->id === null && $input->name === null) {
+            throw new UnprocessableEntityHttpException('Either id or name must be provided');
+        }
+
+        $list = $this->newsletterListService->getListByIdOrName($newsletter, $input->id, $input->name);
+
+        if ($list === null) {
+            throw new UnprocessableEntityHttpException('List not found');
+        }
+
+        $this->subscriberService->removeSubscriberFromList(
+            $subscriber,
+            $list,
+            $input->reason === RemoveSubscriberListReason::UNSUBSCRIBE
+        );
+
+        return $this->json(new SubscriberObject($subscriber));
     }
 }

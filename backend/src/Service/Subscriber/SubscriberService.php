@@ -8,6 +8,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberExport;
+use App\Entity\SubscriberListUnsubscribed;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -299,6 +300,65 @@ class SubscriberService
     {
         return $this->em->getRepository(SubscriberExport::class)
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
+    }
+
+    /**
+     * @throws \RuntimeException if $checkUnsubscribed is true and the subscriber has a prior unsubscription record
+     */
+    public function addSubscriberToList(
+        Subscriber     $subscriber,
+        NewsletterList $list,
+        bool           $checkUnsubscribed
+    ): void
+    {
+        if ($checkUnsubscribed) {
+            $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+                'list' => $list,
+                'subscriber' => $subscriber,
+            ]);
+
+            if ($record !== null) {
+                throw new \RuntimeException('Subscriber has previously unsubscribed from this list');
+            }
+        }
+
+        $subscriber->addList($list);
+        $subscriber->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriber);
+        $this->em->flush();
+    }
+
+    public function removeSubscriberFromList(
+        Subscriber     $subscriber,
+        NewsletterList $list,
+        bool           $recordUnsubscription
+    ): void
+    {
+        $subscriber->removeList($list);
+        $subscriber->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriber);
+        $this->em->flush();
+
+
+        if ($recordUnsubscription) {
+            $existing = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+                'list' => $list,
+                'subscriber' => $subscriber,
+            ]);
+
+            if ($existing === null) {
+                $unsubscribed = new SubscriberListUnsubscribed()
+                    ->setList($list)
+                    ->setSubscriber($subscriber)
+                    ->setCreatedAt($this->now());
+
+                $this->em->persist($unsubscribed);
+                $this->em->persist($list); // test fails otherwise, since this is used in removeElement, but sure why
+                $this->em->flush();
+            }
+        }
     }
 
     public function getSubscriberById(int $id): ?Subscriber
