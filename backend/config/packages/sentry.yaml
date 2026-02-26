@@ -1,4 +1,4 @@
-when@dev:
+when@prod:
     sentry:
         dsn: '%env(SENTRY_DSN)%'
         options:
