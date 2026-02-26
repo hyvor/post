@@ -40,8 +40,6 @@ class CreateSubscriberTest extends WebTestCase
             ]
         );
 
-        dd($response->getContent());
-
     }
 
     public function testCreateSubscriberMinimal(): void
