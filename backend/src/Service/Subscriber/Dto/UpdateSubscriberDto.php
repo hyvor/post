@@ -13,12 +13,8 @@ class UpdateSubscriberDto
 
     public string $email;
 
-    /**
-     * @var iterable<NewsletterList>
-     */
-    public iterable $lists;
-
     public SubscriberStatus $status;
+    public ?string $subscribeIp;
 
     public ?\DateTimeImmutable $subscribedAt;
 

@@ -294,6 +294,12 @@
 	<li>
 		<a href="#bulk-update-subscriber"><code>POST /subscribers/bulk</code></a> - Bulk update subscribers
 	</li>
+	<li>
+		<a href="#add-subscriber-to-list"><code>POST /subscribers/{'{id}'}/lists</code></a> - Add a subscriber to a list
+	</li>
+	<li>
+		<a href="#remove-subscriber-from-list"><code>DELETE /subscribers/{'{id}'}/lists</code></a> - Remove a subscriber from a list
+	</li>
 </ul>
 
 <p>Objects:</p>
@@ -334,7 +340,6 @@
 	code={`
         type Request = {
             email: string;
-            list_ids: number[];
             source?: 'console' | 'form' | 'import'; // default: 'console'
             subscribe_ip?: string | null;
             subscribed_at?: number | null; // unix timestamp
@@ -353,7 +358,6 @@
 	code={`
         type Request = {
             email?: string;
-            list_ids?: number[];
             status?: 'subscribed' | 'unsubscribed' | 'pending';
             metadata?: Record<string, string>;
         }
@@ -391,6 +395,46 @@
             message: string;
             subscribers: Subscriber[];
         }
+    `}
+/>
+
+<h4 id="add-subscriber-to-list">Add a subscriber to a list</h4>
+
+<code>POST /subscribers/{'{id}'}/lists</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {
+            id?: number;    // list id
+            name?: string;  // list name
+            // At least one of id or name is required.
+
+            if_unsubscribed?: 'error' | 'force_create'; // default: 'error'
+            // 'error'        - return 422 if the subscriber has previously unsubscribed from this list
+            // 'force_create' - add to the list even if previously unsubscribed
+        }
+        type Response = Subscriber
+    `}
+/>
+
+<h4 id="remove-subscriber-from-list">Remove a subscriber from a list</h4>
+
+<code>DELETE /subscribers/{'{id}'}/lists</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {
+            id?: number;    // list id
+            name?: string;  // list name
+            // At least one of id or name is required.
+
+            reason?: 'unsubscribe' | 'other'; // default: 'other'
+            // 'unsubscribe' - records an unsubscription, blocking future re-adds unless force_create is used
+            // 'other'       - removes from the list without recording an unsubscription
+        }
+        type Response = Subscriber
     `}
 />
 

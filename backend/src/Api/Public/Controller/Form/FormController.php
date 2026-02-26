@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
-use App\Api\Public\Input\Form\FormRenderInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
