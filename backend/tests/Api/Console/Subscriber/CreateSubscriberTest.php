@@ -220,6 +220,107 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertHasViolation($violations[0]['property'], $violations[0]['message']);
     }
 
+    public function test_updates_if_exists(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => 'supun@hyvor.com',
+            'status' => SubscriberStatus::UNSUBSCRIBED,
+            'subscribe_ip' => '1.2.3.4',
+        ]);
+
+        $subscribedAt = new \DateTimeImmutable('2024-01-01 00:00:00');
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'supun@hyvor.com',
+                'if_exists' => 'update',
+                'status' => 'pending',
+                'subscribe_ip' => '79.255.1.1',
+                'subscribed_at' => $subscribedAt->getTimestamp(),
+                'source' => 'import'
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $updated = $repository->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $updated);
+        $this->assertSame(SubscriberStatus::PENDING, $updated->getStatus());
+        $this->assertSame('79.255.1.1', $updated->getSubscribeIp());
+        $this->assertSame('2024-01-01 00:00:00', $updated->getSubscribedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame(SubscriberSource::IMPORT, $updated->getSource());
+    }
+
+    public function testCreateSubscriberIfExistsUpdateClearsTimestamps(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => 'supun@hyvor.com',
+            'subscribed_at' => new \DateTimeImmutable('2024-01-01'),
+            'unsubscribed_at' => new \DateTimeImmutable('2024-06-01'),
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'supun@hyvor.com',
+                'if_exists' => 'update',
+                'subscribed_at' => null,
+                'unsubscribed_at' => null,
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $updated = $repository->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $updated);
+        $this->assertNull($updated->getSubscribedAt());
+        $this->assertNull($updated->getUnsubscribedAt());
+    }
+
+    public function testCreateSubscriberIfExistsUpdateDoesNotChangeUnsentFields(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => 'supun@hyvor.com',
+            'subscribe_ip' => '1.2.3.4',
+            'subscribed_at' => new \DateTimeImmutable('2024-01-01'),
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'supun@hyvor.com',
+                'if_exists' => 'update',
+                // subscribe_ip and subscribed_at not sent
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $repository = $this->em->getRepository(Subscriber::class);
+        $updated = $repository->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $updated);
+        $this->assertSame('1.2.3.4', $updated->getSubscribeIp());
+        $this->assertSame('2024-01-01 00:00:00', $updated->getSubscribedAt()?->format('Y-m-d H:i:s'));
+    }
+
     public function testCreateSubscriberDuplicateEmail(): void
     {
         $newsletter = NewsletterFactory::createOne();

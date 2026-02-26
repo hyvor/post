@@ -166,6 +166,14 @@ class SubscriberService
             $subscriber->setStatus($updates->status);
         }
 
+        if ($updates->has('source')) {
+            $subscriber->setSource($updates->source);
+        }
+
+        if ($updates->has('subscribeIp')) {
+            $subscriber->setSubscribeIp($updates->subscribeIp);
+        }
+
         if ($updates->has('subscribedAt')) {
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }
