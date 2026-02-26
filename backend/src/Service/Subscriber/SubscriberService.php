@@ -166,16 +166,6 @@ class SubscriberService
             $subscriber->setStatus($updates->status);
         }
 
-        if ($updates->has('lists')) {
-            // Clear & re-add lists
-            foreach ($subscriber->getLists() as $list) {
-                $subscriber->removeList($list);
-            }
-            foreach ($updates->lists as $list) {
-                $subscriber->addList($list);
-            }
-        }
-
         if ($updates->has('subscribedAt')) {
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }

@@ -85,16 +85,7 @@ class SubscriberController extends AbstractController
     ): JsonResponse
     {
 
-        $missingListIds = $this
-            ->newsletterListService
-            ->getMissingListIdsOfNewsletter($newsletter, $input->list_ids);
-
-        if ($missingListIds !== null) {
-            throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-        }
-
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
-        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
 
         if ($subscriber === null) {
 
@@ -102,7 +93,7 @@ class SubscriberController extends AbstractController
             $subscriber = $this->subscriberService->createSubscriber(
                 $newsletter,
                 $input->email,
-                $lists,
+                [],
                 SubscriberStatus::PENDING,
                 source: $input->source ?? SubscriberSource::CONSOLE,
                 subscribeIp: $input->subscribe_ip ?? null,
@@ -114,13 +105,24 @@ class SubscriberController extends AbstractController
 
             // update
             $updates = new UpdateSubscriberDto();
-            $updates->lists = $lists;
-            $updates->status = $input->status;
-            $updates->subscribedAt = $input->subscribed_at;
-            $updates->unsubscribedAt = $input->unsubscribed_at;
 
-            // TODO:
+            if ($updates->has('status')) {
+                $updates->status = $input->status;
+            }
 
+            if ($updates->has('subscribe_ip')) {
+                $updates->subscribeIp = $input->subscribe_ip;
+            }
+
+            if ($updates->has('subscribed_at')) {
+                $updates->subscribedAt = $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null;
+            }
+
+            if ($updates->has('unsubscribed_at')) {
+                $updates->unsubscribedAt = $input->unsubscribed_at ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null;
+            }
+
+            $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
 
         } else {
             throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
@@ -146,19 +148,6 @@ class SubscriberController extends AbstractController
             }
 
             $updates->email = $input->email;
-        }
-
-        if ($input->has('list_ids')) {
-            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
-                $newsletter,
-                $input->list_ids
-            );
-
-            if ($missingListIds !== null) {
-                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-            }
-
-            $updates->lists = $this->newsletterListService->getListsByIds($input->list_ids);
         }
 
         if ($input->has('status')) {

@@ -17,16 +17,6 @@ class CreateSubscriberInput
     #[Assert\Length(max: 255)]
     public string $email;
 
-    /**
-     * @var int[] $list_ids
-     */
-    #[Assert\NotBlank]
-    #[Assert\All([
-        new Assert\NotBlank(),
-        new Assert\Type('int'),
-    ])]
-    public array $list_ids;
-
     public SubscriberStatus $status = SubscriberStatus::PENDING;
 
     public ?SubscriberSource $source;
