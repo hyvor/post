@@ -137,6 +137,23 @@ class NewsletterListService
         );
     }
 
+    public function getListByIdOrName(Newsletter $newsletter, ?int $id, ?string $name): ?NewsletterList
+    {
+        assert($id !== null || $name !== null, 'Either id or name must be provided');
+
+        if ($id !== null) {
+            return $this->em->getRepository(NewsletterList::class)->findOneBy([
+                'id' => $id,
+                'newsletter' => $newsletter,
+            ]);
+        }
+
+        return $this->em->getRepository(NewsletterList::class)->findOneBy([
+            'name' => $name,
+            'newsletter' => $newsletter,
+        ]);
+    }
+
     /**
      * @param int[] $listIds
      * @return array<int, int>  key: list_id, value: subscriber_count
