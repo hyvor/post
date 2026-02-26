@@ -106,20 +106,26 @@ class SubscriberController extends AbstractController
             // update
             $updates = new UpdateSubscriberDto();
 
-            if ($updates->has('status')) {
-                $updates->status = $input->status;
+            $updates->status = $input->status;
+
+            if ($input->has('source')) {
+                $updates->source = $input->source;
             }
 
-            if ($updates->has('subscribe_ip')) {
+            if ($input->has('subscribe_ip')) {
                 $updates->subscribeIp = $input->subscribe_ip;
             }
 
-            if ($updates->has('subscribed_at')) {
-                $updates->subscribedAt = $input->subscribed_at ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null;
+            if ($input->has('subscribed_at')) {
+                $updates->subscribedAt = $input->subscribed_at !== null
+                    ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at)
+                    : null;
             }
 
-            if ($updates->has('unsubscribed_at')) {
-                $updates->unsubscribedAt = $input->unsubscribed_at ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null;
+            if ($input->has('unsubscribed_at')) {
+                $updates->unsubscribedAt = $input->unsubscribed_at !== null
+                    ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at)
+                    : null;
             }
 
             $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
