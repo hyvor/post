@@ -19,7 +19,6 @@ use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class SubscriberService
@@ -301,25 +300,43 @@ class SubscriberService
     }
 
     /**
-     * @throws \RuntimeException if $checkUnsubscribed is true and the subscriber has a prior unsubscription record
+     * @param Subscriber $subscriber
+     * @param NewsletterList[] $lists
      */
-    public function addSubscriberToList(
-        Subscriber     $subscriber,
-        NewsletterList $list,
-        bool           $checkUnsubscribed
+    public function setSubscriberLists(
+        Subscriber $subscriber,
+        array $lists
     ): void
     {
-        if ($checkUnsubscribed) {
-            $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
-                'list' => $list,
-                'subscriber' => $subscriber,
-            ]);
 
-            if ($record !== null) {
-                throw new \RuntimeException('Subscriber has previously unsubscribed from this list');
+        $listIds = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
+
+        // remove lists that are not in the new list
+        foreach ($subscriber->getLists() as $existingList) {
+            if (!in_array($existingList->getId(), $listIds)) {
+                $subscriber->removeList($existingList);
             }
         }
 
+        // add new lists
+        foreach ($lists as $list) {
+            if (!$subscriber->getLists()->contains($list)) {
+                $subscriber->addList($list);
+            }
+        }
+
+        $subscriber->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriber);
+        $this->em->flush();
+
+    }
+
+    public function addSubscriberToList(
+        Subscriber     $subscriber,
+        NewsletterList $list,
+    ): void
+    {
         $subscriber->addList($list);
         $subscriber->setUpdatedAt($this->now());
 
@@ -357,6 +374,16 @@ class SubscriberService
                 $this->em->flush();
             }
         }
+    }
+
+    public function hasSubscriberUnsubscribedFromList(Subscriber $subscriber, NewsletterList $list): bool
+    {
+        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+            'list' => $list,
+            'subscriber' => $subscriber,
+        ]);
+
+        return $record !== null;
     }
 
     public function getSubscriberById(int $id): ?Subscriber
