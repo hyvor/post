@@ -31,13 +31,11 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private NewsletterService     $newsletterService,
+        private NewsletterService $newsletterService,
         private NewsletterListService $newsletterListService,
-        private SubscriberService     $subscriberService,
-        private AppConfig             $appConfig,
-    )
-    {
-    }
+        private SubscriberService $subscriberService,
+        private AppConfig $appConfig,
+    ) {}
 
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
@@ -53,7 +51,7 @@ class FormController extends AbstractController
         if ($listIds !== null) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
                 $newsletter,
-                $listIds
+                $listIds,
             );
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
@@ -74,9 +72,8 @@ class FormController extends AbstractController
     #[Route('/form/subscribe', methods: 'POST')]
     public function subscribe(
         #[MapRequestPayload] FormSubscribeInput $input,
-        Request                                 $request,
-    ): JsonResponse
-    {
+        Request $request,
+    ): JsonResponse {
         $ip = $request->getClientIp();
         $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
@@ -87,7 +84,7 @@ class FormController extends AbstractController
         $listIds = $input->list_ids;
         $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
             $newsletter,
-            $listIds
+            $listIds,
         );
 
         if ($missingListIds !== null) {
@@ -101,12 +98,22 @@ class FormController extends AbstractController
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
-            $update->status = $subscriber->getOptInAt() !== null ? SubscriberStatus::SUBSCRIBED : SubscriberStatus::PENDING;
+
+            // if the user is already subscribed, we do not want to change the status
+            if ($subscriber->getStatus() !== SubscriberStatus::SUBSCRIBED) {
+                // if the user has previously opted-in
+                // we can directly set the status to subscribed
+                $update->status =
+                    $subscriber->getOptInAt() !== null ?
+                        SubscriberStatus::SUBSCRIBED :
+                        SubscriberStatus::PENDING;
+            }
+
             $update->lists = $lists;
 
             $this->subscriberService->updateSubscriber(
                 $subscriber,
-                $update
+                $update,
             );
         } else {
             $subscriber = $this->subscriberService->createSubscriber(
@@ -115,7 +122,7 @@ class FormController extends AbstractController
                 $lists,
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
-                $ip
+                $ip,
             );
         }
 
@@ -138,7 +145,7 @@ class FormController extends AbstractController
             <hyvor-post-form newsletter={$newsletter->getSubdomain()}
             instance={$instance}></hyvor-post-form>
             <script type="module" src="{$instance}/form/form.js"></script>
-        HTML;
+            HTML;
 
         return new Response($response);
     }

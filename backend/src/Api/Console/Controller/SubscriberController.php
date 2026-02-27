@@ -290,15 +290,17 @@ class SubscriberController extends AbstractController
             throw new UnprocessableEntityHttpException('List not found');
         }
 
-        try {
-            $this->subscriberService->addSubscriberToList(
-                $subscriber,
-                $list,
-                $input->if_unsubscribed === SubscriberListIfUnsubscribed::ERROR
-            );
-        } catch (\RuntimeException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage());
+        if (
+            $input->if_unsubscribed === SubscriberListIfUnsubscribed::ERROR &&
+            $this->subscriberService->hasSubscriberUnsubscribedFromList($subscriber, $list)
+        ) {
+            throw new BadRequestHttpException('Subscriber was previously unsubscribed and can not be added to the list again');
         }
+
+        $this->subscriberService->addSubscriberToList(
+            $subscriber,
+            $list,
+        );
 
         return $this->json(new SubscriberObject($subscriber));
     }
