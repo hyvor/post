@@ -36,7 +36,7 @@
 		{/snippet}
 		{#snippet content()}
 			<Content>
-				<data.component />
+				<data.component {...data} />
 			</Content>
 		{/snippet}
 	</Docs>
