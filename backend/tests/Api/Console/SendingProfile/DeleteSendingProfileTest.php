@@ -87,8 +87,8 @@ class DeleteSendingProfileTest extends WebTestCase
         $json = $this->getJson();
         $this->assertCount(3, $json);      // 2 + system sending profile
 
-        // @phpstan-ignore-next-line
         $item = $json[0];
+        $this->assertIsArray($item);
         $this->assertSame($sendingProfile1->getId(), $item['id']);
         $this->assertTrue($item['is_default']);
 

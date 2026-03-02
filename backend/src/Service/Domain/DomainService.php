@@ -9,7 +9,7 @@ use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -27,7 +27,8 @@ class DomainService
         private LoggerInterface         $logger,
         private readonly Environment    $mailTemplate,
         private readonly StringsFactory $stringsFactory,
-        private RelayApiClient          $relayApiClient
+        private RelayApiClient          $relayApiClient,
+        private AuthInterface           $auth
     )
     {
     }
@@ -45,9 +46,9 @@ class DomainService
     /**
      * @return Domain[]
      */
-    public function getDomainsByUserId(int $userId): array
+    public function getDomainsByOrganizationId(int $organizationId): array
     {
-        return $this->em->getRepository(Domain::class)->findBy(['user_id' => $userId]);
+        return $this->em->getRepository(Domain::class)->findBy(['organization_id' => $organizationId]);
     }
 
     /**
@@ -87,7 +88,11 @@ class DomainService
     /**
      * @throws CreateDomainException
      */
-    public function createDomain(string $domain, int $userId): Domain
+    public function createDomain(
+        string $domain,
+        int    $userId,
+        int    $organizationId
+    ): Domain
     {
 
         try {
@@ -103,6 +108,7 @@ class DomainService
         $domainEntity = new Domain();
         $domainEntity->setDomain($domain);
         $domainEntity->setUserId($userId);
+        $domainEntity->setOrganizationId($organizationId);
         $domainEntity->setCreatedAt($this->now());
         $domainEntity->setUpdatedAt($this->now());
         $domainEntity->setDkimHost($response->dkim_host);
@@ -118,7 +124,7 @@ class DomainService
      * @return array{verified: bool, debug: null | array{last_checked_at: string, error_type: string}}
      * @throws VerifyDomainException
      */
-    public function verifyDomain(Domain $domain, AuthUser $hyvorUser): array
+    public function verifyDomain(Domain $domain): array
     {
         try {
             $result = $this->relayApiClient->verifyDomain($domain->getRelayId());
@@ -137,24 +143,30 @@ class DomainService
             $domain->setRelayStatus(RelayDomainStatus::ACTIVE);
             $domain->setUpdatedAt($this->now());
 
-            $strings = $this->stringsFactory->create();
+            // TODO: Mail should be sent to the organization
+            // https://github.com/hyvor/core/issues/493
+            $authUser = $this->auth->fromId($domain->getUserId());
 
-            $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
-                    'component' => 'post',
-                    'strings' => [
-                        'greeting' => $strings->get('mail.common.greeting', ['name' => $hyvorUser->name]),
-                        'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
-                        ),
-                        'domain' => $domain->getDomain(),
+            if ($authUser) {
+                $strings = $this->stringsFactory->create();
+
+                $mail = $this->mailTemplate->render('mail/domain_verified.html.twig', [
+                        'component' => 'post',
+                        'strings' => [
+                            'greeting' => $strings->get('mail.common.greeting', ['name' => $authUser->name]),
+                            'subject' => $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]
+                            ),
+                            'domain' => $domain->getDomain(),
+                        ]
                     ]
-                ]
-            );
+                );
 
-            $this->emailNotificationService->send(
-                $hyvorUser->email,
-                $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
-                $mail,
-            );
+                $this->emailNotificationService->send(
+                    $authUser->email,
+                    $strings->get('mail.domainVerification.subject', ['domain' => $domain->getDomain()]),
+                    $mail,
+                );
+            }
         }
 
         $this->em->persist($domain);

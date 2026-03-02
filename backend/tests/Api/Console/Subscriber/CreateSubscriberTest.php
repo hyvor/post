@@ -193,7 +193,7 @@ class CreateSubscriberTest extends WebTestCase
             [
                 [
                     'property' => 'source',
-                    'message' => 'This value should be of type console|form|import.',
+                    'message' => 'This value should be of type int|string.',
                 ],
                 [
                     'property' => 'subscribed_at',

@@ -14,15 +14,18 @@ use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(SendingProfileController::class)]
 #[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
 class UpdateSendingProfileTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     public function test_update_sending_profile(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
 
@@ -81,7 +84,7 @@ class UpdateSendingProfileTest extends WebTestCase
 
     public function test_update_default_sending_profile(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
 

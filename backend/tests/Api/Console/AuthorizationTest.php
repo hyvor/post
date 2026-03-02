@@ -12,15 +12,23 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Auth\AuthUserOrganization;
+use Hyvor\Internal\Billing\BillingFake;
+use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
+use Hyvor\Internal\Bundle\Comms\Event\ToCore\License\GetLicensesResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(AuthorizationListener::class)]
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     protected function shouldEnableAuthFake(): bool
     {
@@ -82,21 +90,6 @@ class AuthorizationTest extends WebTestCase
         $this->assertSame("Invalid API key.", $this->getJson()["message"]);
     }
 
-    public function test_invalid_newsletter_id(): void
-    {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
-        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
-        $this->client->request(
-            "GET",
-            "/api/console/issues",
-            server: [
-                "HTTP_X_NEWSLETTER_ID" => "999",
-            ],
-        );
-        $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid newsletter ID.", $this->getJson()["message"]);
-    }
-
     public function test_invalid_session(): void
     {
         AuthFake::enableForSymfony($this->container, null);
@@ -115,29 +108,137 @@ class AuthorizationTest extends WebTestCase
         $this->assertSame("Unauthorized", $this->getJson()["message"]);
     }
 
-    public function test_fails_when_xnewsletterid_header_is_not_set(): void
+    public function test_fails_when_organization_is_required(): void
     {
         AuthFake::enableForSymfony($this->container, ['id' => 1]);
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
             "GET",
-            "/api/console/issues",
+            "/api/console/issues"
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("X-Newsletter-ID is required for this endpoint.", $this->getJson()["message"]);
+        $this->assertSame("Current organization is missing.", $this->getJson()["message"]);
     }
 
-    public function test_user_not_authorized_for_newsletter(): void
+    public function test_fails_organization_mismatch(): void
     {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
 
-        $newsletter = NewsletterFactory::createOne();
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
             "GET",
             "/api/console/issues",
             server: [
+                "HTTP_X_ORGANIZATION_ID" => 2,
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame("org_mismatch", $this->getJson()["message"]);
+    }
+
+    public function test_fails_when_xnewsletterid_header_is_not_set(): void
+    {
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => 1,
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame("X-Newsletter-ID is required for this endpoint.", $this->getJson()["message"]);
+    }
+
+    public function test_invalid_newsletter_id(): void
+    {
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => 1,
+                "HTTP_X_NEWSLETTER_ID" => "999",
+            ],
+        );
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame("Invalid newsletter ID.", $this->getJson()["message"]);
+    }
+
+    public function test_newsletter_does_not_belong_to_current_organization(): void
+    {
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 2]);
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => 1,
+                "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame(
+            "does_not_belong_the_resource",
+            $this->getJson()["message"]
+        );
+    }
+
+    public function test_user_not_authorized_for_newsletter(): void
+    {
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => 1,
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
             ]
         );
@@ -166,7 +267,7 @@ class AuthorizationTest extends WebTestCase
 
     public function test_authorizes_via_api_key_and_updates_last_usage(): void
     {
-        Clock::set(new MockClock('2025-06-01 00:00:00'));
+        static::mockTime(new \DateTimeImmutable('2025-06-01 00:00:00'));
 
         $newsletter = NewsletterFactory::createOne();
         $this->consoleApi(
@@ -195,10 +296,17 @@ class AuthorizationTest extends WebTestCase
 
     public function test_authorizes_via_session(): void
     {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
-
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
         $newsletter = NewsletterFactory::createOne([
-            'user_id' => 1
+            'organization_id' => 1
         ]);
         UserFactory::createOne([
             'hyvor_user_id' => 1,
@@ -210,6 +318,7 @@ class AuthorizationTest extends WebTestCase
             "GET",
             "/api/console/issues",
             server: [
+                "HTTP_X_ORGANIZATION_ID" => 1,
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
             ]
         );
@@ -229,10 +338,22 @@ class AuthorizationTest extends WebTestCase
 
     public function test_user_level_endpoint_works(): void
     {
-        AuthFake::enableForSymfony($this->container, ['id' => 1]);
+        AuthFake::enableForSymfony(
+            $this->container,
+            ['id' => 1],
+            new AuthUserOrganization(
+                id: 1,
+                name: 'Fake Organization',
+                role: 'admin'
+            )
+        );
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+        );
 
         $newsletter = NewsletterFactory::createOne([
-            'user_id' => 1
+            'organization_id' => 1
         ]);
         UserFactory::createOne([
             'hyvor_user_id' => 1,
@@ -243,6 +364,22 @@ class AuthorizationTest extends WebTestCase
         $this->client->request(
             "GET",
             "/api/console/init",
+        );
+        $this->assertResponseStatusCodeSame(200);
+
+        $json = $this->getJson();
+        $this->assertArrayHasKey('newsletters', $json);
+        $this->assertArrayHasKey('config', $json);
+    }
+
+    public function test_when_no_organization_is_required(): void
+    {
+        AuthFake::enableForSymfony($this->container, ['id' => 1]);
+
+        $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
+        $this->client->request(
+            "GET",
+            "/api/console/init"
         );
         $this->assertResponseStatusCodeSame(200);
 

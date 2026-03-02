@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 
@@ -29,6 +30,8 @@ use Symfony\Component\Messenger\Stamp\DelayStamp;
 #[CoversClass(EmailSenderService::class)]
 class SendEmailMessageHandlerTest extends KernelTestCase
 {
+    use ClockSensitiveTrait;
+
     private function mockHttpClient(Send $send): void
     {
         $callback = function ($method, $url, $options) use ($send): JsonMockResponse {
@@ -58,7 +61,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
     public function test_send_job(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::findOrCreate([
@@ -105,7 +108,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
 
     public function test_send_job_with_exception(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::findOrCreate([

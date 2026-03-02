@@ -11,6 +11,7 @@ use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
+use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -68,20 +69,21 @@ class ApprovalService
             ->findOneBy(['id' => $id]);
     }
 
-    public function getApprovalOfUser(AuthUser $user): ?Approval
+    public function getApprovalOfOrganization(AuthUserOrganization $organization): ?Approval
     {
         return $this->em->getRepository(Approval::class)
-            ->findOneBy(['user_id' => $user->id]);
+            ->findOneBy(['organization_id' => $organization->id]);
     }
 
-    public function getApprovalStatusOfUser(AuthUser $user): ApprovalStatus
+    public function getApprovalStatusOfOrganization(AuthUserOrganization $organization): ApprovalStatus
     {
-        $approval = $this->getApprovalOfUser($user);
+        $approval = $this->getApprovalOfOrganization($organization);
         return $approval === null ? ApprovalStatus::PENDING : $approval->getStatus();
     }
 
     public function createApproval(
         int     $userId,
+        int     $organizationId,
         string  $companyName,
         string  $country,
         string  $website,
@@ -112,6 +114,7 @@ class ApprovalService
 
         $approval = new Approval();
         $approval->setUserId($userId)
+            ->setOrganizationId($organizationId)
             ->setStatus(ApprovalStatus::REVIEWING)
             ->setCompanyName($companyName)
             ->setCountry($country)

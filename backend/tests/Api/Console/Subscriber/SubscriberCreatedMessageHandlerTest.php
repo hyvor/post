@@ -14,15 +14,18 @@ use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(SubscriberCreatedMessageHandler::class)]
 #[CoversClass(SubscriberCreatedMessage::class)]
 class SubscriberCreatedMessageHandlerTest extends KernelTestCase
 {
+    use ClockSensitiveTrait;
+
     public function test_send_confirmation_email_for_pending_subscriber(): void
     {
-        Clock::set(new MockClock('2025-11-11 10:00:00'));
+        static::mockTime(new \DateTimeImmutable('2025-11-11 10:00:00'));
 
         $newsletter = NewsletterFactory::createOne([
             'name' => 'My Test Newsletter',

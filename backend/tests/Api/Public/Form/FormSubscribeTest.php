@@ -17,6 +17,7 @@ use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
 #[CoversClass(FormController::class)]
@@ -25,6 +26,7 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 #[CoversClass(NewsletterListService::class)]
 class FormSubscribeTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     public function test_rate_limiter_is_applied(): void
     {
@@ -71,7 +73,7 @@ class FormSubscribeTest extends WebTestCase
     public function test_subscribes_email(): void
     {
         $date = new \DateTimeImmutable('2025-04-14 00:00:00');
-        Clock::set(new MockClock($date));
+        static::mockTime($date);
 
         $newsletter = NewsletterFactory::createOne();
         SendingProfileFactory::createOne([

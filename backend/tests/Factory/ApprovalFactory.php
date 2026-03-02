@@ -38,6 +38,7 @@ final class ApprovalFactory extends PersistentProxyObjectFactory
             'other_info' => null,
             'public_note' => null,
             'private_note' => null,
+            'organization_id' => self::faker()->randomNumber(),
         ];
     }
 

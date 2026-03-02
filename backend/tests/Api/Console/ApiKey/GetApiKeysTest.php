@@ -19,7 +19,7 @@ class GetApiKeysTest extends WebTestCase
 {
     public function test_get_api_keys(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         ApiKeyFactory::createMany(4, [
             'newsletter' => $newsletter,
             'scopes' => [Scope::ISSUES_READ]
@@ -49,7 +49,7 @@ class GetApiKeysTest extends WebTestCase
 
     public function test_get_api_keys_empty(): void
     {
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $response = $this->consoleApi(
             $newsletter,
             'GET',

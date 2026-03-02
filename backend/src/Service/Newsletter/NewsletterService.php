@@ -19,6 +19,9 @@ use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\SendingProfile\Dto\UpdateSendingProfileDto;
 use App\Service\SendingProfile\SendingProfileService;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Bundle\Comms\CommsInterface;
+use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
+use Hyvor\Internal\Component\Component;
 use Hyvor\Internal\Resource\Resource;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +34,7 @@ class NewsletterService
         private EntityManagerInterface $em,
         private AppConfig              $config,
         private SendingProfileService  $sendingProfileService,
-        private Resource               $resource
+        private CommsInterface         $comms,
     )
     {
     }
@@ -39,14 +42,16 @@ class NewsletterService
 
     public function createNewsletter(
         int    $userId,
+        int    $organizationId,
         string $name,
         string $subdomain
     ): Newsletter
     {
-        return $this->em->wrapInTransaction(function () use ($userId, $name, $subdomain) {
+        return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain) {
             $newsletter = new Newsletter()
                 ->setName($name)
                 ->setUserId($userId)
+                ->setOrganizationId($organizationId)
                 ->setMeta(new NewsletterMeta())
                 ->setSubdomain($subdomain)
                 ->setCreatedAt($this->now())
@@ -82,7 +87,10 @@ class NewsletterService
             $this->em->persist($list);
             $this->em->flush();
 
-            $this->resource->register($userId, $newsletter->getId());
+            $this->comms->send(new ResourceCreated(
+                Component::POST,
+                $organizationId
+            ));
 
             return $newsletter;
         });
@@ -90,15 +98,8 @@ class NewsletterService
 
     public function deleteNewsletter(Newsletter $newsletter): void
     {
-        $this->em->wrapInTransaction(function () use ($newsletter) {
-
-            $newsletterId = $newsletter->getId();
-
-            $this->em->remove($newsletter);
-            $this->em->flush();
-
-            $this->resource->delete($newsletterId);
-        });
+        $this->em->remove($newsletter);
+        $this->em->flush();
     }
 
     public function getNewsletterById(int $id): ?Newsletter
@@ -122,17 +123,19 @@ class NewsletterService
     /**
      * @return array<array{newsletter: Newsletter, user: User}>
      */
-    public function getNewslettersOfUser(int $hyvorUserId): array
+    public function getUserNewslettersOfOrganization(int $userId, int $organizationId): array
     {
         $query = <<<DQL
             SELECT u, p
             FROM App\Entity\User u
             JOIN u.newsletter p
-            WHERE u.hyvor_user_id = :hyvor_user_id
+            WHERE p.organization_id = :organization_id
+            AND u.hyvor_user_id = :user_id
         DQL;
 
         $query = $this->em->createQuery($query);
-        $query->setParameter('hyvor_user_id', $hyvorUserId);
+        $query->setParameter('organization_id', $organizationId);
+        $query->setParameter('user_id', $userId);
         /** @var User[] $users */
         $users = $query->getResult();
 

@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -24,6 +25,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[CoversClass(DomainObject::class)]
 class VerifyDomainTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     private function mockCreateEmailIdentity(): void
     {
         $callback = function ($method, $url, $options): JsonMockResponse {
@@ -49,14 +52,14 @@ class VerifyDomainTest extends WebTestCase
     {
         $this->mockCreateEmailIdentity();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 1,
+                'organization_id' => 1,
             ]
         );
 
@@ -79,11 +82,11 @@ class VerifyDomainTest extends WebTestCase
         $httpClient = new MockHttpClient(new MockResponse(info: ['error' => 'host unreachable']));
         $this->container->set(HttpClientInterface::class, $httpClient);
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 1,
+                'organization_id' => 1,
             ]
         );
 
@@ -112,15 +115,15 @@ class VerifyDomainTest extends WebTestCase
     {
         $this->mockCreateEmailIdentity();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1,
+                'organization_id' => 1,
             ]
         );
 
@@ -140,9 +143,9 @@ class VerifyDomainTest extends WebTestCase
     {
         $this->mockCreateEmailIdentity();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -160,14 +163,14 @@ class VerifyDomainTest extends WebTestCase
     {
         $this->mockCreateEmailIdentity();
 
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
-        $newsletter = NewsletterFactory::createOne();
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
 
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'user_id' => 2,
+                'organization_id' => 2,
             ]
         );
 
@@ -180,6 +183,6 @@ class VerifyDomainTest extends WebTestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
-        $this->assertSame('You are not the owner of this domain', $json['message']);
+        $this->assertSame('Your current organization does not own this domain', $json['message']);
     }
 }

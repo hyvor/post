@@ -17,6 +17,7 @@ use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]
@@ -25,9 +26,11 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(IssueObject::class)]
 class CreateIssueTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     public function testCreateIssueDraft(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
             'subdomain' => 'thibault'
@@ -67,7 +70,7 @@ class CreateIssueTest extends WebTestCase
 
     public function test_create_issue_draft_with_custom_email(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne();
 

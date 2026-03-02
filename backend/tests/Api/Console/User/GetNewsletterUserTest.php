@@ -15,7 +15,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(UserController::class)]
 #[CoversClass(UserService::class)]
-#[CoversClass(UserInviteService::class)]
 #[CoversClass(UserObject::class)]
 class GetNewsletterUserTest extends WebTestCase
 {

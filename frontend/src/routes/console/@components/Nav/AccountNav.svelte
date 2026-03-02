@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { NavLink, Tag, Tooltip } from '@hyvor/design/components';
+	import { NavLink, Tooltip } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
@@ -8,13 +8,18 @@
 	import { getI18n } from '../../lib/i18n';
 	import { userApprovalStatusStore } from '../../lib/stores/consoleStore';
 	import ApprovalStatusTag from './ApprovalStatusTag.svelte';
+	import { canAccessBilling, canAccessSettings } from '../../orgPermission';
 
 	const I18n = getI18n();
 </script>
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-		<NavLink href="/console/approve" active={$page.url.pathname === '/console/approve'}>
+		<NavLink
+			href="/console/approve"
+			active={$page.url.pathname === '/console/approve'}
+			disabled={!canAccessSettings()}
+		>
 			<NavItem>
 				<IconClipboardCheck slot="icon" />
 				<span slot="text">{I18n.t('console.nav.approve')}</span>
@@ -23,7 +28,11 @@
 				<ApprovalStatusTag status={$userApprovalStatusStore} />
 			{/snippet}
 		</NavLink>
-		<NavLink href="/console/domains" active={$page.url.pathname === '/console/domains'}>
+		<NavLink
+			href="/console/domains"
+			active={$page.url.pathname === '/console/domains'}
+			disabled={!canAccessSettings()}
+		>
 			<NavItem>
 				<IconDatabase slot="icon" />
 				<span slot="text">{I18n.t('console.nav.domains')}</span>
@@ -37,7 +46,7 @@
 			<NavLink
 				href="/console/billing"
 				active={$page.url.pathname === '/console/billing'}
-				disabled={$userApprovalStatusStore !== 'approved'}
+				disabled={!canAccessBilling() || $userApprovalStatusStore !== 'approved'}
 			>
 				<NavItem>
 					<IconCoin slot="icon" />
@@ -74,6 +83,7 @@
 			padding-top: 5px;
 			padding-bottom: 0;
 		}
+
 		.nav-links {
 			display: flex;
 			border-top: 1px solid var(--border);
@@ -82,18 +92,22 @@
 			:global(a .middle) {
 				display: none;
 			}
+
 			:global(a .start) {
 				margin-right: 0 !important;
 			}
+
 			:global(a) {
 				border-left: none !important;
 				border-top: 3px solid transparent;
 				flex: 1;
 				justify-content: center;
 			}
+
 			:global(a.active) {
 				border-top-color: var(--accent);
 			}
+
 			:global(.line) {
 				display: none !important;
 			}

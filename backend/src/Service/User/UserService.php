@@ -52,13 +52,10 @@ class UserService
         $user = $this->em->getRepository(User::class)->findBy([
             'newsletter' => $newsletter,
             'hyvor_user_id' => $hyvorUserId,
-            'role' => UserRole::ADMIN->value
+            'role' => UserRole::ADMIN
         ]);
 
-        if (!$user) {
-            return false;
-        }
-        return true;
+        return !!$user;
     }
 
     public function createUser(Newsletter $newsletter, int $hyvorUserId): User
@@ -76,9 +73,18 @@ class UserService
         return $user;
     }
 
-    public function deleteUser(Newsletter $newsletter, User $user): void
+    /**
+     * Make sure if the user has access to the newsletter before calling this method
+     */
+    public function deleteUser(
+        User $user,
+        bool $flush = true
+    ): void
     {
         $this->em->remove($user);
-        $this->em->flush();
+
+        if ($flush) {
+            $this->em->flush();
+        }
     }
 }

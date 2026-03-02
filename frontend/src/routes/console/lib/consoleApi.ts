@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { newsletterStore } from './stores/newsletterStore';
+import { authOrganizationStore } from './stores/consoleStore';
 
 export interface ConsoleApiOptions {
 	endpoint: string;
@@ -45,6 +46,12 @@ function getConsoleApi() {
 			headers['X-Newsletter-Id'] = newsletterId.toString();
 		}
 
+		const currentOrg = get(authOrganizationStore);
+
+		if (currentOrg) {
+			headers['X-Organization-ID'] = String(currentOrg.id);
+		}
+
 		if (!(data instanceof FormData)) {
 			headers['Content-Type'] = 'application/json';
 		}
@@ -76,6 +83,21 @@ function getConsoleApi() {
 
 			if (e.violations) {
 				toThrow.message = e.violations.map((v: any) => v.message).join(', ');
+			}
+
+			/**
+			 * requested organization is not the user's current organization
+			 * (changed from another tab / session)
+			 * we redirect the user to account
+			 */
+			if (error === 'org_mismatch') {
+				location.href = '/console';
+				throw new Error('Current organization changed, redirecting...');
+			} else if (error === 'does_not_belong_the_resource') {
+				location.href = '/console';
+				throw new Error(
+					'This newsletter does not belong to your current organization, redirecting...'
+				);
 			}
 
 			throw toThrow;

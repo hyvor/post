@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\OrganizationOptional;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -25,11 +26,14 @@ use App\Service\SendingProfile\SendingProfileService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\InternalApi\Exceptions\InternalApiCallFailedException;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
+use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
 use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
@@ -49,20 +53,31 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/init', methods: 'GET')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
+    #[OrganizationOptional]
     public function initConsole(Request $request): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null;
 
-        $newslettersUsers = $this->newsletterService->getnewslettersOfUser($user->id);
-        $newsletters = array_map(
-            fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
-            $newslettersUsers
-        );
-        $userApproval = $this->approvalService->getApprovalOfUser($user);
+        $newsletters = [];
+        $license = new ResolvedLicense(ResolvedLicenseType::NONE);
+        $organizationApproval = null;
+
+        if ($organization) {
+            $newsletters = array_map(
+                fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
+                $this->newsletterService->getUserNewslettersOfOrganization($user->id, $organization->id)
+            );
+            $license = $this->billing->license($organization->id);
+            $organizationApproval = $this->approvalService->getApprovalOfOrganization($organization);
+        }
 
         return new JsonResponse([
             'newsletters' => $newsletters,
+            'user' => $user,
+            'organization' => $organization,
+            'resolved_license' => $license,
             'config' => [
                 'hyvor' => [
                     'instance' => $this->internalConfig->getInstance(),
@@ -76,7 +91,7 @@ class ConsoleController extends AbstractController
                 ],
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
-            'user_approval' => $userApproval ? $userApproval->getStatus() : ApprovalStatus::PENDING,
+            'user_approval' => $organizationApproval ? $organizationApproval->getStatus() : ApprovalStatus::PENDING,
         ]);
     }
 
@@ -96,17 +111,18 @@ class ConsoleController extends AbstractController
 
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
+        $organizationId = $newsletter->getOrganizationId();
+        assert($organizationId !== null);
         $canChangeBranding = false;
+
         try {
-            $license = $this->billing->license(
-                $newsletter->getUserId(),
-                $newsletter->getId(),
-            );
+            $license = $this->billing->license($organizationId)->license;
             if ($license instanceof PostLicense) {
                 // can only change branding if no branding is enabled in license
                 $canChangeBranding = $license->allowRemoveBranding === true;
             }
-        } catch (InternalApiCallFailedException) {
+        } catch (CommsApiFailedException) {
+            $license = null;
         }
 
         return new JsonResponse([
@@ -119,8 +135,7 @@ class ConsoleController extends AbstractController
             'permissions' => [
                 'can_change_branding' => $canChangeBranding,
             ],
-            'has_license' => (bool)$this->billing->license($newsletter->getUserId(), null),
+            'has_license' => (bool)$license
         ]);
     }
-
 }

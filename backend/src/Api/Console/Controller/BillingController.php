@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Service\Issue\SendService;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,19 +22,19 @@ class BillingController extends AbstractController
     }
 
     #[Route('/billing/usage', methods: 'GET')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function getUsage(Request $request, BillingInterface $billing): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
         /** @var ?PostLicense $license */
-        $license = $billing->license($user->id, null);
+        $license = $billing->license($organization->id)->license;
 
         return new JsonResponse([
             'emails' => [
                 'limit' => $license->emails ?? 0,
-                'this_month' => $this->sendService->getSendsCountThisMonthOfUser($user->id),
-                'last_12_months' => $this->sendService->getSendsCountLast12MonthsOfUser($user->id),
+                'this_month' => $this->sendService->getSendsCountThisMonthOfOrganization($organization->id),
+                'last_12_months' => $this->sendService->getSendsCountLast12MonthsOfOrganization($organization->id),
             ]
         ]);
     }

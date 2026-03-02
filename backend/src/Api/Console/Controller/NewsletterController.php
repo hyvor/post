@@ -5,7 +5,7 @@ namespace App\Api\Console\Controller;
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\UserLevelEndpoint;
+use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
 use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
@@ -15,7 +15,6 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
-use App\Service\NotificationMail\NotificationMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +31,7 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter/subdomain', methods: 'POST')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function getSubdomainAvailability(
         Request                                         $request,
         #[MapRequestPayload] SubdomainAvailabilityInput $input
@@ -54,19 +53,20 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'POST')]
-    #[UserLevelEndpoint]
+    #[OrganizationLevelEndpoint]
     public function createNewsletter(
         Request                                    $request,
         #[MapRequestPayload] CreateNewsletterInput $input
     ): JsonResponse
     {
         $user = AuthorizationListener::getUser($request);
+        $organization = AuthorizationListener::getOrganization($request);
 
         if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
             throw new UnprocessableEntityHttpException('Subdomain is already taken.');
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $input->name, $input->subdomain);
+        $newsletter = $this->newsletterService->createNewsletter($user->id, $organization->id, $input->name, $input->subdomain);
         return $this->json(new NewsletterObject($newsletter));
     }
 

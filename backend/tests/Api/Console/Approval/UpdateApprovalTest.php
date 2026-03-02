@@ -18,7 +18,7 @@ class UpdateApprovalTest extends WebTestCase
     public function test_update_approval(): void
     {
         $approval = ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::REVIEWING,
             'company_name' => 'Old Company',
             'country' => 'US',
@@ -77,7 +77,7 @@ class UpdateApprovalTest extends WebTestCase
     public function test_update_approval_not_reviewing(): void
     {
         $approval = ApprovalFactory::createOne([
-            'user_id' => 1,
+            'organization_id' => 1,
             'status' => ApprovalStatus::APPROVED,
         ]);
 

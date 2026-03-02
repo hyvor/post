@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(NewsletterController::class)]
 #[CoversClass(NewsletterService::class)]
@@ -24,10 +25,11 @@ use Symfony\Component\Clock\MockClock;
 #[CoversClass(UpdateNewsletterInput::class)]
 class UpdateNewsletterTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
 
     public function test_update_newsletter_meta(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $meta = new NewsletterMeta();
         $meta->unsubscribe_text = 'unsubscribe here';
@@ -68,7 +70,6 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame('2025-02-21 00:00:00', $newsletter->getUpdatedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('UpdateName', $newsletter->getName());
         $newsletterMeta = $newsletter->getMeta();
-        $this->assertInstanceOf(NewsletterMeta::class, $newsletterMeta);
         $this->assertSame('#ff0000', $newsletterMeta->template_color_accent);
         $this->assertSame('10px', $newsletterMeta->template_box_radius);
         $this->assertSame(null, $newsletterMeta->unsubscribe_text);
@@ -103,7 +104,7 @@ class UpdateNewsletterTest extends WebTestCase
 
     public function test_update_newsletter_subdomain(): void
     {
-        Clock::set(new MockClock('2025-02-21'));
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
             'subdomain' => 'thibault'
