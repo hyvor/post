@@ -284,21 +284,14 @@
 
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
-	<li><a href="#create-subscriber"><code>POST /subscribers</code></a> - Create a subscriber</li>
 	<li>
-		<a href="#update-subscriber"><code>PATCH /subscribers/{'{id}'}</code></a> - Update a subscriber
+		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
 	</li>
 	<li>
 		<a href="#delete-subscriber"><code>DELETE /subscribers/{'{id}'}</code></a> - Delete a subscriber
 	</li>
 	<li>
 		<a href="#bulk-update-subscriber"><code>POST /subscribers/bulk</code></a> - Bulk update subscribers
-	</li>
-	<li>
-		<a href="#add-subscriber-to-list"><code>POST /subscribers/{'{id}'}/lists</code></a> - Add a subscriber to a list
-	</li>
-	<li>
-		<a href="#remove-subscriber-from-list"><code>DELETE /subscribers/{'{id}'}/lists</code></a> - Remove a subscriber from a list
 	</li>
 </ul>
 
@@ -331,7 +324,7 @@
     `}
 />
 
-<h4 id="create-subscriber">Create a subscriber</h4>
+<h4 id="create-update-subscriber">Create or update a subscriber</h4>
 
 <code>POST /subscribers</code>
 
@@ -339,31 +332,96 @@
 	language="ts"
 	code={`
         type Request = {
+            // If a subscriber with the given email already exists, it will be updated. 
+            // Otherwise, a new subscriber will be created.
             email: string;
-            source?: 'console' | 'form' | 'import'; // default: 'console'
+
+            // The lists that the subscriber has subscribed to
+            // Send an array of list IDs (number) or names (string)
+            lists: (number | string)[];
+
+            // The subscriber's subscription status
+            // set \`send_pending_confirmation_email=true\` to send a confirmation email
+            // default: pending
+            status?: 'pending' | 'subscribed' | 'unsubscribed';
+        
+            // the source of the subscriber (default: 'console')
+            source?: 'console' | 'form' | 'import';
+
+            // subscriber's IP address
             subscribe_ip?: string | null;
+
+            // unix timestamp of when the subscriber opted in
+            // if not set, it will be set to the current time if status is 'subscribed'
             subscribed_at?: number | null; // unix timestamp
+
+            // unix timestamp of when the subscriber unsubscribed
+            // if not set, it will be set to the current time if status is 'unsubscribed'
             unsubscribed_at?: number | null; // unix timestamp
-        }
-        type Response = Subscriber
-    `}
-/>
 
-<h4 id="update-subscriber">Update a subscriber</h4>
-
-<code>PATCH /subscribers/{'{id}'}</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {
-            email?: string;
-            status?: 'subscribed' | 'unsubscribed' | 'pending';
+            // additional metadata for the subscriber
+            // keys must be defined in the Subscriber Metadata Definitions section (or using the API)
             metadata?: Record<string, string>;
+
+            // ============ SETTINGS ===========
+            // change how the endpoint behaves
+
+            // define how to handle the case when the subscriber has
+            // previously unsubscribed from a list that is provided
+            // see below for more info
+            // default: 'ignore'
+            list_add_strategy_if_unsubscribed: 'ignore' | 'force_add';
+
+            // define the reason for removing the subscriber from a list
+            // see below
+            // default: 'unsubscribe'
+            list_remove_reason: 'unsubscribe' | 'other';
+
+            // whether to send a confirmation email when adding a subscriber with 'pending' status
+            // or when changing an existing subscriber's status to 'pending'.
+            // default: false
+            send_pending_confirmation_email?: boolean; 
         }
         type Response = Subscriber
     `}
 />
+
+<h5 id="managing-list-subscriptions">Managing list unsubscriptions and re-subscriptions</h5>
+
+<p>
+	<code>list_add_strategy_if_unsubscribed</code>:
+</p>
+
+<ul>
+	<li>
+		<code>ignore</code> - use this strategy for most auto-subscribing cases (e.g. automatically subscribing
+		a user to a list when they start a trial). This makes sures that if the user has previously unsubscribed
+		from the list, they will not be re-subscribed.
+	</li>
+	<li>
+		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the
+		list again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
+		to the list even if they have previously unsubscribed.
+	</li>
+</ul>
+
+<p>
+	<code>list_remove_reason</code>:
+</p>
+
+<ul>
+	<li>
+		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be
+		removed from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
+		unsubscription, blocking future re-adds unless
+		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe
+		form uses this.
+	</li>
+	<li>
+		<code>other</code> - use this reason if you want to remove the subscriber from the list without
+		recording an unsubscription.
+	</li>
+</ul>
 
 <h4 id="delete-subscriber">Delete a subscriber</h4>
 
@@ -395,46 +453,6 @@
             message: string;
             subscribers: Subscriber[];
         }
-    `}
-/>
-
-<h4 id="add-subscriber-to-list">Add a subscriber to a list</h4>
-
-<code>POST /subscribers/{'{id}'}/lists</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {
-            id?: number;    // list id
-            name?: string;  // list name
-            // At least one of id or name is required.
-
-            if_unsubscribed?: 'error' | 'force_create'; // default: 'error'
-            // 'error'        - return 422 if the subscriber has previously unsubscribed from this list
-            // 'force_create' - add to the list even if previously unsubscribed
-        }
-        type Response = Subscriber
-    `}
-/>
-
-<h4 id="remove-subscriber-from-list">Remove a subscriber from a list</h4>
-
-<code>DELETE /subscribers/{'{id}'}/lists</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {
-            id?: number;    // list id
-            name?: string;  // list name
-            // At least one of id or name is required.
-
-            reason?: 'unsubscribe' | 'other'; // default: 'other'
-            // 'unsubscribe' - records an unsubscription, blocking future re-adds unless force_create is used
-            // 'other'       - removes from the list without recording an unsubscription
-        }
-        type Response = Subscriber
     `}
 />
 
