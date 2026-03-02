@@ -20,6 +20,9 @@ readonly class AppConfig
         #[Autowire('%env(string:RELAY_API_KEY)%')]
         private string $relayApiKey,
 
+        #[Autowire('%env(string:RELAY_WEBHOOK_SECRET)%')]
+        private string $relayWebhookSecret,
+
         // Email configuration
         #[Autowire('%env(int:MAX_EMAILS_PER_SECOND)%')]
         private int    $maxEmailsPerSecond,
@@ -94,5 +97,9 @@ readonly class AppConfig
         return $this->notificationRelayApiKey ?: $this->relayApiKey;
     }
 
+    public function getRelayWebhookSecret(): string
+    {
+        return $this->relayWebhookSecret;
+    }
 
 }
