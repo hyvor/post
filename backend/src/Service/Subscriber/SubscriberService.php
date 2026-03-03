@@ -8,7 +8,7 @@ use App\Entity\NewsletterList;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberExport;
-use App\Entity\SubscriberListUnsubscribed;
+use App\Entity\SubscriberListRemoval;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -150,8 +150,10 @@ class SubscriberService
         return new ArrayCollection($results);
     }
 
-    public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
-    {
+    public function updateSubscriber(
+        Subscriber $subscriber,
+        UpdateSubscriberDto $updates,
+    ): Subscriber {
         if ($updates->has('status')) {
             $subscriber->setStatus($updates->status);
         }
@@ -177,11 +179,11 @@ class SubscriberService
         }
 
         if ($updates->has('metadata')) {
-            $metadata = $subscriber->getMetadata();
-            foreach ($updates->metadata as $key => $value) {
-                $metadata[$key] = $value;
-            }
-            $subscriber->setMetadata($metadata);
+            $subscriber->setMetadata($updates->metadata);
+        }
+
+        if ($updates->has('lists')) {
+            $subscriber->setLists(new ArrayCollection($updates->lists));
         }
 
         $subscriber->setUpdatedAt($this->now());
@@ -284,35 +286,6 @@ class SubscriberService
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
     }
 
-    /**
-     * @param Subscriber $subscriber
-     * @param NewsletterList[] $lists
-     */
-    public function setSubscriberLists(
-        Subscriber $subscriber,
-        array $lists,
-    ): void {
-        $listIds = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
-
-        // remove lists that are not in the new list
-        foreach ($subscriber->getLists() as $existingList) {
-            if (!in_array($existingList->getId(), $listIds)) {
-                $subscriber->removeList($existingList);
-            }
-        }
-
-        // add new lists
-        foreach ($lists as $list) {
-            if (!$subscriber->getLists()->contains($list)) {
-                $subscriber->addList($list);
-            }
-        }
-
-        $subscriber->setUpdatedAt($this->now());
-
-        $this->em->persist($subscriber);
-        $this->em->flush();
-    }
 
     public function addSubscriberToList(
         Subscriber $subscriber,
@@ -338,13 +311,13 @@ class SubscriberService
 
 
         if ($recordUnsubscription) {
-            $existing = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+            $existing = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
                 'list' => $list,
                 'subscriber' => $subscriber,
             ]);
 
             if ($existing === null) {
-                $unsubscribed = new SubscriberListUnsubscribed()
+                $unsubscribed = new SubscriberListRemoval()
                     ->setList($list)
                     ->setSubscriber($subscriber)
                     ->setCreatedAt($this->now());
@@ -358,7 +331,7 @@ class SubscriberService
 
     public function hasSubscriberUnsubscribedFromList(Subscriber $subscriber, NewsletterList $list): bool
     {
-        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
             'list' => $list,
             'subscriber' => $subscriber,
         ]);

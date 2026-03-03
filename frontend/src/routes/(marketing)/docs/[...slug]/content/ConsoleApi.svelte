@@ -372,8 +372,8 @@
             // if the subscriber was previously removed from a list,
             // define the reason(s) for ignoring the re-subscription to that list.
             // see below for more info
-            // default: ['unsubscribe', 'bounce']
-            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'auto')[];
+            // default: ['unsubscribe', 'bounce', 'complaint']
+            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'complaint' | 'auto')[];
 
             // define the reason for removing the subscriber from a list
             // (only when updating, see below for more info)

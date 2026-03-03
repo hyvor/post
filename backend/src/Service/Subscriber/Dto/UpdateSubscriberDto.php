@@ -2,6 +2,7 @@
 
 namespace App\Service\Subscriber\Dto;
 
+use App\Entity\NewsletterList;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Util\OptionalPropertyTrait;
@@ -20,6 +21,9 @@ class UpdateSubscriberDto
     public ?\DateTimeImmutable $optInAt;
 
     public ?string $unsubscribedReason;
+
+    /** @var NewsletterList[] */
+    public array $lists;
 
     /**
      * @var array<string, scalar>
