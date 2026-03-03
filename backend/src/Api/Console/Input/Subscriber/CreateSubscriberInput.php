@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Input\Subscriber;
 
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
@@ -43,13 +44,13 @@ class CreateSubscriberInput
 
     // settings
 
-    public ListsStrategy $lists_strategy = ListsStrategy::SYNC;
+    public ListsStrategy $lists_strategy = ListsStrategy::MERGE;
 
     /**
      * @var string[]
      */
     #[Assert\All(new Assert\Choice(callback: 'getListResubscribeOnValues'))]
-    private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce'];
+    private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce', 'complaint'];
 
     public ListRemoveReason $list_remove_reason = ListRemoveReason::UNSUBSCRIBE;
 
@@ -69,12 +70,12 @@ class CreateSubscriberInput
     }
 
     /**
-     * @return ListSkipResubscribeOn[]
+     * @return ListRemovalReason[]
      */
     public function getListSkipResubscribeOn(): array
     {
         $listSkipResubscribeOn = $this->has('list_skip_resubscribe_on') ? $this->list_skip_resubscribe_on : [];
-        return array_map(fn($item) => ListSkipResubscribeOn::from($item), $listSkipResubscribeOn);
+        return array_map(fn($item) => ListRemovalReason::from($item), $listSkipResubscribeOn);
     }
 
     /**
@@ -82,7 +83,7 @@ class CreateSubscriberInput
      */
     public function getListResubscribeOnValues(): array
     {
-        return array_map(fn($value) => $value->value, ListSkipResubscribeOn::cases());
+        return array_map(fn($value) => $value->value, ListRemovalReason::cases());
     }
 
 }

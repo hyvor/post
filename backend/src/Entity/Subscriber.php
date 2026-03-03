@@ -224,6 +224,15 @@ class Subscriber
         return $this->lists;
     }
 
+    /**
+     * @param Collection<int, NewsletterList> $lists
+     */
+    public function setLists(Collection $lists): static
+    {
+        $this->lists = $lists;
+        return $this;
+    }
+
     public function addList(NewsletterList $list): self
     {
         if (!$this->lists->contains($list)) {

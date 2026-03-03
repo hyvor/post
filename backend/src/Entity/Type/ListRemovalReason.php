@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Api\Console\Input\Subscriber;
+namespace App\Entity\Type;
 
-enum ListSkipResubscribeOn: string
+enum ListRemovalReason: string
 {
     case UNSUBSCRIBE = 'unsubscribe';
     case BOUNCE = 'bounce';
+    case COMPLAINT = 'complaint';
     case OTHER = 'other';
 }

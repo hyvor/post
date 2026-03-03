@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'list_subscriber_unsubscribed')]
+#[ORM\Table(name: 'subscriber_list_removals')]
 #[ORM\UniqueConstraint(columns: ['list_id', 'subscriber_id'])]
-class SubscriberListUnsubscribed
+class SubscriberListRemoval
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,6 +21,9 @@ class SubscriberListUnsubscribed
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'subscriber_id', nullable: false, onDelete: 'CASCADE')]
     private Subscriber $subscriber;
+
+    #[ORM\Column(type: 'string')]
+    private string $reason;
 
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
@@ -54,6 +57,17 @@ class SubscriberListUnsubscribed
     public function setSubscriber(Subscriber $subscriber): static
     {
         $this->subscriber = $subscriber;
+        return $this;
+    }
+
+    public function getReason(): string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(string $reason): static
+    {
+        $this->reason = $reason;
         return $this;
     }
 
