@@ -4,12 +4,12 @@ namespace App\Tests\Factory;
 
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Approval>
+ * @extends PersistentObjectFactory<Approval>
  */
-final class ApprovalFactory extends PersistentProxyObjectFactory
+final class ApprovalFactory extends PersistentObjectFactory
 {
     public function __construct()
     {

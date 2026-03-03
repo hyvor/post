@@ -5,12 +5,12 @@ namespace App\Tests\Factory;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Subscriber>
+ * @extends PersistentObjectFactory<Subscriber>
  */
-final class SubscriberFactory extends PersistentProxyObjectFactory
+final class SubscriberFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services

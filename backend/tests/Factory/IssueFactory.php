@@ -5,21 +5,19 @@ namespace App\Tests\Factory;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use Symfony\Component\Uid\Uuid;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Issue>
+ * @extends PersistentObjectFactory<Issue>
  */
-final class IssueFactory extends PersistentProxyObjectFactory
+final class IssueFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {

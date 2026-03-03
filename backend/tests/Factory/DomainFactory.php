@@ -4,21 +4,19 @@ namespace App\Tests\Factory;
 
 use App\Entity\Domain;
 use App\Entity\Type\RelayDomainStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Domain>
+ * @extends PersistentObjectFactory<Domain>
  */
-final class DomainFactory extends PersistentProxyObjectFactory
+final class DomainFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {

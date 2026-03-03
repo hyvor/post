@@ -5,21 +5,19 @@ namespace App\Tests\Factory;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
 use App\Entity\UserInvite;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<UserInvite>
+ * @extends PersistentObjectFactory<UserInvite>
  */
-final class UserInviteFactory extends PersistentProxyObjectFactory
+final class UserInviteFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -48,8 +46,7 @@ final class UserInviteFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Domain $domain): void {})
-        ;
+        return $this// ->afterInstantiate(function(Domain $domain): void {})
+            ;
     }
 }

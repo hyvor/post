@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Type\ListRemovalReason;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -22,8 +23,8 @@ class SubscriberListRemoval
     #[ORM\JoinColumn(name: 'subscriber_id', nullable: false, onDelete: 'CASCADE')]
     private Subscriber $subscriber;
 
-    #[ORM\Column(type: 'string')]
-    private string $reason;
+    #[ORM\Column(enumType: ListRemovalReason::class)]
+    private ListRemovalReason $reason;
 
     #[ORM\Column]
     private \DateTimeImmutable $created_at;
@@ -60,12 +61,12 @@ class SubscriberListRemoval
         return $this;
     }
 
-    public function getReason(): string
+    public function getReason(): ListRemovalReason
     {
         return $this->reason;
     }
 
-    public function setReason(string $reason): static
+    public function setReason(ListRemovalReason $reason): static
     {
         $this->reason = $reason;
         return $this;
