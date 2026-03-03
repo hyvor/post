@@ -7,6 +7,7 @@ use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\ListsStrategy;
+use App\Api\Console\Input\Subscriber\MetadataStrategy;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
 use App\Entity\NewsletterList;
@@ -126,7 +127,14 @@ class SubscriberController extends AbstractController
             }
 
             if ($input->metadata) {
-                $updates->metadata = $input->metadata;
+                if ($input->metadata_strategy === MetadataStrategy::MERGE) {
+                    $updates->metadata = array_merge(
+                        $subscriber->getMetadata(),
+                        $input->metadata,
+                    );
+                } else {
+                    $updates->metadata = $input->metadata;
+                }
             }
 
             if ($input->lists !== null) {
