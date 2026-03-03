@@ -38,6 +38,7 @@ class SubscriberService
 
     /**
      * @param array<NewsletterList> $lists
+     * @param array<string, scalar> $metadata
      */
     public function createSubscriber(
         Newsletter $newsletter,
@@ -48,6 +49,7 @@ class SubscriberService
         ?string $subscribeIp = null,
         ?\DateTimeImmutable $subscribedAt = null,
         ?\DateTimeImmutable $unsubscribedAt = null,
+        array $metadata = [],
         bool $sendConfirmationEmail = true,
     ): Subscriber {
         $subscriber = new Subscriber()
@@ -56,24 +58,18 @@ class SubscriberService
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now())
             ->setStatus($status)
-            ->setSource($source);
+            ->setSubscribedAt($subscribedAt)
+            ->setUnsubscribedAt($unsubscribedAt)
+            ->setSubscribeIp($subscribeIp)
+            ->setSource($source)
+            ->setMetadata($metadata);
 
         // if status is subscribed, subscribed_at should be set to now
         // if status is unsubscribed, unsubscribed_at should be set to now
         if ($status === SubscriberStatus::SUBSCRIBED) {
-            $subscriber->setSubscribedAt($this->now());
+            $subscriber->setSubscribedAt($subscribedAt ?? $this->now());
         } elseif ($status === SubscriberStatus::UNSUBSCRIBED) {
-            $subscriber->setUnsubscribedAt($this->now());
-        }
-
-        if ($subscribedAt !== null) {
-            $subscriber->setSubscribedAt($subscribedAt);
-        }
-        if ($unsubscribedAt !== null) {
-            $subscriber->setUnsubscribedAt($unsubscribedAt);
-        }
-        if ($subscribeIp !== null) {
-            $subscriber->setSubscribeIp($subscribeIp);
+            $subscriber->setUnsubscribedAt($unsubscribedAt ?? $this->now());
         }
 
         foreach ($lists as $list) {
