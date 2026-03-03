@@ -12,10 +12,12 @@ use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
 use App\Entity\NewsletterList;
 use App\Entity\Subscriber;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\ListRemoval\ListRemovalService;
 use App\Service\Subscriber\SubscriberService;
 use App\Service\SubscriberMetadata\Exception\MetadataValidationFailedException;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
@@ -34,6 +36,7 @@ class SubscriberController extends AbstractController
         private SubscriberService $subscriberService,
         private NewsletterListService $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService,
+        private ListRemovalService $listRemovalService,
     ) {}
 
     #[Route('/subscribers', methods: 'GET')]
@@ -149,11 +152,18 @@ class SubscriberController extends AbstractController
                 } elseif ($input->lists_strategy === ListsStrategy::OVERWRITE) {
                     $newLists = $resolvedLists;
                 } else {
+                    // remove
                     $newLists = array_filter(
                         $newLists,
                         fn($l) => !array_find($resolvedLists, fn($rl) => $rl->getId() === $l->getId()),
                     );
                 }
+
+                $newLists = $this->skipLists(
+                    $subscriber,
+                    $newLists,
+                    $input->getListSkipResubscribeOn(),
+                );
 
                 $updates->lists = $newLists;
             }
@@ -162,6 +172,7 @@ class SubscriberController extends AbstractController
                 $subscriber,
                 $updates,
                 listRemovalReason: $input->list_removal_reason,
+                sendConfirmationEmail: $input->send_pending_confirmation_email,
             );
         }
 
@@ -218,6 +229,36 @@ class SubscriberController extends AbstractController
         }
 
         return $resolvedLists;
+    }
+
+    /**
+     * @param Subscriber $subscriber
+     * @param NewsletterList[] $lists
+     * @param ListRemovalReason[] $reasonsToSkip
+     * @return NewsletterList[]
+     */
+    private function skipLists(Subscriber $subscriber, array $lists, array $reasonsToSkip): array
+    {
+        $newlyAddedLists = [];
+
+        foreach ($lists as $list) {
+            if (!$subscriber->getLists()->contains($list)) {
+                $newlyAddedLists[] = $list;
+            }
+        }
+
+        if (count($newlyAddedLists) === 0) {
+            return $lists;
+        }
+
+        $newlyAddedListIds = array_map(fn($l) => $l->getId(), $newlyAddedLists);
+
+        $removals = $this->listRemovalService->getRemovals($subscriber, $newlyAddedListIds, $reasonsToSkip);
+
+        return array_filter(
+            $lists,
+            fn($list) => !array_find($removals, fn($r) => $r->getList()->getId() === $list->getId()),
+        );
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]

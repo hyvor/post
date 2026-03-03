@@ -46,7 +46,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
                     id: 1,
                     name: 'Fake Organization',
                     role: 'admin',
-                )
+                ),
             );
         }
         /** @var EntityManagerInterface $em */
@@ -67,11 +67,13 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         if (!$callback) {
             $callback = function ($method, $url, $options) use ($forSystemNotification): JsonMockResponse {
-
                 $this->assertSame('POST', $method);
                 $this->assertStringStartsWith('https://relay.hyvor.com/api/console/', $url);
                 $this->assertContains('Content-Type: application/json', $options['headers']);
-                $this->assertContains('Authorization: Bearer ' . ($forSystemNotification ? 'test-notification-relay-key' : 'test-relay-key'), $options['headers']);
+                $this->assertContains(
+                    'Authorization: Bearer ' . ($forSystemNotification ? 'test-notification-relay-key' : 'test-relay-key'),
+                    $options['headers'],
+                );
 
                 if ($forSystemNotification) {
                     $body = json_decode($options['body'], true);
@@ -100,23 +102,24 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      */
     public function consoleApi(
         Newsletter|int|null $newsletter,
-        string              $method,
-        string              $uri,
-        array               $data = [],
-        array               $files = [],
+        string $method,
+        string $uri,
+        array $data = [],
+        array $files = [],
         // only use this if $files is used. otherwise, use $data
-        array               $parameters = [],
-        array               $server = [],
-        true|array          $scopes = true,
-        bool                $useSession = false
-    ): Response
-    {
+        array $parameters = [],
+        array $server = [],
+        true|array $scopes = true,
+        bool $useSession = false,
+    ): Response {
         if ($newsletter instanceof Newsletter) {
             $newsletterId = $newsletter->getId();
-        } else if ($newsletter) {
-            $newsletterId = $newsletter;
-            $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
-            $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
+        } else {
+            if ($newsletter) {
+                $newsletterId = $newsletter;
+                $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
+                $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
+            }
         }
 
         if ($newsletter) {
@@ -143,7 +146,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             if ($scopes !== true) {
                 $apiKeyFactory['scopes'] = array_map(
                     fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
-                    $scopes
+                    $scopes,
                 );
             }
             ApiKeyFactory::createOne($apiKeyFactory);
@@ -166,7 +169,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         if ($response->getStatusCode() === 500) {
             throw new \Exception(
                 'API call failed with status code 500. ' .
-                'Response: ' . $response->getContent()
+                'Response: ' . $response->getContent(),
             );
         }
 
@@ -180,10 +183,9 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     public function publicApi(
         string $method,
         string $uri,
-        array  $data = [],
-        array  $headers = [],
-    ): Response
-    {
+        array $data = [],
+        array $headers = [],
+    ): Response {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
@@ -196,7 +198,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             $method,
             '/api/public' . $uri,
             server: $server,
-            content: (string)json_encode($data)
+            content: (string)json_encode($data),
         );
         return $this->client->getResponse();
     }
@@ -208,12 +210,11 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     public function sudoApi(
         string $method,
         string $uri,
-        array  $data = [],
-        array  $server = [],
-    ): Response
-    {
+        array $data = [],
+        array $server = [],
+    ): Response {
         SudoUserFactory::findOrCreate([
-            'user_id' => 1
+            'user_id' => 1,
         ]);
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'test-session'));
@@ -232,7 +233,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         if ($response->getStatusCode() === 500) {
             throw new \Exception(
                 'API call failed with status code 500. ' .
-                'Response: ' . $response->getContent()
+                'Response: ' . $response->getContent(),
             );
         }
 
@@ -248,7 +249,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function assertApiFailed(int $expectedStatus, string $expectedMessage): void
     {
-
         $response = $this->client->getResponse();
         $this->assertSame($expectedStatus, $response->getStatusCode());
 
@@ -256,7 +256,6 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertArrayHasKey('message', $json);
         $this->assertIsString($json['message']);
         $this->assertStringContainsString($expectedMessage, $json['message']);
-
     }
 
 
