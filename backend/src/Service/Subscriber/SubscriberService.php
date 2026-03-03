@@ -158,6 +158,8 @@ class SubscriberService
         // if some lists are being removed, set the reason to correctly record
         // it in ListRemovalListener
         ListRemovalReason $listRemovalReason = ListRemovalReason::UNSUBSCRIBE,
+        // whether to send the confirmation email if the status was changed to "pending"
+        bool $sendConfirmationEmail = false,
     ): Subscriber {
         $subscriberOld = clone $subscriber;
 
@@ -211,6 +213,7 @@ class SubscriberService
             new SubscriberUpdatedEvent(
                 $subscriberOld,
                 $subscriber,
+                $sendConfirmationEmail,
             ),
         );
 

@@ -19,6 +19,17 @@ class ListRemovalListener
     #[AsEventListener()]
     public function onSubscriberUpdating(SubscriberUpdatingEvent $event): void
     {
+        $this->skipRemoved($event);
+        $this->recordRemoving($event);
+    }
+
+    private function skipRemoved(SubscriberUpdatingEvent $event): void
+    {
+        //
+    }
+
+    private function recordRemoving(SubscriberUpdatingEvent $event): void
+    {
         $oldListIds = $event->getSubscriberOld()->getLists()->map(fn($list) => $list->getId())->toArray();
         $newListIds = $event->getSubscriber()->getLists()->map(fn($list) => $list->getId())->toArray();
 
