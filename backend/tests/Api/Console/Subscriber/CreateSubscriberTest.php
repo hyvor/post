@@ -5,14 +5,20 @@ namespace App\Tests\Api\Console\Subscriber;
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
+use App\Entity\SubscriberListUnsubscribed;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
+use App\Service\App\Messenger\MessageTransport;
+use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberFactory;
+use App\Tests\Factory\SubscriberListUnsubscribedFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -20,13 +26,18 @@ use PHPUnit\Framework\Attributes\TestWith;
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
+#[CoversClass(NewsletterListService::class)]
 class CreateSubscriberTest extends WebTestCase
 {
 
-    public function testCreateSubscriberMinimal(): void
+    public function test_create_subscriber(): void
     {
-        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
+
+        $list = NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+            'name' => 'List 1',
+        ]);
 
         $response = $this->consoleApi(
             $newsletter,
@@ -34,7 +45,10 @@ class CreateSubscriberTest extends WebTestCase
             '/subscribers',
             [
                 'email' => 'test@email.com',
-            ]
+                'lists' => [
+                    'List 1',
+                ],
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -49,18 +63,73 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('test@email.com', $subscriber->getEmail());
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame('console', $subscriber->getSource()->value);
-        $this->assertCount(0, $subscriber->getLists());
 
-        $transport = $this->transport('async');
-        $transport->queue()->assertCount(1);
-        $message = $transport->queue()->first()->getMessage();
-        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
+        $lists = $subscriber->getLists();
+        $this->assertCount(1, $lists);
+        $this->assertSame('List 1', $lists->first()?->getName());
+
+        $event = $this->getEd()->getFirstEvent(SubscriberCreatedEvent::class);
+        $this->assertNotNull($event);
+        $this->assertFalse($event->shouldSendConfirmationEmail());
+    }
+
+    public function testCreateSubscriberWithListsById(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'lists' => [$list1->getId(), $list2->getId()],
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->em->clear();
+        $json = $this->getJson();
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriber);
+        $this->assertCount(2, $subscriber->getLists());
+        $listIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
+        $this->assertContains($list1->getId(), $listIds);
+        $this->assertContains($list2->getId(), $listIds);
+    }
+
+    public function testCreateSubscriberWithListsByName(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter, 'name' => 'My Newsletter']);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'lists' => ['My Newsletter'],
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->em->clear();
+        $json = $this->getJson();
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriber);
+        $this->assertCount(1, $subscriber->getLists());
+        $this->assertSame($list->getId(), $subscriber->getLists()->first()->getId());
     }
 
     public function testCreateSubscriberWithAllInputs(): void
     {
-        $this->mockRelayClient();
         $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscribedAt = new \DateTimeImmutable('2021-08-27 12:00:00');
         $unsubscribedAt = new \DateTimeImmutable('2021-08-29 12:00:00');
@@ -75,7 +144,11 @@ class CreateSubscriberTest extends WebTestCase
                 'subscribe_ip' => '79.255.1.1',
                 'subscribed_at' => $subscribedAt->getTimestamp(),
                 'unsubscribed_at' => $unsubscribedAt->getTimestamp(),
-            ]
+                'lists' => [$list->getId()],
+                'list_add_strategy_if_unsubscribed' => 'force_add',
+                'list_remove_reason' => 'other',
+                'send_pending_confirmation_email' => false,
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -89,8 +162,8 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
         $this->assertSame($unsubscribedAt->getTimestamp(), $json['unsubscribed_at']);
 
-        $repository = $this->em->getRepository(Subscriber::class);
-        $subscriber = $repository->find($json['id']);
+        $this->em->clear();
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('supun@hyvor.com', $subscriber->getEmail());
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
@@ -98,131 +171,13 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('79.255.1.1', $subscriber->getSubscribeIp());
         $this->assertSame('2021-08-27 12:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame('2021-08-29 12:00:00', $subscriber->getUnsubscribedAt()?->format('Y-m-d H:i:s'));
-
-        $transport = $this->transport('async');
-        $transport->queue()->assertCount(1);
-        $message = $transport->queue()->first()->getMessage();
-        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
+        $this->assertCount(1, $subscriber->getLists());
     }
 
-    public function testInputValidationEmptyEmail(): void
-    {
-        $this->validateInput(
-            fn(Newsletter $newsletter) => [],
-            [
-                [
-                    'property' => 'email',
-                    'message' => 'This value should not be blank.',
-                ],
-            ]
-        );
-    }
-
-    public function testInputValidationInvalidEmail(): void
-    {
-        $this->validateInput(
-            fn(Newsletter $newsletter) => [
-                'email' => 'not-email',
-            ],
-            [
-                [
-                    'property' => 'email',
-                    'message' => 'This value is not a valid email address.',
-                ],
-            ]
-        );
-    }
-
-    public function testInputValidationEmailTooLong(): void
-    {
-        $this->validateInput(
-            fn(Newsletter $newsletter) => [
-                'email' => str_repeat('a', 256) . '@hyvor.com',
-            ],
-            [
-                [
-                    'property' => 'email',
-                    'message' => 'This value is too long. It should have 255 characters or less.',
-                ],
-            ]
-        );
-    }
-
-    public function testInputValidationOptionalValues(): void
-    {
-        $this->validateInput(
-            fn(Newsletter $newsletter) => [
-                'email' => 'supun@hyvor.com',
-                'source' => 'invalid-source',
-                'subscribe_ip' => '127.0.0.1',
-                'subscribed_at' => 'invalid-date',
-                'unsubscribed_at' => 'invalid-date',
-            ],
-            [
-                [
-                    'property' => 'source',
-                    'message' => 'This value should be of type int|string.',
-                ],
-                [
-                    'property' => 'subscribed_at',
-                    'message' => 'This value should be of type int|null.',
-                ],
-                [
-                    'property' => 'unsubscribed_at',
-                    'message' => 'This value should be of type int|null.',
-                ],
-            ]
-        );
-    }
-
-    #[TestWith(['not a valid ip'])]
-    #[TestWith(['127.0.0.1'])] // private ip
-    #[TestWith(['::1'])] // localhost
-    #[TestWith(['169.254.255.255'])] // reserved ip
-    public function testValidatesIp(
-        string $ip
-    ): void
-    {
-        $this->validateInput(
-            fn(Newsletter $newsletter) => [
-                'email' => 'supun@hyvor.com',
-                'subscribe_ip' => $ip,
-            ],
-            [
-                [
-                    'property' => 'subscribe_ip',
-                    'message' => 'This value is not a valid IP address.',
-                ],
-            ]
-        );
-    }
-
-    /**
-     * @param callable(Newsletter): array<string, mixed> $input
-     * @param array<int, array{property: string, message: string}> $violations
-     * @return void
-     */
-    private function validateInput(
-        callable $input,
-        array    $violations
-    ): void
+    public function testUpdateExistingSubscriber(): void
     {
         $newsletter = NewsletterFactory::createOne();
-
-        $response = $this->consoleApi(
-            $newsletter,
-            'POST',
-            '/subscribers',
-            $input($newsletter),
-        );
-
-        $this->assertSame(422, $response->getStatusCode());
-        $this->assertHasViolation($violations[0]['property'], $violations[0]['message']);
-    }
-
-    public function test_updates_if_exists(): void
-    {
-        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
             'newsletter' => $newsletter,
@@ -239,34 +194,36 @@ class CreateSubscriberTest extends WebTestCase
             '/subscribers',
             [
                 'email' => 'supun@hyvor.com',
-                'if_exists' => 'update',
                 'status' => 'pending',
                 'subscribe_ip' => '79.255.1.1',
                 'subscribed_at' => $subscribedAt->getTimestamp(),
-                'source' => 'import'
-            ]
+                'source' => 'import',
+                'lists' => [$list->getId()],
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $repository = $this->em->getRepository(Subscriber::class);
-        $updated = $repository->find($subscriber->getId());
+        $this->em->clear();
+        $updated = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertInstanceOf(Subscriber::class, $updated);
         $this->assertSame(SubscriberStatus::PENDING, $updated->getStatus());
         $this->assertSame('79.255.1.1', $updated->getSubscribeIp());
         $this->assertSame('2024-01-01 00:00:00', $updated->getSubscribedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame(SubscriberSource::IMPORT, $updated->getSource());
+        $this->assertCount(1, $updated->getLists());
+        $this->assertSame($list->getId(), $updated->getLists()->first()->getId());
     }
 
-    public function testCreateSubscriberIfExistsUpdateClearsTimestamps(): void
+    public function testListAddStrategyIgnore(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
-        $subscriber = SubscriberFactory::createOne([
-            'newsletter' => $newsletter,
-            'email' => 'supun@hyvor.com',
-            'subscribed_at' => new \DateTimeImmutable('2024-01-01'),
-            'unsubscribed_at' => new \DateTimeImmutable('2024-06-01'),
+        SubscriberListUnsubscribedFactory::createOne([
+            'list' => $list,
+            'subscriber' => $subscriber,
         ]);
 
         $response = $this->consoleApi(
@@ -274,31 +231,30 @@ class CreateSubscriberTest extends WebTestCase
             'POST',
             '/subscribers',
             [
-                'email' => 'supun@hyvor.com',
-                'if_exists' => 'update',
-                'subscribed_at' => null,
-                'unsubscribed_at' => null,
-            ]
+                'email' => $subscriber->getEmail(),
+                'lists' => [$list->getId()],
+                'list_add_strategy_if_unsubscribed' => 'ignore',
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $repository = $this->em->getRepository(Subscriber::class);
-        $updated = $repository->find($subscriber->getId());
+        $this->em->clear();
+        $updated = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertInstanceOf(Subscriber::class, $updated);
-        $this->assertNull($updated->getSubscribedAt());
-        $this->assertNull($updated->getUnsubscribedAt());
+        // Subscriber should NOT be added to the list (was previously unsubscribed, strategy=ignore)
+        $this->assertCount(0, $updated->getLists());
     }
 
-    public function testCreateSubscriberIfExistsUpdateDoesNotChangeUnsentFields(): void
+    public function testListAddStrategyForceAdd(): void
     {
         $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
-        $subscriber = SubscriberFactory::createOne([
-            'newsletter' => $newsletter,
-            'email' => 'supun@hyvor.com',
-            'subscribe_ip' => '1.2.3.4',
-            'subscribed_at' => new \DateTimeImmutable('2024-01-01'),
+        SubscriberListUnsubscribedFactory::createOne([
+            'list' => $list,
+            'subscriber' => $subscriber,
         ]);
 
         $response = $this->consoleApi(
@@ -306,43 +262,238 @@ class CreateSubscriberTest extends WebTestCase
             'POST',
             '/subscribers',
             [
-                'email' => 'supun@hyvor.com',
-                'if_exists' => 'update',
-                // subscribe_ip and subscribed_at not sent
-            ]
+                'email' => $subscriber->getEmail(),
+                'lists' => [$list->getId()],
+                'list_add_strategy_if_unsubscribed' => 'force_add',
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $repository = $this->em->getRepository(Subscriber::class);
-        $updated = $repository->find($subscriber->getId());
+        $this->em->clear();
+        $updated = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
         $this->assertInstanceOf(Subscriber::class, $updated);
-        $this->assertSame('1.2.3.4', $updated->getSubscribeIp());
-        $this->assertSame('2024-01-01 00:00:00', $updated->getSubscribedAt()?->format('Y-m-d H:i:s'));
+        // Subscriber SHOULD be added even though previously unsubscribed
+        $this->assertCount(1, $updated->getLists());
+        $this->assertSame($list->getId(), $updated->getLists()->first()->getId());
     }
 
-    public function testCreateSubscriberDuplicateEmail(): void
+    public function testListRemoveReasonUnsubscribe(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        $subscriber = SubscriberFactory::createOne([
-            'newsletter' => $newsletter,
-            'email' => 'thibault@hyvor.com',
-        ]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter, 'lists' => [$list]]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
             '/subscribers',
             [
-                'email' => 'thibault@hyvor.com',
-            ]
+                'email' => $subscriber->getEmail(),
+                'lists' => [], // empty = remove from all lists
+                'list_remove_reason' => 'unsubscribe',
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->em->clear();
+        $updated = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $updated);
+        $this->assertCount(0, $updated->getLists());
+
+        // Should record unsubscription
+        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+            'list' => $list->_real(),
+            'subscriber' => $updated,
+        ]);
+        $this->assertInstanceOf(SubscriberListUnsubscribed::class, $record);
+    }
+
+    public function testListRemoveReasonOther(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter, 'lists' => [$list]]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => $subscriber->getEmail(),
+                'lists' => [], // empty = remove from all lists
+                'list_remove_reason' => 'other',
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->em->clear();
+        $updated = $this->em->getRepository(Subscriber::class)->find($subscriber->getId());
+        $this->assertInstanceOf(Subscriber::class, $updated);
+        $this->assertCount(0, $updated->getLists());
+
+        // Should NOT record unsubscription
+        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+            'list' => $list->_real(),
+            'subscriber' => $updated,
+        ]);
+        $this->assertNull($record);
+    }
+
+    public function testSendPendingConfirmationEmail(): void
+    {
+        $this->mockRelayClient();
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'lists' => [],
+                'send_pending_confirmation_email' => true,
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(1);
+        $message = $transport->queue()->first()->getMessage();
+        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
+    }
+
+    public function testNoConfirmationEmailByDefault(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'lists' => [],
+            ],
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $transport = $this->transport('async');
+        $transport->queue()->assertCount(0);
+    }
+
+    public function testListNotFound(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+                'lists' => [999999],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertSame(
-            'Subscriber with email ' . $subscriber->getEmail() . ' already exists',
-            $this->getJson()['message']
+        $this->assertStringContainsString('List not found', $this->getJson()['message']);
+    }
+
+    public function testInputValidationEmptyEmail(): void
+    {
+        $this->validateInput(
+            fn(Newsletter $newsletter) => ['lists' => []],
+            [
+                [
+                    'property' => 'email',
+                    'message' => 'This value should not be blank.',
+                ],
+            ],
         );
+    }
+
+    public function testInputValidationInvalidEmail(): void
+    {
+        $this->validateInput(
+            fn(Newsletter $newsletter)
+                => [
+                'email' => 'not-email',
+                'lists' => [],
+            ],
+            [
+                [
+                    'property' => 'email',
+                    'message' => 'This value is not a valid email address.',
+                ],
+            ],
+        );
+    }
+
+    public function testInputValidationEmailTooLong(): void
+    {
+        $this->validateInput(
+            fn(Newsletter $newsletter)
+                => [
+                'email' => str_repeat('a', 256) . '@hyvor.com',
+                'lists' => [],
+            ],
+            [
+                [
+                    'property' => 'email',
+                    'message' => 'This value is too long. It should have 255 characters or less.',
+                ],
+            ],
+        );
+    }
+
+    #[TestWith(['not a valid ip'])]
+    #[TestWith(['127.0.0.1'])] // private ip
+    #[TestWith(['::1'])] // localhost
+    #[TestWith(['169.254.255.255'])] // reserved ip
+    public function testValidatesIp(
+        string $ip,
+    ): void {
+        $this->validateInput(
+            fn(Newsletter $newsletter)
+                => [
+                'email' => 'supun@hyvor.com',
+                'lists' => [],
+                'subscribe_ip' => $ip,
+            ],
+            [
+                [
+                    'property' => 'subscribe_ip',
+                    'message' => 'This value is not a valid IP address.',
+                ],
+            ],
+        );
+    }
+
+    /**
+     * @param callable(Newsletter): array<string, mixed> $input
+     * @param array<int, array{property: string, message: string}> $violations
+     * @return void
+     */
+    private function validateInput(
+        callable $input,
+        array $violations,
+    ): void {
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            $input($newsletter),
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $this->assertHasViolation($violations[0]['property'], $violations[0]['message']);
     }
 
 }

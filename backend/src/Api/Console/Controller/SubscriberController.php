@@ -4,14 +4,10 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Input\Subscriber\AddSubscriberListInput;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
-use App\Api\Console\Input\Subscriber\CreateSubscriberIfExists;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Api\Console\Input\Subscriber\RemoveSubscriberListInput;
-use App\Api\Console\Input\Subscriber\RemoveSubscriberListReason;
-use App\Api\Console\Input\Subscriber\SubscriberListIfUnsubscribed;
-use App\Api\Console\Input\Subscriber\UpdateSubscriberInput;
+use App\Api\Console\Input\Subscriber\ListAddStrategyIfUnsubscribed;
+use App\Api\Console\Input\Subscriber\ListRemoveReason;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
@@ -19,6 +15,7 @@ use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,18 +24,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SubscriberController extends AbstractController
 {
 
     public function __construct(
-        private SubscriberService         $subscriberService,
-        private NewsletterListService     $newsletterListService,
+        private SubscriberService $subscriberService,
+        private NewsletterListService $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService,
-    )
-    {
-    }
+        private MessageBusInterface $messageBus,
+    ) {}
 
     #[Route('/subscribers', methods: 'GET')]
     #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
@@ -70,7 +67,7 @@ class SubscriberController extends AbstractController
                 $listId,
                 $search,
                 $limit,
-                $offset
+                $offset,
             )
             ->map(fn($subscriber) => new SubscriberObject($subscriber));
 
@@ -81,29 +78,36 @@ class SubscriberController extends AbstractController
     #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
-        Newsletter                                 $newsletter
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+    ): JsonResponse {
+        // Resolve lists
+        $resolvedLists = [];
+        foreach ($input->lists as $listIdOrName) {
+            $id = is_int($listIdOrName) ? $listIdOrName : null;
+            $name = is_string($listIdOrName) ? $listIdOrName : null;
+            $list = $this->newsletterListService->getListByIdOrName($newsletter, $id, $name);
+            if ($list === null) {
+                throw new UnprocessableEntityHttpException("List not found: {$listIdOrName}");
+            }
+            $resolvedLists[] = $list;
+        }
 
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
 
         if ($subscriber === null) {
-
-            // create subscriber
             $subscriber = $this->subscriberService->createSubscriber(
                 $newsletter,
                 $input->email,
-                [],
-                SubscriberStatus::PENDING,
+                $resolvedLists,
+                $input->status,
                 source: $input->source ?? SubscriberSource::CONSOLE,
-                subscribeIp: $input->subscribe_ip ?? null,
-                subscribedAt: $input->has('subscribed_at') ? \DateTimeImmutable::createFromTimestamp($input->subscribed_at) : null,
-                unsubscribedAt: $input->has('unsubscribed_at') ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at) : null,
+                subscribeIp: $input->has('subscribe_ip') ? $input->subscribe_ip : null,
+                subscribedAt: $input->getSubscribedAt(),
+                unsubscribedAt: $input->getUnsubscribedAt(),
+                sendConfirmationEmail: $input->send_pending_confirmation_email,
             );
-
-        } elseif ($input->if_exists === CreateSubscriberIfExists::UPDATE) {
-
-            // update
+        } else {
+            // Update existing subscriber with provided fields
             $updates = new UpdateSubscriberDto();
 
             $updates->status = $input->status;
@@ -128,54 +132,41 @@ class SubscriberController extends AbstractController
                     : null;
             }
 
+            if ($input->has('metadata')) {
+                $updates->metadata = $input->metadata;
+            }
+
             $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
-
-        } else {
-            throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
         }
 
-        return $this->json(new SubscriberObject($subscriber));
-    }
+//        // Sync lists
+//        $resolvedListIds = array_map(fn($l) => $l->getId(), $resolvedLists);
+//        $currentListIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
+//
+//        // Add new lists
+//        foreach ($resolvedLists as $list) {
+//            if (!in_array($list->getId(), $currentListIds)) {
+//                if (
+//                    $input->list_add_strategy_if_unsubscribed === ListAddStrategyIfUnsubscribed::IGNORE &&
+//                    $this->subscriberService->hasSubscriberUnsubscribedFromList($subscriber, $list)
+//                ) {
+//                    continue;
+//                }
+//                $this->subscriberService->addSubscriberToList($subscriber, $list);
+//            }
+//        }
+//
+//        // Remove lists no longer in the resolved set
+//        foreach ($subscriber->getLists()->toArray() as $existingList) {
+//            if (!in_array($existingList->getId(), $resolvedListIds)) {
+//                $this->subscriberService->removeSubscriberFromList(
+//                    $subscriber,
+//                    $existingList,
+//                    $input->list_remove_reason === ListRemoveReason::UNSUBSCRIBE,
+//                );
+//            }
+//        }
 
-    #[Route('/subscribers/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
-    public function updateSubscriber(
-        Subscriber                                 $subscriber,
-        Newsletter                                 $newsletter,
-        #[MapRequestPayload] UpdateSubscriberInput $input
-    ): JsonResponse
-    {
-        $updates = new UpdateSubscriberDto();
-
-        if ($input->has('email')) {
-            $subscriberDB = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
-            if ($subscriberDB !== null) {
-                throw new UnprocessableEntityHttpException("Subscriber with email {$input->email} already exists");
-            }
-
-            $updates->email = $input->email;
-        }
-
-        if ($input->has('status')) {
-            if ($input->status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
-                throw new UnprocessableEntityHttpException('Subscribers without opt-in can not be updated to SUBSCRIBED status.');
-            }
-
-            $updates->status = $input->status;
-        }
-
-        $metadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
-
-        if ($input->has('metadata')) {
-            try {
-                $this->subscriberMetadataService->validateMetadata($newsletter, $input->metadata);
-            } catch (\Exception $e) {
-                throw new UnprocessableEntityHttpException($e->getMessage());
-            }
-            $updates->metadata = $input->metadata;
-        }
-
-        $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
         return $this->json(new SubscriberObject($subscriber));
     }
 
@@ -189,8 +180,10 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers/bulk', methods: 'POST')]
     #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
-    public function bulkActions(Newsletter $newsletter, #[MapRequestPayload] BulkActionSubscriberInput $input): JsonResponse
-    {
+    public function bulkActions(
+        Newsletter $newsletter,
+        #[MapRequestPayload] BulkActionSubscriberInput $input,
+    ): JsonResponse {
         if (count($input->subscribers_ids) >= $this->subscriberService::BULK_SUBSCRIBER_LIMIT) {
             throw new UnprocessableEntityHttpException("Subscribers limit exceeded");
         }
@@ -202,7 +195,9 @@ class SubscriberController extends AbstractController
             $subscriber = array_find($currentSubscribers, fn($s) => $s->getId() === $subscriberId);
 
             if ($subscriber === null) {
-                throw new UnprocessableEntityHttpException("Subscriber with ID {$subscriberId} not found in the newsletter");
+                throw new UnprocessableEntityHttpException(
+                    "Subscriber with ID {$subscriberId} not found in the newsletter",
+                );
             }
 
             $subscribers[] = $subscriber;
@@ -213,13 +208,14 @@ class SubscriberController extends AbstractController
             return $this->json([
                 'status' => 'success',
                 'message' => 'Subscribers deleted successfully',
-                'subscribers' => []
+                'subscribers' => [],
             ]);
         }
 
         if ($input->action == 'status_change') {
-            if ($input->status == null)
+            if ($input->status == null) {
                 throw new UnprocessableEntityHttpException("Status must be provided for status change action");
+            }
 
             $status = SubscriberStatus::tryFrom($input->status);
             if (!$status) {
@@ -241,13 +237,14 @@ class SubscriberController extends AbstractController
             return $this->json([
                 'status' => 'success',
                 'message' => 'Subscribers status updated successfully',
-                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers)
+                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers),
             ]);
         }
 
         if ($input->action == 'metadata_update') {
-            if ($input->metadata == null)
+            if ($input->metadata == null) {
                 throw new UnprocessableEntityHttpException("Metadata must be provided for metadata update action");
+            }
 
             foreach ($subscribers as $subscriber) {
                 $updates = new UpdateSubscriberDto();
@@ -265,70 +262,10 @@ class SubscriberController extends AbstractController
             return $this->json([
                 'status' => 'success',
                 'message' => 'Subscribers metadata updated successfully',
-                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers)
+                'subscribers' => array_map(fn($s) => new SubscriberObject($s), $subscribers),
             ]);
         }
 
         throw new BadRequestHttpException("Unhandled action");
-    }
-
-    #[Route('/subscribers/{id}/lists', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
-    public function addSubscriberList(
-        Subscriber                                  $subscriber,
-        Newsletter                                  $newsletter,
-        #[MapRequestPayload] AddSubscriberListInput $input
-    ): JsonResponse
-    {
-        if ($input->id === null && $input->name === null) {
-            throw new UnprocessableEntityHttpException('Either id or name must be provided');
-        }
-
-        $list = $this->newsletterListService->getListByIdOrName($newsletter, $input->id, $input->name);
-
-        if ($list === null) {
-            throw new UnprocessableEntityHttpException('List not found');
-        }
-
-        if (
-            $input->if_unsubscribed === SubscriberListIfUnsubscribed::ERROR &&
-            $this->subscriberService->hasSubscriberUnsubscribedFromList($subscriber, $list)
-        ) {
-            throw new BadRequestHttpException('Subscriber was previously unsubscribed and can not be added to the list again');
-        }
-
-        $this->subscriberService->addSubscriberToList(
-            $subscriber,
-            $list,
-        );
-
-        return $this->json(new SubscriberObject($subscriber));
-    }
-
-    #[Route('/subscribers/{id}/lists', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
-    public function removeSubscriberList(
-        Subscriber                                    $subscriber,
-        Newsletter                                    $newsletter,
-        #[MapRequestPayload] RemoveSubscriberListInput $input
-    ): JsonResponse
-    {
-        if ($input->id === null && $input->name === null) {
-            throw new UnprocessableEntityHttpException('Either id or name must be provided');
-        }
-
-        $list = $this->newsletterListService->getListByIdOrName($newsletter, $input->id, $input->name);
-
-        if ($list === null) {
-            throw new UnprocessableEntityHttpException('List not found');
-        }
-
-        $this->subscriberService->removeSubscriberFromList(
-            $subscriber,
-            $list,
-            $input->reason === RemoveSubscriberListReason::UNSUBSCRIBE
-        );
-
-        return $this->json(new SubscriberObject($subscriber));
     }
 }
