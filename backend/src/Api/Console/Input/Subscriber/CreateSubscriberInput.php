@@ -4,9 +4,11 @@ namespace App\Api\Console\Input\Subscriber;
 
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CreateSubscriberInput
 {
@@ -29,22 +31,25 @@ class CreateSubscriberInput
     public ?SubscriberSource $source = null;
 
     #[Assert\Ip(version: Assert\Ip::ALL_ONLY_PUBLIC)]
-    private ?string $subscribe_ip;
+    public ?string $subscribe_ip;
 
-    private ?int $subscribed_at;
+    public ?int $subscribed_at;
 
-    private ?int $unsubscribed_at;
+    public ?int $unsubscribed_at;
 
     /**
-     * @var array<string,string>|null
+     * @var array<string, scalar>|null
      */
+    #[Assert\All(new Assert\Type('scalar'))]
     public ?array $metadata = null;
-
 
     // settings
 
     public ListsStrategy $lists_strategy = ListsStrategy::SYNC;
 
+    /**
+     * @var string[]
+     */
     #[Assert\All(new Assert\Choice(callback: 'getListResubscribeOnValues'))]
     private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce'];
 
@@ -54,7 +59,7 @@ class CreateSubscriberInput
 
     public bool $send_pending_confirmation_email = false;
 
-    public function getSubscriberIp(): ?string
+    public function getSubscribeIp(): ?string
     {
         return $this->has('subscribe_ip') ? $this->subscribe_ip : null;
     }
@@ -77,7 +82,7 @@ class CreateSubscriberInput
     public function getListSkipResubscribeOn(): array
     {
         $listSkipResubscribeOn = $this->has('list_skip_resubscribe_on') ? $this->list_skip_resubscribe_on : [];
-        return array_map(fn($item) => ListSkipResubscribeOn::tryFrom($item), $listSkipResubscribeOn);
+        return array_map(fn($item) => ListSkipResubscribeOn::from($item), $listSkipResubscribeOn);
     }
 
     /**

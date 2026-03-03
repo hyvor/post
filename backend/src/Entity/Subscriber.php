@@ -64,7 +64,7 @@ class Subscriber
     private ?string $unsubscribe_reason = null;
 
     /**
-     * @var array<string, string>
+     * @var array<string, scalar>
      */
     #[ORM\Column(type: 'json', options: ['default' => '{}'])]
     private array $metadata = [];
@@ -254,7 +254,7 @@ class Subscriber
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, scalar>
      */
     public function getMetadata(): array
     {
@@ -262,7 +262,7 @@ class Subscriber
     }
 
     /**
-     * @param array<string, string> $metadata
+     * @param array<string, scalar> $metadata
      */
     public function setMetadata(array $metadata): static
     {
