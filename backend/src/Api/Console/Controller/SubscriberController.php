@@ -6,10 +6,11 @@ use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Api\Console\Input\Subscriber\ListAddStrategyIfUnsubscribed;
+use App\Api\Console\Input\Subscriber\ListSkipResubscribeOn;
 use App\Api\Console\Input\Subscriber\ListRemoveReason;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
+use App\Entity\NewsletterList;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -80,28 +81,17 @@ class SubscriberController extends AbstractController
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
-        // Resolve lists
-        $resolvedLists = [];
-        foreach ($input->lists as $listIdOrName) {
-            $id = is_int($listIdOrName) ? $listIdOrName : null;
-            $name = is_string($listIdOrName) ? $listIdOrName : null;
-            $list = $this->newsletterListService->getListByIdOrName($newsletter, $id, $name);
-            if ($list === null) {
-                throw new UnprocessableEntityHttpException("List not found: {$listIdOrName}");
-            }
-            $resolvedLists[] = $list;
-        }
-
+        $lists = $this->resolveLists($newsletter, $input->lists);
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
 
         if ($subscriber === null) {
             $subscriber = $this->subscriberService->createSubscriber(
                 $newsletter,
                 $input->email,
-                $resolvedLists,
+                $lists,
                 $input->status,
                 source: $input->source ?? SubscriberSource::CONSOLE,
-                subscribeIp: $input->has('subscribe_ip') ? $input->subscribe_ip : null,
+                subscribeIp: $input->getSubscriberIp(),
                 subscribedAt: $input->getSubscribedAt(),
                 unsubscribedAt: $input->getUnsubscribedAt(),
                 sendConfirmationEmail: $input->send_pending_confirmation_email,
@@ -168,6 +158,58 @@ class SubscriberController extends AbstractController
 //        }
 
         return $this->json(new SubscriberObject($subscriber));
+    }
+
+    /**
+     * @param (string|int)[] $listIdsOrNames
+     * @return NewsletterList[]
+     */
+    private function resolveLists(Newsletter $newsletter, array $listIdsOrNames): array
+    {
+        $listIds = [];
+        $listNames = [];
+
+        foreach ($listIdsOrNames as $listIdOrName) {
+            if (is_int($listIdOrName)) {
+                $listIds[] = $listIdOrName;
+            } elseif (is_string($listIdOrName)) {
+                $listNames[] = $listIdOrName;
+            }
+        }
+
+        $resolvedLists = [];
+
+        if (count($listIds) > 0) {
+            $resolvedLists = $this->newsletterListService->getListsByIds($newsletter, $listIds);
+
+            if (count($resolvedLists) !== count($listIds)) {
+                $resolvedListIds = array_map(fn($l) => $l->getId(), $resolvedLists);
+                $missingIds = array_diff($listIds, $resolvedListIds);
+                throw new UnprocessableEntityHttpException(
+                    "Lists with IDs " . implode(', ', $missingIds) . " not found",
+                );
+            }
+        }
+
+        if (count($listNames) > 0) {
+            $listsByName = $this->newsletterListService->getListsByNames($newsletter, $listNames);
+
+            foreach ($listsByName as $list) {
+                if (!in_array($list, $resolvedLists)) {
+                    $resolvedLists[] = $list;
+                }
+            }
+
+            if (count($listsByName) !== count($listNames)) {
+                $resolvedListNames = array_map(fn($l) => $l->getName(), $listsByName);
+                $missingNames = array_diff($listNames, $resolvedListNames);
+                throw new UnprocessableEntityHttpException(
+                    "Lists with names " . implode(', ', $missingNames) . " not found",
+                );
+            }
+        }
+
+        return $resolvedLists;
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]

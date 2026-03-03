@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Input\Subscriber;
 
-enum ListRemoveReason: string
+enum ListSkipResubscribeOn: string
 {
     case UNSUBSCRIBE = 'unsubscribe';
     case BOUNCE = 'bounce';

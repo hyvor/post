@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 class CreateSubscriberTest extends WebTestCase
 {
 
-    public function test_create_subscriber(): void
+    public function test_create_subscriber_minimal(): void
     {
         $newsletter = NewsletterFactory::createOne();
 
@@ -61,17 +61,23 @@ class CreateSubscriberTest extends WebTestCase
         $subscriber = $repository->find($json['id']);
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertSame('test@email.com', $subscriber->getEmail());
-        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
         $this->assertSame('console', $subscriber->getSource()->value);
 
         $lists = $subscriber->getLists();
         $this->assertCount(1, $lists);
-        $this->assertSame('List 1', $lists->first()?->getName());
+        $this->assertSame('List 1', $lists[0]?->getName());
 
         $event = $this->getEd()->getFirstEvent(SubscriberCreatedEvent::class);
-        $this->assertNotNull($event);
+        $this->assertSame($json['id'], $event->getSubscriber()->getId());
         $this->assertFalse($event->shouldSendConfirmationEmail());
     }
+
+    public function test_create_subscriber_with_all_inputs(): void
+    {
+        //
+    }
+
 
     public function testCreateSubscriberWithListsById(): void
     {

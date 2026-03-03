@@ -338,19 +338,15 @@
 
             // Subscribe to or unsubscribe from lists based 
             // on the given \`lists_strategy\`.
+            // an array of list IDs or names.
             lists: (number | string)[];
 
-            lists_strategy: 
-                | 'sync' // (default) sets the subscriber's lists to the given lists (overwriting existing lists)
-                | 'add'  // adds the subscriber to the given lists
-                | 'remove'; // removes the subscriber from the given lists
-
             // The subscriber's subscription status
-            // set \`send_pending_confirmation_email=true\` to send a confirmation email
             // default: subscribed
-            status?: 'pending' | 'subscribed' | 'unsubscribed';
+            status?: 'subscribed' | 'unsubscribed' | 'pending';
         
-            // the source of the subscriber (default: 'console')
+            // the source of the subscriber
+            // default: console
             source?: 'console' | 'form' | 'import';
 
             // subscriber's IP address
@@ -371,16 +367,22 @@
             // ============ SETTINGS ===========
             // change how the endpoint behaves
 
+            // how \`lists\` field is processed when updating an existing subscriber's list subscriptions.
+            // sync: overwrites the lists (default)
+            // add: adds to the current lists
+            // remove: removes from the current lists
+            lists_strategy: 'sync' | 'add' | 'remove';
+
             // if the subscriber was previously removed from a list,
             // define the reason(s) for ignoring the re-subscription to that list.
             // see below for more info
             // default: ['unsubscribe', 'bounce']
-            list_ignore_resubscribe_on: ('unsubscribe' | 'bounce' | 'auto')[];
+            list_skip_resubscribe_on: ('unsubscribe' | 'bounce' | 'auto')[];
 
             // define the reason for removing the subscriber from a list
             // (only when updating, see below for more info)
             // default: 'unsubscribe'
-            list_remove_reason: 'unsubscribe' | 'bounce' | 'auto';
+            list_remove_reason: 'unsubscribe' | 'bounce' | 'other';
 
             // whether to overwrite or merge the subscriber's metadata 
             // when updating an existing subscriber.
@@ -488,7 +490,10 @@
     {
         "email": "example@example.com",
         "lists": ["Paid Users"],
-        "lists_strategy": "remove"
+        "lists_strategy": "remove",
+
+        // unsubscribe, bounce, or other
+        "list_remove_reason": "unsubscribe"
     }
     `}
 		/>
@@ -528,14 +533,14 @@
         "lists_strategy": "add",
         // ignore unsubscription if the subscriber was removed from the list due to a bounce
         // but allow re-adding if they previously unsubscribed themselves
-        "list_ignore_resubscribe_on": ["bounce"] 
+        "list_skip_resubscribe_on": ["bounce"] 
     }
     `}
 		/>
 
 		<p>
 			To force re-adding both previous unsubscribes and bounces, use an empty array for <code
-				>list_ignore_resubscribe_on</code
+				>list_skip_resubscribe_on</code
 			>.
 		</p>
 	</Accordion>
