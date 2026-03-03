@@ -18,6 +18,7 @@ use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
+use App\Service\SubscriberMetadata\Exception\MetadataValidationFailedException;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +36,6 @@ class SubscriberController extends AbstractController
         private SubscriberService $subscriberService,
         private NewsletterListService $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService,
-        private MessageBusInterface $messageBus,
     ) {}
 
     #[Route('/subscribers', methods: 'GET')]
@@ -81,8 +81,19 @@ class SubscriberController extends AbstractController
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
-        $lists = $this->resolveLists($newsletter, $input->lists);
+        $lists = $input->lists ? $this->resolveLists($newsletter, $input->lists) : [];
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
+
+        if ($input->metadata) {
+            try {
+                $this->subscriberMetadataService->validateMetadata(
+                    $newsletter,
+                    $input->metadata,
+                );
+            } catch (MetadataValidationFailedException $e) {
+                throw new UnprocessableEntityHttpException($e->getMessage());
+            }
+        }
 
         if ($subscriber === null) {
             $subscriber = $this->subscriberService->createSubscriber(
@@ -91,9 +102,10 @@ class SubscriberController extends AbstractController
                 $lists,
                 $input->status,
                 source: $input->source ?? SubscriberSource::CONSOLE,
-                subscribeIp: $input->getSubscriberIp(),
+                subscribeIp: $input->getSubscribeIp(),
                 subscribedAt: $input->getSubscribedAt(),
                 unsubscribedAt: $input->getUnsubscribedAt(),
+                metadata: $input->metadata ?? [],
                 sendConfirmationEmail: $input->send_pending_confirmation_email,
             );
         } else {

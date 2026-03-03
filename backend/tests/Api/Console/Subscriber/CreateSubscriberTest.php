@@ -6,10 +6,10 @@ use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberListUnsubscribed;
+use App\Entity\Type\SubscriberMetadataDefinitionType;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
-use App\Service\App\Messenger\MessageTransport;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
@@ -19,6 +19,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberListUnsubscribedFactory;
+use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
@@ -75,7 +76,76 @@ class CreateSubscriberTest extends WebTestCase
 
     public function test_create_subscriber_with_all_inputs(): void
     {
-        //
+        $this->getEd()->setMockEvents([SubscriberCreatedEvent::class]);
+
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter, 'name' => 'Named List']);
+
+        $subscribedAt = new \DateTimeImmutable('2023-06-15 10:00:00');
+        $unsubscribedAt = new \DateTimeImmutable('2023-06-20 10:00:00');
+
+        SubscriberMetadataDefinitionFactory::createOne([
+            'newsletter' => $newsletter,
+            'key' => 'test-key',
+            'type' => SubscriberMetadataDefinitionType::TEXT,
+        ]);
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@hyvor.com',
+                'lists' => [$list1->getId(), 'Named List'],
+                'status' => 'pending',
+                'source' => 'import',
+                'subscribe_ip' => '203.0.113.1',
+                'subscribed_at' => $subscribedAt->getTimestamp(),
+                'unsubscribed_at' => $unsubscribedAt->getTimestamp(),
+                'metadata' => [
+                    'test-key' => 'test',
+                ],
+                'send_pending_confirmation_email' => true,
+            ],
+        );
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertIsInt($json['id']);
+        $this->assertSame('test@hyvor.com', $json['email']);
+        $this->assertSame('pending', $json['status']);
+        $this->assertSame('import', $json['source']);
+        $this->assertSame('203.0.113.1', $json['subscribe_ip']);
+        $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
+        $this->assertSame($unsubscribedAt->getTimestamp(), $json['unsubscribed_at']);
+        $this->assertCount(2, $json['list_ids']);
+        $this->assertContains($list1->getId(), $json['list_ids']);
+        $this->assertContains($list2->getId(), $json['list_ids']);
+
+        $this->em->clear();
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
+        $this->assertInstanceOf(Subscriber::class, $subscriber);
+        $this->assertSame('test@hyvor.com', $subscriber->getEmail());
+        $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
+        $this->assertSame(SubscriberSource::IMPORT, $subscriber->getSource());
+        $this->assertSame('203.0.113.1', $subscriber->getSubscribeIp());
+        $this->assertSame('2023-06-15 10:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('2023-06-20 10:00:00', $subscriber->getUnsubscribedAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame(
+            [
+                'test-key' => 'test',
+            ],
+            $subscriber->getMetadata(),
+        );
+        $listIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
+        $this->assertCount(2, $listIds);
+        $this->assertContains($list1->getId(), $listIds);
+        $this->assertContains($list2->getId(), $listIds);
+
+        $event = $this->getEd()->getFirstEvent(SubscriberCreatedEvent::class);
+        $this->assertSame($json['id'], $event->getSubscriber()->getId());
+        $this->assertTrue($event->shouldSendConfirmationEmail());
     }
 
 
