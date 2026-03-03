@@ -230,10 +230,59 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertContains($list2->getId(), $listIds);
     }
 
-    public function test_lists_strategy_overwrite(): void {}
+    public function test_lists_strategy_overwrite(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-    public function test_lists_strategy_remove(): void {}
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1],
+        ]);
 
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [$list2->getId()],
+            'lists_strategy' => 'overwrite',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $listIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
+        $this->assertCount(1, $listIds);
+        $this->assertContains($list2->getId(), $listIds);
+    }
+
+    public function test_lists_strategy_remove(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1, $list2],
+        ]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [$list1->getId()],
+            'lists_strategy' => 'remove',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $listIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
+        $this->assertCount(1, $listIds);
+        $this->assertContains($list2->getId(), $listIds);
+    }
+
+    public function test_metadata_strategy_merge(): void {}
+
+    public function test_metadata_strategy_overwrite(): void {}
 
     public function testCreateSubscriberWithListsById(): void
     {
