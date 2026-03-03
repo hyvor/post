@@ -4,7 +4,6 @@ namespace App\Tests\Api\Console\Subscriber;
 
 use App\Api\Console\Controller\SubscriberController;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberListRemoval;
 use App\Entity\Type\ListRemovalReason;
@@ -340,7 +339,17 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame(['c' => '3'], $subscriber->getMetadata());
     }
 
-    public function test_validates_metadata_definition_exists(): void {}
+    public function test_validates_metadata_definition_exists(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => 'test@email.com',
+            'metadata' => ['nonexistent-key' => 'value'],
+        ]);
+
+        $this->assertResponseFailed(422, 'nonexistent-key');
+    }
 
 
     #[TestWith([ListRemovalReason::UNSUBSCRIBE])]
@@ -537,7 +546,18 @@ class CreateSubscriberTest extends WebTestCase
 
     public function test_updates_with_confirmation_email_true(): void
     {
-        // check event has true
+        $newsletter = NewsletterFactory::createOne();
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'send_pending_confirmation_email' => true,
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $event = $this->getEd()->getFirstEvent(SubscriberUpdatedEvent::class);
+        $this->assertTrue($event->shouldSendConfirmationEmail());
     }
 
     #[TestWith([9999])]
@@ -564,13 +584,6 @@ class CreateSubscriberTest extends WebTestCase
 
     /**
      * @param array<string, mixed> $input
-     * add the following:
-     * - invalid email
-     * - too long email
-     * - send string to lists
-     * - invalid status
-     * - invalid IP address
-     * - invalid list_skip_resubscribe_on value
      */
     #[TestWith(
         [
@@ -580,6 +593,48 @@ class CreateSubscriberTest extends WebTestCase
             'email: This value should not be blank',
         ],
         'empty email'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'not-an-email'],
+            'email: This value is not a valid email address',
+        ],
+        'invalid email'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@h.co'],
+            'email: This value is too long',
+        ],
+        'too long email'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'test@email.com', 'lists' => 'not-array'],
+            'lists',
+        ],
+        'string for lists'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'test@email.com', 'status' => 'invalid-status'],
+            'status',
+        ],
+        'invalid status'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'test@email.com', 'subscribe_ip' => 'not-an-ip'],
+            'subscribe_ip: This value is not a valid IP address',
+        ],
+        'invalid IP address'
+    )]
+    #[TestWith(
+        [
+            ['email' => 'test@email.com', 'list_skip_resubscribe_on' => ['invalid-reason']],
+            'not a valid choice',
+        ],
+        'invalid list_skip_resubscribe_on value'
     )]
     public function test_validation(array $input, string $message): void
     {
