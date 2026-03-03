@@ -378,7 +378,7 @@
             // define the reason for removing the subscriber from a list
             // (only when updating, see below for more info)
             // default: 'unsubscribe'
-            list_remove_reason?: 'unsubscribe' | 'bounce' | 'other';
+            list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
 
             // whether to overwrite or merge the subscriber's metadata 
             // when updating an existing subscriber.
@@ -420,7 +420,7 @@
 </ul>
 
 <p>
-	<code>list_remove_reason</code>:
+	<code>list_removal_reason</code>:
 </p>
 
 <ul>
@@ -489,7 +489,7 @@
         "lists_strategy": "remove",
 
         // unsubscribe, bounce, or other
-        "list_remove_reason": "unsubscribe"
+        "list_removal_reason": "unsubscribe"
     }
     `}
 		/>
