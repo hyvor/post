@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		Button,
+		CodeBlock,
 		Divider,
 		IconMessage,
 		Loader,
@@ -120,9 +121,8 @@
 			</SplitControl>
 
 			{#if issue.error_private}
-				<SplitControl label="Error (private)">
-					<TextInput value={issue.error_private} disabled block />
-				</SplitControl>
+				<h3>Error (private)</h3>
+				<CodeBlock code={issue.error_private} />
 			{/if}
 		</div>
 	</div>

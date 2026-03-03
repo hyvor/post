@@ -3,8 +3,8 @@ import type {
 	Approval,
 	SubscriberImport,
 	SudoConfig,
-	SudoIssue,
-	SudoNewsletter,
+	Issue,
+	Newsletter,
 	SudoStats
 } from '../../types';
 
@@ -15,8 +15,8 @@ export const statsStore = writable<SudoStats>({
 });
 export const approvalStore = writable<Approval[]>([]);
 export const subscriberImportStore = writable<SubscriberImport[]>([]);
-export const newsletterStore = writable<SudoNewsletter[]>([]);
-export const issueStore = writable<SudoIssue[]>([]);
+export const newsletterStore = writable<Newsletter[]>([]);
+export const issueStore = writable<Issue[]>([]);
 
 approvalStore.subscribe((approvals) => {
 	statsStore.update((stats) => ({

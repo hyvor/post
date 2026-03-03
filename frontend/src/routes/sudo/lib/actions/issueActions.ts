@@ -1,6 +1,6 @@
 import { ITEMS_PER_PAGE } from '../generalActions';
 import sudoApi from '../sudoApi';
-import type { IssueStatus, SudoIssue } from '../../types';
+import type { IssueStatus, Issue } from '../../types';
 
 export const ISSUE_STATUS_FILTERS: Record<IssueStatus, string> = {
 	draft: 'Draft',
@@ -15,7 +15,7 @@ export function getIssues(
 	limit: number = ITEMS_PER_PAGE,
 	offset: number = 0
 ) {
-	return sudoApi.get<SudoIssue[]>({
+	return sudoApi.get<Issue[]>({
 		endpoint: 'issues',
 		data: {
 			subdomain,
@@ -27,7 +27,7 @@ export function getIssues(
 }
 
 export function getIssue(id: number) {
-	return sudoApi.get<SudoIssue>({
+	return sudoApi.get<Issue>({
 		endpoint: `issues/${id}`
 	});
 }

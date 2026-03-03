@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { SudoNewsletter } from '../types';
+	import type { Newsletter } from '../types';
 	import RelativeTime from '../../console/@components/utils/RelativeTime.svelte';
 
 	interface Props {
-		newsletter: SudoNewsletter;
-		handleSelect: (newsletter: SudoNewsletter) => void;
+		newsletter: Newsletter;
+		handleSelect: (newsletter: Newsletter) => void;
 	}
 
 	let { newsletter, handleSelect }: Props = $props();

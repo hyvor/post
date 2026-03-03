@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Tag } from '@hyvor/design/components';
-	import type { SudoIssue } from '../types';
+	import type { Issue } from '../types';
 	import RelativeTime from '../../console/@components/utils/RelativeTime.svelte';
 
 	interface Props {
-		issue: SudoIssue;
-		handleSelect: (issue: SudoIssue) => void;
+		issue: Issue;
+		handleSelect: (issue: Issue) => void;
 	}
 
 	let { issue, handleSelect }: Props = $props();

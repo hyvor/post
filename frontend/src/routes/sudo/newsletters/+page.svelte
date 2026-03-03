@@ -14,7 +14,7 @@
 	import { onMount } from 'svelte';
 	import { newsletterStore } from '../lib/stores/sudoStore';
 	import NewsletterRow from './NewsletterRow.svelte';
-	import type { SudoNewsletter } from '../types';
+	import type { Newsletter } from '../types';
 	import IconX from '@hyvor/icons/IconX';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { ITEMS_PER_PAGE } from '../lib/generalActions';
@@ -69,7 +69,7 @@
 			});
 	}
 
-	function handleSelect(newsletter: SudoNewsletter) {
+	function handleSelect(newsletter: Newsletter) {
 		goto(`/sudo/newsletters/${newsletter.id}`);
 	}
 

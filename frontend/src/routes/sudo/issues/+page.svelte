@@ -14,7 +14,7 @@
 	import { onMount } from 'svelte';
 	import { issueStore } from '../lib/stores/sudoStore';
 	import IssueRow from './IssueRow.svelte';
-	import type { IssueStatus, SudoIssue } from '../types';
+	import type { IssueStatus, Issue } from '../types';
 	import IconX from '@hyvor/icons/IconX';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { ITEMS_PER_PAGE } from '../lib/generalActions';
@@ -58,7 +58,7 @@
 			});
 	}
 
-	function handleSelect(issue: SudoIssue) {
+	function handleSelect(issue: Issue) {
 		goto(`/sudo/issues/${issue.id}`);
 	}
 

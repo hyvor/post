@@ -57,7 +57,7 @@ export type ImportingSubscriber = {
 	metadata: Record<string, string> | null;
 };
 
-export type SudoNewsletter = {
+export type Newsletter = {
 	id: number;
 	created_at: number;
 	subdomain: string;
@@ -70,7 +70,7 @@ export type SudoNewsletter = {
 
 export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'sent';
 
-export type SudoIssue = {
+export type Issue = {
 	id: number;
 	created_at: number;
 	uuid: string;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		Button,
+		CodeBlock,
 		Divider,
 		IconMessage,
 		Loader,
@@ -96,36 +97,7 @@
 
 			<h3>Stats</h3>
 
-			<SplitControl label="Subscribers">
-				<span
-					>{stats.subscribers.total} total / {stats.subscribers.last_30_days} last 30d</span
-				>
-			</SplitControl>
-
-			<SplitControl label="Issues (sent)">
-				<span>{stats.issues.total} total / {stats.issues.last_30_days} last 30d</span>
-			</SplitControl>
-
-			<SplitControl label="Bounce rate">
-				<span
-					>{stats.bounced_rate.total}% total / {stats.bounced_rate.last_30_days}% last 30d</span
-				>
-			</SplitControl>
-
-			<SplitControl label="Complaint rate">
-				<span
-					>{stats.complained_rate.total}% total / {stats.complained_rate.last_30_days}%
-					last 30d</span
-				>
-			</SplitControl>
-
-			<SplitControl label="Lists">
-				<span>{stats.lists_count}</span>
-			</SplitControl>
-
-			<SplitControl label="Sending profiles">
-				<span>{stats.sending_profiles_count}</span>
-			</SplitControl>
+			<CodeBlock code={JSON.stringify(stats, null, 2)} language="json" />
 		</div>
 	</div>
 {/if}
