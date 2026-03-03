@@ -19,12 +19,10 @@ use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
-use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 class SubscriberService
 {
