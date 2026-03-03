@@ -158,36 +158,12 @@ class SubscriberController extends AbstractController
                 $updates->lists = $newLists;
             }
 
-            $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
+            $subscriber = $this->subscriberService->updateSubscriber(
+                $subscriber,
+                $updates,
+                listRemovalReason: $input->list_removal_reason,
+            );
         }
-
-//        // Sync lists
-//        $resolvedListIds = array_map(fn($l) => $l->getId(), $resolvedLists);
-//        $currentListIds = $subscriber->getLists()->map(fn($l) => $l->getId())->toArray();
-//
-//        // Add new lists
-//        foreach ($resolvedLists as $list) {
-//            if (!in_array($list->getId(), $currentListIds)) {
-//                if (
-//                    $input->list_add_strategy_if_unsubscribed === ListAddStrategyIfUnsubscribed::IGNORE &&
-//                    $this->subscriberService->hasSubscriberUnsubscribedFromList($subscriber, $list)
-//                ) {
-//                    continue;
-//                }
-//                $this->subscriberService->addSubscriberToList($subscriber, $list);
-//            }
-//        }
-//
-//        // Remove lists no longer in the resolved set
-//        foreach ($subscriber->getLists()->toArray() as $existingList) {
-//            if (!in_array($existingList->getId(), $resolvedListIds)) {
-//                $this->subscriberService->removeSubscriberFromList(
-//                    $subscriber,
-//                    $existingList,
-//                    $input->list_remove_reason === ListRemoveReason::UNSUBSCRIBE,
-//                );
-//            }
-//        }
 
         return $this->json(new SubscriberObject($subscriber));
     }

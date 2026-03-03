@@ -52,7 +52,7 @@ class CreateSubscriberInput
     #[Assert\All(new Assert\Choice(callback: 'getListResubscribeOnValues'))]
     private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce', 'complaint'];
 
-    public ListRemoveReason $list_remove_reason = ListRemoveReason::UNSUBSCRIBE;
+    public ListRemovalReason $list_removal_reason = ListRemovalReason::UNSUBSCRIBE;
 
     public MetadataStrategy $metadata_strategy = MetadataStrategy::MERGE;
 
