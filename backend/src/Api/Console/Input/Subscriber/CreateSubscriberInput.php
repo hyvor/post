@@ -19,7 +19,12 @@ class CreateSubscriberInput
     #[Assert\Length(max: 255)]
     public string $email;
 
-    public SubscriberStatus $status = SubscriberStatus::PENDING;
+    /**
+     * @var ?(int|string)[]
+     */
+    public ?array $lists = null;
+
+    public SubscriberStatus $status = SubscriberStatus::SUBSCRIBED;
 
     public ?SubscriberSource $source = null;
 
@@ -31,16 +36,17 @@ class CreateSubscriberInput
     private ?int $unsubscribed_at;
 
     /**
-     * @var ?(int|string)[]
-     */
-    public ?array $lists = null;
-
-    /**
      * @var array<string,string>|null
      */
     public ?array $metadata = null;
 
-    public ListAddStrategyIfUnsubscribed $list_add_strategy_if_unsubscribed = ListAddStrategyIfUnsubscribed::IGNORE;
+
+    // settings
+
+    public ListsStrategy $lists_strategy = ListsStrategy::SYNC;
+
+    #[Assert\All(new Assert\Choice(callback: 'getListResubscribeOnValues'))]
+    private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce'];
 
     public ListRemoveReason $list_remove_reason = ListRemoveReason::UNSUBSCRIBE;
 
@@ -63,6 +69,23 @@ class CreateSubscriberInput
     {
         $unsubscribedAt = $this->has('unsubscribed_at') ? $this->unsubscribed_at : null;
         return $unsubscribedAt ? new \DateTimeImmutable()->setTimestamp($this->unsubscribed_at) : null;
+    }
+
+    /**
+     * @return ListSkipResubscribeOn[]
+     */
+    public function getListSkipResubscribeOn(): array
+    {
+        $listSkipResubscribeOn = $this->has('list_skip_resubscribe_on') ? $this->list_skip_resubscribe_on : [];
+        return array_map(fn($item) => ListSkipResubscribeOn::tryFrom($item), $listSkipResubscribeOn);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getListResubscribeOnValues(): array
+    {
+        return array_map(fn($value) => $value->value, ListSkipResubscribeOn::cases());
     }
 
 }

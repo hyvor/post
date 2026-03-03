@@ -16,15 +16,14 @@ class NewsletterListService
 
     public function __construct(
         private EntityManagerInterface $em,
-    )
-    {
-    }
+    ) {}
 
     public const int MAX_LIST_DEFINITIONS_PER_NEWSLETTER = 20;
 
     public function getListCounter(Newsletter $newsletter): int
     {
-        return $this->em->getRepository(NewsletterList::class)
+        return $this->em
+            ->getRepository(NewsletterList::class)
             ->count([
                 'newsletter' => $newsletter,
             ]);
@@ -32,10 +31,10 @@ class NewsletterListService
 
     public function isNameAvailable(
         Newsletter $newsletter,
-        string     $name
-    ): bool
-    {
-        return $this->em->getRepository(NewsletterList::class)
+        string $name,
+    ): bool {
+        return $this->em
+                ->getRepository(NewsletterList::class)
                 ->count([
                     'newsletter' => $newsletter,
                     'name' => $name,
@@ -44,10 +43,9 @@ class NewsletterListService
 
     public function createNewsletterList(
         Newsletter $newsletter,
-        string     $name,
-        ?string    $description
-    ): NewsletterList
-    {
+        string $name,
+        ?string $description,
+    ): NewsletterList {
         $list = new NewsletterList()
             ->setNewsletter($newsletter)
             ->setName($name)
@@ -79,13 +77,14 @@ class NewsletterListService
     public function getListsOfNewsletter(Newsletter $newsletter): ArrayCollection
     {
         return new ArrayCollection(
-            $this->em->getRepository(NewsletterList::class)
+            $this->em
+                ->getRepository(NewsletterList::class)
                 ->findBy(
                     [
                         'newsletter' => $newsletter,
                         'deleted_at' => null,
-                    ]
-                )
+                    ],
+                ),
         );
     }
 
@@ -126,32 +125,45 @@ class NewsletterListService
     }
 
     /**
-     * Note that we should validate the lists are within the newsletter (using getMissingListIdsOfNewsletter) before calling this method
-     * @param array<int> $listIds
-     * @return ArrayCollection<int, NewsletterList>
+     * @param int[] $ids
+     * @return NewsletterList[]
      */
-    public function getListsByIds(array $listIds): ArrayCollection
+    public function getListsByIds(Newsletter $newsletter, array $ids): array
     {
-        return new ArrayCollection(
-            $this->em->getRepository(NewsletterList::class)->findBy(['id' => $listIds])
-        );
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('l')
+            ->from(NewsletterList::class, 'l')
+            ->where('l.newsletter = :newsletter')
+            ->andWhere($qb->expr()->in('l.id', ':ids'))
+            ->setParameter('newsletter', $newsletter)
+            ->setParameter('ids', $ids);
+
+        /** @var array<int, NewsletterList> $result */
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
     }
 
-    public function getListByIdOrName(Newsletter $newsletter, ?int $id, ?string $name): ?NewsletterList
+    /**
+     * @param string[] $names
+     * @return NewsletterList[]
+     */
+    public function getListsByNames(Newsletter $newsletter, array $names): array
     {
-        assert($id !== null || $name !== null, 'Either id or name must be provided');
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('l')
+            ->from(NewsletterList::class, 'l')
+            ->where('l.newsletter = :newsletter')
+            ->andWhere($qb->expr()->in('l.name', ':names'))
+            ->setParameter('newsletter', $newsletter)
+            ->setParameter('names', $names);
 
-        if ($id !== null) {
-            return $this->em->getRepository(NewsletterList::class)->findOneBy([
-                'id' => $id,
-                'newsletter' => $newsletter,
-            ]);
-        }
+        /** @var array<int, NewsletterList> $result */
+        $result = $qb->getQuery()->getResult();
 
-        return $this->em->getRepository(NewsletterList::class)->findOneBy([
-            'name' => $name,
-            'newsletter' => $newsletter,
-        ]);
+        return $result;
     }
 
     /**
@@ -162,7 +174,8 @@ class NewsletterListService
     {
         $qb = $this->em->createQueryBuilder();
 
-        $qb->select('l.id AS list_id, COUNT(s.id) AS subscriber_count')
+        $qb
+            ->select('l.id AS list_id, COUNT(s.id) AS subscriber_count')
             ->from(NewsletterList::class, 'l')
             ->leftJoin('l.subscribers', 's', 'WITH', 's.status = :subscribed')
             ->where($qb->expr()->in('l.id', ':listIds'))
