@@ -5,11 +5,9 @@ namespace App\Api\Console\Input\Subscriber;
 use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use App\Util\OptionalPropertyTrait;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CreateSubscriberInput
 {
@@ -50,7 +48,7 @@ class CreateSubscriberInput
      * @var string[]
      */
     #[Assert\All(new Assert\Choice(callback: 'getListResubscribeOnValues'))]
-    private array $list_skip_resubscribe_on = ['unsubscribe', 'bounce', 'complaint'];
+    public array $list_skip_resubscribe_on = ['unsubscribe', 'bounce', 'complaint'];
 
     public ListRemovalReason $list_removal_reason = ListRemovalReason::UNSUBSCRIBE;
 
@@ -74,8 +72,7 @@ class CreateSubscriberInput
      */
     public function getListSkipResubscribeOn(): array
     {
-        $listSkipResubscribeOn = $this->has('list_skip_resubscribe_on') ? $this->list_skip_resubscribe_on : [];
-        return array_map(fn($item) => ListRemovalReason::from($item), $listSkipResubscribeOn);
+        return array_map(fn($item) => ListRemovalReason::from($item), $this->list_skip_resubscribe_on);
     }
 
     /**
