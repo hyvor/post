@@ -9,12 +9,15 @@ use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberExport;
 use App\Entity\SubscriberListRemoval;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -153,7 +156,13 @@ class SubscriberService
     public function updateSubscriber(
         Subscriber $subscriber,
         UpdateSubscriberDto $updates,
+
+        // if some lists are being removed, set the reason to correctly record
+        // it in ListRemovalListener
+        ListRemovalReason $listRemovalReason = ListRemovalReason::UNSUBSCRIBE,
     ): Subscriber {
+        $subscriberOld = clone $subscriber;
+
         if ($updates->has('status')) {
             $subscriber->setStatus($updates->status);
         }
@@ -188,8 +197,24 @@ class SubscriberService
 
         $subscriber->setUpdatedAt($this->now());
 
-        $this->em->persist($subscriber);
-        $this->em->flush();
+        $this->em->wrapInTransaction(function () use ($subscriberOld, $subscriber, $listRemovalReason) {
+            $this->em->persist($subscriber);
+            $this->ed->dispatch(
+                new SubscriberUpdatingEvent(
+                    $subscriberOld,
+                    $subscriber,
+                    listRemovalReason: $listRemovalReason,
+                ),
+            );
+            $this->em->flush();
+        });
+
+        $this->ed->dispatch(
+            new SubscriberUpdatedEvent(
+                $subscriberOld,
+                $subscriber,
+            ),
+        );
 
         return $subscriber;
     }

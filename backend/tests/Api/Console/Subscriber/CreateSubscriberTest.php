@@ -6,12 +6,15 @@ use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberListRemoval;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
-use App\Repository\SubscriberRepository;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
+use App\Service\Subscriber\ListRemoval\ListRemovalListener;
 use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
@@ -29,7 +32,10 @@ use function Zenstruck\Foundry\Persistence\refresh;
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberCreatedEvent::class)]
+#[CoversClass(SubscriberUpdatingEvent::class)]
+#[CoversClass(SubscriberUpdatedEvent::class)]
 #[CoversClass(NewsletterListService::class)]
+#[CoversClass(ListRemovalListener::class)]
 class CreateSubscriberTest extends WebTestCase
 {
 
@@ -280,9 +286,86 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertContains($list2->getId(), $listIds);
     }
 
-    public function test_metadata_strategy_merge(): void {}
+    public function test_metadata_strategy_merge(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
 
-    public function test_metadata_strategy_overwrite(): void {}
+        foreach (['a', 'b', 'c'] as $key) {
+            SubscriberMetadataDefinitionFactory::createOne(['newsletter' => $newsletter, 'key' => $key]);
+        }
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'metadata' => ['a' => '1', 'b' => '2'],
+        ]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'metadata' => ['b' => 'updated', 'c' => '3'],
+            'metadata_strategy' => 'merge',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $this->assertSame(['a' => '1', 'b' => 'updated', 'c' => '3'], $subscriber->getMetadata());
+    }
+
+    public function test_metadata_strategy_overwrite(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+
+        foreach (['a', 'b', 'c'] as $key) {
+            SubscriberMetadataDefinitionFactory::createOne(['newsletter' => $newsletter, 'key' => $key]);
+        }
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'metadata' => ['a' => '1', 'b' => '2'],
+        ]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'metadata' => ['c' => '3'],
+            'metadata_strategy' => 'overwrite',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $this->assertSame(['c' => '3'], $subscriber->getMetadata());
+    }
+
+    #[TestWith([ListRemovalReason::UNSUBSCRIBE])]
+    #[TestWith([ListRemovalReason::BOUNCE])]
+    public function test_records_list_removal(ListRemovalReason $reason): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1, $list2],
+        ]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [],
+            'lists_strategy' => 'overwrite',
+            'list_removal_reason' => $reason->value,
+        ]);
+        // make sure the records are recorded
+    }
+
+    public function test_updates_list_removal(): void
+    {
+        // test ON CONFLICT
+    }
+
+    public function test_list_removal_make_sure_adding_lists_is_not_recorded(): void {}
+
+    public function test_list_removal_with_strategy_remove(): void {}
 
     public function testCreateSubscriberWithListsById(): void
     {
