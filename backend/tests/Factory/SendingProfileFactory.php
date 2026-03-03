@@ -3,21 +3,19 @@
 namespace App\Tests\Factory;
 
 use App\Entity\SendingProfile;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SendingProfile>
+ * @extends PersistentObjectFactory<SendingProfile>
  */
-final class SendingProfileFactory extends PersistentProxyObjectFactory
+final class SendingProfileFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
