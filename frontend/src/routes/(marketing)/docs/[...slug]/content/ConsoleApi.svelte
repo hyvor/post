@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Callout, CodeBlock } from '@hyvor/design/components';
+	import { Accordion, Callout, CodeBlock } from '@hyvor/design/components';
 </script>
 
 <h1>Console API</h1>
@@ -336,13 +336,18 @@
             // Otherwise, a new subscriber will be created.
             email: string;
 
-            // The lists that the subscriber has subscribed to
-            // Send an array of list IDs (number) or names (string)
+            // Subscribe to or unsubscribe from lists based 
+            // on the given \`lists_strategy\`.
             lists: (number | string)[];
+
+            lists_strategy: 
+                | 'sync' // (default) sets the subscriber's lists to the given lists (overwriting existing lists)
+                | 'add'  // adds the subscriber to the given lists
+                | 'remove'; // removes the subscriber from the given lists
 
             // The subscriber's subscription status
             // set \`send_pending_confirmation_email=true\` to send a confirmation email
-            // default: pending
+            // default: subscribed
             status?: 'pending' | 'subscribed' | 'unsubscribed';
         
             // the source of the subscriber (default: 'console')
@@ -366,16 +371,21 @@
             // ============ SETTINGS ===========
             // change how the endpoint behaves
 
-            // define how to handle the case when the subscriber has
-            // previously unsubscribed from a list that is provided
+            // if the subscriber was previously removed from a list,
+            // define the reason(s) for ignoring the re-subscription to that list.
             // see below for more info
-            // default: 'ignore'
-            list_add_strategy_if_unsubscribed: 'ignore' | 'force_add';
+            // default: ['unsubscribe', 'bounce']
+            list_ignore_resubscribe_on: ('unsubscribe' | 'bounce' | 'auto')[];
 
             // define the reason for removing the subscriber from a list
-            // see below
+            // (only when updating, see below for more info)
             // default: 'unsubscribe'
-            list_remove_reason: 'unsubscribe' | 'other';
+            list_remove_reason: 'unsubscribe' | 'bounce' | 'auto';
+
+            // whether to overwrite or merge the subscriber's metadata 
+            // when updating an existing subscriber.
+            // default: 'merge'
+            metadata_strategy: 'merge' | 'overwrite';
 
             // whether to send a confirmation email when adding a subscriber with 'pending' status
             // or when changing an existing subscriber's status to 'pending'.
@@ -387,6 +397,12 @@
 />
 
 <h5 id="managing-list-subscriptions">Managing list unsubscriptions and re-subscriptions</h5>
+
+<p>
+	For all subscribers, Hyvor Post records the lists they have previously unsubscribed from. This
+	makes it easier to build automations around list subscriptions while respecting subscribers'
+	preferences.
+</p>
 
 <p>
 	<code>list_add_strategy_if_unsubscribed</code>:
@@ -422,6 +438,108 @@
 		recording an unsubscription.
 	</li>
 </ul>
+
+<h5 id="subscriber-examples">Examples</h5>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+	<Accordion title="Creating or updating a subscriber">
+		<div>
+			This example creates a new subscriber with a subscription to the "Default" list. If a
+			subscriber exists in with the same email, they will be updated and their lists will be
+			set to only "Default" (overwriting existing lists).
+		</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"]
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Adding a subscriber to a list without affecting their other lists">
+		<div>
+			Assuming you have a list with List ID 123, this example adds the subscriber to that list
+			without affecting their other list subscriptions. If the subscriber is already
+			subscribed to the list, no changes will be made.
+		</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": [123],
+        "lists_strategy": "add"
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Removing a subscriber from a list">
+		<div>This example simply removes the subscriber from the list named "Paid Users".</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Paid Users"],
+        "lists_strategy": "remove"
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Adding a pending subscriber and sending a confirmation email">
+		<div>
+			This example creates a subscriber or updates an existing subscriber with "pending"
+			status, and will send a confirmation email to the subscriber asking them to confirm
+			their subscription.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"],
+        "status": "pending",
+        "send_pending_confirmation_email": true
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
+		<div>
+			By default, this endpoint ignores re-subscription attempts to lists that the subscriber
+			has previously unsubscribed from (or was removed from due to a bounce). This example
+			shows how to override that behavior.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"],   
+        "lists_strategy": "add",
+        // ignore unsubscription if the subscriber was removed from the list due to a bounce
+        // but allow re-adding if they previously unsubscribed themselves
+        "list_ignore_resubscribe_on": ["bounce"] 
+    }
+    `}
+		/>
+
+		<p>
+			To force re-adding both previous unsubscribes and bounces, use an empty array for <code
+				>list_ignore_resubscribe_on</code
+			>.
+		</p>
+	</Accordion>
+</div>
 
 <h4 id="delete-subscriber">Delete a subscriber</h4>
 
