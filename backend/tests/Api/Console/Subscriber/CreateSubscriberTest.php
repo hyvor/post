@@ -15,7 +15,7 @@ use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
 use App\Service\Subscriber\ListRemoval\ListRemovalListener;
-use App\Service\Subscriber\Message\SubscriberCreatedMessage;
+use App\Service\Subscriber\Message\SendConfirmationEmailMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
@@ -355,17 +355,113 @@ class CreateSubscriberTest extends WebTestCase
             'lists_strategy' => 'overwrite',
             'list_removal_reason' => $reason->value,
         ]);
-        // make sure the records are recorded
+
+        $this->assertResponseIsSuccessful();
+
+        $repo = $this->em->getRepository(SubscriberListRemoval::class);
+        foreach ([$list1, $list2] as $list) {
+            $record = $repo->findOneBy(['list' => $list, 'subscriber' => $subscriber]);
+            $this->assertInstanceOf(SubscriberListRemoval::class, $record);
+            $this->assertSame($reason->value, $record->getReason());
+        }
     }
 
     public function test_updates_list_removal(): void
     {
-        // test ON CONFLICT
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list],
+        ]);
+
+        // First removal: UNSUBSCRIBE
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [],
+            'lists_strategy' => 'overwrite',
+            'list_removal_reason' => 'unsubscribe',
+        ]);
+
+        // Re-add the list
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [$list->getId()],
+            'lists_strategy' => 'overwrite',
+        ]);
+
+        // Second removal: BOUNCE
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [],
+            'lists_strategy' => 'overwrite',
+            'list_removal_reason' => 'bounce',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $records = $this->em->getRepository(SubscriberListRemoval::class)->findBy([
+            'list' => $list->_real(),
+            'subscriber' => $subscriber->_real(),
+        ]);
+
+        $this->assertCount(1, $records);
+        $this->assertSame('bounce', $records[0]->getReason());
     }
 
-    public function test_list_removal_make_sure_adding_lists_is_not_recorded(): void {}
+    public function test_list_removal_make_sure_adding_lists_is_not_recorded(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
-    public function test_list_removal_with_strategy_remove(): void {}
+        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [$list->getId()],
+            'lists_strategy' => 'overwrite',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $records = $this->em->getRepository(SubscriberListRemoval::class)->findBy([
+            'subscriber' => $subscriber->_real(),
+        ]);
+        $this->assertCount(0, $records);
+    }
+
+    public function test_list_removal_with_strategy_remove(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'lists' => [$list1, $list2],
+        ]);
+
+        $this->consoleApi($newsletter, 'POST', '/subscribers', [
+            'email' => $subscriber->getEmail(),
+            'lists' => [$list1->getId()],
+            'lists_strategy' => 'remove',
+            'list_removal_reason' => 'unsubscribe',
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $this->assertCount(1, $subscriber->getLists());
+        $this->assertSame($list2->getId(), $subscriber->getLists()->first()->getId());
+
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
+            'list' => $list1->_real(),
+            'subscriber' => $subscriber->_real(),
+        ]);
+        $this->assertInstanceOf(SubscriberListRemoval::class, $record);
+        $this->assertSame('unsubscribe', $record->getReason());
+    }
 
     public function testCreateSubscriberWithListsById(): void
     {
@@ -657,7 +753,7 @@ class CreateSubscriberTest extends WebTestCase
         $transport = $this->transport('async');
         $transport->queue()->assertCount(1);
         $message = $transport->queue()->first()->getMessage();
-        $this->assertInstanceOf(SubscriberCreatedMessage::class, $message);
+        $this->assertInstanceOf(SendConfirmationEmailMessage::class, $message);
     }
 
     public function testNoConfirmationEmailByDefault(): void
