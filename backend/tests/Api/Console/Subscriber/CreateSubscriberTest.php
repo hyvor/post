@@ -362,7 +362,7 @@ class CreateSubscriberTest extends WebTestCase
         foreach ([$list1, $list2] as $list) {
             $record = $repo->findOneBy(['list' => $list, 'subscriber' => $subscriber]);
             $this->assertInstanceOf(SubscriberListRemoval::class, $record);
-            $this->assertSame($reason->value, $record->getReason());
+            $this->assertSame($reason, $record->getReason());
         }
     }
 
@@ -376,22 +376,12 @@ class CreateSubscriberTest extends WebTestCase
             'lists' => [$list],
         ]);
 
-        // First removal: UNSUBSCRIBE
-        $this->consoleApi($newsletter, 'POST', '/subscribers', [
-            'email' => $subscriber->getEmail(),
-            'lists' => [],
-            'lists_strategy' => 'overwrite',
-            'list_removal_reason' => 'unsubscribe',
+        $removal = SubscriberListRemovalFactory::createOne([
+            'subscriber' => $subscriber,
+            'list' => $list,
+            'reason' => ListRemovalReason::OTHER,
         ]);
 
-        // Re-add the list
-        $this->consoleApi($newsletter, 'POST', '/subscribers', [
-            'email' => $subscriber->getEmail(),
-            'lists' => [$list->getId()],
-            'lists_strategy' => 'overwrite',
-        ]);
-
-        // Second removal: BOUNCE
         $this->consoleApi($newsletter, 'POST', '/subscribers', [
             'email' => $subscriber->getEmail(),
             'lists' => [],
@@ -401,13 +391,14 @@ class CreateSubscriberTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $records = $this->em->getRepository(SubscriberListRemoval::class)->findBy([
-            'list' => $list->_real(),
-            'subscriber' => $subscriber->_real(),
-        ]);
+        $this->em->clear();
 
+        $records = $this->em->getRepository(SubscriberListRemoval::class)->findAll();
         $this->assertCount(1, $records);
-        $this->assertSame('bounce', $records[0]->getReason());
+        $this->assertSame($removal->getId(), $records[0]->getId());
+        $this->assertSame(ListRemovalReason::BOUNCE, $records[0]->getReason());
+        $this->assertSame($subscriber->getId(), $records[0]->getSubscriber()->getId());
+        $this->assertSame($list->getId(), $records[0]->getList()->getId());
     }
 
     public function test_list_removal_make_sure_adding_lists_is_not_recorded(): void
@@ -426,7 +417,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $records = $this->em->getRepository(SubscriberListRemoval::class)->findBy([
-            'subscriber' => $subscriber->_real(),
+            'subscriber' => $subscriber,
         ]);
         $this->assertCount(0, $records);
     }
@@ -446,21 +437,21 @@ class CreateSubscriberTest extends WebTestCase
             'email' => $subscriber->getEmail(),
             'lists' => [$list1->getId()],
             'lists_strategy' => 'remove',
-            'list_removal_reason' => 'unsubscribe',
+            'list_removal_reason' => 'other',
         ]);
 
         $this->assertResponseIsSuccessful();
 
         refresh($subscriber);
         $this->assertCount(1, $subscriber->getLists());
-        $this->assertSame($list2->getId(), $subscriber->getLists()->first()->getId());
+        $this->assertSame($list2->getId(), $subscriber->getLists()[0]?->getId());
 
         $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
-            'list' => $list1->_real(),
-            'subscriber' => $subscriber->_real(),
+            'list' => $list1,
+            'subscriber' => $subscriber,
         ]);
         $this->assertInstanceOf(SubscriberListRemoval::class, $record);
-        $this->assertSame('unsubscribe', $record->getReason());
+        $this->assertSame(ListRemovalReason::OTHER, $record->getReason());
     }
 
     public function testCreateSubscriberWithListsById(): void

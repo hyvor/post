@@ -5,21 +5,19 @@ namespace App\Tests\Factory;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Send>
+ * @extends PersistentObjectFactory<Send>
  */
-final class SendFactory extends PersistentProxyObjectFactory
+final class SendFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {

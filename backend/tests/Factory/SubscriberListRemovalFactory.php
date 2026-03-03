@@ -3,12 +3,13 @@
 namespace App\Tests\Factory;
 
 use App\Entity\SubscriberListRemoval;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use App\Entity\Type\ListRemovalReason;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SubscriberListRemoval>
+ * @extends PersistentObjectFactory<SubscriberListRemoval>
  */
-final class SubscriberListRemovalFactory extends PersistentProxyObjectFactory
+final class SubscriberListRemovalFactory extends PersistentObjectFactory
 {
     public function __construct() {}
 
@@ -25,7 +26,7 @@ final class SubscriberListRemovalFactory extends PersistentProxyObjectFactory
         return [
             'list' => NewsletterListFactory::new(),
             'subscriber' => SubscriberFactory::new(),
-            'reason' => self::faker()->randomElement(['unsubscribe', 'bounce', 'other']),
+            'reason' => self::faker()->randomElement(ListRemovalReason::cases()),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
