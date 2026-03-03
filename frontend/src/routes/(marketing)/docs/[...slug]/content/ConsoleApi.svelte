@@ -339,11 +339,11 @@
             // Subscribe to or unsubscribe from lists based 
             // on the given \`lists_strategy\`.
             // an array of list IDs or names.
-            lists: (number | string)[];
+            lists?: (number | string)[];
 
             // The subscriber's subscription status
             // default: subscribed
-            status?: 'subscribed' | 'unsubscribed' | 'pending';
+            status?: 'subscribed' | 'pending';
         
             // the source of the subscriber
             // default: console
@@ -356,10 +356,6 @@
             // if not set, it will be set to the current time if status is 'subscribed'
             subscribed_at?: number | null; // unix timestamp
 
-            // unix timestamp of when the subscriber unsubscribed
-            // if not set, it will be set to the current time if status is 'unsubscribed'
-            unsubscribed_at?: number | null; // unix timestamp
-
             // additional metadata for the subscriber
             // keys must be defined in the Subscriber Metadata Definitions section (or using the API)
             metadata?: Record<string, string>;
@@ -368,26 +364,26 @@
             // change how the endpoint behaves
 
             // how \`lists\` field is processed when updating an existing subscriber's list subscriptions.
-            // sync: overwrites the lists (default)
-            // add: adds to the current lists
+            // merge: merges the lists (default)
+            // overwrite: overwrites the lists
             // remove: removes from the current lists
-            lists_strategy: 'sync' | 'add' | 'remove';
+            lists_strategy?: 'merge' | 'overwrite' | 'remove';
 
             // if the subscriber was previously removed from a list,
             // define the reason(s) for ignoring the re-subscription to that list.
             // see below for more info
             // default: ['unsubscribe', 'bounce']
-            list_skip_resubscribe_on: ('unsubscribe' | 'bounce' | 'auto')[];
+            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'auto')[];
 
             // define the reason for removing the subscriber from a list
             // (only when updating, see below for more info)
             // default: 'unsubscribe'
-            list_remove_reason: 'unsubscribe' | 'bounce' | 'other';
+            list_remove_reason?: 'unsubscribe' | 'bounce' | 'other';
 
             // whether to overwrite or merge the subscriber's metadata 
             // when updating an existing subscriber.
             // default: 'merge'
-            metadata_strategy: 'merge' | 'overwrite';
+            metadata_strategy?: 'merge' | 'overwrite';
 
             // whether to send a confirmation email when adding a subscriber with 'pending' status
             // or when changing an existing subscriber's status to 'pending'.

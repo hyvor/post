@@ -17,9 +17,7 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -44,7 +42,6 @@ final class SubscriberFactory extends PersistentProxyObjectFactory
             'subscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'opt_in_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'unsubscribe_reason' => self::faker()->text(255),
-            'unsubscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

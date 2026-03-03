@@ -48,9 +48,6 @@ class Subscriber
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $opt_in_at = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $unsubscribed_at = null;
-
     #[ORM\Column(enumType: SubscriberSource::class)]
     private SubscriberSource $source;
 
@@ -166,18 +163,6 @@ class Subscriber
     public function setOptInAt(?\DateTimeImmutable $opt_in_at): static
     {
         $this->opt_in_at = $opt_in_at;
-
-        return $this;
-    }
-
-    public function getUnsubscribedAt(): ?\DateTimeImmutable
-    {
-        return $this->unsubscribed_at;
-    }
-
-    public function setUnsubscribedAt(?\DateTimeImmutable $unsubscribed_at): static
-    {
-        $this->unsubscribed_at = $unsubscribed_at;
 
         return $this;
     }

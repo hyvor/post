@@ -20,7 +20,6 @@ class SubscriberObject
     public ?string $subscribe_ip;
     public bool $is_opted_in = false;
     public ?int $subscribed_at;
-    public ?int $unsubscribed_at;
 
     /**
      * @var array<string, string>
@@ -37,7 +36,6 @@ class SubscriberObject
         $this->subscribe_ip = $subscriber->getSubscribeIp();
         $this->is_opted_in = $subscriber->getOptInAt() !== null;
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
-        $this->unsubscribed_at = $subscriber->getUnsubscribedAt()?->getTimestamp();
         $this->metadata = $subscriber->getMetadata();
     }
 

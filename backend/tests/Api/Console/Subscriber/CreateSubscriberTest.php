@@ -22,14 +22,18 @@ use App\Tests\Factory\SubscriberListUnsubscribedFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
+
+use function Zenstruck\Foundry\Persistence\refresh;
 
 #[CoversClass(SubscriberController::class)]
 #[CoversClass(SubscriberService::class)]
-#[CoversClass(SubscriberRepository::class)]
-#[CoversClass(Subscriber::class)]
+#[CoversClass(SubscriberCreatedEvent::class)]
 #[CoversClass(NewsletterListService::class)]
 class CreateSubscriberTest extends WebTestCase
 {
+
+    use ClockSensitiveTrait;
 
     public function test_create_subscriber_minimal(): void
     {
@@ -83,7 +87,6 @@ class CreateSubscriberTest extends WebTestCase
         $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter, 'name' => 'Named List']);
 
         $subscribedAt = new \DateTimeImmutable('2023-06-15 10:00:00');
-        $unsubscribedAt = new \DateTimeImmutable('2023-06-20 10:00:00');
 
         SubscriberMetadataDefinitionFactory::createOne([
             'newsletter' => $newsletter,
@@ -102,7 +105,6 @@ class CreateSubscriberTest extends WebTestCase
                 'source' => 'import',
                 'subscribe_ip' => '203.0.113.1',
                 'subscribed_at' => $subscribedAt->getTimestamp(),
-                'unsubscribed_at' => $unsubscribedAt->getTimestamp(),
                 'metadata' => [
                     'test-key' => 'test',
                 ],
@@ -118,7 +120,6 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('import', $json['source']);
         $this->assertSame('203.0.113.1', $json['subscribe_ip']);
         $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
-        $this->assertSame($unsubscribedAt->getTimestamp(), $json['unsubscribed_at']);
         $this->assertCount(2, $json['list_ids']);
         $this->assertContains($list1->getId(), $json['list_ids']);
         $this->assertContains($list2->getId(), $json['list_ids']);
@@ -131,7 +132,6 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame(SubscriberSource::IMPORT, $subscriber->getSource());
         $this->assertSame('203.0.113.1', $subscriber->getSubscribeIp());
         $this->assertSame('2023-06-15 10:00:00', $subscriber->getSubscribedAt()?->format('Y-m-d H:i:s'));
-        $this->assertSame('2023-06-20 10:00:00', $subscriber->getUnsubscribedAt()?->format('Y-m-d H:i:s'));
         $this->assertSame(
             [
                 'test-key' => 'test',
@@ -146,6 +146,88 @@ class CreateSubscriberTest extends WebTestCase
         $event = $this->getEd()->getFirstEvent(SubscriberCreatedEvent::class);
         $this->assertSame($json['id'], $event->getSubscriber()->getId());
         $this->assertTrue($event->shouldSendConfirmationEmail());
+    }
+
+
+    public function test_creates_subscriber_fills_subscribed_at(): void
+    {
+        $this->mockTime('2026-01-01');
+
+        $newsletter = NewsletterFactory::createOne();
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'test@email.com',
+            ],
+        );
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($this->getJson()['id']);
+        $this->assertNotNull($subscriber);
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame('2026-01-01', $subscriber->getSubscribedAt()?->format('Y-m-d'));
+    }
+
+    public function test_updates_subscriber_all(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        SubscriberMetadataDefinitionFactory::createOne([
+            'newsletter' => $newsletter,
+            'key' => 'a',
+        ]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'email' => 'supun@hyvor.com',
+            'newsletter' => $newsletter,
+            'lists' => [
+                $list1,
+            ],
+            'status' => SubscriberStatus::PENDING,
+            'source' => SubscriberSource::FORM,
+            'subscribe_ip' => '1.2.3.4',
+            'subscribed_at' => new \DateTimeImmutable('2026-01-02'),
+        ]);
+
+        $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/subscribers',
+            [
+                'email' => 'supun@hyvor.com',
+                'lists' => [$list2->getId()], // merge
+                'status' => 'subscribed',
+                'source' => 'console',
+                'subscribe_ip' => '2.3.4.5',
+                'subscribed_at' => new \DateTimeImmutable('2026-01-01')->getTimestamp(),
+                'metadata' => [
+                    'a' => 'b',
+                ],
+            ],
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+
+        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
+        $this->assertSame(SubscriberSource::CONSOLE, $subscriber->getSource());
+        $this->assertSame('2.3.4.5', $subscriber->getSubscribeIp());
+        $this->assertSame('2026-01-01', $subscriber->getSubscribedAt()?->format('Y-m-d'));
+        $this->assertSame([
+            'a' => 'b',
+        ], $subscriber->getMetadata());
+
+        $lists = $subscriber->getLists();
+        $this->assertCount(2, $lists);
+
+        $listIds = $lists->map(fn($l) => $l->getId())->toArray();
+        $this->assertContains($list1->getId(), $listIds);
+        $this->assertContains($list2->getId(), $listIds);
     }
 
 
