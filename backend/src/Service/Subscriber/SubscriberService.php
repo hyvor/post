@@ -37,12 +37,12 @@ class SubscriberService
     ) {}
 
     /**
-     * @param iterable<NewsletterList> $lists
+     * @param array<NewsletterList> $lists
      */
     public function createSubscriber(
         Newsletter $newsletter,
         string $email,
-        iterable $lists,
+        array $lists,
         SubscriberStatus $status,
         SubscriberSource $source,
         ?string $subscribeIp = null,
