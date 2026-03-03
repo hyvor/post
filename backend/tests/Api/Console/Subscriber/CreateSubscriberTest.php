@@ -5,7 +5,7 @@ namespace App\Tests\Api\Console\Subscriber;
 use App\Api\Console\Controller\SubscriberController;
 use App\Entity\Newsletter;
 use App\Entity\Subscriber;
-use App\Entity\SubscriberListUnsubscribed;
+use App\Entity\SubscriberListRemoval;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -18,7 +18,7 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberFactory;
-use App\Tests\Factory\SubscriberListUnsubscribedFactory;
+use App\Tests\Factory\SubscriberListRemovalFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -230,6 +230,10 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertContains($list2->getId(), $listIds);
     }
 
+    public function test_lists_strategy_overwrite(): void {}
+
+    public function test_lists_strategy_remove(): void {}
+
 
     public function testCreateSubscriberWithListsById(): void
     {
@@ -379,7 +383,7 @@ class CreateSubscriberTest extends WebTestCase
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
-        SubscriberListUnsubscribedFactory::createOne([
+        SubscriberListRemovalFactory::createOne([
             'list' => $list,
             'subscriber' => $subscriber,
         ]);
@@ -410,7 +414,7 @@ class CreateSubscriberTest extends WebTestCase
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
-        SubscriberListUnsubscribedFactory::createOne([
+        SubscriberListRemovalFactory::createOne([
             'list' => $list,
             'subscriber' => $subscriber,
         ]);
@@ -461,11 +465,11 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertCount(0, $updated->getLists());
 
         // Should record unsubscription
-        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
             'list' => $list->_real(),
             'subscriber' => $updated,
         ]);
-        $this->assertInstanceOf(SubscriberListUnsubscribed::class, $record);
+        $this->assertInstanceOf(SubscriberListRemoval::class, $record);
     }
 
     public function testListRemoveReasonOther(): void
@@ -493,7 +497,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertCount(0, $updated->getLists());
 
         // Should NOT record unsubscription
-        $record = $this->em->getRepository(SubscriberListUnsubscribed::class)->findOneBy([
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
             'list' => $list->_real(),
             'subscriber' => $updated,
         ]);

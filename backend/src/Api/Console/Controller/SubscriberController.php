@@ -6,8 +6,7 @@ use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
-use App\Api\Console\Input\Subscriber\ListSkipResubscribeOn;
-use App\Api\Console\Input\Subscriber\ListRemoveReason;
+use App\Api\Console\Input\Subscriber\ListsStrategy;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Newsletter;
 use App\Entity\NewsletterList;
@@ -16,7 +15,6 @@ use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
-use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use App\Service\Subscriber\SubscriberService;
 use App\Service\SubscriberMetadata\Exception\MetadataValidationFailedException;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
@@ -26,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SubscriberController extends AbstractController
@@ -81,7 +78,7 @@ class SubscriberController extends AbstractController
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
-        $lists = $input->lists ? $this->resolveLists($newsletter, $input->lists) : [];
+        $resolvedLists = $input->lists ? $this->resolveLists($newsletter, $input->lists) : [];
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $input->email);
 
         if ($input->metadata) {
@@ -99,7 +96,7 @@ class SubscriberController extends AbstractController
             $subscriber = $this->subscriberService->createSubscriber(
                 $newsletter,
                 $input->email,
-                $lists,
+                $resolvedLists,
                 status: $input->status ?? SubscriberStatus::SUBSCRIBED,
                 source: $input->source ?? SubscriberSource::CONSOLE,
                 subscribeIp: $input->getSubscribeIp(),
@@ -130,6 +127,27 @@ class SubscriberController extends AbstractController
 
             if ($input->metadata) {
                 $updates->metadata = $input->metadata;
+            }
+
+            if ($input->lists !== null) {
+                $newLists = $subscriber->getLists()->toArray();
+
+                if ($input->lists_strategy === ListsStrategy::MERGE) {
+                    foreach ($resolvedLists as $list) {
+                        if (!array_find($newLists, fn($l) => $l->getId() === $list->getId())) {
+                            $newLists[] = $list;
+                        }
+                    }
+                } elseif ($input->lists_strategy === ListsStrategy::OVERWRITE) {
+                    $newLists = $resolvedLists;
+                } else {
+                    $newLists = array_filter(
+                        $newLists,
+                        fn($l) => !array_find($resolvedLists, fn($rl) => $rl->getId() === $l->getId()),
+                    );
+                }
+
+                $updates->lists = $newLists;
             }
 
             $subscriber = $this->subscriberService->updateSubscriber($subscriber, $updates);
