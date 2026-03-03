@@ -2,9 +2,9 @@
 
 namespace App\Api\Sudo\Controller;
 
-use App\Api\Sudo\Object\NewsletterObject;
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterService;
+use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +14,7 @@ class NewsletterController extends AbstractController
 {
     public function __construct(
         private NewsletterService $newsletterService,
+        private SudoObjectFactory $sudoObjectFactory,
     )
     {
     }
@@ -27,7 +28,7 @@ class NewsletterController extends AbstractController
 
         return new JsonResponse(
             array_map(
-                fn($newsletter) => new NewsletterObject($newsletter),
+                fn($newsletter) => $this->sudoObjectFactory->create($newsletter),
                 $this->newsletterService->getNewsletters($name, $limit, $offset)
             )
         );
@@ -37,7 +38,7 @@ class NewsletterController extends AbstractController
     public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
         return new JsonResponse([
-            'newsletter' => new NewsletterObject($newsletter),
+            'newsletter' => $this->sudoObjectFactory->create($newsletter),
             'stats' => $this->newsletterService->getNewsletterStats($newsletter),
         ]);
     }

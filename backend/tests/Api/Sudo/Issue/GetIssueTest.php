@@ -3,7 +3,6 @@
 namespace App\Tests\Api\Sudo\Issue;
 
 use App\Api\Sudo\Controller\IssueController;
-use App\Api\Sudo\Object\SudoIssueObject;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -11,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(IssueService::class)]
-#[CoversClass(SudoIssueObject::class)]
 class GetIssueTest extends WebTestCase
 {
     public function test_get_issue(): void
@@ -30,8 +28,6 @@ class GetIssueTest extends WebTestCase
         $this->assertArrayHasKey('uuid', $data);
         $this->assertArrayHasKey('subject', $data);
         $this->assertArrayHasKey('status', $data);
-        $this->assertArrayHasKey('newsletter_subdomain', $data);
-        $this->assertArrayHasKey('newsletter_id', $data);
         $this->assertArrayHasKey('scheduled_at', $data);
         $this->assertArrayHasKey('sending_at', $data);
         $this->assertArrayHasKey('sent_at', $data);

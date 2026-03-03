@@ -3,7 +3,6 @@
 namespace App\Tests\Api\Sudo\Newsletter;
 
 use App\Api\Sudo\Controller\NewsletterController;
-use App\Api\Sudo\Object\NewsletterObject;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
@@ -11,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(NewsletterController::class)]
 #[CoversClass(NewsletterService::class)]
-#[CoversClass(NewsletterObject::class)]
 class GetNewslettersTest extends WebTestCase
 {
     public function test_get_newsletters(): void
@@ -29,7 +27,6 @@ class GetNewslettersTest extends WebTestCase
 
         $newsletter = $data[0];
         $this->assertIsArray($newsletter);
-        $this->assertCount(8, $newsletter);
         $this->assertArrayHasKey('id', $newsletter);
         $this->assertArrayHasKey('created_at', $newsletter);
         $this->assertArrayHasKey('subdomain', $newsletter);

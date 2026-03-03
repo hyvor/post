@@ -2,10 +2,10 @@
 
 namespace App\Api\Sudo\Controller;
 
-use App\Api\Sudo\Object\SudoIssueObject;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\IssueService;
+use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +15,7 @@ class IssueController extends AbstractController
 {
     public function __construct(
         private IssueService $issueService,
+        private SudoObjectFactory $sudoObjectFactory,
     )
     {
     }
@@ -31,7 +32,7 @@ class IssueController extends AbstractController
 
         return new JsonResponse(
             array_map(
-                fn($issue) => new SudoIssueObject($issue),
+                fn($issue) => $this->sudoObjectFactory->create($issue),
                 $this->issueService->getIssuesGlobal($subdomain, $status, $limit, $offset)
             )
         );
@@ -40,6 +41,6 @@ class IssueController extends AbstractController
     #[Route('/issues/{id}', methods: ['GET'])]
     public function getIssue(Issue $issue): JsonResponse
     {
-        return new JsonResponse(new SudoIssueObject($issue));
+        return new JsonResponse($this->sudoObjectFactory->create($issue));
     }
 }
