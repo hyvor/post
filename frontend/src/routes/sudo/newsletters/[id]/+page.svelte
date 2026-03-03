@@ -12,13 +12,13 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getNewsletter } from '../../lib/actions/newsletterActions';
-	import type { NewsletterStats, SudoNewsletter } from '../../types';
+	import type { NewsletterStats, Newsletter } from '../../types';
 	import FriendlyDate from '../../../console/@components/utils/FriendlyDate.svelte';
 	import IconArrowLeft from '@hyvor/icons/IconArrowLeft';
 
 	let loading = $state(true);
 	let error: string | null = $state(null);
-	let newsletter: SudoNewsletter | null = $state(null);
+	let newsletter: Newsletter | null = $state(null);
 	let stats: NewsletterStats | null = $state(null);
 
 	onMount(() => {

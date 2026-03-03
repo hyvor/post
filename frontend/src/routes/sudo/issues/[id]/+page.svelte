@@ -13,13 +13,13 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getIssue } from '../../lib/actions/issueActions';
-	import type { SudoIssue } from '../../types';
+	import type { Issue } from '../../types';
 	import FriendlyDate from '../../../console/@components/utils/FriendlyDate.svelte';
 	import IconArrowLeft from '@hyvor/icons/IconArrowLeft';
 
 	let loading = $state(true);
 	let error: string | null = $state(null);
-	let issue: SudoIssue | null = $state(null);
+	let issue: Issue | null = $state(null);
 
 	const statusColors: Record<string, 'default' | 'blue' | 'orange' | 'green'> = {
 		draft: 'default',
