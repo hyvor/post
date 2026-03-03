@@ -100,21 +100,21 @@ class SubscriberController extends AbstractController
                 $newsletter,
                 $input->email,
                 $lists,
-                $input->status,
+                status: $input->status ?? SubscriberStatus::SUBSCRIBED,
                 source: $input->source ?? SubscriberSource::CONSOLE,
                 subscribeIp: $input->getSubscribeIp(),
                 subscribedAt: $input->getSubscribedAt(),
-                unsubscribedAt: $input->getUnsubscribedAt(),
                 metadata: $input->metadata ?? [],
                 sendConfirmationEmail: $input->send_pending_confirmation_email,
             );
         } else {
-            // Update existing subscriber with provided fields
             $updates = new UpdateSubscriberDto();
 
-            $updates->status = $input->status;
+            if ($input->status) {
+                $updates->status = $input->status;
+            }
 
-            if ($input->has('source')) {
+            if ($input->source) {
                 $updates->source = $input->source;
             }
 
@@ -128,13 +128,7 @@ class SubscriberController extends AbstractController
                     : null;
             }
 
-            if ($input->has('unsubscribed_at')) {
-                $updates->unsubscribedAt = $input->unsubscribed_at !== null
-                    ? \DateTimeImmutable::createFromTimestamp($input->unsubscribed_at)
-                    : null;
-            }
-
-            if ($input->has('metadata')) {
+            if ($input->metadata) {
                 $updates->metadata = $input->metadata;
             }
 

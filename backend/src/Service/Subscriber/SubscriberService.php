@@ -48,7 +48,6 @@ class SubscriberService
         SubscriberSource $source,
         ?string $subscribeIp = null,
         ?\DateTimeImmutable $subscribedAt = null,
-        ?\DateTimeImmutable $unsubscribedAt = null,
         array $metadata = [],
         bool $sendConfirmationEmail = true,
     ): Subscriber {
@@ -59,7 +58,6 @@ class SubscriberService
             ->setUpdatedAt($this->now())
             ->setStatus($status)
             ->setSubscribedAt($subscribedAt)
-            ->setUnsubscribedAt($unsubscribedAt)
             ->setSubscribeIp($subscribeIp)
             ->setSource($source)
             ->setMetadata($metadata);
@@ -68,8 +66,6 @@ class SubscriberService
         // if status is unsubscribed, unsubscribed_at should be set to now
         if ($status === SubscriberStatus::SUBSCRIBED) {
             $subscriber->setSubscribedAt($subscribedAt ?? $this->now());
-        } elseif ($status === SubscriberStatus::UNSUBSCRIBED) {
-            $subscriber->setUnsubscribedAt($unsubscribedAt ?? $this->now());
         }
 
         foreach ($lists as $list) {
@@ -156,10 +152,6 @@ class SubscriberService
 
     public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
     {
-        if ($updates->has('email')) {
-            $subscriber->setEmail($updates->email);
-        }
-
         if ($updates->has('status')) {
             $subscriber->setStatus($updates->status);
         }
@@ -178,10 +170,6 @@ class SubscriberService
 
         if ($updates->has('optInAt')) {
             $subscriber->setOptInAt($updates->optInAt);
-        }
-
-        if ($updates->has('unsubscribedAt')) {
-            $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
         }
 
         if ($updates->has('unsubscribedReason')) {

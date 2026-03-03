@@ -26,7 +26,7 @@ class CreateSubscriberInput
      */
     public ?array $lists = null;
 
-    public SubscriberStatus $status = SubscriberStatus::SUBSCRIBED;
+    public ?SubscriberStatus $status = null;
 
     public ?SubscriberSource $source = null;
 
@@ -34,8 +34,6 @@ class CreateSubscriberInput
     public ?string $subscribe_ip;
 
     public ?int $subscribed_at;
-
-    public ?int $unsubscribed_at;
 
     /**
      * @var array<string, scalar>|null
@@ -68,12 +66,6 @@ class CreateSubscriberInput
     {
         $subscribedAt = $this->has('subscribed_at') ? $this->subscribed_at : null;
         return $subscribedAt ? new \DateTimeImmutable()->setTimestamp($this->subscribed_at) : null;
-    }
-
-    public function getUnsubscribedAt(): ?\DateTimeImmutable
-    {
-        $unsubscribedAt = $this->has('unsubscribed_at') ? $this->unsubscribed_at : null;
-        return $unsubscribedAt ? new \DateTimeImmutable()->setTimestamp($this->unsubscribed_at) : null;
     }
 
     /**
