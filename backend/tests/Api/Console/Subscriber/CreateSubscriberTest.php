@@ -519,15 +519,22 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame($list->getId(), $subscriber->getLists()[0]?->getId());
     }
 
-    public function test_list_can_bypass_removal(): void
+    public function test_list_can_bypass_removal_and_removes_removal(): void
     {
         $newsletter = NewsletterFactory::createOne();
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
         $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
 
-        SubscriberListRemovalFactory::createOne([
+        $removal = SubscriberListRemovalFactory::createOne([
             'subscriber' => $subscriber,
             'list' => $list,
+            'reason' => ListRemovalReason::UNSUBSCRIBE,
+        ]);
+        $removalId = $removal->getId();
+
+        $otherRemoval = SubscriberListRemovalFactory::createOne([
+            'subscriber' => $subscriber,
+            'list' => NewsletterListFactory::createOne(['newsletter' => $newsletter]),
             'reason' => ListRemovalReason::UNSUBSCRIBE,
         ]);
 
@@ -536,12 +543,19 @@ class CreateSubscriberTest extends WebTestCase
             'lists' => [$list->getId()],
             'list_skip_resubscribe_on' => [],
         ]);
+        $this->em->clear();
 
         $this->assertResponseIsSuccessful();
 
         refresh($subscriber);
         $this->assertCount(1, $subscriber->getLists());
         $this->assertSame($list->getId(), $subscriber->getLists()[0]?->getId());
+
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->find($removalId);
+        $this->assertNull($record);
+
+        $recordOther = $this->em->getRepository(SubscriberListRemoval::class)->find($otherRemoval->getId());
+        $this->assertInstanceOf(SubscriberListRemoval::class, $recordOther);
     }
 
     public function test_updates_with_confirmation_email_true(): void
