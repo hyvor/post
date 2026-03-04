@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Subscriber\MessageHandler;
+namespace App\Service\Subscriber\ConfirmationMail;
 
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
@@ -8,7 +8,6 @@ use App\Service\Content\ContentService;
 use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
-use App\Service\Subscriber\Message\SendConfirmationEmailMessage;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
@@ -21,7 +20,7 @@ use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 #[AsMessageHandler]
-class SendConfirmationEmailMessageHandler
+class SendConfirmationMailMessageHandler
 {
     use ClockAwareTrait;
 
@@ -39,10 +38,14 @@ class SendConfirmationEmailMessageHandler
         private Environment $twig,
     ) {}
 
-    public function __invoke(SendConfirmationEmailMessage $message): void
+    public function __invoke(SendConfirmationMailMessage $message): void
     {
         $subscriber = $this->em->getRepository(Subscriber::class)->find($message->getSubscriberId());
-        assert($subscriber !== null);
+
+        if ($subscriber === null) {
+            return;
+        }
+
         $newsletter = $subscriber->getNewsletter();
 
         if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
@@ -56,14 +59,12 @@ class SendConfirmationEmailMessageHandler
         ];
 
         $token = $this->encryption->encrypt($data);
-
         $strings = $this->stringsFactory->create();
 
         $heading = $strings->get('mail.subscriberConfirmation.heading');
-
         $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
 
-        $content = $this->twig->render('newsletter/mail/config.json', [
+        $content = $this->twig->render('newsletter/mail/confirm.json.twig', [
             'newsletterName' => $newsletter->getName(),
             'buttonUrl' => $this->newsletterService->getArchiveUrl($newsletter) . "/confirm?token=" . $token,
             'buttonText' => $strings->get('mail.subscriberConfirmation.buttonText'),
@@ -84,6 +85,7 @@ class SendConfirmationEmailMessageHandler
             ->to($subscriber->getEmail())
             ->html($this->htmlTemplateRenderer->render($template, $variables))
             ->subject($heading . ' to ' . $newsletter->getName());
+
         $this->relayApiClient->sendEmail($email);
     }
 }

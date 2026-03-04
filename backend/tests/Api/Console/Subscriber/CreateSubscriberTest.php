@@ -10,7 +10,10 @@ use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\App\Messenger\MessageTransport;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Subscriber\ConfirmationMail\ConfirmationMailListener;
+use App\Service\Subscriber\ConfirmationMail\SendConfirmationMailMessage;
 use App\Service\Subscriber\Event\SubscriberCreatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
 use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
@@ -38,6 +41,7 @@ use function Zenstruck\Foundry\Persistence\refresh;
 #[CoversClass(ListRemovalListener::class)]
 #[CoversClass(ListRemovalService::class)]
 #[CoversClass(CreateSubscriberInput::class)]
+#[CoversClass(ConfirmationMailListener::class)]
 class CreateSubscriberTest extends WebTestCase
 {
 
@@ -561,10 +565,13 @@ class CreateSubscriberTest extends WebTestCase
     public function test_updates_with_confirmation_email_true(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        $subscriber = SubscriberFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(
+            ['newsletter' => $newsletter, 'status' => SubscriberStatus::SUBSCRIBED],
+        );
 
         $this->consoleApi($newsletter, 'POST', '/subscribers', [
             'email' => $subscriber->getEmail(),
+            'status' => 'pending',
             'send_pending_confirmation_email' => true,
         ]);
 
@@ -572,6 +579,11 @@ class CreateSubscriberTest extends WebTestCase
 
         $event = $this->getEd()->getFirstEvent(SubscriberUpdatedEvent::class);
         $this->assertTrue($event->shouldSendConfirmationEmail());
+
+        $transport = $this->transport(MessageTransport::ASYNC);
+        $transport->queue()->assertContains(SendConfirmationMailMessage::class);
+        $message = $transport->queue()->messages(SendConfirmationMailMessage::class)[0];
+        $this->assertSame($subscriber->getId(), $message->getSubscriberId());
     }
 
     #[TestWith([9999])]
