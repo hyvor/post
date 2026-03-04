@@ -59,7 +59,7 @@ class TemplateService
 
     public function updateTemplate(Template $template, UpdateTemplateDto $updates): Template
     {
-        if ($updates->hasProperty('template')) {
+        if ($updates->has('template')) {
             $template->setTemplate($updates->template);
         }
 

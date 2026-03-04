@@ -92,13 +92,13 @@ class ImportService
 
     public function updateSubscriberImport(SubscriberImport $subscriberImport, UpdateSubscriberImportDto $updates): SubscriberImport
     {
-        if ($updates->hasProperty('status')) {
+        if ($updates->has('status')) {
             $subscriberImport->setStatus($updates->status);
         }
-        if ($updates->hasProperty('fields')) {
+        if ($updates->has('fields')) {
             $subscriberImport->setFields($updates->fields);
         }
-        if ($updates->hasProperty('errorMessage')) {
+        if ($updates->has('errorMessage')) {
             $subscriberImport->setErrorMessage($updates->errorMessage);
         }
         $subscriberImport->setUpdatedAt($this->now());

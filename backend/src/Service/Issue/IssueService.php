@@ -22,13 +22,11 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository        $issueRepository,
-        private NewsletterListService  $newsletterListService,
-        private SendingProfileService  $sendingProfileService,
-        private EmailSenderService     $emailSenderService,
-    )
-    {
-    }
+        private IssueRepository $issueRepository,
+        private NewsletterListService $newsletterListService,
+        private SendingProfileService $sendingProfileService,
+        private EmailSenderService $emailSenderService,
+    ) {}
 
     public function getIssueByUuid(string $uuid): ?Issue
     {
@@ -38,7 +36,7 @@ class IssueService
     public function createIssueDraft(Newsletter $newsletter): Issue
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
-        $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
+        $listIds = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
         $sendingProfile = $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         $issue = new Issue()
@@ -58,43 +56,43 @@ class IssueService
 
     public function updateIssue(Issue $issue, UpdateIssueDto $updates): Issue
     {
-        if ($updates->hasProperty('subject')) {
+        if ($updates->has('subject')) {
             $issue->setSubject($updates->subject);
         }
 
-        if ($updates->hasProperty('content')) {
+        if ($updates->has('content')) {
             $issue->setContent($updates->content);
         }
 
-        if ($updates->hasProperty('sendingProfile')) {
+        if ($updates->has('sendingProfile')) {
             $issue->setSendingProfile($updates->sendingProfile);
         }
 
-        if ($updates->hasProperty('status')) {
+        if ($updates->has('status')) {
             $issue->setStatus($updates->status);
         }
 
-        if ($updates->hasProperty('lists')) {
+        if ($updates->has('lists')) {
             $issue->setListids($updates->lists);
         }
 
-        if ($updates->hasProperty('html')) {
+        if ($updates->has('html')) {
             $issue->setHtml($updates->html);
         }
 
-        if ($updates->hasProperty('text')) {
+        if ($updates->has('text')) {
             $issue->setText($updates->text);
         }
 
-        if ($updates->hasProperty('sendingAt')) {
+        if ($updates->has('sendingAt')) {
             $issue->setSendingAt($updates->sendingAt);
         }
 
-        if ($updates->hasProperty('totalSendable')) {
+        if ($updates->has('totalSendable')) {
             $issue->setTotalSendable($updates->totalSendable);
         }
 
-        if ($updates->hasProperty('sentAt')) {
+        if ($updates->has('sentAt')) {
             $issue->setSentAt($updates->sentAt);
         }
 
@@ -110,12 +108,11 @@ class IssueService
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
-        Newsletter   $newsletter,
-        int          $limit,
-        int          $offset,
+        Newsletter $newsletter,
+        int $limit,
+        int $offset,
         ?IssueStatus $status = null,
-    ): ArrayCollection
-    {
+    ): ArrayCollection {
         $where = ['newsletter' => $newsletter];
 
         if ($status !== null) {
@@ -128,8 +125,8 @@ class IssueService
                     $where,
                     ['id' => 'DESC'],
                     $limit,
-                    $offset
-                )
+                    $offset,
+                ),
         );
     }
 

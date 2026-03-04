@@ -23,13 +23,11 @@ class ImportSubscribersMessageHandler
 
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterListService  $newsletterListService,
-        private ParserFactory          $parserFactory,
-        private ManagerRegistry        $registry,
-        private LoggerInterface        $logger,
-    )
-    {
-    }
+        private NewsletterListService $newsletterListService,
+        private ParserFactory $parserFactory,
+        private ManagerRegistry $registry,
+        private LoggerInterface $logger,
+    ) {}
 
     public function __invoke(ImportSubscribersMessage $message): void
     {
@@ -62,7 +60,6 @@ class ImportSubscribersMessageHandler
                     'exception' => $e,
                     'importId' => $subscriberImport->getId(),
                 ]);
-
             } else {
                 $subscriberImport->setErrorMessage('An unexpected error occurred.');
                 $this->logger->error('Unexpected error during import', [
@@ -86,14 +83,14 @@ class ImportSubscribersMessageHandler
 
         $importedCount = 0;
         foreach ($subscribers as $dto) {
-
             $subscriberLists = [];
 
             if (count($dto->lists) === 0) {
                 $subscriberLists = $lists;
             } else {
                 foreach ($dto->lists as $listName) {
-                    $list = $lists->findFirst(fn($key, $l) => $l->getName() === $listName);
+                    $list = array_find($lists, fn($l) => $l->getName() === $listName);
+
                     if ($list === null) {
                         continue;
                     }
@@ -104,15 +101,15 @@ class ImportSubscribersMessageHandler
             }
 
             $query = <<<SQL
-                    INSERT INTO subscribers (
-                        newsletter_id, email, status, subscribed_at,
-                        subscribe_ip, source, metadata, created_at, updated_at
-                    ) VALUES (
-                        :newsletter_id, :email, :status, :subscribed_at,
-                        :subscribe_ip, :source, :metadata, :created_at, :updated_at
-                    )
-                    ON CONFLICT (newsletter_id, email) DO NOTHING
-                    RETURNING id
+                INSERT INTO subscribers (
+                    newsletter_id, email, status, subscribed_at,
+                    subscribe_ip, source, metadata, created_at, updated_at
+                ) VALUES (
+                    :newsletter_id, :email, :status, :subscribed_at,
+                    :subscribe_ip, :source, :metadata, :created_at, :updated_at
+                )
+                ON CONFLICT (newsletter_id, email) DO NOTHING
+                RETURNING id
                 SQL;
 
             $params = [
@@ -130,7 +127,6 @@ class ImportSubscribersMessageHandler
             $subscriberId = $this->em->getConnection()->fetchOne($query, $params);
 
             if ($subscriberId && count($subscriberLists) > 0) {
-
                 $placeholders = [];
                 $params = ['subscriber_id' => $subscriberId];
 
@@ -141,7 +137,7 @@ class ImportSubscribersMessageHandler
 
                 $sql = sprintf(
                     'INSERT INTO list_subscriber (list_id, subscriber_id) VALUES %s',
-                    implode(', ', $placeholders)
+                    implode(', ', $placeholders),
                 );
 
                 $this->em->getConnection()->executeStatement($sql, $params);

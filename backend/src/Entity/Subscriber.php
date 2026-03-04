@@ -48,9 +48,6 @@ class Subscriber
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $opt_in_at = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $unsubscribed_at = null;
-
     #[ORM\Column(enumType: SubscriberSource::class)]
     private SubscriberSource $source;
 
@@ -64,7 +61,7 @@ class Subscriber
     private ?string $unsubscribe_reason = null;
 
     /**
-     * @var array<string, string>
+     * @var array<string, scalar>
      */
     #[ORM\Column(type: 'json', options: ['default' => '{}'])]
     private array $metadata = [];
@@ -170,18 +167,6 @@ class Subscriber
         return $this;
     }
 
-    public function getUnsubscribedAt(): ?\DateTimeImmutable
-    {
-        return $this->unsubscribed_at;
-    }
-
-    public function setUnsubscribedAt(?\DateTimeImmutable $unsubscribed_at): static
-    {
-        $this->unsubscribed_at = $unsubscribed_at;
-
-        return $this;
-    }
-
     public function getSource(): SubscriberSource
     {
         return $this->source;
@@ -239,6 +224,15 @@ class Subscriber
         return $this->lists;
     }
 
+    /**
+     * @param Collection<int, NewsletterList> $lists
+     */
+    public function setLists(Collection $lists): static
+    {
+        $this->lists = $lists;
+        return $this;
+    }
+
     public function addList(NewsletterList $list): self
     {
         if (!$this->lists->contains($list)) {
@@ -254,7 +248,7 @@ class Subscriber
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, scalar>
      */
     public function getMetadata(): array
     {
@@ -262,7 +256,7 @@ class Subscriber
     }
 
     /**
-     * @param array<string, string> $metadata
+     * @param array<string, scalar> $metadata
      */
     public function setMetadata(array $metadata): static
     {

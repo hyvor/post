@@ -102,39 +102,39 @@ class ApprovalController extends AbstractController
 
         $updates = new UpdateApprovalDto();
 
-        if ($input->hasProperty('company_name')) {
+        if ($input->has('company_name')) {
             $updates->companyName = $input->company_name;
         }
 
-        if ($input->hasProperty('country')) {
+        if ($input->has('country')) {
             $updates->country = $input->country;
         }
 
-        if ($input->hasProperty('website')) {
+        if ($input->has('website')) {
             $updates->website = $input->website;
         }
 
-        if ($input->hasProperty('social_links')) {
+        if ($input->has('social_links')) {
             $updates->socialLinks = $input->social_links;
         }
 
-        if ($input->hasProperty('type_of_content')) {
+        if ($input->has('type_of_content')) {
             $updates->typeOfContent = $input->type_of_content;
         }
 
-        if ($input->hasProperty('frequency')) {
+        if ($input->has('frequency')) {
             $updates->frequency = $input->frequency;
         }
 
-        if ($input->hasProperty('existing_list')) {
+        if ($input->has('existing_list')) {
             $updates->existingList = $input->existing_list;
         }
 
-        if ($input->hasProperty('sample')) {
+        if ($input->has('sample')) {
             $updates->sample = $input->sample;
         }
 
-        if ($input->hasProperty('why_post')) {
+        if ($input->has('why_post')) {
             $updates->whyPost = $input->why_post;
         }
 
