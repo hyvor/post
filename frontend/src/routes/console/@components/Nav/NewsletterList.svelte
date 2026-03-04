@@ -6,12 +6,8 @@
 {#if $userNewslettersStore.length}
 	<div class="wrap">
 		<div class="title-wrap">
-			<div class="title">
-				Newsletters you can access
-			</div>
-			<div class="description">
-				Your organization owns these newsletters.
-			</div>
+			<div class="title">Newsletters you can access</div>
+			<div class="description">Your organization owns these newsletters.</div>
 		</div>
 		{#each $userNewslettersStore as newsletter}
 			<NewsletterRow newsletterList={newsletter} />
