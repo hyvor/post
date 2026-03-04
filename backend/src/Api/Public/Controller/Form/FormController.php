@@ -57,7 +57,7 @@ class FormController extends AbstractController
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
             }
 
-            $lists = $this->newsletterListService->getListsByIds($listIds);
+            $lists = $this->newsletterListService->getListsByIds($newsletter, $listIds);
         } else {
             $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         }
@@ -65,7 +65,7 @@ class FormController extends AbstractController
         return new JsonResponse([
             'newsletter' => new FormNewsletterObject($newsletter),
             'is_subscribed' => false,
-            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
+            'lists' => array_map(fn($list) => new FormListObject($list), $lists),
         ]);
     }
 
@@ -91,7 +91,7 @@ class FormController extends AbstractController
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
-        $lists = $this->newsletterListService->getListsByIds($listIds);
+        $lists = $this->newsletterListService->getListsByIds($newsletter, $listIds);
 
         $email = $input->email;
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);

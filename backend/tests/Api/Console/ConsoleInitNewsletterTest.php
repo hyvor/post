@@ -37,7 +37,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)],
         );
 
         // --- subscribers
@@ -53,11 +53,6 @@ class ConsoleInitNewsletterTest extends WebTestCase
             'subscribed_at' => new \DateTimeImmutable('-40 days'),
             'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
-        ]);
-        // unsubscribed
-        SubscriberFactory::createMany(2, [
-            'newsletter' => $newsletter,
-            'status' => SubscriberStatus::UNSUBSCRIBED,
         ]);
         // other newsletters
         SubscriberFactory::createMany(3, [
@@ -134,7 +129,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())],
         );
 
         $response = $this->consoleApi(
@@ -217,7 +212,7 @@ class ConsoleInitNewsletterTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())],
         );
 
         $response = $this->consoleApi(

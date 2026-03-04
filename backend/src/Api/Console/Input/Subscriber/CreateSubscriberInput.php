@@ -63,8 +63,10 @@ class CreateSubscriberInput
 
     public function getSubscribedAt(): ?\DateTimeImmutable
     {
-        $subscribedAt = $this->has('subscribed_at') ? $this->subscribed_at : null;
-        return $subscribedAt ? new \DateTimeImmutable()->setTimestamp($this->subscribed_at) : null;
+        if (!$this->has('subscribed_at')) {
+            return null;
+        }
+        return $this->subscribed_at ? new \DateTimeImmutable()->setTimestamp($this->subscribed_at) : null;
     }
 
     /**
