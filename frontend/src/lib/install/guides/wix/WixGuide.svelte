@@ -3,19 +3,14 @@
 	import { CodeBlock } from "@hyvor/design/components";
     import { newsletterStore } from "../../../../routes/console/lib/stores/newsletterStore";
 	import { DocsImage } from "@hyvor/design/marketing";
-    import addElementImg from "$lib/install/guides/wix/add-element.png";
-    import pasteCodeImg from "$lib/install/guides/wix/paste-code.png";
-    import doneImg from "$lib/install/guides/wix/done.png";
+
+    const addElementImg = "/img/install/guides/wix/add-element.png";
+    const pasteCodeImg = "/img/install/guides/wix/paste-code.png";
+    const doneImg = "/img/install/guides/wix/done.png";
 </script>
 
 <h2 id="wix">Wix</h2>
 
-
-<p>
-	Integrate Hyvor Post signup form with your Wix site to allow visitors to subscribe to your newsletter directly from your site.
-</p>
-
-<br /><br />
 
 <GuideSection>
 	To embed the signup form on your Wix website, follow these steps:

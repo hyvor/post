@@ -3,19 +3,14 @@
 	import { CodeBlock } from "@hyvor/design/components";
     import { newsletterStore } from "../../../../routes/console/lib/stores/newsletterStore";
 	import { DocsImage } from "@hyvor/design/marketing";
-    import addBlockImg from "$lib/install/guides/squarespace/add-block.png";
-    import embedImg from "$lib/install/guides/squarespace/embed.png";
-    import chooseCodeImg from "$lib/install/guides/squarespace/choose-code.png";
+
+    const addBlockImg = "/img/install/guides/squarespace/add-block.png";
+    const embedImg = "/img/install/guides/squarespace/embed.png";
+    const chooseCodeImg = "/img/install/guides/squarespace/choose-code.png";
 </script>
 
 <h2 id="squarespace">Squarespace</h2>
 
-
-<p>
-	Integrate Hyvor Post signup form with your Squarespace site to allow visitors to subscribe to your newsletter directly from your site.
-</p>
-
-<br /><br />
 
 <GuideSection>
 	To embed the signup form on your Squarespace website, follow these steps:

@@ -3,18 +3,13 @@
 	import { CodeBlock } from "@hyvor/design/components";
     import { newsletterStore } from "../../../../routes/console/lib/stores/newsletterStore";
 	import { DocsImage } from "@hyvor/design/marketing";
-    import embedCodeImg from "$lib/install/guides/framer/embed-code.png";
-    import pasteCodeImg from "$lib/install/guides/framer/paste-code.png";
+
+    const embedCodeImg = "/img/install/guides/framer/embed-code.png";
+    const pasteCodeImg = "/img/install/guides/framer/paste-code.png";
 </script>
 
 <h2 id="framer">Framer</h2>
 
-
-<p>
-	Integrate Hyvor Post signup form with your Framer site to allow your users to subscribe to your newsletter directly from your website.
-</p>
-
-<br /><br />
 
 <GuideSection>
 	To embed the signup form on your Framer website, follow these steps:

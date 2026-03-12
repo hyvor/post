@@ -7,12 +7,6 @@
 <h2 id="hyvorblogs">Hyvor Blogs</h2>
 
 
-<p>
-	Integrate Hyvor Post signup form with your Hyvor Blogs blog to allow visitors to subscribe to your newsletter directly from your blog.
-</p>
-
-<br /><br />
-
 <GuideSection>
 	To embed the signup form on your Hyvor Blogs blog, follow these steps:
 

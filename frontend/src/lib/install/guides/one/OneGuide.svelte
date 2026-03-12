@@ -3,16 +3,11 @@
 	import { CodeBlock } from "@hyvor/design/components";
     import { newsletterStore } from "../../../../routes/console/lib/stores/newsletterStore";
 	import { DocsImage } from "@hyvor/design/marketing";
-    import codeWidgetImg from "$lib/install/guides/one/code-widget.png";
+
+    const codeWidgetImg = "/img/install/guides/one/code-widget.png";
 </script>
 
 <h2 id="onecom">One.com</h2>
-
-<p>
-	Embed the signup form on your One.com website to allow visitors to subscribe to your newsletter directly from your site.
-</p>
-
-<br /><br />
 
 <GuideSection>
 	To embed the signup form on your One.com website, follow these steps:

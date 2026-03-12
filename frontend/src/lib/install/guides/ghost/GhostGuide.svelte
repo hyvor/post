@@ -7,12 +7,6 @@
 <h2 id="ghost">Ghost</h2>
 
 
-<p>
-	Integrate Hyvor Post signup form with your Ghost site to allow visitors to subscribe to your newsletter directly from your website.
-</p>
-
-<br /><br />
-
 <GuideSection>
 	To embed the signup form on your Ghost site, follow these steps:
 
