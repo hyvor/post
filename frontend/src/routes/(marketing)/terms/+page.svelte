@@ -69,7 +69,7 @@
 	<p>You are solely responsible for:</p>
 	<ul>
 		<li>The newsletter and content you publish;</li>
-		<li>Ensuring your content complies with applicable laws (e.g.GDPR);</li>
+		<li>Ensuring your content complies with applicable laws (e.g., GDPR);</li>
 		<li>Obtaining proper consent before sending emails to subscribers.</li>
 	</ul>
 	<p>

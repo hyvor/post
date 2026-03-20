@@ -21,7 +21,7 @@
 		"embeddableNewsletterForm": "Embeddable Newsletter Form",
 		"embeddableNewsletterFormDescription": "Embeddable, customizable newsletter form to collect emails from your users on your website.",
 		"listMngmt": "Multiple lists management",
-		"listMngmtDescription": "Create multiple lists to organize your subscribers or create multiple lists. Ex: Monthly, Weekly, etc.",
+		"listMngmtDescription": "Create multiple lists to organize your subscribers. e.g., Monthly, Weekly, etc.",
 		"customSendingDomain": "Custom Sending Domain",
 		"customSendingDomainDescription": "Boost credibility and brand recognition by sending newsletters from your own domain.",
 		"customizableTemplates": "Customizable Email Templates",
@@ -33,7 +33,7 @@
 		"automation": "Automation (Coming Soon)",
 		"automationDescription": "Automate your email campaigns with triggers, sequences, and personalized content.",
 		"migration": "Migration Assistance",
-		"migrationDescription": "Busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
+		"migrationDescription": "Too busy to handle migration? We can help you migrate your existing subscribers and campaigns from other platforms.",
 		"faqs": "Frequently Asked Questions",
 		"faqsDescription": "We will answer some of the most common questions about Hyvor Post. Feel free to contact our team anytime."
 	},
@@ -74,7 +74,7 @@
 			"dedicatedSupport": "Dedicated Support via Slack",
 			"customOnboarding": "Custom Onboarding"
 		},
-		"pricesAsOfJuly2025": "Pricing comparing as of 2025-07"
+		"pricesAsOfJuly2025": "Pricing comparison as of 2025-07"
 	},
 	"newsletter": {
 		"confirmation": {
