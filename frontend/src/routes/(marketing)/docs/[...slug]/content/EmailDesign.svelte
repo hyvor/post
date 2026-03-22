@@ -86,7 +86,7 @@
 />
 
 <p>
-	Note that all variables are escapred by default. Hence, you need to use <code
+	Note that all variables are escaped by default. Hence, you need to use <code
 		>{`{{ content | raw }}`}</code
 	>
 	to render the content as HTML. See

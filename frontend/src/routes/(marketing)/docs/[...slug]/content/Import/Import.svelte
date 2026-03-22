@@ -77,7 +77,7 @@
 		<div>Subscriber Metadata</div>
 		<div>
 			You can map values to all <Link href="/subscriber-metadata">Subscriber Metadata</Link> which
-			you have have defined in your console.
+			you have defined in your console.
 		</div>
 		<div><code>string</code></div>
 		<div>No</div>

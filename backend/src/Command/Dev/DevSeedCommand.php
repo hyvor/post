@@ -28,19 +28,18 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * @codeCoverageIgnore
  */
 #[AsCommand(
-    name: 'app:dev:seed',
+    name: 'dev:seed',
     description: 'Seeds the database with test data for development purposes.'
 )]
 class DevSeedCommand extends Command
 {
 
     public function __construct(
-        private KernelInterface      $kernel,
-        private ContentDefaultStyle  $contentDefaultStyle,
+        private KernelInterface $kernel,
+        private ContentDefaultStyle $contentDefaultStyle,
         private HtmlTemplateRenderer $htmlEmailTemplateRenderer,
         private AppConfig $appConfig,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -53,24 +52,25 @@ class DevSeedCommand extends Command
         }
 
         SudoUserFactory::createOne([
-            'user_id' => 1
+            'user_id' => 1,
         ]);
 
         $domainVerified = DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'example.com',
-            'relay_status' => RelayDomainStatus::ACTIVE
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
 
         DomainFactory::createOne([
             'user_id' => 1,
             'domain' => 'notverified.com',
-            'relay_status' => RelayDomainStatus::PENDING
+            'relay_status' => RelayDomainStatus::PENDING,
         ]);
 
         $newsletter = NewsletterFactory::createOne([
             'name' => 'Test Newsletter',
-            'subdomain' => 'test'
+            'subdomain' => 'test',
+            'organization_id' => 1,
         ]);
 
         $sendingProfile = SendingProfileFactory::createOne([
@@ -90,7 +90,7 @@ class DevSeedCommand extends Command
             'domain' => $domainVerified,
             'from_email' => 'ishini@example.com',
             'brand_logo' => "https://picsum.photos/150/40", // full logo
-            'brand_name' => null
+            'brand_name' => null,
         ]);
 
         SubscriberMetadataDefinitionFactory::createOne([
@@ -102,31 +102,31 @@ class DevSeedCommand extends Command
         $user = UserFactory::createOne([
             'hyvor_user_id' => 1,
             'newsletter' => $newsletter,
-            'role' => UserRole::OWNER
+            'role' => UserRole::OWNER,
         ]);
 
         $list1 = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
             'name' => 'PHP',
-            'description' => 'Get the latest PHP news'
+            'description' => 'Get the latest PHP news',
         ]);
         $list2 = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
             'name' => 'Typescript',
-            'description' => 'Get the latest Typescript news'
+            'description' => 'Get the latest Typescript news',
         ]);
 
         SubscriberFactory::createOne([
             'newsletter' => $newsletter,
             'email' => 'supun@hyvor.com',
             'lists' => [$list1, $list2],
-            'status' => SubscriberStatus::SUBSCRIBED
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
         SubscriberFactory::createOne([
             'newsletter' => $newsletter,
             'email' => 'ishini@hyvor.com',
             'lists' => [$list1, $list2],
-            'status' => SubscriberStatus::SUBSCRIBED
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
         SubscriberFactory::createMany(30, [
             'newsletter' => $newsletter,
