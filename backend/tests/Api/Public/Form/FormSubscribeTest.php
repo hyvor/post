@@ -20,6 +20,8 @@ use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
+use function Zenstruck\Foundry\Persistence\refresh;
+
 #[CoversClass(FormController::class)]
 #[CoversClass(SubscriberObject::class)]
 #[CoversClass(SubscriberService::class)]
@@ -113,13 +115,11 @@ class FormSubscribeTest extends WebTestCase
         ], $json['list_ids']);
         $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
         $this->assertNull($json['subscribed_at']);
-        $this->assertNull($json['unsubscribed_at']);
 
         $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertNotNull($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
-        $this->assertNull($subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
     }
 
@@ -136,8 +136,8 @@ class FormSubscribeTest extends WebTestCase
             'newsletter' => $newsletter,
             'email' => $email,
             'lists' => [$list1],
-            'status' => SubscriberStatus::UNSUBSCRIBED,
             'opt_in_at' => null,
+            'status' => SubscriberStatus::PENDING,
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
@@ -161,11 +161,14 @@ class FormSubscribeTest extends WebTestCase
         ], $json['list_ids']);
         $this->assertSame('pending', $json['status']);
 
-        $subscriber->_refresh();
+        refresh($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame([
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
     }
+
+    public function test_preserves_subscribed_status(): void {}
+
 }

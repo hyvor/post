@@ -98,17 +98,6 @@ class FormController extends AbstractController
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
-
-            // if the user is already subscribed, we do not want to change the status
-            if ($subscriber->getStatus() !== SubscriberStatus::SUBSCRIBED) {
-                // if the user has previously opted-in
-                // we can directly set the status to subscribed
-                $update->status =
-                    $subscriber->getOptInAt() !== null ?
-                        SubscriberStatus::SUBSCRIBED :
-                        SubscriberStatus::PENDING;
-            }
-
             $update->lists = $lists;
 
             $this->subscriberService->updateSubscriber(
