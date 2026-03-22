@@ -90,7 +90,7 @@
 <p>
 	2. If you want to show only the Product Announcements list, you can set the
 	<code>lists</code> attribute to "Product Announcements" (multiple lists can be separated by commas).
-	Anyone who subscribes via this form will only be subscribed to the Product Announcements list only.
+	Anyone who subscribes via this form will be subscribed to the Product Announcements list only.
 </p>
 
 <CodeBlock

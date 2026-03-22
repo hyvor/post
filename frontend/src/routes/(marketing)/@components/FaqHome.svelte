@@ -23,7 +23,7 @@
 		topBorderColor="#f3f4f6"
 	>
 		Before sending your first newsletter, you must get your account approved by our team. We do
-		this to ensure zero spam is sent through Hyvor Post and that your newsletteer complies with
+		this to ensure zero spam is sent through Hyvor Post and that your newsletter complies with
 		our <a href="/terms" class="hds-link">Terms of Service</a>. The approval process is quick,
 		and you will usually get a response within 1 business day (usually much faster).
 		<br /><br />

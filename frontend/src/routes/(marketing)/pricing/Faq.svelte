@@ -17,7 +17,7 @@
 		<Accordion
 			title="Do you offer a free trial?"
 			icon={IconArrowClockwise}
-			content="Yes, we offer a 14-days trial with all features included. In this period, you can send test emails to your team members. When you're ready to send emails to your subscribers, you should request an approval and upgrade to a paid plan."
+			content="Yes, we offer a 14-day trial with all features included. In this period, you can send test emails to your team members. When you're ready to send emails to your subscribers, you should request an approval and upgrade to a paid plan."
 		/>
 		<Accordion
 			title="How do payments work?"
