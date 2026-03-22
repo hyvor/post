@@ -26,13 +26,11 @@ class SubscriberController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private SubscriberService     $subscriberService,
-        private SendService           $sendService,
+        private SubscriberService $subscriberService,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private Encryption            $encryption,
-    )
-    {
-    }
+        private Encryption $encryption,
+    ) {}
 
     #[Route('/subscriber/confirm', methods: ['GET'])]
     public function confirm(Request $request): JsonResponse
@@ -57,7 +55,7 @@ class SubscriberController extends AbstractController
         assert(is_string($data['expires_at']));
         if (new \DateTimeImmutable($data['expires_at'])->getTimestamp() < $this->now()->getTimestamp()) {
             throw new BadRequestHttpException(
-                'The confirmation link has expired. Please request a new confirmation link.'
+                'The confirmation link has expired. Please request a new confirmation link.',
             );
         }
 
@@ -73,9 +71,8 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscriber/unsubscribe', methods: ['POST'])]
     public function unsubscribe(
-        #[MapRequestPayload] UnsubscribeInput $input
-    ): JsonResponse
-    {
+        #[MapRequestPayload] UnsubscribeInput $input,
+    ): JsonResponse {
         try {
             $sendId = $this->encryption->decrypt($input->token);
         } catch (DecryptException) {
@@ -97,15 +94,14 @@ class SubscriberController extends AbstractController
         $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
 
         return new JsonResponse([
-            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
+            'lists' => array_map(fn($list) => new FormListObject($list), $lists),
         ]);
     }
 
     #[Route('/subscriber/resubscribe', methods: ['PATCH'])]
     public function resubscribe(
         #[MapRequestPayload] ResubscribeInput $input,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         try {
             $sendId = $this->encryption->decrypt($input->token);
         } catch (DecryptException) {
@@ -128,7 +124,7 @@ class SubscriberController extends AbstractController
 
         $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
             $send->getNewsletter(),
-            $input->list_ids
+            $input->list_ids,
         );
 
         if ($missingListIds !== null) {
@@ -139,7 +135,7 @@ class SubscriberController extends AbstractController
             throw new UnprocessableEntityHttpException('At least one list must be provided.');
         }
 
-        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
+        $lists = $this->newsletterListService->getListsByIds($send->getNewsletter(), $input->list_ids);
 
         $updates->lists = $lists;
         $this->subscriberService->updateSubscriber($subscriber, $updates);

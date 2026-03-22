@@ -24,8 +24,6 @@ services:
     networks:
       - hyvor-network
 
-    profiles: [ dev ]
-
   hyvor-post-backend:
     container_name: hyvor-post-backend
     build:
@@ -33,7 +31,7 @@ services:
       target: backend-dev
     volumes:
       - ./backend:/app/backend
-     #  - ../internal:/app/backend/vendor/hyvor/internal:ro
+      # - ../internal:/app/backend/vendor/hyvor/internal:ro
       - ./shared:/app/shared
     labels:
       traefik.enable: true
@@ -46,7 +44,6 @@ services:
       traefik.http.services.hyvor-post-backend.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
     healthcheck:
       test: ls
       disable: true
@@ -68,7 +65,6 @@ services:
       traefik.http.services.hyvor-post-embed.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
 
   hyvor-post-archive:
     container_name: hyvor-post-archive
@@ -90,7 +86,6 @@ services:
       traefik.http.services.hyvor-post-archive.loadbalancer.server.port: 80
     networks:
       - hyvor-network
-    profiles: [ dev ]
 
 networks:
   hyvor-network:

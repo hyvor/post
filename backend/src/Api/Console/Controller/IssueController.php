@@ -96,15 +96,15 @@ class IssueController extends AbstractController
     {
         $updates = new UpdateIssueDto();
 
-        if ($input->hasProperty('subject')) {
+        if ($input->has('subject')) {
             $updates->subject = $input->subject;
         }
 
-        if ($input->hasProperty('content')) {
+        if ($input->has('content')) {
             $updates->content = $input->content;
         }
 
-        if ($input->hasProperty('sending_profile_id')) {
+        if ($input->has('sending_profile_id')) {
             $sendingProfile = $this->sendingProfileService->getSendingProfileOfNewsletterById(
                 $newsletter,
                 $input->sending_profile_id
@@ -117,7 +117,7 @@ class IssueController extends AbstractController
             $updates->sendingProfile = $sendingProfile;
         }
 
-        if ($input->hasProperty('lists')) {
+        if ($input->has('lists')) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter($newsletter, $input->lists);
 
             if ($missingListIds !== null) {
