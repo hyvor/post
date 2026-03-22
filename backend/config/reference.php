@@ -208,29 +208,29 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             initial_marking?: list<scalar|Param|null>,
  *             events_to_dispatch?: list<string|Param>|null,
  *             places?: list<array{ // Default: []
- *                 name?: scalar|Param|null,
- *                 metadata?: array<string, mixed>,
+ *                 name: scalar|Param|null,
+ *                 metadata?: list<mixed>,
  *             }>,
- *             transitions?: list<array{ // Default: []
- *                 name?: string|Param,
+ *             transitions: list<array{ // Default: []
+ *                 name: string|Param,
  *                 guard?: string|Param, // An expression to block the transition.
  *                 from?: list<array{ // Default: []
- *                     place?: string|Param,
+ *                     place: string|Param,
  *                     weight?: int|Param, // Default: 1
  *                 }>,
  *                 to?: list<array{ // Default: []
- *                     place?: string|Param,
+ *                     place: string|Param,
  *                     weight?: int|Param, // Default: 1
  *                 }>,
  *                 weight?: int|Param, // Default: 1
- *                 metadata?: array<string, mixed>,
+ *                 metadata?: list<mixed>,
  *             }>,
- *             metadata?: array<string, mixed>,
+ *             metadata?: list<mixed>,
  *         }>,
  *     },
  *     router?: bool|array{ // Router configuration
  *         enabled?: bool|Param, // Default: false
- *         resource?: scalar|Param|null,
+ *         resource: scalar|Param|null,
  *         type?: scalar|Param|null,
  *         cache_dir?: scalar|Param|null, // Deprecated: Setting the "framework.router.cache_dir.cache_dir" configuration option is deprecated. It will be removed in version 8.0. // Default: "%kernel.build_dir%"
  *         default_uri?: scalar|Param|null, // The default URI used to generate URLs in a non-HTTP context. // Default: null
@@ -360,10 +360,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         mapping?: array{
  *             paths?: list<scalar|Param|null>,
  *         },
- *         default_context?: array<string, mixed>,
+ *         default_context?: list<mixed>,
  *         named_serializers?: array<string, array{ // Default: []
  *             name_converter?: scalar|Param|null,
- *             default_context?: array<string, mixed>,
+ *             default_context?: list<mixed>,
  *             include_built_in_normalizers?: bool|Param, // Whether to include the built-in normalizers // Default: true
  *             include_built_in_encoders?: bool|Param, // Whether to include the built-in encoders // Default: true
  *         }>,
@@ -427,7 +427,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     messenger?: bool|array{ // Messenger configuration
  *         enabled?: bool|Param, // Default: true
- *         routing?: array<string, string|array{ // Default: []
+ *         routing?: array<string, array{ // Default: []
  *             senders?: list<scalar|Param|null>,
  *         }>,
  *         serializer?: array{
@@ -440,7 +440,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         transports?: array<string, string|array{ // Default: []
  *             dsn?: scalar|Param|null,
  *             serializer?: scalar|Param|null, // Service id of a custom serializer to use. // Default: null
- *             options?: array<string, mixed>,
+ *             options?: list<mixed>,
  *             failure_transport?: scalar|Param|null, // Transport name to send failed messages to (after all retries have failed). // Default: null
  *             retry_strategy?: string|array{
  *                 service?: scalar|Param|null, // Service id to override the retry strategy entirely. // Default: null
@@ -462,7 +462,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *                 allow_no_senders?: bool|Param, // Default: true
  *             },
  *             middleware?: list<string|array{ // Default: []
- *                 id?: scalar|Param|null,
+ *                 id: scalar|Param|null,
  *                 arguments?: list<mixed>,
  *             }>,
  *         }>,
@@ -634,7 +634,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             lock_factory?: scalar|Param|null, // The service ID of the lock factory used by this limiter (or null to disable locking). // Default: "auto"
  *             cache_pool?: scalar|Param|null, // The cache pool to use for storing the current limiter state. // Default: "cache.rate_limiter"
  *             storage_service?: scalar|Param|null, // The service ID of a custom storage implementation, this precedes any configured "cache_pool". // Default: null
- *             policy?: "fixed_window"|"token_bucket"|"sliding_window"|"compound"|"no_limit"|Param, // The algorithm to be used by this limiter.
+ *             policy: "fixed_window"|"token_bucket"|"sliding_window"|"compound"|"no_limit"|Param, // The algorithm to be used by this limiter.
  *             limiters?: list<scalar|Param|null>,
  *             limit?: int|Param, // The maximum allowed hits in a fixed interval or burst.
  *             interval?: scalar|Param|null, // Configures the fixed interval if "policy" is set to "fixed_window" or "sliding_window". The value must be a number followed by "second", "minute", "hour", "day", "week" or "month" (or their plural equivalent).
@@ -679,7 +679,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         enabled?: bool|Param, // Default: false
  *         message_bus?: scalar|Param|null, // The message bus to use. // Default: "messenger.default_bus"
  *         routing?: array<string, array{ // Default: []
- *             service?: scalar|Param|null,
+ *             service: scalar|Param|null,
  *             secret?: scalar|Param|null, // Default: ""
  *         }>,
  *     },
@@ -694,7 +694,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     dbal?: array{
  *         default_connection?: scalar|Param|null,
  *         types?: array<string, string|array{ // Default: []
- *             class?: scalar|Param|null,
+ *             class: scalar|Param|null,
  *             commented?: bool|Param, // Deprecated: The doctrine-bundle type commenting features were removed; the corresponding config parameter was deprecated in 2.0 and will be dropped in 3.0.
  *         }>,
  *         driver_schemes?: array<string, scalar|Param|null>,
@@ -910,7 +910,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *                 datetime_functions?: array<string, scalar|Param|null>,
  *             },
  *             filters?: array<string, string|array{ // Default: []
- *                 class?: scalar|Param|null,
+ *                 class: scalar|Param|null,
  *                 enabled?: bool|Param, // Default: false
  *                 parameters?: array<string, mixed>,
  *             }>,
@@ -1045,7 +1045,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     use_microseconds?: scalar|Param|null, // Default: true
  *     channels?: list<scalar|Param|null>,
  *     handlers?: array<string, array{ // Default: []
- *         type?: scalar|Param|null,
+ *         type: scalar|Param|null,
  *         id?: scalar|Param|null,
  *         enabled?: bool|Param, // Default: true
  *         priority?: scalar|Param|null, // Default: 0
@@ -1192,7 +1192,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         headers?: list<scalar|Param|null>,
  *         mailer?: scalar|Param|null, // Default: null
  *         email_prototype?: string|array{
- *             id?: scalar|Param|null,
+ *             id: scalar|Param|null,
  *             method?: scalar|Param|null, // Default: null
  *         },
  *         lazy?: bool|Param, // Default: true
@@ -1316,6 +1316,85 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         expired_worker_ttl?: int|Param, // How long to keep expired workers in cache (in seconds). // Default: 3600
  *     },
  * }
+ * @psalm-type SentryConfig = array{
+ *     dsn?: scalar|Param|null, // If this value is not provided, the SDK will try to read it from the SENTRY_DSN environment variable. If that variable also does not exist, the SDK will not send any events.
+ *     register_error_listener?: bool|Param, // Default: true
+ *     register_error_handler?: bool|Param, // Default: true
+ *     logger?: scalar|Param|null, // The service ID of the PSR-3 logger used to log messages coming from the SDK client. Be aware that setting the same logger of the application may create a circular loop when an event fails to be sent. // Default: null
+ *     options?: array{
+ *         integrations?: mixed, // Default: []
+ *         default_integrations?: bool|Param,
+ *         prefixes?: list<scalar|Param|null>,
+ *         sample_rate?: float|Param, // The sampling factor to apply to events. A value of 0 will deny sending any event, and a value of 1 will send all events.
+ *         enable_tracing?: bool|Param,
+ *         traces_sample_rate?: float|Param, // The sampling factor to apply to transactions. A value of 0 will deny sending any transaction, and a value of 1 will send all transactions.
+ *         traces_sampler?: scalar|Param|null,
+ *         profiles_sample_rate?: float|Param, // The sampling factor to apply to profiles. A value of 0 will deny sending any profiles, and a value of 1 will send all profiles. Profiles are sampled in relation to traces_sample_rate
+ *         enable_logs?: bool|Param,
+ *         enable_metrics?: bool|Param, // Default: true
+ *         attach_stacktrace?: bool|Param,
+ *         attach_metric_code_locations?: bool|Param,
+ *         context_lines?: int|Param,
+ *         environment?: scalar|Param|null, // Default: "%kernel.environment%"
+ *         logger?: scalar|Param|null,
+ *         spotlight?: bool|Param,
+ *         spotlight_url?: scalar|Param|null,
+ *         release?: scalar|Param|null, // Default: "%env(default::SENTRY_RELEASE)%"
+ *         server_name?: scalar|Param|null,
+ *         ignore_exceptions?: list<scalar|Param|null>,
+ *         ignore_transactions?: list<scalar|Param|null>,
+ *         before_send?: scalar|Param|null,
+ *         before_send_transaction?: scalar|Param|null,
+ *         before_send_check_in?: scalar|Param|null,
+ *         before_send_metrics?: scalar|Param|null,
+ *         before_send_log?: scalar|Param|null,
+ *         before_send_metric?: scalar|Param|null,
+ *         trace_propagation_targets?: mixed,
+ *         tags?: array<string, scalar|Param|null>,
+ *         error_types?: scalar|Param|null,
+ *         max_breadcrumbs?: int|Param,
+ *         before_breadcrumb?: mixed,
+ *         in_app_exclude?: list<scalar|Param|null>,
+ *         in_app_include?: list<scalar|Param|null>,
+ *         send_default_pii?: bool|Param,
+ *         max_value_length?: int|Param,
+ *         transport?: scalar|Param|null,
+ *         http_client?: scalar|Param|null,
+ *         http_proxy?: scalar|Param|null,
+ *         http_proxy_authentication?: scalar|Param|null,
+ *         http_connect_timeout?: float|Param, // The maximum number of seconds to wait while trying to connect to a server. It works only when using the default transport.
+ *         http_timeout?: float|Param, // The maximum execution time for the request+response as a whole. It works only when using the default transport.
+ *         http_ssl_verify_peer?: bool|Param,
+ *         http_compression?: bool|Param,
+ *         capture_silenced_errors?: bool|Param,
+ *         max_request_body_size?: "none"|"never"|"small"|"medium"|"always"|Param,
+ *         class_serializers?: array<string, scalar|Param|null>,
+ *     },
+ *     messenger?: bool|array{
+ *         enabled?: bool|Param, // Default: true
+ *         capture_soft_fails?: bool|Param, // Default: true
+ *         isolate_breadcrumbs_by_message?: bool|Param, // Default: false
+ *     },
+ *     tracing?: bool|array{
+ *         enabled?: bool|Param, // Default: true
+ *         dbal?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *             connections?: list<scalar|Param|null>,
+ *         },
+ *         twig?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *         cache?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *         http_client?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *         console?: array{
+ *             excluded_commands?: list<scalar|Param|null>,
+ *         },
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1365,6 +1444,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
  *         zenstruck_messenger_monitor?: ZenstruckMessengerMonitorConfig,
+ *         sentry?: SentryConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1402,10 +1482,7 @@ final class App
      */
     public static function config(array $config): array
     {
-        /** @var ConfigType $config */
-        $config = AppReference::config($config);
-
-        return $config;
+        return AppReference::config($config);
     }
 }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84ff26b07990da9b940ce6cb14f5bcb2",
+    "content-hash": "dd989ca3afc3abbd0a64879f524d7922",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2009,16 +2009,16 @@
         },
         {
             "name": "hyvor/internal",
-            "version": "4.0.3",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyvor/internal.git",
-                "reference": "0af4fc193b282d9b880fde3330e1fd91b7aaf3b4"
+                "reference": "a4ed1453d34c257642791aa52f73675330b712eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyvor/internal/zipball/0af4fc193b282d9b880fde3330e1fd91b7aaf3b4",
-                "reference": "0af4fc193b282d9b880fde3330e1fd91b7aaf3b4",
+                "url": "https://api.github.com/repos/hyvor/internal/zipball/a4ed1453d34c257642791aa52f73675330b712eb",
+                "reference": "a4ed1453d34c257642791aa52f73675330b712eb",
                 "shasum": ""
             },
             "require": {
@@ -2078,9 +2078,9 @@
             "description": "Internal Package for HYVOR Applications",
             "support": {
                 "issues": "https://github.com/hyvor/internal/issues",
-                "source": "https://github.com/hyvor/internal/tree/4.0.3"
+                "source": "https://github.com/hyvor/internal/tree/4.0.8"
             },
-            "time": "2026-02-11T10:33:08+00:00"
+            "time": "2026-03-02T10:35:10+00:00"
         },
         {
             "name": "hyvor/phrosemirror",
