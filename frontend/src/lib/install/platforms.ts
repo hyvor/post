@@ -18,12 +18,11 @@ type PlatformsType = Record<
 >;
 
 export const platforms: PlatformsType = {
-	
 	html: {
-        name: 'HTML',
-        component: HtmlGuide, // if you have one
-        code: true
-    },
+		name: 'HTML',
+		component: HtmlGuide, // if you have one
+		code: true
+	},
 	hyvorblogs: {
 		name: 'Hyvor Blogs',
 		component: HyvorBlogsGuide
