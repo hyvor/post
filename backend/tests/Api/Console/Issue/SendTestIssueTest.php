@@ -12,6 +12,7 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use function Zenstruck\Foundry\Persistence\refresh;
 
 #[CoversClass(IssueController::class)]
 #[CoversClass(HtmlTemplateRenderer::class)]
@@ -46,13 +47,14 @@ class SendTestIssueTest extends WebTestCase
             ]
         );
 
-        $response = $this->consoleApi(
+        $this->consoleApi(
             $newsletter,
             'POST',
             "/issues/" . $issue->getId() . "/test",
             [
                 'emails' => [
-                    'thibault@hyvor.com'
+                    'thibault@hyvor.com',
+                    'nadil@hyvor.com'
                 ]
             ]
         );
@@ -60,7 +62,8 @@ class SendTestIssueTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $json = $this->getJson();
-        $this->assertSame(1, $json['success_count']);
+        $this->assertSame(2, $json['success_count']);
+        $this->assertSame(2, refresh($issue)->getTestEmailsSent());
     }
 
     public function test_send_invalid_email(): void
@@ -102,7 +105,8 @@ class SendTestIssueTest extends WebTestCase
             [
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
-                'status' => IssueStatus::DRAFT
+                'status' => IssueStatus::DRAFT,
+                'test_emails_sent' => 10
             ]
         );
 
@@ -119,5 +123,6 @@ class SendTestIssueTest extends WebTestCase
         );
 
         $this->assertResponseFailed(422, 'Test emails can only be sent to verified domains or emails of newsletter users.');
+        $this->assertSame(10, refresh($issue)->getTestEmailsSent());
     }
 }

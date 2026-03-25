@@ -65,6 +65,9 @@ class Issue
     private int $total_sendable = 0;
 
     #[ORM\Column]
+    private int $test_emails_sent = 0;
+
+    #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
 
     public function getId(): int
@@ -273,6 +276,18 @@ class Issue
     public function setSentAt(?\DateTimeImmutable $sent_at): static
     {
         $this->sent_at = $sent_at;
+
+        return $this;
+    }
+
+    public function getTestEmailsSent(): int
+    {
+        return $this->test_emails_sent;
+    }
+
+    public function setTestEmailsSent(int $test_emails_sent): static
+    {
+        $this->test_emails_sent = $test_emails_sent;
 
         return $this;
     }
