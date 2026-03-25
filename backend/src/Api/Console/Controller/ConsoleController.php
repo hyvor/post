@@ -112,7 +112,6 @@ class ConsoleController extends AbstractController
         $subscriberMetadataDefinitions = $this->subscriberMetadataService->getMetadataDefinitions($newsletter);
 
         $organizationId = $newsletter->getOrganizationId();
-        assert($organizationId !== null);
         $canChangeBranding = false;
 
         try {
