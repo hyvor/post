@@ -223,18 +223,25 @@ class IssueService
     public function sendTestEmails(Issue $issue, array $emails): int
     {
         $testSentEmails = [];
+        $testEmailCount = 0;
+
         foreach ($emails as $email) {
             try {
                 $this->emailSenderService->send($issue, email: $email);
+                $testEmailCount++;
             } catch (\Exception) {
                 continue;
             }
             $testSentEmails[] = $email;
         }
 
+        $issue->setTestEmailsSent($issue->getTestEmailsSent() + $testEmailCount);
+        $this->em->persist($issue);
+
         $newsletter = $issue->getNewsletter();
         $newsletter->setTestSentEmails($testSentEmails);
         $this->em->persist($newsletter);
+
         $this->em->flush();
 
         return count($testSentEmails);
