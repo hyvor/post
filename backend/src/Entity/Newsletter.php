@@ -27,8 +27,8 @@ class Newsletter
     #[ORM\Column]
     private int $user_id;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $organization_id = null;
+    #[ORM\Column]
+    private int $organization_id;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -101,12 +101,12 @@ class Newsletter
         return $this->user_id;
     }
 
-    public function getOrganizationId(): ?int
+    public function getOrganizationId(): int
     {
         return $this->organization_id;
     }
 
-    public function setOrganizationId(?int $organization_id): static
+    public function setOrganizationId(int $organization_id): static
     {
         $this->organization_id = $organization_id;
 

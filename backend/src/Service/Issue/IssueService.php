@@ -6,10 +6,11 @@ use App\Entity\Issue;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Type\IssueStatus;
-use App\Repository\IssueRepository;
+use App\Service\Domain\DomainService;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
+use App\Service\User\UserService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -22,7 +23,8 @@ class IssueService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private IssueRepository        $issueRepository,
+        private DomainService          $domainService,
+        private UserService            $userService,
         private NewsletterListService  $newsletterListService,
         private SendingProfileService  $sendingProfileService,
         private EmailSenderService     $emailSenderService,
@@ -32,7 +34,7 @@ class IssueService
 
     public function getIssueByUuid(string $uuid): ?Issue
     {
-        return $this->issueRepository->findOneBy(['uuid' => $uuid]);
+        return $this->em->getRepository(Issue::class)->findOneBy(['uuid' => $uuid]);
     }
 
     public function createIssueDraft(Newsletter $newsletter): Issue
@@ -174,7 +176,7 @@ class IssueService
         }
 
         return new ArrayCollection(
-            $this->issueRepository
+            $this->em->getRepository(Issue::class)
                 ->findBy(
                     $where,
                     ['id' => 'DESC'],
@@ -188,6 +190,31 @@ class IssueService
     {
         $this->em->remove($issue);
         $this->em->flush();
+    }
+
+    /**
+     * @param string[] $emails
+     */
+    public function isTestEmailAllowed(Issue $issue, array $emails): bool
+    {
+        $newsletter = $issue->getNewsletter();
+
+        $verifiedDomains = array_map(fn($domain) => $domain->getDomain(),
+            $this->domainService->getVerifiedDomainsByOrganizationId($newsletter->getOrganizationId())
+        );
+        $newsletterUserEmails = $this->userService->getNewsletterUserEmails($newsletter);
+
+        foreach ($emails as $email) {
+
+            $parts = explode('@', $email);
+            $emailDomain = $parts[1];
+
+            if (!in_array($emailDomain, $verifiedDomains) && !in_array($email, $newsletterUserEmails)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
