@@ -7,6 +7,8 @@
 	import { statsStore } from './lib/stores/sudoStore.js';
 	import { Tag } from '@hyvor/design/components';
 	import IconSend from '@hyvor/icons/IconSend';
+	import IconJournal from '@hyvor/icons/IconJournal';
+	import IconEnvelope from '@hyvor/icons/IconEnvelope';
 </script>
 
 <div class="nav">
@@ -35,6 +37,24 @@
 						</Tag>
 					{/if}
 				</span>
+			</NavItem>
+		</NavLink>
+
+		<Divider margin={10} />
+
+		<NavLink
+			href="/sudo/newsletters"
+			active={$page.url.pathname.startsWith('/sudo/newsletters')}
+		>
+			<NavItem>
+				<IconJournal slot="icon" />
+				<span slot="text">Newsletters</span>
+			</NavItem>
+		</NavLink>
+		<NavLink href="/sudo/issues" active={$page.url.pathname.startsWith('/sudo/issues')}>
+			<NavItem>
+				<IconEnvelope slot="icon" />
+				<span slot="text">Issues</span>
 			</NavItem>
 		</NavLink>
 

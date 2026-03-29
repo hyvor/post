@@ -109,6 +109,38 @@ class IssueService
     }
 
     /**
+     * @return Issue[]
+     */
+    public function getIssuesGlobal(
+        ?string      $subdomain,
+        ?IssueStatus $status,
+        int          $limit,
+        int          $offset,
+    ): array
+    {
+        $qb = $this->em->createQueryBuilder()
+            ->select('i')
+            ->from(Issue::class, 'i')
+            ->join('i.newsletter', 'n')
+            ->orderBy('i.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if ($subdomain) {
+            $qb->andWhere('n.subdomain = :subdomain')
+                ->setParameter('subdomain', $subdomain);
+        }
+
+        if ($status) {
+            $qb->andWhere('i.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        /** @var Issue[] */
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
