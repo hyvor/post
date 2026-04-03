@@ -126,6 +126,7 @@ class ConsoleInitTest extends WebTestCase
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
+        $this->assertIsArray($config);
         $this->assertArrayHasKey('newsletter_defaults', $config);
 
         $this->assertArrayHasKey('user_approval', $data);
@@ -163,6 +164,7 @@ class ConsoleInitTest extends WebTestCase
 
         $this->assertArrayHasKey('config', $data);
         $config = $data['config'];
+        $this->assertIsArray($config);
         $this->assertArrayHasKey('newsletter_defaults', $config);
 
         $this->assertArrayHasKey('user_approval', $data);
