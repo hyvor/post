@@ -22,6 +22,7 @@ class ApproveTest extends WebTestCase
             $body = json_decode($options['body'], true);
             $this->assertIsArray($body);
             $this->assertSame('Your Hyvor Post account has been approved', $body['subject']);
+            $this->assertIsString($body['body_html']);
             $this->assertStringContainsString("Hyvor Post account has been approved. Now you can upgrade your account", $body['body_html']);
 
             return new JsonMockResponse();
@@ -62,6 +63,7 @@ class ApproveTest extends WebTestCase
             $body = json_decode($options['body'], true);
             $this->assertIsArray($body);
             $this->assertSame('Your Hyvor Post account has been rejected', $body['subject']);
+            $this->assertIsString($body['body_html']);
             $this->assertStringContainsString('We regret to inform you that your Hyvor Post account approval request has been rejected.', $body['body_html']);
             $this->assertStringContainsString('Reject reason: Not suitable for our platform.', $body['body_html']);
 

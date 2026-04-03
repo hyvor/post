@@ -45,6 +45,7 @@ class SendEmailMessageHandlerTest extends KernelTestCase
             $body = json_decode($options['body'], true);
             $this->assertIsArray($body);
             $this->assertSame('First Newsletter Issue!', $body['subject']);
+            $this->assertIsArray($body['to']);
             $this->assertSame($send->getEmail(), $body['to']['email']);
 
             /** @var array<string, string> $emailHeaders */

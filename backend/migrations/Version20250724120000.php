@@ -20,7 +20,8 @@ final class Version20250724120000 extends AbstractMigration
             CREATE TABLE sudo_users (
                 user_id BIGINT PRIMARY KEY,
                 created_at TIMESTAMPTZ NOT NULL,
-                updated_at TIMESTAMPTZ NOT NULL
+                updated_at TIMESTAMPTZ NOT NULL,
+                role TEXT NOT NULL DEFAULT 'sudo'
             )
         SQL
         );

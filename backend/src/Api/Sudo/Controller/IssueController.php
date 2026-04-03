@@ -5,12 +5,15 @@ namespace App\Api\Sudo\Controller;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use App\Service\Issue\IssueService;
+use App\Service\Sudo\SudoPermission;
+use Hyvor\Internal\Bundle\Api\SudoPermissionRequired;
 use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[SudoPermissionRequired(SudoPermission::ACCESS_SUDO)]
 class IssueController extends AbstractController
 {
     public function __construct(

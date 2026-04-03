@@ -954,6 +954,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         folder?: scalar|Param|null, // Default: "%kernel.project_dir%/../shared/locale"
  *         default?: scalar|Param|null, // Default: "en-US"
  *     },
+ *     sudo?: array{
+ *         permission_enum?: string|Param, // Default: null
+ *         role_enum?: string|Param, // Default: null
+ *     },
  * }
  * @psalm-type DamaDoctrineTestConfig = array{
  *     enable_static_connection?: mixed, // Default: true
@@ -1301,7 +1305,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             use_underscore?: bool|Param, // Default: true
  *             unordered_list_markers?: list<scalar|Param|null>,
  *         },
- *         ...<mixed>
+ *         ...<string, mixed>
  *     },
  * }
  * @psalm-type ZenstruckMessengerMonitorConfig = array{

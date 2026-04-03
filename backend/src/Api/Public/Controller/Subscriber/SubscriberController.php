@@ -45,7 +45,7 @@ class SubscriberController extends AbstractController
             throw new BadRequestHttpException('Invalid confirmation token.');
         }
 
-        if (!$data || !is_array($data) || !isset($data['subscriber_id'], $data['expires_at'])) {
+        if (!$data || !is_array($data) || !isset($data['subscriber_id'], $data['expires_at']) || !is_int($data['subscriber_id'])) {
             throw new BadRequestHttpException('Invalid confirmation token.');
         }
 

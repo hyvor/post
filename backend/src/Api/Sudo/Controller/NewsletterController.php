@@ -4,12 +4,15 @@ namespace App\Api\Sudo\Controller;
 
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\Sudo\SudoPermission;
+use Hyvor\Internal\Bundle\Api\SudoPermissionRequired;
 use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[SudoPermissionRequired(SudoPermission::ACCESS_SUDO)]
 class NewsletterController extends AbstractController
 {
     public function __construct(
