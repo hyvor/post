@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="newsletter">
-		{issue.newsletter_subdomain}
+		{issue.newsletter.subdomain}
 	</div>
 
 	<div class="created-at">

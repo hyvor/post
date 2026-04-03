@@ -14,12 +14,14 @@
 	import { onMount } from 'svelte';
 	import { issueStore } from '../lib/stores/sudoStore';
 	import IssueRow from './IssueRow.svelte';
-	import type { IssueStatus, Issue } from '../types';
+	import type { IssueStatus, Issue, Newsletter } from '../types';
 	import IconX from '@hyvor/icons/IconX';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { ITEMS_PER_PAGE } from '../lib/generalActions';
 	import { getIssues, ISSUE_STATUS_FILTERS } from '../lib/actions/issueActions';
+	import { getNewsletters } from '../lib/actions/newsletterActions';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let loading = $state(true);
 	let hasMore = $state(true);
@@ -32,11 +34,20 @@
 	let statusFilter: IssueStatus | undefined = $state(undefined);
 	let statusDropdownShow = $state(false);
 
+	let newsletters: Newsletter[] = $state([]);
+	let newsletterFilter: number | undefined = $state(undefined);
+	let newsletterDropdownShow = $state(false);
+
+	let selectedNewsletterName = $derived(
+		newsletters.find((n) => n.id === newsletterFilter)?.name
+	);
+
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
 		getIssues(
 			search ?? null,
+			newsletterFilter ?? null,
 			statusFilter ?? null,
 			ITEMS_PER_PAGE,
 			more ? $issueStore.length : 0
@@ -85,7 +96,22 @@
 		statusDropdownShow = false;
 	}
 
+	function onNewsletterClick(id: number) {
+		newsletterFilter = id;
+		load();
+		newsletterDropdownShow = false;
+	}
+
 	onMount(() => {
+		const urlNewsletterIdParam = $page.url.searchParams.get('newsletter_id');
+		if (urlNewsletterIdParam) {
+			newsletterFilter = Number(urlNewsletterIdParam);
+		}
+
+		getNewsletters(null, null, 500, 0).then((data) => {
+			newsletters = data.newsletters;
+		});
+
 		load();
 	});
 </script>
@@ -117,6 +143,44 @@
 				</div>
 			{/snippet}
 		</TextInput>
+		<Dropdown bind:show={newsletterDropdownShow}>
+			{#snippet trigger()}
+				<Button color="input" size="small">
+					{#snippet start()}
+						Newsletter
+					{/snippet}
+					<div class="dropdown-label">
+						{selectedNewsletterName ?? 'All'}
+					</div>
+					{#if newsletterFilter}
+						<IconButton
+							size={14}
+							style="margin-left:4px;"
+							color="gray"
+							on:click={(e) => {
+								e.stopPropagation();
+								newsletterFilter = undefined;
+								load();
+							}}
+						>
+							<IconX size={10} />
+						</IconButton>
+					{/if}
+					{#snippet end()}
+						<IconCaretDown size={14} />
+					{/snippet}
+				</Button>
+			{/snippet}
+			{#snippet content()}
+				<ActionList>
+					{#each newsletters as nl (nl.id)}
+						<ActionListItem on:select={() => onNewsletterClick(nl.id)}
+							>{nl.name}</ActionListItem
+						>
+					{/each}
+				</ActionList>
+			{/snippet}
+		</Dropdown>
 		<Dropdown bind:show={statusDropdownShow}>
 			{#snippet trigger()}
 				<Button color="input" size="small">
@@ -176,6 +240,10 @@
 <style>
 	.top {
 		padding: 20px 0 0 30px;
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		flex-wrap: wrap;
 	}
 
 	.list {

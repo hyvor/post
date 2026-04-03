@@ -23,9 +23,11 @@ class GetNewslettersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertCount(5, $data);
+        $this->assertArrayHasKey('newsletters', $data);
+        $this->assertArrayHasKey('orgs', $data);
+        $this->assertCount(5, $data['newsletters']);
 
-        $newsletter = $data[0];
+        $newsletter = $data['newsletters'][0];
         $this->assertIsArray($newsletter);
         $this->assertArrayHasKey('id', $newsletter);
         $this->assertArrayHasKey('created_at', $newsletter);
@@ -51,9 +53,10 @@ class GetNewslettersTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $data = $this->getJson();
-        $this->assertCount(1, $data);
+        $this->assertArrayHasKey('newsletters', $data);
+        $this->assertCount(1, $data['newsletters']);
 
-        $item = $data[0];
+        $item = $data['newsletters'][0];
         $this->assertIsArray($item);
         $this->assertSame($newsletter->getId(), $item['id']);
     }

@@ -76,8 +76,7 @@ export type Issue = {
   uuid: string;
   subject: string | null;
   status: IssueStatus;
-  newsletter_subdomain: string;
-  newsletter_id: number;
+  newsletter: Newsletter;
   scheduled_at: number | null;
   sending_at: number | null;
   sent_at: number | null;

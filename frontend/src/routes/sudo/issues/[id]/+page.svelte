@@ -82,11 +82,11 @@
 			<SplitControl label="Newsletter">
 				<Button
 					as="a"
-					href={`/sudo/newsletters/${issue.newsletter_id}`}
-					size="small"
-					color="input"
-				>
-					{issue.newsletter_subdomain}
+				href={`/sudo/newsletters/${issue.newsletter.id}`}
+				size="small"
+				color="input"
+			>
+				{issue.newsletter.subdomain}
 				</Button>
 			</SplitControl>
 
@@ -120,10 +120,8 @@
 				<span>{issue.total_sendable}</span>
 			</SplitControl>
 
-			{#if issue.error_private}
-				<h3>Error (private)</h3>
-				<CodeBlock code={issue.error_private} />
-			{/if}
+		<h3>Issue Object</h3>
+		<CodeBlock code={JSON.stringify(issue, null, 2)} language="json" />
 		</div>
 	</div>
 {/if}
@@ -144,5 +142,9 @@
 
 	.header h2 {
 		margin: 0;
+	}
+
+	.content h3 {
+		margin: 10px 0;
 	}
 </style>

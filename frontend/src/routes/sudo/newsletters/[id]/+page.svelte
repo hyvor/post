@@ -12,6 +12,7 @@
 	import { getNewsletter } from '../../lib/actions/newsletterActions';
 	import type { NewsletterStats, Newsletter } from '../../types';
 	import IconArrowLeft from '@hyvor/icons/IconArrowLeft';
+	import IconEnvelope from '@hyvor/icons/IconEnvelope';
 
 	let loading = $state(true);
 	let error: string | null = $state(null);
@@ -49,6 +50,12 @@
 				Back
 			</Button>
 			<h2>{newsletter.name}</h2>
+			<Button as="a" href={`/sudo/issues?newsletter_id=${newsletter.id}`} size="small" color="input">
+				{#snippet start()}
+					<IconEnvelope size={14} />
+				{/snippet}
+				Issues
+			</Button>
 		</div>
 
 		<div class="stats-grid">
