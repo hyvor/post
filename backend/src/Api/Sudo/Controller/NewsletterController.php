@@ -26,13 +26,14 @@ class NewsletterController extends AbstractController
     public function getNewsletters(Request $request): JsonResponse
     {
         $name = $request->query->has('name') ? $request->query->getString('name') : null;
+        $organizationId = $request->query->has('organization_id') ? $request->query->getInt('organization_id') : null;
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
 
         return new JsonResponse(
             array_map(
                 fn($newsletter) => $this->sudoObjectFactory->create($newsletter),
-                $this->newsletterService->getNewsletters($name, $limit, $offset)
+                $this->newsletterService->getNewsletters($name, $organizationId, $limit, $offset)
             )
         );
     }

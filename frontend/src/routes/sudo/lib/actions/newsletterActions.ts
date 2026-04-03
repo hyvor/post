@@ -4,6 +4,7 @@ import type { NewsletterStats, Newsletter } from '../../types';
 
 export function getNewsletters(
 	name: string | null = null,
+	organizationId: number | null = null,
 	limit: number = ITEMS_PER_PAGE,
 	offset: number = 0
 ) {
@@ -11,6 +12,7 @@ export function getNewsletters(
 		endpoint: 'newsletters',
 		data: {
 			name,
+			organization_id: organizationId,
 			limit,
 			offset
 		}

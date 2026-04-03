@@ -106,7 +106,7 @@ class NewsletterService
     /**
      * @return Newsletter[]
      */
-    public function getNewsletters(?string $name, int $limit, int $offset): array
+    public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset): array
     {
         $qb = $this->em->getRepository(Newsletter::class)->createQueryBuilder('n')
             ->orderBy('n.id', 'DESC')
@@ -116,6 +116,11 @@ class NewsletterService
         if ($name) {
             $qb->andWhere('LOWER(n.name) LIKE LOWER(:name)')
                 ->setParameter('name', '%' . $name . '%');
+        }
+
+        if ($organizationId !== null) {
+            $qb->andWhere('n.organization_id = :organizationId')
+                ->setParameter('organizationId', $organizationId);
         }
 
         /** @var Newsletter[] */

@@ -29,6 +29,9 @@
 	let search: string | undefined = $state(undefined);
 	let searchValue: string | undefined = $state(undefined);
 
+	let organizationId: string | undefined = $state(undefined);
+	let organizationIdValue: string | undefined = $state(undefined);
+
 	const SORT_OPTIONS: Record<string, string> = {
 		name: 'Name',
 		created_at: 'Created'
@@ -51,7 +54,12 @@
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
-		getNewsletters(search ?? null, ITEMS_PER_PAGE, more ? $newsletterStore.length : 0)
+		getNewsletters(
+			search ?? null,
+			organizationIdValue ? parseInt(organizationIdValue) : null,
+			ITEMS_PER_PAGE,
+			more ? $newsletterStore.length : 0
+		)
 			.then((data) => {
 				if (more) {
 					newsletterStore.update((newsletters) => [...newsletters, ...data]);
@@ -90,6 +98,23 @@
 		load();
 	}
 
+	function handleOrgIdKeyup(e: any) {
+		if (e.key === 'Enter') {
+			organizationIdValue = organizationId;
+			load();
+		}
+
+		if (e.key === 'Escape') {
+			handleOrgIdClear();
+		}
+	}
+
+	function handleOrgIdClear() {
+		organizationId = undefined;
+		organizationIdValue = undefined;
+		load();
+	}
+
 	onMount(() => {
 		load();
 	});
@@ -101,7 +126,7 @@
 	<IconMessage error message={error} />
 {:else}
 	<div class="top">
-		<TextInput bind:value={search} on:keyup={handleSearchKeyup} size="small">
+		<TextInput bind:value={search} on:keyup={handleSearchKeyup} size="small" block={false}>
 			{#snippet start()}
 				Name
 			{/snippet}
@@ -115,6 +140,27 @@
 					<span class="clear">
 						{#if searchValue}
 							<IconButton size={16} on:click={handleSearchClear}>
+								<IconX size={12} />
+							</IconButton>
+						{/if}
+					</span>
+				</div>
+			{/snippet}
+		</TextInput>
+		<TextInput bind:value={organizationId} on:keyup={handleOrgIdKeyup} size="small" block={false}>
+			{#snippet start()}
+				Org ID
+			{/snippet}
+			{#snippet end()}
+				<div class="search-icons">
+					<span class="enter">
+						{#if organizationId !== organizationIdValue}
+							&nbsp; ⏎
+						{/if}
+					</span>
+					<span class="clear">
+						{#if organizationIdValue}
+							<IconButton size={16} on:click={handleOrgIdClear}>
 								<IconX size={12} />
 							</IconButton>
 						{/if}
