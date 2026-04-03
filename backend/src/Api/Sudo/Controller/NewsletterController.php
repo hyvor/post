@@ -29,13 +29,17 @@ class NewsletterController extends AbstractController
         $organizationId = $request->query->has('organization_id') ? $request->query->getInt('organization_id') : null;
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
+        $sort = $request->query->getString('sort', 'id_desc');
 
-        return new JsonResponse(
-            array_map(
+        $result = $this->newsletterService->getNewsletters($name, $organizationId, $limit, $offset, $sort);
+
+        return new JsonResponse([
+            'newsletters' => array_map(
                 fn($newsletter) => $this->sudoObjectFactory->create($newsletter),
-                $this->newsletterService->getNewsletters($name, $organizationId, $limit, $offset)
-            )
-        );
+                $result['newsletters']
+            ),
+            'orgs' => $result['orgs'],
+        ]);
     }
 
     #[Route('/newsletters/{id}', methods: ['GET'])]

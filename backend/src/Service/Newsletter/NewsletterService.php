@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Bundle\Comms\CommsInterface;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
 use Hyvor\Internal\Component\Component;
-use Hyvor\Internal\Resource\Resource;
+use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,6 +36,7 @@ class NewsletterService
         private AppConfig              $config,
         private SendingProfileService  $sendingProfileService,
         private CommsInterface         $comms,
+        private AuthInterface          $auth,
     )
     {
     }
@@ -104,14 +105,23 @@ class NewsletterService
     }
 
     /**
-     * @return Newsletter[]
+     * @return array{newsletters: Newsletter[], orgs: array<int, array{id: int, name: string, billing_email: ?string, billing_address: ?string}>}
      */
-    public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset): array
+    public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset, string $sort = 'id_desc'): array
     {
         $qb = $this->em->getRepository(Newsletter::class)->createQueryBuilder('n')
-            ->orderBy('n.id', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
+
+        match ($sort) {
+            'id_asc' => $qb->orderBy('n.id', 'ASC'),
+            'most_issues' => $qb
+                ->leftJoin(Issue::class, 'i', 'WITH', 'i.newsletter = n')
+                ->addSelect('COUNT(i.id) as HIDDEN issue_count')
+                ->groupBy('n.id')
+                ->orderBy('issue_count', 'DESC'),
+            default => $qb->orderBy('n.id', 'DESC'),
+        };
 
         if ($name) {
             $qb->andWhere('LOWER(n.name) LIKE LOWER(:name)')
@@ -123,8 +133,27 @@ class NewsletterService
                 ->setParameter('organizationId', $organizationId);
         }
 
-        /** @var Newsletter[] */
-        return $qb->getQuery()->getResult();
+        /** @var Newsletter[] $newsletters */
+        $newsletters = $qb->getQuery()->getResult();
+
+        $organizationIds = array_values(array_unique(array_filter(
+            array_map(fn(Newsletter $newsletter) => $newsletter->getOrganizationId(), $newsletters),
+        )));
+
+        $orgs = $this->auth->organizations($organizationIds, includeBillingInfo: true);
+
+        return [
+            'newsletters' => $newsletters,
+            'orgs' => array_values(array_map(
+                fn($org) => [
+                    'id' => $org->getId(),
+                    'name' => $org->getName(),
+                    'billing_email' => $org->getBillingEmail(),
+                    'billing_address' => $org->getBillingAddress(),
+                ],
+                $orgs,
+            )),
+        ];
     }
 
     public function getNewsletterById(int $id): ?Newsletter

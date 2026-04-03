@@ -1,26 +1,37 @@
-import { ITEMS_PER_PAGE } from '../generalActions';
-import sudoApi from '../sudoApi';
-import type { NewsletterStats, Newsletter } from '../../types';
+import { ITEMS_PER_PAGE } from "../generalActions";
+import sudoApi from "../sudoApi";
+import type { NewsletterStats, Newsletter } from "../../types";
+
+export interface Organization {
+  id: number;
+  name: string;
+  billing_email: string | null;
+  billing_address: {
+    country: string | null;
+  } | null;
+}
 
 export function getNewsletters(
-	name: string | null = null,
-	organizationId: number | null = null,
-	limit: number = ITEMS_PER_PAGE,
-	offset: number = 0
+  name: string | null = null,
+  organizationId: number | null = null,
+  limit: number = ITEMS_PER_PAGE,
+  offset: number = 0,
+  sort: string = "id_desc",
 ) {
-	return sudoApi.get<Newsletter[]>({
-		endpoint: 'newsletters',
-		data: {
-			name,
-			organization_id: organizationId,
-			limit,
-			offset
-		}
-	});
+  return sudoApi.get<{ newsletters: Newsletter[]; orgs: Organization[] }>({
+    endpoint: "newsletters",
+    data: {
+      name,
+      organization_id: organizationId,
+      limit,
+      offset,
+      sort,
+    },
+  });
 }
 
 export function getNewsletter(id: number) {
-	return sudoApi.get<{ newsletter: Newsletter; stats: NewsletterStats }>({
-		endpoint: `newsletters/${id}`
-	});
+  return sudoApi.get<{ newsletter: Newsletter; stats: NewsletterStats }>({
+    endpoint: `newsletters/${id}`,
+  });
 }

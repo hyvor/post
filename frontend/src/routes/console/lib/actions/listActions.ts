@@ -1,28 +1,32 @@
-import consoleApi from '../consoleApi';
-import type { List } from '../../types';
+import consoleApi from "../consoleApi";
+import type { List } from "../../types";
 
 export function createList(name: string, description: string | null) {
-	return consoleApi.post<List>({
-		endpoint: 'lists',
-		data: {
-			name,
-			description
-		}
-	});
+  return consoleApi.post<List>({
+    endpoint: "lists",
+    data: {
+      name,
+      description,
+    },
+  });
 }
 
-export function updateList(id: number, name: string, description: string | null) {
-	return consoleApi.patch<List>({
-		endpoint: `lists/${id}`,
-		data: {
-			name,
-			description
-		}
-	});
+export function updateList(
+  id: number,
+  name: string,
+  description: string | null,
+) {
+  return consoleApi.patch<List>({
+    endpoint: `lists/${id}`,
+    data: {
+      name,
+      description,
+    },
+  });
 }
 
 export function deleteList(id: number) {
-	return consoleApi.delete({
-		endpoint: `lists/${id}`
-	});
+  return consoleApi.delete({
+    endpoint: `lists/${id}`,
+  });
 }

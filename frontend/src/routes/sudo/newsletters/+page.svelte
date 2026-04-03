@@ -18,13 +18,15 @@
 	import IconX from '@hyvor/icons/IconX';
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { ITEMS_PER_PAGE } from '../lib/generalActions';
-	import { getNewsletters } from '../lib/actions/newsletterActions';
+	import { getNewsletters, type Organization } from '../lib/actions/newsletterActions';
 	import { goto } from '$app/navigation';
 
 	let loading = $state(true);
 	let hasMore = $state(true);
 	let loadingMore = $state(false);
 	let error: string | null = $state(null);
+
+	let orgsMap = $state<Record<number, Organization>>({});
 
 	let search: string | undefined = $state(undefined);
 	let searchValue: string | undefined = $state(undefined);
@@ -33,23 +35,13 @@
 	let organizationIdValue: string | undefined = $state(undefined);
 
 	const SORT_OPTIONS: Record<string, string> = {
-		name: 'Name',
-		created_at: 'Created'
+		id_desc: 'ID DESC',
+		id_asc: 'ID ASC',
+		most_issues: 'Most issues'
 	};
 	type SortKey = keyof typeof SORT_OPTIONS;
-	let sortBy: SortKey = $state('created_at');
+	let sortBy: SortKey = $state('id_desc');
 	let sortDropdownShow = $state(false);
-
-	let sortedNewsletters = $derived.by(() => {
-		const items = [...$newsletterStore];
-		items.sort((a, b) => {
-			if (sortBy === 'name') {
-				return a.name.localeCompare(b.name);
-			}
-			return b.created_at - a.created_at;
-		});
-		return items;
-	});
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
@@ -58,15 +50,23 @@
 			search ?? null,
 			organizationIdValue ? parseInt(organizationIdValue) : null,
 			ITEMS_PER_PAGE,
-			more ? $newsletterStore.length : 0
+			more ? $newsletterStore.length : 0,
+			sortBy
 		)
 			.then((data) => {
-				if (more) {
-					newsletterStore.update((newsletters) => [...newsletters, ...data]);
-				} else {
-					newsletterStore.set(data);
+				const newOrgs: Record<number, Organization> = {};
+				for (const org of data.orgs) {
+					newOrgs[org.id] = org;
 				}
-				hasMore = data.length === ITEMS_PER_PAGE;
+
+				if (more) {
+					newsletterStore.update((newsletters) => [...newsletters, ...data.newsletters]);
+					orgsMap = { ...orgsMap, ...newOrgs };
+				} else {
+					newsletterStore.set(data.newsletters);
+					orgsMap = newOrgs;
+				}
+				hasMore = data.newsletters.length === ITEMS_PER_PAGE;
 			})
 			.catch((e) => {
 				error = e.message;
@@ -182,18 +182,19 @@
 					{/snippet}
 				</Button>
 			{/snippet}
-			{#snippet content()}
-				<ActionList>
-					{#each Object.entries(SORT_OPTIONS) as [key, value]}
-						<ActionListItem
-							on:select={() => {
-								sortBy = key;
-								sortDropdownShow = false;
-							}}>{value}</ActionListItem
-						>
-					{/each}
-				</ActionList>
-			{/snippet}
+		{#snippet content()}
+			<ActionList>
+				{#each Object.entries(SORT_OPTIONS) as [key, value]}
+					<ActionListItem
+						on:select={() => {
+							sortBy = key;
+							sortDropdownShow = false;
+							load();
+						}}>{value}</ActionListItem
+					>
+				{/each}
+			</ActionList>
+		{/snippet}
 		</Dropdown>
 	</div>
 
@@ -201,8 +202,8 @@
 		<IconMessage empty message="No newsletters found" />
 	{:else}
 		<div class="list">
-			{#each sortedNewsletters as newsletter (newsletter.id)}
-				<NewsletterRow {newsletter} {handleSelect} />
+			{#each $newsletterStore as newsletter (newsletter.id)}
+				<NewsletterRow {newsletter} {handleSelect} org={newsletter.organization_id ? orgsMap[newsletter.organization_id] : undefined} />
 			{/each}
 			<LoadButton
 				text="Load More"

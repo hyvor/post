@@ -5,15 +5,12 @@
 		Divider,
 		IconMessage,
 		Loader,
-		SplitControl,
-		TextInput,
 		toast
 	} from '@hyvor/design/components';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getNewsletter } from '../../lib/actions/newsletterActions';
 	import type { NewsletterStats, Newsletter } from '../../types';
-	import FriendlyDate from '../../../console/@components/utils/FriendlyDate.svelte';
 	import IconArrowLeft from '@hyvor/icons/IconArrowLeft';
 
 	let loading = $state(true);
@@ -54,50 +51,66 @@
 			<h2>{newsletter.name}</h2>
 		</div>
 
+		<div class="stats-grid">
+			<div class="stat">
+				<div class="stat-title">Subscribers</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.subscribers.total.toLocaleString()}</span>
+					<span class="stat-change" class:positive={stats.subscribers.last_30_days >= 0} class:negative={stats.subscribers.last_30_days < 0}>
+						{stats.subscribers.last_30_days >= 0 ? '+' : ''}{stats.subscribers.last_30_days.toLocaleString()}
+						<span class="last-30d">30d</span>
+					</span>
+				</div>
+			</div>
+			<div class="stat">
+				<div class="stat-title">Issues</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.issues.total.toLocaleString()}</span>
+					<span class="stat-change" class:positive={stats.issues.last_30_days >= 0} class:negative={stats.issues.last_30_days < 0}>
+						{stats.issues.last_30_days >= 0 ? '+' : ''}{stats.issues.last_30_days.toLocaleString()}
+						<span class="last-30d">30d</span>
+					</span>
+				</div>
+			</div>
+			<div class="stat">
+				<div class="stat-title">Bounce Rate</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.bounced_rate.total}<span class="percent">%</span></span>
+					<span class="stat-change" class:positive={stats.bounced_rate.last_30_days - stats.bounced_rate.total <= 0} class:negative={stats.bounced_rate.last_30_days - stats.bounced_rate.total > 0}>
+						{stats.bounced_rate.last_30_days - stats.bounced_rate.total >= 0 ? '+' : ''}{(stats.bounced_rate.last_30_days - stats.bounced_rate.total).toFixed(2)}<span class="percent">%</span>
+						<span class="last-30d">30d</span>
+					</span>
+				</div>
+			</div>
+			<div class="stat">
+				<div class="stat-title">Complaint Rate</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.complained_rate.total}<span class="percent">%</span></span>
+					<span class="stat-change" class:positive={stats.complained_rate.last_30_days - stats.complained_rate.total <= 0} class:negative={stats.complained_rate.last_30_days - stats.complained_rate.total > 0}>
+						{stats.complained_rate.last_30_days - stats.complained_rate.total >= 0 ? '+' : ''}{(stats.complained_rate.last_30_days - stats.complained_rate.total).toFixed(2)}<span class="percent">%</span>
+						<span class="last-30d">30d</span>
+					</span>
+				</div>
+			</div>
+			<div class="stat">
+				<div class="stat-title">Lists</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.lists_count}</span>
+				</div>
+			</div>
+			<div class="stat">
+				<div class="stat-title">Sending Profiles</div>
+				<div class="stat-value-wrap">
+					<span class="stat-value">{stats.sending_profiles_count}</span>
+				</div>
+			</div>
+		</div>
+
+		<Divider margin={20} />
+
 		<div class="content">
-			<SplitControl label="ID">
-				<TextInput value={String(newsletter.id)} disabled block />
-			</SplitControl>
-
-			<SplitControl label="Name">
-				<TextInput value={newsletter.name} disabled block />
-			</SplitControl>
-
-			<SplitControl label="Subdomain">
-				<TextInput value={newsletter.subdomain} disabled block />
-			</SplitControl>
-
-			<SplitControl label="User ID">
-				<TextInput value={String(newsletter.user_id)} disabled block />
-			</SplitControl>
-
-			<SplitControl label="Organization ID">
-				<TextInput
-					value={newsletter.organization_id != null
-						? String(newsletter.organization_id)
-						: '—'}
-					disabled
-					block
-				/>
-			</SplitControl>
-
-			<SplitControl label="Language">
-				<TextInput value={newsletter.language_code ?? '—'} disabled block />
-			</SplitControl>
-
-			<SplitControl label="RTL">
-				<TextInput value={newsletter.is_rtl ? 'Yes' : 'No'} disabled block />
-			</SplitControl>
-
-			<SplitControl label="Created at">
-				<FriendlyDate time={newsletter.created_at} />
-			</SplitControl>
-
-			<Divider margin={20} />
-
-			<h3>Stats</h3>
-
-			<CodeBlock code={JSON.stringify(stats, null, 2)} language="json" />
+			<h3>Newsletter Object</h3>
+			<CodeBlock code={JSON.stringify(newsletter, null, 2)} language="json" />
 		</div>
 	</div>
 {/if}
@@ -118,6 +131,50 @@
 
 	.header h2 {
 		margin: 0;
+	}
+
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 15px;
+	}
+
+	.stat {
+		padding: 15px;
+		background: var(--bg-light);
+		border-radius: var(--box-radius);
+	}
+
+	.stat-title {
+		margin-bottom: 5px;
+		color: var(--text-light);
+	}
+
+	.stat-value {
+		font-size: 35px;
+	}
+
+	.stat-change {
+		margin-left: 5px;
+		font-size: 14px;
+	}
+
+	.stat-change.positive {
+		color: var(--green);
+	}
+
+	.stat-change.negative {
+		color: var(--red);
+	}
+
+	.last-30d {
+		font-size: 12px;
+		color: var(--text-light);
+	}
+
+	.percent {
+		font-size: 0.6em;
+		opacity: 0.5;
 	}
 
 	.content h3 {
