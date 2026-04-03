@@ -105,7 +105,7 @@ class NewsletterService
     }
 
     /**
-     * @return array{newsletters: Newsletter[], orgs: array<int, array{id: int, name: string, billing_email: ?string, billing_address: ?string}>}
+     * @return array{newsletters: Newsletter[], orgs: list<array{id: int, name: string, billing_email: string, billing_address: array{line1: string, city: string, state: string, postal_code: string, country: string}|null}>}
      */
     public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset, string $sort = 'id_desc'): array
     {
