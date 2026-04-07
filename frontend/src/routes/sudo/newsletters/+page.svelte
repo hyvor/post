@@ -147,7 +147,12 @@
 				</div>
 			{/snippet}
 		</TextInput>
-		<TextInput bind:value={organizationId} on:keyup={handleOrgIdKeyup} size="small" block={false}>
+		<TextInput
+			bind:value={organizationId}
+			on:keyup={handleOrgIdKeyup}
+			size="small"
+			block={false}
+		>
 			{#snippet start()}
 				Org ID
 			{/snippet}
@@ -182,19 +187,19 @@
 					{/snippet}
 				</Button>
 			{/snippet}
-		{#snippet content()}
-			<ActionList>
-				{#each Object.entries(SORT_OPTIONS) as [key, value]}
-					<ActionListItem
-						on:select={() => {
-							sortBy = key;
-							sortDropdownShow = false;
-							load();
-						}}>{value}</ActionListItem
-					>
-				{/each}
-			</ActionList>
-		{/snippet}
+			{#snippet content()}
+				<ActionList>
+					{#each Object.entries(SORT_OPTIONS) as [key, value]}
+						<ActionListItem
+							on:select={() => {
+								sortBy = key;
+								sortDropdownShow = false;
+								load();
+							}}>{value}</ActionListItem
+						>
+					{/each}
+				</ActionList>
+			{/snippet}
 		</Dropdown>
 	</div>
 
@@ -203,7 +208,13 @@
 	{:else}
 		<div class="list">
 			{#each $newsletterStore as newsletter (newsletter.id)}
-				<NewsletterRow {newsletter} {handleSelect} org={newsletter.organization_id ? orgsMap[newsletter.organization_id] : undefined} />
+				<NewsletterRow
+					{newsletter}
+					{handleSelect}
+					org={newsletter.organization_id
+						? orgsMap[newsletter.organization_id]
+						: undefined}
+				/>
 			{/each}
 			<LoadButton
 				text="Load More"

@@ -38,9 +38,7 @@
 	let newsletterFilter: number | undefined = $state(undefined);
 	let newsletterDropdownShow = $state(false);
 
-	let selectedNewsletterName = $derived(
-		newsletters.find((n) => n.id === newsletterFilter)?.name
-	);
+	let selectedNewsletterName = $derived(newsletters.find((n) => n.id === newsletterFilter)?.name);
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);

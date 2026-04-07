@@ -1,1 +1,1 @@
-export const saveDiscardBoxClassContextName = "save-discard-box-context";
+export const saveDiscardBoxClassContextName = 'save-discard-box-context';

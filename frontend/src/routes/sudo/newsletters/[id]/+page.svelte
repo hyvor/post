@@ -50,7 +50,12 @@
 				Back
 			</Button>
 			<h2>{newsletter.name}</h2>
-			<Button as="a" href={`/sudo/issues?newsletter_id=${newsletter.id}`} size="small" color="input">
+			<Button
+				as="a"
+				href={`/sudo/issues?newsletter_id=${newsletter.id}`}
+				size="small"
+				color="input"
+			>
 				{#snippet start()}
 					<IconEnvelope size={14} />
 				{/snippet}
@@ -63,8 +68,14 @@
 				<div class="stat-title">Subscribers</div>
 				<div class="stat-value-wrap">
 					<span class="stat-value">{stats.subscribers.total.toLocaleString()}</span>
-					<span class="stat-change" class:positive={stats.subscribers.last_30_days >= 0} class:negative={stats.subscribers.last_30_days < 0}>
-						{stats.subscribers.last_30_days >= 0 ? '+' : ''}{stats.subscribers.last_30_days.toLocaleString()}
+					<span
+						class="stat-change"
+						class:positive={stats.subscribers.last_30_days >= 0}
+						class:negative={stats.subscribers.last_30_days < 0}
+					>
+						{stats.subscribers.last_30_days >= 0
+							? '+'
+							: ''}{stats.subscribers.last_30_days.toLocaleString()}
 						<span class="last-30d">30d</span>
 					</span>
 				</div>
@@ -73,8 +84,14 @@
 				<div class="stat-title">Issues</div>
 				<div class="stat-value-wrap">
 					<span class="stat-value">{stats.issues.total.toLocaleString()}</span>
-					<span class="stat-change" class:positive={stats.issues.last_30_days >= 0} class:negative={stats.issues.last_30_days < 0}>
-						{stats.issues.last_30_days >= 0 ? '+' : ''}{stats.issues.last_30_days.toLocaleString()}
+					<span
+						class="stat-change"
+						class:positive={stats.issues.last_30_days >= 0}
+						class:negative={stats.issues.last_30_days < 0}
+					>
+						{stats.issues.last_30_days >= 0
+							? '+'
+							: ''}{stats.issues.last_30_days.toLocaleString()}
 						<span class="last-30d">30d</span>
 					</span>
 				</div>
@@ -82,9 +99,22 @@
 			<div class="stat">
 				<div class="stat-title">Bounce Rate</div>
 				<div class="stat-value-wrap">
-					<span class="stat-value">{stats.bounced_rate.total}<span class="percent">%</span></span>
-					<span class="stat-change" class:positive={stats.bounced_rate.last_30_days - stats.bounced_rate.total <= 0} class:negative={stats.bounced_rate.last_30_days - stats.bounced_rate.total > 0}>
-						{stats.bounced_rate.last_30_days - stats.bounced_rate.total >= 0 ? '+' : ''}{(stats.bounced_rate.last_30_days - stats.bounced_rate.total).toFixed(2)}<span class="percent">%</span>
+					<span class="stat-value"
+						>{stats.bounced_rate.total}<span class="percent">%</span></span
+					>
+					<span
+						class="stat-change"
+						class:positive={stats.bounced_rate.last_30_days -
+							stats.bounced_rate.total <=
+							0}
+						class:negative={stats.bounced_rate.last_30_days - stats.bounced_rate.total >
+							0}
+					>
+						{stats.bounced_rate.last_30_days - stats.bounced_rate.total >= 0
+							? '+'
+							: ''}{(
+							stats.bounced_rate.last_30_days - stats.bounced_rate.total
+						).toFixed(2)}<span class="percent">%</span>
 						<span class="last-30d">30d</span>
 					</span>
 				</div>
@@ -92,9 +122,23 @@
 			<div class="stat">
 				<div class="stat-title">Complaint Rate</div>
 				<div class="stat-value-wrap">
-					<span class="stat-value">{stats.complained_rate.total}<span class="percent">%</span></span>
-					<span class="stat-change" class:positive={stats.complained_rate.last_30_days - stats.complained_rate.total <= 0} class:negative={stats.complained_rate.last_30_days - stats.complained_rate.total > 0}>
-						{stats.complained_rate.last_30_days - stats.complained_rate.total >= 0 ? '+' : ''}{(stats.complained_rate.last_30_days - stats.complained_rate.total).toFixed(2)}<span class="percent">%</span>
+					<span class="stat-value"
+						>{stats.complained_rate.total}<span class="percent">%</span></span
+					>
+					<span
+						class="stat-change"
+						class:positive={stats.complained_rate.last_30_days -
+							stats.complained_rate.total <=
+							0}
+						class:negative={stats.complained_rate.last_30_days -
+							stats.complained_rate.total >
+							0}
+					>
+						{stats.complained_rate.last_30_days - stats.complained_rate.total >= 0
+							? '+'
+							: ''}{(
+							stats.complained_rate.last_30_days - stats.complained_rate.total
+						).toFixed(2)}<span class="percent">%</span>
 						<span class="last-30d">30d</span>
 					</span>
 				</div>
