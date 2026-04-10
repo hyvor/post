@@ -120,7 +120,7 @@
 	<IconMessage error message={error} />
 {:else}
 	<div class="top">
-		<TextInput bind:value={search} on:keyup={handleSearchKeyup} size="small">
+		<TextInput bind:value={search} on:keyup={handleSearchKeyup} size="small" block={false}>
 			{#snippet start()}
 				Subdomain
 			{/snippet}
