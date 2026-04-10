@@ -58,6 +58,7 @@ class SubscriberCreatedMessageHandlerTest extends KernelTestCase
             $body = json_decode($options['body'], true);
             $this->assertIsArray($body);
             $this->assertSame('Confirm your subscription to ' . $newsletter->getName(), $body['subject']);
+            $this->assertIsArray($body['to']);
             $this->assertSame($subscriber->getEmail(), $body['to']['email']);
 
             return new JsonMockResponse();

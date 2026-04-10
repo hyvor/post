@@ -3,6 +3,8 @@
 namespace App\Api\Sudo\Resolver;
 
 use App\Entity\Approval;
+use App\Entity\Issue;
+use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -16,6 +18,8 @@ class EntityResolver implements ValueResolverInterface
     public const ENTITIES = [
         'approvals' => Approval::class,
         'subscriber-imports' => SubscriberImport::class,
+        'newsletters' => Newsletter::class,
+        'issues' => Issue::class,
     ];
 
     public function __construct(

@@ -109,6 +109,57 @@ class IssueService
     }
 
     /**
+     * @return Issue[]
+     */
+    public function getIssuesGlobal(
+        ?string      $subdomain,
+        ?int         $newsletterId,
+        ?IssueStatus $status,
+        int          $limit,
+        int          $offset,
+    ): array
+    {
+        $qb = $this->em->createQueryBuilder()
+            ->select('i', 'n')
+            ->from(Issue::class, 'i')
+            ->join('i.newsletter', 'n')
+            ->orderBy('i.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if ($subdomain) {
+            $qb->andWhere('n.subdomain = :subdomain')
+                ->setParameter('subdomain', $subdomain);
+        }
+
+        if ($newsletterId) {
+            $qb->andWhere('n.id = :newsletterId')
+                ->setParameter('newsletterId', $newsletterId);
+        }
+
+        if ($status) {
+            $qb->andWhere('i.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        /** @var Issue[] */
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getIssueGlobal(int $id): ?Issue
+    {
+        /** @var Issue|null */
+        return $this->em->createQueryBuilder()
+            ->select('i', 'n')
+            ->from(Issue::class, 'i')
+            ->join('i.newsletter', 'n')
+            ->andWhere('i.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
