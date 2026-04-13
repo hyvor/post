@@ -122,4 +122,4 @@ jobs:
       - name: Frontend
         run: |
           docker build -t frontend . --target frontend-dev && \
-          docker run frontend npm run format
+          docker run frontend npm run lint
