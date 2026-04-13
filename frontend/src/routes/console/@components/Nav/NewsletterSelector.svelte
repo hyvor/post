@@ -18,8 +18,7 @@
 		{/snippet}
 
 		<div class="wrap">
-			<NewsletterList own={true} />
-			<NewsletterList own={false} />
+			<NewsletterList />
 		</div>
 	</Modal>
 {/if}

@@ -54,12 +54,12 @@ class DomainService
     /**
      * @return Domain[]
      */
-    public function getVerifiedDomainsByUserId(int $userId): array
+    public function getVerifiedDomainsByOrganizationId(int $organizationId): array
     {
         return $this->em->getRepository(Domain::class)
             ->findBy([
-                'user_id' => $userId,
-                'relay_status' => [RelayDomainStatus::ACTIVE, RelayDomainStatus::PENDING]
+                'organization_id' => $organizationId,
+                'relay_status' => [RelayDomainStatus::ACTIVE, RelayDomainStatus::WARNING]
             ]);
     }
 

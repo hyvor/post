@@ -5,15 +5,16 @@ namespace App\Service\User;
 use App\Entity\Newsletter;
 use App\Entity\Type\UserRole;
 use App\Entity\User;
-use App\Entity\UserInvite;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Hyvor\Internal\Auth\AuthInterface;
 
 class UserService
 {
 
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private AuthInterface          $authService,
     )
     {
     }
@@ -86,5 +87,14 @@ class UserService
         if ($flush) {
             $this->em->flush();
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNewsletterUserEmails(Newsletter $newsletter): array
+    {
+        $newsletterUserIds = array_map(fn($user) => $user->getHyvorUserId(), $this->getNewsletterUsers($newsletter)->toArray());
+        return array_map(fn($authUser) => $authUser->email, $this->authService->fromIds($newsletterUserIds));
     }
 }

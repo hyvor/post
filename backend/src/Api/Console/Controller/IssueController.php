@@ -22,10 +22,8 @@ use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TemplateRenderException;
 use App\Service\Template\TextTemplateRenderer;
 use App\Service\User\UserService;
-use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
-use Hyvor\Internal\Component\Component;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +44,6 @@ class IssueController extends AbstractController
         private BillingInterface      $billing,
         private DomainService         $domainService,
         private UserService           $userService,
-        private AuthInterface         $authService,
         private SendingProfileService $sendingProfileService
     )
     {
@@ -172,7 +169,6 @@ class IssueController extends AbstractController
         }
 
         $organizationId = $issue->getNewsletter()->getOrganizationId();
-        assert($organizationId !== null);
 
         $license = $this->billing->license($organizationId)->license;
         if (!$license instanceof PostLicense) {
@@ -213,10 +209,8 @@ class IssueController extends AbstractController
     public function getTestData(Issue $issue): JsonResponse
     {
         $newsletter = $issue->getNewsletter();
-        $verifiedDomains = $this->domainService->getVerifiedDomainsByUserId($newsletter->getUserId());
-
-        $newsletterUserIds = array_map(fn($user) => $user->getHyvorUserId(), $this->userService->getNewsletterUsers($newsletter)->toArray());
-        $newsletterUserEmails = array_map(fn($authUser) => $authUser->email, $this->authService->fromIds($newsletterUserIds));
+        $verifiedDomains = $this->domainService->getVerifiedDomainsByOrganizationId($newsletter->getOrganizationId());
+        $newsletterUserEmails = $this->userService->getNewsletterUserEmails($newsletter);
 
         $testSentEmails = $newsletter->getTestSentEmails() ?? [];
         $suggestedEmails = array_unique(array_merge($newsletterUserEmails, $testSentEmails));
@@ -245,6 +239,10 @@ class IssueController extends AbstractController
 
         if ($issue->getContent() === null) {
             throw new UnprocessableEntityHttpException("Content cannot be empty.");
+        }
+
+        if (!$this->issueService->isTestEmailAllowed($issue, $input->emails)) {
+            throw new UnprocessableEntityHttpException("Test emails can only be sent to verified domains or emails of newsletter users.");
         }
 
         $sendCount = $this->issueService->sendTestEmails($issue, $input->emails);

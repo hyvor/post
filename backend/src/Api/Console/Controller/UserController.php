@@ -64,7 +64,6 @@ class UserController extends AbstractController
         }
 
         $organizationId = $newsletter->getOrganizationId();
-        assert($organizationId !== null);
 
         if ($this->userService->hasAccessToNewsletter($newsletter, $hyvorUser->id)) {
             throw new BadRequestHttpException('User is already added to the newsletter');
