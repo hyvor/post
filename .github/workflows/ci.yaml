@@ -120,4 +120,6 @@ jobs:
         run: cd embed && npm ci && npm run lint
 
       - name: Frontend
-        run: docker compose run frontend npm run format
+        run: |
+          docker build -t frontend . --target frontend-dev && \
+          docker run frontend npm run format
