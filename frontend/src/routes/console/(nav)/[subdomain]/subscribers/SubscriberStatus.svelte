@@ -7,8 +7,7 @@
 	let color: 'green' | 'orange' | 'default';
 
 	$: {
-		color =
-			status === 'subscribed' ? 'green' : status === 'unsubscribed' ? 'orange' : 'default';
+		color = status === 'subscribed' ? 'green' : status === 'unsubscribed' ? 'orange' : 'default';
 	}
 </script>
 

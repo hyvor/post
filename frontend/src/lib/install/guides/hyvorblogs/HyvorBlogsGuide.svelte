@@ -7,8 +7,8 @@
 <h2 id="hyvorblogs">Hyvor Blogs</h2>
 
 <p>
-	Integrate Hyvor Post signup form with your Hyvor Blogs blog to allow visitors to subscribe to
-	your newsletter directly from your blog.
+	Integrate Hyvor Post signup form with your Hyvor Blogs blog to allow visitors to subscribe to your
+	newsletter directly from your blog.
 </p>
 
 <br /><br />
@@ -19,8 +19,7 @@
 	<ol>
 		<li>Log in to your <a href="https://blogs.hyvor.com/console">Hyvor Blogs console</a>.</li>
 		<li>
-			Go to <code>Settings -&gt; Comments & Newsletter -&gt; Newsletter Signup Form Code</code
-			>.
+			Go to <code>Settings -&gt; Comments & Newsletter -&gt; Newsletter Signup Form Code</code>.
 		</li>
 		<CodeBlock
 			language="html"

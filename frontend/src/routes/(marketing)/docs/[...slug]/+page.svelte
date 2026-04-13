@@ -27,8 +27,7 @@
 							<div
 								class="nav-item-wrap"
 								class:has-parent={page.parent !== undefined}
-								class:force-active={page.slug !== '' &&
-									data.slug?.startsWith(page.slug)}
+								class:force-active={page.slug !== '' && data.slug?.startsWith(page.slug)}
 							>
 								<NavItem href={page.slug === '' ? '/docs' : `/docs/${page.slug}`}>
 									{page.name}

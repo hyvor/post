@@ -27,8 +27,7 @@
 			Make sure to replace <code>{'{subdomain}'}</code> with your actual newsletter subdomain.
 		</Callout>
 		<li>
-			Paste the code snippet into the HTML of your website where you want the signup form to
-			appear.
+			Paste the code snippet into the HTML of your website where you want the signup form to appear.
 		</li>
 	</ol>
 </GuideSection>

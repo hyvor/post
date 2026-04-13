@@ -25,9 +25,7 @@
 			>"
 		</li>
 		<DocsImage src={codeWidgetImg} alt="One.com Custom Code Widget" width={400} />
-		<li>
-			Drag it and drop on where you want the Hyvor Post signup form to appear on your site.
-		</li>
+		<li>Drag it and drop on where you want the Hyvor Post signup form to appear on your site.</li>
 		<li>Paste the following code snippet into the custom code widget:</li>
 		<CodeBlock
 			language="html"

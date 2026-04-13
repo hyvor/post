@@ -21,8 +21,7 @@
 			</div>
 			<div class="description">
 				{#if own}
-					You are the owner of these newsletters. Your subscription applies to all of
-					them.
+					You are the owner of these newsletters. Your subscription applies to all of them.
 				{:else}
 					You are admin on these websites. Your subscription does not apply to them.
 				{/if}

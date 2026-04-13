@@ -489,12 +489,12 @@
 		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
 	</li>
 	<li>
-		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
-		sending profile
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a sending
+		profile
 	</li>
 	<li>
-		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete
-		a sending profile
+		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete a sending
+		profile
 	</li>
 </ul>
 
@@ -580,8 +580,8 @@ appearance of your newsletters.
 		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
 	</li>
 	<li>
-		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
-		with content
+		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template with
+		content
 	</li>
 </ul>
 

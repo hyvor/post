@@ -21,13 +21,13 @@
 
 	<ol>
 		<li>
-			In your Framer project editor, go to "<b>Utility</b>" and choose "<b>Embed</b>"
-			component and place it on the place you want the signup form to appear.
+			In your Framer project editor, go to "<b>Utility</b>" and choose "<b>Embed</b>" component and
+			place it on the place you want the signup form to appear.
 		</li>
 		<DocsImage src={embedCodeImg} alt="Framer Embed Component" width={400} />
 		<li>
-			Click on the embed component and in the properties panel, paste the following code
-			snippet in the "<b>HTML</b>" section.
+			Click on the embed component and in the properties panel, paste the following code snippet in
+			the "<b>HTML</b>" section.
 		</li>
 		<DocsImage src={pasteCodeImg} alt="Framer Paste Code" width={400} />
 		<CodeBlock

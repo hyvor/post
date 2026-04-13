@@ -1,6 +1,6 @@
 <script lang="ts">
- import Integrations from "../@components/Integration/Integrations.svelte";
-import FeatureSectionHead from "../@homepage/FeatureSectionHead.svelte";
+	import Integrations from '../@components/Integration/Integrations.svelte';
+	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 </script>
 
 <svelte:head>

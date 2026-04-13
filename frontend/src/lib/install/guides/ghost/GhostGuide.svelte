@@ -18,11 +18,11 @@
 
 	<ol>
 		<li>
-			To add Hyvor Post to Ghost, you need to edit your theme. If you are not sure how to do
-			it, check <a href="https://ghost.org/tutorials/download-and-upload-a-theme/"
+			To add Hyvor Post to Ghost, you need to edit your theme. If you are not sure how to do it,
+			check <a href="https://ghost.org/tutorials/download-and-upload-a-theme/"
 				>Ghost's documentation</a
-			>. After downloading your theme, open the template file you want to add comments to.
-			Usually, it is <code>post.hbs</code>.
+			>. After downloading your theme, open the template file you want to add comments to. Usually,
+			it is <code>post.hbs</code>.
 		</li>
 		<li>Add the following code where you want to add comments.</li>
 		<CodeBlock

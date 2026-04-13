@@ -11,8 +11,8 @@
 <h2 id="squarespace">Squarespace</h2>
 
 <p>
-	Integrate Hyvor Post signup form with your Squarespace site to allow visitors to subscribe to
-	your newsletter directly from your site.
+	Integrate Hyvor Post signup form with your Squarespace site to allow visitors to subscribe to your
+	newsletter directly from your site.
 </p>
 
 <br /><br />
@@ -21,9 +21,7 @@
 	To embed the signup form on your Squarespace website, follow these steps:
 
 	<ol>
-		<li>
-			Go to Squarespace dashboard and find the place where you want to add the signup form.
-		</li>
+		<li>Go to Squarespace dashboard and find the place where you want to add the signup form.</li>
 		<DocsImage src={addBlockImg} alt="Squarespace Add Block" width={400} />
 		<li>Click "<b>Add Block</b>" and choose "<b>Embed</b>".</li>
 		<DocsImage src={embedImg} alt="Squarespace Embed" width={400} />

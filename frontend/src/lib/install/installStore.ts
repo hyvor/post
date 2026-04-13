@@ -1,4 +1,4 @@
-import { derived, writable } from "svelte/store";
+import { derived, writable } from 'svelte/store';
 
 export const installSubdomain = writable<null | string>();
 

@@ -105,9 +105,7 @@
 				const progress = easeOutCubic(rawProgress);
 
 				// Interpolate from current to target value
-				animatedPrices[i] = Math.floor(
-					startPrices[i] + (p.price - startPrices[i]) * progress
-				);
+				animatedPrices[i] = Math.floor(startPrices[i] + (p.price - startPrices[i]) * progress);
 
 				animatedWidths[i] = startWidths[i] + (targetWidth - startWidths[i]) * progress;
 
@@ -156,10 +154,7 @@
 			<div class="row">
 				<div class="name">{name}</div>
 				<div class="bar-container">
-					<div
-						class="bar"
-						style="width: {animatedWidths[i]}%; background-color: {color};"
-					>
+					<div class="bar" style="width: {animatedWidths[i]}%; background-color: {color};">
 						<div class="price">€{animatedPrices[i]}</div>
 					</div>
 				</div>

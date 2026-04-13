@@ -44,11 +44,7 @@
 		{:else if $issueStore.length}
 			<div class="issues-title">
 				{I18n.t('console.nav.issues')}
-				<CreateIssueButton
-					text={I18n.t('console.issues.newIssue')}
-					icon={IconPlus}
-					size="small"
-				/>
+				<CreateIssueButton text={I18n.t('console.issues.newIssue')} icon={IconPlus} size="small" />
 			</div>
 
 			<div class="issues-list">
