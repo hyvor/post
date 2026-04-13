@@ -144,10 +144,7 @@
 					width={200}
 				>
 					<ActionList selection="single" selectionAlign="end">
-						<ActionListItem
-							on:click={() => selectStatus(null)}
-							selected={status === null}
-						>
+						<ActionListItem on:click={() => selectStatus(null)} selected={status === null}>
 							{I18n.t('console.subscribers.status.all')}
 						</ActionListItem>
 						<ActionListItem
@@ -180,10 +177,7 @@
 				>
 					<ActionList>
 						{#each $listStore as list}
-							<ActionListItem
-								on:click={() => selectList(list)}
-								selected={list.id === list?.id}
-							>
+							<ActionListItem on:click={() => selectList(list)} selected={list.id === list?.id}>
 								{list.name}
 							</ActionListItem>
 						{/each}
@@ -221,12 +215,7 @@
 		</div>
 		<div class="right">
 			<ButtonGroup>
-				<Button
-					size="small"
-					color="input"
-					as="a"
-					href={consoleUrlWithNewsletter('/tools/import')}
-				>
+				<Button size="small" color="input" as="a" href={consoleUrlWithNewsletter('/tools/import')}>
 					{#snippet end()}
 						<IconBoxArrowInDown />
 					{/snippet}

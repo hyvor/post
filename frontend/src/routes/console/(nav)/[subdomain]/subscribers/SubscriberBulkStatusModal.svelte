@@ -2,10 +2,7 @@
 	import { Button, Modal, toast } from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
 	import { updateSubscribersStatus } from '../../../lib/actions/subscriberActions';
-	import {
-		selectedSubscriberIdsStore,
-		subscriberStore
-	} from '../../../lib/stores/newsletterStore';
+	import { selectedSubscriberIdsStore, subscriberStore } from '../../../lib/stores/newsletterStore';
 	import type { NewsletterSubscriberStatus } from '../../../types';
 
 	interface Props {

@@ -24,7 +24,11 @@
 				{#each categories as category}
 					<NavCategory name={category.name}>
 						{#each category.pages as page}
-							<div class="nav-item-wrap" class:has-parent={page.parent !== undefined}>
+							<div
+								class="nav-item-wrap"
+								class:has-parent={page.parent !== undefined}
+								class:force-active={page.slug !== '' && data.slug?.startsWith(page.slug)}
+							>
 								<NavItem href={page.slug === '' ? '/docs' : `/docs/${page.slug}`}>
 									{page.name}
 								</NavItem>
@@ -36,7 +40,7 @@
 		{/snippet}
 		{#snippet content()}
 			<Content>
-				<data.component />
+				<data.component {...data} />
 			</Content>
 		{/snippet}
 	</Docs>
@@ -48,5 +52,9 @@
 	}
 	.nav-item-wrap.has-parent {
 		padding-left: 15px;
+	}
+	.nav-item-wrap.force-active :global(a) {
+		background-color: var(--accent-lightest);
+		border-left: 3px solid var(--accent);
 	}
 </style>

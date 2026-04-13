@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		SplitControl,
-		TabNav,
-		TabNavItem,
-		Textarea,
-		TextInput
-	} from '@hyvor/design/components';
+	import { SplitControl, TabNav, TabNavItem, Textarea, TextInput } from '@hyvor/design/components';
 	import { getI18n } from '../../../../lib/i18n';
 	import { newsletterEditingStore } from '../../../../lib/stores/newsletterStore';
 	import NewsletterSaveDiscard from '../../@components/save/NewsletterSaveDiscard.svelte';
@@ -68,10 +62,7 @@
 <SplitControl label={i18n.t('console.settings.form.colorsUi')}>
 	{#snippet nested()}
 		<TabNav>
-			<TabNavItem
-				name="light"
-				active={palette === 'light'}
-				onclick={() => (palette = 'light')}
+			<TabNavItem name="light" active={palette === 'light'} onclick={() => (palette = 'light')}
 				>{i18n.t('console.settings.form.paletteLight')}</TabNavItem
 			>
 			<TabNavItem name="dark" active={palette === 'dark'} onclick={() => (palette = 'dark')}
