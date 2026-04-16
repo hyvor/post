@@ -80,11 +80,7 @@
 		<div class="column-content">
 			<div class="hds-box">
 				{#if defaultsLoaded}
-					<CodemirrorEditor
-						ext="twig"
-						bind:value={template}
-						change={(e) => (template = e)}
-					/>
+					<CodemirrorEditor ext="twig" bind:value={template} change={(e) => (template = e)} />
 				{/if}
 			</div>
 		</div>

@@ -104,9 +104,7 @@
 						exceedAmount = e.data.exceed_amount || 0;
 						showLimitModal = true;
 					} else {
-						toast.error(
-							I18n.t('console.issues.draft.sendIssue.failed') + ': ' + e.message
-						);
+						toast.error(I18n.t('console.issues.draft.sendIssue.failed') + ': ' + e.message);
 					}
 				})
 				.finally(() => {

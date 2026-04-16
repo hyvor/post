@@ -103,9 +103,7 @@
 				<Avatar src={url} size={64} />
 			{/if}
 		</div>
-		<Button color="accent" variant="fill" on:click={() => fileInput?.click()}
-			>Choose File</Button
-		>
+		<Button color="accent" variant="fill" on:click={() => fileInput?.click()}>Choose File</Button>
 		<div class="info">
 			<Text light small>Max file size: {MAX_FILE_SIZE_MB}MB</Text>
 			<Text light small>Allowed file types: JPEG, PNG, GIF, SVG, JPG</Text>

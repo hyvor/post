@@ -50,10 +50,7 @@
 		)
 			.then((data) => {
 				if (more) {
-					subscriberImportStore.update((subscriberImports) => [
-						...subscriberImports,
-						...data
-					]);
+					subscriberImportStore.update((subscriberImports) => [...subscriberImports, ...data]);
 				} else {
 					subscriberImportStore.set(data);
 				}
@@ -173,8 +170,7 @@
 			{#snippet content()}
 				<ActionList>
 					{#each Object.entries(IMPORT_STATUS_FILTERS) as [key, value]}
-						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem
-						>
+						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem>
 					{/each}
 				</ActionList>
 			{/snippet}

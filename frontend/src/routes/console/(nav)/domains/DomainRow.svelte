@@ -105,9 +105,7 @@
 			View DNS Records
 		</Button>
 		{#if domain.relay_status === 'pending'}
-			<Button size="small" color="input" on:click={handleVerify} {loading}>
-				Verify Domain
-			</Button>
+			<Button size="small" color="input" on:click={handleVerify} {loading}>Verify Domain</Button>
 		{/if}
 		<IconButton size="small" color="red" variant="fill-light" on:click={handleDelete}>
 			<IconTrash size={12} />
@@ -126,14 +124,13 @@
 	>
 		<p>
 			{#if domain.relay_status === 'suspended'}
-				Domain <strong>{domain.domain}</strong> is suspended. Please contact support for more
-				information.
+				Domain <strong>{domain.domain}</strong> is suspended. Please contact support for more information.
 			{:else if domain.relay_status === 'warning'}
-				Domain <strong>{domain.domain}</strong> is put on warning status. Please check the DNS
-				records and ensure they are correct. Please contact support for more information.
+				Domain <strong>{domain.domain}</strong> is put on warning status. Please check the DNS records
+				and ensure they are correct. Please contact support for more information.
 			{:else if domain.relay_status === 'pending'}
-				Domain verification for <strong>{domain.domain}</strong> is in pending status. Please
-				note that it may take up to 72 hours for the changes to take effect.
+				Domain verification for <strong>{domain.domain}</strong> is in pending status. Please note that
+				it may take up to 72 hours for the changes to take effect.
 			{:else}
 				Domain verification for <strong>{domain.domain}</strong> is in active status.
 			{/if}
