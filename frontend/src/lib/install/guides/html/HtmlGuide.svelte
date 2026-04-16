@@ -23,9 +23,11 @@
         <hyvor-post-form newsletter="${$newsletterStore?.subdomain || '{subdomain}'}"></hyvor-post-form>
     `}
 		/>
-		<Callout type="info" title="Replace Subdomain">
-			Make sure to replace <code>{'{subdomain}'}</code> with your actual newsletter subdomain.
-		</Callout>
+		{#if !$newsletterStore.subdomain}
+			<Callout type="warning">
+				Make sure to replace <code>{'{subdomain}'}</code> with your actual newsletter subdomain.
+			</Callout>
+		{/if}
 		<li>
 			Paste the code snippet into the HTML of your website where you want the signup form to appear.
 		</li>
