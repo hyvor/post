@@ -11,7 +11,7 @@ final class Version20260225000000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create list_subscriber_unsubscribed table';
+        return 'Create subscriber_list_removals table';
     }
 
     public function up(Schema $schema): void
@@ -30,8 +30,5 @@ final class Version20260225000000 extends AbstractMigration
         );
     }
 
-    public function down(Schema $schema): void
-    {
-        $this->addSql('DROP TABLE list_subscriber_unsubscribed');
-    }
+    public function down(Schema $schema): void {}
 }

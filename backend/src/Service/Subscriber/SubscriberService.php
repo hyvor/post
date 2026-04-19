@@ -64,7 +64,6 @@ class SubscriberService
             ->setMetadata($metadata);
 
         // if status is subscribed, subscribed_at should be set to now
-        // if status is unsubscribed, unsubscribed_at should be set to now
         if ($status === SubscriberStatus::SUBSCRIBED) {
             $subscriber->setSubscribedAt($subscribedAt ?? $this->now());
         }
@@ -181,10 +180,6 @@ class SubscriberService
 
         if ($updates->has('optInAt')) {
             $subscriber->setOptInAt($updates->optInAt);
-        }
-
-        if ($updates->has('unsubscribedReason')) {
-            $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
         }
 
         if ($updates->has('metadata')) {

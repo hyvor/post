@@ -45,9 +45,6 @@ class Subscriber
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $subscribed_at = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $opt_in_at = null;
-
     #[ORM\Column(enumType: SubscriberSource::class)]
     private SubscriberSource $source;
 
@@ -56,9 +53,6 @@ class Subscriber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subscribe_ip = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $unsubscribe_reason = null;
 
     /**
      * @var array<string, scalar>
@@ -155,18 +149,6 @@ class Subscriber
         return $this;
     }
 
-    public function getOptInAt(): ?\DateTimeImmutable
-    {
-        return $this->opt_in_at;
-    }
-
-    public function setOptInAt(?\DateTimeImmutable $opt_in_at): static
-    {
-        $this->opt_in_at = $opt_in_at;
-
-        return $this;
-    }
-
     public function getSource(): SubscriberSource
     {
         return $this->source;
@@ -202,19 +184,6 @@ class Subscriber
 
         return $this;
     }
-
-    public function getUnsubscribeReason(): ?string
-    {
-        return $this->unsubscribe_reason;
-    }
-
-    public function setUnsubscribeReason(?string $unsubscribe_reason): static
-    {
-        $this->unsubscribe_reason = $unsubscribe_reason;
-
-        return $this;
-    }
-
 
     /**
      * @return Collection<int, NewsletterList>

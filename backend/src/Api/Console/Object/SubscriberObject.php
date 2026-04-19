@@ -18,7 +18,6 @@ class SubscriberObject
      */
     public array $list_ids;
     public ?string $subscribe_ip;
-    public bool $is_opted_in = false;
     public ?int $subscribed_at;
 
     /**
@@ -34,9 +33,7 @@ class SubscriberObject
         $this->status = $subscriber->getStatus();
         $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
         $this->subscribe_ip = $subscriber->getSubscribeIp();
-        $this->is_opted_in = $subscriber->getOptInAt() !== null;
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
         $this->metadata = $subscriber->getMetadata();
     }
-
 }
