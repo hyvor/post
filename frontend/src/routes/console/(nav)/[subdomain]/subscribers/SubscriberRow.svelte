@@ -93,8 +93,6 @@
 			<span class="status-time">
 				{#if subscriber.status === 'subscribed' && subscriber.subscribed_at}
 					<RelativeTime unix={subscriber.subscribed_at} />
-				{:else if subscriber.status === 'unsubscribed' && subscriber.unsubscribed_at}
-					<RelativeTime unix={subscriber.unsubscribed_at} />
 				{/if}
 			</span>
 		</div>

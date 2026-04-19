@@ -20,8 +20,6 @@ class UpdateSubscriberDto
 
     public ?\DateTimeImmutable $optInAt;
 
-    public ?string $unsubscribedReason;
-
     /** @var NewsletterList[] */
     public array $lists;
 
@@ -29,5 +27,4 @@ class UpdateSubscriberDto
      * @var array<string, scalar>
      */
     public array $metadata;
-
 }

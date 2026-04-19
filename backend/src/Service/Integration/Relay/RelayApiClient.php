@@ -30,9 +30,7 @@ class RelayApiClient
         private HttpClientInterface $httpClient,
         private SerializerInterface $serializer,
         private LoggerInterface     $logger,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @template T of object
@@ -51,8 +49,7 @@ class RelayApiClient
         array  $headers = [],
         array  $backoffSeconds = self::BACKOFF,
         bool   $isSystemNotification = false
-    )
-    {
+    ) {
         $attempts = 0;
 
         while (true) {
@@ -73,8 +70,7 @@ class RelayApiClient
                 );
 
                 return $this->serializer->deserialize($response->getContent(), $classToDeserialize, 'json');
-
-            } catch (TransportExceptionInterface|HttpExceptionInterface $e) {
+            } catch (TransportExceptionInterface | HttpExceptionInterface $e) {
 
                 $this->logger->error(
                     'Relay API call failed',
@@ -173,8 +169,7 @@ class RelayApiClient
         Email   $email,
         ?string $idempotencyKey = null,
         bool    $isSystemNotification = false
-    ): SendEmailResponse
-    {
+    ): SendEmailResponse {
         $additionalHeaders = [];
 
         foreach ($email->getHeaders()->all() as $header) {

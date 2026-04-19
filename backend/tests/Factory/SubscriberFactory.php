@@ -40,8 +40,6 @@ final class SubscriberFactory extends PersistentObjectFactory
             'status' => self::faker()->randomElement(SubscriberStatus::cases()),
             'subscribe_ip' => self::faker()->text(255),
             'subscribed_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'opt_in_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'unsubscribe_reason' => self::faker()->text(255),
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
@@ -51,7 +49,7 @@ final class SubscriberFactory extends PersistentObjectFactory
      */
     protected function initialize(): static
     {
-        return $this// ->afterInstantiate(function(Subscriber $subscriber): void {})
-            ;
+        return $this // ->afterInstantiate(function(Subscriber $subscriber): void {})
+        ;
     }
 }

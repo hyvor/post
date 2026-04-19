@@ -1,5 +1,5 @@
 services:
-  hyvor-post-frontend:
+  frontend:
     container_name: hyvor-post-frontend
     build:
       context: .
@@ -24,7 +24,7 @@ services:
     networks:
       - hyvor-network
 
-  hyvor-post-backend:
+  backend:
     container_name: hyvor-post-backend
     build:
       context: .
@@ -48,7 +48,7 @@ services:
       test: ls
       disable: true
 
-  hyvor-post-embed:
+  embed:
     container_name: hyvor-post-embed
     build:
       context: .
@@ -66,7 +66,7 @@ services:
     networks:
       - hyvor-network
 
-  hyvor-post-archive:
+  archive:
     container_name: hyvor-post-archive
     build:
       context: .
