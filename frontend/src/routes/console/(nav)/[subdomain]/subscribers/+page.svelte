@@ -236,7 +236,7 @@
 					{#snippet end()}
 						<IconPlus />
 					{/snippet}
-					{I18n.t('console.subscribers.addSubscribers')}
+					{I18n.t('console.subscribers.addSubscriber')}
 				</Button>
 			</ButtonGroup>
 		</div>

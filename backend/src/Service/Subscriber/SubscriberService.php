@@ -178,10 +178,6 @@ class SubscriberService
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }
 
-        if ($updates->has('optInAt')) {
-            $subscriber->setOptInAt($updates->optInAt);
-        }
-
         if ($updates->has('metadata')) {
             $subscriber->setMetadata($updates->metadata);
         }

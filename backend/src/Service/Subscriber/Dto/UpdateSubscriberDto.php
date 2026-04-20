@@ -18,8 +18,6 @@ class UpdateSubscriberDto
 
     public ?\DateTimeImmutable $subscribedAt;
 
-    public ?\DateTimeImmutable $optInAt;
-
     /** @var NewsletterList[] */
     public array $lists;
 

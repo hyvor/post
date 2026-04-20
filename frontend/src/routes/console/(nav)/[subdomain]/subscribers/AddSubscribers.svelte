@@ -2,8 +2,9 @@
 	import {
 		FormControl,
 		Modal,
+		Radio,
 		SplitControl,
-		Textarea,
+		TextInput,
 		Validation,
 		toast
 	} from '@hyvor/design/components';
@@ -11,60 +12,53 @@
 	import ListSelector from './ListSelector.svelte';
 	import { createSubscriber } from '../../../lib/actions/subscriberActions';
 
-	export let show = false;
-
-	let emailsString = '';
-	let selectedList = $listStore.map((list) => list.id);
-
-	let emailsError: null | string = null;
-
-	let input: HTMLTextAreaElement | null = null;
-
-	$: if (show && input) {
-		input.focus();
+	interface Props {
+		show?: boolean;
 	}
 
-	let loading = false;
+	let { show = $bindable(false) }: Props = $props();
 
-	function addSubscribers() {
-		const emails = emailsString
-			.split('\n')
-			.map((email) => email.trim())
-			.filter((email) => email);
+	let email = $state('');
+	let selectedList = $state($listStore.map((list) => list.id));
+	let emailsError: null | string = $state(null);
+	let status: 'pending' | 'subscribed' = $state('pending');
+	let input: HTMLInputElement | undefined = $state(undefined);
 
-		if (emails.length === 0) {
-			emailsError = 'Please enter at least one email.';
-			return;
+	$effect(() => {
+		if (show && input) {
+			input.focus();
 		}
-		if (emails.length > 100) {
-			emailsError = 'You can add up to 100 emails at once.';
-			return;
-		}
+	});
 
+	let loading = $state(false);
+
+	function addSubscriber() {
 		if (selectedList.length === 0) {
 			return;
 		}
 
 		loading = true;
-		for (const email of emails) {
-			createSubscriber(email, selectedList)
-				.then((data) => {
-					show = false;
-					subscriberStore.update((subscriber) => [data, ...subscriber]);
-				})
-				.catch((error) => {
-					toast.error(`Failed to add subscriber: ${error.message}.`);
-				})
-				.finally(() => {
-					loading = false;
-				});
-		}
+		createSubscriber(email, {
+			lists: selectedList,
+			status,
+			list_skip_resubscribe_on: [] // force adding
+		})
+			.then((data) => {
+				show = false;
+				subscriberStore.update((subscriber) => [data, ...subscriber]);
+			})
+			.catch((error) => {
+				toast.error(`Failed to add subscriber: ${error.message}.`);
+			})
+			.finally(() => {
+				loading = false;
+			});
 	}
 </script>
 
 <Modal
 	bind:show
-	title="Add subscribers"
+	title="Add subscriber"
 	footer={{
 		confirm: {
 			text: 'Add'
@@ -73,23 +67,15 @@
 			text: 'Cancel'
 		}
 	}}
-	on:confirm={addSubscribers}
+	on:confirm={addSubscriber}
 	{loading}
 >
-	<p>
-		Subscribers will receive an email to confirm their opt-in and will be added only upon
-		confirmation.
-	</p>
-
-	<SplitControl label="Emails" caption="Add one email per line">
+	<SplitControl label="Email">
 		<FormControl>
-			<Textarea
-				rows={5}
-				placeholder="user@example.com
-other@example.org
-"
-				bind:value={emailsString}
-				bind:textarea={input!}
+			<TextInput
+				placeholder="user@example.org"
+				bind:value={email}
+				bind:input
 				state={emailsError ? 'error' : 'default'}
 			/>
 			{#if emailsError}
@@ -97,7 +83,31 @@ other@example.org
 			{/if}
 		</FormControl>
 	</SplitControl>
+
 	<SplitControl label="Lists">
-		<ListSelector bind:selectedList />
+		<ListSelector bind:selectedList setAllOnMount={true} />
+	</SplitControl>
+
+	<SplitControl label="Status">
+		<FormControl>
+			<Radio bind:group={status} name="status" value="pending">Pending (Recommended)</Radio>
+			<Radio bind:group={status} name="status" value="subscribed">Subscribed</Radio>
+		</FormControl>
+
+		<div class="status-note">
+			{#if status === 'pending'}
+				Subscriber will receive a confirmation email to opt-in.
+			{:else}
+				Make sure you have the subscriber's consent.
+			{/if}
+		</div>
 	</SplitControl>
 </Modal>
+
+<style>
+	.status-note {
+		margin-top: 5px;
+		font-size: 14px;
+		color: var(--text-light);
+	}
+</style>
