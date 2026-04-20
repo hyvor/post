@@ -6,6 +6,7 @@ export interface CreateSubscriberParams {
 	status?: 'pending' | 'subscribed';
 	list_skip_resubscribe_on?: string[];
 	lists_strategy?: 'merge' | 'overwrite' | 'remove';
+	list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
 	metadata?: Record<string, any>;
 	metadata_strategy?: 'merge' | 'overwrite';
 }

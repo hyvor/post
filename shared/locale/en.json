@@ -110,7 +110,6 @@
                 "label": "Status",
                 "all": "All",
                 "subscribed": "Subscribed",
-                "unsubscribed": "Unsubscribed",
                 "pending": "Pending"
             },
             "count": "{count} subscribers",
