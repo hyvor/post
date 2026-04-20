@@ -9,6 +9,7 @@ use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\AppConfig;
@@ -98,11 +99,22 @@ class FormController extends AbstractController
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
-            $update->lists = $lists;
+
+            // merge lists
+            $subscriberLists = $subscriber->getLists()->toArray();
+            foreach ($lists as $listToAdd) {
+                if (!array_find($subscriberLists, fn($l) => $l->getId() === $listToAdd->getId())) {
+                    $subscriberLists[] = $listToAdd;
+                }
+            }
+            $update->lists = $subscriberLists;
 
             $this->subscriberService->updateSubscriber(
                 $subscriber,
                 $update,
+                // generally, this should not be used since we do not remove lists
+                // but sending just in case to prevent removals being marked as unsubscribes
+                ListRemovalReason::OTHER
             );
         } else {
             $subscriber = $this->subscriberService->createSubscriber(
@@ -138,5 +150,4 @@ class FormController extends AbstractController
 
         return new Response($response);
     }
-
 }
