@@ -62,17 +62,6 @@ export function deleteSubscribers(ids: number[]) {
 	});
 }
 
-export function updateSubscribersStatus(ids: number[], status: NewsletterSubscriberStatus) {
-	return consoleApi.post<BulkSubscriberActionResponse>({
-		endpoint: 'subscribers/bulk',
-		data: {
-			action: 'status_change',
-			subscribers_ids: ids,
-			status
-		}
-	});
-}
-
 export function updateSubscribersMetadata(ids: number[], metadata: Record<string, string>) {
 	return consoleApi.post<BulkSubscriberActionResponse>({
 		endpoint: 'subscribers/bulk',

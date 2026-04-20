@@ -1,46 +1,56 @@
 <script lang="ts">
-	import { Button, Modal, toast } from '@hyvor/design/components';
+	import { FormControl, Modal, Radio, SplitControl, toast } from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
-	import { updateSubscribersStatus } from '../../../lib/actions/subscriberActions';
 	import {
 		selectedSubscriberIdsStore,
 		subscriberStore
 	} from '../../../lib/stores/newsletterStore';
 	import type { NewsletterSubscriberStatus } from '../../../types';
+	import { createSubscriber } from '../../../lib/actions/subscriberActions';
+	import { SimpleLoadingProgress } from './bulkLoader.svelte';
 
 	interface Props {
 		show: boolean;
 	}
 
 	let { show = $bindable() }: Props = $props();
+	let status: NewsletterSubscriberStatus = $state('pending');
+	let loader = new SimpleLoadingProgress();
 
-	let loading = $state(false);
+	async function handleStatusChange() {
+		loader.start($selectedSubscriberIdsStore.length);
 
-	async function handleStatusChange(status: NewsletterSubscriberStatus) {
-		loading = true;
-		updateSubscribersStatus($selectedSubscriberIdsStore, status)
-			.then((res) => {
-				toast.success(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
-				selectedSubscriberIdsStore.set([]);
-				show = false;
+		for (const subscriberId of $selectedSubscriberIdsStore) {
+			const subscriber = $subscriberStore.find((s) => s.id === subscriberId);
 
-				const updatedMap = new Map(res.subscribers.map((s) => [s.id, s.status]));
-				subscriberStore.update((subscribers) =>
-					subscribers.map((s) =>
-						updatedMap.has(s.id) ? { ...s, status: updatedMap.get(s.id)! } : s
-					)
+			if (!subscriber) {
+				loader.next();
+				continue;
+			}
+
+			if (subscriber.status === status) {
+				loader.next();
+				continue;
+			}
+
+			try {
+				const newSubscriber = await createSubscriber(subscriber.email, {
+					status
+				});
+				subscriberStore.update((subs) =>
+					subs.map((sub) => (sub.id === newSubscriber.id ? newSubscriber : sub))
 				);
-			})
-			.catch((error: unknown) => {
-				if (error instanceof Error) {
-					toast.error(error.message);
-				} else {
-					toast.error(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
-				}
-			})
-			.finally(() => {
-				loading = false;
-			});
+			} catch (e: any) {
+				toast.error('Unable to update subscriber: ' + e.message);
+				break;
+			}
+
+			loader.next();
+		}
+
+		loader.done();
+		toast.success(I18n.t('console.subscribers.bulk.statusUpdateSuccess'));
+		show = false;
 	}
 
 	const I18n = getI18n();
@@ -54,25 +64,13 @@
 			text: I18n.t('console.common.cancel')
 		}
 	}}
-	{loading}
+	loading={loader.getLoading()}
+	on:confirm={handleStatusChange}
 >
-	<div class="status-options">
-		<Button color="input" on:click={() => handleStatusChange('subscribed')}>
-			{I18n.t('console.subscribers.status.subscribed')}
-		</Button>
-		<Button color="input" on:click={() => handleStatusChange('unsubscribed')}>
-			{I18n.t('console.subscribers.status.unsubscribed')}
-		</Button>
-		<Button color="input" on:click={() => handleStatusChange('pending')}>
-			{I18n.t('console.subscribers.status.pending')}
-		</Button>
-	</div>
+	<SplitControl label="Status">
+		<FormControl>
+			<Radio name="status" bind:group={status} value="pending">Pending</Radio>
+			<Radio name="status" bind:group={status} value="subscribed">Subscribed</Radio>
+		</FormControl>
+	</SplitControl>
 </Modal>
-
-<style>
-	.status-options {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-</style>
