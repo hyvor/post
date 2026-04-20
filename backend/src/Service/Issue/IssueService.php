@@ -28,9 +28,7 @@ class IssueService
         private NewsletterListService  $newsletterListService,
         private SendingProfileService  $sendingProfileService,
         private EmailSenderService     $emailSenderService,
-    )
-    {
-    }
+    ) {}
 
     public function getIssueByUuid(string $uuid): ?Issue
     {
@@ -40,7 +38,7 @@ class IssueService
     public function createIssueDraft(Newsletter $newsletter): Issue
     {
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
-        $listIds = $lists->map(fn(NewsletterList $list) => $list->getId())->toArray();
+        $listIds = array_map(fn(NewsletterList $list) => $list->getId(), $lists);
         $sendingProfile = $this->sendingProfileService->getCurrentDefaultSendingProfileOfNewsletter($newsletter);
 
         $issue = new Issue()
@@ -112,12 +110,11 @@ class IssueService
      * @return ArrayCollection<int, Issue>
      */
     public function getIssues(
-        Newsletter   $newsletter,
-        int          $limit,
-        int          $offset,
+        Newsletter $newsletter,
+        int $limit,
+        int $offset,
         ?IssueStatus $status = null,
-    ): ArrayCollection
-    {
+    ): ArrayCollection {
         $where = ['newsletter' => $newsletter];
 
         if ($status !== null) {
@@ -130,8 +127,8 @@ class IssueService
                     $where,
                     ['id' => 'DESC'],
                     $limit,
-                    $offset
-                )
+                    $offset,
+                ),
         );
     }
 
@@ -148,7 +145,8 @@ class IssueService
     {
         $newsletter = $issue->getNewsletter();
 
-        $verifiedDomains = array_map(fn($domain) => $domain->getDomain(),
+        $verifiedDomains = array_map(
+            fn($domain) => $domain->getDomain(),
             $this->domainService->getVerifiedDomainsByOrganizationId($newsletter->getOrganizationId())
         );
         $newsletterUserEmails = $this->userService->getNewsletterUserEmails($newsletter);

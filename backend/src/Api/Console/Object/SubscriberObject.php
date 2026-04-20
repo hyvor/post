@@ -22,7 +22,7 @@ class SubscriberObject
     public ?int $subscribed_at;
 
     /**
-     * @var array<string, string>
+     * @var array<string, scalar>
      */
     public array $metadata;
 
