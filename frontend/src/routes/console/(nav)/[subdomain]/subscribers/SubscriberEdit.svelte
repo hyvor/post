@@ -32,7 +32,8 @@
 		const data: CreateSubscriberParams = {
 			lists_strategy: 'overwrite',
 			metadata_strategy: 'overwrite',
-			list_skip_resubscribe_on: []
+			list_skip_resubscribe_on: [],
+			list_removal_reason: 'other'
 		};
 
 		if (status !== subscriber.status) {

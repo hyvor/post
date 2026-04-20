@@ -157,12 +157,6 @@
 							{I18n.t('console.subscribers.status.subscribed')}
 						</ActionListItem>
 						<ActionListItem
-							on:click={() => selectStatus('unsubscribed')}
-							selected={status === 'unsubscribed'}
-						>
-							{I18n.t('console.subscribers.status.unsubscribed')}
-						</ActionListItem>
-						<ActionListItem
 							on:click={() => selectStatus('pending')}
 							selected={status === 'pending'}
 						>
