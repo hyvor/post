@@ -112,14 +112,13 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         true|array $scopes = true,
         bool $useSession = false,
     ): Response {
+        $newsletterId = null;
         if ($newsletter instanceof Newsletter) {
             $newsletterId = $newsletter->getId();
-        } else {
-            if ($newsletter) {
-                $newsletterId = $newsletter;
-                $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
-                $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
-            }
+        } elseif ($newsletter) {
+            $newsletterId = $newsletter;
+            $newsletter = NewsletterFactory::findBy(['id' => $newsletterId]);
+            $newsletter = count($newsletter) > 0 ? $newsletter[0] : null;
         }
 
         if ($newsletter) {

@@ -41,7 +41,7 @@ class AuthorizationTest extends WebTestCase
         $this->assertResponseStatusCodeSame(401);
         $this->assertSame(
             "Unauthorized",
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -52,12 +52,12 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_AUTHORIZATION" => "WrongHeader",
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
             'Authorization header must start with "Bearer ".',
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -68,12 +68,12 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_AUTHORIZATION" => "Bearer ",
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
             "API key is missing or empty.",
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -84,7 +84,7 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_AUTHORIZATION" => "Bearer InvalidApiKey",
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame("Invalid API key.", $this->getJson()["message"]);
@@ -102,7 +102,7 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(401);
         $this->assertSame("Unauthorized", $this->getJson()["message"]);
@@ -115,7 +115,7 @@ class AuthorizationTest extends WebTestCase
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
             "GET",
-            "/api/console/issues"
+            "/api/console/issues",
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame("Current organization is missing.", $this->getJson()["message"]);
@@ -129,8 +129,8 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -139,7 +139,7 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_X_ORGANIZATION_ID" => 2,
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame("org_mismatch", $this->getJson()["message"]);
@@ -153,8 +153,8 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -163,7 +163,7 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_X_ORGANIZATION_ID" => 1,
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame("X-Newsletter-ID is required for this endpoint.", $this->getJson()["message"]);
@@ -177,8 +177,8 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
@@ -201,8 +201,8 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
         $newsletter = NewsletterFactory::createOne(['organization_id' => 2]);
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -212,12 +212,12 @@ class AuthorizationTest extends WebTestCase
             server: [
                 "HTTP_X_ORGANIZATION_ID" => 1,
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
             "does_not_belong_the_resource",
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -229,8 +229,8 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
         $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -240,12 +240,12 @@ class AuthorizationTest extends WebTestCase
             server: [
                 "HTTP_X_ORGANIZATION_ID" => 1,
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
             "You do not have access to this newsletter.",
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -256,12 +256,12 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_WRITE]
+            scopes: [Scope::ISSUES_WRITE],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
             "You do not have the required scope 'issues.read' to access this resource.",
-            $this->getJson()["message"]
+            $this->getJson()["message"],
         );
     }
 
@@ -274,23 +274,23 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_READ]
+            scopes: [Scope::ISSUES_READ],
         );
         $this->assertResponseStatusCodeSame(200);
 
         $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
         $this->assertInstanceOf(
             Newsletter::class,
-            $newsletterFromAttr
+            $newsletterFromAttr,
         );
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
-        $apiKey = $this->em->getRepository(ApiKey::class)->findOneBy(['newsletter' => $newsletter->_real()]);
+        $apiKey = $this->em->getRepository(ApiKey::class)->findOneBy(['newsletter' => $newsletter]);
 
         $this->assertInstanceOf(ApiKey::class, $apiKey);
         $this->assertSame(
             '2025-06-01 00:00:00',
-            $apiKey->getLastAccessedAt()?->format('Y-m-d H:i:s')
+            $apiKey->getLastAccessedAt()?->format('Y-m-d H:i:s'),
         );
     }
 
@@ -302,15 +302,15 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
         $newsletter = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
         UserFactory::createOne([
             'hyvor_user_id' => 1,
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -320,14 +320,14 @@ class AuthorizationTest extends WebTestCase
             server: [
                 "HTTP_X_ORGANIZATION_ID" => 1,
                 "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
-            ]
+            ],
         );
         $this->assertResponseStatusCodeSame(200);
 
         $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
         $this->assertInstanceOf(
             Newsletter::class,
-            $newsletterFromAttr
+            $newsletterFromAttr,
         );
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
@@ -344,20 +344,20 @@ class AuthorizationTest extends WebTestCase
             new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            )
+                role: 'admin',
+            ),
         );
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())],
         );
 
         $newsletter = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
         UserFactory::createOne([
             'hyvor_user_id' => 1,
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
@@ -379,7 +379,7 @@ class AuthorizationTest extends WebTestCase
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request(
             "GET",
-            "/api/console/init"
+            "/api/console/init",
         );
         $this->assertResponseStatusCodeSame(200);
 

@@ -72,20 +72,18 @@ class NewsletterListService
     }
 
     /**
-     * @return ArrayCollection<int, NewsletterList>
+     * @return NewsletterList[]
      */
-    public function getListsOfNewsletter(Newsletter $newsletter): ArrayCollection
+    public function getListsOfNewsletter(Newsletter $newsletter): array
     {
-        return new ArrayCollection(
-            $this->em
-                ->getRepository(NewsletterList::class)
-                ->findBy(
-                    [
-                        'newsletter' => $newsletter,
-                        'deleted_at' => null,
-                    ],
-                ),
-        );
+        return $this->em
+            ->getRepository(NewsletterList::class)
+            ->findBy(
+                [
+                    'newsletter' => $newsletter,
+                    'deleted_at' => null,
+                ],
+            );
     }
 
     public function updateNewsletterList(NewsletterList $list, string $name, ?string $description): NewsletterList
