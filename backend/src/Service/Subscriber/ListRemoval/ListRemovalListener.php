@@ -2,10 +2,7 @@
 
 namespace App\Service\Subscriber\ListRemoval;
 
-use App\Entity\SubscriberListRemoval;
 use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -79,5 +76,4 @@ class ListRemovalListener
             ],
         );
     }
-
 }
