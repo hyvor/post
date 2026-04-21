@@ -32,7 +32,7 @@ class PreferencesTest extends WebTestCase
 
         $response = $this->publicApi(
             'POST',
-            '/subscriber/unsubscribe',
+            '/subscriber/preferences',
             [
                 'token' => $token,
             ]
@@ -48,7 +48,6 @@ class PreferencesTest extends WebTestCase
 
         $listRemovals = $this->getEm()->getRepository(SubscriberListRemoval::class)->findAll();
         $listRemoval = $listRemovals[0];
-        $this->assertNotNull($listRemoval);
         $this->assertSame($lists[0]->getId(), $listRemoval->getList()->getId());
         $this->assertSame($subscriber->getId(), $listRemoval->getSubscriber()->getId());
         $this->assertSame(ListRemovalReason::UNSUBSCRIBE, $listRemoval->getReason());
@@ -58,7 +57,7 @@ class PreferencesTest extends WebTestCase
     {
         $response = $this->publicApi(
             'POST',
-            '/subscriber/unsubscribe',
+            '/subscriber/preferences',
             [
                 'token' => 'invalidtoken',
             ]
@@ -75,7 +74,7 @@ class PreferencesTest extends WebTestCase
 
         $response = $this->publicApi(
             'POST',
-            '/subscriber/unsubscribe',
+            '/subscriber/preferences',
             [
                 'token' => $token,
             ]
@@ -92,7 +91,7 @@ class PreferencesTest extends WebTestCase
 
         $response = $this->publicApi(
             'POST',
-            '/subscriber/unsubscribe',
+            '/subscriber/preferences',
             [
                 'token' => $token,
             ]

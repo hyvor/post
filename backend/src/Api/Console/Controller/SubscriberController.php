@@ -315,13 +315,7 @@ class SubscriberController extends AbstractController
 
             foreach ($subscribers as $subscriber) {
                 $updates = new UpdateSubscriberDto();
-
-                if ($status === SubscriberStatus::SUBSCRIBED && $subscriber->getOptInAt() === null) {
-                    $updates->status = SubscriberStatus::PENDING;
-                } else {
-                    $updates->status = $status;
-                }
-
+                $updates->status = $status;
                 $this->subscriberService->updateSubscriber($subscriber, $updates);
             }
 

@@ -75,14 +75,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertStringContainsString('Subscribers status updated successfully', (string)$response->getContent());
 
-        /** @var Subscriber[] $subscribers */
-        $subscribers = $this->em->getRepository(Subscriber::class)
-            ->createQueryBuilder('s')
-            ->where('s.status != :status')
-            ->setParameter('status', SubscriberStatus::UNSUBSCRIBED->value)
-            ->getQuery()
-            ->getResult();
-
+        $subscribers = $this->em->getRepository(Subscriber::class)->findAll();
         $this->assertCount(0, $subscribers);
     }
 

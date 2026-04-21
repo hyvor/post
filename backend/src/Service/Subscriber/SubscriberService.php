@@ -23,6 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class SubscriberService
 {
@@ -35,6 +36,7 @@ class SubscriberService
         private EntityManagerInterface $em,
         private SubscriberRepository $subscriberRepository,
         private EventDispatcherInterface $ed,
+        private MessageBusInterface $messageBus,
     ) {}
 
     /**
