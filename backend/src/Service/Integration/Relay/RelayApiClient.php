@@ -17,7 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class RelayApiClient
+class RelayApiClient implements RelayApiClientInterface
 {
     const int MAX_ATTEMPTS = 3;
     /** @var int[] $BACKOFF */

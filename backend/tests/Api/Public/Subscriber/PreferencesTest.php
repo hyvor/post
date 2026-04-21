@@ -2,24 +2,31 @@
 
 namespace App\Tests\Api\Public\Subscriber;
 
-use App\Entity\Type\SubscriberStatus;
+use App\Entity\SubscriberListRemoval;
+use App\Entity\Type\ListRemovalReason;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendFactory;
+use App\Tests\Factory\SubscriberFactory;
 
-class UnsubscribeTest extends WebTestCase
+class PreferencesTest extends WebTestCase
 {
     public function test_unsubscribe(): void
     {
         $newsletter = NewsletterFactory::createOne();
-        NewsletterListFactory::createMany(5, [
+
+        $lists = NewsletterListFactory::createMany(5, [
             'newsletter' => $newsletter
         ]);
+
+        $subscriber = SubscriberFactory::createOne([
+            'lists' => [$lists[0]]
+        ]);
         $send = SendFactory::createOne([
+            'subscriber' => $subscriber,
             'newsletter' => $newsletter,
         ]);
-        $subscriber = $send->getSubscriber();
 
         $token = $this->encryption->encrypt($send->getId());
 
@@ -31,15 +38,20 @@ class UnsubscribeTest extends WebTestCase
             ]
         );
 
-
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
         $this->assertNotFalse($json);
         $this->assertIsArray($json['lists']);
         $this->assertCount(5, $json['lists']);
 
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
-        $this->assertNotNull($subscriber->getUnsubscribedAt());
+        $this->assertSame([], $subscriber->getLists()->toArray());
+
+        $listRemovals = $this->getEm()->getRepository(SubscriberListRemoval::class)->findAll();
+        $listRemoval = $listRemovals[0];
+        $this->assertNotNull($listRemoval);
+        $this->assertSame($lists[0]->getId(), $listRemoval->getList()->getId());
+        $this->assertSame($subscriber->getId(), $listRemoval->getSubscriber()->getId());
+        $this->assertSame(ListRemovalReason::UNSUBSCRIBE, $listRemoval->getReason());
     }
 
     public function test_unsubscribe_with_invalid_token(): void

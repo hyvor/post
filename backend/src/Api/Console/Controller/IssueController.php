@@ -45,9 +45,7 @@ class IssueController extends AbstractController
         private DomainService         $domainService,
         private UserService           $userService,
         private SendingProfileService $sendingProfileService
-    )
-    {
-    }
+    ) {}
 
     #[Route('/issues', methods: 'GET')]
     #[ScopeRequired(Scope::ISSUES_READ)]
@@ -89,8 +87,7 @@ class IssueController extends AbstractController
         Issue                                 $issue,
         Newsletter                            $newsletter,
         #[MapRequestPayload] UpdateIssueInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $updates = new UpdateIssueDto();
 
         if ($input->has('subject')) {
@@ -132,7 +129,7 @@ class IssueController extends AbstractController
         ));
     }
 
-    #[Route ('/issues/{id}', methods: 'DELETE')]
+    #[Route('/issues/{id}', methods: 'DELETE')]
     #[ScopeRequired(Scope::ISSUES_WRITE)]
     public function deleteIssue(Issue $issue): JsonResponse
     {
@@ -143,7 +140,7 @@ class IssueController extends AbstractController
         return $this->json([]);
     }
 
-    #[Route ('/issues/{id}/send', methods: 'POST')]
+    #[Route('/issues/{id}/send', methods: 'POST')]
     #[ScopeRequired(Scope::ISSUES_WRITE)]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
@@ -176,7 +173,7 @@ class IssueController extends AbstractController
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);
-        if ($sendCountThisMonth + $subscribersCount >= $license->emails)
+        if ($sendCountThisMonth + $subscribersCount >= $license->emails) {
             return $this->json([
                 'message' => 'would_exceed_limit',
                 'data' => [
@@ -184,6 +181,7 @@ class IssueController extends AbstractController
                     'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount)
                 ]
             ], 422);
+        }
 
         $updates = new UpdateIssueDto();
         $updates->status = IssueStatus::SENDING;
@@ -222,13 +220,12 @@ class IssueController extends AbstractController
         ]);
     }
 
-    #[Route ('/issues/{id}/test', methods: 'POST')]
+    #[Route('/issues/{id}/test', methods: 'POST')]
     #[ScopeRequired(Scope::ISSUES_WRITE)]
     public function sendTest(
         Issue                              $issue,
         #[MapRequestPayload] SendTestInput $input
-    ): JsonResponse
-    {
+    ): JsonResponse {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
         }
@@ -252,7 +249,7 @@ class IssueController extends AbstractController
         ]);
     }
 
-    #[Route ('/issues/{id}/preview', methods: 'GET')]
+    #[Route('/issues/{id}/preview', methods: 'GET')]
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function previewIssue(Issue $issue): JsonResponse
     {
@@ -268,7 +265,7 @@ class IssueController extends AbstractController
         ]);
     }
 
-    #[Route ('/issues/{id}/progress', methods: 'GET')]
+    #[Route('/issues/{id}/progress', methods: 'GET')]
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
@@ -276,7 +273,7 @@ class IssueController extends AbstractController
         return $this->json($progress);
     }
 
-    #[Route ('/issues/{id}/sends', methods: 'GET')]
+    #[Route('/issues/{id}/sends', methods: 'GET')]
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getIssueSends(Request $request, Issue $issue): JsonResponse
     {
@@ -298,7 +295,7 @@ class IssueController extends AbstractController
         return $this->json($sends);
     }
 
-    #[Route ('/issues/{id}/report', methods: 'GET')]
+    #[Route('/issues/{id}/report', methods: 'GET')]
     #[ScopeRequired(Scope::ISSUES_READ)]
     public function getIssueReport(Issue $issue): JsonResponse
     {

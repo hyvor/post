@@ -7,6 +7,7 @@ use App\Entity\Send;
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\Exception\RelayApiException;
 use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\Integration\Relay\RelayApiClientInterface;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
 use App\Service\Template\TextTemplateRenderer;
@@ -17,15 +18,13 @@ class EmailSenderService
 {
 
     public function __construct(
-        private RelayApiClient        $relayApiClient,
+        private RelayApiClientInterface        $relayApiClient,
         private SendingProfileService $sendingProfileService,
         private HtmlTemplateRenderer  $htmlEmailTemplateRenderer,
         private TextTemplateRenderer  $textEmailTemplateRenderer,
         private AppConfig             $appConfig,
         private Encryption            $encryption
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws RelayApiException
@@ -34,8 +33,7 @@ class EmailSenderService
         Issue   $issue,
         ?Send   $send = null,
         ?string $email = null,
-    ): void
-    {
+    ): void {
         $toEmail = $email ?? $send?->getEmail();
         assert(is_string($toEmail));
 

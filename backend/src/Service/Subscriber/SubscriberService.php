@@ -216,23 +216,6 @@ class SubscriberService
         return $this->subscriberRepository->findOneBy(['newsletter' => $newsletter, 'email' => $email]);
     }
 
-    public function unsubscribeBySend(
-        Send $send,
-        ?\DateTimeImmutable $at = null,
-        ?string $reason = null,
-    ): void {
-        $subscriber = $send->getSubscriber();
-
-        $update = new UpdateSubscriberDto();
-
-        $update->status = SubscriberStatus::UNSUBSCRIBED;
-        $update->optInAt = null;
-        $update->unsubscribedAt = $at ?? $this->now();
-        $update->unsubscribedReason = $reason;
-
-        $this->updateSubscriber($subscriber, $update);
-    }
-
     public function unsubscribeByEmail(
         string $email,
         ?\DateTimeImmutable $at = null,
