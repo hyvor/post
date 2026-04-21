@@ -42,14 +42,6 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
                 $metadata[1]->getKey() => Str::random(5),
             ],
         ]);
-        SubscriberFactory::createOne([
-            'newsletter' => $newsletter,
-            'status' => SubscriberStatus::UNSUBSCRIBED,
-            'metadata' => [
-                $metadata[0]->getKey() => Str::random(5),
-                $metadata[1]->getKey() => Str::random(5),
-            ],
-        ]);
 
         $export = SubscriberExportFactory::createOne([
             'newsletter' => $newsletter,
@@ -73,8 +65,8 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
 
         $read = $filesystem->read(
             $newsletter->getId() . '/' .
-            MediaFolder::EXPORT->value . '/' .
-            $media[0]->getUuid() . '.' . $media[0]->getExtension(),
+                MediaFolder::EXPORT->value . '/' .
+                $media[0]->getUuid() . '.' . $media[0]->getExtension(),
         );
 
         // Headers
@@ -116,8 +108,8 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
         assert($filesystem instanceof Filesystem);
         $read = $filesystem->read(
             $newsletter->getId() . '/' .
-            MediaFolder::EXPORT->value . '/' .
-            $media[0]->getUuid() . '.' . $media[0]->getExtension(),
+                MediaFolder::EXPORT->value . '/' .
+                $media[0]->getUuid() . '.' . $media[0]->getExtension(),
         );
 
         // Only default headers should be present
