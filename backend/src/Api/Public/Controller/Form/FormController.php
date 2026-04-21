@@ -124,6 +124,7 @@ class FormController extends AbstractController
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
                 $ip,
+                sendConfirmationEmail: true
             );
         }
 

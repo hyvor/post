@@ -6,6 +6,7 @@ use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Content\ContentService;
 use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\Integration\Relay\RelayApiClientInterface;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -33,7 +34,7 @@ class SendConfirmationMailMessageHandler
         private TemplateVariableService $templateVariableService,
         private HtmlTemplateRenderer $htmlTemplateRenderer,
         private readonly StringsFactory $stringsFactory,
-        private RelayApiClient $relayApiClient,
+        private RelayApiClientInterface $relayApiClient,
         private EntityManagerInterface $em,
         private Environment $twig,
     ) {}

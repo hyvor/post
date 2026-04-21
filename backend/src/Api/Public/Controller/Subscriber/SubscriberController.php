@@ -5,6 +5,7 @@ namespace App\Api\Public\Controller\Subscriber;
 use App\Api\Public\Input\Subscriber\ResubscribeInput;
 use App\Api\Public\Input\Subscriber\UnsubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
@@ -68,7 +69,7 @@ class SubscriberController extends AbstractController
         return new JsonResponse();
     }
 
-    #[Route('/subscriber/unsubscribe', methods: ['POST'])]
+    #[Route('/subscriber/preferences', methods: ['POST'])]
     public function unsubscribe(
         #[MapRequestPayload] UnsubscribeInput $input,
     ): JsonResponse {
@@ -88,11 +89,34 @@ class SubscriberController extends AbstractController
             throw new BadRequestHttpException('Newsletter send not found.');
         }
 
-        $this->subscriberService->unsubscribeBySend($send);
+        $subscriber = $send->getSubscriber();
+        $lists = [];
+
+        if (count($input->list_ids)) {
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
+                $send->getNewsletter(),
+                $input->list_ids,
+            );
+
+            if ($missingListIds !== null) {
+                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
+
+            $lists = $this->newsletterListService->getListsByIds($send->getNewsletter(), $input->list_ids);
+        }
+
+        $updates = new UpdateSubscriberDto();
+        $updates->lists = $lists;
+        $this->subscriberService->updateSubscriber(
+            $subscriber,
+            $updates,
+            listRemovalReason: ListRemovalReason::UNSUBSCRIBE
+        );
 
         $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
 
         return new JsonResponse([
+            'email' => $subscriber->getEmail(),
             'lists' => array_map(fn($list) => new FormListObject($list), $lists),
         ]);
     }

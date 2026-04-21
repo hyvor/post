@@ -8,4 +8,13 @@ class UnsubscribeInput
 {
     #[Assert\NotBlank]
     public string $token;
+
+    /**
+     * @var int[]
+     */
+    #[Assert\All([
+        new Assert\NotBlank(),
+        new Assert\Type('int'),
+    ])]
+    public array $list_ids = [];
 }
