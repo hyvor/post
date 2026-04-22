@@ -153,7 +153,6 @@
 		label={I18n.t('console.settings.metadata.displayName')}
 		caption={I18n.t('console.settings.metadata.displayNameCaption')}
 	>
-		<TextInput block placeholder="Subscription Plan" bind:value={name} maxlength={255}
-		></TextInput>
+		<TextInput block placeholder="Subscription Plan" bind:value={name} maxlength={255}></TextInput>
 	</SplitControl>
 </Modal>

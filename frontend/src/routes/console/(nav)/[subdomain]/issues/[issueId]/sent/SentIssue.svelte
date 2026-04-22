@@ -1,14 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getIssueReport, type IssueCounts } from '../../../../../lib/actions/issueActions';
-	import {
-		Callout,
-		IconButton,
-		Loader,
-		TextInput,
-		toast,
-		Tooltip
-	} from '@hyvor/design/components';
+	import { Callout, IconButton, Loader, TextInput, toast, Tooltip } from '@hyvor/design/components';
 	import IconExclamationTriangle from '@hyvor/icons/IconExclamationTriangle';
 	import IconCopy from '@hyvor/icons/IconCopy';
 	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';

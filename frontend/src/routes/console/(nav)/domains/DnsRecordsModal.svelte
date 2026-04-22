@@ -28,11 +28,7 @@
 		<SplitControl label="Host" caption="DNS record host">
 			<div class="record-value">
 				<div class="value-text">{domain.dkim_txt_name}</div>
-				<Button
-					size="x-small"
-					color="input"
-					on:click={() => copyAndToast(domain.dkim_txt_name)}
-				>
+				<Button size="x-small" color="input" on:click={() => copyAndToast(domain.dkim_txt_name)}>
 					COPY
 				</Button>
 			</div>
@@ -41,11 +37,7 @@
 		<SplitControl label="Value" caption="DNS record value/content">
 			<div class="record-value">
 				<div class="value-text value-long">{domain.dkim_txt_value}</div>
-				<Button
-					size="x-small"
-					color="input"
-					on:click={() => copyAndToast(domain.dkim_txt_value)}
-				>
+				<Button size="x-small" color="input" on:click={() => copyAndToast(domain.dkim_txt_value)}>
 					COPY
 				</Button>
 			</div>
