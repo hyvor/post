@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Subscriber\Subscriber\Message;
+namespace App\Service\Subscriber\Message;
 
 use App\Service\App\Messenger\MessageTransport;
 use Symfony\Component\Messenger\Attribute\AsMessage;

@@ -11,7 +11,7 @@ final class Version20260422051619 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add subscribers email index';
+        return 'Add subscribers email index and unsubscribe_reason column';
     }
 
     public function up(Schema $schema): void
