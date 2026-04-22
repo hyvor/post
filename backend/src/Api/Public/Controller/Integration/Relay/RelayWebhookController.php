@@ -43,7 +43,6 @@ class RelayWebhookController extends AbstractController
     public function __construct(
         private AppConfig         $appConfig,
         private DomainService     $domainService,
-        private SubscriberService $subscriberService,
         private SendService       $sendService,
         private MessageBusInterface $messageBus,
     ) {}
