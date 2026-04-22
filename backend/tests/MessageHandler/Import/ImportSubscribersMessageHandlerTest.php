@@ -32,7 +32,7 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
         /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
-            $newsletter->_real(),
+            $newsletter,
             MediaFolder::IMPORT,
             $file,
         );
@@ -53,7 +53,7 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
             'status' => SubscriberImportStatus::IMPORTING,
             'fields' => [
                 "email" => "email",
-                "lists" => "lists"
+                "lists" => "lists",
             ],
         ]);
 
@@ -63,8 +63,8 @@ class ImportSubscribersMessageHandlerTest extends KernelTestCase
         $this->transport('async')->throwExceptions()->process();
 
         $importedSubscribers = $this->em->getRepository(Subscriber::class)->findBy(
-            ['newsletter' => $newsletter->_real()],
-            ['id' => 'ASC']
+            ['newsletter' => $newsletter],
+            ['id' => 'ASC'],
         );
 
         $this->assertCount(3, $importedSubscribers);

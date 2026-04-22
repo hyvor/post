@@ -33,14 +33,13 @@
 	<div class="value-wrap">
 		{#if enabled}
 			<span class="value"
-				>{enabled ? counts.total.toLocaleString() : '-'}{#if percent}<span class="percent"
-						>%</span
+				>{enabled ? counts.total.toLocaleString() : '-'}{#if percent}<span class="percent">%</span
 					>{/if}</span
 			>
 			{#if change !== null && enabled}
 				<span class="change" class:positive={change >= 0} class:negative={change < 0}>
-					{change >= 0 ? '+' : ''}{change.toLocaleString()}{#if percent}<span
-							class="percent">%</span
+					{change >= 0 ? '+' : ''}{change.toLocaleString()}{#if percent}<span class="percent"
+							>%</span
 						>{/if}
 					<span class="last-30d-tag">{I18n.t('console.billing.usage.30days')}</span>
 				</span>

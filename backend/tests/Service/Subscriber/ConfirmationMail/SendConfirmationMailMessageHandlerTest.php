@@ -1,25 +1,23 @@
 <?php
 
-namespace App\Tests\MessageHandler\Subscriber;
+namespace App\Tests\Service\Subscriber\ConfirmationMail;
 
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Subscriber\Message\SubscriberCreatedMessage;
-use App\Service\Subscriber\MessageHandler\SubscriberCreatedMessageHandler;
+use App\Service\Subscriber\ConfirmationMail\SendConfirmationMailMessage;
+use App\Service\Subscriber\ConfirmationMail\SendConfirmationMailMessageHandler;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
-#[CoversClass(SubscriberCreatedMessageHandler::class)]
-#[CoversClass(SubscriberCreatedMessage::class)]
-class SubscriberCreatedMessageHandlerTest extends KernelTestCase
+#[CoversClass(SendConfirmationMailMessageHandler::class)]
+#[CoversClass(SendConfirmationMailMessage::class)]
+class SendConfirmationMailMessageHandlerTest extends KernelTestCase
 {
     use ClockSensitiveTrait;
 
@@ -65,7 +63,7 @@ class SubscriberCreatedMessageHandlerTest extends KernelTestCase
 
         $this->mockRelayClient($callback);
 
-        $message = new SubscriberCreatedMessage($subscriber->getId());
+        $message = new SendConfirmationMailMessage($subscriber->getId());
         $this->getMessageBus()->dispatch($message);
 
         $transport = $this->transport('async');

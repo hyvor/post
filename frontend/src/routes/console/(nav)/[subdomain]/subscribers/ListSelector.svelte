@@ -3,7 +3,11 @@
 	import { onMount } from 'svelte';
 	import { listStore } from '../../../lib/stores/newsletterStore';
 
-	export let selectedList = [] as number[];
+	let {
+		selectedList = $bindable([] as number[]),
+		setAllOnMount = false,
+		allowZero = false
+	} = $props();
 
 	function onListChange(id: number) {
 		if (selectedList.includes(id)) {
@@ -14,7 +18,9 @@
 	}
 
 	onMount(() => {
-		selectedList = $listStore.map((list) => list.id);
+		if (setAllOnMount) {
+			selectedList = $listStore.map((list) => list.id);
+		}
 	});
 </script>
 
@@ -25,7 +31,7 @@
 		</Checkbox>
 	</div>
 {/each}
-{#if selectedList.length === 0}
+{#if selectedList.length === 0 && !allowZero}
 	<Validation type="error">Please select at least one list.</Validation>
 {/if}
 

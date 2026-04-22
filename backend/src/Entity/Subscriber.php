@@ -45,12 +45,6 @@ class Subscriber
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $subscribed_at = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $opt_in_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $unsubscribed_at = null;
-
     #[ORM\Column(enumType: SubscriberSource::class)]
     private SubscriberSource $source;
 
@@ -60,14 +54,14 @@ class Subscriber
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subscribe_ip = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $unsubscribe_reason = null;
-
     /**
-     * @var array<string, string>
+     * @var array<string, scalar>
      */
     #[ORM\Column(type: 'json', options: ['default' => '{}'])]
     private array $metadata = [];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $unsubscribe_reason = null;
 
     public function __construct()
     {
@@ -158,30 +152,6 @@ class Subscriber
         return $this;
     }
 
-    public function getOptInAt(): ?\DateTimeImmutable
-    {
-        return $this->opt_in_at;
-    }
-
-    public function setOptInAt(?\DateTimeImmutable $opt_in_at): static
-    {
-        $this->opt_in_at = $opt_in_at;
-
-        return $this;
-    }
-
-    public function getUnsubscribedAt(): ?\DateTimeImmutable
-    {
-        return $this->unsubscribed_at;
-    }
-
-    public function setUnsubscribedAt(?\DateTimeImmutable $unsubscribed_at): static
-    {
-        $this->unsubscribed_at = $unsubscribed_at;
-
-        return $this;
-    }
-
     public function getSource(): SubscriberSource
     {
         return $this->source;
@@ -218,25 +188,21 @@ class Subscriber
         return $this;
     }
 
-    public function getUnsubscribeReason(): ?string
-    {
-        return $this->unsubscribe_reason;
-    }
-
-    public function setUnsubscribeReason(?string $unsubscribe_reason): static
-    {
-        $this->unsubscribe_reason = $unsubscribe_reason;
-
-        return $this;
-    }
-
-
     /**
      * @return Collection<int, NewsletterList>
      */
     public function getLists(): Collection
     {
         return $this->lists;
+    }
+
+    /**
+     * @param Collection<int, NewsletterList> $lists
+     */
+    public function setLists(Collection $lists): static
+    {
+        $this->lists = $lists;
+        return $this;
     }
 
     public function addList(NewsletterList $list): self
@@ -254,7 +220,7 @@ class Subscriber
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, scalar>
      */
     public function getMetadata(): array
     {
@@ -262,11 +228,23 @@ class Subscriber
     }
 
     /**
-     * @param array<string, string> $metadata
+     * @param array<string, scalar> $metadata
      */
     public function setMetadata(array $metadata): static
     {
         $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    public function getUnsubscribeReason(): ?string
+    {
+        return $this->unsubscribe_reason;
+    }
+
+    public function setUnsubscribeReason(?string $unsubscribe_reason): static
+    {
+        $this->unsubscribe_reason = $unsubscribe_reason;
 
         return $this;
     }

@@ -10,9 +10,7 @@
 	import { debouncedUpdateDraftIssue } from '../draftActions';
 
 	let sendingProfileId = $state(
-		$draftIssueStore.sending_profile_id ??
-			$sendingProfilesStore.find((p) => p.is_default)?.id ??
-			0
+		$draftIssueStore.sending_profile_id ?? $sendingProfilesStore.find((p) => p.is_default)?.id ?? 0
 	);
 
 	const I18n = getI18n();
@@ -33,17 +31,13 @@
 							{profile.from_email}
 
 							{#if profile.is_system}
-								<Tooltip
-									text={I18n.t('console.issues.draft.sendingProfile.system')}
-								>
+								<Tooltip text={I18n.t('console.issues.draft.sendingProfile.system')}>
 									<Tag size="small" color="blue">System</Tag>
 								</Tooltip>
 							{/if}
 
 							{#if profile.is_default}
-								<Tooltip
-									text={I18n.t('console.issues.draft.sendingProfile.default')}
-								>
+								<Tooltip text={I18n.t('console.issues.draft.sendingProfile.default')}>
 									<Tag size="small" color="green">Default</Tag>
 								</Tooltip>
 							{/if}
@@ -73,9 +67,7 @@
 								{#if profile.brand_logo}
 									<img
 										src={profile.brand_logo}
-										alt={I18n.t(
-											'console.issues.draft.sendingProfile.brandLogo'
-										)}
+										alt={I18n.t('console.issues.draft.sendingProfile.brandLogo')}
 									/>
 								{/if}
 								{#if profile.brand_name}

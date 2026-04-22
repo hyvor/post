@@ -3,21 +3,19 @@
 namespace App\Tests\Factory;
 
 use App\Entity\NewsletterList;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<NewsletterList>
+ * @extends PersistentObjectFactory<NewsletterList>
  */
-final class NewsletterListFactory extends PersistentProxyObjectFactory
+final class NewsletterListFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -32,6 +30,7 @@ final class NewsletterListFactory extends PersistentProxyObjectFactory
     protected function defaults(): array
     {
         return [
+            'newsletter' => NewsletterFactory::new(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'name' => self::faker()->text(255),
             'description' => self::faker()->text(255),
@@ -45,8 +44,7 @@ final class NewsletterListFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(NewsletterList $newsletterList): void {})
+        return $this // ->afterInstantiate(function(NewsletterList $newsletterList): void {})
         ;
     }
 }

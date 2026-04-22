@@ -15,6 +15,7 @@ WORKDIR /app/frontend
 COPY frontend/package.json \
     frontend/svelte.config.js \
     frontend/vite.config.ts \
+    frontend/.prettierrc frontend/.prettierignore \
     frontend/tsconfig.json /app/frontend/
 # copy code
 COPY frontend/src /app/frontend/src
@@ -46,6 +47,7 @@ WORKDIR /app/archive
 COPY archive/package.json archive/package-lock.json \
     archive/svelte.config.js \
     archive/vite.config.ts \
+    archive/.prettierrc archive/.prettierignore \
     archive/tsconfig.json /app/archive/
 # copy code
 COPY archive/src /app/archive/src
@@ -85,6 +87,7 @@ COPY embed/package.json embed/package-lock.json \
     embed/tsconfig.json \
     embed/tsconfig.app.json \
     embed/tsconfig.node.json \
+    embed/.prettierrc embed/.prettierignore \
     /app/embed/
 
 COPY embed/src /app/embed/src

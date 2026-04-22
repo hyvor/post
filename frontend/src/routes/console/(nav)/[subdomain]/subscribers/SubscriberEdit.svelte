@@ -1,55 +1,47 @@
 <script lang="ts">
 	import {
-		Checkbox,
 		FormControl,
 		Modal,
 		Radio,
 		SplitControl,
 		TextInput,
-		Validation,
 		toast
 	} from '@hyvor/design/components';
 	import type { Subscriber } from '../../../types';
+	import { subscriberMetadataDefinitionStore } from '../../../lib/stores/newsletterStore';
+	import ListSelector from './ListSelector.svelte';
 	import {
-		listStore,
-		subscriberMetadataDefinitionStore
-	} from '../../../lib/stores/newsletterStore';
-	import { updateSubscriber } from '../../../lib/actions/subscriberActions';
+		createSubscriber,
+		type CreateSubscriberParams
+	} from '../../../lib/actions/subscriberActions';
 
-	export let subscriber: Subscriber;
-	export let show = false;
-	export let handleUpdate: (subscriber: Subscriber) => void;
-
-	let email = subscriber.email;
-	let status = subscriber.status;
-	let selectedList = subscriber.list_ids;
-	let metadata = { ...subscriber.metadata };
-
-	let emailError: null | string = null;
-
-	let loading = false;
-
-	function onListChange(id: number) {
-		if (selectedList.includes(id)) {
-			selectedList = selectedList.filter((l) => l !== id);
-		} else {
-			selectedList = [...selectedList, id];
-		}
+	interface Props {
+		subscriber: Subscriber;
+		show?: boolean;
+		handleUpdate: (subscriber: Subscriber) => void;
 	}
 
-	function submit() {
-		const data: Record<string, any> = {};
+	let { subscriber, show = $bindable(false), handleUpdate }: Props = $props();
 
-		if (email.trim() !== subscriber.email) {
-			data.email = email;
-		}
+	let status = $derived(subscriber.status);
+	let selectedList = $derived(subscriber.list_ids);
+	let metadata = $derived({ ...subscriber.metadata });
+	let loading = $state(false);
+
+	function submit() {
+		const data: CreateSubscriberParams = {
+			lists_strategy: 'overwrite',
+			metadata_strategy: 'overwrite',
+			list_skip_resubscribe_on: [],
+			list_removal_reason: 'other'
+		};
 
 		if (status !== subscriber.status) {
 			data.status = status;
 		}
 
 		if (selectedList.sort().join(',') !== subscriber.list_ids.sort().join(',')) {
-			data.list_ids = selectedList;
+			data.lists = selectedList;
 		}
 
 		if (JSON.stringify(metadata) !== JSON.stringify(subscriber.metadata)) {
@@ -57,20 +49,15 @@
 		}
 
 		loading = true;
-		emailError = null;
 
-		updateSubscriber(subscriber.id, data)
+		createSubscriber(subscriber.email, data)
 			.then((res) => {
 				toast.success('Subscriber updated successfully');
 				show = false;
 				handleUpdate(res);
 			})
 			.catch((err) => {
-				if (err.message === 'email_taken') {
-					emailError = 'This email is already taken.';
-				} else {
-					toast.error(err.message);
-				}
+				toast.error(err.message);
 			})
 			.finally(() => {
 				loading = false;
@@ -94,34 +81,18 @@
 >
 	<SplitControl label="Email">
 		<FormControl>
-			<TextInput bind:value={email} block state={emailError ? 'error' : undefined} />
-			{#if emailError}
-				<Validation type="error">{emailError}</Validation>
-			{/if}
+			<TextInput value={subscriber.email} disabled />
 		</FormControl>
 	</SplitControl>
 
 	<SplitControl label="Lists">
-		{#each $listStore as list}
-			<div class="list">
-				<Checkbox
-					checked={selectedList.includes(list.id)}
-					on:change={() => onListChange(list.id)}
-					disabled={selectedList.length === 1 && selectedList[0] === list.id}
-				>
-					{list.name}
-				</Checkbox>
-			</div>
-		{/each}
+		<ListSelector bind:selectedList allowZero />
 	</SplitControl>
 
 	<SplitControl label="Status">
 		<FormControl>
-			<Radio bind:group={status} value="subscribed" disabled={!subscriber.is_opted_in}
-				>Subscribed
-			</Radio>
-			<Radio bind:group={status} value="unsubscribed">Unsubscribed</Radio>
 			<Radio bind:group={status} value="pending">Pending</Radio>
+			<Radio bind:group={status} value="subscribed">Subscribed</Radio>
 		</FormControl>
 	</SplitControl>
 

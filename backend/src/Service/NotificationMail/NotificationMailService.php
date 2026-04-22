@@ -4,6 +4,7 @@ namespace App\Service\NotificationMail;
 
 use App\Service\AppConfig;
 use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\Integration\Relay\RelayApiClientInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -13,18 +14,15 @@ use Symfony\Component\Mime\Email;
 class NotificationMailService
 {
     public function __construct(
-        private RelayApiClient $relayApiClient,
+        private RelayApiClientInterface $relayApiClient,
         private AppConfig      $appConfig,
-    )
-    {
-    }
+    ) {}
 
     public function send(
         string $emailAddress,
         string $subject,
         string $content,
-    ): void
-    {
+    ): void {
         $email = new Email()
             ->from(new Address(
                 address: $this->appConfig->getNotificationMailFromAddress(),

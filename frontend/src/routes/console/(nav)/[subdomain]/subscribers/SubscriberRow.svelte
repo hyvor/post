@@ -38,7 +38,8 @@
 			content: 'Are you sure you want to delete this subscriber?',
 			confirmText: 'Delete',
 			cancelText: 'Cancel',
-			danger: true
+			danger: true,
+			autoClose: false
 		});
 
 		if (!confirmation) return;
@@ -93,8 +94,6 @@
 			<span class="status-time">
 				{#if subscriber.status === 'subscribed' && subscriber.subscribed_at}
 					<RelativeTime unix={subscriber.subscribed_at} />
-				{:else if subscriber.status === 'unsubscribed' && subscriber.unsubscribed_at}
-					<RelativeTime unix={subscriber.unsubscribed_at} />
 				{/if}
 			</span>
 		</div>

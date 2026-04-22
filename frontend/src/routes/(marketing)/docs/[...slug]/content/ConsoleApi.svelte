@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Callout, CodeBlock } from '@hyvor/design/components';
+	import { Accordion, Callout, CodeBlock } from '@hyvor/design/components';
 </script>
 
 <h1>Console API</h1>
@@ -284,9 +284,8 @@
 
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
-	<li><a href="#create-subscriber"><code>POST /subscribers</code></a> - Create a subscriber</li>
 	<li>
-		<a href="#update-subscriber"><code>PATCH /subscribers/{'{id}'}</code></a> - Update a subscriber
+		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
 	</li>
 	<li>
 		<a href="#delete-subscriber"><code>DELETE /subscribers/{'{id}'}</code></a> - Delete a subscriber
@@ -314,18 +313,18 @@
 
             // filter by status
             status?: 'subscribed' | 'unsubscribed' | 'pending';
-            
+
             // filter by list
-            list_id?: number; 
+            list_id?: number;
 
             // search by email
-            search?: string; 
+            search?: string;
         }
         type Response = Subscriber[]
     `}
 />
 
-<h4 id="create-subscriber">Create a subscriber</h4>
+<h4 id="create-update-subscriber">Create or update a subscriber</h4>
 
 <code>POST /subscribers</code>
 
@@ -333,33 +332,214 @@
 	language="ts"
 	code={`
         type Request = {
+            // If a subscriber with the given email already exists, it will be updated.
+            // Otherwise, a new subscriber will be created.
             email: string;
-            list_ids: number[];
-            source?: 'console' | 'form' | 'import'; // default: 'console'
+
+            // Subscribe to or unsubscribe from lists based
+            // on the given \`lists_strategy\`.
+            // an array of list IDs or names.
+            lists?: (number | string)[];
+
+            // The subscriber's subscription status
+            // default: subscribed
+            status?: 'subscribed' | 'pending';
+
+            // the source of the subscriber
+            // default: console
+            source?: 'console' | 'form' | 'import';
+
+            // subscriber's IP address
             subscribe_ip?: string | null;
+
+            // unix timestamp of when the subscriber opted in
+            // if not set, it will be set to the current time if status is 'subscribed'
             subscribed_at?: number | null; // unix timestamp
-            unsubscribed_at?: number | null; // unix timestamp
-        }
-        type Response = Subscriber
-    `}
-/>
 
-<h4 id="update-subscriber">Update a subscriber</h4>
-
-<code>PATCH /subscribers/{'{id}'}</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {
-            email?: string;
-            list_ids?: number[];
-            status?: 'subscribed' | 'unsubscribed' | 'pending';
+            // additional metadata for the subscriber
+            // keys must be defined in the Subscriber Metadata Definitions section (or using the API)
             metadata?: Record<string, string>;
+
+            // ============ SETTINGS ===========
+            // change how the endpoint behaves
+
+            // how \`lists\` field is processed when updating an existing subscriber's list subscriptions.
+            // merge: merges the lists (default)
+            // overwrite: overwrites the lists
+            // remove: removes from the current lists
+            lists_strategy?: 'merge' | 'overwrite' | 'remove';
+
+            // if the subscriber was previously removed from a list,
+            // define the reason(s) for ignoring the re-subscription to that list.
+            // see below for more info
+            // default: ['unsubscribe', 'bounce', 'complaint']
+            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'complaint' | 'auto')[];
+
+            // define the reason for removing the subscriber from a list
+            // (only when updating, see below for more info)
+            // default: 'unsubscribe'
+            list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
+
+            // whether to overwrite or merge the subscriber's metadata
+            // when updating an existing subscriber.
+            // default: 'merge'
+            metadata_strategy?: 'merge' | 'overwrite';
+
+            // whether to send a confirmation email when adding a subscriber with 'pending' status
+            // or when changing an existing subscriber's status to 'pending'.
+            // default: false
+            send_pending_confirmation_email?: boolean;
         }
         type Response = Subscriber
     `}
 />
+
+<h5 id="managing-list-subscriptions">Managing list unsubscriptions and re-subscriptions</h5>
+
+<p>
+	For all subscribers, Hyvor Post records the lists they have previously unsubscribed from. This
+	makes it easier to build automations around list subscriptions while respecting subscribers'
+	preferences.
+</p>
+
+<p>
+	<code>list_add_strategy_if_unsubscribed</code>:
+</p>
+
+<ul>
+	<li>
+		<code>ignore</code> - use this strategy for most auto-subscribing cases (e.g. automatically subscribing
+		a user to a list when they start a trial). This makes sures that if the user has previously unsubscribed
+		from the list, they will not be re-subscribed.
+	</li>
+	<li>
+		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the list
+		again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
+		to the list even if they have previously unsubscribed.
+	</li>
+</ul>
+
+<p>
+	<code>list_removal_reason</code>:
+</p>
+
+<ul>
+	<li>
+		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be removed
+		from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
+		unsubscription, blocking future re-adds unless
+		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe form
+		uses this.
+	</li>
+	<li>
+		<code>other</code> - use this reason if you want to remove the subscriber from the list without recording
+		an unsubscription.
+	</li>
+</ul>
+
+<h5 id="subscriber-examples">Examples</h5>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+	<Accordion title="Creating or updating a subscriber">
+		<div>
+			This example creates a new subscriber with a subscription to the "Default" list. If a
+			subscriber exists in with the same email, they will be updated and their lists will be set to
+			only "Default" (overwriting existing lists).
+		</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"]
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Adding a subscriber to a list without affecting their other lists">
+		<div>
+			Assuming you have a list with List ID 123, this example adds the subscriber to that list
+			without affecting their other list subscriptions. If the subscriber is already subscribed to
+			the list, no changes will be made.
+		</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": [123],
+        "lists_strategy": "add"
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Removing a subscriber from a list">
+		<div>This example simply removes the subscriber from the list named "Paid Users".</div>
+
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Paid Users"],
+        "lists_strategy": "remove",
+
+        // unsubscribe, bounce, or other
+        "list_removal_reason": "unsubscribe"
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Adding a pending subscriber and sending a confirmation email">
+		<div>
+			This example creates a subscriber or updates an existing subscriber with "pending" status, and
+			will send a confirmation email to the subscriber asking them to confirm their subscription.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"],
+        "status": "pending",
+        "send_pending_confirmation_email": true
+    }
+    `}
+		/>
+	</Accordion>
+
+	<Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
+		<div>
+			By default, this endpoint ignores re-subscription attempts to lists that the subscriber has
+			previously unsubscribed from (or was removed from due to a bounce). This example shows how to
+			override that behavior.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
+    {
+        "email": "example@example.com",
+        "lists": ["Default"],
+        "lists_strategy": "add",
+        // ignore unsubscription if the subscriber was removed from the list due to a bounce
+        // but allow re-adding if they previously unsubscribed themselves
+        "list_skip_resubscribe_on": ["bounce"]
+    }
+    `}
+		/>
+
+		<p>
+			To force re-adding both previous unsubscribes and bounces, use an empty array for <code
+				>list_skip_resubscribe_on</code
+			>.
+		</p>
+	</Accordion>
+</div>
 
 <h4 id="delete-subscriber">Delete a subscriber</h4>
 
@@ -489,12 +669,12 @@
 		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
 	</li>
 	<li>
-		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
-		sending profile
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a sending
+		profile
 	</li>
 	<li>
-		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete
-		a sending profile
+		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete a sending
+		profile
 	</li>
 </ul>
 
@@ -580,8 +760,8 @@ appearance of your newsletters.
 		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
 	</li>
 	<li>
-		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
-		with content
+		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template with
+		content
 	</li>
 </ul>
 
@@ -758,7 +938,7 @@ appearance of your newsletters.
         type Request = {
             // max size: 10MB
             // supported formats: jpg, jpeg, png, gif, webp
-            file: File; 
+            file: File;
             folder: 'issue_images' | 'newsletter_images';
         }
         type Response = Media
@@ -951,12 +1131,11 @@ appearance of your newsletters.
             id: number;
             email: string;
             source: 'console' | 'form' | 'import';
-            status: 'subscribed' | 'unsubscribed' | 'pending';
+            status: 'subscribed' | 'pending';
             list_ids: number[];
             subscribe_ip: string | null;
             is_opted_in: boolean;
             subscribed_at: number | null; // unix timestamp
-            unsubscribed_at: number | null; // unix timestamp
             metadata: Record<string, string>;
         }
     `}

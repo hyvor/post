@@ -5,6 +5,7 @@ namespace App\Tests\Api\Public\Form;
 use App\Api\Console\Object\SubscriberObject;
 use App\Api\Public\Controller\Form\FormController;
 use App\Entity\Subscriber;
+use App\Entity\SubscriberListRemoval;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
@@ -15,10 +16,10 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
+
+use function Zenstruck\Foundry\Persistence\refresh;
 
 #[CoversClass(FormController::class)]
 #[CoversClass(SubscriberObject::class)]
@@ -113,13 +114,11 @@ class FormSubscribeTest extends WebTestCase
         ], $json['list_ids']);
         $this->assertSame(SubscriberStatus::PENDING->value, $json['status']);
         $this->assertNull($json['subscribed_at']);
-        $this->assertNull($json['unsubscribed_at']);
 
         $subscriber = $this->em->getRepository(Subscriber::class)->find($json['id']);
         $this->assertNotNull($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
-        $this->assertNull($subscriber->getUnsubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
     }
 
@@ -136,8 +135,7 @@ class FormSubscribeTest extends WebTestCase
             'newsletter' => $newsletter,
             'email' => $email,
             'lists' => [$list1],
-            'status' => SubscriberStatus::UNSUBSCRIBED,
-            'opt_in_at' => null,
+            'status' => SubscriberStatus::PENDING,
         ]);
 
         $response = $this->publicApi('POST', '/form/subscribe', [
@@ -161,11 +159,49 @@ class FormSubscribeTest extends WebTestCase
         ], $json['list_ids']);
         $this->assertSame('pending', $json['status']);
 
-        $subscriber->_refresh();
+        refresh($subscriber);
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertSame([
             $list1->getId(),
             $list2->getId(),
         ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
+    }
+
+    public function test_merges_lists(): void
+    {
+        $this->mockRelayClient();
+
+        $newsletter = NewsletterFactory::createOne();
+        $list1 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $list2 = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $email = 'supun@hyvor.com';
+        $subscriber = SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'email' => $email,
+            'lists' => [$list1],
+            'status' => SubscriberStatus::PENDING,
+        ]);
+
+        $this->publicApi('POST', '/form/subscribe', [
+            'newsletter_subdomain' => $newsletter->getSubdomain(),
+            'email' => $email,
+            'list_ids' => [
+                $list2->getId(),
+            ],
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        refresh($subscriber);
+        $this->assertSame([
+            $list1->getId(),
+            $list2->getId(),
+        ], array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray()));
+
+        $this->assertCount(
+            0,
+            $this->getEm()->getRepository(SubscriberListRemoval::class)->findAll()
+        );
     }
 }
