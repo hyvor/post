@@ -30,6 +30,7 @@ final class NewsletterListFactory extends PersistentObjectFactory
     protected function defaults(): array
     {
         return [
+            'newsletter' => NewsletterFactory::new(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'name' => self::faker()->text(255),
             'description' => self::faker()->text(255),
@@ -43,7 +44,7 @@ final class NewsletterListFactory extends PersistentObjectFactory
      */
     protected function initialize(): static
     {
-        return $this// ->afterInstantiate(function(NewsletterList $newsletterList): void {})
-            ;
+        return $this // ->afterInstantiate(function(NewsletterList $newsletterList): void {})
+        ;
     }
 }
