@@ -4,7 +4,7 @@ namespace App\Api\Public\Input\Subscriber;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UnsubscribeInput
+class PreferencesInput
 {
     #[Assert\NotBlank]
     public string $token;

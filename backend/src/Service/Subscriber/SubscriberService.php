@@ -218,29 +218,6 @@ class SubscriberService
         return $this->subscriberRepository->findOneBy(['newsletter' => $newsletter, 'email' => $email]);
     }
 
-    public function unsubscribeByEmail(
-        string $email,
-        ?\DateTimeImmutable $at = null,
-        ?string $reason = null,
-    ): void {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb
-            ->update(Subscriber::class, 's')
-            ->set('s.status', ':status')
-            ->set('s.opt_in_at', ':optInAt')
-            ->set('s.unsubscribed_at', ':unsubscribedAt')
-            ->set('s.unsubscribe_reason', ':reason')
-            ->where('s.email = :email')
-            ->setParameter('status', SubscriberStatus::UNSUBSCRIBED->value)
-            ->setParameter('optInAt', null)
-            ->setParameter('unsubscribedAt', $at ?? $this->now())
-            ->setParameter('reason', $reason)
-            ->setParameter('email', $email);
-
-        $qb->getQuery()->execute();
-    }
-
     public function exportSubscribers(Newsletter $newsletter): SubscriberExport
     {
         // Create a new SubscriberExport entity
