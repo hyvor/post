@@ -46,7 +46,7 @@ final class NewsletterFactory extends PersistentObjectFactory
      */
     protected function initialize(): static
     {
-        return $this// ->afterInstantiate(function(Newsletter $newsletter): void {})
-            ;
+        return $this // ->afterInstantiate(function(Newsletter $newsletter): void {})
+        ;
     }
 }

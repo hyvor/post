@@ -9,7 +9,7 @@ use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\AppConfig;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
-use App\Service\Subscriber\Subscriber\Message\UnsubscribeByEmailMessage;
+use App\Service\Subscriber\Message\UnsubscribeByEmailMessage;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
