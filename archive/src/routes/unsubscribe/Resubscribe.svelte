@@ -68,10 +68,7 @@
 					<div class="list-name">{list.name}</div>
 					<div class="list-description">{list.description}</div>
 				</div>
-				<Switch
-					checked={selectedListsIds.includes(list.id)}
-					onchange={handleListSwitch(list.id)}
-				/>
+				<Switch checked={selectedListsIds.includes(list.id)} onchange={handleListSwitch(list.id)} />
 			</label>
 		{/each}
 	</div>

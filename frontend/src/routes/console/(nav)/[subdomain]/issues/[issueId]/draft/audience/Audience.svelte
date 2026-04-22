@@ -25,16 +25,12 @@
 					{#if $userApprovalStatusStore !== 'approved'}
 						<div class="message">
 							Your account must be approved to send newsletter issues.
-							<Button size="small" as="a" href="/console/approve"
-								>Go to Approval</Button
-							>
+							<Button size="small" as="a" href="/console/approve">Go to Approval</Button>
 						</div>
 					{:else}
 						<div class="message">
 							You must have an active subscription to send newsletter issues.
-							<Button size="small" as="a" href="/console/billing"
-								>Go to Billing</Button
-							>
+							<Button size="small" as="a" href="/console/billing">Go to Billing</Button>
 						</div>
 					{/if}
 				</Callout>

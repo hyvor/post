@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { FormControl, Modal, Radio, SplitControl, toast } from '@hyvor/design/components';
 	import { getI18n } from '../../../lib/i18n';
-	import {
-		selectedSubscriberIdsStore,
-		subscriberStore
-	} from '../../../lib/stores/newsletterStore';
+	import { selectedSubscriberIdsStore, subscriberStore } from '../../../lib/stores/newsletterStore';
 	import type { NewsletterSubscriberStatus } from '../../../types';
 	import { createSubscriber } from '../../../lib/actions/subscriberActions';
 	import { SimpleLoadingProgress } from './bulkLoader.svelte';

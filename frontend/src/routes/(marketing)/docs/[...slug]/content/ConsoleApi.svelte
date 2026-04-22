@@ -1,46 +1,46 @@
 <script lang="ts">
-    import {Accordion, Callout, CodeBlock} from '@hyvor/design/components';
+	import { Accordion, Callout, CodeBlock } from '@hyvor/design/components';
 </script>
 
 <h1>Console API</h1>
 
 <p>
-    The Console API allows you to automate your newsletter-related tasks over HTTP with API key
-    authentication. This is the same API that we internally use at the Console.
+	The Console API allows you to automate your newsletter-related tasks over HTTP with API key
+	authentication. This is the same API that we internally use at the Console.
 </p>
 
 <h2 id="getting-started">Getting Started</h2>
 
 <ul>
-    <li>
-        Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>.
-    </li>
-    <li>The base URL: <code>https://post.hyvor.com/api/console</code></li>
-    <li>
-        For each request, set <code>Authorization</code> header to
-        <code>Bearer {'<API_KEY>'}</code>.
-    </li>
-    <li>Available HTTP methods:</li>
-    <ul>
-        <li><code>GET</code> - Retrieve a resource</li>
-        <li><code>POST</code> - Create a resource or perform an action</li>
-        <li><code>PUT</code> - Update a resource</li>
-        <li><code>DELETE</code> - Remove a resource</li>
-    </ul>
-    <li>
-        Request params can be set as <code>JSON</code> (recommended) or as
-        <code>application/x-www-form-urlencoded</code>.
-    </li>
-    <li>All endpoints return JSON data. The response will be an object or an array of objects.</li>
+	<li>
+		Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>.
+	</li>
+	<li>The base URL: <code>https://post.hyvor.com/api/console</code></li>
+	<li>
+		For each request, set <code>Authorization</code> header to
+		<code>Bearer {'<API_KEY>'}</code>.
+	</li>
+	<li>Available HTTP methods:</li>
+	<ul>
+		<li><code>GET</code> - Retrieve a resource</li>
+		<li><code>POST</code> - Create a resource or perform an action</li>
+		<li><code>PUT</code> - Update a resource</li>
+		<li><code>DELETE</code> - Remove a resource</li>
+	</ul>
+	<li>
+		Request params can be set as <code>JSON</code> (recommended) or as
+		<code>application/x-www-form-urlencoded</code>.
+	</li>
+	<li>All endpoints return JSON data. The response will be an object or an array of objects.</li>
 </ul>
 
 <Callout type="info">
-    <p>
-        In this documentation, all objects, request params, and responses are written as <a
-        href="https://www.typescriptlang.org/"
-        rel="nofollow">Typescript</a
-    > interfaces in order to make type declarations concise.
-    </p>
+	<p>
+		In this documentation, all objects, request params, and responses are written as <a
+			href="https://www.typescriptlang.org/"
+			rel="nofollow">Typescript</a
+		> interfaces in order to make type declarations concise.
+	</p>
 </Callout>
 
 <h2 id="categories">Categories</h2>
@@ -50,16 +50,16 @@
 <p>Jump to each category:</p>
 
 <ul>
-    <li><a href="#newsletter">Newsletter</a></li>
-    <li><a href="#issue">Issue</a></li>
-    <li><a href="#list">List</a></li>
-    <li><a href="#subscriber">Subscriber</a></li>
-    <li><a href="#subscriber-metadata">Subscriber Metadata</a></li>
-    <li><a href="#sending-profile">Sending Profile</a></li>
-    <li><a href="#template">Template</a></li>
-    <li><a href="#user">User</a></li>
-    <li><a href="#media">Media</a></li>
-    <li><a href="#export">Export</a></li>
+	<li><a href="#newsletter">Newsletter</a></li>
+	<li><a href="#issue">Issue</a></li>
+	<li><a href="#list">List</a></li>
+	<li><a href="#subscriber">Subscriber</a></li>
+	<li><a href="#subscriber-metadata">Subscriber Metadata</a></li>
+	<li><a href="#sending-profile">Sending Profile</a></li>
+	<li><a href="#template">Template</a></li>
+	<li><a href="#user">User</a></li>
+	<li><a href="#media">Media</a></li>
+	<li><a href="#export">Export</a></li>
 </ul>
 
 <!-- ############################## CATEGORIES ################################# -->
@@ -69,16 +69,16 @@
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-newsletter"><code>GET /newsletter</code></a> - Get newsletter data</li>
-    <li>
-        <a href="#update-newsletter"><code>PATCH /newsletter</code></a> - Update a newsletter
-    </li>
+	<li><a href="#get-newsletter"><code>GET /newsletter</code></a> - Get newsletter data</li>
+	<li>
+		<a href="#update-newsletter"><code>PATCH /newsletter</code></a> - Update a newsletter
+	</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#newsletter-object">Newsletter Object</a></li>
+	<li><a href="#newsletter-object">Newsletter Object</a></li>
 </ul>
 
 <h4 id="get-newsletter">Get newsletter data</h4>
@@ -86,8 +86,8 @@
 <code>GET /newsletter</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Newsletter
     `}
@@ -98,8 +98,8 @@
 <code>PATCH /newsletter</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = Partial<Newsletter>  // except id, created_at
         type Response = Newsletter
     `}
@@ -110,22 +110,22 @@
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-issues"><code>GET /issues</code></a> - Get issues</li>
-    <li><a href="#create-issue"><code>POST /issues</code></a> - Create an issue</li>
-    <li><a href="#get-issue"><code>GET /issues/{'{id}'}</code></a> - Get an issue</li>
-    <li><a href="#update-issue"><code>PATCH /issues/{'{id}'}</code></a> - Update an issue</li>
-    <li><a href="#delete-issue"><code>DELETE /issues/{'{id}'}</code></a> - Delete an issue</li>
-    <li><a href="#send-issue"><code>POST /issues/{'{id}'}/send</code></a> - Send an issue</li>
-    <li>
-        <a href="#get-issue-sends"><code>GET /issues/{'{id}'}/sends</code></a> - Get issue sends
-    </li>
+	<li><a href="#get-issues"><code>GET /issues</code></a> - Get issues</li>
+	<li><a href="#create-issue"><code>POST /issues</code></a> - Create an issue</li>
+	<li><a href="#get-issue"><code>GET /issues/{'{id}'}</code></a> - Get an issue</li>
+	<li><a href="#update-issue"><code>PATCH /issues/{'{id}'}</code></a> - Update an issue</li>
+	<li><a href="#delete-issue"><code>DELETE /issues/{'{id}'}</code></a> - Delete an issue</li>
+	<li><a href="#send-issue"><code>POST /issues/{'{id}'}/send</code></a> - Send an issue</li>
+	<li>
+		<a href="#get-issue-sends"><code>GET /issues/{'{id}'}/sends</code></a> - Get issue sends
+	</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#issue-object">Issue Object</a></li>
-    <li><a href="#send-object">Send Object</a></li>
+	<li><a href="#issue-object">Issue Object</a></li>
+	<li><a href="#send-object">Send Object</a></li>
 </ul>
 
 <h4 id="get-issues">Get issues</h4>
@@ -133,8 +133,8 @@
 <code>GET /issues</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             limit?: number; // default: 50
             offset?: number; // default: 0
@@ -148,8 +148,8 @@
 <code>POST /issues</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Issue
     `}
@@ -160,8 +160,8 @@
 <code>GET /issues/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Issue
     `}
@@ -172,8 +172,8 @@
 <code>PATCH /issues/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             subject?: string;
             lists?: number[];
@@ -189,8 +189,8 @@
 <code>DELETE /issues/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -201,8 +201,8 @@
 <code>POST /issues/{'{id}'}/send</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Issue
     `}
@@ -213,8 +213,8 @@
 <code>GET /issues/{'{id}'}/sends</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Send[]
     `}
@@ -225,15 +225,15 @@
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#create-list"><code>POST /lists</code></a> - Create a list</li>
-    <li><a href="#update-list"><code>PATCH /lists/{'{id}'}</code></a> - Update a list</li>
-    <li><a href="#delete-list"><code>DELETE /lists/{'{id}'}</code></a> - Delete a list</li>
+	<li><a href="#create-list"><code>POST /lists</code></a> - Create a list</li>
+	<li><a href="#update-list"><code>PATCH /lists/{'{id}'}</code></a> - Update a list</li>
+	<li><a href="#delete-list"><code>DELETE /lists/{'{id}'}</code></a> - Delete a list</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#list-object">List Object</a></li>
+	<li><a href="#list-object">List Object</a></li>
 </ul>
 
 <h4 id="create-list">Create a list</h4>
@@ -241,8 +241,8 @@
 <code>POST /lists</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             name: string;   // max length: 255
             description?: string;
@@ -256,8 +256,8 @@
 <code>PATCH /lists/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             name?: string;   // max length: 255
             description?: string;
@@ -271,8 +271,8 @@
 <code>DELETE /lists/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -283,21 +283,21 @@
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
-    <li>
-        <a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
-    </li>
-    <li>
-        <a href="#delete-subscriber"><code>DELETE /subscribers/{'{id}'}</code></a> - Delete a subscriber
-    </li>
-    <li>
-        <a href="#bulk-update-subscriber"><code>POST /subscribers/bulk</code></a> - Bulk update subscribers
-    </li>
+	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
+	<li>
+		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
+	</li>
+	<li>
+		<a href="#delete-subscriber"><code>DELETE /subscribers/{'{id}'}</code></a> - Delete a subscriber
+	</li>
+	<li>
+		<a href="#bulk-update-subscriber"><code>POST /subscribers/bulk</code></a> - Bulk update subscribers
+	</li>
 </ul>
 
 <p>Objects:</p>
 <ul>
-    <li><a href="#subscriber-object">Subscriber Object</a></li>
+	<li><a href="#subscriber-object">Subscriber Object</a></li>
 </ul>
 
 <h4 id="get-subscribers">Get subscribers</h4>
@@ -305,8 +305,8 @@
 <code>GET /subscribers</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             limit?: number; // default: 50
             offset?: number; // default: 0
@@ -329,8 +329,8 @@
 <code>POST /subscribers</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             // If a subscriber with the given email already exists, it will be updated.
             // Otherwise, a new subscriber will be created.
@@ -397,92 +397,92 @@
 <h5 id="managing-list-subscriptions">Managing list unsubscriptions and re-subscriptions</h5>
 
 <p>
-    For all subscribers, Hyvor Post records the lists they have previously unsubscribed from. This
-    makes it easier to build automations around list subscriptions while respecting subscribers'
-    preferences.
+	For all subscribers, Hyvor Post records the lists they have previously unsubscribed from. This
+	makes it easier to build automations around list subscriptions while respecting subscribers'
+	preferences.
 </p>
 
 <p>
-    <code>list_add_strategy_if_unsubscribed</code>:
+	<code>list_add_strategy_if_unsubscribed</code>:
 </p>
 
 <ul>
-    <li>
-        <code>ignore</code> - use this strategy for most auto-subscribing cases (e.g. automatically subscribing
-        a user to a list when they start a trial). This makes sures that if the user has previously unsubscribed
-        from the list, they will not be re-subscribed.
-    </li>
-    <li>
-        <code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the
-        list again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
-        to the list even if they have previously unsubscribed.
-    </li>
+	<li>
+		<code>ignore</code> - use this strategy for most auto-subscribing cases (e.g. automatically subscribing
+		a user to a list when they start a trial). This makes sures that if the user has previously unsubscribed
+		from the list, they will not be re-subscribed.
+	</li>
+	<li>
+		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the list
+		again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
+		to the list even if they have previously unsubscribed.
+	</li>
 </ul>
 
 <p>
-    <code>list_removal_reason</code>:
+	<code>list_removal_reason</code>:
 </p>
 
 <ul>
-    <li>
-        <code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be
-        removed from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
-        unsubscription, blocking future re-adds unless
-        <code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe
-        form uses this.
-    </li>
-    <li>
-        <code>other</code> - use this reason if you want to remove the subscriber from the list without
-        recording an unsubscription.
-    </li>
+	<li>
+		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be removed
+		from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
+		unsubscription, blocking future re-adds unless
+		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe form
+		uses this.
+	</li>
+	<li>
+		<code>other</code> - use this reason if you want to remove the subscriber from the list without recording
+		an unsubscription.
+	</li>
 </ul>
 
 <h5 id="subscriber-examples">Examples</h5>
 
 <div style="display: flex; flex-direction: column; gap: 10px">
-    <Accordion title="Creating or updating a subscriber">
-        <div>
-            This example creates a new subscriber with a subscription to the "Default" list. If a
-            subscriber exists in with the same email, they will be updated and their lists will be
-            set to only "Default" (overwriting existing lists).
-        </div>
+	<Accordion title="Creating or updating a subscriber">
+		<div>
+			This example creates a new subscriber with a subscription to the "Default" list. If a
+			subscriber exists in with the same email, they will be updated and their lists will be set to
+			only "Default" (overwriting existing lists).
+		</div>
 
-        <CodeBlock
-            language="json"
-            code={`
+		<CodeBlock
+			language="json"
+			code={`
     {
         "email": "example@example.com",
         "lists": ["Default"]
     }
     `}
-        />
-    </Accordion>
+		/>
+	</Accordion>
 
-    <Accordion title="Adding a subscriber to a list without affecting their other lists">
-        <div>
-            Assuming you have a list with List ID 123, this example adds the subscriber to that list
-            without affecting their other list subscriptions. If the subscriber is already
-            subscribed to the list, no changes will be made.
-        </div>
+	<Accordion title="Adding a subscriber to a list without affecting their other lists">
+		<div>
+			Assuming you have a list with List ID 123, this example adds the subscriber to that list
+			without affecting their other list subscriptions. If the subscriber is already subscribed to
+			the list, no changes will be made.
+		</div>
 
-        <CodeBlock
-            language="json"
-            code={`
+		<CodeBlock
+			language="json"
+			code={`
     {
         "email": "example@example.com",
         "lists": [123],
         "lists_strategy": "add"
     }
     `}
-        />
-    </Accordion>
+		/>
+	</Accordion>
 
-    <Accordion title="Removing a subscriber from a list">
-        <div>This example simply removes the subscriber from the list named "Paid Users".</div>
+	<Accordion title="Removing a subscriber from a list">
+		<div>This example simply removes the subscriber from the list named "Paid Users".</div>
 
-        <CodeBlock
-            language="json"
-            code={`
+		<CodeBlock
+			language="json"
+			code={`
     {
         "email": "example@example.com",
         "lists": ["Paid Users"],
@@ -492,18 +492,17 @@
         "list_removal_reason": "unsubscribe"
     }
     `}
-        />
-    </Accordion>
+		/>
+	</Accordion>
 
-    <Accordion title="Adding a pending subscriber and sending a confirmation email">
-        <div>
-            This example creates a subscriber or updates an existing subscriber with "pending"
-            status, and will send a confirmation email to the subscriber asking them to confirm
-            their subscription.
-        </div>
-        <CodeBlock
-            language="json"
-            code={`
+	<Accordion title="Adding a pending subscriber and sending a confirmation email">
+		<div>
+			This example creates a subscriber or updates an existing subscriber with "pending" status, and
+			will send a confirmation email to the subscriber asking them to confirm their subscription.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
     {
         "email": "example@example.com",
         "lists": ["Default"],
@@ -511,18 +510,18 @@
         "send_pending_confirmation_email": true
     }
     `}
-        />
-    </Accordion>
+		/>
+	</Accordion>
 
-    <Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
-        <div>
-            By default, this endpoint ignores re-subscription attempts to lists that the subscriber
-            has previously unsubscribed from (or was removed from due to a bounce). This example
-            shows how to override that behavior.
-        </div>
-        <CodeBlock
-            language="json"
-            code={`
+	<Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
+		<div>
+			By default, this endpoint ignores re-subscription attempts to lists that the subscriber has
+			previously unsubscribed from (or was removed from due to a bounce). This example shows how to
+			override that behavior.
+		</div>
+		<CodeBlock
+			language="json"
+			code={`
     {
         "email": "example@example.com",
         "lists": ["Default"],
@@ -532,14 +531,14 @@
         "list_skip_resubscribe_on": ["bounce"]
     }
     `}
-        />
+		/>
 
-        <p>
-            To force re-adding both previous unsubscribes and bounces, use an empty array for <code
-        >list_skip_resubscribe_on</code
-        >.
-        </p>
-    </Accordion>
+		<p>
+			To force re-adding both previous unsubscribes and bounces, use an empty array for <code
+				>list_skip_resubscribe_on</code
+			>.
+		</p>
+	</Accordion>
 </div>
 
 <h4 id="delete-subscriber">Delete a subscriber</h4>
@@ -547,8 +546,8 @@
 <code>DELETE /subscribers/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -559,8 +558,8 @@
 <code>POST /subscribers/bulk</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             subscribers_ids: number[];
             action: 'delete' | 'status_change' | 'metadata_update';
@@ -578,36 +577,36 @@
 <h3 id="subscriber-metadata">Subscriber Metadata</h3>
 
 <p>
-    Subscriber metadata definitions allow you to define custom fields for subscribers. These fields
-    can be used to store additional information about subscribers.
+	Subscriber metadata definitions allow you to define custom fields for subscribers. These fields
+	can be used to store additional information about subscribers.
 </p>
 
 <p>Endpoints:</p>
 
 <ul>
-    <li>
-        <a href="#create-subscriber-metadata-definition"
-        ><code>POST /subscriber-metadata-definitions</code></a
-        > - Create a subscriber metadata definition
-    </li>
-    <li>
-        <a href="#update-subscriber-metadata-definition"
-        ><code>PATCH /subscriber-metadata-definitions/{'{id}'}</code></a
-        > - Update a subscriber metadata definition
-    </li>
-    <li>
-        <a href="#delete-subscriber-metadata-definition"
-        ><code>DELETE /subscriber-metadata-definitions/{'{id}'}</code></a
-        > - Delete a subscriber metadata definition
-    </li>
+	<li>
+		<a href="#create-subscriber-metadata-definition"
+			><code>POST /subscriber-metadata-definitions</code></a
+		> - Create a subscriber metadata definition
+	</li>
+	<li>
+		<a href="#update-subscriber-metadata-definition"
+			><code>PATCH /subscriber-metadata-definitions/{'{id}'}</code></a
+		> - Update a subscriber metadata definition
+	</li>
+	<li>
+		<a href="#delete-subscriber-metadata-definition"
+			><code>DELETE /subscriber-metadata-definitions/{'{id}'}</code></a
+		> - Delete a subscriber metadata definition
+	</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li>
-        <a href="#subscriber-metadata-definition-object">Subscriber Metadata Definition Object</a>
-    </li>
+	<li>
+		<a href="#subscriber-metadata-definition-object">Subscriber Metadata Definition Object</a>
+	</li>
 </ul>
 
 <h4 id="create-subscriber-metadata-definition">Create a subscriber metadata definition</h4>
@@ -615,8 +614,8 @@
 <code>POST /subscriber-metadata-definitions</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             key: string;   // max length: 255
             name: string;  // max length: 255
@@ -626,10 +625,10 @@
 />
 
 <Callout type="info">
-    <ul>
-        <li><code>key</code> can only contain lowercase letters, numbers, and underscores.</li>
-        <li>Once created, the <code>key</code> cannot be changed.</li>
-    </ul>
+	<ul>
+		<li><code>key</code> can only contain lowercase letters, numbers, and underscores.</li>
+		<li>Once created, the <code>key</code> cannot be changed.</li>
+	</ul>
 </Callout>
 
 <h4 id="update-subscriber-metadata-definition">Update a subscriber metadata definition</h4>
@@ -637,8 +636,8 @@
 <code>PATCH /subscriber-metadata-definitions/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             name: string;  // max length: 255
         }
@@ -651,8 +650,8 @@
 <code>DELETE /subscriber-metadata-definitions/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -663,26 +662,26 @@
 <p>Endpoints:</p>
 
 <ul>
-    <li>
-        <a href="#get-sending-profiles"><code>GET /sending-profiles</code></a> - Get sending profiles
-    </li>
-    <li>
-        <a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
-    </li>
-    <li>
-        <a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
-        sending profile
-    </li>
-    <li>
-        <a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete
-        a sending profile
-    </li>
+	<li>
+		<a href="#get-sending-profiles"><code>GET /sending-profiles</code></a> - Get sending profiles
+	</li>
+	<li>
+		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
+	</li>
+	<li>
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a sending
+		profile
+	</li>
+	<li>
+		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete a sending
+		profile
+	</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#sending-profile-object">Sending Profile Object</a></li>
+	<li><a href="#sending-profile-object">Sending Profile Object</a></li>
 </ul>
 
 <h4 id="get-sending-profiles">Get sending profiles</h4>
@@ -690,8 +689,8 @@
 <code>GET /sending-profiles</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = SendingProfile[]
     `}
@@ -702,8 +701,8 @@
 <code>POST /sending-profiles</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             from_email: string;
             from_name?: string | null;
@@ -721,8 +720,8 @@
 <code>PATCH /sending-profiles/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             from_email?: string;
             from_name?: string | null;
@@ -741,8 +740,8 @@
 <code>DELETE /sending-profiles/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -756,20 +755,20 @@ appearance of your newsletters.
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-template"><code>GET /templates</code></a> - Get newsletter template</li>
-    <li>
-        <a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
-    </li>
-    <li>
-        <a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
-        with content
-    </li>
+	<li><a href="#get-template"><code>GET /templates</code></a> - Get newsletter template</li>
+	<li>
+		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
+	</li>
+	<li>
+		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template with
+		content
+	</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#template-object">Template Object</a></li>
+	<li><a href="#template-object">Template Object</a></li>
 </ul>
 
 <h4 id="get-template">Get newsletter template</h4>
@@ -777,8 +776,8 @@ appearance of your newsletters.
 <code>GET /templates</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = Template
     `}
@@ -789,8 +788,8 @@ appearance of your newsletters.
 <code>PATCH /templates</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             template?: string;
         }
@@ -803,8 +802,8 @@ appearance of your newsletters.
 <code>POST /templates/render</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             template?: string | null;
         }
@@ -817,25 +816,25 @@ appearance of your newsletters.
 <h3 id="user">User</h3>
 
 <p>
-    The owner of the newsletter can invite other users as Admins to collaborate on managing the
-    newsletter.
+	The owner of the newsletter can invite other users as Admins to collaborate on managing the
+	newsletter.
 </p>
 
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-user"><code>GET /users</code></a> - Get user</li>
-    <li><a href="#delete-user"><code>DELETE /users/{'{id}'}</code></a> - Delete user</li>
-    <li><a href="#get-invites"><code>GET /invites</code></a> - Get invites</li>
-    <li><a href="#create-invite"><code>POST /invites</code></a> - Create an invite</li>
-    <li><a href="#delete-invite"><code>DELETE /invites/{'{id}'}</code></a> - Delete an invite</li>
+	<li><a href="#get-user"><code>GET /users</code></a> - Get user</li>
+	<li><a href="#delete-user"><code>DELETE /users/{'{id}'}</code></a> - Delete user</li>
+	<li><a href="#get-invites"><code>GET /invites</code></a> - Get invites</li>
+	<li><a href="#create-invite"><code>POST /invites</code></a> - Create an invite</li>
+	<li><a href="#delete-invite"><code>DELETE /invites/{'{id}'}</code></a> - Delete an invite</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#user-object">User Object</a></li>
-    <li><a href="#user-invite-object">User Invite Object</a></li>
+	<li><a href="#user-object">User Object</a></li>
+	<li><a href="#user-invite-object">User Invite Object</a></li>
 </ul>
 
 <h4 id="get-user">Get user</h4>
@@ -843,8 +842,8 @@ appearance of your newsletters.
 <code>GET /users</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = User[]
     `}
@@ -855,8 +854,8 @@ appearance of your newsletters.
 <code>DELETE /users/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -867,8 +866,8 @@ appearance of your newsletters.
 <code>GET /invites</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = UserInvite[]
     `}
@@ -879,14 +878,14 @@ appearance of your newsletters.
 <code>POST /invites</code>
 
 <p>
-    You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer"
->HYVOR account</a
-> before sending an invitation.
+	You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer"
+		>HYVOR account</a
+	> before sending an invitation.
 </p>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             username?: string;
             email?: string;
@@ -896,11 +895,11 @@ appearance of your newsletters.
 />
 
 <Callout type="info">
-    <ul>
-        <li>
-            Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.
-        </li>
-    </ul>
+	<ul>
+		<li>
+			Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.
+		</li>
+	</ul>
 </Callout>
 
 <h4 id="delete-invite">Delete an invite</h4>
@@ -908,8 +907,8 @@ appearance of your newsletters.
 <code>DELETE /invites/{'{id}'}</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = {}
     `}
@@ -920,13 +919,13 @@ appearance of your newsletters.
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#upload-media"><code>POST /media</code></a> - Upload media</li>
+	<li><a href="#upload-media"><code>POST /media</code></a> - Upload media</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#media-object">Media Object</a></li>
+	<li><a href="#media-object">Media Object</a></li>
 </ul>
 
 <h4 id="upload-media">Upload media</h4>
@@ -934,8 +933,8 @@ appearance of your newsletters.
 <code>POST /media</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {
             // max size: 10MB
             // supported formats: jpg, jpeg, png, gif, webp
@@ -951,14 +950,14 @@ appearance of your newsletters.
 <p>Endpoints:</p>
 
 <ul>
-    <li><a href="#get-exports"><code>GET /export</code></a> - Get subscriber exports</li>
-    <li><a href="#create-export"><code>POST /export</code></a> - Create a subscriber export</li>
+	<li><a href="#get-exports"><code>GET /export</code></a> - Get subscriber exports</li>
+	<li><a href="#create-export"><code>POST /export</code></a> - Create a subscriber export</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
-    <li><a href="#subscriber-export-object">Subscriber Export Object</a></li>
+	<li><a href="#subscriber-export-object">Subscriber Export Object</a></li>
 </ul>
 
 <h4 id="get-exports">Get subscriber exports</h4>
@@ -966,8 +965,8 @@ appearance of your newsletters.
 <code>GET /export</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = SubscriberExport[]
     `}
@@ -978,8 +977,8 @@ appearance of your newsletters.
 <code>POST /export</code>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         type Request = {}
         type Response = SubscriberExport
     `}
@@ -992,8 +991,8 @@ appearance of your newsletters.
 <h3 id="newsletter-object">Newsletter Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Newsletter {
             id: string;
             subdomain: string;
@@ -1059,8 +1058,8 @@ appearance of your newsletters.
 <h3 id="issue-object">Issue Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Issue {
             id: number;
             uuid: string;
@@ -1088,8 +1087,8 @@ appearance of your newsletters.
 <h3 id="send-object">Send Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Send {
             id: number;
             created_at: number; // unix timestamp
@@ -1111,8 +1110,8 @@ appearance of your newsletters.
 <h3 id="list-object">List Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface List {
             id: number;
             created_at: number; // unix timestamp
@@ -1126,8 +1125,8 @@ appearance of your newsletters.
 <h3 id="subscriber-object">Subscriber Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Subscriber {
             id: number;
             email: string;
@@ -1145,8 +1144,8 @@ appearance of your newsletters.
 <h3 id="subscriber-metadata-definition-object">Subscriber Metadata Definition Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface SubscriberMetadataDefinition {
             id: number;
             created_at: number; // unix timestamp
@@ -1160,8 +1159,8 @@ appearance of your newsletters.
 <h3 id="sending-profile-object">Sending Profile Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface SendingProfile {
             id: number;
             created_at: number; // unix timestamp
@@ -1180,8 +1179,8 @@ appearance of your newsletters.
 <h3 id="template-object">Template Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Template {
             template: string;
         }
@@ -1191,8 +1190,8 @@ appearance of your newsletters.
 <h3 id="user-mini-object">User Mini Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface UserMiniObject {
             name: string;
             email: string;
@@ -1205,8 +1204,8 @@ appearance of your newsletters.
 <h3 id="user-object">User Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface User {
             id: number;
             role: 'owner' | 'admin';
@@ -1219,8 +1218,8 @@ appearance of your newsletters.
 <h3 id="user-invite-object">User Invite Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface UserInvite {
             id: number;
             created_at: number; // unix timestamp
@@ -1234,8 +1233,8 @@ appearance of your newsletters.
 <h3 id="media-object">Media Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface Media {
             id: number;
             created_at: number; // unix timestamp
@@ -1250,8 +1249,8 @@ appearance of your newsletters.
 <h3 id="subscriber-export-object">Subscriber Export Object</h3>
 
 <CodeBlock
-    language="ts"
-    code={`
+	language="ts"
+	code={`
         interface SubscriberExport {
             id: number;
             created_at: number; // unix timestamp

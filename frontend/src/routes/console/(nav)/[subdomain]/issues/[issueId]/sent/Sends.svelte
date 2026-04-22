@@ -93,16 +93,10 @@
 				>
 					Unsubscribed
 				</ActionListItem>
-				<ActionListItem
-					on:click={() => selectType('bounced')}
-					selected={type === 'bounced'}
-				>
+				<ActionListItem on:click={() => selectType('bounced')} selected={type === 'bounced'}>
 					Bounced
 				</ActionListItem>
-				<ActionListItem
-					on:click={() => selectType('complained')}
-					selected={type === 'complained'}
-				>
+				<ActionListItem on:click={() => selectType('complained')} selected={type === 'complained'}>
 					Complained
 				</ActionListItem>
 			</ActionList>
@@ -118,12 +112,7 @@
 			>
 				<svelte:fragment slot="end">
 					{#if searchVal.trim() !== ''}
-						<IconButton
-							variant="invisible"
-							color="gray"
-							size={16}
-							on:click={searchActions.onClear}
-						>
+						<IconButton variant="invisible" color="gray" size={16} on:click={searchActions.onClear}>
 							<IconX size={12} />
 						</IconButton>
 					{/if}
