@@ -2,8 +2,7 @@
 
 namespace App\Api\Public\Controller\Subscriber;
 
-use App\Api\Public\Input\Subscriber\ResubscribeInput;
-use App\Api\Public\Input\Subscriber\UnsubscribeInput;
+use App\Api\Public\Input\Subscriber\PreferencesInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberStatus;
@@ -71,7 +70,7 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscriber/preferences', methods: ['POST'])]
     public function unsubscribe(
-        #[MapRequestPayload] UnsubscribeInput $input,
+        #[MapRequestPayload] PreferencesInput $input,
     ): JsonResponse {
         try {
             $sendId = $this->encryption->decrypt($input->token);
@@ -119,50 +118,5 @@ class SubscriberController extends AbstractController
             'email' => $subscriber->getEmail(),
             'lists' => array_map(fn($list) => new FormListObject($list), $lists),
         ]);
-    }
-
-    #[Route('/subscriber/resubscribe', methods: ['PATCH'])]
-    public function resubscribe(
-        #[MapRequestPayload] ResubscribeInput $input,
-    ): JsonResponse {
-        try {
-            $sendId = $this->encryption->decrypt($input->token);
-        } catch (DecryptException) {
-            throw new BadRequestHttpException('Invalid unsubscribe token.');
-        }
-
-        if (!$sendId || !is_int($sendId)) {
-            throw new BadRequestHttpException('Invalid unsubscribe token.');
-        }
-
-        $send = $this->sendService->getSendById($sendId);
-
-        if (!$send) {
-            throw new BadRequestHttpException('Newsletter send not found.');
-        }
-
-        $subscriber = $send->getSubscriber();
-
-        $updates = new UpdateSubscriberDto();
-
-        $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
-            $send->getNewsletter(),
-            $input->list_ids,
-        );
-
-        if ($missingListIds !== null) {
-            throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-        }
-
-        if (count($input->list_ids) === 0) {
-            throw new UnprocessableEntityHttpException('At least one list must be provided.');
-        }
-
-        $lists = $this->newsletterListService->getListsByIds($send->getNewsletter(), $input->list_ids);
-
-        $updates->lists = $lists;
-        $this->subscriberService->updateSubscriber($subscriber, $updates);
-
-        return new JsonResponse();
     }
 }
