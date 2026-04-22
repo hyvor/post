@@ -60,6 +60,9 @@ class Subscriber
     #[ORM\Column(type: 'json', options: ['default' => '{}'])]
     private array $metadata = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $unsubscribe_reason = null;
+
     public function __construct()
     {
         $this->lists = new ArrayCollection();
@@ -230,6 +233,18 @@ class Subscriber
     public function setMetadata(array $metadata): static
     {
         $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    public function getUnsubscribeReason(): ?string
+    {
+        return $this->unsubscribe_reason;
+    }
+
+    public function setUnsubscribeReason(?string $unsubscribe_reason): static
+    {
+        $this->unsubscribe_reason = $unsubscribe_reason;
 
         return $this;
     }

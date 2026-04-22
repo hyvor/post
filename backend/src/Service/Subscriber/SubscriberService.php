@@ -188,6 +188,10 @@ class SubscriberService
             $subscriber->setLists(new ArrayCollection($updates->lists));
         }
 
+        if ($updates->has('unsubscribeReason')) {
+            $subscriber->setUnsubscribeReason($updates->unsubscribeReason);
+        }
+
         $subscriber->setUpdatedAt($this->now());
 
         $this->em->wrapInTransaction(function () use ($subscriberOld, $subscriber, $listRemovalReason) {
