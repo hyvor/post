@@ -38,9 +38,10 @@ class VerifyDomainTest extends WebTestCase
                 ]);
             } elseif (str_starts_with($url, 'https://relay.hyvor.com/api/console/sends')) {
                 $body = json_decode($options['body'], true);
-                $this->assertIsArray($body);
-                $this->assertSame('Your domain hyvor.com is verified', $body['subject']);
-                $this->assertStringContainsString("Your domain <strong>hyvor.com</strong> has been successfully verified", $body['body_html']);
+            $this->assertIsArray($body);
+            $this->assertSame('Your domain hyvor.com is verified', $body['subject']);
+            $this->assertIsString($body['body_html']);
+            $this->assertStringContainsString("Your domain <strong>hyvor.com</strong> has been successfully verified", $body['body_html']);
             }
             return new JsonMockResponse();
         };

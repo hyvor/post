@@ -2,7 +2,6 @@
 
 namespace App\Tests\Api\Sudo;
 
-use App\Api\Sudo\Authorization\SudoAuthorizationListener;
 use App\Tests\Case\WebTestCase;
 use Hyvor\Internal\Auth\AuthFake;
 use Hyvor\Internal\Auth\AuthUserOrganization;
@@ -11,6 +10,7 @@ use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\Sudo\SudoUserFactory;
+use Hyvor\Internal\Bundle\Api\SudoAuthorizationListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
 
@@ -63,7 +63,10 @@ class SudoAuthorizationListenerTest extends WebTestCase
         $this->client->getCookieJar()->set(new Cookie('authsess', 'validSession'));
         $this->client->request("GET", "/api/sudo/approvals");
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Not logged in", $this->getJson()["message"]);
+        $json = $this->getJson();
+        $this->assertSame('auth_required', $json['message']);
+        $this->assertIsArray($json['data']);
+        $this->assertArrayHasKey('login_url', $json['data']);
     }
 
     public function test_sudo_api_access_with_invalid_sudo_user(): void

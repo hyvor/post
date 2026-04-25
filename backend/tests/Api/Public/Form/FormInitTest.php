@@ -53,6 +53,7 @@ class FormInitTest extends WebTestCase
         $this->assertCount(2, $lists);
         $this->assertIsArray($lists[0]);
         $this->assertSame($list1->getId(), $lists[0]['id']);
+        $this->assertIsArray($lists[1]);
         $this->assertSame($list2->getId(), $lists[1]['id']);
     }
 
