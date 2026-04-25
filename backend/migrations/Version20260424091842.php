@@ -17,18 +17,14 @@ final class Version20250724120000 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(<<<SQL
-            CREATE TABLE sudo_users (
-                user_id BIGINT PRIMARY KEY,
-                created_at TIMESTAMPTZ NOT NULL,
-                updated_at TIMESTAMPTZ NOT NULL,
-            )
+            ALTER TABLE sudo_users ADD COLUMN role TEXT NOT NULL DEFAULT 'sudo';
         SQL
         );
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE sudo_users');
+        $this->addSql('ALTER TABLE sudo_users DROP COLUMN role');
     }
 }
 
