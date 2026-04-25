@@ -35,3 +35,15 @@ export function getNewsletter(id: number) {
 		endpoint: `newsletters/${id}`
 	});
 }
+
+export interface NewsletterRowStats {
+	issues_count: number;
+	subscribers_count: number;
+}
+
+export function getNewslettersBatchStats(ids: number[]) {
+	return sudoApi.get<{ stats: Record<number, NewsletterRowStats> }>({
+		endpoint: 'newsletters/stats',
+		data: { ids }
+	});
+}

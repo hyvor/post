@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
 	import type { Newsletter } from '../types';
-	import type { Organization } from '../lib/actions/newsletterActions';
+	import type {
+		NewsletterRowStats,
+		Organization
+	} from '../lib/actions/newsletterActions';
 	import { flagByCountryCode } from '$lib/helpers/countryCode';
 	import { configStore } from '../lib/stores/sudoStore';
 	import RelativeTime from '../../console/@components/utils/RelativeTime.svelte';
@@ -9,22 +12,23 @@
 	interface Props {
 		newsletter: Newsletter;
 		org?: Organization;
+		stats?: NewsletterRowStats;
 		handleSelect: (newsletter: Newsletter) => void;
 	}
 
-	let { newsletter, org, handleSelect }: Props = $props();
+	let { newsletter, org, stats, handleSelect }: Props = $props();
 </script>
 
 <button class="row" onclick={() => handleSelect(newsletter)}>
-	<div class="name">
-		{newsletter.name}
+	<div class="col-newsletter">
+		<div class="nl-name">{newsletter.name}</div>
+		<div class="nl-subdomain">{newsletter.subdomain}</div>
+		<div class="nl-created">
+			<RelativeTime unix={newsletter.created_at} />
+		</div>
 	</div>
 
-	<div class="subdomain">
-		{newsletter.subdomain}
-	</div>
-
-	<div class="org">
+	<div class="col-org">
 		{#if org}
 			<div class="org-name">
 				{org.name}
@@ -45,6 +49,7 @@
 					size="x-small"
 					target="_blank"
 					color="input"
+					on:click={(e: Event) => e.stopPropagation()}
 				>
 					Org &rarr;
 				</Button>
@@ -54,8 +59,13 @@
 		{/if}
 	</div>
 
-	<div class="created-at">
-		<RelativeTime unix={newsletter.created_at} />
+	<div class="col-stats">
+		{#if stats}
+			<div class="stat-line">Issues: {stats.issues_count}</div>
+			<div class="stat-line">Subscribers: {stats.subscribers_count}</div>
+		{:else}
+			<span class="loading-stats">…</span>
+		{/if}
 	</div>
 </button>
 
@@ -75,16 +85,28 @@
 		background: var(--hover);
 	}
 
-	.name {
-		width: 25%;
+	.col-newsletter {
+		width: 35%;
 	}
 
-	.subdomain {
-		width: 20%;
+	.nl-name {
+		font-weight: 500;
 	}
 
-	.org {
-		width: 30%;
+	.nl-subdomain {
+		font-size: 13px;
+		color: var(--text-light);
+		margin-top: 2px;
+	}
+
+	.nl-created {
+		font-size: 12px;
+		color: var(--text-light);
+		margin-top: 4px;
+	}
+
+	.col-org {
+		width: 35%;
 	}
 
 	.org-name {
@@ -104,7 +126,15 @@
 		color: var(--text-light);
 	}
 
-	.created-at {
-		width: 25%;
+	.col-stats {
+		width: 30%;
+	}
+
+	.stat-line {
+		font-size: 13px;
+	}
+
+	.loading-stats {
+		color: var(--text-light);
 	}
 </style>

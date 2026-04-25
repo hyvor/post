@@ -7,11 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20250724120000 extends AbstractMigration
+final class Version20260424091842 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create sudo_users table';
+        return 'Add role column to sudo_users table';
     }
 
     public function up(Schema $schema): void

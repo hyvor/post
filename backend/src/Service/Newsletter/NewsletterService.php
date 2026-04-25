@@ -120,12 +120,17 @@ class NewsletterService
                 ->addSelect('COUNT(i.id) as HIDDEN issue_count')
                 ->groupBy('n.id')
                 ->orderBy('issue_count', 'DESC'),
+            'most_subscribers' => $qb
+                ->leftJoin(Subscriber::class, 's', 'WITH', 's.newsletter = n')
+                ->addSelect('COUNT(s.id) as HIDDEN subscriber_count')
+                ->groupBy('n.id')
+                ->orderBy('subscriber_count', 'DESC'),
             default => $qb->orderBy('n.id', 'DESC'),
         };
 
         if ($name) {
-            $qb->andWhere('LOWER(n.name) LIKE LOWER(:name)')
-                ->setParameter('name', '%' . $name . '%');
+            $qb->andWhere('LOWER(n.name) LIKE LOWER(:q) OR LOWER(n.subdomain) LIKE LOWER(:q)')
+                ->setParameter('q', '%' . $name . '%');
         }
 
         if ($organizationId !== null) {
@@ -154,6 +159,51 @@ class NewsletterService
                 $orgs,
             )),
         ];
+    }
+
+    /**
+     * @param int[] $newsletterIds
+     * @return array<int, array{issues_count: int, subscribers_count: int}>
+     */
+    public function getNewslettersBatchStats(array $newsletterIds): array
+    {
+        if (count($newsletterIds) === 0) {
+            return [];
+        }
+
+        /** @var list<array{newsletter_id: int, cnt: int}> $issueCounts */
+        $issueCounts = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+            ->select('IDENTITY(i.newsletter) as newsletter_id, COUNT(i.id) as cnt')
+            ->where('i.newsletter IN (:ids)')
+            ->setParameter('ids', $newsletterIds)
+            ->groupBy('i.newsletter')
+            ->getQuery()->getArrayResult();
+
+        /** @var list<array{newsletter_id: int, cnt: int}> $subscriberCounts */
+        $subscriberCounts = $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('IDENTITY(s.newsletter) as newsletter_id, COUNT(s.id) as cnt')
+            ->where('s.newsletter IN (:ids)')
+            ->setParameter('ids', $newsletterIds)
+            ->groupBy('s.newsletter')
+            ->getQuery()->getArrayResult();
+
+        $issueByNewsletter = [];
+        foreach ($issueCounts as $row) {
+            $issueByNewsletter[(int)$row['newsletter_id']] = (int)$row['cnt'];
+        }
+        $subscriberByNewsletter = [];
+        foreach ($subscriberCounts as $row) {
+            $subscriberByNewsletter[(int)$row['newsletter_id']] = (int)$row['cnt'];
+        }
+
+        $stats = [];
+        foreach ($newsletterIds as $id) {
+            $stats[$id] = [
+                'issues_count' => $issueByNewsletter[$id] ?? 0,
+                'subscribers_count' => $subscriberByNewsletter[$id] ?? 0,
+            ];
+        }
+        return $stats;
     }
 
     public function getNewsletterById(int $id): ?Newsletter

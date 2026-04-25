@@ -42,6 +42,22 @@ class NewsletterController extends AbstractController
         ]);
     }
 
+    #[Route('/newsletters/stats', methods: ['GET'])]
+    public function getNewslettersStats(Request $request): JsonResponse
+    {
+        $idsParam = $request->query->getString('ids', '');
+        $intIds = $idsParam === ''
+            ? []
+            : array_values(array_filter(
+                array_map('intval', explode(',', $idsParam)),
+                fn(int $id) => $id > 0,
+            ));
+
+        return new JsonResponse([
+            'stats' => $this->newsletterService->getNewslettersBatchStats($intIds),
+        ]);
+    }
+
     #[Route('/newsletters/{id}', methods: ['GET'])]
     public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
