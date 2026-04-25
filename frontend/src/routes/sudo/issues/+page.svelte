@@ -8,8 +8,7 @@
 		IconMessage,
 		LoadButton,
 		Loader,
-		TextInput,
-		toast
+		TextInput
 	} from '@hyvor/design/components';
 	import { onMount } from 'svelte';
 	import { issueStore } from '../lib/stores/sudoStore';
@@ -19,7 +18,7 @@
 	import IconCaretDown from '@hyvor/icons/IconCaretDown';
 	import { ITEMS_PER_PAGE } from '../lib/generalActions';
 	import { getIssues, ISSUE_STATUS_FILTERS } from '../lib/actions/issueActions';
-	import { getNewsletters } from '../lib/actions/newsletterActions';
+	import { getNewsletter, getNewsletters } from '../lib/actions/newsletterActions';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -28,23 +27,24 @@
 	let loadingMore = $state(false);
 	let error: string | null = $state(null);
 
-	let search: string | undefined = $state(undefined);
-	let searchValue: string | undefined = $state(undefined);
-
 	let statusFilter: IssueStatus | undefined = $state(undefined);
 	let statusDropdownShow = $state(false);
 
+	const NEWSLETTER_PAGE_SIZE = 20;
 	let newsletters: Newsletter[] = $state([]);
 	let newsletterFilter: number | undefined = $state(undefined);
+	let selectedNewsletter: Newsletter | undefined = $state(undefined);
 	let newsletterDropdownShow = $state(false);
-
-	let selectedNewsletterName = $derived(newsletters.find((n) => n.id === newsletterFilter)?.name);
+	let newsletterSearch = $state('');
+	let newsletterOffset = $state(0);
+	let newsletterHasMore = $state(true);
+	let newslettersLoading = $state(false);
+	let newsletterSearchDebounce: ReturnType<typeof setTimeout> | null = null;
 
 	function load(more = false) {
 		more ? (loadingMore = true) : (loading = true);
 
 		getIssues(
-			search ?? null,
 			newsletterFilter ?? null,
 			statusFilter ?? null,
 			ITEMS_PER_PAGE,
@@ -67,25 +67,23 @@
 			});
 	}
 
+	function loadNewsletters(reset = false) {
+		newslettersLoading = true;
+		const offset = reset ? 0 : newsletterOffset;
+
+		getNewsletters(newsletterSearch || null, null, NEWSLETTER_PAGE_SIZE, offset)
+			.then((data) => {
+				newsletters = reset ? data.newsletters : [...newsletters, ...data.newsletters];
+				newsletterOffset = offset + data.newsletters.length;
+				newsletterHasMore = data.newsletters.length === NEWSLETTER_PAGE_SIZE;
+			})
+			.finally(() => {
+				newslettersLoading = false;
+			});
+	}
+
 	function handleSelect(issue: Issue) {
 		goto(`/sudo/issues/${issue.id}`);
-	}
-
-	function handleSearchKeyup(e: any) {
-		if (e.key === 'Enter') {
-			searchValue = search;
-			load();
-		}
-
-		if (e.key === 'Escape') {
-			handleSearchClear();
-		}
-	}
-
-	function handleSearchClear() {
-		search = undefined;
-		searchValue = undefined;
-		load();
 	}
 
 	function onStatusClick(val: any) {
@@ -94,21 +92,44 @@
 		statusDropdownShow = false;
 	}
 
-	function onNewsletterClick(id: number) {
-		newsletterFilter = id;
+	function onNewsletterClick(nl: Newsletter) {
+		newsletterFilter = nl.id;
+		selectedNewsletter = nl;
 		load();
 		newsletterDropdownShow = false;
 	}
 
+	function clearNewsletter(e: Event) {
+		e.stopPropagation();
+		newsletterFilter = undefined;
+		selectedNewsletter = undefined;
+		load();
+	}
+
+	function onNewsletterSearchInput() {
+		if (newsletterSearchDebounce) clearTimeout(newsletterSearchDebounce);
+		newsletterSearchDebounce = setTimeout(() => {
+			loadNewsletters(true);
+		}, 250);
+	}
+
+	$effect(() => {
+		if (newsletterDropdownShow && newsletters.length === 0 && !newslettersLoading) {
+			loadNewsletters(true);
+		}
+	});
+
 	onMount(() => {
 		const urlNewsletterIdParam = $page.url.searchParams.get('newsletter_id');
 		if (urlNewsletterIdParam) {
-			newsletterFilter = Number(urlNewsletterIdParam);
+			const id = Number(urlNewsletterIdParam);
+			newsletterFilter = id;
+			getNewsletter(id)
+				.then((data) => {
+					selectedNewsletter = data.newsletter;
+				})
+				.catch(() => {});
 		}
-
-		getNewsletters(null, null, 500, 0).then((data) => {
-			newsletters = data.newsletters;
-		});
 
 		load();
 	});
@@ -120,27 +141,6 @@
 	<IconMessage error message={error} />
 {:else}
 	<div class="top">
-		<TextInput bind:value={search} on:keyup={handleSearchKeyup} size="small" block={false}>
-			{#snippet start()}
-				Subdomain
-			{/snippet}
-			{#snippet end()}
-				<div class="search-icons">
-					<span class="enter">
-						{#if search !== searchValue}
-							&nbsp; ⏎
-						{/if}
-					</span>
-					<span class="clear">
-						{#if searchValue}
-							<IconButton size={16} on:click={handleSearchClear}>
-								<IconX size={12} />
-							</IconButton>
-						{/if}
-					</span>
-				</div>
-			{/snippet}
-		</TextInput>
 		<Dropdown bind:show={newsletterDropdownShow}>
 			{#snippet trigger()}
 				<Button color="input" size="small">
@@ -148,18 +148,14 @@
 						Newsletter
 					{/snippet}
 					<div class="dropdown-label">
-						{selectedNewsletterName ?? 'All'}
+						{selectedNewsletter?.name ?? 'All'}
 					</div>
 					{#if newsletterFilter}
 						<IconButton
 							size={14}
 							style="margin-left:4px;"
 							color="gray"
-							on:click={(e) => {
-								e.stopPropagation();
-								newsletterFilter = undefined;
-								load();
-							}}
+							on:click={clearNewsletter}
 						>
 							<IconX size={10} />
 						</IconButton>
@@ -170,13 +166,39 @@
 				</Button>
 			{/snippet}
 			{#snippet content()}
-				<ActionList>
-					{#each newsletters as nl (nl.id)}
-						<ActionListItem on:select={() => onNewsletterClick(nl.id)}
-							>{nl.name}</ActionListItem
-						>
-					{/each}
-				</ActionList>
+				<div class="newsletter-dropdown">
+					<div class="newsletter-search">
+						<TextInput
+							bind:value={newsletterSearch}
+							on:input={onNewsletterSearchInput}
+							placeholder="Search by name or subdomain"
+							size="small"
+							block
+						/>
+					</div>
+					<div class="newsletter-list">
+						{#if newslettersLoading && newsletters.length === 0}
+							<div class="newsletter-loader"><Loader /></div>
+						{:else if newsletters.length === 0}
+							<IconMessage empty message="No newsletters" />
+						{:else}
+							<ActionList>
+								{#each newsletters as nl (nl.id)}
+									<ActionListItem on:select={() => onNewsletterClick(nl)}>
+										<span class="newsletter-name">{nl.name}</span>
+										<span class="newsletter-sub">{nl.subdomain}</span>
+									</ActionListItem>
+								{/each}
+							</ActionList>
+							<LoadButton
+								text="Load More"
+								loading={newslettersLoading}
+								show={newsletterHasMore}
+								on:click={() => loadNewsletters(false)}
+							/>
+						{/if}
+					</div>
+				</div>
 			{/snippet}
 		</Dropdown>
 		<Dropdown bind:show={statusDropdownShow}>
@@ -250,22 +272,47 @@
 		padding: 20px 30px;
 	}
 
-	.search-icons {
-		display: flex;
-		gap: 5px;
-		align-items: center;
-
-		.enter,
-		.clear {
-			width: 20px;
-		}
-
-		.enter {
-			margin-top: 3px;
-		}
-	}
-
 	.dropdown-label {
 		font-weight: normal;
+	}
+
+	.newsletter-dropdown {
+		width: 320px;
+		box-sizing: border-box;
+		background-color: var(--box-background);
+		border-radius: var(--box-radius);
+		box-shadow: var(--box-shadow);
+		overflow: hidden;
+	}
+
+	.newsletter-search {
+		padding: 8px 8px 4px;
+		box-sizing: border-box;
+	}
+
+	.newsletter-search :global(input) {
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	.newsletter-list {
+		max-height: 320px;
+		overflow-y: auto;
+	}
+
+	.newsletter-loader {
+		padding: 16px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.newsletter-name {
+		font-weight: 500;
+	}
+
+	.newsletter-sub {
+		color: var(--text-secondary, #6b7280);
+		font-size: 0.85em;
+		margin-left: 6px;
 	}
 </style>

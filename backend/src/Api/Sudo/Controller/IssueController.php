@@ -26,7 +26,6 @@ class IssueController extends AbstractController
     #[Route('/issues', methods: ['GET'])]
     public function getIssues(Request $request): JsonResponse
     {
-        $subdomain = $request->query->has('subdomain') ? $request->query->getString('subdomain') : null;
         $newsletterId = $request->query->has('newsletter_id') ? $request->query->getInt('newsletter_id') : null;
         $status = $request->query->has('status')
             ? IssueStatus::tryFrom($request->query->getString('status'))
@@ -39,7 +38,7 @@ class IssueController extends AbstractController
         return new JsonResponse(
             array_map(
                 fn($issue) => $this->sudoObjectFactory->create($issue, $relationships),
-                $this->issueService->getIssuesGlobal($subdomain, $newsletterId, $status, $limit, $offset)
+                $this->issueService->getIssuesGlobal($newsletterId, $status, $limit, $offset)
             )
         );
     }

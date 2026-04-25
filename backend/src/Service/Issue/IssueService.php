@@ -112,7 +112,6 @@ class IssueService
      * @return Issue[]
      */
     public function getIssuesGlobal(
-        ?string      $subdomain,
         ?int         $newsletterId,
         ?IssueStatus $status,
         int          $limit,
@@ -126,11 +125,6 @@ class IssueService
             ->orderBy('i.id', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
-
-        if ($subdomain) {
-            $qb->andWhere('n.subdomain = :subdomain')
-                ->setParameter('subdomain', $subdomain);
-        }
 
         if ($newsletterId) {
             $qb->andWhere('n.id = :newsletterId')

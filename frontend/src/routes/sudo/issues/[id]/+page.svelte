@@ -16,10 +16,17 @@
 	import type { Issue } from '../../types';
 	import FriendlyDate from '../../../console/@components/utils/FriendlyDate.svelte';
 	import IconArrowLeft from '@hyvor/icons/IconArrowLeft';
+	import IconArrowRight from '@hyvor/icons/IconArrowRight';
 
 	let loading = $state(true);
 	let error: string | null = $state(null);
 	let issue: Issue | null = $state(null);
+
+	const issueDump = $derived.by(() => {
+		if (!issue) return '';
+		const { newsletter: _newsletter, ...rest } = issue;
+		return JSON.stringify(rest, null, 2);
+	});
 
 	const statusColors: Record<string, 'default' | 'blue' | 'orange' | 'green'> = {
 		draft: 'default',
@@ -87,6 +94,9 @@
 					color="input"
 				>
 					{issue.newsletter.subdomain}
+					{#snippet end()}
+						<IconArrowRight size={12} />
+					{/snippet}
 				</Button>
 			</SplitControl>
 
@@ -121,7 +131,7 @@
 			</SplitControl>
 
 			<h3>Issue Object</h3>
-			<CodeBlock code={JSON.stringify(issue, null, 2)} language="json" />
+			<CodeBlock code={issueDump} language="json" />
 		</div>
 	</div>
 {/if}

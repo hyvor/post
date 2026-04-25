@@ -7,7 +7,6 @@ use App\Entity\Type\IssueStatus;
 use App\Service\Issue\IssueService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
-use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IssueController::class)]
@@ -46,26 +45,4 @@ class GetIssuesTest extends WebTestCase
         $this->assertArrayHasKey('error_private', $issue);
     }
 
-    public function test_get_issues_by_subdomain(): void
-    {
-        $newsletter = NewsletterFactory::createOne();
-
-        $issue = IssueFactory::createOne([
-            'newsletter' => $newsletter,
-        ]);
-        IssueFactory::createMany(3);
-
-        $response = $this->sudoApi(
-            'GET',
-            "/issues?subdomain={$newsletter->getSubdomain()}"
-        );
-
-        $this->assertSame(200, $response->getStatusCode());
-        $data = $this->getJson();
-        $this->assertCount(1, $data);
-
-        $item = $data[0];
-        $this->assertIsArray($item);
-        $this->assertSame($issue->getId(), $item['id']);
-    }
 }
