@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
 	import type { Newsletter } from '../types';
-	import type {
-		NewsletterRowStats,
-		Organization
-	} from '../lib/actions/newsletterActions';
+	import type { NewsletterRowStats, Organization } from '../lib/actions/newsletterActions';
 	import { flagByCountryCode } from '$lib/helpers/countryCode';
 	import { configStore } from '../lib/stores/sudoStore';
 	import RelativeTime from '../../console/@components/utils/RelativeTime.svelte';
