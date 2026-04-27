@@ -105,7 +105,7 @@ class NewsletterService
     }
 
     /**
-     * @return array{newsletters: Newsletter[], orgs: list<array{id: int, name: string, billing_email: string, billing_address: array{line1: string, city: string, state: string, postal_code: string, country: string}|null}>}
+     * @return Newsletter[]
      */
     public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset, string $sort = 'id_desc'): array
     {
@@ -139,26 +139,7 @@ class NewsletterService
         }
 
         /** @var Newsletter[] $newsletters */
-        $newsletters = $qb->getQuery()->getResult();
-
-        $organizationIds = array_values(array_unique(array_filter(
-            array_map(fn(Newsletter $newsletter) => $newsletter->getOrganizationId(), $newsletters),
-        )));
-
-        $orgs = $this->auth->organizations($organizationIds, includeBillingInfo: true);
-
-        return [
-            'newsletters' => $newsletters,
-            'orgs' => array_values(array_map(
-                fn($org) => [
-                    'id' => $org->getId(),
-                    'name' => $org->getName(),
-                    'billing_email' => $org->getBillingEmail(),
-                    'billing_address' => $org->getBillingAddress(),
-                ],
-                $orgs,
-            )),
-        ];
+        return $qb->getQuery()->getResult();
     }
 
     /**

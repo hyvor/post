@@ -5,6 +5,7 @@ namespace App\Api\Sudo\Controller;
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Sudo\SudoPermission;
+use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Bundle\Api\SudoPermissionRequired;
 use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,7 @@ class NewsletterController extends AbstractController
     public function __construct(
         private NewsletterService $newsletterService,
         private SudoObjectFactory $sudoObjectFactory,
+        private AuthInterface $auth,
     )
     {
     }
@@ -31,14 +33,28 @@ class NewsletterController extends AbstractController
         $offset = $request->query->getInt('offset', 0);
         $sort = $request->query->getString('sort', 'id_desc');
 
-        $result = $this->newsletterService->getNewsletters($name, $organizationId, $limit, $offset, $sort);
+        $newsletters = $this->newsletterService->getNewsletters($name, $organizationId, $limit, $offset, $sort);
+
+        $organizationIds = array_values(array_unique(array_filter(
+            array_map(fn(Newsletter $newsletter) => $newsletter->getOrganizationId(), $newsletters),
+        )));
+
+        $orgs = $this->auth->organizations($organizationIds, includeBillingInfo: true);
 
         return new JsonResponse([
             'newsletters' => array_map(
                 fn($newsletter) => $this->sudoObjectFactory->create($newsletter),
-                $result['newsletters']
+                $newsletters
             ),
-            'orgs' => $result['orgs'],
+            'orgs' => array_values(array_map(
+                fn($org) => [
+                    'id' => $org->getId(),
+                    'name' => $org->getName(),
+                    'billing_email' => $org->getBillingEmail(),
+                    'billing_address' => $org->getBillingAddress(),
+                ],
+                $orgs,
+            )),
         ]);
     }
 
