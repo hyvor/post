@@ -97,7 +97,7 @@ class RelayWebhookController extends AbstractController
         $send = $payload['send'];
         $attempt = $payload['attempt'];
 
-        if (!isset($send['headers']['X-Newsletter-Send-ID'])) {
+        if (empty($send['headers']['X-Newsletter-Send-ID'])) {
             return;
         }
 
