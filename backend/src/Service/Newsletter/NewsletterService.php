@@ -37,9 +37,7 @@ class NewsletterService
         private SendingProfileService  $sendingProfileService,
         private CommsInterface         $comms,
         private AuthInterface          $auth,
-    )
-    {
-    }
+    ) {}
 
 
     public function createNewsletter(
@@ -47,8 +45,7 @@ class NewsletterService
         int    $organizationId,
         string $name,
         string $subdomain
-    ): Newsletter
-    {
+    ): Newsletter {
         return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain) {
             $newsletter = new Newsletter()
                 ->setName($name)
@@ -138,7 +135,7 @@ class NewsletterService
                 ->setParameter('organizationId', $organizationId);
         }
 
-        /** @var Newsletter[] $newsletters */
+        /** @var Newsletter[] */
         return $qb->getQuery()->getResult();
     }
 
