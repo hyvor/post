@@ -7,5 +7,4 @@ use Hyvor\Internal\Sudo\SudoPermissionInterface;
 enum SudoPermission: string implements SudoPermissionInterface
 {
     case ACCESS_SUDO = 'access_sudo';
-    case READ_BLOGS = 'read_blogs';
 }
