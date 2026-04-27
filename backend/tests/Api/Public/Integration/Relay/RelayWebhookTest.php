@@ -62,6 +62,26 @@ class RelayWebhookTest extends WebTestCase
         $this->assertNotNull($send->getDeliveredAt());
     }
 
+    public function test_ignores_for_issue_test_mail_webhook(): void
+    {
+        $data = [
+            "event" => "send.recipient.accepted",
+            "payload" => [
+                "send" => [
+                    "headers" => [
+                        "X-Newsletter-Send-ID" => ""
+                    ]
+                ],
+                "attempt" => [
+                    "created_at" => 1758221942
+                ]
+            ]
+        ];
+
+        $response = $this->callWebhook($data);
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
     public function test_send_recipient_failed(): void
     {
         $send = SendFactory::createOne([
