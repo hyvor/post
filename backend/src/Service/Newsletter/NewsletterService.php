@@ -7,6 +7,7 @@ use App\Entity\Meta\NewsletterMeta;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\Send;
+use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
@@ -22,7 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Bundle\Comms\CommsInterface;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
 use Hyvor\Internal\Component\Component;
-use Hyvor\Internal\Resource\Resource;
+use Hyvor\Internal\Auth\AuthInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,9 +36,8 @@ class NewsletterService
         private AppConfig              $config,
         private SendingProfileService  $sendingProfileService,
         private CommsInterface         $comms,
-    )
-    {
-    }
+        private AuthInterface          $auth,
+    ) {}
 
 
     public function createNewsletter(
@@ -45,8 +45,7 @@ class NewsletterService
         int    $organizationId,
         string $name,
         string $subdomain
-    ): Newsletter
-    {
+    ): Newsletter {
         return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain) {
             $newsletter = new Newsletter()
                 ->setName($name)
@@ -100,6 +99,89 @@ class NewsletterService
     {
         $this->em->remove($newsletter);
         $this->em->flush();
+    }
+
+    /**
+     * @return Newsletter[]
+     */
+    public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset, string $sort = 'id_desc'): array
+    {
+        $qb = $this->em->getRepository(Newsletter::class)->createQueryBuilder('n')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        match ($sort) {
+            'id_asc' => $qb->orderBy('n.id', 'ASC'),
+            'most_issues' => $qb
+                ->leftJoin(Issue::class, 'i', 'WITH', 'i.newsletter = n')
+                ->addSelect('COUNT(i.id) as HIDDEN issue_count')
+                ->groupBy('n.id')
+                ->orderBy('issue_count', 'DESC'),
+            'most_subscribers' => $qb
+                ->leftJoin(Subscriber::class, 's', 'WITH', 's.newsletter = n')
+                ->addSelect('COUNT(s.id) as HIDDEN subscriber_count')
+                ->groupBy('n.id')
+                ->orderBy('subscriber_count', 'DESC'),
+            default => $qb->orderBy('n.id', 'DESC'),
+        };
+
+        if ($name) {
+            $qb->andWhere('LOWER(n.name) LIKE LOWER(:q) OR LOWER(n.subdomain) LIKE LOWER(:q)')
+                ->setParameter('q', '%' . $name . '%');
+        }
+
+        if ($organizationId !== null) {
+            $qb->andWhere('n.organization_id = :organizationId')
+                ->setParameter('organizationId', $organizationId);
+        }
+
+        /** @var Newsletter[] */
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param int[] $newsletterIds
+     * @return array<int, array{issues_count: int, subscribers_count: int}>
+     */
+    public function getNewslettersBatchStats(array $newsletterIds): array
+    {
+        if (count($newsletterIds) === 0) {
+            return [];
+        }
+
+        /** @var list<array{newsletter_id: int, cnt: int}> $issueCounts */
+        $issueCounts = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+            ->select('IDENTITY(i.newsletter) as newsletter_id, COUNT(i.id) as cnt')
+            ->where('i.newsletter IN (:ids)')
+            ->setParameter('ids', $newsletterIds)
+            ->groupBy('i.newsletter')
+            ->getQuery()->getArrayResult();
+
+        /** @var list<array{newsletter_id: int, cnt: int}> $subscriberCounts */
+        $subscriberCounts = $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+            ->select('IDENTITY(s.newsletter) as newsletter_id, COUNT(s.id) as cnt')
+            ->where('s.newsletter IN (:ids)')
+            ->setParameter('ids', $newsletterIds)
+            ->groupBy('s.newsletter')
+            ->getQuery()->getArrayResult();
+
+        $issueByNewsletter = [];
+        foreach ($issueCounts as $row) {
+            $issueByNewsletter[(int)$row['newsletter_id']] = (int)$row['cnt'];
+        }
+        $subscriberByNewsletter = [];
+        foreach ($subscriberCounts as $row) {
+            $subscriberByNewsletter[(int)$row['newsletter_id']] = (int)$row['cnt'];
+        }
+
+        $stats = [];
+        foreach ($newsletterIds as $id) {
+            $stats[$id] = [
+                'issues_count' => $issueByNewsletter[$id] ?? 0,
+                'subscribers_count' => $subscriberByNewsletter[$id] ?? 0,
+            ];
+        }
+        return $stats;
     }
 
     public function getNewsletterById(int $id): ?Newsletter
@@ -164,7 +246,7 @@ class NewsletterService
     }
 
     /**
-     * @return array<string, array{total: int|float, last_30_days: int|float}>
+     * @return array{subscribers: array{total: int, last_30_days: int}, issues: array{total: int, last_30_days: int}, bounced_rate: array{total: float, last_30_days: float}, complained_rate: array{total: float, last_30_days: float}, lists_count: int, sending_profiles_count: int}
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {
@@ -224,6 +306,20 @@ class NewsletterService
         $bouncedRateLast30d = $totalSendsLast30d > 0 ? round(($bouncedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
         $complainedRateLast30d = $totalSendsLast30d > 0 ? round(($complainedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
 
+        $listsCount = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->where('l.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $sendingProfilesCount = (int) $this->em->getRepository(SendingProfile::class)->createQueryBuilder('sp')
+            ->select('COUNT(sp.id)')
+            ->where('sp.newsletter = :newsletter')
+            ->setParameter('newsletter', $newsletter)
+            ->getQuery()
+            ->getSingleScalarResult();
+
         return [
             'subscribers' => [
                 'total' => $subscribers,
@@ -241,6 +337,8 @@ class NewsletterService
                 'total' => $complainedRate,
                 'last_30_days' => $complainedRateLast30d,
             ],
+            'lists_count' => $listsCount,
+            'sending_profiles_count' => $sendingProfilesCount,
         ];
     }
 

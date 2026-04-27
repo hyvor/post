@@ -11,6 +11,8 @@ use App\Service\Import\ImportService;
 use App\Service\Import\Message\ImportSubscribersMessage;
 use App\Service\Import\Parser\ParserFactory;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\Sudo\SudoPermission;
+use Hyvor\Internal\Bundle\Api\SudoPermissionRequired;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[SudoPermissionRequired(SudoPermission::ACCESS_SUDO)]
 class SubscriberImportController extends AbstractController
 {
     public function __construct(

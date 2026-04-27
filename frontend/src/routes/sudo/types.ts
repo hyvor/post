@@ -56,3 +56,39 @@ export type ImportingSubscriber = {
 	subscribe_ip: string | null;
 	metadata: Record<string, string> | null;
 };
+
+export type Newsletter = {
+	id: number;
+	created_at: number;
+	subdomain: string;
+	name: string;
+	user_id: number;
+	organization_id: number | null;
+	language_code: string | null;
+	is_rtl: boolean;
+};
+
+export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'sent';
+
+export type Issue = {
+	id: number;
+	created_at: number;
+	uuid: string;
+	subject: string | null;
+	status: IssueStatus;
+	newsletter: Newsletter;
+	scheduled_at: number | null;
+	sending_at: number | null;
+	sent_at: number | null;
+	total_sendable: number;
+	error_private: string | null;
+};
+
+export type NewsletterStats = {
+	subscribers: { total: number; last_30_days: number };
+	issues: { total: number; last_30_days: number };
+	bounced_rate: { total: number; last_30_days: number };
+	complained_rate: { total: number; last_30_days: number };
+	lists_count: number;
+	sending_profiles_count: number;
+};
