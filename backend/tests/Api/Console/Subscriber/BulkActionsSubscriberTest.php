@@ -67,7 +67,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'status_change',
-                'status' => 'unsubscribed',
+                'status' => 'pending',
             ]
         );
 
@@ -76,7 +76,10 @@ class BulkActionsSubscriberTest extends WebTestCase
         $this->assertStringContainsString('Subscribers status updated successfully', (string)$response->getContent());
 
         $subscribers = $this->em->getRepository(Subscriber::class)->findAll();
-        $this->assertCount(0, $subscribers);
+        $this->assertCount(50, $subscribers);
+        foreach ($subscribers as $subscriber) {
+            $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
+        }
     }
 
     public function test_bulk_status_update_status_not_provided(): void
@@ -227,7 +230,7 @@ class BulkActionsSubscriberTest extends WebTestCase
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Metadata definition with key non_existent_key not found', (string)$response->getContent());
+        $this->assertStringContainsString('Metadata definitions with keys non_existent_key not found', (string)$response->getContent());
     }
 
     public function test_bulk_action_invalid_subscriber_ids(): void
