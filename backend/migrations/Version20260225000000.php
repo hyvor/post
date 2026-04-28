@@ -11,7 +11,7 @@ final class Version20260225000000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create subscriber_list_removals table';
+        return 'Create subscriber_list_removals table and subscribers email index';
     }
 
     public function up(Schema $schema): void
@@ -28,6 +28,7 @@ final class Version20260225000000 extends AbstractMigration
                 )
                 SQL,
         );
+        $this->addSql('CREATE INDEX idx_subscribers_email ON subscribers (email)');
     }
 
     public function down(Schema $schema): void {}
