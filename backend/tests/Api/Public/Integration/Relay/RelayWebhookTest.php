@@ -4,11 +4,10 @@ namespace App\Tests\Api\Public\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SendStatus;
-use App\Entity\Type\SubscriberStatus;
+use App\Service\Subscriber\Message\UnsubscribeByEmailMessage;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\SendFactory;
-use App\Tests\Factory\SubscriberFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 class RelayWebhookTest extends WebTestCase
@@ -312,23 +311,6 @@ class RelayWebhookTest extends WebTestCase
 
     public function test_suppression_created(): void
     {
-        $subscriber1 = SubscriberFactory::createOne([
-            'status' => SubscriberStatus::SUBSCRIBED,
-            'email' => 'suppressed@example.com'
-        ]);
-        $subscriber2 = SubscriberFactory::createOne([
-            'status' => SubscriberStatus::SUBSCRIBED,
-            'email' => 'suppressed@example.com'
-        ]);
-        $subscriber3 = SubscriberFactory::createOne([
-            'status' => SubscriberStatus::PENDING,
-            'email' => 'suppressed@example.com'
-        ]);
-        $subscriber4 = SubscriberFactory::createOne([
-            'status' => SubscriberStatus::SUBSCRIBED,
-            'email' => 'not-suppressed@example.com'
-        ]);
-
         $data = [
             "event" => "suppression.created",
             "payload" => [
@@ -346,20 +328,16 @@ class RelayWebhookTest extends WebTestCase
         $response = $this->callWebhook($data);
         $this->assertSame(200, $response->getStatusCode());
 
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber1->getStatus());
-        $this->assertSame('bounce - Hard bounce', $subscriber1->getUnsubscribeReason());
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber2->getStatus());
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber3->getStatus());
-        $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber4->getStatus());
+        $queued = $this->transport('async')->queue();
+        $queued->assertContains(UnsubscribeByEmailMessage::class, 1);
+
+        $message = $queued->messages(UnsubscribeByEmailMessage::class)[0];
+        $this->assertSame('suppressed@example.com', $message->email);
+        $this->assertSame('bounce - Hard bounce', $message->reason);
     }
 
     public function test_suppression_created_with_long_description(): void
     {
-        $subscriber = SubscriberFactory::createOne([
-            'status' => SubscriberStatus::SUBSCRIBED,
-            'email' => 'suppressed@example.com'
-        ]);
-
         $longDescription = str_repeat('a', 300);
 
         $data = [
@@ -379,9 +357,11 @@ class RelayWebhookTest extends WebTestCase
         $response = $this->callWebhook($data);
         $this->assertSame(200, $response->getStatusCode());
 
-        $this->assertSame(SubscriberStatus::UNSUBSCRIBED, $subscriber->getStatus());
-        $this->assertNotNull($subscriber->getUnsubscribeReason());
-        $this->assertLessThanOrEqual(255, strlen($subscriber->getUnsubscribeReason()));
+        $queued = $this->transport('async')->queue();
+        $queued->assertContains(UnsubscribeByEmailMessage::class, 1);
+
+        $message = $queued->messages(UnsubscribeByEmailMessage::class)[0];
+        $this->assertLessThanOrEqual(255, strlen($message->reason));
     }
 
     public function test_ignore_webhooks_for_emails_without_send_id(): void

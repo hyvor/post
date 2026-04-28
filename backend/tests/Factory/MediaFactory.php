@@ -4,12 +4,12 @@ namespace App\Tests\Factory;
 
 use App\Entity\Media;
 use App\Entity\Type\MediaFolder;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Media>
+ * @extends PersistentObjectFactory<Media>
  */
-final class MediaFactory extends PersistentProxyObjectFactory
+final class MediaFactory extends PersistentObjectFactory
 {
 
     public static function class(): string

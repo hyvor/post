@@ -31,7 +31,7 @@ class GetImportingSubscribersTest extends WebTestCase
         /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
-            $newsletter->_real(),
+            $newsletter,
             MediaFolder::IMPORT,
             $file,
         );
@@ -42,7 +42,7 @@ class GetImportingSubscribersTest extends WebTestCase
             'status' => SubscriberImportStatus::PENDING_APPROVAL,
             'fields' => [
                 'email' => 'email',
-                'lists' => 'lists'
+                'lists' => 'lists',
             ],
             'csv_fields' => ['email', 'lists', 'extra_col_1', 'extra_col_2'],
 

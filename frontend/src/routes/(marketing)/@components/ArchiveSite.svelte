@@ -27,8 +27,8 @@
 						<div class="seo-feature-name">Customizable</div>
 					</div>
 					<div class="seo-feature-description">
-						Design your archive site to match your brand's look and feel with
-						customizable templates.
+						Design your archive site to match your brand's look and feel with customizable
+						templates.
 					</div>
 				</div>
 
@@ -38,8 +38,8 @@
 						<div class="seo-feature-name">Free subdomain</div>
 					</div>
 					<div class="seo-feature-description">
-						Get a free subdomain (e.g., yoursubdomain.hyvorpost.email) to host your
-						archive site without needing your own domain.
+						Get a free subdomain (e.g., yoursubdomain.hyvorpost.email) to host your archive site
+						without needing your own domain.
 					</div>
 				</div>
 			</div>

@@ -159,9 +159,7 @@
 	<div class="card-footer">
 		<div class="price">
 			{#if !enterprise}
-				<span class="price-amount">{currency}{currentPrice}</span><span
-					class="price-period"
-				>
+				<span class="price-amount">{currency}{currentPrice}</span><span class="price-period">
 					/{yearly ? I18n.t('pricing.year') : I18n.t('pricing.month')}
 				</span>
 			{:else}
@@ -171,13 +169,9 @@
 
 		<div class="button-wrap">
 			{#if !enterprise}
-				<Button size="large" {target} as="a" href={url}
-					>{I18n.t('pricing.choosePlan')}</Button
-				>
+				<Button size="large" {target} as="a" href={url}>{I18n.t('pricing.choosePlan')}</Button>
 			{:else}
-				<Button size="large" {target} as="a" href="https://hyvor.com/enterprise"
-					>Contact Us</Button
-				>
+				<Button size="large" {target} as="a" href="https://hyvor.com/enterprise">Contact Us</Button>
 			{/if}
 		</div>
 	</div>

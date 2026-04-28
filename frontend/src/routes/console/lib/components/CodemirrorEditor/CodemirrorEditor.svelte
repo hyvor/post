@@ -29,9 +29,7 @@
 				cm.indentSelection('add');
 			} else {
 				cm.replaceSelection(
-					cm.getOption('indentWithTabs')
-						? '\t'
-						: Array(cm.getOption('indentUnit') + 1).join(' '),
+					cm.getOption('indentWithTabs') ? '\t' : Array(cm.getOption('indentUnit') + 1).join(' '),
 					'end',
 					'+input'
 				);

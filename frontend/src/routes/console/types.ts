@@ -161,7 +161,7 @@ export type List = {
 	subscribers_count_last_30d: number;
 };
 
-export type NewsletterSubscriberStatus = 'subscribed' | 'unsubscribed' | 'pending';
+export type NewsletterSubscriberStatus = 'subscribed' | 'pending';
 export type NewsletterSubscriberSource = 'console' | 'form' | 'import';
 
 export type Subscriber = {
@@ -170,9 +170,7 @@ export type Subscriber = {
 	status: NewsletterSubscriberStatus;
 	list_ids: number[];
 	source: NewsletterSubscriberSource;
-	is_opted_in: boolean;
 	subscribed_at: number;
-	unsubscribed_at: number | null;
 	metadata: Record<string, string>;
 };
 

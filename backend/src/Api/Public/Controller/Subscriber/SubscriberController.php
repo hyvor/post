@@ -2,9 +2,9 @@
 
 namespace App\Api\Public\Controller\Subscriber;
 
-use App\Api\Public\Input\Subscriber\ResubscribeInput;
-use App\Api\Public\Input\Subscriber\UnsubscribeInput;
+use App\Api\Public\Input\Subscriber\PreferencesInput;
 use App\Api\Public\Object\Form\FormListObject;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
@@ -26,13 +26,11 @@ class SubscriberController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private SubscriberService     $subscriberService,
-        private SendService           $sendService,
+        private SubscriberService $subscriberService,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private Encryption            $encryption,
-    )
-    {
-    }
+        private Encryption $encryption,
+    ) {}
 
     #[Route('/subscriber/confirm', methods: ['GET'])]
     public function confirm(Request $request): JsonResponse
@@ -57,55 +55,23 @@ class SubscriberController extends AbstractController
         assert(is_string($data['expires_at']));
         if (new \DateTimeImmutable($data['expires_at'])->getTimestamp() < $this->now()->getTimestamp()) {
             throw new BadRequestHttpException(
-                'The confirmation link has expired. Please request a new confirmation link.'
+                'The confirmation link has expired. Please request a new confirmation link.',
             );
         }
 
         $updates = new UpdateSubscriberDto();
         $updates->status = SubscriberStatus::SUBSCRIBED;
         $updates->subscribedAt = $this->now();
-        $updates->optInAt = $this->now();
 
         $this->subscriberService->updateSubscriber($subscriber, $updates);
 
         return new JsonResponse();
     }
 
-    #[Route('/subscriber/unsubscribe', methods: ['POST'])]
+    #[Route('/subscriber/preferences', methods: ['POST'])]
     public function unsubscribe(
-        #[MapRequestPayload] UnsubscribeInput $input
-    ): JsonResponse
-    {
-        try {
-            $sendId = $this->encryption->decrypt($input->token);
-        } catch (DecryptException) {
-            throw new BadRequestHttpException('Invalid unsubscribe token.');
-        }
-
-        if (!$sendId || !is_int($sendId)) {
-            throw new BadRequestHttpException('Invalid unsubscribe token.');
-        }
-
-        $send = $this->sendService->getSendById($sendId);
-
-        if (!$send) {
-            throw new BadRequestHttpException('Newsletter send not found.');
-        }
-
-        $this->subscriberService->unsubscribeBySend($send);
-
-        $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
-
-        return new JsonResponse([
-            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
-        ]);
-    }
-
-    #[Route('/subscriber/resubscribe', methods: ['PATCH'])]
-    public function resubscribe(
-        #[MapRequestPayload] ResubscribeInput $input,
-    ): JsonResponse
-    {
+        #[MapRequestPayload] PreferencesInput $input,
+    ): JsonResponse {
         try {
             $sendId = $this->encryption->decrypt($input->token);
         } catch (DecryptException) {
@@ -123,27 +89,34 @@ class SubscriberController extends AbstractController
         }
 
         $subscriber = $send->getSubscriber();
+        $lists = [];
+
+        if (count($input->list_ids)) {
+            $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
+                $send->getNewsletter(),
+                $input->list_ids,
+            );
+
+            if ($missingListIds !== null) {
+                throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
+            }
+
+            $lists = $this->newsletterListService->getListsByIds($send->getNewsletter(), $input->list_ids);
+        }
 
         $updates = new UpdateSubscriberDto();
-
-        $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
-            $send->getNewsletter(),
-            $input->list_ids
+        $updates->lists = $lists;
+        $this->subscriberService->updateSubscriber(
+            $subscriber,
+            $updates,
+            listRemovalReason: ListRemovalReason::UNSUBSCRIBE
         );
 
-        if ($missingListIds !== null) {
-            throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
-        }
+        $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
 
-        if (count($input->list_ids) === 0) {
-            throw new UnprocessableEntityHttpException('At least one list must be provided.');
-        }
-
-        $lists = $this->newsletterListService->getListsByIds($input->list_ids);
-
-        $updates->lists = $lists;
-        $this->subscriberService->updateSubscriber($subscriber, $updates);
-
-        return new JsonResponse();
+        return new JsonResponse([
+            'email' => $subscriber->getEmail(),
+            'lists' => array_map(fn($list) => new FormListObject($list), $lists),
+        ]);
     }
 }

@@ -9,12 +9,14 @@ use App\Service\Domain\Dto\UpdateDomainDto;
 use App\Service\AppConfig;
 use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
+use App\Service\Subscriber\Message\UnsubscribeByEmailMessage;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -41,11 +43,9 @@ class RelayWebhookController extends AbstractController
     public function __construct(
         private AppConfig         $appConfig,
         private DomainService     $domainService,
-        private SubscriberService $subscriberService,
         private SendService       $sendService,
-    )
-    {
-    }
+        private MessageBusInterface $messageBus,
+    ) {}
 
     #[Route('/integration/relay/webhook', methods: 'POST')]
     public function handleWebhook(Request $request): JsonResponse
@@ -161,9 +161,11 @@ class RelayWebhookController extends AbstractController
 
         $reasonText = "$reason" . ($description ? " - $description" : '');
 
-        $this->subscriberService->unsubscribeByEmail(
-            $suppressedEmail,
-            reason: mb_substr($reasonText, 0, 255)
+        $this->messageBus->dispatch(
+            new UnsubscribeByEmailMessage(
+                $suppressedEmail,
+                mb_substr($reasonText, 0, 255)
+            )
         );
     }
 }

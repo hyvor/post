@@ -104,13 +104,12 @@
             "tooltip": "Lists are used to group subscribers. You can send issues to one or more lists."
         },
         "subscribers": {
-            "addSubscribers": "Add Subscribers",
+            "addSubscriber": "Add Subscriber",
             "emptyList": "No subscribers found",
             "status": {
                 "label": "Status",
                 "all": "All",
                 "subscribed": "Subscribed",
-                "unsubscribed": "Unsubscribed",
                 "pending": "Pending"
             },
             "count": "{count} subscribers",

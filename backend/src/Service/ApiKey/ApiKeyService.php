@@ -65,19 +65,19 @@ class ApiKeyService
 
     public function updateApiKey(ApiKey $apiKey, UpdateApiKeyDto $updates): ApiKey
     {
-        if ($updates->hasProperty('enabled')) {
+        if ($updates->has('enabled')) {
             $apiKey->setIsEnabled($updates->enabled);
         }
 
-        if ($updates->hasProperty('scopes')) {
+        if ($updates->has('scopes')) {
             $apiKey->setScopes($updates->scopes);
         }
 
-        if ($updates->hasProperty('name')) {
+        if ($updates->has('name')) {
             $apiKey->setName($updates->name);
         }
 
-        if ($updates->hasProperty('lastAccessedAt')) {
+        if ($updates->has('lastAccessedAt')) {
             $apiKey->setLastAccessedAt($updates->lastAccessedAt);
         }
 

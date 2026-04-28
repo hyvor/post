@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
 	import type { List } from '$lib/types';
 	import Switch from './Switch.svelte';
 	import Button from '../@components/Button.svelte';
-	import { resubscribe } from '$lib/actions/subscriptionActions';
+	import { changePreferences } from '$lib/actions/subscriptionActions';
+	import { fade } from 'svelte/transition';
 
 	interface Props {
 		lists: List[];
@@ -13,7 +13,9 @@
 
 	let { lists, token, error = $bindable() }: Props = $props();
 
-	let selectedListsIds: number[] = $state(lists.map((list) => list.id));
+	let selectedListsIds: number[] = $state([]);
+	let saving = $state(false);
+	let saved = $state(false);
 
 	function handleListSwitch(listId: number) {
 		return (event: Event) => {
@@ -40,56 +42,55 @@
 			return;
 		}
 
-		resubscribe(selectedListsIds, token).catch((e) => {
-			error = e.message || 'An unexpected error occurred';
-		});
+		saving = true;
+
+		changePreferences(token, selectedListsIds)
+			.then(() => {
+				saved = true;
+				setTimeout(() => {
+					saved = false;
+				}, 2000);
+			})
+			.catch((e) => {
+				error = e.message || 'An unexpected error occurred';
+			})
+			.finally(() => {
+				saving = false;
+			});
 	}
 </script>
 
 <div class="resubscribe">
-	<div class="lists" transition:slide={{ duration: 400 }} class:hidden={lists.length === 0}>
+	<div class="lists" class:hidden={lists.length === 0}>
 		{#each lists as list (list.id)}
 			<label class="list">
 				<div class="list-name-description">
 					<div class="list-name">{list.name}</div>
 					<div class="list-description">{list.description}</div>
 				</div>
-				<Switch
-					checked={selectedListsIds.includes(list.id)}
-					onchange={handleListSwitch(list.id)}
-				/>
+				<Switch checked={selectedListsIds.includes(list.id)} onchange={handleListSwitch(list.id)} />
 			</label>
 		{/each}
 	</div>
 
 	<div class="select">
-		<Button
-			color="var(--hp-accent-text-light)"
-			backgroundColor="transparent"
-			size="x-small"
-			style="font-weight: 500;"
-			onclick={handleSelectAll}
-		>
-			Select all
-		</Button>
-		<Button
-			color="var(--hp-accent-text-light)"
-			backgroundColor="transparent"
-			size="x-small"
-			style="font-weight: 500;"
-			onclick={handleDeselectAll}
-		>
-			Deselect all
-		</Button>
+		<button onclick={handleDeselectAll}>Deselect</button>
+		<button onclick={handleSelectAll}>Select all</button>
 	</div>
 
-	<Button size="small" onclick={handleSave}>Save preferences</Button>
+	<div>
+		<Button onclick={handleSave} disabled={saving}>Save preferences</Button>
+	</div>
+
+	{#if saved}
+		<div class="saved" transition:fade>Preferences saved</div>
+	{/if}
 </div>
 
 <style>
 	.lists {
 		margin: auto;
-		width: 70%;
+		margin-top: 30px;
 	}
 
 	.list {
@@ -114,10 +115,24 @@
 	}
 
 	.select {
+		margin-top: 10px;
+		margin-bottom: 30px;
 		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		margin: 5px 9% 10px auto;
-		width: 20%;
+		gap: 6px;
+		justify-content: flex-end;
+	}
+
+	.select button {
+		font-size: 12px;
+	}
+
+	.select button:hover {
+		text-decoration: underline;
+	}
+
+	.saved {
+		margin-top: 10px;
+		font-size: 14px;
+		color: var(--hp-text-light);
 	}
 </style>

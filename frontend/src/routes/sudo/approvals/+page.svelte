@@ -154,20 +154,12 @@
 	<IconMessage error message={error} />
 {:else}
 	<div class="top">
-		<TextInput
-			type="number"
-			min="1"
-			bind:value={search}
-			on:keyup={handleSearchKeyup}
-			size="small"
-		>
+		<TextInput type="number" min="1" bind:value={search} on:keyup={handleSearchKeyup} size="small">
 			{#snippet start()}
 				User ID
 			{/snippet}
 			{#snippet end()}
-				<div
-					style="display: flex; flex-direction:column; align-items: center; width: 25px;"
-				>
+				<div style="display: flex; flex-direction:column; align-items: center; width: 25px;">
 					{#if searchValue}
 						<IconButton size={16} on:click={handleSearchClear}>
 							<IconX size={12} />
@@ -211,8 +203,7 @@
 			{#snippet content()}
 				<ActionList>
 					{#each Object.entries(APPROVAL_STATUS_FILTERS) as [key, value]}
-						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem
-						>
+						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem>
 					{/each}
 				</ActionList>
 			{/snippet}

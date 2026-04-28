@@ -63,8 +63,7 @@
 				<ColorPicker
 					color={$newsletterEditingStore.template_color_background_text ??
 						newsletterDefaults.TEMPLATE_COLOR_BACKGROUND_TEXT}
-					oninput={(val) =>
-						($newsletterEditingStore.template_color_background_text = val)}
+					oninput={(val) => ($newsletterEditingStore.template_color_background_text = val)}
 				/>
 			</SplitControl>
 
@@ -106,8 +105,7 @@
 				<TextInput
 					value={$newsletterEditingStore.template_font_family ??
 						newsletterDefaults.TEMPLATE_FONT_FAMILY}
-					on:input={(e) =>
-						($newsletterEditingStore.template_font_family = e.target.value)}
+					on:input={(e) => ($newsletterEditingStore.template_font_family = e.target.value)}
 					block
 				/>
 			</SplitControl>
@@ -123,8 +121,7 @@
 				<TextInput
 					value={$newsletterEditingStore.template_font_line_height ??
 						newsletterDefaults.TEMPLATE_FONT_LINE_HEIGHT}
-					on:input={(e) =>
-						($newsletterEditingStore.template_font_line_height = e.target.value)}
+					on:input={(e) => ($newsletterEditingStore.template_font_line_height = e.target.value)}
 					block
 				/>
 			</SplitControl>
@@ -140,9 +137,7 @@
 
 		{#if !canChangeBrading}
 			<div class="cant-branding">
-				<Callout type="warning">
-					Your license does not permit removing the branding.
-				</Callout>
+				<Callout type="warning">Your license does not permit removing the branding.</Callout>
 			</div>
 		{/if}
 	</SplitControl>

@@ -8,13 +8,17 @@ use App\Entity\NewsletterList;
 use App\Entity\Send;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberExport;
+use App\Entity\SubscriberListRemoval;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
+use App\Service\Subscriber\Event\SubscriberCreatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatedEvent;
+use App\Service\Subscriber\Event\SubscriberUpdatingEvent;
 use App\Service\Subscriber\Message\ExportSubscribersMessage;
-use App\Service\Subscriber\Message\SubscriberCreatedMessage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
@@ -29,51 +33,41 @@ class SubscriberService
     public const BULK_SUBSCRIBER_LIMIT = 100;
 
     public function __construct(
-        private EntityManagerInterface   $em,
-        private SubscriberRepository     $subscriberRepository,
-        private MessageBusInterface      $messageBus,
-    )
-    {
-    }
+        private EntityManagerInterface $em,
+        private SubscriberRepository $subscriberRepository,
+        private EventDispatcherInterface $ed,
+        private MessageBusInterface $messageBus,
+    ) {}
 
     /**
-     * @param iterable<NewsletterList> $lists
+     * @param array<NewsletterList> $lists
+     * @param array<string, scalar> $metadata
      */
     public function createSubscriber(
-        Newsletter          $newsletter,
-        string              $email,
-        iterable            $lists,
-        SubscriberStatus    $status,
-        SubscriberSource    $source,
-        ?string             $subscribeIp = null,
+        Newsletter $newsletter,
+        string $email,
+        array $lists,
+        SubscriberStatus $status,
+        SubscriberSource $source,
+        ?string $subscribeIp = null,
         ?\DateTimeImmutable $subscribedAt = null,
-        ?\DateTimeImmutable $unsubscribedAt = null
-    ): Subscriber
-    {
+        array $metadata = [],
+        bool $sendConfirmationEmail = true,
+    ): Subscriber {
         $subscriber = new Subscriber()
             ->setNewsletter($newsletter)
             ->setEmail($email)
             ->setCreatedAt($this->now())
             ->setUpdatedAt($this->now())
             ->setStatus($status)
-            ->setSource($source);
+            ->setSubscribedAt($subscribedAt)
+            ->setSubscribeIp($subscribeIp)
+            ->setSource($source)
+            ->setMetadata($metadata);
 
         // if status is subscribed, subscribed_at should be set to now
-        // if status is unsubscribed, unsubscribed_at should be set to now
         if ($status === SubscriberStatus::SUBSCRIBED) {
-            $subscriber->setSubscribedAt($this->now());
-        } elseif ($status === SubscriberStatus::UNSUBSCRIBED) {
-            $subscriber->setUnsubscribedAt($this->now());
-        }
-
-        if ($subscribedAt !== null) {
-            $subscriber->setSubscribedAt($subscribedAt);
-        }
-        if ($unsubscribedAt !== null) {
-            $subscriber->setUnsubscribedAt($unsubscribedAt);
-        }
-        if ($subscribeIp !== null) {
-            $subscriber->setSubscribeIp($subscribeIp);
+            $subscriber->setSubscribedAt($subscribedAt ?? $this->now());
         }
 
         foreach ($lists as $list) {
@@ -83,7 +77,7 @@ class SubscriberService
         $this->em->persist($subscriber);
         $this->em->flush();
 
-        $this->messageBus->dispatch(new SubscriberCreatedMessage($subscriber->getId()));
+        $this->ed->dispatch(new SubscriberCreatedEvent($subscriber, $sendConfirmationEmail));
 
         return $subscriber;
     }
@@ -102,7 +96,8 @@ class SubscriberService
         $ids = array_map(fn(Subscriber $s) => $s->getId(), $subscribers);
 
         $qb = $this->em->createQueryBuilder();
-        $qb->delete(Subscriber::class, 's')
+        $qb
+            ->delete(Subscriber::class, 's')
             ->where($qb->expr()->in('s.id', ':ids'))
             ->setParameter('ids', $ids);
 
@@ -113,14 +108,13 @@ class SubscriberService
      * @return ArrayCollection<int, Subscriber>
      */
     public function getSubscribers(
-        Newsletter        $newsletter,
+        Newsletter $newsletter,
         ?SubscriberStatus $status,
-        ?int              $listId,
-        ?string           $search,
-        int               $limit,
-        int               $offset
-    ): ArrayCollection
-    {
+        ?int $listId,
+        ?string $search,
+        int $limit,
+        int $offset,
+    ): ArrayCollection {
         $qb = $this->subscriberRepository->createQueryBuilder('s');
 
         $qb
@@ -133,18 +127,21 @@ class SubscriberService
             ->setFirstResult($offset);
 
         if ($status !== null) {
-            $qb->andWhere('s.status = :status')
+            $qb
+                ->andWhere('s.status = :status')
                 ->setParameter('status', $status->value);
         }
 
         if ($listId !== null) {
-            $qb->andWhere('l.id = :listId')
+            $qb
+                ->andWhere('l.id = :listId')
                 ->andWhere('l.deleted_at IS NULL')
                 ->setParameter('listId', $listId);
         }
 
         if ($search !== null) {
-            $qb->andWhere('s.email LIKE :search')
+            $qb
+                ->andWhere('s.email LIKE :search')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -155,54 +152,67 @@ class SubscriberService
         return new ArrayCollection($results);
     }
 
-    public function updateSubscriber(Subscriber $subscriber, UpdateSubscriberDto $updates): Subscriber
-    {
-        if ($updates->hasProperty('email')) {
-            $subscriber->setEmail($updates->email);
-        }
+    public function updateSubscriber(
+        Subscriber $subscriber,
+        UpdateSubscriberDto $updates,
 
-        if ($updates->hasProperty('status')) {
+        // if some lists are being removed, set the reason to correctly record
+        // it in ListRemovalListener
+        ListRemovalReason $listRemovalReason = ListRemovalReason::UNSUBSCRIBE,
+        // whether to send the confirmation email if the status was changed to "pending"
+        bool $sendConfirmationEmail = false,
+    ): Subscriber {
+        $subscriberOld = clone $subscriber;
+
+        if ($updates->has('status')) {
             $subscriber->setStatus($updates->status);
         }
 
-        if ($updates->hasProperty('lists')) {
-            // Clear & re-add lists
-            foreach ($subscriber->getLists() as $list) {
-                $subscriber->removeList($list);
-            }
-            foreach ($updates->lists as $list) {
-                $subscriber->addList($list);
-            }
+        if ($updates->has('source')) {
+            $subscriber->setSource($updates->source);
         }
 
-        if ($updates->hasProperty('subscribedAt')) {
+        if ($updates->has('subscribeIp')) {
+            $subscriber->setSubscribeIp($updates->subscribeIp);
+        }
+
+        if ($updates->has('subscribedAt')) {
             $subscriber->setSubscribedAt($updates->subscribedAt);
         }
 
-        if ($updates->hasProperty('optInAt')) {
-            $subscriber->setOptInAt($updates->optInAt);
+        if ($updates->has('metadata')) {
+            $subscriber->setMetadata($updates->metadata);
         }
 
-        if ($updates->hasProperty('unsubscribedAt')) {
-            $subscriber->setUnsubscribedAt($updates->unsubscribedAt);
+        if ($updates->has('lists')) {
+            $subscriber->setLists(new ArrayCollection($updates->lists));
         }
 
-        if ($updates->hasProperty('unsubscribedReason')) {
-            $subscriber->setUnsubscribeReason($updates->unsubscribedReason);
-        }
-
-        if ($updates->hasProperty('metadata')) {
-            $metadata = $subscriber->getMetadata();
-            foreach ($updates->metadata as $key => $value) {
-                $metadata[$key] = $value;
-            }
-            $subscriber->setMetadata($metadata);
+        if ($updates->has('unsubscribeReason')) {
+            $subscriber->setUnsubscribeReason($updates->unsubscribeReason);
         }
 
         $subscriber->setUpdatedAt($this->now());
 
-        $this->em->persist($subscriber);
-        $this->em->flush();
+        $this->em->wrapInTransaction(function () use ($subscriberOld, $subscriber, $listRemovalReason) {
+            $this->em->persist($subscriber);
+            $this->ed->dispatch(
+                new SubscriberUpdatingEvent(
+                    $subscriberOld,
+                    $subscriber,
+                    listRemovalReason: $listRemovalReason,
+                ),
+            );
+            $this->em->flush();
+        });
+
+        $this->ed->dispatch(
+            new SubscriberUpdatedEvent(
+                $subscriberOld,
+                $subscriber,
+                $sendConfirmationEmail,
+            ),
+        );
 
         return $subscriber;
     }
@@ -210,47 +220,6 @@ class SubscriberService
     public function getSubscriberByEmail(Newsletter $newsletter, string $email): ?Subscriber
     {
         return $this->subscriberRepository->findOneBy(['newsletter' => $newsletter, 'email' => $email]);
-    }
-
-    public function unsubscribeBySend(
-        Send                $send,
-        ?\DateTimeImmutable $at = null,
-        ?string             $reason = null
-    ): void
-    {
-        $subscriber = $send->getSubscriber();
-
-        $update = new UpdateSubscriberDto();
-
-        $update->status = SubscriberStatus::UNSUBSCRIBED;
-        $update->optInAt = null;
-        $update->unsubscribedAt = $at ?? $this->now();
-        $update->unsubscribedReason = $reason;
-
-        $this->updateSubscriber($subscriber, $update);
-    }
-
-    public function unsubscribeByEmail(
-        string              $email,
-        ?\DateTimeImmutable $at = null,
-        ?string             $reason = null
-    ): void
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb->update(Subscriber::class, 's')
-            ->set('s.status', ':status')
-            ->set('s.opt_in_at', ':optInAt')
-            ->set('s.unsubscribed_at', ':unsubscribedAt')
-            ->set('s.unsubscribe_reason', ':reason')
-            ->where('s.email = :email')
-            ->setParameter('status', SubscriberStatus::UNSUBSCRIBED->value)
-            ->setParameter('optInAt', null)
-            ->setParameter('unsubscribedAt', $at ?? $this->now())
-            ->setParameter('reason', $reason)
-            ->setParameter('email', $email);
-
-        $qb->getQuery()->execute();
     }
 
     public function exportSubscribers(Newsletter $newsletter): SubscriberExport
@@ -272,9 +241,8 @@ class SubscriberService
 
     public function markSubscriberExportAsFailed(
         SubscriberExport $subscriberExport,
-        string           $errorMessage
-    ): void
-    {
+        string $errorMessage,
+    ): void {
         $subscriberExport->setStatus(SubscriberExportStatus::FAILED);
         $subscriberExport->setErrorMessage($errorMessage);
         $this->em->persist($subscriberExport);
@@ -283,9 +251,8 @@ class SubscriberService
 
     public function markSubscriberExportAsCompleted(
         SubscriberExport $subscriberExport,
-        Media            $media
-    ): void
-    {
+        Media $media,
+    ): void {
         $subscriberExport->setStatus(SubscriberExportStatus::COMPLETED);
         $subscriberExport->setMedia($media);
         $this->em->persist($subscriberExport);
@@ -297,8 +264,62 @@ class SubscriberService
      */
     public function getExports(Newsletter $newsletter): array
     {
-        return $this->em->getRepository(SubscriberExport::class)
+        return $this->em
+            ->getRepository(SubscriberExport::class)
             ->findBy(['newsletter' => $newsletter], ['created_at' => 'DESC']);
+    }
+
+
+    public function addSubscriberToList(
+        Subscriber $subscriber,
+        NewsletterList $list,
+    ): void {
+        $subscriber->addList($list);
+        $subscriber->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriber);
+        $this->em->flush();
+    }
+
+    public function removeSubscriberFromList(
+        Subscriber $subscriber,
+        NewsletterList $list,
+        bool $recordUnsubscription,
+    ): void {
+        $subscriber->removeList($list);
+        $subscriber->setUpdatedAt($this->now());
+
+        $this->em->persist($subscriber);
+        $this->em->flush();
+
+
+        if ($recordUnsubscription) {
+            $existing = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
+                'list' => $list,
+                'subscriber' => $subscriber,
+            ]);
+
+            if ($existing === null) {
+                $unsubscribed = new SubscriberListRemoval()
+                    ->setList($list)
+                    ->setSubscriber($subscriber)
+                    ->setCreatedAt($this->now());
+
+                $this->em->persist($unsubscribed);
+                $this->em->persist($list); // test fails otherwise, since this is used in removeElement, but sure why
+                $this->em->flush();
+            }
+        }
+    }
+
+    public function hasSubscriberUnsubscribedFromList(Subscriber $subscriber, NewsletterList $list): bool
+    {
+        $record = $this->em->getRepository(SubscriberListRemoval::class)->findOneBy([
+            'list' => $list,
+            'subscriber' => $subscriber,
+        ]);
+
+        return $record !== null;
     }
 
     public function getSubscriberById(int $id): ?Subscriber
