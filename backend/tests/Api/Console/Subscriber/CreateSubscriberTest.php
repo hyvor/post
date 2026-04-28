@@ -132,6 +132,7 @@ class CreateSubscriberTest extends WebTestCase
         $this->assertSame('import', $json['source']);
         $this->assertSame('203.0.113.1', $json['subscribe_ip']);
         $this->assertSame($subscribedAt->getTimestamp(), $json['subscribed_at']);
+        $this->assertIsArray($json['list_ids']);
         $this->assertCount(2, $json['list_ids']);
         $this->assertContains($list1->getId(), $json['list_ids']);
         $this->assertContains($list2->getId(), $json['list_ids']);
@@ -704,5 +705,4 @@ class CreateSubscriberTest extends WebTestCase
             'This value is not a valid IP address.',
         );
     }
-
 }

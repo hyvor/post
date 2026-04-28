@@ -42,10 +42,7 @@
 
 		<Divider margin={10} />
 
-		<NavLink
-			href="/sudo/newsletters"
-			active={$page.url.pathname.startsWith('/sudo/newsletters')}
-		>
+		<NavLink href="/sudo/newsletters" active={$page.url.pathname.startsWith('/sudo/newsletters')}>
 			<NavItem>
 				<IconJournal slot="icon" />
 				<span slot="text">Newsletters</span>
