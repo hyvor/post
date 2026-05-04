@@ -21,12 +21,7 @@
 	}
 </script>
 
-<button
-	type="button"
-	class="send-row"
-	onclick={() => (showModal = true)}
-	onkeydown={handleKeydown}
->
+<button type="button" class="send-row" onclick={() => (showModal = true)} onkeydown={handleKeydown}>
 	<div class="email">
 		{send.email}
 	</div>

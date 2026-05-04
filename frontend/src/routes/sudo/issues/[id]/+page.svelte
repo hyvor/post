@@ -70,12 +70,8 @@
 			<h2>{issue.subject || 'No subject'}</h2>
 		</div>
 
-		<TabNav active={tab}>
-			<TabNavItem
-				name="details"
-				active={tab === 'details'}
-				onclick={() => (tab = 'details')}
-			>
+		<TabNav>
+			<TabNavItem name="details" active={tab === 'details'} onclick={() => (tab = 'details')}>
 				Details
 			</TabNavItem>
 			<TabNavItem name="html" active={tab === 'html'} onclick={() => (tab = 'html')}>
