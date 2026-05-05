@@ -225,12 +225,7 @@
 				label={I18n.t('console.settings.api.key')}
 				caption={I18n.t('console.settings.api.keyCaption')}
 			>
-				<Button
-					color="gray"
-					variant="outline"
-					size="small"
-					onclick={() => handleRegenerate()}
-				>
+				<Button color="gray" variant="outline" size="small" onclick={() => handleRegenerate()}>
 					{I18n.t('console.settings.api.regenerate')}
 
 					{#snippet end()}

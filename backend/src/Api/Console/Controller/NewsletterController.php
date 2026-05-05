@@ -93,19 +93,19 @@ class NewsletterController extends AbstractController
     ): JsonResponse
     {
         $updates = new UpdateNewsletterDto();
-        if ($input->hasProperty('name')) {
+        if ($input->has('name')) {
             $updates->name = $input->name;
         }
-        if ($input->hasProperty('subdomain')) {
+        if ($input->has('subdomain')) {
             if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
                 throw new UnprocessableEntityHttpException('Subdomain is already taken.');
             }
             $updates->subdomain = $input->subdomain;
         }
-        if ($input->hasProperty('language_code')) {
+        if ($input->has('language_code')) {
             $updates->language_code = $input->language_code;
         }
-        if ($input->hasProperty('is_rtl')) {
+        if ($input->has('is_rtl')) {
             $updates->is_rtl = $input->is_rtl;
         }
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);

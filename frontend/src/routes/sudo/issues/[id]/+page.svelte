@@ -87,12 +87,7 @@
 			</SplitControl>
 
 			<SplitControl label="Newsletter">
-				<Button
-					as="a"
-					href={`/sudo/newsletters/${issue.newsletter.id}`}
-					size="small"
-					color="input"
-				>
+				<Button as="a" href={`/sudo/newsletters/${issue.newsletter.id}`} size="small" color="input">
 					{issue.newsletter.subdomain}
 					{#snippet end()}
 						<IconArrowRight size={12} />

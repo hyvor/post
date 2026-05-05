@@ -103,10 +103,9 @@
 				track.event('issue test mail sent');
 			})
 			.catch((e) => {
-				toast.error(
-					I18n.t('console.issues.draft.testEmail.confirm.failed') + ': ' + e.message,
-					{ id: toastId }
-				);
+				toast.error(I18n.t('console.issues.draft.testEmail.confirm.failed') + ': ' + e.message, {
+					id: toastId
+				});
 			});
 	}
 

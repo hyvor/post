@@ -5,6 +5,8 @@ namespace App;
 use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Billing\License\License;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Hyvor\Internal\Component\Component;
 
 /**
@@ -39,6 +41,15 @@ class InternalFake extends \Hyvor\Internal\InternalFake
                 'username' => 'thibault',
                 'name' => 'Thibault Boutet'
             ]
+        ];
+    }
+
+    public function licenses(array $organizationIds, Component $component): array
+    {
+        $license = PostLicense::trial();
+        $license->emails = 1000;
+        return [
+            1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)
         ];
     }
 }

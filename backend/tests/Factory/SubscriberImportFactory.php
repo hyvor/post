@@ -4,21 +4,19 @@ namespace App\Tests\Factory;
 
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberImportStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SubscriberImport>
+ * @extends PersistentObjectFactory<SubscriberImport>
  */
-final class SubscriberImportFactory extends PersistentProxyObjectFactory
+final class SubscriberImportFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {

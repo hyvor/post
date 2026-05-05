@@ -14,19 +14,9 @@ interface UnsubscribeResponse {
 	lists: List[];
 }
 
-export function unsubscribe(token: string) {
+export function changePreferences(token: string, list_ids: number[]) {
 	return publicApi.post<UnsubscribeResponse>({
-		endpoint: SUBSCRIBER_PREFIX + '/unsubscribe',
-		data: { token }
-	});
-}
-
-export function resubscribe(list_ids: number[], token: string) {
-	return publicApi.patch<void>({
-		endpoint: SUBSCRIBER_PREFIX + '/resubscribe',
-		data: {
-			list_ids,
-			token
-		}
+		endpoint: SUBSCRIBER_PREFIX + '/preferences',
+		data: { token, list_ids }
 	});
 }

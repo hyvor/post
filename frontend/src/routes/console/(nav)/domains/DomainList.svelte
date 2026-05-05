@@ -24,8 +24,7 @@
 				// If all domains are verified, reset the interval
 				if (
 					!res.some(
-						(domain) =>
-							domain.relay_status === 'pending' || domain.relay_status === 'warning'
+						(domain) => domain.relay_status === 'pending' || domain.relay_status === 'warning'
 					)
 				) {
 					currentInterval = 30 * 1000;
@@ -47,8 +46,7 @@
 			// Only refresh if there are unverified domains
 			if (
 				domains.some(
-					(domain) =>
-						domain.relay_status === 'pending' || domain.relay_status === 'warning'
+					(domain) => domain.relay_status === 'pending' || domain.relay_status === 'warning'
 				)
 			) {
 				refreshDomains();

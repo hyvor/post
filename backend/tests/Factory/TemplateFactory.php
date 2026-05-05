@@ -6,21 +6,19 @@ use App\Entity\Send;
 use App\Entity\Template;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Template>
+ * @extends PersistentObjectFactory<Template>
  */
-final class TemplateFactory extends PersistentProxyObjectFactory
+final class TemplateFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -46,8 +44,7 @@ final class TemplateFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Send $issue): void {})
-        ;
+        return $this// ->afterInstantiate(function(Send $issue): void {})
+            ;
     }
 }

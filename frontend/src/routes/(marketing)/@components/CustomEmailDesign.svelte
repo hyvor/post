@@ -18,8 +18,8 @@
 						<div class="seo-feature-name">Customizable Email Templates</div>
 					</div>
 					<div class="seo-feature-description">
-						Choose from a variety of professionally designed email templates that can be
-						easily customized to match your brand's look and feel.
+						Choose from a variety of professionally designed email templates that can be easily
+						customized to match your brand's look and feel.
 					</div>
 				</div>
 
@@ -29,8 +29,8 @@
 						<div class="seo-feature-name">Free subdomain</div>
 					</div>
 					<div class="seo-feature-description">
-						Get a free subdomain (e.g., yourname.hyvorpost.io) to send emails without
-						needing your own domain.
+						Get a free subdomain (e.g., yourname.hyvorpost.io) to send emails without needing your
+						own domain.
 					</div>
 				</div>
 			</div>

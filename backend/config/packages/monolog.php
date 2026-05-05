@@ -9,7 +9,6 @@ return static function (MonologConfig $monolog, ContainerConfigurator $container
             ->type('buffer')
             ->handler('final')
             ->level("%env(LOG_LEVEL)%")
-            ->bubble(false)
             ->channels()->elements(['app']);
         $monolog->handler('non_app')
             ->type('buffer')

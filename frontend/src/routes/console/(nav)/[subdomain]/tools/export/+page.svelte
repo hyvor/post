@@ -78,13 +78,7 @@
 							<ExportStatusBadge status={exportItem.status} />
 						</div>
 						{#if exportItem.status === 'completed' && exportItem.url}
-							<Button
-								size="small"
-								color="input"
-								as="a"
-								href={exportItem.url}
-								target="_blank"
-							>
+							<Button size="small" color="input" as="a" href={exportItem.url} target="_blank">
 								Download
 								{#snippet end()}
 									<IconCloudDownload size={12} />

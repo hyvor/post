@@ -36,10 +36,7 @@
 	</div>
 	<div class="metadata">
 		{#if importingSubscriber.metadata}
-			<CodeBlock
-				code={JSON.stringify(importingSubscriber.metadata, null, 2)}
-				language="json"
-			/>
+			<CodeBlock code={JSON.stringify(importingSubscriber.metadata, null, 2)} language="json" />
 		{:else}
 			N/A
 		{/if}

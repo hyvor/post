@@ -61,9 +61,7 @@
 				if (listsToFilter.length > 0) {
 					lists = lists.filter((list) => listsToFilter.includes(list.name));
 					if (lists.length === 0) {
-						initError =
-							'No lists found with the provided list names: ' +
-							listsToFilter.join(', ');
+						initError = 'No lists found with the provided list names: ' + listsToFilter.join(', ');
 						return;
 					}
 				}

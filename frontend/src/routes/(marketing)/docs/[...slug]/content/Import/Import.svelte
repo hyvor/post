@@ -8,9 +8,9 @@
 <h1>Import</h1>
 
 <p>
-	You can import subscribers from a CSV file to Hyvor Post. This is useful when you want to
-	migrate your subscribers from another service or when you have a list of subscribers that you
-	want to add to Hyvor Post.
+	You can import subscribers from a CSV file to Hyvor Post. This is useful when you want to migrate
+	your subscribers from another service or when you have a list of subscribers that you want to add
+	to Hyvor Post.
 </p>
 
 <DocsImage src={newImport} alt="Import" />
@@ -51,17 +51,15 @@
 	<TableRow>
 		<div>Lists</div>
 		<div>
-			An array of list names that subscriber should be subscribed to. If unmapped, user will
-			be subscribed to all lists.
+			An array of list names that subscriber should be subscribed to. If unmapped, user will be
+			subscribed to all lists.
 		</div>
 		<div><code>string[]</code></div>
 		<div>No</div>
 	</TableRow>
 	<TableRow>
 		<div>Subscribed At</div>
-		<div>
-			Timestamp when the subscriber was subscribed. If unmapped, current time will be used.
-		</div>
+		<div>Timestamp when the subscriber was subscribed. If unmapped, current time will be used.</div>
 		<div><code>string</code></div>
 		<div>No</div>
 	</TableRow>
@@ -76,8 +74,8 @@
 	<TableRow>
 		<div>Subscriber Metadata</div>
 		<div>
-			You can map values to all <Link href="/subscriber-metadata">Subscriber Metadata</Link> which
-			you have defined in your console.
+			You can map values to all <Link href="/subscriber-metadata">Subscriber Metadata</Link> which you
+			have defined in your console.
 		</div>
 		<div><code>string</code></div>
 		<div>No</div>

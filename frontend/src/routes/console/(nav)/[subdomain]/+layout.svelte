@@ -17,9 +17,7 @@
 	let isLoading = $state(true);
 
 	function load() {
-		const userNewsletter = $userNewslettersStore.find(
-			(n) => n.newsletter.subdomain === subdomain
-		);
+		const userNewsletter = $userNewslettersStore.find((n) => n.newsletter.subdomain === subdomain);
 
 		if (!userNewsletter) {
 			toast.error('Newsletter not found');

@@ -23,8 +23,6 @@ use PHPUnit\Framework\Attributes\TestWith;
 class GetSubscribersTest extends WebTestCase
 {
 
-    // TODO: tests for authentication
-
     public function testListSubscribersNonEmpty(): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -48,7 +46,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/subscribers'
+            '/subscribers',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -81,7 +79,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/subscribers?limit=2&offset=1'
+            '/subscribers?limit=2&offset=1',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -101,7 +99,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/subscribers'
+            '/subscribers',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -109,8 +107,8 @@ class GetSubscribersTest extends WebTestCase
         $this->assertCount(0, $json);
     }
 
-    #[TestWith([SubscriberStatus::SUBSCRIBED, SubscriberStatus::UNSUBSCRIBED])]
-    #[TestWith([SubscriberStatus::UNSUBSCRIBED, SubscriberStatus::SUBSCRIBED])]
+    #[TestWith([SubscriberStatus::SUBSCRIBED, SubscriberStatus::PENDING])]
+    #[TestWith([SubscriberStatus::PENDING, SubscriberStatus::SUBSCRIBED])]
     public function testListSubscribersByStatus(SubscriberStatus $status, SubscriberStatus $oppositeStatus): void
     {
         $newsletter = NewsletterFactory::createOne();
@@ -133,7 +131,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/subscribers?status={$status->value}"
+            "/subscribers?status={$status->value}",
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -176,7 +174,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/subscribers?search=thibault"
+            "/subscribers?search=thibault",
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -194,15 +192,15 @@ class GetSubscribersTest extends WebTestCase
         $list1 = NewsletterListFactory::createOne(
             [
                 'newsletter' => $newsletter,
-                'name' => 'list_1'
-            ]
+                'name' => 'list_1',
+            ],
         );
 
         $list2 = NewsletterListFactory::createOne(
             [
                 'newsletter' => $newsletter,
-                'name' => 'list_2'
-            ]
+                'name' => 'list_2',
+            ],
         );
 
         $subscriber1 = SubscriberFactory::createOne([
@@ -222,7 +220,7 @@ class GetSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/subscribers?list_id={$list1->getId()}"
+            "/subscribers?list_id={$list1->getId()}",
         );
 
         $this->assertSame(200, $response->getStatusCode());

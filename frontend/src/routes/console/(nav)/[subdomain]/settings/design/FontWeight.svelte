@@ -17,8 +17,7 @@
 		heading
 			? ($newsletterEditingStore.template_font_weight_heading ??
 					newsletterDefaults.TEMPLATE_FONT_WEIGHT_HEADING)
-			: ($newsletterEditingStore.template_font_weight ??
-					newsletterDefaults.TEMPLATE_FONT_WEIGHT)
+			: ($newsletterEditingStore.template_font_weight ?? newsletterDefaults.TEMPLATE_FONT_WEIGHT)
 	);
 
 	const fontWeights = [
@@ -58,10 +57,7 @@
 	{#snippet content()}
 		<ActionList selection="single" selectionAlign="end">
 			{#each fontWeights as weight}
-				<ActionListItem
-					on:click={() => handleChange(weight)}
-					selected={currentValue === weight}
-				>
+				<ActionListItem on:click={() => handleChange(weight)} selected={currentValue === weight}>
 					<span class="weight-value">{weight}</span>
 				</ActionListItem>
 			{/each}

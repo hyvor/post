@@ -4,7 +4,7 @@
 	import ListView from './home/ListView.svelte';
 </script>
 
-<SingleBox style="overflow-auto">
+<SingleBox style="overflow:auto">
 	<HomeStats />
 	<ListView />
 </SingleBox>

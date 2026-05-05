@@ -7,7 +7,7 @@
 	import IconEyeglasses from '@hyvor/icons/IconEyeglasses';
 	import { newsletterStore, listsStore } from '$lib/archiveStore';
 	import Resubscribe from './Resubscribe.svelte';
-	import { unsubscribe } from '$lib/actions/subscriptionActions';
+	import { changePreferences } from '$lib/actions/subscriptionActions';
 
 	let isLoading = $state(true);
 	let previewMode = $state(false);
@@ -32,7 +32,7 @@
 			return;
 		}
 
-		unsubscribe(token)
+		changePreferences(token, [])
 			.then((data) => {
 				listsStore.set(data.lists);
 			})
@@ -63,9 +63,9 @@
 		{:else}
 			<Notice
 				heading="Unsubscribe successful"
-				message="You have unsubscribed from all lists of <strong>{$newsletterStore.name}</strong>.
+				message="You've been unsubscribed from <strong>{$newsletterStore.name}</strong>.
                     <br />
-                    If this was a mistake, you can easily resubscribe below. Thank you."
+                    If you change your mind, you can resubscribe below."
 				icon={IconEnvelopeSlash}
 			>
 				<Resubscribe lists={$listsStore} {token} bind:error />

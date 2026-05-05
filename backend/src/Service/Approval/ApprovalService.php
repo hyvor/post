@@ -137,29 +137,29 @@ class ApprovalService
         UpdateApprovalDto $updates
     ): Approval
     {
-        if ($updates->hasProperty('companyName')) {
+        if ($updates->has('companyName')) {
             $approval->setCompanyName($updates->companyName);
         }
 
-        if ($updates->hasProperty('country')) {
+        if ($updates->has('country')) {
             $approval->setCountry($updates->country);
         }
 
-        if ($updates->hasProperty('website')) {
+        if ($updates->has('website')) {
             $approval->setWebsite($updates->website);
         }
 
-        if ($updates->hasProperty('socialLinks')) {
+        if ($updates->has('socialLinks')) {
             $approval->setSocialLinks($updates->socialLinks);
         }
 
-        if ($updates->hasProperty('status')) {
+        if ($updates->has('status')) {
             $approval->setStatus($updates->status);
         }
 
         $otherInfo = $approval->getOtherInfo() ?? [];
 
-        if ($updates->hasProperty('typeOfContent')) {
+        if ($updates->has('typeOfContent')) {
             if ($updates->typeOfContent === null) {
                 unset($otherInfo['type_of_content']);
             } else {
@@ -167,7 +167,7 @@ class ApprovalService
             }
         }
 
-        if ($updates->hasProperty('frequency')) {
+        if ($updates->has('frequency')) {
             if ($updates->frequency === null) {
                 unset($otherInfo['frequency']);
             } else {
@@ -175,7 +175,7 @@ class ApprovalService
             }
         }
 
-        if ($updates->hasProperty('existingList')) {
+        if ($updates->has('existingList')) {
             if ($updates->existingList === null) {
                 unset($otherInfo['existing_list']);
             } else {
@@ -183,7 +183,7 @@ class ApprovalService
             }
         }
 
-        if ($updates->hasProperty('sample')) {
+        if ($updates->has('sample')) {
             if ($updates->sample === null) {
                 unset($otherInfo['sample']);
             } else {
@@ -191,7 +191,7 @@ class ApprovalService
             }
         }
 
-        if ($updates->hasProperty('whyPost')) {
+        if ($updates->has('whyPost')) {
             if ($updates->whyPost === null) {
                 unset($otherInfo['why_post']);
             } else {

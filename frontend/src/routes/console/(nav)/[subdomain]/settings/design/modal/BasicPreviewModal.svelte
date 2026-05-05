@@ -9,13 +9,7 @@
 </script>
 
 <div class="modal-wrap">
-	<Modal
-		bind:show
-		title="Email Design"
-		size="large"
-		role="dialog"
-		on:cancel={() => (show = false)}
-	>
+	<Modal bind:show title="Email Design" size="large" role="dialog" on:cancel={() => (show = false)}>
 		<div class="content">
 			<div class="left">
 				<Callout type="info">

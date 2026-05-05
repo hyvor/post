@@ -5,6 +5,9 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Sudo\Resolver\EntityResolver as SudoEntityResolver;
+use App\Service\Integration\Relay\RelayApiClient;
+use App\Service\Integration\Relay\RelayApiClientInterface;
+use App\Service\Integration\Relay\RelayDevClient;
 use App\Service\Media\FilesystemFactory;
 use Aws\S3\S3Client;
 use League\Flysystem\Filesystem;
@@ -68,4 +71,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '%env(S3_BUCKET)%',
             '%kernel.project_dir%/var/uploads',
         ]);
+
+    // ================== DEV ==================
+    $services->alias(RelayApiClientInterface::class, RelayApiClient::class);
+    if ($containerConfigurator->env() === 'dev') {
+        $services->alias(RelayApiClientInterface::class, RelayDevClient::class);
+    }
 };

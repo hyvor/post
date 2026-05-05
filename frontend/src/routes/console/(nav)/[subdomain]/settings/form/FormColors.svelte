@@ -24,10 +24,8 @@
 	<FormControl>
 		<ColorPicker
 			color={palette === 'light'
-				? $newsletterEditingStore.form_color_light_text ||
-					newsletterDefaults.FORM_COLOR_LIGHT_TEXT
-				: $newsletterEditingStore.form_color_dark_text ||
-					newsletterDefaults.FORM_COLOR_DARK_TEXT}
+				? $newsletterEditingStore.form_color_light_text || newsletterDefaults.FORM_COLOR_LIGHT_TEXT
+				: $newsletterEditingStore.form_color_dark_text || newsletterDefaults.FORM_COLOR_DARK_TEXT}
 			on:input={(e) => {
 				palette === 'light'
 					? ($newsletterEditingStore.form_color_light_text = e.detail)

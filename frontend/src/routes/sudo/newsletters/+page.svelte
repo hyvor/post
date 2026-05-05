@@ -166,12 +166,7 @@
 				</div>
 			{/snippet}
 		</TextInput>
-		<TextInput
-			bind:value={organizationId}
-			on:keyup={handleOrgIdKeyup}
-			size="small"
-			block={false}
-		>
+		<TextInput bind:value={organizationId} on:keyup={handleOrgIdKeyup} size="small" block={false}>
 			{#snippet start()}
 				Org ID
 			{/snippet}
@@ -235,9 +230,7 @@
 				<NewsletterRow
 					{newsletter}
 					{handleSelect}
-					org={newsletter.organization_id
-						? orgsMap[newsletter.organization_id]
-						: undefined}
+					org={newsletter.organization_id ? orgsMap[newsletter.organization_id] : undefined}
 					stats={statsMap[newsletter.id]}
 				/>
 			{/each}

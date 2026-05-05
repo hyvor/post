@@ -27,9 +27,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class ConsoleInitTest extends WebTestCase
 {
 
-    // TODO: tests for input validation
-    // TODO: tests for authentication
-
     protected function shouldEnableAuthFake(): bool
     {
         return false;
@@ -43,8 +40,8 @@ class ConsoleInitTest extends WebTestCase
             $withOrganization ? new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
-                role: 'admin'
-            ) : null
+                role: 'admin',
+            ) : null,
         );
     }
 
@@ -60,7 +57,7 @@ class ConsoleInitTest extends WebTestCase
             UserFactory::createOne([
                 'newsletter' => $newsletter,
                 'hyvor_user_id' => 1,
-                'role' => UserRole::OWNER
+                'role' => UserRole::OWNER,
             ]);
         }
 
@@ -74,14 +71,14 @@ class ConsoleInitTest extends WebTestCase
         ]);
 
         $newsletterAdmin = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
 
         // admin
         $user = UserFactory::createOne([
             'newsletter' => $newsletterAdmin,
             'hyvor_user_id' => 1,
-            'role' => UserRole::ADMIN
+            'role' => UserRole::ADMIN,
         ]);
 
         $noAccessNewsletter = NewsletterFactory::createOne([
@@ -90,18 +87,18 @@ class ConsoleInitTest extends WebTestCase
         UserFactory::createOne([
             'newsletter' => $noAccessNewsletter,
             'hyvor_user_id' => 2,
-            'role' => UserRole::OWNER
+            'role' => UserRole::OWNER,
         ]);
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, PostLicense::trial())],
         );
 
         $response = $this->consoleApi(
             null,
             'GET',
-            '/init'
+            '/init',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -140,7 +137,7 @@ class ConsoleInitTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/init'
+            '/init',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -184,12 +181,12 @@ class ConsoleInitTest extends WebTestCase
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
-            'role' => UserRole::OWNER
+            'role' => UserRole::OWNER,
         ]);
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())],
         );
 
         $response = $this->consoleApi(
@@ -220,25 +217,18 @@ class ConsoleInitTest extends WebTestCase
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
-            'role' => UserRole::OWNER
+            'role' => UserRole::OWNER,
         ]);
 
         $newsletterList = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
         ]);
 
-        $subscribersOldUnsubscribed = SubscriberFactory::createMany(2, [
-            'newsletter' => $newsletter,
-            'lists' => [$newsletterList],
-            'created_at' => new \DateTimeImmutable('2021-01-01'),
-            'status' => SubscriberStatus::UNSUBSCRIBED
-        ]);
-
         $subscribersOld = SubscriberFactory::createMany(5, [
             'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable('2021-01-01'),
-            'status' => SubscriberStatus::SUBSCRIBED
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
 
@@ -246,24 +236,20 @@ class ConsoleInitTest extends WebTestCase
             'newsletter' => $newsletter,
             'lists' => [$newsletterList],
             'created_at' => new \DateTimeImmutable(),
-            'status' => SubscriberStatus::SUBSCRIBED
+            'status' => SubscriberStatus::SUBSCRIBED,
         ]);
 
-        foreach ($subscribersOldUnsubscribed as $subscriber) {
-            $newsletterList->addSubscriber($subscriber->_real());
-        }
-
         foreach ($subscribersOld as $subscriber) {
-            $newsletterList->addSubscriber($subscriber->_real());
+            $newsletterList->addSubscriber($subscriber);
         }
 
         foreach ($subscribersNew as $subscriber) {
-            $newsletterList->addSubscriber($subscriber->_real());
+            $newsletterList->addSubscriber($subscriber);
         }
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, PostLicense::trial())],
         );
 
         $response = $this->consoleApi(

@@ -8,7 +8,7 @@ trait OptionalPropertyTrait
     /**
      * Checks if the property is INITIALIZED
      */
-    public function hasProperty(string $property): bool
+    public function has(string $property): bool
     {
         try {
             $_ = $this->{$property};

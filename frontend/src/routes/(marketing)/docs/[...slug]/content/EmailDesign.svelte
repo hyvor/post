@@ -6,8 +6,8 @@
 
 <p>
 	When you send an issue to your subscribers, Hyvor Post "renders" the issue using a template. By
-	default, Hyvor Post uses a default email template. Its design is simple and can be customized
-	for your needs at <strong>Console &rarr; Settings &rarr; Email Template</strong>.
+	default, Hyvor Post uses a default email template. Its design is simple and can be customized for
+	your needs at <strong>Console &rarr; Settings &rarr; Email Template</strong>.
 </p>
 
 <h2 id="custom">Custom Templates</h2>

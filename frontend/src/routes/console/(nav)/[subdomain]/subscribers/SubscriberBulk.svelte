@@ -3,10 +3,7 @@
 	import { getI18n } from '../../../lib/i18n';
 	import { deleteSubscribers } from '../../../lib/actions/subscriberActions';
 	import { slide } from 'svelte/transition';
-	import {
-		selectedSubscriberIdsStore,
-		subscriberStore
-	} from '../../../lib/stores/newsletterStore';
+	import { selectedSubscriberIdsStore, subscriberStore } from '../../../lib/stores/newsletterStore';
 
 	const I18n = getI18n();
 	const MAX_SELECTABLE_SUBSCRIBERS = 100;
@@ -77,10 +74,7 @@
 					<Link href="javascript:void()" on:click={handleSelectAll}>
 						{I18n.t('console.common.selectAll')}
 					</Link>
-					<Link
-						href="javascript:void()"
-						on:click={() => selectedSubscriberIdsStore.set([])}
-					>
+					<Link href="javascript:void()" on:click={() => selectedSubscriberIdsStore.set([])}>
 						{I18n.t('console.subscribers.bulk.deselect')}
 					</Link>
 				</div>

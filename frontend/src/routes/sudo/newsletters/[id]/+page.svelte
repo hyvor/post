@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		Button,
-		CodeBlock,
-		Divider,
-		IconMessage,
-		Loader,
-		toast
-	} from '@hyvor/design/components';
+	import { Button, CodeBlock, Divider, IconMessage, Loader, toast } from '@hyvor/design/components';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getNewsletter } from '../../lib/actions/newsletterActions';
@@ -89,9 +82,7 @@
 						class:positive={stats.issues.last_30_days >= 0}
 						class:negative={stats.issues.last_30_days < 0}
 					>
-						{stats.issues.last_30_days >= 0
-							? '+'
-							: ''}{stats.issues.last_30_days.toLocaleString()}
+						{stats.issues.last_30_days >= 0 ? '+' : ''}{stats.issues.last_30_days.toLocaleString()}
 						<span class="last-30d">30d</span>
 					</span>
 				</div>
@@ -99,20 +90,13 @@
 			<div class="stat">
 				<div class="stat-title">Bounce Rate</div>
 				<div class="stat-value-wrap">
-					<span class="stat-value"
-						>{stats.bounced_rate.total}<span class="percent">%</span></span
-					>
+					<span class="stat-value">{stats.bounced_rate.total}<span class="percent">%</span></span>
 					<span
 						class="stat-change"
-						class:positive={stats.bounced_rate.last_30_days -
-							stats.bounced_rate.total <=
-							0}
-						class:negative={stats.bounced_rate.last_30_days - stats.bounced_rate.total >
-							0}
+						class:positive={stats.bounced_rate.last_30_days - stats.bounced_rate.total <= 0}
+						class:negative={stats.bounced_rate.last_30_days - stats.bounced_rate.total > 0}
 					>
-						{stats.bounced_rate.last_30_days - stats.bounced_rate.total >= 0
-							? '+'
-							: ''}{(
+						{stats.bounced_rate.last_30_days - stats.bounced_rate.total >= 0 ? '+' : ''}{(
 							stats.bounced_rate.last_30_days - stats.bounced_rate.total
 						).toFixed(2)}<span class="percent">%</span>
 						<span class="last-30d">30d</span>
@@ -122,21 +106,14 @@
 			<div class="stat">
 				<div class="stat-title">Complaint Rate</div>
 				<div class="stat-value-wrap">
-					<span class="stat-value"
-						>{stats.complained_rate.total}<span class="percent">%</span></span
+					<span class="stat-value">{stats.complained_rate.total}<span class="percent">%</span></span
 					>
 					<span
 						class="stat-change"
-						class:positive={stats.complained_rate.last_30_days -
-							stats.complained_rate.total <=
-							0}
-						class:negative={stats.complained_rate.last_30_days -
-							stats.complained_rate.total >
-							0}
+						class:positive={stats.complained_rate.last_30_days - stats.complained_rate.total <= 0}
+						class:negative={stats.complained_rate.last_30_days - stats.complained_rate.total > 0}
 					>
-						{stats.complained_rate.last_30_days - stats.complained_rate.total >= 0
-							? '+'
-							: ''}{(
+						{stats.complained_rate.last_30_days - stats.complained_rate.total >= 0 ? '+' : ''}{(
 							stats.complained_rate.last_30_days - stats.complained_rate.total
 						).toFixed(2)}<span class="percent">%</span>
 						<span class="last-30d">30d</span>

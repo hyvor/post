@@ -23,8 +23,7 @@ export function updateDraftIssue() {
 	for (const field of updatableFields) {
 		if (field === 'lists') {
 			if (
-				JSON.stringify(draftIssue[field].sort()) !==
-				JSON.stringify(draftIssueEditing[field].sort())
+				JSON.stringify(draftIssue[field].sort()) !== JSON.stringify(draftIssueEditing[field].sort())
 			) {
 				(changedFields as any)[field] = draftIssueEditing[field];
 			}

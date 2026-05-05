@@ -4,21 +4,19 @@ namespace App\Tests\Factory;
 
 use App\Entity\Meta\NewsletterMeta;
 use App\Entity\Newsletter;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Newsletter>
+ * @extends PersistentObjectFactory<Newsletter>
  */
-final class NewsletterFactory extends PersistentProxyObjectFactory
+final class NewsletterFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -48,7 +46,7 @@ final class NewsletterFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this// ->afterInstantiate(function(Newsletter $newsletter): void {})
-            ;
+        return $this // ->afterInstantiate(function(Newsletter $newsletter): void {})
+        ;
     }
 }
