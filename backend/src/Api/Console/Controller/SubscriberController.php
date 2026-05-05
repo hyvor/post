@@ -261,6 +261,19 @@ class SubscriberController extends AbstractController
         );
     }
 
+    #[Route('/subscribers/email/{email}', methods: 'GET')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
+    public function getSubscriberByEmail(string $email, Newsletter $newsletter): JsonResponse
+    {
+        $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
+
+        if ($subscriber === null) {
+            return $this->json(['message' => 'Subscriber not found'], 404);
+        }
+
+        return $this->json(new SubscriberObject($subscriber));
+    }
+
     #[Route('/subscribers/{id}', methods: 'DELETE')]
     #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
