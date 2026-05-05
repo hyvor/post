@@ -27,4 +27,6 @@ class UpdateSubscriberDto
     public array $metadata;
 
     public ?string $unsubscribeReason;
+
+    public ?\DateTimeImmutable $optInAt;
 }

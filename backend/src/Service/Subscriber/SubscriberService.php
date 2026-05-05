@@ -192,6 +192,10 @@ class SubscriberService
             $subscriber->setUnsubscribeReason($updates->unsubscribeReason);
         }
 
+        if ($updates->has('optInAt')) {
+            $subscriber->setOptInAt($updates->optInAt);
+        }
+
         $subscriber->setUpdatedAt($this->now());
 
         $this->em->wrapInTransaction(function () use ($subscriberOld, $subscriber, $listRemovalReason) {

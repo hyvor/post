@@ -54,6 +54,9 @@ class Subscriber
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subscribe_ip = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $opt_in_at = null;
+
     /**
      * @var array<string, scalar>
      */
@@ -184,6 +187,18 @@ class Subscriber
     public function setSubscribeIp(?string $subscribe_ip): static
     {
         $this->subscribe_ip = $subscribe_ip;
+
+        return $this;
+    }
+
+    public function getOptInAt(): ?\DateTimeImmutable
+    {
+        return $this->opt_in_at;
+    }
+
+    public function setOptInAt(?\DateTimeImmutable $opt_in_at): static
+    {
+        $this->opt_in_at = $opt_in_at;
 
         return $this;
     }
