@@ -285,6 +285,10 @@
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
 	<li>
+		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a subscriber
+		by email
+	</li>
+	<li>
 		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
 	</li>
 	<li>
@@ -321,6 +325,18 @@
             search?: string;
         }
         type Response = Subscriber[]
+    `}
+/>
+
+<h4 id="get-subscriber-by-email">Get a subscriber by email</h4>
+
+<code>GET /subscribers/email/{'{email}'}</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = Subscriber // 404 if not found
     `}
 />
 
@@ -1133,6 +1149,7 @@ appearance of your newsletters.
             source: 'console' | 'form' | 'import';
             status: 'subscribed' | 'pending';
             list_ids: number[];
+            lists: string[]; // list names
             subscribe_ip: string | null;
             is_opted_in: boolean;
             subscribed_at: number | null; // unix timestamp

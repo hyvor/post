@@ -17,6 +17,10 @@ class SubscriberObject
      * @var array<int>
      */
     public array $list_ids;
+    /**
+     * @var array<string>
+     */
+    public array $lists;
     public ?string $subscribe_ip;
     public ?int $subscribed_at;
 
@@ -31,7 +35,9 @@ class SubscriberObject
         $this->email = $subscriber->getEmail();
         $this->source = $subscriber->getSource();
         $this->status = $subscriber->getStatus();
-        $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
+        $subscriberLists = $subscriber->getLists();
+        $this->list_ids = array_values($subscriberLists->map(fn($list) => $list->getId())->toArray());
+        $this->lists = array_values($subscriberLists->map(fn($list) => $list->getName())->toArray());
         $this->subscribe_ip = $subscriber->getSubscribeIp();
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
         $this->metadata = $subscriber->getMetadata();
