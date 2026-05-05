@@ -285,7 +285,8 @@
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
 	<li>
-		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a subscriber by email
+		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a subscriber
+		by email
 	</li>
 	<li>
 		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber

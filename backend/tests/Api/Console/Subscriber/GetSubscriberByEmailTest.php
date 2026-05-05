@@ -40,11 +40,11 @@ class GetSubscriberByEmailTest extends WebTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        /** @var array<string, mixed> $json */
         $json = $this->getJson();
-
         $this->assertSame($subscriber->getId(), $json['id']);
         $this->assertSame('test@example.com', $json['email']);
+        $this->assertIsArray($json['list_ids']);
+        $this->assertIsArray($json['lists']);
         $this->assertContains($list1->getId(), $json['list_ids']);
         $this->assertContains($list2->getId(), $json['list_ids']);
         $this->assertContains('list-one', $json['lists']);
@@ -82,5 +82,4 @@ class GetSubscriberByEmailTest extends WebTestCase
 
         $this->assertSame(404, $response->getStatusCode());
     }
-
 }
