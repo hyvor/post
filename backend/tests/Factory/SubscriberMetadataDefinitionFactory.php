@@ -4,12 +4,12 @@ namespace App\Tests\Factory;
 
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SubscriberMetadataDefinition>
+ * @extends PersistentObjectFactory<SubscriberMetadataDefinition>
  */
-final class SubscriberMetadataDefinitionFactory extends PersistentProxyObjectFactory
+final class SubscriberMetadataDefinitionFactory extends PersistentObjectFactory
 {
 
     public static function class(): string

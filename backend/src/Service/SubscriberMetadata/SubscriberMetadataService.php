@@ -5,6 +5,7 @@ namespace App\Service\SubscriberMetadata;
 use App\Entity\Newsletter;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Entity\Type\SubscriberMetadataDefinitionType;
+use App\Service\SubscriberMetadata\Exception\MetadataValidationFailedException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockAwareTrait;
 
@@ -17,9 +18,7 @@ class SubscriberMetadataService
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @return SubscriberMetadataDefinition[]
@@ -38,6 +37,17 @@ class SubscriberMetadataService
             ->findOneBy(['newsletter' => $newsletter, 'key' => $key]);
     }
 
+    /**
+     * @param string[] $keys
+     * @return SubscriberMetadataDefinition[]
+     */
+    public function getMetadataDefinitionsByKeys(Newsletter $newsletter, array $keys): array
+    {
+        return $this->entityManager
+            ->getRepository(SubscriberMetadataDefinition::class)
+            ->findBy(['newsletter' => $newsletter, 'key' => $keys]);
+    }
+
     public function getMetadataDefinitionsCount(Newsletter $newsletter): int
     {
         return $this->entityManager
@@ -47,10 +57,9 @@ class SubscriberMetadataService
 
     public function createMetadataDefinition(
         Newsletter $newsletter,
-        string     $key,
-        string     $name,
-    ): SubscriberMetadataDefinition
-    {
+        string $key,
+        string $name,
+    ): SubscriberMetadataDefinition {
         $metadataDefinition = new SubscriberMetadataDefinition();
         $metadataDefinition->setNewsletter($newsletter);
         $metadataDefinition->setKey($key);
@@ -67,9 +76,8 @@ class SubscriberMetadataService
 
     public function updateMetadataDefinition(
         SubscriberMetadataDefinition $metadataDefinition,
-        string                       $name,
-    ): void
-    {
+        string $name,
+    ): void {
         $metadataDefinition->setName($name);
         $metadataDefinition->setUpdatedAt($this->now());
 
@@ -82,32 +90,43 @@ class SubscriberMetadataService
         $this->entityManager->flush();
     }
 
-    public function validateValueType(
-        SubscriberMetadataDefinition $metadataDefinition,
-        mixed                        $value
-    ): bool
+    /**
+     * @param array<string, scalar> $metadata
+     * @throws MetadataValidationFailedException
+     */
+    public function validateMetadata(Newsletter $newsletter, array $metadata): void
     {
+        $keys = array_keys($metadata);
+        $definitions = $this->getMetadataDefinitionsByKeys($newsletter, $keys);
+
+        if (count($definitions) !== count($keys)) {
+            $foundKeys = array_map(fn(SubscriberMetadataDefinition $def) => $def->getKey(), $definitions);
+            $missingKeys = array_diff($keys, $foundKeys);
+            throw new MetadataValidationFailedException(
+                "Metadata definitions with keys " . implode(', ', $missingKeys) . " not found",
+            );
+        }
+
+        foreach ($definitions as $definition) {
+            $value = $metadata[$definition->getKey()] ?? null;
+            if (!$this->validateValueType($definition, $value)) {
+                throw new MetadataValidationFailedException(
+                    "Invalid value type for metadata key " . $definition->getKey(
+                    ) . ". Expected type: " . $definition->getType()->toJsonType(),
+                );
+            }
+        }
+    }
+
+    private function validateValueType(
+        SubscriberMetadataDefinition $metadataDefinition,
+        mixed $value,
+    ): bool {
         return match ($metadataDefinition->getType()) {
             //  @phpstan-ignore-next-line
             SubscriberMetadataDefinitionType::TEXT => is_string($value),
             // Other Metadata types can be added here
             default => false,
         };
-    }
-
-    /**
-     * @param array<string, mixed> $metadata
-     */
-    public function validateMetadata(Newsletter $newsletter, array $metadata): bool
-    {
-        foreach ($metadata as $key => $value) {
-            $metaDef = $this->getMetadataDefinitionByKey($newsletter, $key);
-            if ($metaDef === null)
-                throw new \Exception("Metadata definition with key {$key} not found");
-            if (!$this->validateValueType($metaDef, $value)) {
-                throw new \Exception("Value for metadata key {$key} is not valid");
-            }
-        }
-        return true;
     }
 }

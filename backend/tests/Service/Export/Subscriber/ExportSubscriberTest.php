@@ -25,10 +25,10 @@ class ExportSubscriberTest extends KernelTestCase
         ]);
 
         $exporter = new SubscriberCsvExporter(
-            $this->em
+            $this->em,
         );
 
-        $file = $exporter->createFile($newsletter->_real());
+        $file = $exporter->createFile($newsletter);
         $read = file_get_contents($file);
         $this->assertNotFalse($read);
         $lines = explode("\n", $read);

@@ -40,7 +40,7 @@ class CsvParserTest extends KernelTestCase
         /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
-            $newsletter->_real(),
+            $newsletter,
             MediaFolder::IMPORT,
             $file,
         );

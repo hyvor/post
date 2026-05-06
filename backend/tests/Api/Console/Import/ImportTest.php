@@ -21,7 +21,7 @@ class ImportTest extends WebTestCase
     /** @var array<string, string> */
     const array MAPPING = [
         'email' => 'email',
-        'lists' => 'lists'
+        'lists' => 'lists',
     ];
 
     public function test_import(): void
@@ -37,7 +37,7 @@ class ImportTest extends WebTestCase
         /** @var MediaService $mediaService */
         $mediaService = $this->container->get(MediaService::class);
         $media = $mediaService->upload(
-            $newsletter->_real(),
+            $newsletter,
             MediaFolder::IMPORT,
             $file,
         );
@@ -45,7 +45,7 @@ class ImportTest extends WebTestCase
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
             'media' => $media,
-            'status' => SubscriberImportStatus::REQUIRES_INPUT
+            'status' => SubscriberImportStatus::REQUIRES_INPUT,
         ]);
 
         $response = $this->consoleApi(
@@ -53,8 +53,8 @@ class ImportTest extends WebTestCase
             'POST',
             '/imports/' . $subscriberImport->getId(),
             [
-                'mapping' => self::MAPPING
-            ]
+                'mapping' => self::MAPPING,
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -75,7 +75,7 @@ class ImportTest extends WebTestCase
 
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => SubscriberImportStatus::COMPLETED
+            'status' => SubscriberImportStatus::COMPLETED,
         ]);
 
         $response = $this->consoleApi(
@@ -83,8 +83,8 @@ class ImportTest extends WebTestCase
             'POST',
             '/imports/' . $subscriberImport->getId(),
             [
-                'mapping' => self::MAPPING
-            ]
+                'mapping' => self::MAPPING,
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -99,7 +99,7 @@ class ImportTest extends WebTestCase
 
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => SubscriberImportStatus::REQUIRES_INPUT
+            'status' => SubscriberImportStatus::REQUIRES_INPUT,
         ]);
 
         $response = $this->consoleApi(
@@ -108,9 +108,9 @@ class ImportTest extends WebTestCase
             '/imports/' . $subscriberImport->getId(),
             [
                 'mapping' => [
-                    'lists' => 'lists'
-                ]
-            ]
+                    'lists' => 'lists',
+                ],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -129,7 +129,7 @@ class ImportTest extends WebTestCase
 
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => SubscriberImportStatus::REQUIRES_INPUT
+            'status' => SubscriberImportStatus::REQUIRES_INPUT,
         ]);
 
         $response = $this->consoleApi(
@@ -138,9 +138,9 @@ class ImportTest extends WebTestCase
             '/imports/' . $subscriberImport->getId(),
             [
                 'mapping' => [
-                    'email' => null
-                ]
-            ]
+                    'email' => null,
+                ],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -159,7 +159,7 @@ class ImportTest extends WebTestCase
 
         $subscriberImport = SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => SubscriberImportStatus::REQUIRES_INPUT
+            'status' => SubscriberImportStatus::REQUIRES_INPUT,
         ]);
 
         $response = $this->consoleApi(
@@ -168,9 +168,9 @@ class ImportTest extends WebTestCase
             '/imports/' . $subscriberImport->getId(),
             [
                 'mapping' => [
-                    'email' => ''
-                ]
-            ]
+                    'email' => '',
+                ],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -192,7 +192,7 @@ class ImportTest extends WebTestCase
         SubscriberImportFactory::createOne([
             'newsletter' => $newsletter,
             'created_at' => $date,
-            'status' => SubscriberImportStatus::COMPLETED
+            'status' => SubscriberImportStatus::COMPLETED,
         ]);
 
         $response = $this->consoleApi(
@@ -200,8 +200,8 @@ class ImportTest extends WebTestCase
             'POST',
             '/imports/upload',
             parameters: [
-                'source' => 'test'
-            ]
+                'source' => 'test',
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -219,7 +219,7 @@ class ImportTest extends WebTestCase
         SubscriberImportFactory::createMany(5, [
             'newsletter' => $newsletter,
             'created_at' => $date->modify('-7 day'),
-            'status' => SubscriberImportStatus::COMPLETED
+            'status' => SubscriberImportStatus::COMPLETED,
         ]);
 
         $response = $this->consoleApi(
@@ -227,8 +227,8 @@ class ImportTest extends WebTestCase
             'POST',
             '/imports/upload',
             parameters: [
-                'source' => 'test'
-            ]
+                'source' => 'test',
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -252,11 +252,11 @@ class ImportTest extends WebTestCase
             'POST',
             '/imports/upload',
             files: [
-                'file' => $file
+                'file' => $file,
             ],
             parameters: [
-                'source' => 'test'
-            ]
+                'source' => 'test',
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());

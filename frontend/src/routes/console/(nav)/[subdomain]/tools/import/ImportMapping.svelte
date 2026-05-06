@@ -228,9 +228,7 @@
 				<ActionList>
 					<div class="action-list">
 						{#each filteredFields as filteredColumn}
-							<ActionListItem
-								on:click={() => handleSelect('subscribed_at', filteredColumn)}
-							>
+							<ActionListItem on:click={() => handleSelect('subscribed_at', filteredColumn)}>
 								{filteredColumn}
 							</ActionListItem>
 						{/each}
@@ -274,9 +272,7 @@
 				<ActionList>
 					<div class="action-list">
 						{#each filteredFields as filteredColumn}
-							<ActionListItem
-								on:click={() => handleSelect('subscribe_ip', filteredColumn)}
-							>
+							<ActionListItem on:click={() => handleSelect('subscribe_ip', filteredColumn)}>
 								{filteredColumn}
 							</ActionListItem>
 						{/each}
@@ -322,8 +318,7 @@
 						<div class="action-list">
 							{#each filteredFields as filteredColumn}
 								<ActionListItem
-									on:click={() =>
-										handleSelect(`metadata_${column.key}`, filteredColumn)}
+									on:click={() => handleSelect(`metadata_${column.key}`, filteredColumn)}
 								>
 									{filteredColumn}
 								</ActionListItem>

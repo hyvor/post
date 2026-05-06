@@ -135,11 +135,7 @@
 				</FormControl>
 			</SplitControl>
 			<SplitControl label="Description" caption="The description of the list.">
-				<TextInput
-					placeholder="Enter list description"
-					bind:value={listDescription}
-					block
-				/>
+				<TextInput placeholder="Enter list description" bind:value={listDescription} block />
 			</SplitControl>
 		</FormControl>
 	</div>

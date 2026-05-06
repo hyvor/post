@@ -151,12 +151,7 @@
 						{selectedNewsletter?.name ?? 'All'}
 					</div>
 					{#if newsletterFilter}
-						<IconButton
-							size={14}
-							style="margin-left:4px;"
-							color="gray"
-							on:click={clearNewsletter}
-						>
+						<IconButton size={14} style="margin-left:4px;" color="gray" on:click={clearNewsletter}>
 							<IconX size={10} />
 						</IconButton>
 					{/if}
@@ -232,8 +227,7 @@
 			{#snippet content()}
 				<ActionList>
 					{#each Object.entries(ISSUE_STATUS_FILTERS) as [key, value]}
-						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem
-						>
+						<ActionListItem on:select={() => onStatusClick(key)}>{value}</ActionListItem>
 					{/each}
 				</ActionList>
 			{/snippet}

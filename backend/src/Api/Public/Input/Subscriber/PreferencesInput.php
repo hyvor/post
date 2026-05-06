@@ -4,8 +4,10 @@ namespace App\Api\Public\Input\Subscriber;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ResubscribeInput
+class PreferencesInput
 {
+    #[Assert\NotBlank]
+    public string $token;
 
     /**
      * @var int[]
@@ -14,8 +16,5 @@ class ResubscribeInput
         new Assert\NotBlank(),
         new Assert\Type('int'),
     ])]
-    public array $list_ids;
-
-    #[Assert\NotBlank]
-    public string $token;
+    public array $list_ids = [];
 }

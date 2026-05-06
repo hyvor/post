@@ -9,8 +9,7 @@
 	<div class="left">
 		<h1>Signup Form</h1>
 		<h2>
-			Embeddable, customizable newsletter form to collect emails from your users on your
-			website
+			Embeddable, customizable newsletter form to collect emails from your users on your website
 		</h2>
 		<!-- <img src={signupSvg} alt="Signup Form Illustration" width="300" /> -->
 
@@ -21,8 +20,8 @@
 					<div class="seo-feature-name">Easy embedding</div>
 				</div>
 				<div class="seo-feature-description">
-					Easily embed the signup form on your website with a simple copy-paste of the
-					generated code snippet.
+					Easily embed the signup form on your website with a simple copy-paste of the generated
+					code snippet.
 				</div>
 			</div>
 
@@ -43,8 +42,8 @@
 					<div class="seo-feature-name">Fully-customizable</div>
 				</div>
 				<div class="seo-feature-description">
-					Customize the appearance and behavior of the signup form to match your website's
-					design and branding.
+					Customize the appearance and behavior of the signup form to match your website's design
+					and branding.
 				</div>
 			</div>
 		</div>

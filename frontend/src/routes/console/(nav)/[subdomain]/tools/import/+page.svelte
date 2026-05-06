@@ -113,9 +113,7 @@
 
 		getImports(more ? $importStore.length : 0)
 			.then((data) => {
-				more
-					? importStore.update((imports) => [...imports, ...data])
-					: importStore.set(data);
+				more ? importStore.update((imports) => [...imports, ...data]) : importStore.set(data);
 				hasMore = data.length === IMPORTS_PER_PAGE;
 			})
 			.catch((e) => {
@@ -160,8 +158,8 @@
 		{#snippet icon()}
 			<IconInfoCircle />
 		{/snippet}
-		To prevent abuse, all imports exceeding 50 subscribers will require a manual approval from our
-		team and it may take upto 1 working day. Reach out to us on
+		To prevent abuse, all imports exceeding 50 subscribers will require a manual approval from our team
+		and it may take upto 1 working day. Reach out to us on
 		<a href="mailto:post.support@hyvor.com"> post.support@hyvor.com</a> for any inquiries.
 	</Callout>
 
@@ -187,11 +185,7 @@
 								: undefined}
 						disabled={!limitsExceeded}
 					>
-						<Button
-							type="button"
-							on:click={submitFile}
-							disabled={limitsExceeded || uploading}
-						>
+						<Button type="button" on:click={submitFile} disabled={limitsExceeded || uploading}>
 							Upload
 							{#snippet action()}
 								{#if uploading}

@@ -64,10 +64,10 @@
 <DocsImage src="/img/docs/form-customize.png" alt="Customize form" />
 
 <p>
-	This includes options like title, description, button text, colors and UI. Custom CSS can also
-	be added for further customization. Note that the custom CSS is added to the form, which is a
-	web component with a shadow DOM, so your custom CSS will only affect the form and not the rest
-	of your website.
+	This includes options like title, description, button text, colors and UI. Custom CSS can also be
+	added for further customization. Note that the custom CSS is added to the form, which is a web
+	component with a shadow DOM, so your custom CSS will only affect the form and not the rest of your
+	website.
 </p>
 
 <h2 id="multiple-lists">Working with Multiple Lists</h2>
@@ -75,8 +75,8 @@
 <p>Assume you have two lists in your newsletter: Weekly Updates and Product Announcements.</p>
 
 <p>
-	1. By default, both lists will be shown in the signup form, and users can choose which list(s)
-	to subscribe to.
+	1. By default, both lists will be shown in the signup form, and users can choose which list(s) to
+	subscribe to.
 </p>
 
 <CodeBlock
@@ -106,8 +106,8 @@
 
 <p>
 	3. By default, all lists are selected in the form UI. If you want to make a list unselected by
-	default, you can set the <code>lists-default-unselected</code> attribute to the list name (again,
-	multiple lists can be separated by commas).
+	default, you can set the <code>lists-default-unselected</code> attribute to the list name (again, multiple
+	lists can be separated by commas).
 </p>
 
 <CodeBlock
@@ -140,8 +140,8 @@
 <DocsImage src="/img/docs/form-lists-hidden.png" alt="Multiple Lists: Hidden" width={400} />
 
 <p>
-	In the above example, the user will be subscribed to the Product Announcements list without
-	seeing the list selection.
+	In the above example, the user will be subscribed to the Product Announcements list without seeing
+	the list selection.
 </p>
 
 <h2 id="attributes">Form Attributes</h2>
@@ -168,15 +168,15 @@
 	<TableRow>
 		<div><code>lists</code></div>
 		<div>
-			A comma-separated list of newsletter list names to show in the form. If not set, all
-			lists will be shown (if there are more than one).
+			A comma-separated list of newsletter list names to show in the form. If not set, all lists
+			will be shown (if there are more than one).
 		</div>
 	</TableRow>
 	<TableRow>
 		<div><code>lists-default-unselected</code></div>
 		<div>
-			A comma-separated list of newsletter list names that should be unselected by default in
-			the form. If not set, all lists will be selected by default.
+			A comma-separated list of newsletter list names that should be unselected by default in the
+			form. If not set, all lists will be selected by default.
 		</div>
 	</TableRow>
 	<TableRow>

@@ -60,7 +60,7 @@ class DeleteMediaTest extends KernelTestCase
             $content,
         );
 
-        $mediaService->delete($media1->_real());
+        $mediaService->delete($media1);
 
         $this->assertFalse($filesystem->fileExists($mediaService->getUploadPath($media1)));
         $this->assertNull($mediaService->getMediaByUuid($uuid1));

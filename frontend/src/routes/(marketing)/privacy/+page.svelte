@@ -17,8 +17,7 @@
 	</p>
 
 	<p>
-		By using Hyvor Post, you agree to the practices described here and in our main Privacy
-		Policy.
+		By using Hyvor Post, you agree to the practices described here and in our main Privacy Policy.
 	</p>
 
 	<Callout>
@@ -37,8 +36,8 @@
 			<li>HYVOR is a privacy-focused company.</li>
 			<li>We only collect data necessary for the operation of Hyvor Post.</li>
 			<li>
-				We only share your data with third parties when necessary for the operation of Hyvor
-				Post. This includes email delivery.
+				We only share your data with third parties when necessary for the operation of Hyvor Post.
+				This includes email delivery.
 			</li>
 			<li>We never sell data to third parties.</li>
 		</ul>
@@ -49,12 +48,10 @@
 	<h2 id="definitions">1. Definitions</h2>
 	<ul>
 		<li>
-			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content and
-			newsletters.
+			<strong>User:</strong> A person who creates a Hyvor Post account to manage their content and newsletters.
 		</li>
 		<li>
-			<strong>Subscriber:</strong> A person who subscribes to a newsletter created by a Hyvor Post
-			user.
+			<strong>Subscriber:</strong> A person who subscribes to a newsletter created by a Hyvor Post user.
 		</li>
 		<li>
 			<strong>You:</strong> A customer, subscriber, or entity who visits our Services.
@@ -63,20 +60,18 @@
 
 	<h2 id="introduction">2. Information We Collect</h2>
 	<p>
-		In addition to the account data collected on hyvor.com, Hyvor Post may collect the
-		following:
+		In addition to the account data collected on hyvor.com, Hyvor Post may collect the following:
 	</p>
 
 	<h3 id="newsletter-data">2.1 Newsletter-Specific Data</h3>
 	<ul>
 		<li>
-			<strong>Subscriber Information:</strong> Names and email addresses of people who subscribe
-			to your newsletters. This data is provided by you or collected via your public subscription
-			forms.
+			<strong>Subscriber Information:</strong> Names and email addresses of people who subscribe to your
+			newsletters. This data is provided by you or collected via your public subscription forms.
 		</li>
 		<li>
-			<strong>Content Data:</strong> Newsletters, drafts, and metadata you create within the Hyvor
-			Post platform.
+			<strong>Content Data:</strong> Newsletters, drafts, and metadata you create within the Hyvor Post
+			platform.
 		</li>
 	</ul>
 	<hr />
@@ -88,16 +83,15 @@
 	</ul>
 
 	<p>
-		We do not sell, rent, or use your data or your subscribers' data for any advertising
-		purposes.
+		We do not sell, rent, or use your data or your subscribers' data for any advertising purposes.
 	</p>
 	<hr />
 
 	<h2 id="data-retention">4. Data Retention</h2>
 	<ul>
 		<li>
-			We retain your data for as long as you have an active Hyvor Post account or until you
-			request deletion.
+			We retain your data for as long as you have an active Hyvor Post account or until you request
+			deletion.
 		</li>
 		<li>
 			You can delete your account and all associated data at any time through the Hyvor Post
@@ -112,24 +106,24 @@
 	<h2 id="data-sharing">5. Data Sharing</h2>
 	<ul>
 		<li>
-			Your data can be shared with law enforcement or regulatory bodies when required by law
-			or to protect our rights.
+			Your data can be shared with law enforcement or regulatory bodies when required by law or to
+			protect our rights.
 		</li>
 	</ul>
 	<hr />
 	<h2 id="data-processors">6. Data Processors</h2>
 	<p>
-		We use GDPR-compliant sub-processors (e.g., email delivery providers) to send newsletters
-		and ensure platform stability. A full list is available at the <a
-			href="https://hyvor.com/sub">sub-processors of HYVOR</a
+		We use GDPR-compliant sub-processors (e.g., email delivery providers) to send newsletters and
+		ensure platform stability. A full list is available at the <a href="https://hyvor.com/sub"
+			>sub-processors of HYVOR</a
 		>.
 	</p>
 
 	<hr />
 	<h2 id="our-servers">7. Our Servers</h2>
 	<p>
-		All data collected by Hyvor Post is stored on secure servers located in the European Union.
-		We use industry-standard security measures to protect your data.
+		All data collected by Hyvor Post is stored on secure servers located in the European Union. We
+		use industry-standard security measures to protect your data.
 	</p>
 
 	<hr />
@@ -137,8 +131,8 @@
 	<h2 id="your-rights">8. Your Rights</h2>
 	<p>
 		Subscribers have the right to unsubscribe from newsletters at any time. You can do this by
-		clicking the "Unsubscribe" link in any newsletter email or by contacting the Hyvor Post user
-		who sent you the newsletter.
+		clicking the "Unsubscribe" link in any newsletter email or by contacting the Hyvor Post user who
+		sent you the newsletter.
 	</p>
 </Document>
 

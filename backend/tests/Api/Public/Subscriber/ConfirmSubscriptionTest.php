@@ -9,8 +9,6 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 #[CoversClass(SubscriberController::class)]
@@ -41,6 +39,7 @@ class ConfirmSubscriptionTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame(SubscriberStatus::SUBSCRIBED, $subscriber->getStatus());
         $this->assertNotNull($subscriber->getSubscribedAt());
+        $this->assertNotNull($subscriber->getOptInAt());
     }
 
     public function test_confirm_subscription_with_invalid_token(): void

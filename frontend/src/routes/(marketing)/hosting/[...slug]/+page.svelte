@@ -26,9 +26,7 @@
 					<NavCategory name={category.name}>
 						{#each category.pages as page}
 							<div class="nav-item-wrap" class:has-parent={page.parent !== undefined}>
-								<NavItem
-									href={page.slug === '' ? '/hosting' : `/hosting/${page.slug}`}
-								>
+								<NavItem href={page.slug === '' ? '/hosting' : `/hosting/${page.slug}`}>
 									{page.name}
 								</NavItem>
 							</div>

@@ -4,21 +4,19 @@ namespace App\Tests\Factory;
 
 use App\Entity\SubscriberExport;
 use App\Entity\Type\SubscriberExportStatus;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<SubscriberExport>
+ * @extends PersistentObjectFactory<SubscriberExport>
  */
-final class SubscriberExportFactory extends PersistentProxyObjectFactory
+final class SubscriberExportFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -45,8 +43,7 @@ final class SubscriberExportFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Domain $domain): void {})
-        ;
+        return $this// ->afterInstantiate(function(Domain $domain): void {})
+            ;
     }
 }

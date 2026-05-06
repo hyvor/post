@@ -17,13 +17,15 @@ class SubscriberObject
      * @var array<int>
      */
     public array $list_ids;
+    /**
+     * @var array<string>
+     */
+    public array $lists;
     public ?string $subscribe_ip;
-    public bool $is_opted_in = false;
     public ?int $subscribed_at;
-    public ?int $unsubscribed_at;
 
     /**
-     * @var array<string, string>
+     * @var array<string, scalar>
      */
     public array $metadata;
 
@@ -33,12 +35,11 @@ class SubscriberObject
         $this->email = $subscriber->getEmail();
         $this->source = $subscriber->getSource();
         $this->status = $subscriber->getStatus();
-        $this->list_ids = array_values($subscriber->getLists()->map(fn($list) => $list->getId())->toArray());
+        $subscriberLists = $subscriber->getLists();
+        $this->list_ids = array_values($subscriberLists->map(fn($list) => $list->getId())->toArray());
+        $this->lists = array_values($subscriberLists->map(fn($list) => $list->getName())->toArray());
         $this->subscribe_ip = $subscriber->getSubscribeIp();
-        $this->is_opted_in = $subscriber->getOptInAt() !== null;
         $this->subscribed_at = $subscriber->getSubscribedAt()?->getTimestamp();
-        $this->unsubscribed_at = $subscriber->getUnsubscribedAt()?->getTimestamp();
         $this->metadata = $subscriber->getMetadata();
     }
-
 }

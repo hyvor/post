@@ -1,12 +1,22 @@
 import type { NewsletterSubscriberStatus, Subscriber } from '../../types';
 import consoleApi from '../consoleApi';
 
-export function createSubscriber(email: string, list_ids: number[]) {
+export interface CreateSubscriberParams {
+	lists?: number[];
+	status?: 'pending' | 'subscribed';
+	list_skip_resubscribe_on?: string[];
+	lists_strategy?: 'merge' | 'overwrite' | 'remove';
+	list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
+	metadata?: Record<string, any>;
+	metadata_strategy?: 'merge' | 'overwrite';
+}
+
+export function createSubscriber(email: string, params: CreateSubscriberParams) {
 	return consoleApi.post<Subscriber>({
 		endpoint: 'subscribers',
 		data: {
 			email,
-			list_ids
+			...params
 		}
 	});
 }
@@ -36,13 +46,6 @@ export function deleteSubscriber(id: number) {
 	});
 }
 
-export function updateSubscriber(id: number, data: Partial<Subscriber>) {
-	return consoleApi.patch<Subscriber>({
-		endpoint: `subscribers/${id}`,
-		data
-	});
-}
-
 interface BulkSubscriberActionResponse {
 	status: string;
 	message: string;
@@ -55,17 +58,6 @@ export function deleteSubscribers(ids: number[]) {
 		data: {
 			action: 'delete',
 			subscribers_ids: ids
-		}
-	});
-}
-
-export function updateSubscribersStatus(ids: number[], status: NewsletterSubscriberStatus) {
-	return consoleApi.post<BulkSubscriberActionResponse>({
-		endpoint: 'subscribers/bulk',
-		data: {
-			action: 'status_change',
-			subscribers_ids: ids,
-			status
 		}
 	});
 }

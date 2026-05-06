@@ -71,11 +71,9 @@
 				country: country !== approval.country ? country : null,
 				website: website !== approval.website ? website : null,
 				social_links: socialLinks !== (approval.social_links ?? '') ? socialLinks : null,
-				type_of_content:
-					typeOfContent !== (approval.type_of_content ?? '') ? typeOfContent : null,
+				type_of_content: typeOfContent !== (approval.type_of_content ?? '') ? typeOfContent : null,
 				frequency: frequency !== (approval.frequency ?? '') ? frequency : null,
-				existing_list:
-					existingList !== (approval.existing_list ?? '') ? existingList : null,
+				existing_list: existingList !== (approval.existing_list ?? '') ? existingList : null,
 				sample: sample !== (approval.sample ?? '') ? sample : null,
 				why_post: whyPost !== (approval.why_post ?? '') ? whyPost : null
 			})
@@ -247,10 +245,7 @@
 	{#if !$approvalStore}
 		<div class="checkboxes">
 			<Checkbox bind:checked={checkbox1}>
-				<I18n.T
-					key="console.approve.checkbox1"
-					params={{ strong: { element: 'strong' } }}
-				/>
+				<I18n.T key="console.approve.checkbox1" params={{ strong: { element: 'strong' } }} />
 			</Checkbox>
 			<Checkbox bind:checked={checkbox2}>
 				<I18n.T

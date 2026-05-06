@@ -42,14 +42,6 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
                 $metadata[1]->getKey() => Str::random(5),
             ],
         ]);
-        SubscriberFactory::createOne([
-            'newsletter' => $newsletter,
-            'status' => SubscriberStatus::UNSUBSCRIBED,
-            'metadata' => [
-                $metadata[0]->getKey() => Str::random(5),
-                $metadata[1]->getKey() => Str::random(5),
-            ],
-        ]);
 
         $export = SubscriberExportFactory::createOne([
             'newsletter' => $newsletter,
@@ -61,7 +53,7 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
         $this->transport('async')->throwExceptions()->process();
 
         $media = $this->em->getRepository(Media::class)->findBy([
-            'newsletter' => $newsletter->_real(),
+            'newsletter' => $newsletter,
             'folder' => MediaFolder::EXPORT,
         ]);
         $this->assertCount(1, $media);
@@ -73,18 +65,21 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
 
         $read = $filesystem->read(
             $newsletter->getId() . '/' .
-            MediaFolder::EXPORT->value . '/' .
-            $media[0]->getUuid() . '.' . $media[0]->getExtension()
+                MediaFolder::EXPORT->value . '/' .
+                $media[0]->getUuid() . '.' . $media[0]->getExtension(),
         );
 
         // Headers
-        $this->assertStringContainsString("Email,Status,\"Subscribed At\",Source,\"{$metadata[0]->getKey()}\",\"{$metadata[1]->getKey()}\"", $read);
+        $this->assertStringContainsString(
+            "Email,Status,\"Subscribed At\",Source,\"{$metadata[0]->getKey()}\",\"{$metadata[1]->getKey()}\"",
+            $read,
+        );
 
         // Subscriber rows
         $subscriberMetadata = $subscriber->getMetadata();
         $this->assertStringContainsString(
             "{$subscriber->getEmail()},{$subscriber->getStatus()->value},\"{$subscriber->getSubscribedAt()?->format('Y-m-d H:i:s')}\",{$subscriber->getSource()->value},{$subscriberMetadata[$metadata[0]->getKey()]},{$subscriberMetadata[$metadata[1]->getKey()]}",
-            $read
+            $read,
         );
     }
 
@@ -102,7 +97,7 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
 
         // Verify the file was created and uploaded even with no subscribers
         $media = $this->em->getRepository(Media::class)->findBy([
-            'newsletter' => $newsletter->_real(),
+            'newsletter' => $newsletter,
             'folder' => MediaFolder::EXPORT,
         ]);
         $this->assertCount(1, $media);
@@ -113,12 +108,11 @@ class ExportSubscribersMessageHandlerTest extends KernelTestCase
         assert($filesystem instanceof Filesystem);
         $read = $filesystem->read(
             $newsletter->getId() . '/' .
-            MediaFolder::EXPORT->value . '/' .
-            $media[0]->getUuid() . '.' . $media[0]->getExtension()
+                MediaFolder::EXPORT->value . '/' .
+                $media[0]->getUuid() . '.' . $media[0]->getExtension(),
         );
 
         // Only default headers should be present
         $this->assertSame("Email,Status,\"Subscribed At\",Source\n", $read);
-
     }
 }

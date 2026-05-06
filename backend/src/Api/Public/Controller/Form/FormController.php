@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Api\Public\Controller\Form;
 
 use App\Api\Public\Input\Form\FormInitInput;
-use App\Api\Public\Input\Form\FormRenderInput;
 use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
+use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\AppConfig;
@@ -32,13 +32,11 @@ class FormController extends AbstractController
     use ClockAwareTrait;
 
     public function __construct(
-        private NewsletterService     $newsletterService,
+        private NewsletterService $newsletterService,
         private NewsletterListService $newsletterListService,
-        private SubscriberService     $subscriberService,
-        private AppConfig             $appConfig,
-    )
-    {
-    }
+        private SubscriberService $subscriberService,
+        private AppConfig $appConfig,
+    ) {}
 
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
@@ -54,13 +52,13 @@ class FormController extends AbstractController
         if ($listIds !== null) {
             $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
                 $newsletter,
-                $listIds
+                $listIds,
             );
             if ($missingListIds !== null) {
                 throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
             }
 
-            $lists = $this->newsletterListService->getListsByIds($listIds);
+            $lists = $this->newsletterListService->getListsByIds($newsletter, $listIds);
         } else {
             $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
         }
@@ -68,16 +66,15 @@ class FormController extends AbstractController
         return new JsonResponse([
             'newsletter' => new FormNewsletterObject($newsletter),
             'is_subscribed' => false,
-            'lists' => $lists->map(fn($list) => new FormListObject($list))->toArray(),
+            'lists' => array_map(fn($list) => new FormListObject($list), $lists),
         ]);
     }
 
     #[Route('/form/subscribe', methods: 'POST')]
     public function subscribe(
         #[MapRequestPayload] FormSubscribeInput $input,
-        Request                                 $request,
-    ): JsonResponse
-    {
+        Request $request,
+    ): JsonResponse {
         $ip = $request->getClientIp();
         $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
 
@@ -88,26 +85,36 @@ class FormController extends AbstractController
         $listIds = $input->list_ids;
         $missingListIds = $this->newsletterListService->getMissingListIdsOfNewsletter(
             $newsletter,
-            $listIds
+            $listIds,
         );
 
         if ($missingListIds !== null) {
             throw new UnprocessableEntityHttpException("List with id {$missingListIds[0]} not found");
         }
 
-        $lists = $this->newsletterListService->getListsByIds($listIds);
+        $lists = $this->newsletterListService->getListsByIds($newsletter, $listIds);
 
         $email = $input->email;
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
 
         if ($subscriber) {
             $update = new UpdateSubscriberDto();
-            $update->status = $subscriber->getOptInAt() !== null ? SubscriberStatus::SUBSCRIBED : SubscriberStatus::PENDING;
-            $update->lists = $lists;
+
+            // merge lists
+            $subscriberLists = $subscriber->getLists()->toArray();
+            foreach ($lists as $listToAdd) {
+                if (!array_find($subscriberLists, fn($l) => $l->getId() === $listToAdd->getId())) {
+                    $subscriberLists[] = $listToAdd;
+                }
+            }
+            $update->lists = $subscriberLists;
 
             $this->subscriberService->updateSubscriber(
                 $subscriber,
-                $update
+                $update,
+                // generally, this should not be used since we do not remove lists
+                // but sending just in case to prevent removals being marked as unsubscribes
+                ListRemovalReason::OTHER
             );
         } else {
             $subscriber = $this->subscriberService->createSubscriber(
@@ -116,7 +123,8 @@ class FormController extends AbstractController
                 $lists,
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
-                $ip
+                $ip,
+                sendConfirmationEmail: true
             );
         }
 
@@ -139,9 +147,8 @@ class FormController extends AbstractController
             <hyvor-post-form newsletter={$newsletter->getSubdomain()}
             instance={$instance}></hyvor-post-form>
             <script type="module" src="{$instance}/form/form.js"></script>
-        HTML;
+            HTML;
 
         return new Response($response);
     }
-
 }
