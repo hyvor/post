@@ -76,7 +76,6 @@
 
 		<NavLink
 			href="/api/messenger"
-			active={$page.url.pathname === '/sudo/messenger'}
 			target="_blank"
 		>
 			<NavItem>

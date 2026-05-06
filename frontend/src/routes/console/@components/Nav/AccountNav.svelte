@@ -21,8 +21,12 @@
 			disabled={!canAccessSettings()}
 		>
 			<NavItem>
-				<IconClipboardCheck slot="icon" />
-				<span slot="text">{I18n.t('console.nav.approve')}</span>
+				{#snippet icon()}
+								<IconClipboardCheck  />
+							{/snippet}
+				{#snippet text()}
+								<span >{I18n.t('console.nav.approve')}</span>
+							{/snippet}
 			</NavItem>
 			{#snippet end()}
 				<ApprovalStatusTag status={$userApprovalStatusStore} />
@@ -34,8 +38,12 @@
 			disabled={!canAccessSettings()}
 		>
 			<NavItem>
-				<IconDatabase slot="icon" />
-				<span slot="text">{I18n.t('console.nav.domains')}</span>
+				{#snippet icon()}
+								<IconDatabase  />
+							{/snippet}
+				{#snippet text()}
+								<span >{I18n.t('console.nav.domains')}</span>
+							{/snippet}
 			</NavItem>
 		</NavLink>
 		<Tooltip
@@ -49,8 +57,12 @@
 				disabled={!canAccessBilling() || $userApprovalStatusStore !== 'approved'}
 			>
 				<NavItem>
-					<IconCoin slot="icon" />
-					<span slot="text">{I18n.t('console.nav.billing')}</span>
+					{#snippet icon()}
+										<IconCoin  />
+									{/snippet}
+					{#snippet text()}
+										<span >{I18n.t('console.nav.billing')}</span>
+									{/snippet}
 				</NavItem>
 			</NavLink>
 		</Tooltip>
