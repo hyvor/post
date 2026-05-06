@@ -22,11 +22,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconClipboardCheck  />
-							{/snippet}
+					<IconClipboardCheck />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.approve')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.approve')}</span>
+				{/snippet}
 			</NavItem>
 			{#snippet end()}
 				<ApprovalStatusTag status={$userApprovalStatusStore} />
@@ -39,11 +39,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconDatabase  />
-							{/snippet}
+					<IconDatabase />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.domains')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.domains')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 		<Tooltip
@@ -58,11 +58,11 @@
 			>
 				<NavItem>
 					{#snippet icon()}
-										<IconCoin  />
-									{/snippet}
+						<IconCoin />
+					{/snippet}
 					{#snippet text()}
-										<span >{I18n.t('console.nav.billing')}</span>
-									{/snippet}
+						<span>{I18n.t('console.nav.billing')}</span>
+					{/snippet}
 				</NavItem>
 			</NavLink>
 		</Tooltip>

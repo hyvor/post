@@ -39,11 +39,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconHouse  />
-							{/snippet}
+					<IconHouse />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.home')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.home')}</span>
+				{/snippet}
 			</NavItem>
 
 			{#snippet end()}
@@ -65,11 +65,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconPeople  />
-							{/snippet}
+					<IconPeople />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.subscribers')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.subscribers')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -79,11 +79,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconSend  />
-							{/snippet}
+					<IconSend />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.issues')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.issues')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -95,11 +95,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconTools  />
-							{/snippet}
+					<IconTools />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.tools')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.tools')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -109,11 +109,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconGear  />
-							{/snippet}
+					<IconGear />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.settings')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.settings')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -125,11 +125,11 @@
 		>
 			<NavItem>
 				{#snippet icon()}
-								<IconCode  />
-							{/snippet}
+					<IconCode />
+				{/snippet}
 				{#snippet text()}
-								<span >{I18n.t('console.nav.install')}</span>
-							{/snippet}
+					<span>{I18n.t('console.nav.install')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 	</div>

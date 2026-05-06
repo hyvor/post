@@ -6,7 +6,6 @@
 	}
 
 	let { icon, text, end }: Props = $props();
-	
 </script>
 
 <div class="nav-item">

@@ -74,10 +74,7 @@
 
 		<Divider margin={10} />
 
-		<NavLink
-			href="/api/messenger"
-			target="_blank"
-		>
+		<NavLink href="/api/messenger" target="_blank">
 			<NavItem>
 				{#snippet icon()}
 					<IconSend />
