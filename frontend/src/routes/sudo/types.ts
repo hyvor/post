@@ -84,6 +84,24 @@ export type Issue = {
 	error_private: string | null;
 };
 
+export type SendStatus = 'pending' | 'sent' | 'failed';
+export type SendType = 'all' | 'unsubscribed' | 'bounced' | 'complained';
+
+export interface IssueSend {
+	id: number;
+	created_at: number;
+	email: string;
+	status: SendStatus;
+	sent_at: number | null;
+	failed_at: number | null;
+	delivered_at: number | null;
+	unsubscribed_at: number | null;
+	bounced_at: number | null;
+	hard_bounce: boolean;
+	complained_at: number | null;
+	subscriber: { id: number; email: string } | null;
+}
+
 export type NewsletterStats = {
 	subscribers: { total: number; last_30_days: number };
 	issues: { total: number; last_30_days: number };

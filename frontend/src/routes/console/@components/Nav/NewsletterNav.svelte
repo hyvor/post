@@ -12,23 +12,18 @@
 	import { newsletterStore } from '../../lib/stores/newsletterStore';
 	import { page } from '$app/state';
 	import { getI18n } from '../../lib/i18n';
-	import { getAppConfig, selectingNewsletter } from '../../lib/stores/consoleStore';
+	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
 
-	let width: number;
-
 	const I18n = getI18n();
-	const config = getAppConfig();
 
 	function triggerNewsletterSelector() {
 		selectingNewsletter.set(true);
 	}
 </script>
 
-<svelte:window bind:innerWidth={width} />
-
 <div class="wrap hds-box">
-	<button class="current" on:click={triggerNewsletterSelector}>
+	<button class="current" onclick={triggerNewsletterSelector}>
 		<div class="left">
 			<div class="name">
 				{$newsletterStore.name}
@@ -43,8 +38,12 @@
 			active={page.url.pathname === `/console/${$newsletterStore.subdomain}`}
 		>
 			<NavItem>
-				<IconHouse slot="icon" />
-				<span slot="text">{I18n.t('console.nav.home')}</span>
+				{#snippet icon()}
+					<IconHouse />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.home')}</span>
+				{/snippet}
 			</NavItem>
 
 			{#snippet end()}
@@ -65,8 +64,12 @@
 			active={page.url.pathname === `/console/${$newsletterStore.subdomain}/subscribers`}
 		>
 			<NavItem>
-				<IconPeople slot="icon" />
-				<span slot="text">{I18n.t('console.nav.subscribers')}</span>
+				{#snippet icon()}
+					<IconPeople />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.subscribers')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -75,8 +78,12 @@
 			active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/issues`)}
 		>
 			<NavItem>
-				<IconSend slot="icon" />
-				<span slot="text">{I18n.t('console.nav.issues')}</span>
+				{#snippet icon()}
+					<IconSend />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.issues')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -87,8 +94,12 @@
 			active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/tools`)}
 		>
 			<NavItem>
-				<IconTools slot="icon" />
-				<span slot="text">{I18n.t('console.nav.tools')}</span>
+				{#snippet icon()}
+					<IconTools />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.tools')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -97,8 +108,12 @@
 			active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/settings`)}
 		>
 			<NavItem>
-				<IconGear slot="icon" />
-				<span slot="text">{I18n.t('console.nav.settings')}</span>
+				{#snippet icon()}
+					<IconGear />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.settings')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -109,8 +124,12 @@
 			active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/install`)}
 		>
 			<NavItem>
-				<IconCode slot="icon" />
-				<span slot="text">{I18n.t('console.nav.install')}</span>
+				{#snippet icon()}
+					<IconCode />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.install')}</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 	</div>
