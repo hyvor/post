@@ -9,34 +9,43 @@
 	import IconSend from '@hyvor/icons/IconSend';
 	import IconJournal from '@hyvor/icons/IconJournal';
 	import IconEnvelope from '@hyvor/icons/IconEnvelope';
+	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 </script>
 
 <div class="nav">
 	<div class="nav-links hds-box">
 		<NavLink href="/sudo/approvals" active={$page.url.pathname === '/sudo/approvals'}>
 			<NavItem>
-				<IconClipboardCheck slot="icon" />
-				<span slot="text">
-					Approvals
-					{#if $statsStore.reviewing_approvals > 0}
-						<Tag size="x-small" color="orange">
-							{$statsStore.reviewing_approvals}
-						</Tag>
-					{/if}
-				</span>
+				{#snippet icon()}
+					<IconClipboardCheck />
+				{/snippet}
+				{#snippet text()}
+					<span>
+						Approvals
+						{#if $statsStore.reviewing_approvals > 0}
+							<Tag size="x-small" color="orange">
+								{$statsStore.reviewing_approvals}
+							</Tag>
+						{/if}
+					</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 		<NavLink href="/sudo/imports" active={$page.url.pathname === '/sudo/imports'}>
 			<NavItem>
-				<IconBoxArrowInDown slot="icon" />
-				<span slot="text">
-					Subscriber Imports
-					{#if $statsStore.pending_imports > 0}
-						<Tag size="x-small" color="orange">
-							{$statsStore.pending_imports}
-						</Tag>
-					{/if}
-				</span>
+				{#snippet icon()}
+					<IconBoxArrowInDown />
+				{/snippet}
+				{#snippet text()}
+					<span>
+						Subscriber Imports
+						{#if $statsStore.pending_imports > 0}
+							<Tag size="x-small" color="orange">
+								{$statsStore.pending_imports}
+							</Tag>
+						{/if}
+					</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
@@ -47,23 +56,42 @@
 			active={$page.url.pathname.startsWith('/sudo/newsletters')}
 		>
 			<NavItem>
-				<IconJournal slot="icon" />
-				<span slot="text">Newsletters</span>
+				{#snippet icon()}
+					<IconJournal />
+				{/snippet}
+				{#snippet text()}
+					<span>Newsletters</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 		<NavLink href="/sudo/issues" active={$page.url.pathname.startsWith('/sudo/issues')}>
 			<NavItem>
-				<IconEnvelope slot="icon" />
-				<span slot="text">Issues</span>
+				{#snippet icon()}
+					<IconEnvelope />
+				{/snippet}
+				{#snippet text()}
+					<span>Issues</span>
+				{/snippet}
 			</NavItem>
 		</NavLink>
 
 		<Divider margin={10} />
 
-		<NavLink href="/sudo/messenger" active={$page.url.pathname === '/sudo/messenger'}>
+		<NavLink
+			href="/api/messenger"
+			active={$page.url.pathname === '/sudo/messenger'}
+			target="_blank"
+		>
 			<NavItem>
-				<IconSend slot="icon" />
-				<span slot="text"> Messenger </span>
+				{#snippet icon()}
+					<IconSend />
+				{/snippet}
+				{#snippet text()}
+					<span> Messenger </span>
+				{/snippet}
+				{#snippet end()}
+					<IconBoxArrowUpRight size={14} />
+				{/snippet}
 			</NavItem>
 		</NavLink>
 	</div>
