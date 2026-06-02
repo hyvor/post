@@ -52,7 +52,7 @@ class ResendOptInTest extends WebTestCase
         );
 
         $this->assertSame(400, $response->getStatusCode());
-        $this->assertStringContainsString('not pending', $this->getJson()['message']);
+        $this->assertSame('Subscriber is not pending', $this->getJson()['message']);
     }
 
     public function test_resend_opt_in_not_found(): void
