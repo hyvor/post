@@ -9,6 +9,7 @@ export interface CreateSubscriberParams {
 	list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
 	metadata?: Record<string, any>;
 	metadata_strategy?: 'merge' | 'overwrite';
+	send_pending_confirmation_email?: boolean;
 }
 
 export function createSubscriber(email: string, params: CreateSubscriberParams) {
@@ -59,6 +60,12 @@ export function deleteSubscribers(ids: number[]) {
 			action: 'delete',
 			subscribers_ids: ids
 		}
+	});
+}
+
+export function resendOptInEmail(id: number) {
+	return consoleApi.post<{}>({
+		endpoint: `subscribers/${id}/resend-opt-in`
 	});
 }
 

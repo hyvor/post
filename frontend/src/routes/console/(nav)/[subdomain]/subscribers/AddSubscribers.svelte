@@ -41,7 +41,8 @@
 		createSubscriber(email, {
 			lists: selectedList,
 			status,
-			list_skip_resubscribe_on: [] // force adding
+			list_skip_resubscribe_on: [], // force adding
+			send_pending_confirmation_email: status === 'pending',
 		})
 			.then((data) => {
 				show = false;

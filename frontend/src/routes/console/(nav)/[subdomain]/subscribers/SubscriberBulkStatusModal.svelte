@@ -14,6 +14,14 @@
 	let status: NewsletterSubscriberStatus = $state('pending');
 	let loader = new SimpleLoadingProgress();
 
+	let allSelectedStatus = $derived.by(() => {
+		const selected = $selectedSubscriberIdsStore;
+		if (selected.length === 0) return null;
+		const statuses = selected.map((id) => $subscriberStore.find((s) => s.id === id)?.status);
+		const unique = new Set(statuses.filter(Boolean));
+		return unique.size === 1 ? [...unique][0] : null;
+	});
+
 	async function handleStatusChange() {
 		loader.start($selectedSubscriberIdsStore.length);
 
@@ -32,7 +40,8 @@
 
 			try {
 				const newSubscriber = await createSubscriber(subscriber.email, {
-					status
+					status,
+					send_pending_confirmation_email: status === 'pending',
 				});
 				subscriberStore.update((subs) =>
 					subs.map((sub) => (sub.id === newSubscriber.id ? newSubscriber : sub))
@@ -66,8 +75,8 @@
 >
 	<SplitControl label="Status">
 		<FormControl>
-			<Radio name="status" bind:group={status} value="pending">Pending</Radio>
-			<Radio name="status" bind:group={status} value="subscribed">Subscribed</Radio>
+			<Radio name="status" bind:group={status} value="pending" disabled={allSelectedStatus === 'pending'}>Pending</Radio>
+			<Radio name="status" bind:group={status} value="subscribed" disabled={allSelectedStatus === 'subscribed'}>Subscribed</Radio>
 		</FormControl>
 	</SplitControl>
 </Modal>
