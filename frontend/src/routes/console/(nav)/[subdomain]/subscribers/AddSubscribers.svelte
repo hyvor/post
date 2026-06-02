@@ -42,7 +42,7 @@
 			lists: selectedList,
 			status,
 			list_skip_resubscribe_on: [], // force adding
-			send_pending_confirmation_email: true,
+			send_pending_confirmation_email: true
 		})
 			.then((data) => {
 				show = false;

@@ -76,8 +76,7 @@
 	}
 
 	let listNames = $derived(
-		subscriber.list_ids
-			.map((id) => $listStore.find((l) => l.id === id)?.name || 'Unknown')
+		subscriber.list_ids.map((id) => $listStore.find((l) => l.id === id)?.name || 'Unknown')
 	);
 
 	const I18n = getI18n();
@@ -124,12 +123,7 @@
 	<div class="actions">
 		{#if subscriber.status === 'pending'}
 			<Tooltip text="Resend opt-in email">
-				<IconButton
-					color="input"
-					size="small"
-					on:click={onResendOptIn}
-					disabled={resending}
-				>
+				<IconButton color="input" size="small" on:click={onResendOptIn} disabled={resending}>
 					<IconEnvelopeAt size={12} />
 				</IconButton>
 			</Tooltip>

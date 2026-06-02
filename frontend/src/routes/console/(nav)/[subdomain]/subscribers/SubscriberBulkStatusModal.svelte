@@ -32,7 +32,7 @@
 
 			try {
 				const newSubscriber = await createSubscriber(subscriber.email, {
-					status,
+					status
 				});
 				subscriberStore.update((subs) =>
 					subs.map((sub) => (sub.id === newSubscriber.id ? newSubscriber : sub))
