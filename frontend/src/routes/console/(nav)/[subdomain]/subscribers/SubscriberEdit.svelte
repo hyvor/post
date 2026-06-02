@@ -33,7 +33,8 @@
 			lists_strategy: 'overwrite',
 			metadata_strategy: 'overwrite',
 			list_skip_resubscribe_on: [],
-			list_removal_reason: 'other'
+			list_removal_reason: 'other',
+			send_pending_confirmation_email: true
 		};
 
 		if (status !== subscriber.status) {

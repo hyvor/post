@@ -109,6 +109,7 @@
 				on:keydown={searchActions.onKeydown}
 				on:blur={searchActions.onBlur}
 				size="small"
+				block={false}
 			>
 				<svelte:fragment slot="end">
 					{#if searchVal.trim() !== ''}

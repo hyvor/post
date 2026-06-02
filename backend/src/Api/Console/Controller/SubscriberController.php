@@ -16,9 +16,11 @@ use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\NewsletterList\NewsletterListService;
+use App\Service\Subscriber\ConfirmationMail\SendConfirmationMailMessage;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
 use App\Service\Subscriber\ListRemoval\ListRemovalService;
 use App\Service\Subscriber\SubscriberService;
+use Symfony\Component\Messenger\MessageBusInterface;
 use App\Service\SubscriberMetadata\Exception\MetadataValidationFailedException;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,6 +39,7 @@ class SubscriberController extends AbstractController
         private NewsletterListService $newsletterListService,
         private SubscriberMetadataService $subscriberMetadataService,
         private ListRemovalService $listRemovalService,
+        private MessageBusInterface $bus,
     ) {}
 
     #[Route('/subscribers', methods: 'GET')]
@@ -272,6 +275,17 @@ class SubscriberController extends AbstractController
         }
 
         return $this->json(new SubscriberObject($subscriber));
+    }
+
+    #[Route('/subscribers/{id}/resend-opt-in', methods: 'POST')]
+    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    public function resendOptIn(Subscriber $subscriber): JsonResponse
+    {
+        if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
+            throw new BadRequestHttpException("Subscriber is not pending");
+        }
+        $this->bus->dispatch(new SendConfirmationMailMessage($subscriber->getId()));
+        return $this->json([]);
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
