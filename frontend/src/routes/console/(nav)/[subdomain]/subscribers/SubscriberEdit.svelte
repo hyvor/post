@@ -23,7 +23,7 @@
 
 	let { subscriber, show = $bindable(false), handleUpdate }: Props = $props();
 
-	let status = $state(subscriber.status);
+	let status = $derived(subscriber.status);
 	let selectedList = $derived(subscriber.list_ids);
 	let metadata = $derived({ ...subscriber.metadata });
 	let loading = $state(false);
@@ -33,14 +33,12 @@
 			lists_strategy: 'overwrite',
 			metadata_strategy: 'overwrite',
 			list_skip_resubscribe_on: [],
-			list_removal_reason: 'other'
+			list_removal_reason: 'other',
+			send_pending_confirmation_email: true
 		};
 
 		if (status !== subscriber.status) {
 			data.status = status;
-			if (status === 'pending') {
-				data.send_pending_confirmation_email = true;
-			}
 		}
 
 		if (selectedList.sort().join(',') !== subscriber.list_ids.sort().join(',')) {
@@ -94,8 +92,8 @@
 
 	<SplitControl label="Status">
 		<FormControl>
-			<Radio bind:group={status} value="pending" disabled={subscriber.status === 'pending'}>Pending</Radio>
-			<Radio bind:group={status} value="subscribed" disabled={subscriber.status === 'subscribed'}>Subscribed</Radio>
+			<Radio bind:group={status} value="pending">Pending</Radio>
+			<Radio bind:group={status} value="subscribed">Subscribed</Radio>
 		</FormControl>
 	</SplitControl>
 

@@ -91,7 +91,7 @@
 	<div class="email-wrap">
 		<div class="email">{subscriber.email}</div>
 		<div class="status-tag">
-			<SubscriberStatus status={subscriber.status} />
+			<SubscriberStatus status={subscriber.status} size="small" />
 			{#if subscriber.status === 'subscribed' && subscriber.subscribed_at}
 				<span class="status-time">
 					<RelativeTime unix={subscriber.subscribed_at} />

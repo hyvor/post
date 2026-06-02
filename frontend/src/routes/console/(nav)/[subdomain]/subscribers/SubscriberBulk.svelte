@@ -71,11 +71,9 @@
 					count: $selectedSubscriberIdsStore.length
 				})}
 				<div class="links">
-					{#if $subscriberStore.length > 1}
 					<Link href="javascript:void()" on:click={handleSelectAll}>
 						{I18n.t('console.common.selectAll')}
 					</Link>
-				{/if}
 					<Link href="javascript:void()" on:click={() => selectedSubscriberIdsStore.set([])}>
 						{I18n.t('console.subscribers.bulk.deselect')}
 					</Link>
