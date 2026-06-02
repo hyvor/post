@@ -103,7 +103,7 @@
 	<div class="lists-wrap">
 		{#if listNames.length > 0}
 			<div class="list-names">
-				{#each listNames as name}
+				{#each listNames.sort((a, b) => a.localeCompare(b)) as name}
 					<Tag color="default" size="small">{name}</Tag>
 				{/each}
 			</div>
@@ -149,12 +149,14 @@
 
 <style>
 	.subscriber {
-		padding: 15px 25px 15px 55px;
+		padding: 12px 20px 12px 55px;
 		border-radius: var(--box-radius);
-		display: flex;
+		display: grid;
+		grid-template-columns: 2fr 1.5fr 1fr 100px;
+		align-items: center;
+		gap: 12px;
 		text-align: left;
 		width: 100%;
-		align-items: center;
 		position: relative;
 	}
 	.subscriber:hover {
@@ -172,11 +174,11 @@
 		cursor: pointer;
 	}
 
-	.email-wrap {
-		flex: 1;
-	}
 	.email {
 		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.status-tag {
 		display: flex;
@@ -189,9 +191,6 @@
 		color: var(--text-light);
 	}
 
-	.lists-wrap {
-		flex: 1;
-	}
 	.list-names {
 		display: flex;
 		flex-wrap: wrap;
@@ -200,11 +199,6 @@
 	.no-lists {
 		font-size: 14px;
 		color: var(--text-light);
-		font-style: italic;
-	}
-
-	.source-wrap {
-		flex: 1;
 	}
 
 	.tag {
@@ -216,13 +210,28 @@
 		display: flex;
 		gap: 4px;
 		align-items: center;
+		justify-content: flex-end;
 	}
 
 	@media (max-width: 992px) {
 		.subscriber {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 10px;
+			grid-template-columns: 1fr auto;
+			grid-template-rows: auto auto;
+			padding-left: 55px;
+		}
+
+		.lists-wrap {
+			grid-column: 1;
+		}
+
+		.source-wrap {
+			display: none;
+		}
+
+		.actions {
+			grid-column: 2;
+			grid-row: 1 / 3;
+			align-self: center;
 		}
 	}
 </style>
