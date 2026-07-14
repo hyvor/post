@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Link, Tag } from '@hyvor/design/components';
 	import type { Approval } from '../types';
-	import ApprovalStatusTag from '../../console/@components/Nav/ApprovalStatusTag.svelte';
+	import ApprovalStatusTag from './ApprovalStatusTag.svelte';
 	import FriendlyDate from '../../console/@components/utils/FriendlyDate.svelte';
 	import { configStore } from '../lib/stores/sudoStore';
 	interface Props {

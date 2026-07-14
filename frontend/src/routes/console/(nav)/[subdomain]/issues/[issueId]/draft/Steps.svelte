@@ -6,7 +6,6 @@
 	import { goto } from '$app/navigation';
 	import { consoleUrlWithNewsletter } from '../../../../../lib/consoleUrl';
 	import IconSend from '@hyvor/icons/IconSend';
-	import { userApprovalStatusStore } from '../../../../../lib/stores/consoleStore';
 	import { getI18n } from '../../../../../lib/i18n';
 	import { draftIssueEditingStore, draftStepStore } from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
@@ -131,7 +130,7 @@
 		{#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
 			<Button
 				onclick={handleSend}
-				disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}
+				disabled={!$newsletterLicenseStore}
 			>
 				Send Issue
 				{#snippet end()}

@@ -4,7 +4,6 @@ namespace App\Tests\Api\Console;
 
 use App\Api\Console\Controller\ConsoleController;
 use App\Api\Console\Object\NewsletterListObject;
-use App\Entity\Type\ApprovalStatus;
 use App\Entity\Type\SubscriberStatus;
 use App\Entity\Type\UserRole;
 use App\Service\Newsletter\NewsletterService;
@@ -125,9 +124,6 @@ class ConsoleInitTest extends WebTestCase
         $config = $data['config'];
         $this->assertIsArray($config);
         $this->assertArrayHasKey('newsletter_defaults', $config);
-
-        $this->assertArrayHasKey('user_approval', $data);
-        $this->assertSame(ApprovalStatus::PENDING->value, $data['user_approval']);
     }
 
     public function testInitConsoleWithoutOrg(): void
@@ -163,9 +159,6 @@ class ConsoleInitTest extends WebTestCase
         $config = $data['config'];
         $this->assertIsArray($config);
         $this->assertArrayHasKey('newsletter_defaults', $config);
-
-        $this->assertArrayHasKey('user_approval', $data);
-        $this->assertSame(ApprovalStatus::PENDING->value, $data['user_approval']);
     }
 
     public function testInitNewsletter(): void

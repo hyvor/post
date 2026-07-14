@@ -14,14 +14,13 @@
 	} from '@hyvor/design/cloud';
 	import en from '../../../../shared/locale/en.json';
 	import fr from '../../../../shared/locale/fr.json';
-	import type { AppConfig, ApprovalStatus, NewsletterList } from './types';
+	import type { AppConfig, NewsletterList } from './types';
 	import { onMount } from 'svelte';
 	import consoleApi from './lib/consoleApi';
 	import { page } from '$app/state';
 	import {
 		setAppConfig,
 		getAppConfig,
-		userApprovalStatusStore,
 		authOrganizationStore,
 		authUserStore,
 		resolvedLicenseStore
@@ -42,7 +41,6 @@
 		organization: CloudContextOrganization;
 		resolved_license: ResolvedLicense;
 		newsletters: NewsletterList[];
-		user_approval: ApprovalStatus;
 	}
 
 	let isLoading = $state(true);
@@ -63,8 +61,6 @@
 				if (res.newsletters.length > 0) {
 					setNewsletterStoreByNewsletterList(res.newsletters[0]);
 				}
-
-				userApprovalStatusStore.set(res.user_approval);
 
 				if (switchingOrg && !page.url.pathname.startsWith('/console/new')) {
 					goto('/console');

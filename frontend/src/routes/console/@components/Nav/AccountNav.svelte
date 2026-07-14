@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { NavLink, Tooltip } from '@hyvor/design/components';
+	import { NavLink } from '@hyvor/design/components';
 	import { page } from '$app/stores';
 	import IconCoin from '@hyvor/icons/IconCoin';
 	import IconDatabase from '@hyvor/icons/IconDatabase';
-	import IconClipboardCheck from '@hyvor/icons/IconClipboardCheck';
 	import NavItem from './NavItem.svelte';
 	import { getI18n } from '../../lib/i18n';
-	import { userApprovalStatusStore } from '../../lib/stores/consoleStore';
-	import ApprovalStatusTag from './ApprovalStatusTag.svelte';
 	import { canAccessBilling, canAccessSettings } from '../../orgPermission';
 
 	const I18n = getI18n();
@@ -15,23 +12,6 @@
 
 <div class="wrap hds-box">
 	<div class="nav-links">
-		<NavLink
-			href="/console/approve"
-			active={$page.url.pathname === '/console/approve'}
-			disabled={!canAccessSettings()}
-		>
-			<NavItem>
-				{#snippet icon()}
-					<IconClipboardCheck />
-				{/snippet}
-				{#snippet text()}
-					<span>{I18n.t('console.nav.approve')}</span>
-				{/snippet}
-			</NavItem>
-			{#snippet end()}
-				<ApprovalStatusTag status={$userApprovalStatusStore} />
-			{/snippet}
-		</NavLink>
 		<NavLink
 			href="/console/domains"
 			active={$page.url.pathname === '/console/domains'}
@@ -46,26 +26,20 @@
 				{/snippet}
 			</NavItem>
 		</NavLink>
-		<Tooltip
-			text={I18n.t('console.nav.billingTooltip')}
-			position="right"
-			disabled={$userApprovalStatusStore === 'approved'}
+		<NavLink
+			href="/console/billing"
+			active={$page.url.pathname === '/console/billing'}
+			disabled={!canAccessBilling()}
 		>
-			<NavLink
-				href="/console/billing"
-				active={$page.url.pathname === '/console/billing'}
-				disabled={!canAccessBilling() || $userApprovalStatusStore !== 'approved'}
-			>
-				<NavItem>
-					{#snippet icon()}
-						<IconCoin />
-					{/snippet}
-					{#snippet text()}
-						<span>{I18n.t('console.nav.billing')}</span>
-					{/snippet}
-				</NavItem>
-			</NavLink>
-		</Tooltip>
+			<NavItem>
+				{#snippet icon()}
+					<IconCoin />
+				{/snippet}
+				{#snippet text()}
+					<span>{I18n.t('console.nav.billing')}</span>
+				{/snippet}
+			</NavItem>
+		</NavLink>
 	</div>
 </div>
 
