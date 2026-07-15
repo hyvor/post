@@ -128,7 +128,6 @@ class ConsoleController extends AbstractController
             'permissions' => [
                 'can_change_branding' => $canChangeBranding,
             ],
-            'has_license' => (bool)$license
         ]);
     }
 }

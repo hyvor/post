@@ -9,7 +9,7 @@
 	import { getI18n } from '../../../../../lib/i18n';
 	import { draftIssueEditingStore, draftStepStore } from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
-	import { newsletterLicenseStore } from '../../../../../lib/stores/newsletterStore';
+	import { canSendIssues, resolvedLicenseStore } from '../../../../../lib/stores/consoleStore';
 	import { track } from '@hyvor/design/marketing';
 
 	interface Props {
@@ -41,7 +41,7 @@
 			return false;
 		}
 
-		if (!$newsletterLicenseStore) {
+		if (!canSendIssues($resolvedLicenseStore)) {
 			toast.error(I18n.t('console.issues.draft.sendIssue.validate.license'));
 			return false;
 		}
@@ -130,7 +130,7 @@
 		{#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
 			<Button
 				onclick={handleSend}
-				disabled={!$newsletterLicenseStore}
+				disabled={!canSendIssues($resolvedLicenseStore)}
 			>
 				Send Issue
 				{#snippet end()}

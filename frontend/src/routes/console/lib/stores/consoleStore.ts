@@ -11,6 +11,12 @@ export const authOrganizationStore = writable<CloudContextOrganization>();
 export const authUserStore = writable<CloudContextUser>();
 export const resolvedLicenseStore = writable<ResolvedLicense>();
 
+// trial licenses cannot be used to send issues; a paid license (subscription
+// or enterprise contract) is required
+export function canSendIssues(license: ResolvedLicense | undefined): boolean {
+	return !!license?.license && license.type !== 'trial';
+}
+
 let appConfig = {} as AppConfig;
 
 export function setAppConfig(config: AppConfig) {

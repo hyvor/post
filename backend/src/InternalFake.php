@@ -49,7 +49,7 @@ class InternalFake extends \Hyvor\Internal\InternalFake
         $license = PostLicense::trial();
         $license->emails = 1000;
         return [
-            1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)
+            1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, $license)
         ];
     }
 }

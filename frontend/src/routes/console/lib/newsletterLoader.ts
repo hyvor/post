@@ -10,7 +10,6 @@ import consoleApi from './consoleApi';
 import {
 	issueStore,
 	listStore,
-	newsletterLicenseStore,
 	newsletterPermissionsStore,
 	newsletterStatsStore,
 	sendingProfilesStore,
@@ -25,7 +24,6 @@ interface NewsletterResponse {
 	subscriber_metadata_definitions: SubscriberMetadataDefinition[];
 	sending_profiles: SendingProfile[];
 	permissions: NewsletterPermissions;
-	has_license: boolean;
 }
 
 // to prevent multiple requests for the same subdomain
@@ -46,7 +44,6 @@ export function loadNewsletter(newsletterId: number) {
 			.then((res) => {
 				setNewsletterStore(res.newsletter);
 				newsletterStatsStore.set(res.stats);
-				newsletterLicenseStore.set(res.has_license);
 				listStore.set(res.lists);
 				subscriberMetadataDefinitionStore.set(res.subscriber_metadata_definitions);
 				sendingProfilesStore.set(res.sending_profiles);

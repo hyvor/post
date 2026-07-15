@@ -4,7 +4,10 @@
 	import TestEmail from './TestEmail.svelte';
 	import { Button, Callout } from '@hyvor/design/components';
 	import IconExclamationCircle from '@hyvor/icons/IconExclamationCircle';
-	import { newsletterLicenseStore } from '../../../../../../lib/stores/newsletterStore.js';
+	import {
+		canSendIssues,
+		resolvedLicenseStore
+	} from '../../../../../../lib/stores/consoleStore.js';
 </script>
 
 <div class="audience-wrap">
@@ -14,7 +17,7 @@
 	</div>
 
 	<div class="test-email">
-		{#if !$newsletterLicenseStore}
+		{#if !canSendIssues($resolvedLicenseStore)}
 			<div class="subscription-callout">
 				<Callout type="warning">
 					{#snippet icon()}
@@ -22,7 +25,7 @@
 					{/snippet}
 
 					<div class="message">
-						You must have an active subscription to send newsletter issues.
+						You must have an active subscription before you can send newsletters. Please upgrade your subscription to continue.
 						<Button size="small" as="a" href="/console/billing">Go to Billing</Button>
 					</div>
 				</Callout>

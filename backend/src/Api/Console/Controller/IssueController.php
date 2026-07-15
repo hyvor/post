@@ -24,6 +24,7 @@ use App\Service\Template\TextTemplateRenderer;
 use App\Service\User\UserService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -167,9 +168,14 @@ class IssueController extends AbstractController
 
         $organizationId = $issue->getNewsletter()->getOrganizationId();
 
-        $license = $this->billing->license($organizationId)->license;
+        $resolvedLicense = $this->billing->license($organizationId);
+        $license = $resolvedLicense->license;
         if (!$license instanceof PostLicense) {
             throw new UnprocessableEntityHttpException("License not found or invalid.");
+        }
+
+        if ($resolvedLicense->type === ResolvedLicenseType::TRIAL) {
+            throw new UnprocessableEntityHttpException("Cannot send issues during trial. Please upgrade your subscription.");
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);

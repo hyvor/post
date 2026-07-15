@@ -14,7 +14,6 @@ import {
 } from '../../types';
 
 export const newsletterStore = writable<Newsletter>();
-export const newsletterLicenseStore = writable<boolean>(false);
 export const newsletterEditingStore = writable<Newsletter>();
 export const newsletterRoleStore = writable<UserRole>();
 export const newsletterPermissionsStore = writable<NewsletterPermissions>();
