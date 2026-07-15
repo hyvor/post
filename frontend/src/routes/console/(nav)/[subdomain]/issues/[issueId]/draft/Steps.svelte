@@ -128,10 +128,7 @@
 	</div>
 	<div class="right">
 		{#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
-			<Button
-				onclick={handleSend}
-				disabled={!canSendIssues($resolvedLicenseStore)}
-			>
+			<Button onclick={handleSend} disabled={!canSendIssues($resolvedLicenseStore)}>
 				Send Issue
 				{#snippet end()}
 					<IconSend size={14} />

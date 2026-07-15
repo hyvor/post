@@ -262,11 +262,7 @@ export type Media = {
 };
 
 export type ImportStatus =
-	| 'requires_input'
-	| 'pending_approval'
-	| 'importing'
-	| 'failed'
-	| 'completed';
+	'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
 
 export type Import = {
 	id: number;

@@ -26,8 +26,8 @@
 		sure your newsletter complies with our <a href="/terms" class="hds-link">Terms of Service</a>
 		- we do not tolerate spam being sent through Hyvor Post.
 		<br /><br />
-		Note that even without a subscription, you can collect or import subscribers, prepare your
-		first newsletter issue, and test it with your own email address.
+		Note that even without a subscription, you can collect or import subscribers, prepare your first newsletter
+		issue, and test it with your own email address.
 	</Accordion>
 
 	<Accordion

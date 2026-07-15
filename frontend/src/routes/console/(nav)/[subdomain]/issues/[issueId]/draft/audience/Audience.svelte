@@ -25,7 +25,8 @@
 					{/snippet}
 
 					<div class="message">
-						You must have an active subscription before you can send newsletters. Please upgrade your subscription to continue.
+						You must have an active subscription before you can send newsletters. Please upgrade
+						your subscription to continue.
 						<Button size="small" as="a" href="/console/billing">Go to Billing</Button>
 					</div>
 				</Callout>
