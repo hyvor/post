@@ -252,6 +252,52 @@ class SendIssueTest extends WebTestCase
         $this->assertSame($issueDB->getTotalSendable(), 1);
     }
 
+    public function test_during_trial(): void
+    {
+        static::mockTime(new \DateTimeImmutable('2025-02-21'));
+
+        $newsletter = NewsletterFactory::createOne([
+            'organization_id' => 1
+        ]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        SubscriberFactory::createOne([
+            'newsletter' => $newsletter,
+            'status' => SubscriberStatus::SUBSCRIBED,
+            'lists' => [$list]
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'status' => IssueStatus::DRAFT,
+            'list_ids' => [$list->getId()],
+            'content' => 'content'
+        ]);
+
+        $license = PostLicense::trial();
+        $license->emails = 1000;
+
+        BillingFake::enableForSymfony(
+            $this->container,
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, $license)]
+        );
+
+        $response = $this->consoleApi(
+            $newsletter,
+            'POST',
+            "/issues/" . $issue->getId() . "/send"
+        );
+
+        $this->assertSame(422, $response->getStatusCode());
+        $json = $this->getJson();
+        $this->assertSame('Cannot send issues during trial. Please upgrade your subscription.', $json['message']);
+
+        $repository = $this->em->getRepository(Issue::class);
+        $issue = $repository->find($issue->getId());
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertSame(IssueStatus::DRAFT, $issue->getStatus());
+    }
+
     public function test_send_issue_rate_limit(): void
     {
         static::mockTime(new \DateTimeImmutable('2025-02-21'));

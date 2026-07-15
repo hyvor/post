@@ -32,11 +32,7 @@ export type Approval = {
 };
 
 export type SubscriberImportStatus =
-	| 'requires_input'
-	| 'pending_approval'
-	| 'importing'
-	| 'failed'
-	| 'completed';
+	'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
 
 export type SubscriberImport = {
 	id: number;

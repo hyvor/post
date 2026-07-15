@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tag } from '@hyvor/design/components';
-	import type { ApprovalStatus, IssueStatus } from '../../types';
+	import type { ApprovalStatus } from '../types';
 	import IconCheckCircle from '@hyvor/icons/IconCheckCircle';
 	import IconHourglassSplit from '@hyvor/icons/IconHourglassSplit';
 	import IconXCircle from '@hyvor/icons/IconXCircle';

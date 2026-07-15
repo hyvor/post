@@ -15,10 +15,8 @@ use App\Api\Console\Object\NewsletterObject;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
-use App\Entity\Type\ApprovalStatus;
 use App\Repository\ListRepository;
 use App\Service\AppConfig;
-use App\Service\Approval\ApprovalService;
 use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\NewsletterList\NewsletterListService;
@@ -46,7 +44,6 @@ class ConsoleController extends AbstractController
         private AppConfig                 $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
         private SendingProfileService     $sendingProfileService,
-        private ApprovalService           $approvalService,
         private BillingInterface          $billing,
     )
     {
@@ -62,7 +59,6 @@ class ConsoleController extends AbstractController
 
         $newsletters = [];
         $license = new ResolvedLicense(ResolvedLicenseType::NONE);
-        $organizationApproval = null;
 
         if ($organization) {
             $newsletters = array_map(
@@ -70,7 +66,6 @@ class ConsoleController extends AbstractController
                 $this->newsletterService->getUserNewslettersOfOrganization($user->id, $organization->id)
             );
             $license = $this->billing->license($organization->id);
-            $organizationApproval = $this->approvalService->getApprovalOfOrganization($organization);
         }
 
         return new JsonResponse([
@@ -91,7 +86,6 @@ class ConsoleController extends AbstractController
                 ],
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
             ],
-            'user_approval' => $organizationApproval ? $organizationApproval->getStatus() : ApprovalStatus::PENDING,
         ]);
     }
 
@@ -134,7 +128,6 @@ class ConsoleController extends AbstractController
             'permissions' => [
                 'can_change_branding' => $canChangeBranding,
             ],
-            'has_license' => (bool)$license
         ]);
     }
 }

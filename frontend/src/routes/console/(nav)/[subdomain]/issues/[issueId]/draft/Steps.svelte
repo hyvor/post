@@ -6,11 +6,10 @@
 	import { goto } from '$app/navigation';
 	import { consoleUrlWithNewsletter } from '../../../../../lib/consoleUrl';
 	import IconSend from '@hyvor/icons/IconSend';
-	import { userApprovalStatusStore } from '../../../../../lib/stores/consoleStore';
 	import { getI18n } from '../../../../../lib/i18n';
 	import { draftIssueEditingStore, draftStepStore } from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
-	import { newsletterLicenseStore } from '../../../../../lib/stores/newsletterStore';
+	import { canSendIssues, resolvedLicenseStore } from '../../../../../lib/stores/consoleStore';
 	import { track } from '@hyvor/design/marketing';
 
 	interface Props {
@@ -42,7 +41,7 @@
 			return false;
 		}
 
-		if (!$newsletterLicenseStore) {
+		if (!canSendIssues($resolvedLicenseStore)) {
 			toast.error(I18n.t('console.issues.draft.sendIssue.validate.license'));
 			return false;
 		}
@@ -129,10 +128,7 @@
 	</div>
 	<div class="right">
 		{#if $draftStepStore[$draftIssueEditingStore.id] === 'audience'}
-			<Button
-				onclick={handleSend}
-				disabled={$userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}
-			>
+			<Button onclick={handleSend} disabled={!canSendIssues($resolvedLicenseStore)}>
 				Send Issue
 				{#snippet end()}
 					<IconSend size={14} />

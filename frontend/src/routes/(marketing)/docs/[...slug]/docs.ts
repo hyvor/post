@@ -3,7 +3,6 @@ import Introduction from './content/Introduction.svelte';
 import type { Component } from 'svelte';
 import SignupForm from './content/SignupForm.svelte';
 import Import from './content/Import/Import.svelte';
-import Approval from './content/Approval.svelte';
 import ConsoleApi from './content/ConsoleApi.svelte';
 
 export const categories: Category[] = [
@@ -14,11 +13,6 @@ export const categories: Category[] = [
 				slug: '',
 				name: 'Introduction',
 				component: Introduction
-			},
-			{
-				slug: 'approval',
-				name: 'Approval',
-				component: Approval
 			}
 		]
 	},

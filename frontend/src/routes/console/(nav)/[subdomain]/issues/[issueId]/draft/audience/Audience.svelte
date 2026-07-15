@@ -4,8 +4,10 @@
 	import TestEmail from './TestEmail.svelte';
 	import { Button, Callout } from '@hyvor/design/components';
 	import IconExclamationCircle from '@hyvor/icons/IconExclamationCircle';
-	import { newsletterLicenseStore } from '../../../../../../lib/stores/newsletterStore.js';
-	import { userApprovalStatusStore } from '../../../../../../lib/stores/consoleStore.js';
+	import {
+		canSendIssues,
+		resolvedLicenseStore
+	} from '../../../../../../lib/stores/consoleStore.js';
 </script>
 
 <div class="audience-wrap">
@@ -15,24 +17,18 @@
 	</div>
 
 	<div class="test-email">
-		{#if $userApprovalStatusStore !== 'approved' || !$newsletterLicenseStore}
+		{#if !canSendIssues($resolvedLicenseStore)}
 			<div class="subscription-callout">
 				<Callout type="warning">
 					{#snippet icon()}
 						<IconExclamationCircle />
 					{/snippet}
 
-					{#if $userApprovalStatusStore !== 'approved'}
-						<div class="message">
-							Your account must be approved to send newsletter issues.
-							<Button size="small" as="a" href="/console/approve">Go to Approval</Button>
-						</div>
-					{:else}
-						<div class="message">
-							You must have an active subscription to send newsletter issues.
-							<Button size="small" as="a" href="/console/billing">Go to Billing</Button>
-						</div>
-					{/if}
+					<div class="message">
+						You must have an active subscription before you can send newsletters. Please upgrade
+						your subscription to continue.
+						<Button size="small" as="a" href="/console/billing">Go to Billing</Button>
+					</div>
 				</Callout>
 			</div>
 		{/if}
