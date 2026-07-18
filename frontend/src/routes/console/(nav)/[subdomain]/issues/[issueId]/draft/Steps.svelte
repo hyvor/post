@@ -7,7 +7,11 @@
 	import { consoleUrlWithNewsletter } from '../../../../../lib/consoleUrl';
 	import IconSend from '@hyvor/icons/IconSend';
 	import { getI18n } from '../../../../../lib/i18n';
-	import { draftIssueEditingStore, draftStepStore, draftSendableSubscribersCountStore } from './draftStore';
+	import {
+		draftIssueEditingStore,
+		draftStepStore,
+		draftSendableSubscribersCountStore
+	} from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
 	import { canSendIssues, resolvedLicenseStore } from '../../../../../lib/stores/consoleStore';
 	import { newsletterStore } from '../../../../../lib/stores/newsletterStore';

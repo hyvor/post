@@ -191,8 +191,8 @@
 		<div class="content">
 			<h3>Daily Sending Rate</h3>
 			<p class="hint">
-				Maximum number of emails this newsletter can send per day. Leave empty to use the default
-				({DEFAULT_DAILY_SENDING_RATE.toLocaleString()} / day).
+				Maximum number of emails this newsletter can send per day. Leave empty to use the default ({DEFAULT_DAILY_SENDING_RATE.toLocaleString()}
+				/ day).
 			</p>
 			<div class="rate-row">
 				<TextInput

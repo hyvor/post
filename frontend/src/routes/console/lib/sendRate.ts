@@ -5,10 +5,15 @@
  *
  * Returns the i18n key and count to render, or null when there is nothing to show.
  */
+export type SendRateEstimateKey =
+	| 'console.issues.draft.sendRateEstimate.withinHour'
+	| 'console.issues.draft.sendRateEstimate.hours'
+	| 'console.issues.draft.sendRateEstimate.days';
+
 export function getSendDurationEstimate(
 	count: number,
 	ratePerDay: number
-): { key: string; count: number } | null {
+): { key: SendRateEstimateKey; count: number } | null {
 	if (count <= 0 || ratePerDay <= 0) {
 		return null;
 	}
