@@ -32,6 +32,7 @@ class UpdateNewsletterTest extends WebTestCase
 
         $data = $this->getJson();
         $this->assertArrayHasKey('newsletter', $data);
+        $this->assertIsArray($data['newsletter']);
         $this->assertSame(1000, $data['newsletter']['daily_sending_rate']);
 
         $this->assertSame(1000, $newsletter->getDailySendingRate());
@@ -54,6 +55,8 @@ class UpdateNewsletterTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
 
         $data = $this->getJson();
+        $this->assertArrayHasKey('newsletter', $data);
+        $this->assertIsArray($data['newsletter']);
         $this->assertNull($data['newsletter']['daily_sending_rate']);
     }
 
