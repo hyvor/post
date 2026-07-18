@@ -177,9 +177,9 @@ class Newsletter
         return $this;
     }
 
-    public function getDailySendingRate(): ?int
+    public function getDailySendingRate(): int
     {
-        return $this->daily_sending_rate;
+        return $this->daily_sending_rate ?? self::DEFAULT_DAILY_SENDING_RATE;
     }
 
     public function setDailySendingRate(?int $daily_sending_rate): static
@@ -187,14 +187,6 @@ class Newsletter
         $this->daily_sending_rate = $daily_sending_rate;
 
         return $this;
-    }
-
-    /**
-     * The effective daily sending rate, falling back to the default when not set.
-     */
-    public function getEffectiveDailySendingRate(): int
-    {
-        return $this->daily_sending_rate ?? self::DEFAULT_DAILY_SENDING_RATE;
     }
 
     /**

@@ -18,6 +18,8 @@ class UpdateNewsletterInput extends NewsletterObject
     public const UNUPDATABLE_PROPERTIES = [
         'id',
         'created_at',
+        // Only editable via the sudo API.
+        'daily_sending_rate',
     ];
 
     public function __construct()

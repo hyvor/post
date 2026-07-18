@@ -77,7 +77,7 @@ class SendIssueMessageHandler
     private function getIntervalSeconds(Issue $issue): float
     {
         $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
-        $dailyRate = $issue->getNewsletter()->getEffectiveDailySendingRate();
+        $dailyRate = $issue->getNewsletter()->getDailySendingRate();
 
         return max(self::SECONDS_PER_DAY / $dailyRate, 1 / $maxPerSecond);
     }
