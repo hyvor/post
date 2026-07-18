@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\List\CreateListInput;
 use App\Api\Console\Input\List\UpdateListInput;
@@ -26,7 +26,7 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists', methods: 'POST')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function createNewsletterList(
         Newsletter                           $newsletter,
         #[MapRequestPayload] CreateListInput $input
@@ -55,7 +55,7 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function updateNewsletterList(
         NewsletterList                       $list,
         #[MapRequestPayload] UpdateListInput $input
@@ -73,7 +73,7 @@ class ListController extends AbstractController
     }
 
     #[Route('/lists/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function deleteNewsletterList(NewsletterList $list): JsonResponse
     {
         $this->newsletterListService->deleteNewsletterList($list);

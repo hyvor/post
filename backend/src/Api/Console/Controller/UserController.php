@@ -2,21 +2,22 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
 use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Input\UserInvite\CreateUserInput;
+use App\Api\Console\Input\User\CreateUserInput;
+use App\Api\Console\Input\User\DeleteUserInput;
 use App\Api\Console\Object\UserObject;
 use App\Entity\Newsletter;
-use App\Entity\User;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Bundle\Comms\CommsInterface;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\Organization\VerifyMember;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
@@ -30,7 +31,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', methods: 'GET')]
-    #[ScopeRequired(Scope::USERS_READ)]
+    #[ScopeRequired(PostScope::USERS_READ)]
     public function getUsers(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService->getNewsletterUsers($newsletter)
@@ -45,16 +46,26 @@ class UserController extends AbstractController
         return $this->json($users);
     }
 
-    #[Route('users/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::USERS_WRITE)]
-    public function deleteUser(Newsletter $newsletter, User $user): JsonResponse
+    #[Route('/users', methods: 'DELETE')]
+    #[ScopeRequired(PostScope::USERS_WRITE)]
+    public function deleteUser(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
     {
+        if ($input->user_id === null && $input->id === null) {
+            throw new BadRequestHttpException('Either user_id or id is required');
+        }
+
+        $user = $this->userService->getUser($newsletter, id: $input->id, hyvorUserId: $input->user_id);
+
+        if (!$user) {
+            throw new NotFoundHttpException('User not found');
+        }
+
         $this->userService->deleteUser($user);
         return $this->json([]);
     }
 
     #[Route('/users', methods: 'POST')]
-    #[ScopeRequired(Scope::USERS_WRITE)]
+    #[ScopeRequired(PostScope::USERS_WRITE)]
     public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
         $hyvorUser = $this->auth->fromId($input->user_id);
@@ -65,7 +76,12 @@ class UserController extends AbstractController
 
         $organizationId = $newsletter->getOrganizationId();
 
-        if ($this->userService->hasAccessToNewsletter($newsletter, $hyvorUser->id)) {
+        $existingUser = $this->userService->getUser($newsletter, hyvorUserId: $hyvorUser->id);
+
+        if ($existingUser) {
+            if ($input->on_duplicate === 'ignore') {
+                return $this->json(new UserObject($existingUser, $hyvorUser));
+            }
             throw new BadRequestHttpException('User is already added to the newsletter');
         }
 

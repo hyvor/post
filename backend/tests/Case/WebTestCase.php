@@ -2,7 +2,7 @@
 
 namespace App\Tests\Case;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Entity\Newsletter;
 use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
@@ -98,7 +98,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      * @param array<string, mixed> $files
      * @param array<string, mixed> $parameters
      * @param array<string, mixed> $server
-     * @param true|(string|Scope)[] $scopes
+     * @param true|(string|PostScope)[] $scopes
      */
     public function consoleApi(
         Newsletter|int|null $newsletter,
@@ -144,7 +144,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             $apiKeyFactory = ['key_hashed' => $apiKeyHashed, 'newsletter' => $newsletter];
             if ($scopes !== true) {
                 $apiKeyFactory['scopes'] = array_map(
-                    fn(Scope|string $scope) => is_string($scope) ? $scope : $scope->value,
+                    fn(PostScope|string $scope) => is_string($scope) ? $scope : $scope->value,
                     $scopes,
                 );
             }

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\ApiKey;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Controller\ApiKeyController;
 use App\Api\Console\Input\ApiKey\UpdateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
@@ -37,7 +37,7 @@ class UpdateApiKeyTest extends WebTestCase
             [
                 'is_enabled' => false,
                 'name' => 'Updated API Key',
-                'scopes' => [Scope::NEWSLETTER_READ, Scope::ISSUES_READ, Scope::ISSUES_WRITE]
+                'scopes' => [PostScope::NEWSLETTER_READ, PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
             ]
         );
 
@@ -56,9 +56,9 @@ class UpdateApiKeyTest extends WebTestCase
         $this->assertNotNull($apiKeyDb);
         $this->assertFalse($apiKeyDb->getIsEnabled());
         $this->assertCount(3, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::NEWSLETTER_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUES_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUES_WRITE->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::NEWSLETTER_READ->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::ISSUES_READ->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::ISSUES_WRITE->value, $apiKeyDb->getScopes());
         $this->assertSame('Updated API Key', $apiKeyDb->getName());
     }
 }

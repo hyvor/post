@@ -832,25 +832,22 @@ appearance of your newsletters.
 <h3 id="user">User</h3>
 
 <p>
-	The owner of the newsletter can invite other users as Admins to collaborate on managing the
-	newsletter.
+	Admins of the organization that owns the newsletter can be added as users to collaborate on
+	managing it.
 </p>
 
 <p>Endpoints:</p>
 
 <ul>
 	<li><a href="#get-user"><code>GET /users</code></a> - Get user</li>
-	<li><a href="#delete-user"><code>DELETE /users/{'{id}'}</code></a> - Delete user</li>
-	<li><a href="#get-invites"><code>GET /invites</code></a> - Get invites</li>
-	<li><a href="#create-invite"><code>POST /invites</code></a> - Create an invite</li>
-	<li><a href="#delete-invite"><code>DELETE /invites/{'{id}'}</code></a> - Delete an invite</li>
+	<li><a href="#create-user"><code>POST /users</code></a> - Create user</li>
+	<li><a href="#delete-user"><code>DELETE /users</code></a> - Delete user</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
 	<li><a href="#user-object">User Object</a></li>
-	<li><a href="#user-invite-object">User Invite Object</a></li>
 </ul>
 
 <h4 id="get-user">Get user</h4>
@@ -865,67 +862,47 @@ appearance of your newsletters.
     `}
 />
 
-<h4 id="delete-user">Delete user</h4>
+<h4 id="create-user">Create user</h4>
 
-<code>DELETE /users/{'{id}'}</code>
+<code>POST /users</code>
 
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {}
-        type Response = {}
-    `}
-/>
-
-<h4 id="get-invites">Get invites</h4>
-
-<code>GET /invites</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {}
-        type Response = UserInvite[]
-    `}
-/>
-
-<h4 id="create-invite">Create an invite</h4>
-
-<code>POST /invites</code>
-
-<p>
-	You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer"
-		>HYVOR account</a
-	> before sending an invitation.
-</p>
+<p>The user must already be a member of the organization that owns this newsletter.</p>
 
 <CodeBlock
 	language="ts"
 	code={`
         type Request = {
-            username?: string;
-            email?: string;
+            user_id: number; // the user's id in HYVOR (AuthInterface)
+
+            // what to do if the user is already added to the newsletter
+            // throw: return a 400 error (default)
+            // ignore: return the existing user without an error
+            on_duplicate?: 'throw' | 'ignore';
         }
-        type Response = UserInvite
+        type Response = User
     `}
 />
 
 <Callout type="info">
 	<ul>
 		<li>
-			Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.
+			Returns a 400 error if the user is not a member of the organization that owns this newsletter.
 		</li>
 	</ul>
 </Callout>
 
-<h4 id="delete-invite">Delete an invite</h4>
+<h4 id="delete-user">Delete user</h4>
 
-<code>DELETE /invites/{'{id}'}</code>
+<code>DELETE /users</code>
 
 <CodeBlock
 	language="ts"
 	code={`
-        type Request = {}
+        type Request = {
+            // one of user_id or id is required
+            user_id?: number; // the user's id in HYVOR (AuthInterface)
+            id?: number; // the user's id in this newsletter's user list
+        }
         type Response = {}
     `}
 />
@@ -1228,21 +1205,6 @@ appearance of your newsletters.
             role: 'owner' | 'admin';
             created_at: number; // unix timestamp
             user: UserMiniObject;
-        }
-    `}
-/>
-
-<h3 id="user-invite-object">User Invite Object</h3>
-
-<CodeBlock
-	language="ts"
-	code={`
-        interface UserInvite {
-            id: number;
-            created_at: number; // unix timestamp
-            role: 'admin';
-            user: UserMiniObject;
-            expires_at: number; // unix timestamp
         }
     `}
 />

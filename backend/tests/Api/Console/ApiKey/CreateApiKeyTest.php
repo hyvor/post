@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\ApiKey;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Controller\ApiKeyController;
 use App\Api\Console\Input\ApiKey\CreateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiKeyController::class)]
 #[CoversClass(ApiKeyService::class)]
-#[CoversClass(Scope::class)]
+#[CoversClass(PostScope::class)]
 #[CoversClass(CreateApiKeyInput::class)]
 #[CoversClass(ApiKeyObject::class)]
 class CreateApiKeyTest extends WebTestCase
@@ -30,7 +30,7 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Test name',
-                'scopes' => [Scope::ISSUES_READ, Scope::ISSUES_WRITE]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
             ]
         );
 
@@ -47,7 +47,7 @@ class CreateApiKeyTest extends WebTestCase
         ]);
         $this->assertNotNull($apiKey);
         $this->assertSame('Test name', $apiKey->getName());
-        $this->assertSame([Scope::ISSUES_READ->value, Scope::ISSUES_WRITE->value], $apiKey->getScopes());
+        $this->assertSame([PostScope::ISSUES_READ->value, PostScope::ISSUES_WRITE->value], $apiKey->getScopes());
     }
 
     public function test_create_api_key_without_name(): void
@@ -59,7 +59,7 @@ class CreateApiKeyTest extends WebTestCase
             'POST',
             '/api-keys',
             [
-                'scopes' => [Scope::ISSUES_READ, Scope::ISSUES_WRITE]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
             ]
         );
 
@@ -96,7 +96,7 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Test name',
-                'scopes' => [Scope::ISSUES_READ, Scope::ISSUES_WRITE, 'invalid_scope']
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE, 'invalid_scope']
             ]
         );
         $this->assertSame(422, $response->getStatusCode());
@@ -118,7 +118,7 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Exceeding limit',
-                'scopes' => [Scope::ISSUES_READ, Scope::ISSUES_WRITE]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
             ]
         );
 

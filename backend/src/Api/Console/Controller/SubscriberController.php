@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
@@ -43,7 +43,7 @@ class SubscriberController extends AbstractController
     ) {}
 
     #[Route('/subscribers', methods: 'GET')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_READ)]
     public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -80,7 +80,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
@@ -265,7 +265,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/email/{email}', methods: 'GET')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_READ)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_READ)]
     public function getSubscriberByEmail(string $email, Newsletter $newsletter): JsonResponse
     {
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
@@ -278,7 +278,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}/resend-opt-in', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function resendOptIn(Subscriber $subscriber): JsonResponse
     {
         if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
@@ -289,7 +289,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
@@ -297,7 +297,7 @@ class SubscriberController extends AbstractController
     }
 
     #[Route('/subscribers/bulk', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function bulkActions(
         Newsletter $newsletter,
         #[MapRequestPayload] BulkActionSubscriberInput $input,

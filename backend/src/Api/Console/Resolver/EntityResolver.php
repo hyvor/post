@@ -13,8 +13,6 @@ use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberImport;
 use App\Entity\SubscriberMetadataDefinition;
-use App\Entity\User;
-use App\Entity\UserInvite;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +30,6 @@ class EntityResolver implements ValueResolverInterface
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
         'sending-profiles' => SendingProfile::class,
-        'users' => User::class,
-        'invites' => UserInvite::class,
         'imports' => SubscriberImport::class,
 //        'approvals' => Approval::class,
         'api-keys' => ApiKey::class,

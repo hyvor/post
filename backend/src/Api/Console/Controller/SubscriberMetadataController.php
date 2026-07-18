@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\SubscriberMetadata\CreateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Input\SubscriberMetadata\UpdateSubscriberMetadataDefinitionInput;
@@ -26,7 +26,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function createMetadata(
         Newsletter                                                   $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
@@ -54,7 +54,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function updateMetadata(
         SubscriberMetadataDefinition                                 $metadataDefinition,
         #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input
@@ -65,7 +65,7 @@ class SubscriberMetadataController extends AbstractController
     }
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SUBSCRIBERS_WRITE)]
+    #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function deleteMetadata(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
     {
         $this->subscriberMetadataService->deleteMetadataDefinition($metadataDefinition);

@@ -35,6 +35,19 @@ class UserService
         return new ArrayCollection($users);
     }
 
+    public function getUser(Newsletter $newsletter, ?int $id = null, ?int $hyvorUserId = null): ?User
+    {
+        $criteria = ['newsletter' => $newsletter];
+
+        if ($id !== null) {
+            $criteria['id'] = $id;
+        } elseif ($hyvorUserId !== null) {
+            $criteria['hyvor_user_id'] = $hyvorUserId;
+        }
+
+        return $this->em->getRepository(User::class)->findOneBy($criteria);
+    }
+
     public function hasAccessToNewsletter(Newsletter $newsletter, int $hyvorUserId): bool
     {
         $user = $this->em->getRepository(User::class)->findOneBy([

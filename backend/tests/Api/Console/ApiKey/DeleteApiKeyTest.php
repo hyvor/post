@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\ApiKey;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Controller\ApiKeyController;
 use App\Api\Console\Object\ApiKeyObject;
 use App\Entity\ApiKey;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiKeyController::class)]
 #[CoversClass(ApiKeyService::class)]
-#[CoversClass(Scope::class)]
+#[CoversClass(PostScope::class)]
 #[CoversClass(ApiKeyObject::class)]
 class DeleteApiKeyTest extends WebTestCase
 {

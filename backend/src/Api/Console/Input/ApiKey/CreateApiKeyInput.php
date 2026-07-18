@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Input\ApiKey;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateApiKeyInput
@@ -26,6 +26,6 @@ class CreateApiKeyInput
      */
     public static function getScopeValues(): array
     {
-        return array_column(Scope::cases(), 'value');
+        return array_column(PostScope::cases(), 'value');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Input\Import\UploadImportInput;
@@ -33,7 +33,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/upload', methods: 'POST')]
-    #[ScopeRequired(Scope::DATA_WRITE)]
+    #[ScopeRequired(PostScope::DATA_WRITE)]
     public function upload(
         Newsletter                             $newsletter,
         Request                                $request,
@@ -62,7 +62,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/{id}', methods: 'POST')]
-    #[ScopeRequired(Scope::DATA_WRITE)]
+    #[ScopeRequired(PostScope::DATA_WRITE)]
     public function import(
         Newsletter                       $newsletter,
         SubscriberImport                 $subscriberImport,
@@ -102,7 +102,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports', methods: 'GET')]
-    #[ScopeRequired(Scope::DATA_READ)]
+    #[ScopeRequired(PostScope::DATA_READ)]
     public function listImports(Newsletter $newsletter, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 30);
@@ -116,7 +116,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/limits', methods: 'GET')]
-    #[ScopeRequired(Scope::DATA_READ)]
+    #[ScopeRequired(PostScope::DATA_READ)]
     public function importCounts(Newsletter $newsletter): JsonResponse
     {
         $counts = $this->importService->getNewsletterImportCounts($newsletter);

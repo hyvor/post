@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
@@ -49,7 +49,7 @@ class IssueController extends AbstractController
     ) {}
 
     #[Route('/issues', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getIssues(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -64,7 +64,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function createIssue(Newsletter $newsletter): JsonResponse
     {
         $issue = $this->issueService->createIssueDraft($newsletter);
@@ -73,7 +73,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getById(Issue $issue): JsonResponse
     {
         return $this->json(new IssueObject(
@@ -83,7 +83,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function updateIssue(
         Issue                                 $issue,
         Newsletter                            $newsletter,
@@ -131,7 +131,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function deleteIssue(Issue $issue): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
@@ -142,7 +142,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/send', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
@@ -209,7 +209,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/test', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function getTestData(Issue $issue): JsonResponse
     {
         $newsletter = $issue->getNewsletter();
@@ -227,7 +227,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/test', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function sendTest(
         Issue                              $issue,
         #[MapRequestPayload] SendTestInput $input
@@ -256,7 +256,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/preview', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function previewIssue(Issue $issue): JsonResponse
     {
         try {
@@ -272,7 +272,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/progress', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
@@ -280,7 +280,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/sends', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getIssueSends(Request $request, Issue $issue): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -302,7 +302,7 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/report', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
+    #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getIssueReport(Issue $issue): JsonResponse
     {
         $counts = $this->sendService->getIssueStats($issue, full: true);

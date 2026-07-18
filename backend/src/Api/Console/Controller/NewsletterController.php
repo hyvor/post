@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
@@ -71,14 +71,14 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
+    #[ScopeRequired(PostScope::NEWSLETTER_READ)]
     public function getNewsletter(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function deleteNewsletter(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
@@ -86,7 +86,7 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'PATCH')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function updateNewsletter(
         Newsletter                                                                                 $newsletter,
         #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input

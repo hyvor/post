@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\ApiKey\CreateApiKeyInput;
 use App\Api\Console\Input\ApiKey\UpdateApiKeyInput;
@@ -26,7 +26,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys', methods: 'POST')]
-    #[ScopeRequired(Scope::API_KEYS_WRITE)]
+    #[ScopeRequired(PostScope::API_KEYS_WRITE)]
     public function createApiKey(#[MapRequestPayload] CreateApiKeyInput $input, Newsletter $newsletter): JsonResponse
     {
         $apiKeysCount = count($this->apiKeyService->getApiKeysForNewsletter($newsletter));
@@ -40,7 +40,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys', methods: 'GET')]
-    #[ScopeRequired(Scope::API_KEYS_READ)]
+    #[ScopeRequired(PostScope::API_KEYS_READ)]
     public function getApiKeys(Newsletter $newsletter): JsonResponse
     {
         $apiKeys = $this->apiKeyService->getApiKeysForNewsletter($newsletter);
@@ -50,7 +50,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::API_KEYS_WRITE)]
+    #[ScopeRequired(PostScope::API_KEYS_WRITE)]
     public function updateApiKey(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
     {
         $updates = new UpdateApiKeyDto();
@@ -70,7 +70,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys/{id}', methods: 'POST')]
-    #[ScopeRequired(Scope::API_KEYS_WRITE)]
+    #[ScopeRequired(PostScope::API_KEYS_WRITE)]
     public function regenerateApiKey(ApiKey $apiKey): JsonResponse
     {
         $regeneration = $this->apiKeyService->regenerateApiKey($apiKey);
@@ -79,7 +79,7 @@ class ApiKeyController extends AbstractController
     }
 
     #[Route('/api-keys/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::API_KEYS_WRITE)]
+    #[ScopeRequired(PostScope::API_KEYS_WRITE)]
     public function deleteApiKey(ApiKey $apiKey): JsonResponse
     {
         $this->apiKeyService->deleteApiKey($apiKey);

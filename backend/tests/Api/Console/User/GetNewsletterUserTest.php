@@ -5,7 +5,6 @@ namespace App\Tests\Api\Console\User;
 use App\Api\Console\Controller\UserController;
 use App\Api\Console\Object\UserObject;
 use App\Service\User\UserService;
-use App\Service\UserInvite\UserInviteService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;

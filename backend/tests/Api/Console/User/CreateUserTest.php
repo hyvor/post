@@ -65,6 +65,55 @@ class CreateUserTest extends WebTestCase
         $this->assertResponseFailed(400, "User is already added to the newsletter");
     }
 
+    public function test_when_already_an_admin_and_on_duplicate_is_throw(): void
+    {
+        $this->getComms()->addResponse(VerifyMember::class, function () {
+            return new VerifyMemberResponse(true, 'admin');
+        });
+
+        $newsletter = NewsletterFactory::createOne();
+        UserFactory::createOne([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => 53,
+        ]);
+
+        $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/users',
+            [
+                'user_id' => 53,
+                'on_duplicate' => 'throw',
+            ]
+        );
+
+        $this->assertResponseFailed(400, "User is already added to the newsletter");
+    }
+
+    public function test_when_already_an_admin_and_on_duplicate_is_ignore(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        UserFactory::createOne([
+            'newsletter' => $newsletter,
+            'hyvor_user_id' => 53,
+        ]);
+
+        $this->consoleApi(
+            $newsletter,
+            'POST',
+            '/users',
+            [
+                'user_id' => 53,
+                'on_duplicate' => 'ignore',
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        $data = $this->getJson();
+        $this->assertCount(4, $data);
+    }
+
     public function test_when_not_an_organization_member(): void
     {
         $this->getComms()->addResponse(VerifyMember::class, function () {

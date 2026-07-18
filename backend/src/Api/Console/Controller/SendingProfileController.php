@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\SendingProfile\CreateSendingProfileInput;
 use App\Api\Console\Input\SendingProfile\UpdateSendingProfileInput;
@@ -42,7 +42,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles', methods: 'GET')]
-    #[ScopeRequired(Scope::SENDING_PROFILES_READ)]
+    #[ScopeRequired(PostScope::SENDING_PROFILES_READ)]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
@@ -53,7 +53,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles', methods: 'POST')]
-    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
+    #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter                                     $newsletter,
@@ -75,7 +75,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
+    #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function updateSendingProfile(
         SendingProfile                                 $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input
@@ -119,7 +119,7 @@ class SendingProfileController extends AbstractController
     }
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::SENDING_PROFILES_WRITE)]
+    #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
     {
 

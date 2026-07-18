@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console;
 
 use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Entity\ApiKey;
 use App\Entity\Newsletter;
@@ -256,7 +256,7 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_WRITE],
+            scopes: [PostScope::ISSUES_WRITE],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
@@ -274,7 +274,7 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_READ],
+            scopes: [PostScope::ISSUES_READ],
         );
         $this->assertResponseStatusCodeSame(200);
 

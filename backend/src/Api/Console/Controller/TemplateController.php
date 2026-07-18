@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Template\UpdateTemplateInput;
 use App\Api\Console\Input\Template\RenderTemplateInput;
@@ -32,7 +32,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates', methods: 'GET')]
-    #[ScopeRequired(Scope::TEMPLATES_READ)]
+    #[ScopeRequired(PostScope::TEMPLATES_READ)]
     public function getNewsletterTemplate(Newsletter $newsletter): JsonResponse
     {
         $template = $this->templateService->getTemplate($newsletter);
@@ -48,7 +48,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates', methods: 'PATCH')]
-    #[ScopeRequired(Scope::TEMPLATES_WRITE)]
+    #[ScopeRequired(PostScope::TEMPLATES_WRITE)]
     public function updateTemplate(
         Newsletter                               $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input
@@ -69,7 +69,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates/render', methods: 'POST')]
-    #[ScopeRequired(Scope::TEMPLATES_READ)]
+    #[ScopeRequired(PostScope::TEMPLATES_READ)]
     public function renderTemplate(
         Newsletter                               $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input

@@ -6,7 +6,7 @@ namespace App\Api\Console\Controller;
 
 use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Authorization\OrganizationOptional;
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Object\ListObject;
@@ -81,7 +81,7 @@ class ConsoleController extends AbstractController
                     'default_email_domain' => $this->appConfig->getSystemMailDomain(),
                     'archive_url' => $this->appConfig->getUrlArchive(),
                     'api_keys' => [
-                        'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
+                        'scopes' => array_map(fn($scope) => $scope->value, PostScope::cases()),
                     ],
                 ],
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
@@ -90,7 +90,7 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/init/newsletter', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
+    #[ScopeRequired(PostScope::NEWSLETTER_READ)]
     public function initNewsletter(Newsletter $newsletter): JsonResponse
     {
         $newsletterStats = $this->newsletterService->getnewsletterStats($newsletter);

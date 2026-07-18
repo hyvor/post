@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
 use App\Api\Console\Authorization\ScopeRequired;
 use App\Api\Console\Input\Media\MediaUploadInput;
 use App\Api\Console\Object\MediaObject;
@@ -70,7 +70,7 @@ class MediaController extends AbstractController
     }
 
     #[Route('/media', methods: 'POST')]
-    #[ScopeRequired(Scope::MEDIA_WRITE)]
+    #[ScopeRequired(PostScope::MEDIA_WRITE)]
     public function upload(
         Newsletter                            $newsletter,
         Request                               $request,
