@@ -126,6 +126,7 @@ export type Newsletter = {
 	name: string;
 	language_code: string | null;
 	is_rtl: boolean;
+	daily_sending_rate: number;
 } & NewsletterMeta;
 
 export type NewsletterPermissions = {

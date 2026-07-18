@@ -102,6 +102,11 @@
                 "listsEmptyError": "Please select at least one list",
                 "subscribersCount": "{count} {count, plural, one {subscriber} other {subscribers}}",
                 "sendableSubscribersCount": "<b>{count} {count, plural, one {subscriber} other {subscribers}}</b> will receive this issue",
+                "sendRateEstimate": {
+                    "withinHour": "Based on your sending rate, this issue will be sent within the hour.",
+                    "hours": "Based on your sending rate, this issue will be sent over about {count} {count, plural, one {hour} other {hours}}.",
+                    "days": "Based on your sending rate, this issue will be sent over about {count} {count, plural, one {day} other {days}}."
+                },
                 "fromName": "From Name",
                 "fromEmail": "From Email",
                 "fromEmailCaption": "Your subscribers will see this email address as the sender of the newsletter.",

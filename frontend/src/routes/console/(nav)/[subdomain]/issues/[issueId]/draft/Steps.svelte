@@ -7,9 +7,11 @@
 	import { consoleUrlWithNewsletter } from '../../../../../lib/consoleUrl';
 	import IconSend from '@hyvor/icons/IconSend';
 	import { getI18n } from '../../../../../lib/i18n';
-	import { draftIssueEditingStore, draftStepStore } from './draftStore';
+	import { draftIssueEditingStore, draftStepStore, draftSendableSubscribersCountStore } from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
 	import { canSendIssues, resolvedLicenseStore } from '../../../../../lib/stores/consoleStore';
+	import { newsletterStore } from '../../../../../lib/stores/newsletterStore';
+	import { getSendDurationEstimate } from '../../../../../lib/sendRate';
 	import { track } from '@hyvor/design/marketing';
 
 	interface Props {
@@ -80,9 +82,18 @@
 			return;
 		}
 
+		const estimate = getSendDurationEstimate(
+			$draftSendableSubscribersCountStore.count,
+			$newsletterStore.daily_sending_rate
+		);
+		let content = I18n.t('console.issues.draft.sendIssue.content');
+		if (estimate) {
+			content += ' ' + I18n.t(estimate.key, { count: estimate.count });
+		}
+
 		const confirmed = await confirm({
 			title: I18n.t('console.issues.draft.sendIssue.title'),
-			content: I18n.t('console.issues.draft.sendIssue.content'),
+			content,
 			confirmText: I18n.t('console.issues.draft.sendIssue.confirmText'),
 			autoClose: false
 		});
