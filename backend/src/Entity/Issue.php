@@ -70,6 +70,9 @@ class Issue
     #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $queued_at = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -276,6 +279,18 @@ class Issue
     public function setSentAt(?\DateTimeImmutable $sent_at): static
     {
         $this->sent_at = $sent_at;
+
+        return $this;
+    }
+
+    public function getQueuedAt(): ?\DateTimeImmutable
+    {
+        return $this->queued_at;
+    }
+
+    public function setQueuedAt(?\DateTimeImmutable $queued_at): static
+    {
+        $this->queued_at = $queued_at;
 
         return $this;
     }

@@ -10,6 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'newsletters')]
 class Newsletter
 {
+    /**
+     * Default maximum number of emails a newsletter can send per day.
+     * Used when daily_sending_rate is null.
+     */
+    public const int DEFAULT_DAILY_SENDING_RATE = 500;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -38,6 +44,9 @@ class Newsletter
 
     #[ORM\Column]
     private bool $is_rtl = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $daily_sending_rate = null;
 
     #[ORM\Column(type: 'json_document', options: ['jsonb' => true, 'default' => '{"#type":"newsletters_meta"}'])]
     private NewsletterMeta $meta;
@@ -166,6 +175,26 @@ class Newsletter
         $this->is_rtl = $is_rtl;
 
         return $this;
+    }
+
+    public function getDailySendingRate(): ?int
+    {
+        return $this->daily_sending_rate;
+    }
+
+    public function setDailySendingRate(?int $daily_sending_rate): static
+    {
+        $this->daily_sending_rate = $daily_sending_rate;
+
+        return $this;
+    }
+
+    /**
+     * The effective daily sending rate, falling back to the default when not set.
+     */
+    public function getEffectiveDailySendingRate(): int
+    {
+        return $this->daily_sending_rate ?? self::DEFAULT_DAILY_SENDING_RATE;
     }
 
     /**
