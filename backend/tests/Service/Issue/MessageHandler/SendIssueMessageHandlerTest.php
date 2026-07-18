@@ -2,6 +2,8 @@
 
 namespace Service\Issue\MessageHandler;
 
+use App\Entity\Issue;
+use App\Entity\Newsletter;
 use App\Entity\Send;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
@@ -21,6 +23,8 @@ use Symfony\Component\Messenger\Stamp\DelayStamp;
 #[CoversClass(SendIssueMessageHandler::class)]
 #[CoversClass(SendService::class)]
 #[CoversClass(SendIssueMessage::class)]
+#[CoversClass(Issue::class)]
+#[CoversClass(Newsletter::class)]
 class SendIssueMessageHandlerTest extends KernelTestCase
 {
 

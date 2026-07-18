@@ -4,6 +4,7 @@ namespace App\Tests\Api\Sudo\Newsletter;
 
 use App\Api\Sudo\Controller\NewsletterController;
 use App\Api\Sudo\Input\Newsletter\UpdateNewsletterInput;
+use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(NewsletterController::class)]
 #[CoversClass(NewsletterService::class)]
 #[CoversClass(UpdateNewsletterInput::class)]
+#[CoversClass(Newsletter::class)]
 class UpdateNewsletterTest extends WebTestCase
 {
     public function test_updates_daily_sending_rate(): void

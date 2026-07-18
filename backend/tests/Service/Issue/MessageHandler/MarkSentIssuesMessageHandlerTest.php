@@ -2,6 +2,7 @@
 
 namespace Service\Issue\MessageHandler;
 
+use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Service\Issue\Message\MarkSentIssuesMessage;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(MarkSentIssuesMessageHandler::class)]
 #[CoversClass(MarkSentIssuesMessage::class)]
+#[CoversClass(Issue::class)]
 class MarkSentIssuesMessageHandlerTest extends KernelTestCase
 {
     private function runHandler(): void
