@@ -52,11 +52,12 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $allMessages = $this->transport('async')->queue()->all();
         $this->assertCount(5, $allMessages);
 
-        // by default, the max emails per second value is 8
+        // The newsletter has no custom daily_sending_rate, so the default (500/day)
+        // applies: interval = max(86400 / 500, 1 / 8) = 172.8s between emails.
         $first = $allMessages[0];
         $this->assertSame(0, $first->envelope->last(DelayStamp::class)?->getDelay());
         $second = $allMessages[1];
-        $this->assertSame(125, $second->envelope->last(DelayStamp::class)?->getDelay());
+        $this->assertSame(172800, $second->envelope->last(DelayStamp::class)?->getDelay());
 
         $sendRepository = $this->em->getRepository(Send::class);
         $send = $sendRepository->findOneBy([
@@ -68,7 +69,44 @@ class SendIssueMessageHandlerTest extends KernelTestCase
         $this->assertSame($issue->getId(), $send->getIssue()->getId());
         $this->assertSame($subscribers[0]->getId(), $send->getSubscriber()->getId());
 
-        $this->assertSame(IssueStatus::SENT, $issue->getStatus());
+        // The issue stays SENDING until every email is delivered; fan-out only
+        // records queued_at (a scheduled reconciler flips it to SENT later).
+        $this->assertSame(IssueStatus::SENDING, $issue->getStatus());
+        $this->assertNotNull($issue->getQueuedAt());
+    }
+
+    public function test_spreads_emails_by_daily_sending_rate(): void
+    {
+        $newsletter = NewsletterFactory::createOne([
+            // 86400 / 8640 = 10 seconds between emails
+            'daily_sending_rate' => 8640,
+        ]);
+
+        $list = NewsletterListFactory::createOne([
+            'newsletter' => $newsletter,
+        ]);
+
+        SubscriberFactory::createMany(3, [
+            'newsletter' => $newsletter,
+            'lists' => [$list],
+            'status' => SubscriberStatus::SUBSCRIBED,
+        ]);
+
+        $issue = IssueFactory::createOne([
+            'newsletter' => $newsletter,
+            'listIds' => [$list->getId()],
+            'status' => IssueStatus::SENDING,
+        ]);
+
+        $this->getMessageBus()->dispatch(new SendIssueMessage($issue->getId()));
+        $this->transport('async')->throwExceptions()->process(1);
+
+        $allMessages = $this->transport('async')->queue()->all();
+        $this->assertCount(3, $allMessages);
+
+        $this->assertSame(0, $allMessages[0]->envelope->last(DelayStamp::class)?->getDelay());
+        $this->assertSame(10000, $allMessages[1]->envelope->last(DelayStamp::class)?->getDelay());
+        $this->assertSame(20000, $allMessages[2]->envelope->last(DelayStamp::class)?->getDelay());
     }
 
     public function test_handle_on_issue_id_subscriber_id_conflict(): void
