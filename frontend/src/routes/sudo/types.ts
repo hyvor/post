@@ -62,6 +62,7 @@ export type Newsletter = {
 	organization_id: number | null;
 	language_code: string | null;
 	is_rtl: boolean;
+	daily_sending_rate: number | null;
 };
 
 export type IssueStatus = 'draft' | 'scheduled' | 'sending' | 'sent';
