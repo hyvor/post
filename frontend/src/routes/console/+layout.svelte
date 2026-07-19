@@ -5,6 +5,7 @@
 		Loader,
 		toast
 	} from '@hyvor/design/components';
+	import { isEmbedded } from './lib/embedded';
 	import {
 		CloudContext,
 		type CloudContextOrganization,
@@ -46,6 +47,11 @@
 	let isLoading = $state(true);
 
 	function startConsole(switchingOrg = false) {
+		if (page.url.searchParams.has('embedded')) {
+			$isEmbedded = true;
+			document.body.style.backgroundColor = 'transparent';
+		}
+
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
@@ -105,7 +111,7 @@
 		}
 	]}
 >
-	<main>
+	<main class:embedded={$isEmbedded}>
 		{#if isLoading}
 			<div class="full-loader">
 				<Loader size="large"></Loader>
@@ -135,7 +141,10 @@
 				}}
 				style="display:flex; flex-direction: column; width: 100%; height: 100vh"
 			>
-				<HyvorBar />
+
+				{#if !$isEmbedded}
+					<HyvorBar />
+				{/if}
 				{@render children?.()}
 			</CloudContext>
 		{/if}
@@ -158,5 +167,18 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	main.embedded :global(#nav-wrap) {
+		height: 100%;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav) {
+		flex: 1;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav > .wrap) {
+		height: 100%;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav > .wrap) {
+		height: 100%;
 	}
 </style>

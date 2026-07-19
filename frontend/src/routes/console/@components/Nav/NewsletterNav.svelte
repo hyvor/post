@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Divider, NavLink, IconButton, Tag, toast, Tooltip } from '@hyvor/design/components';
+	import { Divider, NavLink,  Tooltip, Button } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
@@ -14,22 +14,28 @@
 	import { getI18n } from '../../lib/i18n';
 	import { selectingNewsletter } from '../../lib/stores/consoleStore';
 	import { getNewsletterArchiveUrlFromSubdomain } from '../../lib/archive';
+	import { isEmbedded } from '../../lib/embedded';
 
 	const I18n = getI18n();
 
 	function triggerNewsletterSelector() {
+		if ($isEmbedded) {
+			return;
+		}
 		selectingNewsletter.set(true);
 	}
 </script>
 
 <div class="wrap hds-box">
-	<button class="current" onclick={triggerNewsletterSelector}>
+	<button class="current" onclick={triggerNewsletterSelector} class:disabled={$isEmbedded}>
 		<div class="left">
 			<div class="name">
 				{$newsletterStore.name}
 			</div>
 		</div>
-		<IconChevronExpand />
+		{#if !$isEmbedded}
+			<IconChevronExpand />
+		{/if}
 	</button>
 
 	<div class="nav-links">
@@ -117,28 +123,45 @@
 			</NavItem>
 		</NavLink>
 
-		<Divider margin={15} />
+		{#if !$isEmbedded}
 
-		<NavLink
-			href={'/console/' + $newsletterStore.subdomain.toString() + '/install'}
-			active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/install`)}
-		>
-			<NavItem>
-				{#snippet icon()}
-					<IconCode />
-				{/snippet}
-				{#snippet text()}
-					<span>{I18n.t('console.nav.install')}</span>
-				{/snippet}
-			</NavItem>
-		</NavLink>
+			<Divider margin={15} />
+
+			<NavLink
+				href={'/console/' + $newsletterStore.subdomain.toString() + '/install'}
+				active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/install`)}
+			>
+				<NavItem>
+					{#snippet icon()}
+						<IconCode />
+					{/snippet}
+					{#snippet text()}
+						<span>{I18n.t('console.nav.install')}</span>
+					{/snippet}
+				</NavItem>
+			</NavLink>
+
+		{/if}
 	</div>
+
+	{#if $isEmbedded}
+		<div class="full-console">
+			<Button as="a" href={'/console/' + $newsletterStore.subdomain.toString()} target="_blank">
+				Hyvor Post Console
+				{#snippet end()}
+					<IconBoxArrowUpRight size={12} />
+				{/snippet}
+			</Button>
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
 	.wrap {
 		padding-bottom: 15px;
 		padding-top: 5px;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.home-link {
@@ -164,7 +187,12 @@
 		width: calc(100% - 20px);
 		padding: 10px 20px;
 		border-radius: var(--box-radius);
-		cursor: pointer;
+		&:not(.disabled) {
+			cursor: pointer;
+		}
+		&.disabled {
+			pointer-events: none;
+		}
 
 		.left {
 			flex: 1;
@@ -174,13 +202,21 @@
 			font-weight: 600;
 		}
 
-		&:hover {
+		&:hover:not(.disabled) {
 			background-color: var(--hover);
 		}
 	}
 
 	.nav-links :global(a.active) {
 		background-color: var(--accent-light-mid);
+	}
+
+
+	.full-console {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
 	}
 
 	@media (max-width: 992px) {

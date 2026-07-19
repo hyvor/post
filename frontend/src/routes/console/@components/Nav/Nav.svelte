@@ -2,22 +2,27 @@
 	import { DarkToggle, LanguageToggle } from '@hyvor/design/components';
 	import AccountNav from './AccountNav.svelte';
 	import NewsletterNav from './NewsletterNav.svelte';
+	import { isEmbedded } from '../../lib/embedded';
 </script>
 
 <div id="nav">
 	<div id="nav-wrap">
-		<div class="account-nav">
-			<AccountNav />
-		</div>
+		{#if !$isEmbedded}
+			<div class="account-nav">
+				<AccountNav />
+			</div>
+		{/if}
 		<div class="newsletter-nav">
 			<NewsletterNav />
 		</div>
-		<div class="bottom">
-			<div class="lang hds-box">
-				<LanguageToggle position="top" />
-				<DarkToggle />
+		{#if !$isEmbedded}
+			<div class="bottom">
+				<div class="lang hds-box">
+					<LanguageToggle position="top" />
+					<DarkToggle />
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 </div>
 
