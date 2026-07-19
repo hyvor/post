@@ -40,19 +40,24 @@ class NewsletterService
     ) {}
 
 
+    /**
+     * @param array<string, string> $metadata
+     */
     public function createNewsletter(
         int    $userId,
         int    $organizationId,
         string $name,
-        string $subdomain
+        string $subdomain,
+        array  $metadata = []
     ): Newsletter {
-        return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain) {
+        return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain, $metadata) {
             $newsletter = new Newsletter()
                 ->setName($name)
                 ->setUserId($userId)
                 ->setOrganizationId($organizationId)
                 ->setMeta(new NewsletterMeta())
                 ->setSubdomain($subdomain)
+                ->setMetadata($metadata)
                 ->setCreatedAt($this->now())
                 ->setUpdatedAt($this->now());
 
@@ -403,6 +408,31 @@ class NewsletterService
 
         $newsletter = $this->em->getRepository(Newsletter::class)->findOneBy(['subdomain' => $subdomain]);
         return $newsletter !== null;
+    }
+
+    /**
+     * Appends a random 4-6 character alphanumeric string to the given subdomain
+     * until a unique, unused subdomain is found.
+     */
+    public function generateUniqueSubdomain(string $subdomain): string
+    {
+        do {
+            $candidate = $subdomain . '-' . $this->randomAlphanumericString(random_int(4, 6));
+        } while ($this->isSubdomainTaken($candidate));
+
+        return $candidate;
+    }
+
+    private function randomAlphanumericString(int $length): string
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $string = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $string;
     }
 
     public function getArchiveUrl(Newsletter $newsletter): string

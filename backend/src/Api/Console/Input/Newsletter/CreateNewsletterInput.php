@@ -17,4 +17,16 @@ class CreateNewsletterInput
     #[Subdomain]
     public string $subdomain;
 
+    public bool $autogenerate_subdomain_on_duplicate = false;
+
+    /**
+     * @var array<string, string>
+     */
+    #[Assert\Type('array')]
+    #[Assert\All([
+        new Assert\Type('string'),
+        new Assert\Length(max: 255),
+    ])]
+    public array $metadata = [];
+
 }

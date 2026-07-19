@@ -48,6 +48,12 @@ class Newsletter
     #[ORM\Column(type: 'json')]
     private ?array $test_sent_emails = null;
 
+    /**
+     * @var array<string, string>
+     */
+    #[ORM\Column(type: 'json')]
+    private array $metadata = [];
+
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -182,6 +188,24 @@ class Newsletter
     public function setTestSentEmails(?array $test_sent_emails): static
     {
         $this->test_sent_emails = $test_sent_emails;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array<string, string> $metadata
+     */
+    public function setMetadata(array $metadata): static
+    {
+        $this->metadata = $metadata;
 
         return $this;
     }

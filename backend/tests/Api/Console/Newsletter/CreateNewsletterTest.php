@@ -156,4 +156,71 @@ class CreateNewsletterTest extends WebTestCase
         $this->assertSame('Subdomain is already taken.', $this->getJson()['message']);
 
     }
+
+    public function test_autogenerate_subdomain_on_duplicate(): void
+    {
+        NewsletterFactory::createOne(['subdomain' => 'taken-subdomain']);
+
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletter',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => 'taken-subdomain',
+                'autogenerate_subdomain_on_duplicate' => true,
+            ],
+            useSession: true
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertIsString($json['subdomain']);
+        $this->assertNotSame('taken-subdomain', $json['subdomain']);
+        $this->assertMatchesRegularExpression('/^taken-subdomain-[a-z0-9]{4,6}$/', $json['subdomain']);
+
+        $newsletterId = $json['id'];
+        $this->assertIsInt($newsletterId);
+        $repository = $this->em->getRepository(Newsletter::class);
+        $newsletter = $repository->find($newsletterId);
+        $this->assertNotNull($newsletter);
+        $this->assertSame($json['subdomain'], $newsletter->getSubdomain());
+    }
+
+    public function test_create_newsletter_with_metadata(): void
+    {
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletter',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => 'valid-newsletter-metadata',
+                'metadata' => [
+                    'external_id' => 'abc123',
+                    'source' => 'onboarding',
+                ],
+            ],
+            useSession: true
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertSame([
+            'external_id' => 'abc123',
+            'source' => 'onboarding',
+        ], $json['metadata']);
+
+        $newsletterId = $json['id'];
+        $this->assertIsInt($newsletterId);
+        $repository = $this->em->getRepository(Newsletter::class);
+        $newsletter = $repository->find($newsletterId);
+        $this->assertNotNull($newsletter);
+        $this->assertSame([
+            'external_id' => 'abc123',
+            'source' => 'onboarding',
+        ], $newsletter->getMetadata());
+    }
 }

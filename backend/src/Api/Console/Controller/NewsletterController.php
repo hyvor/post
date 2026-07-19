@@ -62,11 +62,23 @@ class NewsletterController extends AbstractController
         $user = AuthorizationListener::getUser($request);
         $organization = AuthorizationListener::getOrganization($request);
 
-        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
-            throw new UnprocessableEntityHttpException('Subdomain is already taken.');
+        $subdomain = $input->subdomain;
+
+        if ($this->newsletterService->isSubdomainTaken($subdomain)) {
+            if ($input->autogenerate_subdomain_on_duplicate) {
+                $subdomain = $this->newsletterService->generateUniqueSubdomain($subdomain);
+            } else {
+                throw new UnprocessableEntityHttpException('Subdomain is already taken.');
+            }
         }
 
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $organization->id, $input->name, $input->subdomain);
+        $newsletter = $this->newsletterService->createNewsletter(
+            $user->id,
+            $organization->id,
+            $input->name,
+            $subdomain,
+            $input->metadata
+        );
         return $this->json(new NewsletterObject($newsletter));
     }
 
