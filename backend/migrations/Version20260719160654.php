@@ -18,9 +18,11 @@ final class Version20260719160654 extends AbstractMigration
     {
         $this->addSql(
             <<<SQL
-            ALTER TABLE newsletters
-                ADD COLUMN metadata JSONB NOT NULL DEFAULT '{}';
-            SQL
+                ALTER TABLE newsletters
+                    ADD COLUMN metadata JSONB NOT NULL DEFAULT '{}',
+                    ADD COLUMN created_by_source TEXT DEFAULT NULL,
+                    ALTER COLUMN user_id DROP NOT NULL;
+                SQL,
         );
     }
 
@@ -28,9 +30,9 @@ final class Version20260719160654 extends AbstractMigration
     {
         $this->addSql(
             <<<SQL
-            ALTER TABLE newsletters
-                DROP COLUMN metadata;
-            SQL
+                ALTER TABLE newsletters
+                    DROP COLUMN metadata;
+                SQL,
         );
     }
 }

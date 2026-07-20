@@ -19,6 +19,9 @@ use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Hyvor\Internal\CloudApi\CloudApiService;
 
+/**
+ * @deprecated
+ */
 class AuthorizationListenerOld
 {
     use ClockAwareTrait;

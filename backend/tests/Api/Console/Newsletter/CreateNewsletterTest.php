@@ -43,9 +43,9 @@ class CreateNewsletterTest extends WebTestCase
             '/newsletter',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => $subdomain
+                'subdomain' => $subdomain,
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertResponseStatusCodeSame(422);
@@ -63,12 +63,12 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => 'valid-newsletter-subdomain'
+                'subdomain' => 'valid-newsletter-subdomain',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -104,7 +104,7 @@ class CreateNewsletterTest extends WebTestCase
             Component::CORE,
             eventValidator: function (ResourceCreated $event) use ($newsletter) {
                 $this->assertSame($newsletter->getOrganizationId(), $event->getOrganizationId());
-            }
+            },
         );
     }
 
@@ -117,9 +117,9 @@ class CreateNewsletterTest extends WebTestCase
             '/newsletter',
             [
                 'name' => $long_string,
-                'subdomain' => 'valid-newsletter-subdomain'
+                'subdomain' => 'valid-newsletter-subdomain',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -136,7 +136,6 @@ class CreateNewsletterTest extends WebTestCase
     #[TestWith(['other', true])]
     public function test_subdomain_taken(string $subdomain, bool $create = false): void
     {
-
         if ($create) {
             NewsletterFactory::createOne(['subdomain' => $subdomain]);
         }
@@ -147,14 +146,13 @@ class CreateNewsletterTest extends WebTestCase
             '/newsletter',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => $subdomain
+                'subdomain' => $subdomain,
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertSame('Subdomain is already taken.', $this->getJson()['message']);
-
     }
 
     public function test_autogenerate_subdomain_on_duplicate(): void
@@ -170,7 +168,7 @@ class CreateNewsletterTest extends WebTestCase
                 'subdomain' => 'taken-subdomain',
                 'autogenerate_subdomain_on_duplicate' => true,
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -202,7 +200,7 @@ class CreateNewsletterTest extends WebTestCase
                     'source' => 'onboarding',
                 ],
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());

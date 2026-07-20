@@ -6,6 +6,7 @@ use App\Api\Console\Authorization\AuthorizationListenerOld;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
 use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
@@ -55,10 +56,8 @@ class NewsletterController extends AbstractController
     public function createNewsletter(
         Request $request,
         #[MapRequestPayload] CreateNewsletterInput $input,
+        ConsoleAuthResults $consoleAuth,
     ): JsonResponse {
-        $user = AuthorizationListenerOld::getUser($request);
-        $organization = AuthorizationListenerOld::getOrganization($request);
-
         $subdomain = $input->subdomain;
 
         if ($this->newsletterService->isSubdomainTaken($subdomain)) {
@@ -70,11 +69,12 @@ class NewsletterController extends AbstractController
         }
 
         $newsletter = $this->newsletterService->createNewsletter(
-            $user->id,
-            $organization->id,
+            $consoleAuth->getOrganizationId(),
             $input->name,
             $subdomain,
+            $consoleAuth->getSourceString(),
             $input->metadata,
+            userId: $consoleAuth->getNullableUser()?->id,
         );
         return $this->json(new NewsletterObject($newsletter));
     }

@@ -7,6 +7,9 @@ use App\Service\ApiKey\ApiKeyService;
 use App\Service\ApiKey\Dto\UpdateApiKeyDto;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\User\UserService;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\CloudApi\CloudApiService;
+use Hyvor\Internal\InternalConfig;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -25,7 +28,16 @@ class AuthorizationListener extends ConsoleApiAuthorizationListenerAbstract
         private ApiKeyService $apiKeyService,
         private NewsletterService $newsletterService,
         private UserService $userService,
-    ) {}
+        InternalConfig $internalConfig,
+        CloudApiService $cloudApiService,
+        AuthInterface $auth,
+    ) {
+        parent::__construct(
+            $internalConfig,
+            $cloudApiService,
+            $auth,
+        );
+    }
 
     protected function getBasePath(): string
     {
