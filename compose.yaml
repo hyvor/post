@@ -31,7 +31,7 @@ services:
       target: backend-dev
     volumes:
       - ./backend:/app/backend
-      # - ../internal:/app/backend/vendor/hyvor/internal:ro
+      - ../internal:/app/backend/vendor/hyvor/internal:ro
       - ./shared:/app/shared
     labels:
       traefik.enable: true
@@ -43,7 +43,9 @@ services:
       # service
       traefik.http.services.hyvor-post-backend.loadbalancer.server.port: 80
     networks:
-      - hyvor-network
+      hyvor-network:
+        aliases:
+          - post.hyvor.internal
     healthcheck:
       test: ls
       disable: true

@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\User\CreateUserInput;
 use App\Api\Console\Input\User\DeleteUserInput;
 use App\Api\Console\Object\UserObject;
@@ -23,18 +23,17 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
     public function __construct(
-        private AuthInterface  $auth,
-        private UserService    $userService,
+        private AuthInterface $auth,
+        private UserService $userService,
         private CommsInterface $comms,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/users', methods: 'GET')]
     #[ScopeRequired(PostScope::USERS_READ)]
     public function getUsers(Newsletter $newsletter): JsonResponse
     {
-        $users = $this->userService->getNewsletterUsers($newsletter)
+        $users = $this->userService
+            ->getNewsletterUsers($newsletter)
             ->map(function ($user) {
                 $hyvorUser = $this->auth->fromId($user->getHyvorUserId());
                 if ($hyvorUser === null) {

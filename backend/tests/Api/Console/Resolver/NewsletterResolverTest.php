@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Tests\Case\KernelTestCase;
@@ -24,7 +24,7 @@ class NewsletterResolverTest extends KernelTestCase
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\SomeOther\Controller\NewsletterController::getNewsletters'
+            'App\Api\SomeOther\Controller\NewsletterController::getNewsletters',
         );
 
         $output = $resolver->resolve($request, $argument);
@@ -44,7 +44,7 @@ class NewsletterResolverTest extends KernelTestCase
         $request->server->set('REQUEST_URI', '/api/console/lists');
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 

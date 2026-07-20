@@ -2,8 +2,7 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\OrganizationLevelEndpoint;
+use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
@@ -19,16 +18,15 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 
 class DomainController extends AbstractController
 {
 
     public function __construct(
         private DomainService $domainService,
-        private AppConfig     $appConfig,
-    )
-    {
-    }
+        private AppConfig $appConfig,
+    ) {}
 
     private function resolveDomainEntity(string $id): Domain
     {
@@ -42,24 +40,23 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domains', methods: 'GET')]
-    #[OrganizationLevelEndpoint]
+    #[OrgEndpoint]
     public function getDomains(Request $request): JsonResponse
     {
-        $organization = AuthorizationListener::getOrganization($request);
+        $organization = AuthorizationListenerOld::getOrganization($request);
 
         $domains = $this->domainService->getDomainsByOrganizationId($organization->id);
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
     }
 
     #[Route('/domains', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
+    #[OrgEndpoint]
     public function createDomain(
-        Request                                $request,
-        #[MapRequestPayload] CreateDomainInput $input
-    ): JsonResponse
-    {
-        $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::getOrganization($request);
+        Request $request,
+        #[MapRequestPayload] CreateDomainInput $input,
+    ): JsonResponse {
+        $user = AuthorizationListenerOld::getUser($request);
+        $organization = AuthorizationListenerOld::getOrganization($request);
 
         if ($input->domain === $this->appConfig->getSystemMailDomain()) {
             throw new BadRequestHttpException('This domain is reserved and cannot be registered');
@@ -71,7 +68,7 @@ class DomainController extends AbstractController
             throw new BadRequestHttpException(
                 $domainInDb->getOrganizationId() === $organization->id ?
                     'This domain is already registered' :
-                    'This domain is already registered by another organization'
+                    'This domain is already registered by another organization',
             );
         }
 
@@ -84,10 +81,10 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domains/{id}/verify', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
+    #[OrgEndpoint]
     public function verifyDomain(Request $request, string $id): JsonResponse
     {
-        $organization = AuthorizationListener::getOrganization($request);
+        $organization = AuthorizationListenerOld::getOrganization($request);
         $domain = $this->resolveDomainEntity($id);
 
         if ($domain->getOrganizationId() !== $organization->id) {
@@ -110,10 +107,10 @@ class DomainController extends AbstractController
     }
 
     #[Route('/domains/{id}', methods: 'DELETE')]
-    #[OrganizationLevelEndpoint]
+    #[OrgEndpoint]
     public function deleteDomain(Request $request, string $id): JsonResponse
     {
-        $organization = AuthorizationListener::getOrganization($request);
+        $organization = AuthorizationListenerOld::getOrganization($request);
         $domain = $this->resolveDomainEntity($id);
 
         if ($domain->getOrganizationId() !== $organization->id) {

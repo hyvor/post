@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\SubscriberMetadata\CreateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Input\SubscriberMetadata\UpdateSubscriberMetadataDefinitionInput;
 use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
@@ -20,18 +20,15 @@ class SubscriberMetadataController extends AbstractController
 {
 
     public function __construct(
-        private SubscriberMetadataService $subscriberMetadataService
-    )
-    {
-    }
+        private SubscriberMetadataService $subscriberMetadataService,
+    ) {}
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function createMetadata(
-        Newsletter                                                   $newsletter,
-        #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input,
+    ): JsonResponse {
         $current = $this->subscriberMetadataService->getMetadataDefinitionByKey($newsletter, $input->key);
 
         if ($current) {
@@ -47,7 +44,7 @@ class SubscriberMetadataController extends AbstractController
         $metadataDefinition = $this->subscriberMetadataService->createMetadataDefinition(
             $newsletter,
             $input->key,
-            $input->name
+            $input->name,
         );
 
         return $this->json(new SubscriberMetadataDefinitionObject($metadataDefinition));
@@ -56,10 +53,9 @@ class SubscriberMetadataController extends AbstractController
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
     public function updateMetadata(
-        SubscriberMetadataDefinition                                 $metadataDefinition,
-        #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input
-    ): JsonResponse
-    {
+        SubscriberMetadataDefinition $metadataDefinition,
+        #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input,
+    ): JsonResponse {
         $this->subscriberMetadataService->updateMetadataDefinition($metadataDefinition, $input->name);
         return $this->json(new SubscriberMetadataDefinitionObject($metadataDefinition));
     }

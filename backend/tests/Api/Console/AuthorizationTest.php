@@ -2,9 +2,10 @@
 
 namespace App\Tests\Api\Console;
 
-use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\AuthorizationListenerOld;
+use Hyvor\Internal\Auth\Oidc\Testing\OidcTestingUtils;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Entity\ApiKey;
 use App\Entity\Newsletter;
 use App\Tests\Case\WebTestCase;
@@ -17,14 +18,14 @@ use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
-use Hyvor\Internal\Bundle\Comms\Event\ToCore\License\GetLicensesResponse;
+use Hyvor\Internal\Component\Component;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
+use Hyvor\Internal\CloudApi\CloudApiService;
+use Hyvor\Internal\CloudApi\Scope\ScopeBuilder;
 
-#[CoversClass(AuthorizationListener::class)]
+#[CoversClass(AuthorizationListenerOld::class)]
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
 {
@@ -387,4 +388,34 @@ class AuthorizationTest extends WebTestCase
         $this->assertArrayHasKey('newsletters', $json);
         $this->assertArrayHasKey('config', $json);
     }
+
+    // cloud JWT
+
+    public function test_works_with_cloud_jwt(): void
+    {
+        $orgId = 15;
+
+        $cloudApiService = $this->getService(CloudApiService::class);
+        $key = OidcTestingUtils::generateKey();
+
+        $scopeBuilder = new ScopeBuilder();
+        $scopeBuilder->addScopes(Component::POST, PostScope::ISSUES_READ);
+
+        $jwt = $cloudApiService->createJwtToken(
+            $key,
+            $orgId,
+            $scopeBuilder,
+        );
+
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => $orgId,
+                "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
+            ],
+        );
+        $this->assertResponseStatusCodeSame(403);
+    }
+
 }

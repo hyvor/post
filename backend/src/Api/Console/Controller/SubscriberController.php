@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Subscriber\BulkActionSubscriberInput;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Api\Console\Input\Subscriber\ListsStrategy;

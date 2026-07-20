@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
+use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Entity\Newsletter;
 use App\Repository\NewsletterRepository;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -32,10 +32,10 @@ class NewsletterResolver implements ValueResolverInterface
             return [];
         }
 
-        if (!AuthorizationListener::hasNewsletter($request)) {
+        if (!AuthorizationListenerOld::hasNewsletter($request)) {
             throw new BadRequestException('Missing X-Newsletter-Id header');
         }
 
-        return [AuthorizationListener::getNewsletter($request)];
+        return [AuthorizationListenerOld::getNewsletter($request)];
     }
 }
