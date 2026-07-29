@@ -2,7 +2,6 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
 use App\Entity\ApiKey;
 use App\Entity\Approval;
 use App\Entity\Domain;
@@ -37,10 +36,8 @@ class EntityResolver implements ValueResolverInterface
 
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterResolver     $newsletterResolver,
-    )
-    {
-    }
+        private NewsletterResolver $newsletterResolver,
+    ) {}
 
     /**
      * @return iterable<mixed>
@@ -100,7 +97,7 @@ class EntityResolver implements ValueResolverInterface
             false,
             false,
             null,
-            controllerName: $controllerName
+            controllerName: $controllerName,
         );
         $currentNewsletter = (array)$this->newsletterResolver->resolve($request, $argumentMetadata);
         if ($newsletterOfEntity->getId() !== $currentNewsletter[0]->getId()) {

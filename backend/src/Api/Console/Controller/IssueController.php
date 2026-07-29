@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
@@ -37,15 +37,15 @@ class IssueController extends AbstractController
 {
 
     public function __construct(
-        private IssueService          $issueService,
-        private SendService           $sendService,
+        private IssueService $issueService,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private TextTemplateRenderer  $textTemplateRenderer,
-        private HtmlTemplateRenderer  $htmlTemplateRenderer,
-        private BillingInterface      $billing,
-        private DomainService         $domainService,
-        private UserService           $userService,
-        private SendingProfileService $sendingProfileService
+        private TextTemplateRenderer $textTemplateRenderer,
+        private HtmlTemplateRenderer $htmlTemplateRenderer,
+        private BillingInterface $billing,
+        private DomainService $domainService,
+        private UserService $userService,
+        private SendingProfileService $sendingProfileService,
     ) {}
 
     #[Route('/issues', methods: 'GET')]
@@ -76,18 +76,20 @@ class IssueController extends AbstractController
     #[ScopeRequired(PostScope::ISSUES_READ)]
     public function getById(Issue $issue): JsonResponse
     {
-        return $this->json(new IssueObject(
-            $issue,
-            $this->sendService->getSendableSubscribersCount($issue)
-        ));
+        return $this->json(
+            new IssueObject(
+                $issue,
+                $this->sendService->getSendableSubscribersCount($issue),
+            ),
+        );
     }
 
     #[Route('/issues/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function updateIssue(
-        Issue                                 $issue,
-        Newsletter                            $newsletter,
-        #[MapRequestPayload] UpdateIssueInput $input
+        Issue $issue,
+        Newsletter $newsletter,
+        #[MapRequestPayload] UpdateIssueInput $input,
     ): JsonResponse {
         $updates = new UpdateIssueDto();
 
@@ -102,7 +104,7 @@ class IssueController extends AbstractController
         if ($input->has('sending_profile_id')) {
             $sendingProfile = $this->sendingProfileService->getSendingProfileOfNewsletterById(
                 $newsletter,
-                $input->sending_profile_id
+                $input->sending_profile_id,
             );
 
             if ($sendingProfile === null) {
@@ -124,10 +126,12 @@ class IssueController extends AbstractController
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
 
-        return $this->json(new IssueObject(
-            $issueUpdated,
-            $this->sendService->getSendableSubscribersCount($issue)
-        ));
+        return $this->json(
+            new IssueObject(
+                $issueUpdated,
+                $this->sendService->getSendableSubscribersCount($issue),
+            ),
+        );
     }
 
     #[Route('/issues/{id}', methods: 'DELETE')]
@@ -175,7 +179,9 @@ class IssueController extends AbstractController
         }
 
         if ($resolvedLicense->type === ResolvedLicenseType::TRIAL) {
-            throw new UnprocessableEntityHttpException("Cannot send issues during trial. Please upgrade your subscription.");
+            throw new UnprocessableEntityHttpException(
+                "Cannot send issues during trial. Please upgrade your subscription.",
+            );
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);
@@ -184,8 +190,8 @@ class IssueController extends AbstractController
                 'message' => 'would_exceed_limit',
                 'data' => [
                     'limit' => $license->emails,
-                    'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount)
-                ]
+                    'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount),
+                ],
             ], 422);
         }
 
@@ -229,8 +235,8 @@ class IssueController extends AbstractController
     #[Route('/issues/{id}/test', methods: 'POST')]
     #[ScopeRequired(PostScope::ISSUES_WRITE)]
     public function sendTest(
-        Issue                              $issue,
-        #[MapRequestPayload] SendTestInput $input
+        Issue $issue,
+        #[MapRequestPayload] SendTestInput $input,
     ): JsonResponse {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -245,7 +251,9 @@ class IssueController extends AbstractController
         }
 
         if (!$this->issueService->isTestEmailAllowed($issue, $input->emails)) {
-            throw new UnprocessableEntityHttpException("Test emails can only be sent to verified domains or emails of newsletter users.");
+            throw new UnprocessableEntityHttpException(
+                "Test emails can only be sent to verified domains or emails of newsletter users.",
+            );
         }
 
         $sendCount = $this->issueService->sendTestEmails($issue, $input->emails);
@@ -267,7 +275,7 @@ class IssueController extends AbstractController
 
         return $this->json([
             'html' => $preview,
-            'sendable_subscribers_count' => $this->sendService->getSendableSubscribersCount($issue)
+            'sendable_subscribers_count' => $this->sendService->getSendableSubscribersCount($issue),
         ]);
     }
 
@@ -308,8 +316,8 @@ class IssueController extends AbstractController
         $counts = $this->sendService->getIssueStats($issue, full: true);
         return $this->json(
             [
-                'counts' => $counts
-            ]
+                'counts' => $counts,
+            ],
         );
     }
 }

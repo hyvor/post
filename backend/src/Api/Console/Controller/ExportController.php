@@ -3,23 +3,21 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Object\SubscriberExportObject;
 use App\Entity\Newsletter;
 use App\Service\Media\MediaService;
 use App\Service\Subscriber\SubscriberService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ExportController extends AbstractController
 {
     public function __construct(
         private SubscriberService $subscriberService,
-        private MediaService      $mediaService,
-    )
-    {
-    }
+        private MediaService $mediaService,
+    ) {}
 
     #[Route('/export', methods: 'POST')]
     #[ScopeRequired(PostScope::DATA_WRITE)]
@@ -36,8 +34,9 @@ class ExportController extends AbstractController
         $exports = $this->subscriberService->getExports($newsletter);
         $exportObjects = array_map(function ($export) {
             $media = $export->getMedia();
-            if ($media)
+            if ($media) {
                 return new SubscriberExportObject($export, $this->mediaService->getPublicUrl($media));
+            }
             return new SubscriberExportObject($export, null);
         }, $exports);
         return $this->json($exportObjects);

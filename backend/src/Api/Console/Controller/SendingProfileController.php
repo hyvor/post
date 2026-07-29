@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\SendingProfile\CreateSendingProfileInput;
 use App\Api\Console\Input\SendingProfile\UpdateSendingProfileInput;
 use App\Api\Console\Object\SendingProfileObject;
@@ -23,10 +23,8 @@ class SendingProfileController extends AbstractController
 {
     public function __construct(
         private SendingProfileService $sendingProfileService,
-        private DomainService         $domainService
-    )
-    {
-    }
+        private DomainService $domainService,
+    ) {}
 
     private function getDomainFromEmail(string $email): Domain
     {
@@ -47,7 +45,7 @@ class SendingProfileController extends AbstractController
     {
         $sendingProfiles = array_map(
             fn(SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
-            $this->sendingProfileService->getSendingProfiles($newsletter)
+            $this->sendingProfileService->getSendingProfiles($newsletter),
         );
         return $this->json($sendingProfiles);
     }
@@ -56,9 +54,8 @@ class SendingProfileController extends AbstractController
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
-        Newsletter                                     $newsletter,
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+    ): JsonResponse {
         $domain = $this->getDomainFromEmail($input->from_email);
         $sendingProfile = $this->sendingProfileService->createSendingProfile(
             $newsletter,
@@ -68,7 +65,7 @@ class SendingProfileController extends AbstractController
             $input->reply_to_email,
             $input->brand_name,
             $input->brand_logo,
-            $input->brand_url
+            $input->brand_url,
         );
 
         return $this->json(new SendingProfileObject($sendingProfile));
@@ -77,11 +74,9 @@ class SendingProfileController extends AbstractController
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function updateSendingProfile(
-        SendingProfile                                 $sendingProfile,
-        #[MapRequestPayload] UpdateSendingProfileInput $input
-    ): JsonResponse
-    {
-
+        SendingProfile $sendingProfile,
+        #[MapRequestPayload] UpdateSendingProfileInput $input,
+    ): JsonResponse {
         $updates = new UpdateSendingProfileDto();
         if ($input->has('from_email')) {
             $domain = $this->getDomainFromEmail($input->from_email);
@@ -122,7 +117,6 @@ class SendingProfileController extends AbstractController
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
     public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
     {
-
         if ($sendingProfile->getIsSystem()) {
             throw new BadRequestHttpException("Cannot delete system sending profile");
         }
@@ -133,8 +127,8 @@ class SendingProfileController extends AbstractController
         return $this->json(
             array_map(
                 fn(SendingProfile $profile) => new SendingProfileObject($profile),
-                $sendingProfiles
-            )
+                $sendingProfiles,
+            ),
         );
     }
 }

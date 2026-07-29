@@ -25,10 +25,17 @@ class Newsletter
     private \DateTimeImmutable $updated_at;
 
     #[ORM\Column]
-    private int $user_id;
+    private ?string $created_by_source = null;
 
     #[ORM\Column]
     private int $organization_id;
+
+    /**
+     * legacy column, now newsletters are owned by organizations
+     * however, we still save the user ID if it was created by a user session
+     */
+    #[ORM\Column]
+    private ?int $user_id = null;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -102,9 +109,29 @@ class Newsletter
         return $this;
     }
 
-    public function getUserId(): int
+    public function getCreatedBySource(): ?string
+    {
+        return $this->created_by_source;
+    }
+
+    public function setCreatedBySource(?string $created_by_source): static
+    {
+        $this->created_by_source = $created_by_source;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
     {
         return $this->user_id;
+    }
+
+
+    public function setUserId(?int $user_id): static
+    {
+        $this->user_id = $user_id;
+
+        return $this;
     }
 
     public function getOrganizationId(): int
@@ -129,13 +156,6 @@ class Newsletter
     public function getMeta(): NewsletterMeta
     {
         return $this->meta;
-    }
-
-    public function setUserId(int $user_id): static
-    {
-        $this->user_id = $user_id;
-
-        return $this;
     }
 
     public function getName(): string

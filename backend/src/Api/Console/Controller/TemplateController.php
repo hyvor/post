@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Template\UpdateTemplateInput;
 use App\Api\Console\Input\Template\RenderTemplateInput;
 use App\Api\Console\Object\TemplateObject;
@@ -23,13 +23,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class TemplateController extends AbstractController
 {
     public function __construct(
-        private TemplateService         $templateService,
+        private TemplateService $templateService,
         private TemplateVariableService $templateVariableService,
-        private HtmlTemplateRenderer    $htmlTemplateRenderer,
-        private ContentDefaultStyle     $contentDefaultStyle,
-    )
-    {
-    }
+        private HtmlTemplateRenderer $htmlTemplateRenderer,
+        private ContentDefaultStyle $contentDefaultStyle,
+    ) {}
 
     #[Route('/templates', methods: 'GET')]
     #[ScopeRequired(PostScope::TEMPLATES_READ)]
@@ -40,7 +38,7 @@ class TemplateController extends AbstractController
         if (!$template) {
             // Load default template
             return $this->json([
-                'template' => $this->templateService->readDefaultTemplate()
+                'template' => $this->templateService->readDefaultTemplate(),
             ]);
         }
 
@@ -50,10 +48,9 @@ class TemplateController extends AbstractController
     #[Route('/templates', methods: 'PATCH')]
     #[ScopeRequired(PostScope::TEMPLATES_WRITE)]
     public function updateTemplate(
-        Newsletter                               $newsletter,
-        #[MapRequestPayload] UpdateTemplateInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        #[MapRequestPayload] UpdateTemplateInput $input,
+    ): JsonResponse {
         $templateString = $input->template ?? $this->templateService->readDefaultTemplate();
 
         $template = $this->templateService->getTemplate($newsletter);
@@ -71,10 +68,9 @@ class TemplateController extends AbstractController
     #[Route('/templates/render', methods: 'POST')]
     #[ScopeRequired(PostScope::TEMPLATES_READ)]
     public function renderTemplate(
-        Newsletter                               $newsletter,
-        #[MapRequestPayload] RenderTemplateInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        #[MapRequestPayload] RenderTemplateInput $input,
+    ): JsonResponse {
         $subject = 'Hyvor Post Default Email';
         $defaultContentHtml = $this->contentDefaultStyle->html();
 

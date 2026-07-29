@@ -15,11 +15,11 @@ class ApiKeyService
 
     const int MAX_API_KEY_PER_NEWSLETTER = 10;
 
+    public const int API_KEY_LENGTH = 32;
+
     public function __construct(
         private EntityManagerInterface $em,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @param string[] $scopes
@@ -27,9 +27,10 @@ class ApiKeyService
      */
     public function createApiKey(Newsletter $newsletter, string $name, array $scopes): array
     {
-        $key = bin2hex(random_bytes(16));
+        $key = bin2hex(random_bytes(self::API_KEY_LENGTH / 2));
         $apiKey = new ApiKey();
-        $apiKey->setNewsletter($newsletter)
+        $apiKey
+            ->setNewsletter($newsletter)
             ->setName($name)
             ->setScopes($scopes)
             ->setKeyHashed(hash('sha256', $key))

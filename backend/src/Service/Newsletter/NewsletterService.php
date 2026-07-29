@@ -33,10 +33,10 @@ class NewsletterService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private AppConfig              $config,
-        private SendingProfileService  $sendingProfileService,
-        private CommsInterface         $comms,
-        private AuthInterface          $auth,
+        private AppConfig $config,
+        private SendingProfileService $sendingProfileService,
+        private CommsInterface $comms,
+        private AuthInterface $auth,
     ) {}
 
 
@@ -44,60 +44,70 @@ class NewsletterService
      * @param array<string, string> $metadata
      */
     public function createNewsletter(
-        int    $userId,
-        int    $organizationId,
+        int $organizationId,
         string $name,
         string $subdomain,
-        array  $metadata = []
+        string $createdBySource,
+        array $metadata = [],
+        ?int $userId = null,
     ): Newsletter {
-        return $this->em->wrapInTransaction(function () use ($userId, $organizationId, $name, $subdomain, $metadata) {
-            $newsletter = new Newsletter()
-                ->setName($name)
-                ->setUserId($userId)
-                ->setOrganizationId($organizationId)
-                ->setMeta(new NewsletterMeta())
-                ->setSubdomain($subdomain)
-                ->setMetadata($metadata)
-                ->setCreatedAt($this->now())
-                ->setUpdatedAt($this->now());
+        return $this->em->wrapInTransaction(
+            function () use ($userId, $organizationId, $name, $subdomain, $metadata, $createdBySource) {
+                $newsletter = new Newsletter()
+                    ->setName($name)
+                    ->setOrganizationId($organizationId)
+                    ->setMeta(new NewsletterMeta())
+                    ->setSubdomain($subdomain)
+                    ->setMetadata($metadata)
+                    ->setCreatedAt($this->now())
+                    ->setUpdatedAt($this->now())
+                    ->setUserId($userId)
+                    ->setCreatedBySource($createdBySource);
 
-            $user = new User()
-                ->setCreatedAt($this->now())
-                ->setUpdatedAt($this->now())
-                ->setHyvorUserId($userId)
-                ->setNewsletter($newsletter)
-                ->setRole(UserRole::OWNER);
+                // TODO: take user_id from outside
+                // TODO: remove owner
+                if ($userId) {
+                    $user = new User()
+                        ->setCreatedAt($this->now())
+                        ->setUpdatedAt($this->now())
+                        ->setHyvorUserId($userId)
+                        ->setNewsletter($newsletter)
+                        ->setRole(UserRole::OWNER);
+                    $this->em->persist($user);
+                }
 
-            $list = new NewsletterList()
-                ->setName('Default List')
-                ->setCreatedAt($this->now())
-                ->setUpdatedAt($this->now())
-                ->setNewsletter($newsletter);
+                $list = new NewsletterList()
+                    ->setName('Default List')
+                    ->setCreatedAt($this->now())
+                    ->setUpdatedAt($this->now())
+                    ->setNewsletter($newsletter);
 
-            $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
+                $systemAddress = $this->sendingProfileService->getSystemAddressOfNewsletter($newsletter);
 
-            $this->sendingProfileService
-                ->createSendingProfile(
-                    $newsletter,
-                    null,
-                    fromEmail: $systemAddress,
-                    fromName: $newsletter->getName(),
-                    system: true,
-                    flush: false
+                $this->sendingProfileService
+                    ->createSendingProfile(
+                        $newsletter,
+                        null,
+                        fromEmail: $systemAddress,
+                        fromName: $newsletter->getName(),
+                        system: true,
+                        flush: false,
+                    );
+
+                $this->em->persist($newsletter);
+                $this->em->persist($list);
+                $this->em->flush();
+
+                $this->comms->send(
+                    new ResourceCreated(
+                        Component::POST,
+                        $organizationId,
+                    ),
                 );
 
-            $this->em->persist($user);
-            $this->em->persist($newsletter);
-            $this->em->persist($list);
-            $this->em->flush();
-
-            $this->comms->send(new ResourceCreated(
-                Component::POST,
-                $organizationId
-            ));
-
-            return $newsletter;
-        });
+                return $newsletter;
+            },
+        );
     }
 
     public function deleteNewsletter(Newsletter $newsletter): void
@@ -109,9 +119,15 @@ class NewsletterService
     /**
      * @return Newsletter[]
      */
-    public function getNewsletters(?string $name, ?int $organizationId, int $limit, int $offset, string $sort = 'id_desc'): array
-    {
-        $qb = $this->em->getRepository(Newsletter::class)->createQueryBuilder('n')
+    public function getNewsletters(
+        ?string $name,
+        ?int $organizationId,
+        int $limit,
+        int $offset,
+        string $sort = 'id_desc',
+    ): array {
+        $qb = $this->em
+            ->getRepository(Newsletter::class)->createQueryBuilder('n')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
@@ -131,12 +147,14 @@ class NewsletterService
         };
 
         if ($name) {
-            $qb->andWhere('LOWER(n.name) LIKE LOWER(:q) OR LOWER(n.subdomain) LIKE LOWER(:q)')
+            $qb
+                ->andWhere('LOWER(n.name) LIKE LOWER(:q) OR LOWER(n.subdomain) LIKE LOWER(:q)')
                 ->setParameter('q', '%' . $name . '%');
         }
 
         if ($organizationId !== null) {
-            $qb->andWhere('n.organization_id = :organizationId')
+            $qb
+                ->andWhere('n.organization_id = :organizationId')
                 ->setParameter('organizationId', $organizationId);
         }
 
@@ -155,7 +173,8 @@ class NewsletterService
         }
 
         /** @var list<array{newsletter_id: int, cnt: int}> $issueCounts */
-        $issueCounts = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+        $issueCounts = $this->em
+            ->getRepository(Issue::class)->createQueryBuilder('i')
             ->select('IDENTITY(i.newsletter) as newsletter_id, COUNT(i.id) as cnt')
             ->where('i.newsletter IN (:ids)')
             ->setParameter('ids', $newsletterIds)
@@ -163,7 +182,8 @@ class NewsletterService
             ->getQuery()->getArrayResult();
 
         /** @var list<array{newsletter_id: int, cnt: int}> $subscriberCounts */
-        $subscriberCounts = $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+        $subscriberCounts = $this->em
+            ->getRepository(Subscriber::class)->createQueryBuilder('s')
             ->select('IDENTITY(s.newsletter) as newsletter_id, COUNT(s.id) as cnt')
             ->where('s.newsletter IN (:ids)')
             ->setParameter('ids', $newsletterIds)
@@ -218,7 +238,7 @@ class NewsletterService
             JOIN u.newsletter p
             WHERE p.organization_id = :organization_id
             AND u.hyvor_user_id = :user_id
-        DQL;
+            DQL;
 
         $query = $this->em->createQuery($query);
         $query->setParameter('organization_id', $organizationId);
@@ -255,8 +275,8 @@ class NewsletterService
      */
     public function getNewsletterStats(Newsletter $newsletter): array
     {
-
-        $subscribersQuery = $this->em->getRepository(Subscriber::class)->createQueryBuilder('s')
+        $subscribersQuery = $this->em
+            ->getRepository(Subscriber::class)->createQueryBuilder('s')
             ->select('count(s.id)')
             ->where('s.newsletter = :newsletter')
             ->andWhere('s.status = :status')
@@ -264,12 +284,14 @@ class NewsletterService
             ->setParameter('status', SubscriberStatus::SUBSCRIBED);
 
         $subscribers = (int)$subscribersQuery->getQuery()->getSingleScalarResult();
-        $subscribersLast30d = (int)$subscribersQuery->andWhere('s.subscribed_at > :date')
+        $subscribersLast30d = (int)$subscribersQuery
+            ->andWhere('s.subscribed_at > :date')
             ->setParameter('date', new \DateTimeImmutable()->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
 
-        $issuesQuery = $this->em->getRepository(Issue::class)->createQueryBuilder('i')
+        $issuesQuery = $this->em
+            ->getRepository(Issue::class)->createQueryBuilder('i')
             ->select('count(i.id)')
             ->where('i.newsletter = :newsletter')
             ->andWhere('i.status = :status')
@@ -277,13 +299,15 @@ class NewsletterService
             ->setParameter('status', IssueStatus::SENT);
 
         $issues = (int)$issuesQuery->getQuery()->getSingleScalarResult();
-        $issuesLast30d = (int)$issuesQuery->andWhere('i.sent_at > :date')
+        $issuesLast30d = (int)$issuesQuery
+            ->andWhere('i.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleScalarResult();
 
         // bounced rate and complained rate
-        $bouncedAndComplainedRateQuery = $this->em->getRepository(Send::class)->createQueryBuilder('s')
+        $bouncedAndComplainedRateQuery = $this->em
+            ->getRepository(Send::class)->createQueryBuilder('s')
             ->select('COUNT(s.id) as totalSends')
             ->addSelect('SUM(CASE WHEN s.bounced_at IS NOT NULL THEN 1 ELSE 0 END) as bouncedSends')
             ->addSelect('SUM(CASE WHEN s.complained_at IS NOT NULL THEN 1 ELSE 0 END) as complainedSends')
@@ -301,24 +325,33 @@ class NewsletterService
         $complainedRate = $totalSends > 0 ? round(($complainedSends / $totalSends) * 100, 2) : 0.0;
 
         /** @var array<string, string> $bouncedAndComplainedRateLast30dValues */
-        $bouncedAndComplainedRateLast30dValues = $bouncedAndComplainedRateQuery->andWhere('s.sent_at > :date')
+        $bouncedAndComplainedRateLast30dValues = $bouncedAndComplainedRateQuery
+            ->andWhere('s.sent_at > :date')
             ->setParameter('date', (new \DateTimeImmutable())->sub(new \DateInterval('P30D')))
             ->getQuery()
             ->getSingleResult();
         $totalSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['totalSends'];
         $bouncedSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['bouncedSends'];
         $complainedSendsLast30d = (int)$bouncedAndComplainedRateLast30dValues['complainedSends'];
-        $bouncedRateLast30d = $totalSendsLast30d > 0 ? round(($bouncedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
-        $complainedRateLast30d = $totalSendsLast30d > 0 ? round(($complainedSendsLast30d / $totalSendsLast30d) * 100, 2) : 0.0;
+        $bouncedRateLast30d = $totalSendsLast30d > 0 ? round(
+            ($bouncedSendsLast30d / $totalSendsLast30d) * 100,
+            2,
+        ) : 0.0;
+        $complainedRateLast30d = $totalSendsLast30d > 0 ? round(
+            ($complainedSendsLast30d / $totalSendsLast30d) * 100,
+            2,
+        ) : 0.0;
 
-        $listsCount = (int) $this->em->getRepository(NewsletterList::class)->createQueryBuilder('l')
+        $listsCount = (int)$this->em
+            ->getRepository(NewsletterList::class)->createQueryBuilder('l')
             ->select('COUNT(l.id)')
             ->where('l.newsletter = :newsletter')
             ->setParameter('newsletter', $newsletter)
             ->getQuery()
             ->getSingleScalarResult();
 
-        $sendingProfilesCount = (int) $this->em->getRepository(SendingProfile::class)->createQueryBuilder('sp')
+        $sendingProfilesCount = (int)$this->em
+            ->getRepository(SendingProfile::class)->createQueryBuilder('sp')
             ->select('COUNT(sp.id)')
             ->where('sp.newsletter = :newsletter')
             ->setParameter('newsletter', $newsletter)

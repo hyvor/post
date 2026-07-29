@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Media\MediaUploadInput;
 use App\Api\Console\Object\MediaObject;
 use App\Entity\Media;
@@ -27,22 +27,18 @@ class MediaController extends AbstractController
 
     public function __construct(
         private ValidatorInterface $validator,
-        private MediaService       $mediaService
-    )
-    {
-    }
+        private MediaService $mediaService,
+    ) {}
 
     public function doUpload(
         Newsletter $newsletter,
         MediaFolder $folder,
         mixed $file,
         int $maxSizeMb = 10,
-    ): Media
-    {
-
+    ): Media {
         $constraint = new Constraints\File(
             maxSize: $maxSizeMb . 'M',
-            extensions: $folder->getAllowedExtensions()
+            extensions: $folder->getAllowedExtensions(),
         );
         $errors = $this->validator->validate($file, $constraint);
 
@@ -50,8 +46,8 @@ class MediaController extends AbstractController
             throw new UnprocessableEntityHttpException(
                 previous: new ValidationFailedException(
                     'Invalid file upload',
-                    $errors
-                )
+                    $errors,
+                ),
             );
         }
 
@@ -61,22 +57,20 @@ class MediaController extends AbstractController
             return $this->mediaService->upload(
                 $newsletter,
                 $folder,
-                $file
+                $file,
             );
         } catch (MediaUploadException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
-
     }
 
     #[Route('/media', methods: 'POST')]
     #[ScopeRequired(PostScope::MEDIA_WRITE)]
     public function upload(
-        Newsletter                            $newsletter,
-        Request                               $request,
-        #[MapRequestPayload] MediaUploadInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        Request $request,
+        #[MapRequestPayload] MediaUploadInput $input,
+    ): JsonResponse {
         $file = $request->files->get(key: 'file');
         $folder = $input->folder;
 
@@ -89,8 +83,8 @@ class MediaController extends AbstractController
         return $this->json(
             new MediaObject(
                 $media,
-                $this->mediaService->getPublicUrl($media)
-            )
+                $this->mediaService->getPublicUrl($media),
+            ),
         );
     }
 

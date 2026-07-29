@@ -2,13 +2,16 @@
 
 namespace App\Tests\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\NewsletterResolver;
+use App\Entity\Newsletter;
 use App\Entity\NewsletterList;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\AccessType;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +23,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class EntityResolverTest extends KernelTestCase
 {
 
+    private function consoleAuthResultsFor(Newsletter $newsletter): ConsoleAuthResults
+    {
+        return new ConsoleAuthResults(
+            accessType: AccessType::PRODUCT_API_KEY,
+            organizationId: $newsletter->getOrganizationId(),
+            resource: $newsletter,
+            productApiKey: new \stdClass(),
+        );
+    }
+
     public function testDoesNotResolveClassesOutsideConsoleApiControllers(): void
     {
         /** @var EntityResolver $resolver */
@@ -28,7 +41,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\SomeOther\Controller\NewsletterController::getNewsletters'
+            'App\Api\SomeOther\Controller\NewsletterController::getNewsletters',
         );
 
         $output = $resolver->resolve($request, $argument);
@@ -45,7 +58,7 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterController::getNewsletters'
+            'App\Api\Console\Controller\NewsletterController::getNewsletters',
         );
         $argument->method('getType')->willReturn($class);
 
@@ -62,7 +75,7 @@ class EntityResolverTest extends KernelTestCase
         $request->attributes->set('id', 'invalid');
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
@@ -79,7 +92,7 @@ class EntityResolverTest extends KernelTestCase
         $request->attributes->set('id', '1');
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
@@ -94,11 +107,11 @@ class EntityResolverTest extends KernelTestCase
 
         $request = new Request(
             attributes: ['id' => '1'],
-            server: ['REQUEST_URI' => '/api/console/invalid']
+            server: ['REQUEST_URI' => '/api/console/invalid'],
         );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
@@ -117,10 +130,13 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->attributes->set(AuthorizationListener::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
+        $request->attributes->set(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+            $this->consoleAuthResultsFor($newsletter),
+        );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
@@ -145,7 +161,7 @@ class EntityResolverTest extends KernelTestCase
         $request->headers->set('X-Newsletter-Id', (string)$newsletter->getId());
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 
@@ -167,10 +183,13 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->attributes->set(AuthorizationListener::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, NewsletterFactory::createOne());
+        $request->attributes->set(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+            $this->consoleAuthResultsFor(NewsletterFactory::createOne()),
+        );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
-            'App\Api\Console\Controller\NewsletterListController::getLists'
+            'App\Api\Console\Controller\NewsletterListController::getLists',
         );
         $argument->method('getType')->willReturn('App\Entity\NewsletterList');
 

@@ -2,7 +2,7 @@
 
 namespace App\Api\Console\RateLimit;
 
-use App\Api\Console\Authorization\AuthorizationListener;
+use App\Entity\Newsletter;
 use App\Service\App\RateLimit\RateLimiterProvider;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,19 +11,19 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\RateLimiter\LimiterInterface;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResultsResolver;
 
 // priority less than AuthorizationListener
+// this is only for the test issue endpoint for now.
 #[AsEventListener(event: KernelEvents::CONTROLLER, method: 'onController', priority: 150)]
 #[AsEventListener(event: KernelEvents::RESPONSE, method: 'onResponse')]
 class RateLimitListener
 {
 
     public function __construct(
-        private RateLimit           $rateLimit,
+        private RateLimit $rateLimit,
         private RateLimiterProvider $rateLimiterProvider,
-    )
-    {
-    }
+    ) {}
 
     private const string RATE_LIMIT_HEADERS_ATTRIBUTE_KEY = 'console_api_rate_limit_headers';
 
@@ -34,16 +34,20 @@ class RateLimitListener
 
     public function isTestIssueEndpoint(Request $request): bool
     {
-        return $request->getMethod() === 'POST' && preg_match('#^/api/console/issues/\d+/test$#', $request->getPathInfo());
+        return $request->getMethod() === 'POST' && preg_match(
+                '#^/api/console/issues/\d+/test$#',
+                $request->getPathInfo(),
+            );
     }
 
     private function getRateLimiter(Request $request): LimiterInterface
     {
-        $newsletter = AuthorizationListener::getNewsletter($request);
+        $newsletter = ConsoleAuthResultsResolver::fromRequest($request)->getResource();
+        assert($newsletter instanceof Newsletter);
 
         return $this->rateLimiterProvider->rateLimiter(
             $this->rateLimit->testIssues(),
-            'test:issue:newsletter:' . $newsletter->getId()
+            'test:issue:newsletter:' . $newsletter->getId(),
         );
     }
 

@@ -2,10 +2,10 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListener;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\OrganizationLevelEndpoint;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
 use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
@@ -26,17 +26,14 @@ class NewsletterController extends AbstractController
 {
     public function __construct(
         private NewsletterService $newsletterService,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/newsletter/subdomain', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
+    #[OrgEndpoint]
     public function getSubdomainAvailability(
-        Request                                         $request,
-        #[MapRequestPayload] SubdomainAvailabilityInput $input
-    ): JsonResponse
-    {
+        Request $request,
+        #[MapRequestPayload] SubdomainAvailabilityInput $input,
+    ): JsonResponse {
         if (!$input->subdomain) {
             throw new UnprocessableEntityHttpException('Subdomain is required.');
         }
@@ -48,20 +45,18 @@ class NewsletterController extends AbstractController
         }
 
         return $this->json([
-            'available' => $available
+            'available' => $available,
         ]);
     }
 
-    #[Route('/newsletter', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
+    #[Route('/newsletters', methods: 'POST')]
+    #[OrgEndpoint]
+    #[ScopeRequired(PostScope::ORG_NEWSLETTERS_CREATE)]
     public function createNewsletter(
-        Request                                    $request,
-        #[MapRequestPayload] CreateNewsletterInput $input
-    ): JsonResponse
-    {
-        $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::getOrganization($request);
-
+        Request $request,
+        #[MapRequestPayload] CreateNewsletterInput $input,
+        ConsoleAuthResults $consoleAuth,
+    ): JsonResponse {
         $subdomain = $input->subdomain;
 
         if ($this->newsletterService->isSubdomainTaken($subdomain)) {
@@ -73,11 +68,12 @@ class NewsletterController extends AbstractController
         }
 
         $newsletter = $this->newsletterService->createNewsletter(
-            $user->id,
-            $organization->id,
+            $consoleAuth->getOrganizationId(),
             $input->name,
             $subdomain,
-            $input->metadata
+            $consoleAuth->getSourceString(),
+            $input->metadata,
+            userId: $consoleAuth->getNullableUser()?->id,
         );
         return $this->json(new NewsletterObject($newsletter));
     }
@@ -100,10 +96,9 @@ class NewsletterController extends AbstractController
     #[Route('/newsletter', methods: 'PATCH')]
     #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function updateNewsletter(
-        Newsletter                                                                                 $newsletter,
-        #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input,
+    ): JsonResponse {
         $updates = new UpdateNewsletterDto();
         if ($input->has('name')) {
             $updates->name = $input->name;

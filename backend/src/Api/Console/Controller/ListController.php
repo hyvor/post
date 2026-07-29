@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\List\CreateListInput;
 use App\Api\Console\Input\List\UpdateListInput;
 use App\Api\Console\Object\ListObject;
@@ -20,18 +20,15 @@ class ListController extends AbstractController
 {
 
     public function __construct(
-        private NewsletterListService $newsletterListService
-    )
-    {
-    }
+        private NewsletterListService $newsletterListService,
+    ) {}
 
     #[Route('/lists', methods: 'POST')]
     #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function createNewsletterList(
-        Newsletter                           $newsletter,
-        #[MapRequestPayload] CreateListInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        #[MapRequestPayload] CreateListInput $input,
+    ): JsonResponse {
         $listCounter = $this->newsletterListService->getListCounter($newsletter);
 
         if ($listCounter >= $this->newsletterListService::MAX_LIST_DEFINITIONS_PER_NEWSLETTER) {
@@ -49,7 +46,7 @@ class ListController extends AbstractController
         $list = $this->newsletterListService->createNewsletterList(
             $newsletter,
             $input->name,
-            $input->description
+            $input->description,
         );
         return $this->json(new ListObject($list, 0));
     }
@@ -57,14 +54,13 @@ class ListController extends AbstractController
     #[Route('/lists/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
     public function updateNewsletterList(
-        NewsletterList                       $list,
-        #[MapRequestPayload] UpdateListInput $input
-    ): JsonResponse
-    {
+        NewsletterList $list,
+        #[MapRequestPayload] UpdateListInput $input,
+    ): JsonResponse {
         $list = $this->newsletterListService->updateNewsletterList(
             $list,
             $input->name ?? $list->getName(),
-            $input->description ?? $list->getDescription()
+            $input->description ?? $list->getDescription(),
         );
 
         $subscriberCounts = $this->newsletterListService->getSubscriberCountOfLists([$list->getId()]);

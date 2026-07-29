@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\ApiKey\CreateApiKeyInput;
 use App\Api\Console\Input\ApiKey\UpdateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
@@ -20,10 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class ApiKeyController extends AbstractController
 {
     public function __construct(
-        private ApiKeyService $apiKeyService
-    )
-    {
-    }
+        private ApiKeyService $apiKeyService,
+    ) {}
 
     #[Route('/api-keys', methods: 'POST')]
     #[ScopeRequired(PostScope::API_KEYS_WRITE)]

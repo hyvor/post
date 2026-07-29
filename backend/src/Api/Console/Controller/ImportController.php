@@ -3,7 +3,7 @@
 namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Input\Import\UploadImportInput;
 use App\Api\Console\Object\SubscriberImportObject;
@@ -20,26 +20,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ImportController extends AbstractController
 {
     public function __construct(
-        private ImportService       $importService,
+        private ImportService $importService,
         private MessageBusInterface $messageBus,
-        private MediaController     $mediaController,
-    )
-    {
-    }
+        private MediaController $mediaController,
+    ) {}
 
     #[Route('/imports/upload', methods: 'POST')]
     #[ScopeRequired(PostScope::DATA_WRITE)]
     public function upload(
-        Newsletter                             $newsletter,
-        Request                                $request,
-        #[MapRequestPayload] UploadImportInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        Request $request,
+        #[MapRequestPayload] UploadImportInput $input,
+    ): JsonResponse {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
         if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
@@ -64,11 +61,10 @@ class ImportController extends AbstractController
     #[Route('/imports/{id}', methods: 'POST')]
     #[ScopeRequired(PostScope::DATA_WRITE)]
     public function import(
-        Newsletter                       $newsletter,
-        SubscriberImport                 $subscriberImport,
-        #[MapRequestPayload] ImportInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        SubscriberImport $subscriberImport,
+        #[MapRequestPayload] ImportInput $input,
+    ): JsonResponse {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
         if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
@@ -95,7 +91,7 @@ class ImportController extends AbstractController
 
         $subscriberImport = $this->importService->updateSubscriberImport(
             $subscriberImport,
-            $updates
+            $updates,
         );
 
         return new JsonResponse(new SubscriberImportObject($subscriberImport));
