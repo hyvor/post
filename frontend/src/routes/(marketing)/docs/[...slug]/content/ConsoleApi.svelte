@@ -73,6 +73,9 @@
 	<li>
 		<a href="#update-newsletter"><code>PATCH /newsletter</code></a> - Update a newsletter
 	</li>
+	<li>
+		<a href="#delete-newsletter"><code>DELETE /newsletter</code></a> - Delete a newsletter
+	</li>
 </ul>
 
 <p>Objects:</p>
@@ -104,6 +107,23 @@
         type Response = Newsletter
     `}
 />
+
+<h4 id="delete-newsletter">Delete a newsletter</h4>
+
+<code>DELETE /newsletter</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {}
+    `}
+/>
+
+<Callout type="warning">
+	This endpoint will soft-delete the newsletter, scheduling it for permanent deletion after 30
+	days.
+</Callout>
 
 <h3 id="issue">Issue</h3>
 
@@ -285,8 +305,8 @@
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
 	<li>
-		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a subscriber
-		by email
+		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a
+		subscriber by email
 	</li>
 	<li>
 		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
@@ -429,8 +449,8 @@
 		from the list, they will not be re-subscribed.
 	</li>
 	<li>
-		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the list
-		again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
+		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the
+		list again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
 		to the list even if they have previously unsubscribed.
 	</li>
 </ul>
@@ -441,15 +461,15 @@
 
 <ul>
 	<li>
-		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be removed
-		from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
+		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be
+		removed from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
 		unsubscription, blocking future re-adds unless
-		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe form
-		uses this.
+		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe
+		form uses this.
 	</li>
 	<li>
-		<code>other</code> - use this reason if you want to remove the subscriber from the list without recording
-		an unsubscription.
+		<code>other</code> - use this reason if you want to remove the subscriber from the list without
+		recording an unsubscription.
 	</li>
 </ul>
 
@@ -459,8 +479,8 @@
 	<Accordion title="Creating or updating a subscriber">
 		<div>
 			This example creates a new subscriber with a subscription to the "Default" list. If a
-			subscriber exists in with the same email, they will be updated and their lists will be set to
-			only "Default" (overwriting existing lists).
+			subscriber exists in with the same email, they will be updated and their lists will be
+			set to only "Default" (overwriting existing lists).
 		</div>
 
 		<CodeBlock
@@ -477,8 +497,8 @@
 	<Accordion title="Adding a subscriber to a list without affecting their other lists">
 		<div>
 			Assuming you have a list with List ID 123, this example adds the subscriber to that list
-			without affecting their other list subscriptions. If the subscriber is already subscribed to
-			the list, no changes will be made.
+			without affecting their other list subscriptions. If the subscriber is already
+			subscribed to the list, no changes will be made.
 		</div>
 
 		<CodeBlock
@@ -513,8 +533,9 @@
 
 	<Accordion title="Adding a pending subscriber and sending a confirmation email">
 		<div>
-			This example creates a subscriber or updates an existing subscriber with "pending" status, and
-			will send a confirmation email to the subscriber asking them to confirm their subscription.
+			This example creates a subscriber or updates an existing subscriber with "pending"
+			status, and will send a confirmation email to the subscriber asking them to confirm
+			their subscription.
 		</div>
 		<CodeBlock
 			language="json"
@@ -531,9 +552,9 @@
 
 	<Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
 		<div>
-			By default, this endpoint ignores re-subscription attempts to lists that the subscriber has
-			previously unsubscribed from (or was removed from due to a bounce). This example shows how to
-			override that behavior.
+			By default, this endpoint ignores re-subscription attempts to lists that the subscriber
+			has previously unsubscribed from (or was removed from due to a bounce). This example
+			shows how to override that behavior.
 		</div>
 		<CodeBlock
 			language="json"
@@ -685,12 +706,12 @@
 		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
 	</li>
 	<li>
-		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a sending
-		profile
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
+		sending profile
 	</li>
 	<li>
-		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete a sending
-		profile
+		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete
+		a sending profile
 	</li>
 </ul>
 
@@ -776,8 +797,8 @@ appearance of your newsletters.
 		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
 	</li>
 	<li>
-		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template with
-		content
+		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
+		with content
 	</li>
 </ul>
 
@@ -886,7 +907,8 @@ appearance of your newsletters.
 <Callout type="info">
 	<ul>
 		<li>
-			Returns a 400 error if the user is not a member of the organization that owns this newsletter.
+			Returns a 400 error if the user is not a member of the organization that owns this
+			newsletter.
 		</li>
 	</ul>
 </Callout>

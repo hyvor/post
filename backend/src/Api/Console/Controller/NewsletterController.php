@@ -86,7 +86,7 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
-    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
+    #[ScopeRequired(PostScope::NEWSLETTER_DELETE)]
     public function deleteNewsletter(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
