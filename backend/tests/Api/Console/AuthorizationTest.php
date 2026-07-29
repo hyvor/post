@@ -2,7 +2,6 @@
 
 namespace App\Tests\Api\Console;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
 use Hyvor\Internal\Auth\Oidc\Testing\OidcTestingUtils;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
@@ -25,7 +24,6 @@ use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Hyvor\Internal\CloudApi\CloudApiService;
 use Hyvor\Internal\CloudApi\Scope\ScopeBuilder;
 
-#[CoversClass(AuthorizationListenerOld::class)]
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
 {

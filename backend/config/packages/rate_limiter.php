@@ -1,13 +1,15 @@
 <?php
 
-use Symfony\Config\FrameworkConfig;
+use Symfony\Component\DependencyInjection\Loader\Configurator\App;
 
-return static function (FrameworkConfig $framework): void {
-
-    // public API
-    $framework->rateLimiter()
-        ->limiter('public_api')
-        ->policy('fixed_window')
-        ->limit(30)
-        ->interval('1 minute');
-};
+return App::config([
+    'framework' => [
+        'rate_limiter' => [
+            'public_api' => [
+                'policy' => 'fixed_window',
+                'limit' => 30,
+                'interval' => '1 minute',
+            ],
+        ],
+    ],
+]);

@@ -2,6 +2,7 @@
 
 namespace App\Api\Console\Authorization;
 
+use App\Entity\ApiKey;
 use App\Entity\Newsletter;
 use App\Service\ApiKey\ApiKeyService;
 use App\Service\ApiKey\Dto\UpdateApiKeyDto;
@@ -108,6 +109,7 @@ class AuthorizationListener extends ConsoleApiAuthorizationListenerAbstract
     {
         $apiKeyUpdates = new UpdateApiKeyDto();
         $apiKeyUpdates->lastAccessedAt = $this->now();
+        assert($apiKeyModel instanceof ApiKey);
         $this->apiKeyService->updateApiKey($apiKeyModel, $apiKeyUpdates);
     }
 

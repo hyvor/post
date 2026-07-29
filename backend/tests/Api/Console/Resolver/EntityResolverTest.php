@@ -2,13 +2,16 @@
 
 namespace App\Tests\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\NewsletterResolver;
+use App\Entity\Newsletter;
 use App\Entity\NewsletterList;
 use App\Tests\Case\KernelTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\AccessType;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +22,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 #[CoversClass(NewsletterResolver::class)]
 class EntityResolverTest extends KernelTestCase
 {
+
+    private function consoleAuthResultsFor(Newsletter $newsletter): ConsoleAuthResults
+    {
+        return new ConsoleAuthResults(
+            accessType: AccessType::PRODUCT_API_KEY,
+            organizationId: $newsletter->getOrganizationId(),
+            resource: $newsletter,
+            productApiKey: new \stdClass(),
+        );
+    }
 
     public function testDoesNotResolveClassesOutsideConsoleApiControllers(): void
     {
@@ -117,7 +130,10 @@ class EntityResolverTest extends KernelTestCase
         $request = new Request();
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
-        $request->attributes->set(AuthorizationListenerOld::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
+        $request->attributes->set(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+            $this->consoleAuthResultsFor($newsletter),
+        );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
             'App\Api\Console\Controller\NewsletterListController::getLists',
@@ -168,8 +184,8 @@ class EntityResolverTest extends KernelTestCase
         $request->attributes->set('id', (string)$newsletterList->getId());
         $request->server->set('REQUEST_URI', '/api/console/lists');
         $request->attributes->set(
-            AuthorizationListenerOld::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY,
-            NewsletterFactory::createOne(),
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+            $this->consoleAuthResultsFor(NewsletterFactory::createOne()),
         );
         $argument = $this->createMock(ArgumentMetadata::class);
         $argument->method('getControllerName')->willReturn(
