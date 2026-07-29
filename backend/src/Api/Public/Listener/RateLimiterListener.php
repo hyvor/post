@@ -2,6 +2,7 @@
 
 namespace App\Api\Public\Listener;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,9 @@ class RateLimiterListener
     private const string RATE_LIMIT_HEADERS_KEY = 'rate_limit_headers';
 
     public function __construct(
-        private RateLimiterFactory $publicApiLimiter
-    )
-    {
-    }
+        #[Autowire(service: 'limiter.public_api')]
+        private RateLimiterFactory $publicApiLimiter,
+    ) {}
 
     private function isPublicApiRequest(Request $request): bool
     {
@@ -30,7 +30,6 @@ class RateLimiterListener
 
     public function onKernelRequest(RequestEvent $event): void
     {
-
         $request = $event->getRequest();
 
         if (!$this->isPublicApiRequest($request)) {
@@ -52,11 +51,10 @@ class RateLimiterListener
             $response = new Response(
                 null,
                 Response::HTTP_TOO_MANY_REQUESTS,
-                $headers
+                $headers,
             );
             $event->setResponse($response);
         }
-
     }
 
     public function onKernelResponse(ResponseEvent $event): void

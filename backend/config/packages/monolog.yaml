@@ -1,0 +1,29 @@
+when@prod: &prod
+  monolog:
+    handlers:
+      app:
+        type: buffer
+        handler: final
+        level: "%env(LOG_LEVEL)%"
+        channels: [ 'app' ]
+
+      non_app:
+        type: buffer
+        handler: final
+        level: error
+        bubble: false
+        channels: [ '!app' ]
+
+      final:
+        type: stream
+        path: 'php://stderr'
+        formatter: monolog.formatter.json
+
+when@dev: *prod
+
+when@test:
+  monolog:
+    handlers:
+      test:
+        type: test
+        level: debug
