@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Divider, NavLink,  Tooltip, Button } from '@hyvor/design/components';
+	import { Divider, NavLink, Tooltip, Button } from '@hyvor/design/components';
 	import IconChevronExpand from '@hyvor/icons/IconChevronExpand';
 	import IconHouse from '@hyvor/icons/IconHouse';
 	import IconPeople from '@hyvor/icons/IconPeople';
@@ -27,18 +27,18 @@
 </script>
 
 <div class="wrap hds-box">
-	<button class="current" onclick={triggerNewsletterSelector} class:disabled={$isEmbedded}>
-		<div class="left">
-			<div class="name">
-				{$newsletterStore.name}
+	{#if !$isEmbedded}
+		<button class="current" onclick={triggerNewsletterSelector}>
+			<div class="left">
+				<div class="name">
+					{$newsletterStore.name}
+				</div>
 			</div>
-		</div>
-		{#if !$isEmbedded}
 			<IconChevronExpand />
-		{/if}
-	</button>
+		</button>
+	{/if}
 
-	<div class="nav-links">
+	<div class="nav-links" class:embedded={$isEmbedded}>
 		<NavLink
 			href={'/console/' + $newsletterStore.subdomain.toString()}
 			active={page.url.pathname === `/console/${$newsletterStore.subdomain}`}
@@ -124,12 +124,13 @@
 		</NavLink>
 
 		{#if !$isEmbedded}
-
 			<Divider margin={15} />
 
 			<NavLink
 				href={'/console/' + $newsletterStore.subdomain.toString() + '/install'}
-				active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/install`)}
+				active={page.url.pathname.startsWith(
+					`/console/${$newsletterStore.subdomain}/install`
+				)}
 			>
 				<NavItem>
 					{#snippet icon()}
@@ -140,13 +141,16 @@
 					{/snippet}
 				</NavItem>
 			</NavLink>
-
 		{/if}
 	</div>
 
 	{#if $isEmbedded}
 		<div class="full-console">
-			<Button as="a" href={'/console/' + $newsletterStore.subdomain.toString()} target="_blank">
+			<Button
+				as="a"
+				href={'/console/' + $newsletterStore.subdomain.toString()}
+				target="_blank"
+			>
 				Hyvor Post Console
 				{#snippet end()}
 					<IconBoxArrowUpRight size={12} />
@@ -211,6 +215,9 @@
 		background-color: var(--accent-light-mid);
 	}
 
+	.nav-links.embedded {
+		margin-top: 15px;
+	}
 
 	.full-console {
 		flex: 1;

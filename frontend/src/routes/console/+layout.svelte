@@ -47,6 +47,14 @@
 	let isLoading = $state(true);
 
 	function startConsole(switchingOrg = false) {
+		/**
+		 * support for /console?newsletter_id=1234 to force a newsletter to be selected
+		 * usually used with embedded mode
+		 */
+		const forceNewsletterId = page.url.searchParams.has('newsletter_id')
+			? parseInt(page.url.searchParams.get('newsletter_id') ?? '0')
+			: null;
+
 		if (page.url.searchParams.has('embedded')) {
 			$isEmbedded = true;
 			document.body.style.backgroundColor = 'transparent';
@@ -64,7 +72,17 @@
 				authUserStore.set(res.user);
 				resolvedLicenseStore.set(res.resolved_license);
 				userNewslettersStore.set(res.newsletters);
-				if (res.newsletters.length > 0) {
+
+				if (forceNewsletterId) {
+					const forcedNewsletterList = res.newsletters.find(
+						(nl) => nl.newsletter.id === forceNewsletterId
+					);
+					if (!forcedNewsletterList) {
+						toast.error('Newsletter not found or you do not have access to it.');
+					} else {
+						setNewsletterStoreByNewsletterList(forcedNewsletterList);
+					}
+				} else if (res.newsletters.length > 0) {
 					setNewsletterStoreByNewsletterList(res.newsletters[0]);
 				}
 
@@ -141,7 +159,6 @@
 				}}
 				style="display:flex; flex-direction: column; width: 100%; height: 100vh"
 			>
-
 				{#if !$isEmbedded}
 					<HyvorBar />
 				{/if}
