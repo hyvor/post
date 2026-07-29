@@ -2,7 +2,6 @@
 
 namespace App\Tests\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Api\Console\Resolver\EntityResolver;
 use App\Api\Console\Resolver\NewsletterResolver;
 use App\Tests\Case\KernelTestCase;

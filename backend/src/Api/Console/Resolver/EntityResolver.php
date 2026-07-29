@@ -2,7 +2,6 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
 use App\Entity\ApiKey;
 use App\Entity\Approval;
 use App\Entity\Domain;

@@ -2,7 +2,6 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListenerOld;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Object\ListObject;
@@ -43,16 +44,27 @@ class ConsoleController extends AbstractController
         private SubscriberMetadataService $subscriberMetadataService,
         private SendingProfileService $sendingProfileService,
         private BillingInterface $billing,
+        private AuthInterface $auth,
     ) {}
 
     #[Route('/init', methods: 'GET')]
-    #[OrgEndpoint]
     public function initConsole(Request $request): JsonResponse
     {
-        $user = AuthorizationListenerOld::getUser($request);
-        $organization = AuthorizationListenerOld::hasOrganization($request) ? AuthorizationListenerOld::getOrganization(
-            $request,
-        ) : null;
+        $me = $this->auth->me($request);
+
+        if ($me === null) {
+            throw new DataCarryingHttpException(
+                401,
+                [
+                    'login_url' => $this->auth->authUrl('login'),
+                    'signup_url' => $this->auth->authUrl('signup'),
+                ],
+                'Unauthorized',
+            );
+        }
+
+        $user = $me->getUser();
+        $organization = $me->getOrganization();
 
         $newsletters = [];
         $license = new ResolvedLicense(ResolvedLicenseType::NONE);
