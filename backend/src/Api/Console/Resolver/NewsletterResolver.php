@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NewsletterResolver implements ValueResolverInterface
 {
@@ -35,7 +36,7 @@ class NewsletterResolver implements ValueResolverInterface
         $resource = $consoleAuth instanceof ConsoleAuthResults ? $consoleAuth->getResource() : null;
 
         if (!$resource instanceof Newsletter) {
-            throw new BadRequestException('Missing X-Newsletter-Id header');
+            throw new NotFoundHttpException('Missing X-Newsletter-Id header or newsletter not found');
         }
 
         return [$resource];

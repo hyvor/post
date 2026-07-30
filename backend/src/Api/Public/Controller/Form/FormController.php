@@ -41,7 +41,11 @@ class FormController extends AbstractController
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
+        if ($input->newsletter_id !== null) {
+            $newsletter = $this->newsletterService->getNewsletterById($input->newsletter_id);
+        } else {
+            $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
+        }
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
