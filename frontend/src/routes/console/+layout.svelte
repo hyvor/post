@@ -28,7 +28,8 @@
 	} from './lib/stores/consoleStore';
 	import { setNewsletterStoreByNewsletterList } from './lib/stores/newsletterStore';
 	import { userNewslettersStore } from './lib/stores/userNewslettersStore';
-	import { goto } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
+	import { consoleUrlWithNewsletter } from './lib/consoleUrl';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -105,6 +106,21 @@
 	}
 
 	onMount(startConsole);
+
+	beforeNavigate((nav) => {
+		if ($isEmbedded) {
+			// cannot change the newsletter, so open none-newsletter URLs in a new tab
+			const newsletterUrl = consoleUrlWithNewsletter('').replace(/\/$/, '');
+
+			if (
+				nav.to?.url.origin !== location.origin ||
+				!nav.to?.url.pathname.startsWith(newsletterUrl)
+			) {
+				nav.cancel();
+				window.open(nav.to?.url.toString(), '_blank');
+			}
+		}
+	});
 </script>
 
 <svelte:head>
