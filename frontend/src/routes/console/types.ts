@@ -126,6 +126,12 @@ export type Newsletter = {
 	name: string;
 	language_code: string | null;
 	is_rtl: boolean;
+
+	metadata: {
+		// set when newsletter is created via Hyvor Blogs integration
+		hyvor_blogs_integration?: 'true',
+	} & Record<string, string>;
+
 } & NewsletterMeta;
 
 export type NewsletterPermissions = {
