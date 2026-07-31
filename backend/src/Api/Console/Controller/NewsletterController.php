@@ -74,6 +74,7 @@ class NewsletterController extends AbstractController
             $consoleAuth->getSourceString(),
             $input->metadata,
             userId: $consoleAuth->getNullableUser()?->id,
+            startTrial: $input->start_trial,
         );
         return $this->json(new NewsletterObject($newsletter));
     }

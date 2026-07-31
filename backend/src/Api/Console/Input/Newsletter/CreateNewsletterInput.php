@@ -29,4 +29,7 @@ class CreateNewsletterInput
     ])]
     public array $metadata = [];
 
+    // whether to start the trial: cloud only
+    public bool $start_trial = true;
+
 }

@@ -50,9 +50,10 @@ class NewsletterService
         string $createdBySource,
         array $metadata = [],
         ?int $userId = null,
+        bool $startTrial = true,
     ): Newsletter {
         return $this->em->wrapInTransaction(
-            function () use ($userId, $organizationId, $name, $subdomain, $metadata, $createdBySource) {
+            function () use ($userId, $organizationId, $name, $subdomain, $metadata, $createdBySource, $startTrial) {
                 $newsletter = new Newsletter()
                     ->setName($name)
                     ->setOrganizationId($organizationId)
@@ -98,12 +99,14 @@ class NewsletterService
                 $this->em->persist($list);
                 $this->em->flush();
 
-                $this->comms->send(
-                    new ResourceCreated(
-                        Component::POST,
-                        $organizationId,
-                    ),
-                );
+                if ($startTrial) {
+                    $this->comms->send(
+                        new ResourceCreated(
+                            Component::POST,
+                            $organizationId,
+                        ),
+                    );
+                }
 
                 return $newsletter;
             },
