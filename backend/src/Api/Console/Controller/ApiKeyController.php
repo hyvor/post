@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
 class ApiKeyController extends AbstractController
 {
@@ -25,6 +26,7 @@ class ApiKeyController extends AbstractController
 
     #[Route('/api-keys', methods: 'POST')]
     #[ScopeRequired(PostScope::API_KEYS_WRITE)]
+    #[OA\Post(summary: 'Create a new API key', description: 'Creates a new API key for the specified newsletter. The API key will be returned in the response, and it is important to store it securely as it will not be retrievable again.')]
     public function createApiKey(#[MapRequestPayload] CreateApiKeyInput $input, Newsletter $newsletter): JsonResponse
     {
         $apiKeysCount = count($this->apiKeyService->getApiKeysForNewsletter($newsletter));
@@ -39,6 +41,7 @@ class ApiKeyController extends AbstractController
 
     #[Route('/api-keys', methods: 'GET')]
     #[ScopeRequired(PostScope::API_KEYS_READ)]
+    #[OA\Get(summary: 'Get all API keys for a newsletter')]
     public function getApiKeys(Newsletter $newsletter): JsonResponse
     {
         $apiKeys = $this->apiKeyService->getApiKeysForNewsletter($newsletter);
@@ -49,6 +52,7 @@ class ApiKeyController extends AbstractController
 
     #[Route('/api-keys/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::API_KEYS_WRITE)]
+    #[OA\Patch(summary: 'Update an API key')]
     public function updateApiKey(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
     {
         $updates = new UpdateApiKeyDto();
@@ -69,6 +73,7 @@ class ApiKeyController extends AbstractController
 
     #[Route('/api-keys/{id}', methods: 'POST')]
     #[ScopeRequired(PostScope::API_KEYS_WRITE)]
+    #[OA\Post(summary: 'Regenerate an API key')]
     public function regenerateApiKey(ApiKey $apiKey): JsonResponse
     {
         $regeneration = $this->apiKeyService->regenerateApiKey($apiKey);
@@ -78,6 +83,7 @@ class ApiKeyController extends AbstractController
 
     #[Route('/api-keys/{id}', methods: 'DELETE')]
     #[ScopeRequired(PostScope::API_KEYS_WRITE)]
+    #[OA\Delete(summary: 'Delete an API key')]
     public function deleteApiKey(ApiKey $apiKey): JsonResponse
     {
         $this->apiKeyService->deleteApiKey($apiKey);

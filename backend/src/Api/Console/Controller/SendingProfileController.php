@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
 class SendingProfileController extends AbstractController
 {
@@ -41,6 +43,14 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles', methods: 'GET')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_READ)]
+    #[OA\Response(
+        response: 200,
+        description: 'List of sending profiles',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SendingProfileObject::class))
+        )
+    )]
     public function getSendingProfiles(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
@@ -52,6 +62,11 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles', methods: 'POST')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
+    #[OA\Response(
+        response: 200,
+        description: 'Sending profile created successfully',
+        content: new Model(type: SendingProfileObject::class)
+    )]
     public function createSendingProfile(
         #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter $newsletter,
@@ -73,6 +88,11 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
+    #[OA\Response(
+        response: 200,
+        description: 'Sending profile updated successfully',
+        content: new Model(type: SendingProfileObject::class)
+    )]
     public function updateSendingProfile(
         SendingProfile $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input,
@@ -115,6 +135,11 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
+    #[OA\Response(
+        response: 200,
+        description: 'Sending profile deleted successfully',
+        content: new Model(type: SendingProfileObject::class)
+    )]
     public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
     {
         if ($sendingProfile->getIsSystem()) {

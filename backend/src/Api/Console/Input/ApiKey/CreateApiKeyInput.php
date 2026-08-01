@@ -12,7 +12,7 @@ class CreateApiKeyInput
     public string $name;
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     #[Assert\NotBlank]
     #[Assert\Type('array')]

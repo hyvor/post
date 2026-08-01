@@ -84,5 +84,4 @@ class CreateSubscriberInput
     {
         return array_map(fn($value) => $value->value, ListRemovalReason::cases());
     }
-
 }
