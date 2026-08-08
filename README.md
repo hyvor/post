@@ -1,6 +1,6 @@
-## Hyvor Post
+## Hyvor Post - Newsletters without surveillance
 
-*No Tracking, Just Ideas, Delivered.*
+*For People, Not Funnels*
 
 [Hyvor Post](https://post.hyvor.com) is a simple, privacy-first newsletter platform. It is based on [Hyvor Relay](https://relay.hyvor.com), an open-source, self-hosted email API for developers.
 
