@@ -98,6 +98,10 @@ class IssueService
             $issue->setSentAt($updates->sentAt);
         }
 
+        if ($updates->has('queuedAt')) {
+            $issue->setQueuedAt($updates->queuedAt);
+        }
+
         $issue->setUpdatedAt($this->now());
 
         $this->em->persist($issue);

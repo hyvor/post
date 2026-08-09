@@ -12,4 +12,5 @@ class UpdateNewsletterDto
     public string $subdomain;
     public ?string $language_code;
     public bool $is_rtl;
+    public ?int $daily_sending_rate;
 }

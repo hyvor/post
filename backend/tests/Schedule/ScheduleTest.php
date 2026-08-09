@@ -16,6 +16,6 @@ class ScheduleTest extends KernelTestCase
         assert($schedule instanceof Schedule);
         $s = $schedule->getSchedule();
         $messages = $s->getRecurringMessages();
-        $this->assertCount(2, $messages);
+        $this->assertCount(3, $messages);
     }
 }

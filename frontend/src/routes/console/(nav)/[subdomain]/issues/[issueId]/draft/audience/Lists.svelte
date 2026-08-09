@@ -7,11 +7,19 @@
 		draftSendableSubscribersCountStore
 	} from '../draftStore';
 	import { debouncedUpdateDraftIssue } from '../draftActions';
-	import { listStore } from '../../../../../../lib/stores/newsletterStore';
+	import { listStore, newsletterStore } from '../../../../../../lib/stores/newsletterStore';
+	import { getSendDurationEstimate } from '../../../../../../lib/sendRate';
 
 	const I18n = getI18n();
 
 	let currentLists = $state($draftIssueEditingStore.lists);
+
+	const sendDurationEstimate = $derived(
+		getSendDurationEstimate(
+			$draftSendableSubscribersCountStore.count,
+			$newsletterStore.daily_sending_rate
+		)
+	);
 
 	function onChange(id: number) {
 		$draftErrorsStore.lists = '';
@@ -68,6 +76,11 @@
 				/>
 			{/if}
 		</div>
+		{#if !$draftSendableSubscribersCountStore.loading && sendDurationEstimate}
+			<div class="send-estimate">
+				{I18n.t(sendDurationEstimate.key, { count: sendDurationEstimate.count })}
+			</div>
+		{/if}
 	{/if}
 </SplitControl>
 
@@ -85,6 +98,12 @@
 	.sendable-count {
 		margin-top: 15px;
 		font-size: 14px;
+		color: var(--text-light);
+	}
+
+	.send-estimate {
+		margin-top: 6px;
+		font-size: 13px;
 		color: var(--text-light);
 	}
 </style>

@@ -2,7 +2,9 @@
 
 namespace App\Api\Sudo\Controller;
 
+use App\Api\Sudo\Input\Newsletter\UpdateNewsletterInput;
 use App\Entity\Newsletter;
+use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Sudo\SudoPermission;
 use Hyvor\Internal\Auth\AuthInterface;
@@ -11,6 +13,7 @@ use Hyvor\Internal\Bundle\Api\SudoObject\SudoObjectFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[SudoPermissionRequired(SudoPermission::ACCESS_SUDO)]
@@ -80,6 +83,22 @@ class NewsletterController extends AbstractController
         return new JsonResponse([
             'newsletter' => $this->sudoObjectFactory->create($newsletter),
             'stats' => $this->newsletterService->getNewsletterStats($newsletter),
+        ]);
+    }
+
+    #[Route('/newsletters/{id}', methods: ['PATCH'])]
+    public function updateNewsletter(
+        Newsletter                              $newsletter,
+        #[MapRequestPayload] UpdateNewsletterInput $input,
+    ): JsonResponse
+    {
+        $updates = new UpdateNewsletterDto();
+        $updates->daily_sending_rate = $input->daily_sending_rate;
+
+        $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
+
+        return new JsonResponse([
+            'newsletter' => $this->sudoObjectFactory->create($newsletter),
         ]);
     }
 }

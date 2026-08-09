@@ -36,6 +36,13 @@ export function getNewsletter(id: number) {
 	});
 }
 
+export function updateNewsletter(id: number, data: { daily_sending_rate: number | null }) {
+	return sudoApi.patch<{ newsletter: Newsletter }>({
+		endpoint: `newsletters/${id}`,
+		data
+	});
+}
+
 export interface NewsletterRowStats {
 	issues_count: number;
 	subscribers_count: number;

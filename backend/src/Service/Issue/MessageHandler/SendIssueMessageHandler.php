@@ -4,7 +4,6 @@ namespace App\Service\Issue\MessageHandler;
 
 use App\Entity\Issue;
 use App\Entity\Subscriber;
-use App\Entity\Type\IssueStatus;
 use App\Service\AppConfig;
 use App\Service\Issue\Dto\UpdateIssueDto;
 use App\Service\Issue\IssueService;
@@ -27,6 +26,8 @@ class SendIssueMessageHandler
 {
     use ClockAwareTrait;
 
+    private const int SECONDS_PER_DAY = 86400;
+
     public function __construct(
         private SendService            $sendService,
         private IssueService           $issueService,
@@ -42,38 +43,54 @@ class SendIssueMessageHandler
         $issue = $this->em->getRepository(Issue::class)->find($message->getIssueId());
         assert($issue !== null);
 
+        $intervalSeconds = $this->getIntervalSeconds($issue);
+
         $currentIndex = 0;
 
         $this->sendService->paginateSendableSubscribers(
             $issue,
             $message->getPaginationSize(),
-            function (Issue $issue, Subscriber $subscriber) use (&$currentIndex) {
+            function (Issue $issue, Subscriber $subscriber) use (&$currentIndex, $intervalSeconds) {
 
                 $this->sendJob(
                     $issue,
                     $subscriber,
-                    $currentIndex
+                    $currentIndex,
+                    $intervalSeconds
                 );
 
                 $currentIndex++;
             }
         );
 
+        // The issue stays in SENDING until every email is actually sent.
         $updates = new UpdateIssueDto();
-        $updates->status = IssueStatus::SENT;
-        $updates->sentAt = $this->now();
+        $updates->queuedAt = $this->now();
         $this->issueService->updateIssue($issue, $updates);
+    }
+
+    /**
+     * Emails are spread evenly across the day based on the newsletter's daily
+     * sending rate, while never exceeding the global infrastructure throughput.
+     * The interval is the number of seconds between two consecutive emails.
+     */
+    private function getIntervalSeconds(Issue $issue): float
+    {
+        $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
+        $dailyRate = $issue->getNewsletter()->getDailySendingRate();
+
+        return max(self::SECONDS_PER_DAY / $dailyRate, 1 / $maxPerSecond);
     }
 
     // this is idempotent
     private function sendJob(
         Issue      $issue,
         Subscriber $subscriber,
-        int        $index
+        int        $index,
+        float      $intervalSeconds
     ): void
     {
-        $maxPerSecond = $this->appConfig->getMaxEmailsPerSecond();
-        $delaySeconds = max($index * (1 / $maxPerSecond), 0);
+        $delaySeconds = max($index * $intervalSeconds, 0);
 
         $this->em->wrapInTransaction(function () use ($issue, $subscriber, $delaySeconds) {
             $createdSendId = $this->sendService->createSend($issue, $subscriber);

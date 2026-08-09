@@ -387,6 +387,10 @@ class NewsletterService
             $newsletter->setIsRtl($updates->is_rtl);
         }
 
+        if ($updates->has('daily_sending_rate')) {
+            $newsletter->setDailySendingRate($updates->daily_sending_rate);
+        }
+
         $newsletter->setUpdatedAt($this->now());
         $this->em->persist($newsletter);
         $this->em->flush();

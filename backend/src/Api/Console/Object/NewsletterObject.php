@@ -14,6 +14,7 @@ class NewsletterObject extends NewsletterMeta
     public string $name;
     public ?string $language_code;
     public bool $is_rtl;
+    public int $daily_sending_rate;
 
     public function __construct(Newsletter $newsletter)
     {
@@ -23,6 +24,7 @@ class NewsletterObject extends NewsletterMeta
         $this->name = $newsletter->getName();
         $this->language_code = $newsletter->getLanguageCode();
         $this->is_rtl = $newsletter->isRtl();
+        $this->daily_sending_rate = $newsletter->getDailySendingRate();
 
         $meta = $newsletter->getMeta();
         foreach (get_object_vars($meta) as $property => $value) {

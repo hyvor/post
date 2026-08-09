@@ -178,6 +178,16 @@
 		<Switch bind:checked={$newsletterEditingStore.is_rtl} />
 	</SplitControl>
 
+	<SplitControl
+		label="Daily sending rate"
+		caption="The maximum number of emails this newsletter sends per day. Larger issues are automatically spread over several hours or days."
+	>
+		<TextInput value={`${$newsletterStore.daily_sending_rate} emails / day`} disabled block />
+		<Callout type="info" style="margin-top:10px">
+			Contact support to increase your sending rate.
+		</Callout>
+	</SplitControl>
+
 	<SplitControl label={I18n.t('console.settings.newsletter.delete')}>
 		<Button color="red" on:click={onDelete} loading={deleting}>
 			{I18n.t('console.settings.newsletter.delete')}
