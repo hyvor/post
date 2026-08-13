@@ -19,6 +19,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
 class UserController extends AbstractController
 {
@@ -30,6 +32,18 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'GET')]
     #[ScopeRequired(PostScope::USERS_READ)]
+    #[OA\Get(
+        description: 'Get all users of the newsletter.',
+        summary: 'Get newsletter users',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of newsletter users',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: UserObject::class)),
+        ),
+    )]
     public function getUsers(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService
@@ -47,6 +61,15 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'DELETE')]
     #[ScopeRequired(PostScope::USERS_WRITE)]
+    #[OA\Delete(
+        description: 'Removes a user from the newsletter, identified by either its `id` or `user_id` (HYVOR user ID).',
+        summary: 'Remove a newsletter user',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
     public function deleteUser(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
     {
         if ($input->user_id === null && $input->id === null) {
@@ -65,6 +88,15 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'POST')]
     #[ScopeRequired(PostScope::USERS_WRITE)]
+    #[OA\Post(
+        description: 'Adds a HYVOR user (identified by `user_id`) who is already a member of the organization to the newsletter.',
+        summary: 'Add a newsletter user',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the added (or already-existing, if `on_duplicate` is `ignore`) newsletter user object.',
+        content: new Model(type: UserObject::class),
+    )]
     public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
         $hyvorUser = $this->auth->fromId($input->user_id);

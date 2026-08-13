@@ -30,6 +30,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
 class SubscriberController extends AbstractController
 {
@@ -44,6 +46,18 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers', methods: 'GET')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_READ)]
+    #[OA\Get(
+        description: 'Get subscribers of the newsletter, paginated and optionally filtered by status, list, or search term.',
+        summary: 'Get subscribers',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of subscribers',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SubscriberObject::class)),
+        ),
+    )]
     public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
@@ -81,6 +95,15 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers', methods: 'POST')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Post(
+        description: 'Creates a new subscriber, or updates the existing subscriber if one already exists with the given email.',
+        summary: 'Create or update a subscriber',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created or updated subscriber object.',
+        content: new Model(type: SubscriberObject::class),
+    )]
     public function createSubscriber(
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
@@ -266,6 +289,24 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers/email/{email}', methods: 'GET')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_READ)]
+    #[OA\Get(
+        description: 'Get a subscriber of the newsletter by email address.',
+        summary: 'Get a subscriber by email',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the subscriber object.',
+        content: new Model(type: SubscriberObject::class),
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Returned when no subscriber exists with the given email.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'message', type: 'string', example: 'Subscriber not found'),
+            ],
+        ),
+    )]
     public function getSubscriberByEmail(string $email, Newsletter $newsletter): JsonResponse
     {
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
@@ -279,6 +320,15 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers/{id}/resend-opt-in', methods: 'POST')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Post(
+        description: 'Resends the opt-in confirmation email to a pending subscriber.',
+        summary: 'Resend opt-in confirmation email',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
     public function resendOptIn(Subscriber $subscriber): JsonResponse
     {
         if ($subscriber->getStatus() !== SubscriberStatus::PENDING) {
@@ -290,6 +340,15 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers/{id}', methods: 'DELETE')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Delete(
+        description: 'Deletes a subscriber.',
+        summary: 'Delete a subscriber',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
     public function deleteSubscriber(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
@@ -298,6 +357,25 @@ class SubscriberController extends AbstractController
 
     #[Route('/subscribers/bulk', methods: 'POST')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Post(
+        description: 'Performs a bulk action (delete, status change, or metadata update) on a set of subscribers.',
+        summary: 'Bulk update subscribers',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the result of the bulk action.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'message', type: 'string'),
+                new OA\Property(
+                    property: 'subscribers',
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: SubscriberObject::class)),
+                ),
+            ],
+        ),
+    )]
     public function bulkActions(
         Newsletter $newsletter,
         #[MapRequestPayload] BulkActionSubscriberInput $input,

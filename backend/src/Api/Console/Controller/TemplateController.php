@@ -15,10 +15,12 @@ use App\Service\Template\TemplateRenderException;
 use App\Service\Template\TemplateService;
 use App\Service\Template\TemplateVariableService;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
 class TemplateController extends AbstractController
 {
@@ -31,6 +33,17 @@ class TemplateController extends AbstractController
 
     #[Route('/templates', methods: 'GET')]
     #[ScopeRequired(PostScope::TEMPLATES_READ)]
+    #[OA\Get(
+        description: 'Get the email template of the newsletter. If the newsletter has not customized its template ' .
+            'yet, returns the default template string instead of a template object.',
+        summary: 'Get the newsletter template',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the template object. If the newsletter has not customized its template, only the ' .
+            '`template` property (the default template string) is present.',
+        content: new Model(type: TemplateObject::class),
+    )]
     public function getNewsletterTemplate(Newsletter $newsletter): JsonResponse
     {
         $template = $this->templateService->getTemplate($newsletter);
@@ -47,6 +60,15 @@ class TemplateController extends AbstractController
 
     #[Route('/templates', methods: 'PATCH')]
     #[ScopeRequired(PostScope::TEMPLATES_WRITE)]
+    #[OA\Patch(
+        description: 'Updates (or creates, if none exists) the email template of the newsletter.',
+        summary: 'Update the newsletter template',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated template object.',
+        content: new Model(type: TemplateObject::class),
+    )]
     public function updateTemplate(
         Newsletter $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input,
@@ -67,6 +89,19 @@ class TemplateController extends AbstractController
 
     #[Route('/templates/render', methods: 'POST')]
     #[ScopeRequired(PostScope::TEMPLATES_READ)]
+    #[OA\Post(
+        description: 'Renders the given (or the newsletter\'s current) email template to HTML, using sample content.',
+        summary: 'Render a template preview',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the rendered HTML.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'html', type: 'string'),
+            ],
+        ),
+    )]
     public function renderTemplate(
         Newsletter $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input,

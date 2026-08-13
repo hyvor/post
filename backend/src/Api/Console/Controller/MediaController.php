@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
 class MediaController extends AbstractController
 {
@@ -66,6 +68,15 @@ class MediaController extends AbstractController
 
     #[Route('/media', methods: 'POST')]
     #[ScopeRequired(PostScope::MEDIA_WRITE)]
+    #[OA\Post(
+        description: 'Uploads a media file to the given folder. Allowed extensions and size limits depend on the folder.',
+        summary: 'Upload media',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the uploaded media object.',
+        content: new Model(type: MediaObject::class),
+    )]
     public function upload(
         Newsletter $newsletter,
         Request $request,

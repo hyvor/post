@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Approval;
 
-use App\Api\Console\Controller\ApprovalController;
+use App\Api\Console\Controller\Org\ApprovalController;
 use App\Api\Console\Object\ApprovalObject;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
@@ -26,8 +26,8 @@ class UpdateApprovalTest extends WebTestCase
             'social_links' => 'https://old-social.com',
             'other_info' => [
                 'type_of_content' => 'Old Type',
-                'frequency' => '1000/week'
-            ]
+                'frequency' => '1000/week',
+            ],
         ]);
 
         $response = $this->consoleApi(
@@ -41,7 +41,7 @@ class UpdateApprovalTest extends WebTestCase
                 'frequency' => null,
                 'why_post' => 'New reason for posting',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -88,7 +88,7 @@ class UpdateApprovalTest extends WebTestCase
             [
                 'company_name' => 'New Company',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -109,7 +109,7 @@ class UpdateApprovalTest extends WebTestCase
             [
                 'company_name' => 'New Company',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(422, $response->getStatusCode());

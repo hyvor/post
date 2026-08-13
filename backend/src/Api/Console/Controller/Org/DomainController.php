@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Console\Controller;
+namespace App\Api\Console\Controller\Org;
 
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
@@ -10,14 +10,16 @@ use App\Service\Domain\CreateDomainException;
 use App\Service\Domain\DeleteDomainException;
 use App\Service\Domain\DomainService;
 use App\Service\Domain\VerifyDomainException;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 
 class DomainController extends AbstractController
 {
@@ -40,6 +42,18 @@ class DomainController extends AbstractController
 
     #[Route('/domains', methods: 'GET')]
     #[OrgEndpoint]
+    #[OA\Get(
+        description: 'Get all sending domains registered by the current organization.',
+        summary: 'Get domains of the current organization',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of domains',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: DomainObject::class)),
+        ),
+    )]
     public function getDomains(ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domains = $this->domainService->getDomainsByOrganizationId($consoleAuth->getOrganizationId());
@@ -48,6 +62,15 @@ class DomainController extends AbstractController
 
     #[Route('/domains', methods: 'POST')]
     #[OrgEndpoint]
+    #[OA\Post(
+        description: 'Registers a new sending domain for the current organization. The domain must be verified before it can be used to send emails.',
+        summary: 'Create a domain',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created domain object.',
+        content: new Model(type: DomainObject::class),
+    )]
     public function createDomain(
         #[MapRequestPayload] CreateDomainInput $input,
         ConsoleAuthResults $consoleAuth,
@@ -80,6 +103,20 @@ class DomainController extends AbstractController
 
     #[Route('/domains/{id}/verify', methods: 'POST')]
     #[OrgEndpoint]
+    #[OA\Post(
+        description: 'Verifies the DNS records of a domain owned by the current organization.',
+        summary: 'Verify a domain',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the verification result and the domain object.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'data', type: 'object'),
+                new OA\Property(property: 'domain', ref: new Model(type: DomainObject::class)),
+            ],
+        ),
+    )]
     public function verifyDomain(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domain = $this->resolveDomainEntity($id);
@@ -105,6 +142,15 @@ class DomainController extends AbstractController
 
     #[Route('/domains/{id}', methods: 'DELETE')]
     #[OrgEndpoint]
+    #[OA\Delete(
+        description: 'Deletes a domain owned by the current organization.',
+        summary: 'Delete a domain',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
     public function deleteDomain(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domain = $this->resolveDomainEntity($id);

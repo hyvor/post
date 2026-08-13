@@ -10,11 +10,13 @@ use App\Api\Console\Object\SubscriberMetadataDefinitionObject;
 use App\Entity\Newsletter;
 use App\Entity\SubscriberMetadataDefinition;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
 class SubscriberMetadataController extends AbstractController
 {
@@ -25,6 +27,15 @@ class SubscriberMetadataController extends AbstractController
 
     #[Route('/subscriber-metadata-definitions', methods: 'POST')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Post(
+        description: 'Creates a new subscriber metadata definition for the newsletter.',
+        summary: 'Create a subscriber metadata definition',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created subscriber metadata definition object.',
+        content: new Model(type: SubscriberMetadataDefinitionObject::class),
+    )]
     public function createMetadata(
         Newsletter $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input,
@@ -52,6 +63,15 @@ class SubscriberMetadataController extends AbstractController
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Patch(
+        description: 'Updates the name of a subscriber metadata definition.',
+        summary: 'Update a subscriber metadata definition',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated subscriber metadata definition object.',
+        content: new Model(type: SubscriberMetadataDefinitionObject::class),
+    )]
     public function updateMetadata(
         SubscriberMetadataDefinition $metadataDefinition,
         #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input,
@@ -62,6 +82,15 @@ class SubscriberMetadataController extends AbstractController
 
     #[Route('/subscriber-metadata-definitions/{id}', methods: 'DELETE')]
     #[ScopeRequired(PostScope::SUBSCRIBERS_WRITE)]
+    #[OA\Delete(
+        description: 'Deletes a subscriber metadata definition. Subscriber metadata values for this key are also removed.',
+        summary: 'Delete a subscriber metadata definition',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
     public function deleteMetadata(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
     {
         $this->subscriberMetadataService->deleteMetadataDefinition($metadataDefinition);

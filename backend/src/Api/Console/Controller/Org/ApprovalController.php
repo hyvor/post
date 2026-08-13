@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Api\Console\Controller;
+namespace App\Api\Console\Controller\Org;
 
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Input\Approval\UpdateApprovalInput;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use App\Api\Console\Object\ApprovalObject;
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Service\Approval\Dto\UpdateApprovalDto;
-use Nelmio\ApiDocBundle\Attribute\Model;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use OpenApi\Attributes as OA;
 
 class ApprovalController extends AbstractController
 {
@@ -51,11 +49,6 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals', methods: 'POST')]
     #[OrgEndpoint]
-    #[OA\Response(
-        response: 200,
-        description: 'Approval created successfully',
-        content: new Model(type: ApprovalObject::class)
-    )]
     public function approve(
         #[MapRequestPayload] CreateApprovalInput $input,
         ConsoleAuthResults $consoleAuth,
@@ -97,7 +90,9 @@ class ApprovalController extends AbstractController
     ): JsonResponse {
         $approval = $this->resolveApproval($id);
 
-        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($consoleAuth->getOrganizationId());
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization(
+            $consoleAuth->getOrganizationId(),
+        );
         if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
             throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }
