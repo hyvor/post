@@ -54,7 +54,7 @@ class DomainController extends AbstractController
             items: new OA\Items(ref: new Model(type: DomainObject::class)),
         ),
     )]
-    public function getDomains(ConsoleAuthResults $consoleAuth): JsonResponse
+    public function list(ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domains = $this->domainService->getDomainsByOrganizationId($consoleAuth->getOrganizationId());
         return $this->json(array_map(fn(Domain $domain) => new DomainObject($domain), $domains));
@@ -71,7 +71,7 @@ class DomainController extends AbstractController
         description: 'Returns the created domain object.',
         content: new Model(type: DomainObject::class),
     )]
-    public function createDomain(
+    public function create(
         #[MapRequestPayload] CreateDomainInput $input,
         ConsoleAuthResults $consoleAuth,
     ): JsonResponse {
@@ -117,7 +117,7 @@ class DomainController extends AbstractController
             ],
         ),
     )]
-    public function verifyDomain(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
+    public function verify(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domain = $this->resolveDomainEntity($id);
 
@@ -151,7 +151,7 @@ class DomainController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteDomain(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
+    public function delete(string $id, ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $domain = $this->resolveDomainEntity($id);
 

@@ -36,7 +36,7 @@ class ListController extends AbstractController
         description: 'Returns the created list object.',
         content: new Model(type: ListObject::class),
     )]
-    public function createNewsletterList(
+    public function create(
         Newsletter $newsletter,
         #[MapRequestPayload] CreateListInput $input,
     ): JsonResponse {
@@ -73,7 +73,7 @@ class ListController extends AbstractController
         description: 'Returns the updated list object.',
         content: new Model(type: ListObject::class),
     )]
-    public function updateNewsletterList(
+    public function update(
         NewsletterList $list,
         #[MapRequestPayload] UpdateListInput $input,
     ): JsonResponse {
@@ -99,7 +99,7 @@ class ListController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteNewsletterList(NewsletterList $list): JsonResponse
+    public function delete(NewsletterList $list): JsonResponse
     {
         $this->newsletterListService->deleteNewsletterList($list);
         return $this->json([]);

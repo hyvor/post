@@ -59,7 +59,7 @@ class NewslettersController extends AbstractController
         description: 'Returns the created newsletter object.',
         content: new Model(type: NewsletterObject::class),
     )]
-    public function createNewsletter(
+    public function create(
         Request $request,
         #[MapRequestPayload] CreateNewsletterInput $input,
         ConsoleAuthResults $consoleAuth,

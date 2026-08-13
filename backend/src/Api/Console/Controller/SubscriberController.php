@@ -58,7 +58,7 @@ class SubscriberController extends AbstractController
             items: new OA\Items(ref: new Model(type: SubscriberObject::class)),
         ),
     )]
-    public function getSubscribers(Request $request, Newsletter $newsletter): JsonResponse
+    public function list(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -104,7 +104,7 @@ class SubscriberController extends AbstractController
         description: 'Returns the created or updated subscriber object.',
         content: new Model(type: SubscriberObject::class),
     )]
-    public function createSubscriber(
+    public function create(
         #[MapRequestPayload] CreateSubscriberInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
@@ -307,7 +307,7 @@ class SubscriberController extends AbstractController
             ],
         ),
     )]
-    public function getSubscriberByEmail(string $email, Newsletter $newsletter): JsonResponse
+    public function getByEmail(string $email, Newsletter $newsletter): JsonResponse
     {
         $subscriber = $this->subscriberService->getSubscriberByEmail($newsletter, $email);
 
@@ -349,7 +349,7 @@ class SubscriberController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteSubscriber(Subscriber $subscriber): JsonResponse
+    public function delete(Subscriber $subscriber): JsonResponse
     {
         $this->subscriberService->deleteSubscriber($subscriber);
         return $this->json([]);
@@ -376,7 +376,7 @@ class SubscriberController extends AbstractController
             ],
         ),
     )]
-    public function bulkActions(
+    public function bulk(
         Newsletter $newsletter,
         #[MapRequestPayload] BulkActionSubscriberInput $input,
     ): JsonResponse {

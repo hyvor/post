@@ -36,7 +36,7 @@ class NewsletterController extends AbstractController
         description: 'Returns the newsletter object.',
         content: new Model(type: NewsletterObject::class),
     )]
-    public function getNewsletter(Newsletter $newsletter): JsonResponse
+    public function get(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
@@ -52,7 +52,7 @@ class NewsletterController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteNewsletter(Newsletter $newsletter): JsonResponse
+    public function delete(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
         return $this->json([]);
@@ -69,7 +69,7 @@ class NewsletterController extends AbstractController
         description: 'Returns the updated newsletter object.',
         content: new Model(type: NewsletterObject::class),
     )]
-    public function updateNewsletter(
+    public function update(
         Newsletter $newsletter,
         #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input,
     ): JsonResponse {

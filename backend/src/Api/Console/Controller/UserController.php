@@ -44,7 +44,7 @@ class UserController extends AbstractController
             items: new OA\Items(ref: new Model(type: UserObject::class)),
         ),
     )]
-    public function getUsers(Newsletter $newsletter): JsonResponse
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService
             ->getNewsletterUsers($newsletter)
@@ -70,7 +70,7 @@ class UserController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteUser(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
+    public function delete(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
     {
         if ($input->user_id === null && $input->id === null) {
             throw new BadRequestHttpException('Either user_id or id is required');
@@ -97,7 +97,7 @@ class UserController extends AbstractController
         description: 'Returns the added (or already-existing, if `on_duplicate` is `ignore`) newsletter user object.',
         content: new Model(type: UserObject::class),
     )]
-    public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
+    public function create(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
         $hyvorUser = $this->auth->fromId($input->user_id);
 

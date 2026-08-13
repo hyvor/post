@@ -81,7 +81,7 @@ class ImportController extends AbstractController
         description: 'Returns the updated subscriber import object.',
         content: new Model(type: SubscriberImportObject::class),
     )]
-    public function import(
+    public function start(
         Newsletter $newsletter,
         SubscriberImport $subscriberImport,
         #[MapRequestPayload] ImportInput $input,
@@ -132,7 +132,7 @@ class ImportController extends AbstractController
             items: new OA\Items(ref: new Model(type: SubscriberImportObject::class)),
         ),
     )]
-    public function listImports(Newsletter $newsletter, Request $request): JsonResponse
+    public function list(Newsletter $newsletter, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 30);
         $offset = $request->query->getInt('offset', 0);
@@ -160,7 +160,7 @@ class ImportController extends AbstractController
             ],
         ),
     )]
-    public function importCounts(Newsletter $newsletter): JsonResponse
+    public function getLimits(Newsletter $newsletter): JsonResponse
     {
         $counts = $this->importService->getNewsletterImportCounts($newsletter);
 

@@ -64,7 +64,7 @@ class IssueController extends AbstractController
             items: new OA\Items(ref: new Model(type: IssueObject::class)),
         ),
     )]
-    public function getIssues(Request $request, Newsletter $newsletter): JsonResponse
+    public function list(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -88,7 +88,7 @@ class IssueController extends AbstractController
         description: 'Returns the created issue object.',
         content: new Model(type: IssueObject::class),
     )]
-    public function createIssue(Newsletter $newsletter): JsonResponse
+    public function create(Newsletter $newsletter): JsonResponse
     {
         $issue = $this->issueService->createIssueDraft($newsletter);
 
@@ -106,7 +106,7 @@ class IssueController extends AbstractController
         description: 'Returns the issue object.',
         content: new Model(type: IssueObject::class),
     )]
-    public function getById(Issue $issue): JsonResponse
+    public function get(Issue $issue): JsonResponse
     {
         return $this->json(
             new IssueObject(
@@ -127,7 +127,7 @@ class IssueController extends AbstractController
         description: 'Returns the updated issue object.',
         content: new Model(type: IssueObject::class),
     )]
-    public function updateIssue(
+    public function update(
         Issue $issue,
         Newsletter $newsletter,
         #[MapRequestPayload] UpdateIssueInput $input,
@@ -186,7 +186,7 @@ class IssueController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteIssue(Issue $issue): JsonResponse
+    public function delete(Issue $issue): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -224,7 +224,7 @@ class IssueController extends AbstractController
             ],
         ),
     )]
-    public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
+    public function send(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -386,7 +386,7 @@ class IssueController extends AbstractController
             ],
         ),
     )]
-    public function previewIssue(Issue $issue): JsonResponse
+    public function preview(Issue $issue): JsonResponse
     {
         try {
             $preview = $this->htmlTemplateRenderer->renderFromIssue($issue);
@@ -411,7 +411,7 @@ class IssueController extends AbstractController
         description: 'Returns the issue sending progress.',
         content: new OA\JsonContent(type: 'object'),
     )]
-    public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
+    public function getProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
         return $this->json($progress);
@@ -431,7 +431,7 @@ class IssueController extends AbstractController
             items: new OA\Items(ref: new Model(type: SendObject::class)),
         ),
     )]
-    public function getIssueSends(Request $request, Issue $issue): JsonResponse
+    public function listSends(Request $request, Issue $issue): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -466,7 +466,7 @@ class IssueController extends AbstractController
             ],
         ),
     )]
-    public function getIssueReport(Issue $issue): JsonResponse
+    public function getReport(Issue $issue): JsonResponse
     {
         $counts = $this->sendService->getIssueStats($issue, full: true);
         return $this->json(

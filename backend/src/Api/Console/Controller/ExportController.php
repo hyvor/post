@@ -32,7 +32,7 @@ class ExportController extends AbstractController
         description: 'Returns the created subscriber export object.',
         content: new Model(type: SubscriberExportObject::class),
     )]
-    public function exportSubscribers(Newsletter $newsletter): JsonResponse
+    public function create(Newsletter $newsletter): JsonResponse
     {
         $subscriberExport = $this->subscriberService->exportSubscribers($newsletter);
         return $this->json(new SubscriberExportObject($subscriberExport, null));
@@ -52,7 +52,7 @@ class ExportController extends AbstractController
             items: new OA\Items(ref: new Model(type: SubscriberExportObject::class)),
         ),
     )]
-    public function listExports(Newsletter $newsletter): JsonResponse
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $exports = $this->subscriberService->getExports($newsletter);
         $exportObjects = array_map(function ($export) {

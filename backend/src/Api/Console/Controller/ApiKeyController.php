@@ -33,7 +33,7 @@ class ApiKeyController extends AbstractController
         description: 'Returns the created API key object. The `key` property is the raw key, which is only returned once.',
         content: new Model(type: ApiKeyObject::class),
     )]
-    public function createApiKey(#[MapRequestPayload] CreateApiKeyInput $input, Newsletter $newsletter): JsonResponse
+    public function create(#[MapRequestPayload] CreateApiKeyInput $input, Newsletter $newsletter): JsonResponse
     {
         $apiKeysCount = count($this->apiKeyService->getApiKeysForNewsletter($newsletter));
         if ($apiKeysCount >= ApiKeyService::MAX_API_KEY_PER_NEWSLETTER) {
@@ -56,7 +56,7 @@ class ApiKeyController extends AbstractController
             items: new OA\Items(ref: new Model(type: ApiKeyObject::class)),
         ),
     )]
-    public function getApiKeys(Newsletter $newsletter): JsonResponse
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $apiKeys = $this->apiKeyService->getApiKeysForNewsletter($newsletter);
         $apiKeyObjects = array_map(fn(ApiKey $apiKey) => new ApiKeyObject($apiKey), $apiKeys);
@@ -72,7 +72,7 @@ class ApiKeyController extends AbstractController
         description: 'Returns the updated API key object.',
         content: new Model(type: ApiKeyObject::class),
     )]
-    public function updateApiKey(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
+    public function update(#[MapRequestPayload] UpdateApiKeyInput $input, ApiKey $apiKey): JsonResponse
     {
         $updates = new UpdateApiKeyDto();
         if ($input->has('is_enabled')) {
@@ -98,7 +98,7 @@ class ApiKeyController extends AbstractController
         description: 'Returns the API key object with the newly generated raw key.',
         content: new Model(type: ApiKeyObject::class),
     )]
-    public function regenerateApiKey(ApiKey $apiKey): JsonResponse
+    public function regenerate(ApiKey $apiKey): JsonResponse
     {
         $regeneration = $this->apiKeyService->regenerateApiKey($apiKey);
 
@@ -113,7 +113,7 @@ class ApiKeyController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteApiKey(ApiKey $apiKey): JsonResponse
+    public function delete(ApiKey $apiKey): JsonResponse
     {
         $this->apiKeyService->deleteApiKey($apiKey);
 

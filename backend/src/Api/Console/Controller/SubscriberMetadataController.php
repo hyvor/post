@@ -36,7 +36,7 @@ class SubscriberMetadataController extends AbstractController
         description: 'Returns the created subscriber metadata definition object.',
         content: new Model(type: SubscriberMetadataDefinitionObject::class),
     )]
-    public function createMetadata(
+    public function create(
         Newsletter $newsletter,
         #[MapRequestPayload] CreateSubscriberMetadataDefinitionInput $input,
     ): JsonResponse {
@@ -72,7 +72,7 @@ class SubscriberMetadataController extends AbstractController
         description: 'Returns the updated subscriber metadata definition object.',
         content: new Model(type: SubscriberMetadataDefinitionObject::class),
     )]
-    public function updateMetadata(
+    public function update(
         SubscriberMetadataDefinition $metadataDefinition,
         #[MapRequestPayload] UpdateSubscriberMetadataDefinitionInput $input,
     ): JsonResponse {
@@ -91,7 +91,7 @@ class SubscriberMetadataController extends AbstractController
         description: 'Returns an empty object on success.',
         content: new OA\JsonContent(),
     )]
-    public function deleteMetadata(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
+    public function delete(SubscriberMetadataDefinition $metadataDefinition): JsonResponse
     {
         $this->subscriberMetadataService->deleteMetadataDefinition($metadataDefinition);
         return $this->json([]);

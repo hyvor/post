@@ -44,7 +44,7 @@ class TemplateController extends AbstractController
             '`template` property (the default template string) is present.',
         content: new Model(type: TemplateObject::class),
     )]
-    public function getNewsletterTemplate(Newsletter $newsletter): JsonResponse
+    public function get(Newsletter $newsletter): JsonResponse
     {
         $template = $this->templateService->getTemplate($newsletter);
 
@@ -69,7 +69,7 @@ class TemplateController extends AbstractController
         description: 'Returns the updated template object.',
         content: new Model(type: TemplateObject::class),
     )]
-    public function updateTemplate(
+    public function update(
         Newsletter $newsletter,
         #[MapRequestPayload] UpdateTemplateInput $input,
     ): JsonResponse {
@@ -102,7 +102,7 @@ class TemplateController extends AbstractController
             ],
         ),
     )]
-    public function renderTemplate(
+    public function preview(
         Newsletter $newsletter,
         #[MapRequestPayload] RenderTemplateInput $input,
     ): JsonResponse {

@@ -55,7 +55,7 @@ class SendingProfileController extends AbstractController
             items: new OA\Items(ref: new Model(type: SendingProfileObject::class))
         )
     )]
-    public function getSendingProfiles(Newsletter $newsletter): JsonResponse
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
             fn(SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
@@ -75,7 +75,7 @@ class SendingProfileController extends AbstractController
         description: 'Sending profile created successfully',
         content: new Model(type: SendingProfileObject::class)
     )]
-    public function createSendingProfile(
+    public function create(
         #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
@@ -105,7 +105,7 @@ class SendingProfileController extends AbstractController
         description: 'Sending profile updated successfully',
         content: new Model(type: SendingProfileObject::class)
     )]
-    public function updateSendingProfile(
+    public function update(
         SendingProfile $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input,
     ): JsonResponse {
@@ -159,7 +159,7 @@ class SendingProfileController extends AbstractController
             items: new OA\Items(ref: new Model(type: SendingProfileObject::class))
         )
     )]
-    public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
+    public function delete(SendingProfile $sendingProfile): JsonResponse
     {
         if ($sendingProfile->getIsSystem()) {
             throw new BadRequestHttpException("Cannot delete system sending profile");

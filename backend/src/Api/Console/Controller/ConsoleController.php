@@ -47,7 +47,7 @@ class ConsoleController extends AbstractController
     ) {}
 
     #[Route('/init', methods: 'GET')]
-    public function initConsole(Request $request): JsonResponse
+    public function init(Request $request): JsonResponse
     {
         $me = $this->auth->me($request);
 

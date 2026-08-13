@@ -37,7 +37,7 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals', methods: 'GET')]
     #[OrgEndpoint]
-    public function getApproval(ConsoleAuthResults $consoleAuth): JsonResponse
+    public function get(ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $organization = $consoleAuth->getOrganizationId();
         $approval = $this->approvalService->getApprovalOfOrganization($organization);
@@ -49,7 +49,7 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals', methods: 'POST')]
     #[OrgEndpoint]
-    public function approve(
+    public function create(
         #[MapRequestPayload] CreateApprovalInput $input,
         ConsoleAuthResults $consoleAuth,
     ): JsonResponse {
@@ -83,7 +83,7 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals/{id}', methods: 'PATCH')]
     #[OrgEndpoint]
-    public function updateApproval(
+    public function update(
         string $id,
         #[MapRequestPayload] UpdateApprovalInput $input,
         ConsoleAuthResults $consoleAuth,
