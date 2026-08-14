@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Controller\SubscribersController;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\App\Messenger\MessageTransport;
 use App\Service\Subscriber\ConfirmationMail\SendConfirmationMailMessage;
@@ -11,7 +11,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscribersController::class)]
 class ResendOptInTest extends WebTestCase
 {
 

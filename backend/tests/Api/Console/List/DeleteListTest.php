@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\List;
 
-use App\Api\Console\Controller\ListController;
+use App\Api\Console\Controller\ListsController;
 use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
@@ -13,7 +13,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
-#[CoversClass(ListController::class)]
+#[CoversClass(ListsController::class)]
 #[CoversClass(NewsletterListService::class)]
 #[CoversClass(NewsletterList::class)]
 class DeleteListTest extends WebTestCase
@@ -30,7 +30,7 @@ class DeleteListTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $newsletterList = NewsletterListFactory::createOne([
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $newsletterListId = $newsletterList->getId();
@@ -38,7 +38,7 @@ class DeleteListTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/lists/' . $newsletterList->getId()
+            '/lists/' . $newsletterList->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -64,7 +64,7 @@ class DeleteListTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/lists/1'
+            '/lists/1',
         );
 
         $this->assertSame(404, $response->getStatusCode());

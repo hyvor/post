@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\RelayDomainStatus;
 use App\Service\Template\HtmlTemplateRenderer;
@@ -12,9 +12,10 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
+
 use function Zenstruck\Foundry\Persistence\refresh;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(HtmlTemplateRenderer::class)]
 class SendTestIssueTest extends WebTestCase
 {
@@ -22,7 +23,6 @@ class SendTestIssueTest extends WebTestCase
     public function test_send_test(): void
     {
         $callback = function ($method, $url, $options): JsonMockResponse {
-
             $this->assertSame('POST', $method);
             $this->assertSame('https://relay.hyvor.com/api/console/sends', $url);
             $body = json_decode($options['body'], true);
@@ -37,14 +37,14 @@ class SendTestIssueTest extends WebTestCase
         DomainFactory::createOne([
             'organization_id' => $newsletter->getOrganizationId(),
             'domain' => 'hyvor.com',
-            'relay_status' => RelayDomainStatus::ACTIVE
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
-                'status' => IssueStatus::DRAFT
-            ]
+                'status' => IssueStatus::DRAFT,
+            ],
         );
 
         $this->consoleApi(
@@ -54,9 +54,9 @@ class SendTestIssueTest extends WebTestCase
             [
                 'emails' => [
                     'thibault@hyvor.com',
-                    'nadil@hyvor.com'
-                ]
-            ]
+                    'nadil@hyvor.com',
+                ],
+            ],
         );
 
         $this->assertResponseIsSuccessful();
@@ -73,8 +73,8 @@ class SendTestIssueTest extends WebTestCase
             [
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
-                'status' => IssueStatus::DRAFT
-            ]
+                'status' => IssueStatus::DRAFT,
+            ],
         );
 
         $response = $this->consoleApi(
@@ -84,9 +84,9 @@ class SendTestIssueTest extends WebTestCase
             [
                 'emails' => [
                     'nadil@hyvor.com',
-                    'thibault'
-                ]
-            ]
+                    'thibault',
+                ],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -99,15 +99,15 @@ class SendTestIssueTest extends WebTestCase
         DomainFactory::createOne([
             'organization_id' => $newsletter->getOrganizationId(),
             'domain' => 'hyvor.com',
-            'relay_status' => RelayDomainStatus::ACTIVE
+            'relay_status' => RelayDomainStatus::ACTIVE,
         ]);
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
                 'subject' => 'Test subject',
                 'status' => IssueStatus::DRAFT,
-                'test_emails_sent' => 10
-            ]
+                'test_emails_sent' => 10,
+            ],
         );
 
         $this->consoleApi(
@@ -117,12 +117,15 @@ class SendTestIssueTest extends WebTestCase
             [
                 'emails' => [
                     'nadil@hyvor.com',
-                    'nadil@example.com'
-                ]
-            ]
+                    'nadil@example.com',
+                ],
+            ],
         );
 
-        $this->assertResponseFailed(422, 'Test emails can only be sent to verified domains or emails of newsletter users.');
+        $this->assertResponseFailed(
+            422,
+            'Test emails can only be sent to verified domains or emails of newsletter users.',
+        );
         $this->assertSame(10, refresh($issue)->getTestEmailsSent());
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Controller\SubscribersController;
 use App\Api\Console\Input\Subscriber\CreateSubscriberInput;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberListRemoval;
@@ -32,7 +32,7 @@ use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 use function Zenstruck\Foundry\Persistence\refresh;
 
-#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscribersController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberCreatedEvent::class)]
 #[CoversClass(SubscriberUpdatingEvent::class)]

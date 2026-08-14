@@ -24,7 +24,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
-class ImportController extends AbstractController
+class ImportsController extends AbstractController
 {
     public function __construct(
         private ImportService $importService,
@@ -36,7 +36,7 @@ class ImportController extends AbstractController
     #[ScopeRequired(PostScope::DATA_WRITE)]
     #[OA\Post(
         description: 'Uploads a CSV file of subscribers to import. Returns the parsed fields and row count so that ' .
-            'the fields can be mapped before starting the import.',
+        'the fields can be mapped before starting the import.',
         summary: 'Upload a subscriber import file',
     )]
     #[OA\Response(

@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console\ApiKey;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Controller\ApiKeyController;
+use App\Api\Console\Controller\ApiKeysController;
 use App\Api\Console\Object\ApiKeyObject;
 use App\Entity\ApiKey;
 use App\Service\ApiKey\ApiKeyService;
@@ -12,7 +12,7 @@ use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ApiKeyController::class)]
+#[CoversClass(ApiKeysController::class)]
 #[CoversClass(ApiKeyService::class)]
 #[CoversClass(PostScope::class)]
 #[CoversClass(ApiKeyObject::class)]
@@ -26,7 +26,7 @@ class DeleteApiKeyTest extends WebTestCase
             [
                 'newsletter' => $newsletter,
                 'is_enabled' => true,
-            ]
+            ],
         );
 
         $apiKeyId = $apiKey->getId();
@@ -34,7 +34,7 @@ class DeleteApiKeyTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/api-keys/' . $apiKey->getId()
+            '/api-keys/' . $apiKey->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -50,7 +50,7 @@ class DeleteApiKeyTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/api-keys/999999'
+            '/api-keys/999999',
         );
 
         $this->assertSame(404, $response->getStatusCode());

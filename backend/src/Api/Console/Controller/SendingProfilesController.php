@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 
-class SendingProfileController extends AbstractController
+class SendingProfilesController extends AbstractController
 {
     public function __construct(
         private SendingProfileService $sendingProfileService,
@@ -52,7 +52,7 @@ class SendingProfileController extends AbstractController
         description: 'List of sending profiles',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: SendingProfileObject::class))
+            items: new OA\Items(ref: new Model(type: SendingProfileObject::class)),
         )
     )]
     public function list(Newsletter $newsletter): JsonResponse
@@ -156,7 +156,7 @@ class SendingProfileController extends AbstractController
         description: 'Returns the remaining sending profiles of the newsletter.',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: SendingProfileObject::class))
+            items: new OA\Items(ref: new Model(type: SendingProfileObject::class)),
         )
     )]
     public function delete(SendingProfile $sendingProfile): JsonResponse

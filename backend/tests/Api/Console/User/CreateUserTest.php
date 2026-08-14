@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\User;
 
-use App\Api\Console\Controller\UserController;
+use App\Api\Console\Controller\UsersController;
 use App\Api\Console\Object\UserObject;
 use App\Service\User\UserService;
 use App\Tests\Case\WebTestCase;
@@ -13,7 +13,7 @@ use Hyvor\Internal\Bundle\Comms\Event\ToCore\Organization\VerifyMemberResponse;
 use Hyvor\Internal\Bundle\Comms\Exception\CommsApiFailedException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(UserController::class)]
+#[CoversClass(UsersController::class)]
 #[CoversClass(UserService::class)]
 #[CoversClass(UserObject::class)]
 class CreateUserTest extends WebTestCase
@@ -32,7 +32,7 @@ class CreateUserTest extends WebTestCase
             '/users',
             [
                 'user_id' => 53,
-            ]
+            ],
         );
 
         $this->assertResponseIsSuccessful();
@@ -59,7 +59,7 @@ class CreateUserTest extends WebTestCase
             '/users',
             [
                 'user_id' => 53,
-            ]
+            ],
         );
 
         $this->assertResponseFailed(400, "User is already added to the newsletter");
@@ -84,7 +84,7 @@ class CreateUserTest extends WebTestCase
             [
                 'user_id' => 53,
                 'on_duplicate' => 'throw',
-            ]
+            ],
         );
 
         $this->assertResponseFailed(400, "User is already added to the newsletter");
@@ -105,7 +105,7 @@ class CreateUserTest extends WebTestCase
             [
                 'user_id' => 53,
                 'on_duplicate' => 'ignore',
-            ]
+            ],
         );
 
         $this->assertResponseIsSuccessful();
@@ -128,7 +128,7 @@ class CreateUserTest extends WebTestCase
             '/users',
             [
                 'user_id' => 53,
-            ]
+            ],
         );
 
         $this->assertResponseFailed(400, 'Unable to find the user in the organization');
@@ -148,7 +148,7 @@ class CreateUserTest extends WebTestCase
             '/users',
             [
                 'user_id' => 53,
-            ]
+            ],
         );
 
         $this->assertResponseFailed(400, 'Unable to verify the user. Please try again later.');

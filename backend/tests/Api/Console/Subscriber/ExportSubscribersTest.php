@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\ExportController;
+use App\Api\Console\Controller\ExportsController;
 use App\Entity\SubscriberExport;
 use App\Entity\Type\SubscriberExportStatus;
 use App\Service\Subscriber\SubscriberService;
@@ -12,7 +12,7 @@ use App\Tests\Factory\SubscriberExportFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ExportController::class)]
+#[CoversClass(ExportsController::class)]
 #[CoversClass(SubscriberService::class)]
 class ExportSubscribersTest extends WebTestCase
 {
@@ -28,7 +28,7 @@ class ExportSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            '/export'
+            '/export',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -37,15 +37,16 @@ class ExportSubscribersTest extends WebTestCase
 
         $subscriberExport = $this->em->getRepository(SubscriberExport::class)->findOneBy(
             [
-                'newsletter' => $newsletter->getId()
-            ]
+                'newsletter' => $newsletter->getId(),
+            ],
         );
         $this->assertNotNull($subscriberExport);
         $this->assertSame(SubscriberExportStatus::PENDING, $subscriberExport->getStatus());
 
         $this->transport('async')->throwExceptions()->process();
 
-        $subscriberExport = $this->em->getRepository(SubscriberExport::class)
+        $subscriberExport = $this->em
+            ->getRepository(SubscriberExport::class)
             ->findOneBy(['newsletter' => $newsletter->getId()]);
         $this->assertNotNull($subscriberExport);
         $this->assertNotNull($subscriberExport->getMedia());
@@ -64,7 +65,7 @@ class ExportSubscribersTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/export'
+            '/export',
         );
 
         $this->assertSame(200, $response->getStatusCode());

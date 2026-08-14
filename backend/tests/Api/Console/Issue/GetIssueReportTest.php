@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Entity\Type\IssueStatus;
 use App\Entity\Type\SendStatus;
 use App\Service\Issue\IssueService;
@@ -13,7 +13,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueService::class)]
 class GetIssueReportTest extends WebTestCase
 {
@@ -28,14 +28,14 @@ class GetIssueReportTest extends WebTestCase
             [
                 'newsletter' => $newsletter,
                 'total_sendable' => 1,
-            ]
+            ],
         );
 
         $send = SendFactory::createOne(
             [
                 'issue' => $issue,
-                'status' => SendStatus::SENT
-            ]
+                'status' => SendStatus::SENT,
+            ],
         );
 
         $response = $this->consoleApi(

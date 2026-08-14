@@ -35,7 +35,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
-class IssueController extends AbstractController
+class IssuesController extends AbstractController
 {
 
     public function __construct(
@@ -199,7 +199,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(PostScope::ISSUES_WRITE)]
     #[OA\Post(
         description: 'Sends a draft issue to its subscribers. Validates the issue, license, and monthly email ' .
-            'limits before queuing the send.',
+        'limits before queuing the send.',
         summary: 'Send an issue',
     )]
     #[OA\Response(
@@ -295,7 +295,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(PostScope::ISSUES_WRITE)]
     #[OA\Get(
         description: 'Get data useful for sending a test email of an issue: verified domains, and suggested and ' .
-            'previously used test email addresses.',
+        'previously used test email addresses.',
         summary: 'Get issue test data',
     )]
     #[OA\Response(
@@ -329,7 +329,7 @@ class IssueController extends AbstractController
     #[ScopeRequired(PostScope::ISSUES_WRITE)]
     #[OA\Post(
         description: 'Sends a test email of a draft issue to the given email addresses. Test emails can only be ' .
-            'sent to verified domains or emails of newsletter users.',
+        'sent to verified domains or emails of newsletter users.',
         summary: 'Send a test issue email',
     )]
     #[OA\Response(

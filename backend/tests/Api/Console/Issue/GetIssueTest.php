@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Api\Console\Object\IssueObject;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -10,7 +10,7 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueObject::class)]
 class GetIssueTest extends WebTestCase
 {
@@ -26,7 +26,7 @@ class GetIssueTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId()
+            "/issues/" . $issue->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -53,7 +53,7 @@ class GetIssueTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues/999',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(404, $response->getStatusCode());
@@ -72,7 +72,7 @@ class GetIssueTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter2,
             'GET',
-            "/issues/" . $issue->getId()
+            "/issues/" . $issue->getId(),
         );
 
         $this->assertSame(403, $response->getStatusCode());

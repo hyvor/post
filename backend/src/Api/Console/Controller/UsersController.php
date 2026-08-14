@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 
-class UserController extends AbstractController
+class UsersController extends AbstractController
 {
     public function __construct(
         private AuthInterface $auth,

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Controller\SubscribersController;
 use App\Entity\Subscriber;
 use App\Repository\SubscriberRepository;
 use App\Service\Subscriber\SubscriberService;
@@ -12,7 +12,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscribersController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
@@ -37,7 +37,7 @@ class DeleteSubscriberTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/subscribers/' . $subscriber->getId()
+            '/subscribers/' . $subscriber->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -54,7 +54,7 @@ class DeleteSubscriberTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/subscribers/1'
+            '/subscribers/1',
         );
 
         $this->assertSame(404, $response->getStatusCode());
@@ -75,7 +75,7 @@ class DeleteSubscriberTest extends WebTestCase
         $response = $this->consoleApi(
             $otherNewsletter,
             'DELETE',
-            '/subscribers/' . $subscriber->getId()
+            '/subscribers/' . $subscriber->getId(),
         );
 
         $this->assertSame(403, $response->getStatusCode());

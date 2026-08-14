@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
-class ApiKeyController extends AbstractController
+class ApiKeysController extends AbstractController
 {
     public function __construct(
         private ApiKeyService $apiKeyService,

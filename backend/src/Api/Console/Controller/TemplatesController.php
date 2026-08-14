@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
-class TemplateController extends AbstractController
+class TemplatesController extends AbstractController
 {
     public function __construct(
         private TemplateService $templateService,
@@ -35,13 +35,13 @@ class TemplateController extends AbstractController
     #[ScopeRequired(PostScope::TEMPLATES_READ)]
     #[OA\Get(
         description: 'Get the email template of the newsletter. If the newsletter has not customized its template ' .
-            'yet, returns the default template string instead of a template object.',
+        'yet, returns the default template string instead of a template object.',
         summary: 'Get the newsletter template',
     )]
     #[OA\Response(
         response: 200,
         description: 'Returns the template object. If the newsletter has not customized its template, only the ' .
-            '`template` property (the default template string) is present.',
+        '`template` property (the default template string) is present.',
         content: new Model(type: TemplateObject::class),
     )]
     public function get(Newsletter $newsletter): JsonResponse

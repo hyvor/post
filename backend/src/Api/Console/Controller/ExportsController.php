@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
-class ExportController extends AbstractController
+class ExportsController extends AbstractController
 {
     public function __construct(
         private SubscriberService $subscriberService,

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Api\Console\Object\SendObject;
 use App\Service\Issue\SendService;
 use App\Tests\Case\WebTestCase;
@@ -13,7 +13,7 @@ use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(SendService::class)]
 #[CoversClass(SendObject::class)]
 class GetSendsTest extends WebTestCase
@@ -26,26 +26,26 @@ class GetSendsTest extends WebTestCase
 
         $subscriber = SubscriberFactory::createOne([
             'newsletter' => $newsletter,
-            'lists' => [$list]
+            'lists' => [$list],
         ]);
 
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-            ]
+            ],
         );
 
         $send = SendFactory::createOne(
             [
                 'issue' => $issue,
                 'subscriber' => $subscriber,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId() . "/sends"
+            "/issues/" . $issue->getId() . "/sends",
         );
         $this->assertSame(200, $response->getStatusCode());
         /** @var array<int, array<string, mixed>> $json */
@@ -63,20 +63,20 @@ class GetSendsTest extends WebTestCase
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-            ]
+            ],
         );
 
         SendFactory::createMany(
             10,
             [
                 'issue' => $issue,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId() . "/sends?limit=5"
+            "/issues/" . $issue->getId() . "/sends?limit=5",
         );
         $this->assertSame(200, $response->getStatusCode());
         $json = $this->getJson();
@@ -91,27 +91,27 @@ class GetSendsTest extends WebTestCase
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-            ]
+            ],
         );
 
         $send1 = SendFactory::createOne(
             [
                 'issue' => $issue,
-                'email' => 'thibault@hyvor.com'
-            ]
+                'email' => 'thibault@hyvor.com',
+            ],
         );
 
         $send2 = SendFactory::createOne(
             [
                 'issue' => $issue,
-                'email' => 'supun@hyvor.com'
-            ]
+                'email' => 'supun@hyvor.com',
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId() . "/sends?search=thibault"
+            "/issues/" . $issue->getId() . "/sends?search=thibault",
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -129,28 +129,28 @@ class GetSendsTest extends WebTestCase
         $issue = IssueFactory::createOne(
             [
                 'newsletter' => $newsletter,
-            ]
+            ],
         );
 
         $send1 = SendFactory::createOne(
             [
                 'issue' => $issue,
                 'email' => 'thibault@hyvor.com',
-                'bounced_at' => new \DateTimeImmutable()
-            ]
+                'bounced_at' => new \DateTimeImmutable(),
+            ],
         );
 
         $send2 = SendFactory::createOne(
             [
                 'issue' => $issue,
-                'email' => 'supun@hyvor.com'
-            ]
+                'email' => 'supun@hyvor.com',
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            "/issues/" . $issue->getId() . "/sends?type=bounced"
+            "/issues/" . $issue->getId() . "/sends?type=bounced",
         );
 
         $this->assertSame(200, $response->getStatusCode());

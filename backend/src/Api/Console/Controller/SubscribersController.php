@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 
-class SubscriberController extends AbstractController
+class SubscribersController extends AbstractController
 {
 
     public function __construct(
