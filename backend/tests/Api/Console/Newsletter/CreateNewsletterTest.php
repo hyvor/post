@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Newsletter;
 
-use App\Api\Console\Controller\NewsletterController;
+use App\Api\Console\Controller\Org\NewslettersController;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
@@ -16,11 +16,10 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
 use Hyvor\Internal\Component\Component;
-use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
-#[CoversClass(NewsletterController::class)]
+#[CoversClass(NewslettersController::class)]
 #[CoversClass(NewsletterService::class)]
 #[CoversClass(NewsletterRepository::class)]
 #[CoversClass(Newsletter::class)]
