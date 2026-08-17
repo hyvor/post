@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Accordion, Callout, CodeBlock } from '@hyvor/design/components';
+	import { Callout, CodeBlock } from '@hyvor/design/components';
+	import { Accordion } from '@hyvor/design/marketing';
 </script>
 
 <h1>Console API</h1>

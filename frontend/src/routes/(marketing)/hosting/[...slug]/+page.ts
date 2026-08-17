@@ -1,17 +1,11 @@
-import { error } from '@sveltejs/kit';
-import { pages } from '../hosting';
+import { loadDocsPage } from '@hyvor/design/marketing';
+import { sections } from '../hosting';
 
-export async function load({ params }: { params: { slug?: string } }) {
-	const slug = params.slug;
-	const page = slug === undefined ? pages[0] : pages.find((p) => p.slug === slug);
-
-	if (!page) {
-		error(404, 'Not found');
-	}
-
-	return {
-		slug: params.slug,
-		name: page.name,
-		component: page.component
-	};
+export async function load({ params }) {
+	return loadDocsPage({
+		basepath: '/hosting',
+		rootName: 'Hosting',
+		sections,
+		slug: params.slug
+	});
 }

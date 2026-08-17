@@ -35,10 +35,12 @@
 
 <div class="wrap">
 	{#if $currentIssueStore.status === 'failed'}
-		<Callout type="danger" style="margin-bottom:20px;">
-			<IconExclamationTriangle />
-			There were some issues while sending this issue. Please contact support for more information.
-		</Callout>
+		<div style="margin-bottom:20px;">
+			<Callout type="danger">
+				<IconExclamationTriangle />
+				There were some issues while sending this issue. Please contact support for more information.
+			</Callout>
+		</div>
 	{/if}
 	<div class="top">
 		<div class="left">

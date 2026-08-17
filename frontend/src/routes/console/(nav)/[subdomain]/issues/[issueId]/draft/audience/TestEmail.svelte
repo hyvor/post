@@ -13,7 +13,6 @@
     import {onMount} from 'svelte';
     import {getIssueTestData, sendIssueTest} from '../../../../../../lib/actions/issueActions';
     import {draftIssueEditingStore} from '../draftStore';
-    import {track} from '@hyvor/design/marketing';
 
     const I18n = getI18n();
 
