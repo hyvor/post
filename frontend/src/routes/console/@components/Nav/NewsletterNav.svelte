@@ -128,9 +128,7 @@
 
 			<NavLink
 				href={'/console/' + $newsletterStore.subdomain.toString() + '/install'}
-				active={page.url.pathname.startsWith(
-					`/console/${$newsletterStore.subdomain}/install`
-				)}
+				active={page.url.pathname.startsWith(`/console/${$newsletterStore.subdomain}/install`)}
 			>
 				<NavItem>
 					{#snippet icon()}
@@ -146,11 +144,7 @@
 
 	{#if $isEmbedded}
 		<div class="full-console">
-			<Button
-				as="a"
-				href={'/console/' + $newsletterStore.subdomain.toString()}
-				target="_blank"
-			>
+			<Button as="a" href={'/console/' + $newsletterStore.subdomain.toString()} target="_blank">
 				Hyvor Post Console
 				{#snippet end()}
 					<IconBoxArrowUpRight size={12} />

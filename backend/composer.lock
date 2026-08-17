@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8041f75a058a7c18ceaedbcf93f22106",
+    "content-hash": "64e8cb062be2aacf55129adc5fbec1c3",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2008,16 +2008,16 @@
         },
         {
             "name": "hyvor/internal",
-            "version": "4.1.0-beta.4",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyvor/internal.git",
-                "reference": "8f146aa18b821529629509fed90444804b3ebc64"
+                "reference": "55b91221ce3b6bf26ac37dbf9fad1b2673114c56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyvor/internal/zipball/8f146aa18b821529629509fed90444804b3ebc64",
-                "reference": "8f146aa18b821529629509fed90444804b3ebc64",
+                "url": "https://api.github.com/repos/hyvor/internal/zipball/55b91221ce3b6bf26ac37dbf9fad1b2673114c56",
+                "reference": "55b91221ce3b6bf26ac37dbf9fad1b2673114c56",
                 "shasum": ""
             },
             "require": {
@@ -2042,7 +2042,9 @@
                 "zenstruck/messenger-test": "^1.13"
             },
             "require-dev": {
-                "hyvor/sdk": "0.0.4",
+                "hyvor/sdk-core": "^0.1.4",
+                "hyvor/sdk-post": "^0.1.4",
+                "nelmio/api-doc-bundle": "^5.11",
                 "orchestra/testbench": "^11.0",
                 "phpstan/phpstan": "^2.1.7",
                 "phpunit/phpunit": "^13.0",
@@ -2078,9 +2080,9 @@
             "description": "Internal Package for HYVOR Applications",
             "support": {
                 "issues": "https://github.com/hyvor/internal/issues",
-                "source": "https://github.com/hyvor/internal/tree/4.1.0-beta.4"
+                "source": "https://github.com/hyvor/internal/tree/4.1.0"
             },
-            "time": "2026-07-29T18:27:31+00:00"
+            "time": "2026-08-17T17:20:23+00:00"
         },
         {
             "name": "hyvor/phrosemirror",

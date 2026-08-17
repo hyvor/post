@@ -123,21 +123,20 @@
 						<ul>
 							<li>
 								The archive site URL will change to <strong
-									>{getNewsletterArchiveUrlFromSubdomain(
-										$newsletterEditingStore.subdomain
-									).replace(/https?:\/\//, '')}</strong
+									>{getNewsletterArchiveUrlFromSubdomain($newsletterEditingStore.subdomain).replace(
+										/https?:\/\//,
+										''
+									)}</strong
 								>
 							</li>
 							<li>
 								The system <a
 									class="hds-link"
-									href={consoleUrlWithNewsletter('/settings/sending-profiles')}
-									>sending profile</a
+									href={consoleUrlWithNewsletter('/settings/sending-profiles')}>sending profile</a
 								>
 								email address will change to
 								<strong
-									>{$newsletterEditingStore.subdomain}@{appConfig.app
-										.default_email_domain}</strong
+									>{$newsletterEditingStore.subdomain}@{appConfig.app.default_email_domain}</strong
 								>
 							</li>
 						</ul>
@@ -150,9 +149,7 @@
 								}}
 								disabled={subdomainUpdating}>Cancel</Button
 							>
-							<Button onclick={handleChange} disabled={subdomainUpdating}
-								>Change subdomain</Button
-							>
+							<Button onclick={handleChange} disabled={subdomainUpdating}>Change subdomain</Button>
 						</div>
 					</Callout>
 				</div>
@@ -196,8 +193,8 @@
 		{#if $newsletterStore.metadata.hyvor_blogs_integration}
 			<br /><br />
 			<Callout type="info">
-				This newsletter was created via Hyvor Blogs integration. You cannot delete it from
-				here. Disconnect the newsletter from Hyvor Blogs to delete it.
+				This newsletter was created via Hyvor Blogs integration. You cannot delete it from here.
+				Disconnect the newsletter from Hyvor Blogs to delete it.
 			</Callout>
 		{/if}
 	</SplitControl>

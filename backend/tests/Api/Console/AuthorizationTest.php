@@ -3,6 +3,7 @@
 namespace App\Tests\Api\Console;
 
 use Hyvor\Internal\Auth\Oidc\Testing\OidcTestingUtils;
+use Hyvor\Internal\CloudApi\JwtSource\JwtSource;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Entity\ApiKey;
@@ -397,12 +398,12 @@ class AuthorizationTest extends WebTestCase
         $key = OidcTestingUtils::generateKey();
 
         $scopeBuilder = new ScopeBuilder();
-        $scopeBuilder->addScopes(Component::POST, PostScope::ISSUES_READ);
+        $scopeBuilder->addScopes(Component::POST, [PostScope::ISSUES_READ]);
 
         $jwt = $cloudApiService->createJwtToken(
-            $key,
             $orgId,
             $scopeBuilder,
+            JwtSource::forCloud('testkey'),
         );
 
         $this->client->request(
@@ -410,7 +411,7 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
             server: [
                 "HTTP_X_ORGANIZATION_ID" => $orgId,
-                "HTTP_X_NEWSLETTER_ID" => $newsletter->getId(),
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $jwt->encode($key['privateKeyPem'], 'testkey'),
             ],
         );
         $this->assertResponseStatusCodeSame(403);

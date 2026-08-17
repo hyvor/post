@@ -44,7 +44,7 @@ class FormController extends AbstractController
         if ($input->newsletter_id !== null) {
             $newsletter = $this->newsletterService->getNewsletterById($input->newsletter_id);
         } else {
-            $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
+            $newsletter = $this->newsletterService->getNewsletterBySubdomain((string)$input->newsletter_subdomain);
         }
 
         if (!$newsletter) {
@@ -118,7 +118,7 @@ class FormController extends AbstractController
                 $update,
                 // generally, this should not be used since we do not remove lists
                 // but sending just in case to prevent removals being marked as unsubscribes
-                ListRemovalReason::OTHER
+                ListRemovalReason::OTHER,
             );
         } else {
             $subscriber = $this->subscriberService->createSubscriber(
@@ -128,7 +128,7 @@ class FormController extends AbstractController
                 SubscriberStatus::PENDING,
                 SubscriberSource::FORM,
                 $ip,
-                sendConfirmationEmail: true
+                sendConfirmationEmail: true,
             );
         }
 

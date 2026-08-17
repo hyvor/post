@@ -14,9 +14,8 @@
 
 <ul>
 	<li>
-		Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>. Each
-		key must be granted one or more <a href="#api-keys">scopes</a>, which limit what it can
-		access.
+		Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>. Each key
+		must be granted one or more <a href="#api-keys">scopes</a>, which limit what it can access.
 	</li>
 	<li>The base URL: <code>https://post.hyvor.com/api/console</code></li>
 	<li>
@@ -126,8 +125,7 @@
 />
 
 <Callout type="warning">
-	This endpoint will soft-delete the newsletter, scheduling it for permanent deletion after 30
-	days.
+	This endpoint will soft-delete the newsletter, scheduling it for permanent deletion after 30 days.
 </Callout>
 
 <h3 id="issue">Issue</h3>
@@ -145,8 +143,7 @@
 		<a href="#preview-issue"><code>GET /issues/{'{id}'}/preview</code></a> - Preview an issue
 	</li>
 	<li>
-		<a href="#get-issue-progress"><code>GET /issues/{'{id}'}/progress</code></a> - Get issue sending
-		progress
+		<a href="#get-issue-progress"><code>GET /issues/{'{id}'}/progress</code></a> - Get issue sending progress
 	</li>
 	<li>
 		<a href="#get-issue-sends"><code>GET /issues/{'{id}'}/sends</code></a> - Get issue sends
@@ -387,8 +384,8 @@
 <ul>
 	<li><a href="#get-subscribers"><code>GET /subscribers</code></a> - Get subscribers</li>
 	<li>
-		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a
-		subscriber by email
+		<a href="#get-subscriber-by-email"><code>GET /subscribers/email/{'{email}'}</code></a> - Get a subscriber
+		by email
 	</li>
 	<li>
 		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
@@ -526,9 +523,9 @@
 
 <p>
 	<code>list_skip_resubscribe_on</code>: when adding an existing subscriber to a list they were
-	previously removed from, this setting controls which of the removal reasons below should block
-	the re-add. By default, previous unsubscribes, bounces, and complaints all block a re-add; pass
-	an empty array to always re-add regardless of why they left.
+	previously removed from, this setting controls which of the removal reasons below should block the
+	re-add. By default, previous unsubscribes, bounces, and complaints all block a re-add; pass an
+	empty array to always re-add regardless of why they left.
 </p>
 
 <p>
@@ -537,11 +534,11 @@
 
 <ul>
 	<li>
-		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be
-		removed from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
+		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be removed
+		from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
 		unsubscription, blocking future re-adds unless the re-add request's
-		<code>list_skip_resubscribe_on</code> excludes <code>unsubscribe</code>. Hyvor Post's
-		default unsubscribe form uses this.
+		<code>list_skip_resubscribe_on</code> excludes <code>unsubscribe</code>. Hyvor Post's default
+		unsubscribe form uses this.
 	</li>
 	<li>
 		<code>bounce</code> - recorded automatically when a send to the subscriber hard-bounces.
@@ -550,8 +547,8 @@
 		<code>complaint</code> - recorded automatically when the subscriber marks a send as spam.
 	</li>
 	<li>
-		<code>other</code> - use this reason if you want to remove the subscriber from the list without
-		recording it as one of the reasons above (does not block future re-adds by default).
+		<code>other</code> - use this reason if you want to remove the subscriber from the list without recording
+		it as one of the reasons above (does not block future re-adds by default).
 	</li>
 </ul>
 
@@ -561,8 +558,8 @@
 	<Accordion title="Creating or updating a subscriber">
 		<div>
 			This example creates a new subscriber with a subscription to the "Default" list. If a
-			subscriber exists in with the same email, they will be updated and their lists will be
-			set to only "Default" (overwriting existing lists).
+			subscriber exists in with the same email, they will be updated and their lists will be set to
+			only "Default" (overwriting existing lists).
 		</div>
 
 		<CodeBlock
@@ -579,8 +576,8 @@
 	<Accordion title="Adding a subscriber to a list without affecting their other lists">
 		<div>
 			Assuming you have a list with List ID 123, this example adds the subscriber to that list
-			without affecting their other list subscriptions. If the subscriber is already
-			subscribed to the list, no changes will be made.
+			without affecting their other list subscriptions. If the subscriber is already subscribed to
+			the list, no changes will be made.
 		</div>
 
 		<CodeBlock
@@ -615,9 +612,8 @@
 
 	<Accordion title="Adding a pending subscriber and sending a confirmation email">
 		<div>
-			This example creates a subscriber or updates an existing subscriber with "pending"
-			status, and will send a confirmation email to the subscriber asking them to confirm
-			their subscription.
+			This example creates a subscriber or updates an existing subscriber with "pending" status, and
+			will send a confirmation email to the subscriber asking them to confirm their subscription.
 		</div>
 		<CodeBlock
 			language="json"
@@ -634,9 +630,9 @@
 
 	<Accordion title="Resubscribing a subscriber who previously unsubscribed from a list">
 		<div>
-			By default, this endpoint ignores re-subscription attempts to lists that the subscriber
-			has previously unsubscribed from (or was removed from due to a bounce). This example
-			shows how to override that behavior.
+			By default, this endpoint ignores re-subscription attempts to lists that the subscriber has
+			previously unsubscribed from (or was removed from due to a bounce). This example shows how to
+			override that behavior.
 		</div>
 		<CodeBlock
 			language="json"
@@ -802,12 +798,12 @@
 		<a href="#create-sending-profile"><code>POST /sending-profiles</code></a> - Create a sending profile
 	</li>
 	<li>
-		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a
-		sending profile
+		<a href="#update-sending-profile"><code>PATCH /sending-profiles/{'{id}'}</code></a> - Update a sending
+		profile
 	</li>
 	<li>
-		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete
-		a sending profile
+		<a href="#delete-sending-profile"><code>DELETE /sending-profiles/{'{id}'}</code></a> - Delete a sending
+		profile
 	</li>
 </ul>
 
@@ -895,8 +891,8 @@ appearance of your newsletters.
 		<a href="#update-template"><code>PATCH /templates</code></a> - Update newsletter template
 	</li>
 	<li>
-		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template
-		with content
+		<a href="#render-template"><code>POST /templates/render</code></a> - Render newsletter template with
+		content
 	</li>
 </ul>
 
@@ -1005,8 +1001,7 @@ appearance of your newsletters.
 <Callout type="info">
 	<ul>
 		<li>
-			Returns a 400 error if the user is not a member of the organization that owns this
-			newsletter.
+			Returns a 400 error if the user is not a member of the organization that owns this newsletter.
 		</li>
 	</ul>
 </Callout>
@@ -1030,8 +1025,8 @@ appearance of your newsletters.
 <h3 id="api-keys">API Keys</h3>
 
 <p>
-	Every API key is granted one or more scopes, which limit what resources and actions it can
-	access. Available scopes:
+	Every API key is granted one or more scopes, which limit what resources and actions it can access.
+	Available scopes:
 </p>
 
 <ul>
@@ -1103,8 +1098,8 @@ appearance of your newsletters.
 />
 
 <Callout type="warning">
-	The <code>key</code> property (the raw key) is only returned once, on creation. Store it securely
-	- it cannot be retrieved again.
+	The <code>key</code> property (the raw key) is only returned once, on creation. Store it securely -
+	it cannot be retrieved again.
 </Callout>
 
 <h4 id="update-api-key">Update an API key</h4>

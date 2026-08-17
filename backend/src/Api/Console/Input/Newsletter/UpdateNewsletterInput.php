@@ -2,13 +2,14 @@
 
 namespace App\Api\Console\Input\Newsletter;
 
+use App\Api\Console\Object\NewsletterObject;
 use App\Service\Newsletter\Constraint\Subdomain;
 use App\Util\OptionalPropertyTrait;
 use Nelmio\ApiDocBundle\Attribute\Ignore;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(required: ['name'])]
-class UpdateNewsletterInput
+class UpdateNewsletterInput extends NewsletterObject
 {
     use OptionalPropertyTrait;
 
@@ -22,6 +23,13 @@ class UpdateNewsletterInput
      */
     #[Ignore]
     private array $setProperties = [];
+
+    public const UNUPDATABLE_PROPERTIES = [
+        'id',
+        'created_at',
+    ];
+
+    public function __construct() {}
 
     public function set(string $property, mixed $value): void
     {

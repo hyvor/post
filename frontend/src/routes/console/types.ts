@@ -129,9 +129,8 @@ export type Newsletter = {
 
 	metadata: {
 		// set when newsletter is created via Hyvor Blogs integration
-		hyvor_blogs_integration?: 'true',
+		hyvor_blogs_integration?: 'true';
 	} & Record<string, string>;
-
 } & NewsletterMeta;
 
 export type NewsletterPermissions = {
