@@ -16,15 +16,17 @@ class HyvorPostForm extends HTMLElement {
 
 	connectedCallback() {
 		const newsletterSubdomain = this.getAttribute('newsletter');
+		const newsletterId = this.getAttribute('newsletter-id');
 
-		if (!newsletterSubdomain) {
-			throw new Error('project-uuid is required for Hyvor Post form.');
+		if (!newsletterSubdomain && !newsletterId) {
+			throw new Error('newsletter or newsletter-id is required for Hyvor Post form.');
 		}
 
 		this.form = mount(Form, {
 			target: this.shadowRoot!,
 			props: {
 				newsletterSubdomain,
+				newsletterId: !newsletterId ? null : parseInt(newsletterId),
 				instance: this.getAttribute('instance') || 'https://post.hyvor.com',
 				shadowRoot: this.shadowRoot!,
 				lists: this.getListsArr('lists'),

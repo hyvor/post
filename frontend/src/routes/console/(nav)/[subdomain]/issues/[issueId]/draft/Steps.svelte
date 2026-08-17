@@ -10,7 +10,6 @@
 	import { draftIssueEditingStore, draftStepStore } from './draftStore';
 	import { sendIssue } from '../../../../../lib/actions/issueActions';
 	import { canSendIssues, resolvedLicenseStore } from '../../../../../lib/stores/consoleStore';
-	import { track } from '@hyvor/design/marketing';
 
 	interface Props {
 		onStatusChange: () => void;
@@ -94,8 +93,6 @@
 				.then(() => {
 					toast.success(I18n.t('console.issues.draft.sendIssue.success'));
 					onStatusChange();
-
-					track.event('issue sent');
 				})
 				.catch((e) => {
 					if (e.message.includes('would_exceed_limit')) {

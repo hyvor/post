@@ -2,8 +2,8 @@
 
 namespace App\Tests\Api\Console\ApiKey;
 
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Controller\ApiKeyController;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use App\Api\Console\Controller\ApiKeysController;
 use App\Api\Console\Input\ApiKey\UpdateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
 use App\Entity\ApiKey;
@@ -13,7 +13,7 @@ use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ApiKeyController::class)]
+#[CoversClass(ApiKeysController::class)]
 #[CoversClass(ApiKeyService::class)]
 #[CoversClass(ApiKeyObject::class)]
 #[CoversClass(UpdateApiKeyInput::class)]
@@ -27,7 +27,7 @@ class UpdateApiKeyTest extends WebTestCase
             [
                 'newsletter' => $newsletter,
                 'is_enabled' => true,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
@@ -37,8 +37,8 @@ class UpdateApiKeyTest extends WebTestCase
             [
                 'is_enabled' => false,
                 'name' => 'Updated API Key',
-                'scopes' => [Scope::NEWSLETTER_READ, Scope::ISSUES_READ, Scope::ISSUES_WRITE]
-            ]
+                'scopes' => [PostScope::NEWSLETTER_READ, PostScope::ISSUES_READ, PostScope::ISSUES_WRITE],
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -56,9 +56,9 @@ class UpdateApiKeyTest extends WebTestCase
         $this->assertNotNull($apiKeyDb);
         $this->assertFalse($apiKeyDb->getIsEnabled());
         $this->assertCount(3, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::NEWSLETTER_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUES_READ->value, $apiKeyDb->getScopes());
-        $this->assertContains(Scope::ISSUES_WRITE->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::NEWSLETTER_READ->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::ISSUES_READ->value, $apiKeyDb->getScopes());
+        $this->assertContains(PostScope::ISSUES_WRITE->value, $apiKeyDb->getScopes());
         $this->assertSame('Updated API Key', $apiKeyDb->getName());
     }
 }

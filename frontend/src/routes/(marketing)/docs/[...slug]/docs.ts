@@ -1,69 +1,53 @@
 import EmailDesign from './content/EmailDesign.svelte';
 import Introduction from './content/Introduction.svelte';
-import type { Component } from 'svelte';
 import SignupForm from './content/SignupForm.svelte';
 import Import from './content/Import/Import.svelte';
 import ConsoleApi from './content/ConsoleApi.svelte';
+import type { NavSectionConfig } from '@hyvor/design/marketing';
 
-export const categories: Category[] = [
+export const sections: NavSectionConfig[] = [
 	{
-		name: 'Intro',
-		pages: [
+		navs: [
 			{
-				slug: '',
+				type: 'page',
 				name: 'Introduction',
-				component: Introduction
+				slug: '',
+				content: Introduction
 			}
 		]
 	},
-
 	{
 		name: 'Features',
-		pages: [
+		navs: [
 			{
-				slug: 'form',
+				type: 'page',
 				name: 'Signup Form',
-				component: SignupForm
+				slug: 'form',
+				content: SignupForm
 			},
 			{
-				slug: 'design',
+				type: 'page',
 				name: 'Email Design',
-				component: EmailDesign
+				slug: 'design',
+				content: EmailDesign
 			},
 			{
-				slug: 'import',
+				type: 'page',
 				name: 'Import',
-				component: Import
+				slug: 'import',
+				content: Import
 			}
 		]
 	},
 	{
 		name: 'Developer',
-		pages: [
-			// {
-			// 	slug: 'webhooks',
-			// 	name: 'Webhooks'
-			// 	// component: add component name
-			// },
+		navs: [
 			{
-				slug: 'api-console',
+				type: 'page',
 				name: 'Console API',
-				component: ConsoleApi
+				slug: 'api-console',
+				content: ConsoleApi
 			}
 		]
 	}
 ];
-
-export const pages = categories.reduce((acc, category) => acc.concat(category.pages), [] as Page[]);
-
-interface Category {
-	name: string;
-	pages: Page[];
-}
-
-interface Page {
-	slug: string;
-	name: string;
-	component?: Component;
-	parent?: string;
-}

@@ -8,7 +8,8 @@
 	import Message from './Message.svelte';
 
 	interface Props {
-		newsletterSubdomain: string;
+		newsletterSubdomain: string | null;
+		newsletterId: number | null;
 		instance: string;
 		shadowRoot: ShadowRoot;
 		lists: string[]; // lists to filter by (empty = no filter)
@@ -18,6 +19,7 @@
 
 	let {
 		newsletterSubdomain,
+		newsletterId,
 		instance,
 		shadowRoot,
 		lists: listsToFilter,
@@ -50,7 +52,8 @@
 		initError = '';
 
 		api<InitResponse>('/init', {
-			newsletter_subdomain: newsletterSubdomain
+			newsletter_subdomain: newsletterSubdomain,
+			newsletter_id: newsletterId
 		})
 			.then((response) => {
 				newsletter = response.newsletter;

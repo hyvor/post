@@ -40,7 +40,7 @@ class UploadMediaTest extends WebTestCase
             ],
             parameters: [
                 'folder' => 'issue_images',
-            ]
+            ],
         );
 
         $this->assertResponseStatusCodeSame(422);
@@ -74,7 +74,7 @@ class UploadMediaTest extends WebTestCase
             ],
             parameters: [
                 'folder' => 'issue_images',
-            ]
+            ],
         );
 
         $this->assertResponseStatusCodeSame(422);
@@ -104,7 +104,7 @@ class UploadMediaTest extends WebTestCase
             ],
             parameters: [
                 'folder' => 'import',
-            ]
+            ],
         );
 
         $this->assertResponseStatusCodeSame(200);
@@ -116,7 +116,7 @@ class UploadMediaTest extends WebTestCase
         $this->assertIsString($url);
         $this->assertStringStartsWith(
             'https://post.hyvor.com/api/public/media/',
-            $url
+            $url,
         );
         $this->assertStringEndsWith('.csv', $url);
 
@@ -137,7 +137,7 @@ class UploadMediaTest extends WebTestCase
         $read = $filesystem->read(
             $newsletter->getId() . '/' .
             $entity->getFolder()->value . '/' .
-            $entity->getUuid() . '.' . $entity->getExtension()
+            $entity->getUuid() . '.' . $entity->getExtension(),
         );
         $this->assertStringContainsString('ID,Name,Department,Salary', $read);
     }

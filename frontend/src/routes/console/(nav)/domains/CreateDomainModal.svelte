@@ -10,8 +10,6 @@
 	import { createDomain } from '../../lib/actions/domainActions';
 	import DnsRecordsModal from './DnsRecordsModal.svelte';
 	import type { Domain } from '../../types';
-	import { onMount } from 'svelte';
-	import { track } from '@hyvor/design/marketing';
 
 	interface Props {
 		show?: boolean;
@@ -57,8 +55,6 @@
 				createdDomain = newDomain;
 				showDnsRecords = true;
 				onCreate();
-
-				track.event('domain added');
 			})
 			.catch((error: any) => {
 				toast.error(error?.message || 'Failed to create domain');

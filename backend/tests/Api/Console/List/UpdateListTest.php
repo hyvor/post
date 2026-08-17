@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\List;
 
-use App\Api\Console\Controller\ListController;
+use App\Api\Console\Controller\ListsController;
 use App\Entity\NewsletterList;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Tests\Case\WebTestCase;
@@ -13,7 +13,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
-#[CoversClass(ListController::class)]
+#[CoversClass(ListsController::class)]
 #[CoversClass(NewsletterListService::class)]
 #[CoversClass(NewsletterList::class)]
 class UpdateListTest extends WebTestCase
@@ -36,7 +36,7 @@ class UpdateListTest extends WebTestCase
             '/lists/' . $newsletterList->getId(),
             [
                 'name' => 'New Name',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -67,7 +67,7 @@ class UpdateListTest extends WebTestCase
             '/lists/' . $newsletterList->getId(),
             [
                 'name' => str_repeat('a', 256),
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -94,7 +94,7 @@ class UpdateListTest extends WebTestCase
             '/lists/' . $newsletterList->getId(),
             [
                 'description' => 'New description',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());

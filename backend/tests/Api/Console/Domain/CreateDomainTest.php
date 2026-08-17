@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Domain;
 
-use App\Api\Console\Controller\DomainController;
+use App\Api\Console\Controller\Org\DomainController;
 use App\Api\Console\Input\Domain\CreateDomainInput;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
@@ -14,8 +14,6 @@ use App\Tests\Factory\NewsletterFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -33,7 +31,6 @@ class CreateDomainTest extends WebTestCase
     private function mockHttpClient(): void
     {
         $callback = function ($method, $url, $options): JsonMockResponse {
-
             $this->assertSame('POST', $method);
             $this->assertSame('https://relay.hyvor.com/api/console/domains', $url);
             $this->assertSame('{"domain":"hyvor.com"}', $options['body']);
@@ -66,7 +63,7 @@ class CreateDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
             ],
-            useSession: true
+            useSession: true,
         );
         $this->assertSame(200, $response->getStatusCode());
 
@@ -98,7 +95,7 @@ class CreateDomainTest extends WebTestCase
             [
                 'domain' => 'hyvorpost.email',
             ],
-            useSession: true
+            useSession: true,
         );
         $this->assertSame(400, $response->getStatusCode());
 
@@ -121,7 +118,7 @@ class CreateDomainTest extends WebTestCase
             [
                 'domain' => 'invalid-domain',
             ],
-            useSession: true
+            useSession: true,
         );
         $this->assertSame(422, $response->getStatusCode());
 
@@ -143,8 +140,8 @@ class CreateDomainTest extends WebTestCase
         $domain = DomainFactory::createOne(
             [
                 'domain' => 'hyvor.com',
-                'organization_id' => $current ? 1 : 2
-            ]
+                'organization_id' => $current ? 1 : 2,
+            ],
         );
 
         $response = $this->consoleApi(
@@ -153,7 +150,7 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'hyvor.com',
-            ]
+            ],
         );
         $this->assertSame(400, $response->getStatusCode());
         $json = $this->getJson();
@@ -161,7 +158,7 @@ class CreateDomainTest extends WebTestCase
             $current ?
                 'This domain is already registered' :
                 'This domain is already registered by another organization',
-            $json['message']
+            $json['message'],
         );
     }
 
@@ -176,7 +173,7 @@ class CreateDomainTest extends WebTestCase
             '/domains',
             [
                 'domain' => 'hyvor.com',
-            ]
+            ],
         );
 
         $this->assertSame(400, $response->getStatusCode());

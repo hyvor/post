@@ -13,7 +13,6 @@
 	import { onMount } from 'svelte';
 	import { getIssueTestData, sendIssueTest } from '../../../../../../lib/actions/issueActions';
 	import { draftIssueEditingStore } from '../draftStore';
-	import { track } from '@hyvor/design/marketing';
 
 	const I18n = getI18n();
 
@@ -99,8 +98,6 @@
 						id: toastId
 					});
 				}
-
-				track.event('issue test mail sent');
 			})
 			.catch((e) => {
 				toast.error(I18n.t('console.issues.draft.testEmail.confirm.failed') + ': ' + e.message, {

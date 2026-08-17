@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Newsletter;
@@ -16,7 +16,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueService::class)]
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
@@ -53,7 +53,7 @@ class UpdateIssueTest extends WebTestCase
                 'subject' => 'Test subject',
                 'list_ids' => [$list1->getId(), $list2->getId()],
                 'content' => 'Test content',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -82,7 +82,7 @@ class UpdateIssueTest extends WebTestCase
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'list_ids' => [$list1->getId()]
+            'list_ids' => [$list1->getId()],
         ]);
 
         $response = $this->consoleApi(
@@ -92,7 +92,7 @@ class UpdateIssueTest extends WebTestCase
             [
                 'subject' => 'Test subject',
                 'content' => 'Test content',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -107,7 +107,6 @@ class UpdateIssueTest extends WebTestCase
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertSame('Test subject', $issue->getSubject());
         $this->assertSame('Test content', $issue->getContent());
-
     }
 
     public function testCreateIssueWithInvalidList(): void
@@ -125,7 +124,7 @@ class UpdateIssueTest extends WebTestCase
             '/issues/' . $issue->getId(),
             [
                 'lists' => [$list->getId()],
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -147,7 +146,7 @@ class UpdateIssueTest extends WebTestCase
             '/issues/' . $issue->getId(),
             [
                 'subject' => 'Test subject',
-            ]
+            ],
         );
 
         $this->assertSame(403, $response->getStatusCode());

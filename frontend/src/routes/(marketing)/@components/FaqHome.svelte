@@ -7,8 +7,7 @@
 
 	import FeatureSectionHead from '../@homepage/FeatureSectionHead.svelte';
 	import { getMarketingI18n } from '../locale';
-	// import Accordion from './Accordion.svelte';
-	import { Accordion } from '@hyvor/design/components';
+	import { Accordion } from '@hyvor/design/marketing';
 	const I18n = getMarketingI18n();
 </script>
 

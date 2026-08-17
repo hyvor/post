@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Approval;
 
-use App\Api\Console\Controller\ApprovalController;
+use App\Api\Console\Controller\Org\ApprovalController;
 use App\Api\Console\Object\ApprovalObject;
 use App\Service\Approval\ApprovalService;
 use App\Tests\Case\WebTestCase;
@@ -23,7 +23,7 @@ class GetApprovalTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/approvals'
+            '/approvals',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -44,7 +44,7 @@ class GetApprovalTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/approvals'
+            '/approvals',
         );
 
         $this->assertSame(200, $response->getStatusCode());

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Controller\SendingProfilesController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Entity\Type\RelayDomainStatus;
@@ -16,7 +16,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
-#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfilesController::class)]
 #[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
 class UpdateSendingProfileTest extends WebTestCase
@@ -33,24 +33,24 @@ class UpdateSendingProfileTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         $domain2 = DomainFactory::createOne(
             [
                 'domain' => 'gmail.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         $sendingEmail = SendingProfileFactory::createOne(
             [
                 'from_email' => 'thibault@hyvor.com',
                 'newsletter' => $newsletter,
-                'domain' => $domain1
-            ]
+                'domain' => $domain1,
+            ],
         );
 
         $response = $this->consoleApi(
@@ -60,8 +60,8 @@ class UpdateSendingProfileTest extends WebTestCase
             [
                 'from_email' => 'thibault@gmail.com',
                 'brand_name' => 'Hyvor Post',
-                'brand_url' => 'https://post.hyvor.com'
-            ]
+                'brand_url' => 'https://post.hyvor.com',
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -92,16 +92,16 @@ class UpdateSendingProfileTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         $domain2 = DomainFactory::createOne(
             [
                 'domain' => 'gmail.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         // old default email
@@ -110,8 +110,8 @@ class UpdateSendingProfileTest extends WebTestCase
                 'from_email' => 'thibault@hyvor.com',
                 'is_default' => true,
                 'newsletter' => $newsletter,
-                'domain' => $domain1
-            ]
+                'domain' => $domain1,
+            ],
         );
 
         $sendingEmail2 = SendingProfileFactory::createOne(
@@ -119,8 +119,8 @@ class UpdateSendingProfileTest extends WebTestCase
                 'from_email' => 'supun@hyvor.com',
                 'is_default' => false,
                 'newsletter' => $newsletter,
-                'domain' => $domain2
-            ]
+                'domain' => $domain2,
+            ],
         );
 
         $response = $this->consoleApi(
@@ -129,7 +129,7 @@ class UpdateSendingProfileTest extends WebTestCase
             '/sending-profiles/' . $sendingEmail2->getId(),
             [
                 'is_default' => true,
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());

@@ -9,221 +9,108 @@ use App\Service\ApiKey\Dto\UpdateApiKeyDto;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\User\UserService;
 use Hyvor\Internal\Auth\AuthInterface;
-use Hyvor\Internal\Auth\AuthUser;
-use Hyvor\Internal\Auth\AuthUserOrganization;
+use Hyvor\Internal\CloudApi\CloudApiService;
+use Hyvor\Internal\InternalConfig;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
 
+/**
+ * @extends ConsoleApiAuthorizationListenerAbstract<Newsletter>
+ */
 #[AsEventListener(event: KernelEvents::CONTROLLER, priority: 200)]
-class AuthorizationListener
+class AuthorizationListener extends ConsoleApiAuthorizationListenerAbstract
 {
     use ClockAwareTrait;
 
-    public const string RESOLVED_NEWSLETTER_ATTRIBUTE_KEY = 'console_api_resolved_newsletter';
-    public const string RESOLVED_API_KEY_ATTRIBUTE_KEY = 'console_api_resolved_api_key';
-    public const string RESOLVED_USER_ATTRIBUTE_KEY = 'console_api_resolved_user';
-    public const string RESOLVED_ORGANIZATION_ATTRIBUTE_KEY = 'console_api_resolved_organization';
-
     public function __construct(
-        private AuthInterface     $auth,
-        private ApiKeyService     $apiKeyService,
+        private ApiKeyService $apiKeyService,
         private NewsletterService $newsletterService,
-        private UserService       $userService
-    )
-    {
+        private UserService $userService,
+        InternalConfig $internalConfig,
+        CloudApiService $cloudApiService,
+        AuthInterface $auth,
+    ) {
+        parent::__construct(
+            $internalConfig,
+            $cloudApiService,
+            $auth,
+        );
     }
 
-    public function __invoke(ControllerEvent $event): void
+    protected function getBasePath(): string
     {
-        // only console API requests
-        if (!str_starts_with($event->getRequest()->getPathInfo(), '/api/console')) {
-            return;
-        }
-        if ($event->isMainRequest() === false) {
-            return;
-        }
-
-        $request = $event->getRequest();
-
-        if ($request->headers->has('authorization')) {
-            $this->handleAuthorizationHeader($event);
-        } else {
-            $this->handleSession($event);
-        }
+        return '/api/console';
     }
 
-    private function handleAuthorizationHeader(ControllerEvent $event): void
+    protected function getBypassPaths(): array
     {
-        $request = $event->getRequest();
-        $authorizationHeader = $request->headers->get('authorization');
-        assert(is_string($authorizationHeader));
+        return [
+            '/api/console/init',
+        ];
+    }
 
-        if (!str_starts_with($authorizationHeader, 'Bearer ')) {
-            throw new AccessDeniedHttpException('Authorization header must start with "Bearer ".');
-        }
+    protected function isResourceApiKey(string $bearerToken): bool
+    {
+        return strlen($bearerToken) === ApiKeyService::API_KEY_LENGTH && ctype_xdigit($bearerToken);
+    }
 
-        $apiKey = trim(substr($authorizationHeader, 7));
-
-        if ($apiKey === '') {
-            throw new AccessDeniedHttpException('API key is missing or empty.');
-        }
-
+    protected function getResourceFromApiKey(string $apiKey): null|array
+    {
         $apiKeyModel = $this->apiKeyService->getByRawKey($apiKey);
 
         if ($apiKeyModel === null) {
-            throw new AccessDeniedHttpException('Invalid API key.');
+            return null;
         }
 
-        $scopes = $apiKeyModel->getScopes();
-        $this->verifyScopes($scopes, $event);
-
-        $newsletter = $apiKeyModel->getNewsletter();
-
-        $request->attributes->set(self::RESOLVED_API_KEY_ATTRIBUTE_KEY, $apiKeyModel);
-        $request->attributes->set(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
-
-        $apiKeyUpdates = new UpdateApiKeyDto();
-        $apiKeyUpdates->lastAccessedAt = $this->now();
-        $this->apiKeyService->updateApiKey($apiKeyModel, $apiKeyUpdates);
+        return [
+            'resource' => $apiKeyModel->getNewsletter(),
+            'scopes' => $apiKeyModel->getScopes(),
+            'apiKey' => $apiKeyModel,
+        ];
     }
 
-    private function handleSession(ControllerEvent $event): void
+    protected function getResourceFromRequest(ControllerEvent $event): ?object
     {
-        $request = $event->getRequest();
-        $newsletterId = $request->headers->get('x-newsletter-id');
-        $isOrganizationLevelEndpoint = count($event->getAttributes(OrganizationLevelEndpoint::class)) > 0;
-        $noOrganizationRequired = count($event->getAttributes(OrganizationOptional::class)) > 0;
+        $newsletterId = $event->getRequest()->headers->get('x-newsletter-id');
+        $newsletter = $this->newsletterService->getNewsletterById((int)$newsletterId);
 
-        $me = $this->auth->me($request);
-
-        if ($me === null) {
-            throw new DataCarryingHttpException(
-                401,
-                [
-                    'login_url' => $this->auth->authUrl('login'),
-                    'signup_url' => $this->auth->authUrl('signup'),
-                ],
-                'Unauthorized'
-            );
+        if ($newsletter === null) {
+            return null;
         }
 
-        $user = $me->getUser();
-        $organization = $me->getOrganization();
-        $request->attributes->set(self::RESOLVED_USER_ATTRIBUTE_KEY, $user);
-        $request->attributes->set(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY, $organization);
-
-        if ($noOrganizationRequired) {
-            assert($isOrganizationLevelEndpoint === true);
-            return;
-        }
-
-        if ($organization === null) {
-            throw new AccessDeniedHttpException('Current organization is missing.');
-        }
-
-        $organizationFromFrontend = (int)$request->headers->get('x-organization-id');
-
-        if ($organizationFromFrontend !== $organization->id) {
-            throw new AccessDeniedHttpException('org_mismatch');
-        }
-
-        // organization-level endpoints do not have a newsletter ID
-        if ($isOrganizationLevelEndpoint === false) {
-            if ($newsletterId === null) {
-                throw new AccessDeniedHttpException('X-Newsletter-ID is required for this endpoint.');
-            }
-
-            $newsletter = $this->newsletterService->getNewsletterById((int)$newsletterId);
-
-            if ($newsletter === null) {
-                throw new AccessDeniedHttpException('Invalid newsletter ID.');
-            }
-
-            if ($newsletter->getOrganizationId() !== $organization->id) {
-                throw new AccessDeniedHttpException('does_not_belong_the_resource');
-            }
-
-            if (!$this->userService->hasAccessToNewsletter($newsletter, $user->id)) {
-                throw new AccessDeniedHttpException('You do not have access to this newsletter.');
-            }
-
-            $request->attributes->set(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY, $newsletter);
-        }
-
-    }
-
-    /**
-     * @param string[] $scopes
-     */
-    private function verifyScopes(array $scopes, ControllerEvent $event): void
-    {
-        $attributes = $event->getAttributes(ScopeRequired::class);
-        $scopeRequiredAttribute = $attributes[0] ?? null;
-
-        assert(
-            $scopeRequiredAttribute instanceof ScopeRequired,
-            'ScopeRequired attribute must be set on the controller method'
-        );
-
-        $requiredScope = $scopeRequiredAttribute->scope->value;
-
-        if (!in_array($requiredScope, $scopes, true)) {
-            throw new AccessDeniedHttpException(
-                "You do not have the required scope '$requiredScope' to access this resource."
-            );
-        }
-    }
-
-    public static function hasUser(Request $request): bool
-    {
-        return $request->attributes->has(self::RESOLVED_USER_ATTRIBUTE_KEY);
-    }
-
-    // only call after hasUser()
-    public static function getUser(Request $request): AuthUser
-    {
-        $user = $request->attributes->get(self::RESOLVED_USER_ATTRIBUTE_KEY);
-        assert($user instanceof AuthUser, 'User must be an instance of AuthUser');
-        return $user;
-    }
-
-    public static function hasNewsletter(Request $request): bool
-    {
-        return $request->attributes->has(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY);
-    }
-
-    // make sure the newsletter is set before calling this
-    public static function getNewsletter(Request $request): Newsletter
-    {
-        $newsletter = $request->attributes->get(self::RESOLVED_NEWSLETTER_ATTRIBUTE_KEY);
-        assert($newsletter instanceof Newsletter);
         return $newsletter;
     }
 
-    public static function hasOrganization(Request $request): bool
+    protected function getResourceFromRequestError(): string
     {
-        return $request->attributes->has(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY)
-            && $request->attributes->get(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY) instanceof AuthUserOrganization;
+        return 'Unable to find the newsletter from the request. Please provide a valid x-newsletter-id header.';
     }
 
-    // make sure the organization is set before calling this
-    public static function getOrganization(Request $request): AuthUserOrganization
+    protected function getOrganizationIdFromResource(object $resource): int
     {
-        $organization = $request->attributes->get(self::RESOLVED_ORGANIZATION_ATTRIBUTE_KEY);
-        assert($organization instanceof AuthUserOrganization);
-        return $organization;
+        return $resource->getOrganizationId();
     }
 
-    // make sure the API key is set before calling this
-    public static function getApiKey(Request $request): ApiKey
+    protected function getUserResourceScopes(object $resource, int $userId): null|array
     {
-        $apiKey = $request->attributes->get(self::RESOLVED_API_KEY_ATTRIBUTE_KEY);
-        assert($apiKey instanceof ApiKey);
-        return $apiKey;
+        $user = $this->userService->getUser($resource, hyvorUserId: $userId);
+
+        if ($user === null) {
+            return null;
+        }
+
+        return array_map(fn($scope) => $scope->value, $user->getRole()->scopes());
     }
+
+    protected function onProductApiKeyUse(object $apiKeyModel): void
+    {
+        $apiKeyUpdates = new UpdateApiKeyDto();
+        $apiKeyUpdates->lastAccessedAt = $this->now();
+        assert($apiKeyModel instanceof ApiKey);
+        $this->apiKeyService->updateApiKey($apiKeyModel, $apiKeyUpdates);
+    }
+
 }

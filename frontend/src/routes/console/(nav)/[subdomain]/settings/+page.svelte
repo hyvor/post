@@ -117,40 +117,42 @@
 			{#if subdomainError}
 				<Validation state="error">{subdomainError}</Validation>
 			{:else}
-				<Callout type="warning" style="margin-top:10px">
-					By changing the subdomain,
-					<ul>
-						<li>
-							The archive site URL will change to <strong
-								>{getNewsletterArchiveUrlFromSubdomain($newsletterEditingStore.subdomain).replace(
-									/https?:\/\//,
-									''
-								)}</strong
-							>
-						</li>
-						<li>
-							The system <a
-								class="hds-link"
-								href={consoleUrlWithNewsletter('/settings/sending-profiles')}>sending profile</a
-							>
-							email address will change to
-							<strong
-								>{$newsletterEditingStore.subdomain}@{appConfig.app.default_email_domain}</strong
-							>
-						</li>
-					</ul>
+				<div style="margin-top:10px">
+					<Callout type="warning">
+						By changing the subdomain,
+						<ul>
+							<li>
+								The archive site URL will change to <strong
+									>{getNewsletterArchiveUrlFromSubdomain($newsletterEditingStore.subdomain).replace(
+										/https?:\/\//,
+										''
+									)}</strong
+								>
+							</li>
+							<li>
+								The system <a
+									class="hds-link"
+									href={consoleUrlWithNewsletter('/settings/sending-profiles')}>sending profile</a
+								>
+								email address will change to
+								<strong
+									>{$newsletterEditingStore.subdomain}@{appConfig.app.default_email_domain}</strong
+								>
+							</li>
+						</ul>
 
-					<div style="text-align:right">
-						<Button
-							variant="outline"
-							onclick={() => {
-								$newsletterEditingStore.subdomain = $newsletterStore.subdomain;
-							}}
-							disabled={subdomainUpdating}>Cancel</Button
-						>
-						<Button onclick={handleChange} disabled={subdomainUpdating}>Change subdomain</Button>
-					</div>
-				</Callout>
+						<div style="text-align:right">
+							<Button
+								variant="outline"
+								onclick={() => {
+									$newsletterEditingStore.subdomain = $newsletterStore.subdomain;
+								}}
+								disabled={subdomainUpdating}>Cancel</Button
+							>
+							<Button onclick={handleChange} disabled={subdomainUpdating}>Change subdomain</Button>
+						</div>
+					</Callout>
+				</div>
 			{/if}
 		{:else}
 			<Button size="small" color="input" on:click={copySubdomain}>
@@ -179,9 +181,22 @@
 	</SplitControl>
 
 	<SplitControl label={I18n.t('console.settings.newsletter.delete')}>
-		<Button color="red" on:click={onDelete} loading={deleting}>
+		<Button
+			color="red"
+			on:click={onDelete}
+			loading={deleting}
+			disabled={$newsletterStore.metadata.hyvor_blogs_integration}
+		>
 			{I18n.t('console.settings.newsletter.delete')}
 		</Button>
+
+		{#if $newsletterStore.metadata.hyvor_blogs_integration}
+			<br /><br />
+			<Callout type="info">
+				This newsletter was created via Hyvor Blogs integration. You cannot delete it from here.
+				Disconnect the newsletter from Hyvor Blogs to delete it.
+			</Callout>
+		{/if}
 	</SplitControl>
 </SettingsBody>
 

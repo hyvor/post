@@ -12,7 +12,7 @@ export function getSubdomainAvailability(subdomain: string) {
 
 export function createNewsletter(name: string, subdomain: string) {
 	return consoleApi.post<Newsletter>({
-		endpoint: 'newsletter',
+		endpoint: 'newsletters',
 		userApi: true,
 		data: {
 			name,

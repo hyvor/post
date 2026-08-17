@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Api\Console\Controller;
+namespace App\Api\Console\Controller\Org;
 
-use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\OrganizationLevelEndpoint;
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Input\Approval\UpdateApprovalInput;
 use App\Api\Console\Object\ApprovalObject;
@@ -11,9 +9,10 @@ use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Service\Approval\Dto\UpdateApprovalDto;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,9 +22,7 @@ class ApprovalController extends AbstractController
 
     public function __construct(
         private ApprovalService $approvalService,
-    )
-    {
-    }
+    ) {}
 
     private function resolveApproval(string $id): Approval
     {
@@ -39,38 +36,38 @@ class ApprovalController extends AbstractController
     }
 
     #[Route('/approvals', methods: 'GET')]
-    #[OrganizationLevelEndpoint]
-    public function getApproval(Request $request): JsonResponse
+    #[OrgEndpoint]
+    public function get(ConsoleAuthResults $consoleAuth): JsonResponse
     {
-        $organization = AuthorizationListener::getOrganization($request);
+        $organization = $consoleAuth->getOrganizationId();
         $approval = $this->approvalService->getApprovalOfOrganization($organization);
 
         return new JsonResponse([
-            'approval' => ($approval !== null) ? new ApprovalObject($approval) : null
+            'approval' => ($approval !== null) ? new ApprovalObject($approval) : null,
         ]);
     }
 
     #[Route('/approvals', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
-    public function approve(
-        Request                                  $request,
-        #[MapRequestPayload] CreateApprovalInput $input
-    ): JsonResponse
-    {
-        $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::getOrganization($request);
+    #[OrgEndpoint]
+    public function create(
+        #[MapRequestPayload] CreateApprovalInput $input,
+        ConsoleAuthResults $consoleAuth,
+    ): JsonResponse {
+        $user = $consoleAuth->getNullableUser();
+        assert($user !== null);
+        $organizationId = $consoleAuth->getOrganizationId();
 
-        if ($this->approvalService->getApprovalStatusOfOrganization($organization) === ApprovalStatus::APPROVED) {
+        if ($this->approvalService->getApprovalStatusOfOrganization($organizationId) === ApprovalStatus::APPROVED) {
             throw new UnprocessableEntityHttpException('Account already approved');
         }
 
-        if ($this->approvalService->getApprovalStatusOfOrganization($organization) === ApprovalStatus::REJECTED) {
+        if ($this->approvalService->getApprovalStatusOfOrganization($organizationId) === ApprovalStatus::REJECTED) {
             throw new UnprocessableEntityHttpException('Account already rejected');
         }
 
         $approval = $this->approvalService->createApproval(
             userId: $user->id,
-            organizationId: $organization->id,
+            organizationId: $organizationId,
             companyName: $input->company_name,
             country: $input->country,
             website: $input->website,
@@ -79,23 +76,23 @@ class ApprovalController extends AbstractController
             frequency: $input->frequency,
             existingList: $input->existing_list,
             sample: $input->sample,
-            whyPost: $input->why_post
+            whyPost: $input->why_post,
         );
         return new JsonResponse(new ApprovalObject($approval));
     }
 
     #[Route('/approvals/{id}', methods: 'PATCH')]
-    #[OrganizationLevelEndpoint]
-    public function updateApproval(
-        Request                                  $request,
-        string                                   $id,
-        #[MapRequestPayload] UpdateApprovalInput $input
-    ): JsonResponse
-    {
-        $organization = AuthorizationListener::getOrganization($request);
+    #[OrgEndpoint]
+    public function update(
+        string $id,
+        #[MapRequestPayload] UpdateApprovalInput $input,
+        ConsoleAuthResults $consoleAuth,
+    ): JsonResponse {
         $approval = $this->resolveApproval($id);
 
-        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($organization);
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization(
+            $consoleAuth->getOrganizationId(),
+        );
         if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
             throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }

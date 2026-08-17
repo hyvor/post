@@ -5,6 +5,7 @@
 		Loader,
 		toast
 	} from '@hyvor/design/components';
+	import { isEmbedded } from './lib/embedded';
 	import {
 		CloudContext,
 		type CloudContextOrganization,
@@ -27,7 +28,8 @@
 	} from './lib/stores/consoleStore';
 	import { setNewsletterStoreByNewsletterList } from './lib/stores/newsletterStore';
 	import { userNewslettersStore } from './lib/stores/userNewslettersStore';
-	import { goto } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
+	import { consoleUrlWithNewsletter } from './lib/consoleUrl';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -46,6 +48,19 @@
 	let isLoading = $state(true);
 
 	function startConsole(switchingOrg = false) {
+		/**
+		 * support for /console?newsletter_id=1234 to force a newsletter to be selected
+		 * usually used with embedded mode
+		 */
+		const forceNewsletterId = page.url.searchParams.has('newsletter_id')
+			? parseInt(page.url.searchParams.get('newsletter_id') ?? '0')
+			: null;
+
+		if (page.url.searchParams.has('embedded')) {
+			$isEmbedded = true;
+			document.body.style.backgroundColor = 'transparent';
+		}
+
 		consoleApi
 			.get<InitResponse>({
 				userApi: true,
@@ -58,7 +73,17 @@
 				authUserStore.set(res.user);
 				resolvedLicenseStore.set(res.resolved_license);
 				userNewslettersStore.set(res.newsletters);
-				if (res.newsletters.length > 0) {
+
+				if (forceNewsletterId) {
+					const forcedNewsletterList = res.newsletters.find(
+						(nl) => nl.newsletter.id === forceNewsletterId
+					);
+					if (!forcedNewsletterList) {
+						toast.error('Newsletter not found or you do not have access to it.');
+					} else {
+						setNewsletterStoreByNewsletterList(forcedNewsletterList);
+					}
+				} else if (res.newsletters.length > 0) {
 					setNewsletterStoreByNewsletterList(res.newsletters[0]);
 				}
 
@@ -81,6 +106,21 @@
 	}
 
 	onMount(startConsole);
+
+	beforeNavigate((nav) => {
+		if ($isEmbedded) {
+			// cannot change the newsletter, so open none-newsletter URLs in a new tab
+			const newsletterUrl = consoleUrlWithNewsletter('').replace(/\/$/, '');
+
+			if (
+				nav.to?.url.origin !== location.origin ||
+				!nav.to?.url.pathname.startsWith(newsletterUrl)
+			) {
+				nav.cancel();
+				window.open(nav.to?.url.toString(), '_blank');
+			}
+		}
+	});
 </script>
 
 <svelte:head>
@@ -105,7 +145,7 @@
 		}
 	]}
 >
-	<main>
+	<main class:embedded={$isEmbedded}>
 		{#if isLoading}
 			<div class="full-loader">
 				<Loader size="large"></Loader>
@@ -135,7 +175,9 @@
 				}}
 				style="display:flex; flex-direction: column; width: 100%; height: 100vh"
 			>
-				<HyvorBar />
+				{#if !$isEmbedded}
+					<HyvorBar />
+				{/if}
 				{@render children?.()}
 			</CloudContext>
 		{/if}
@@ -158,5 +200,18 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	main.embedded :global(#nav-wrap) {
+		height: 100%;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav) {
+		flex: 1;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav > .wrap) {
+		height: 100%;
+	}
+	main.embedded :global(#nav-wrap > .newsletter-nav > .wrap) {
+		height: 100%;
 	}
 </style>

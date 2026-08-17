@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Domain;
 
-use App\Api\Console\Controller\DomainController;
+use App\Api\Console\Controller\Org\DomainController;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Type\RelayDomainStatus;
 use App\Service\Domain\DomainService;
@@ -12,8 +12,6 @@ use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -38,10 +36,13 @@ class VerifyDomainTest extends WebTestCase
                 ]);
             } elseif (str_starts_with($url, 'https://relay.hyvor.com/api/console/sends')) {
                 $body = json_decode($options['body'], true);
-            $this->assertIsArray($body);
-            $this->assertSame('Your domain hyvor.com is verified', $body['subject']);
-            $this->assertIsString($body['body_html']);
-            $this->assertStringContainsString("Your domain <strong>hyvor.com</strong> has been successfully verified", $body['body_html']);
+                $this->assertIsArray($body);
+                $this->assertSame('Your domain hyvor.com is verified', $body['subject']);
+                $this->assertIsString($body['body_html']);
+                $this->assertStringContainsString(
+                    "Your domain <strong>hyvor.com</strong> has been successfully verified",
+                    $body['body_html'],
+                );
             }
             return new JsonMockResponse();
         };
@@ -61,14 +62,14 @@ class VerifyDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'organization_id' => 1,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
             '/domains/' . $domain->getId() . '/verify',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -88,14 +89,14 @@ class VerifyDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'organization_id' => 1,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
             '/domains/' . $domain->getId() . '/verify',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -125,14 +126,14 @@ class VerifyDomainTest extends WebTestCase
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
                 'organization_id' => 1,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
             '/domains/' . $domain->getId() . '/verify',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -152,7 +153,7 @@ class VerifyDomainTest extends WebTestCase
             $newsletter,
             'POST',
             '/domains/99999/verify',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(400, $response->getStatusCode());
@@ -172,14 +173,14 @@ class VerifyDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'organization_id' => 2,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
             '/domains/' . $domain->getId() . '/verify',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(400, $response->getStatusCode());

@@ -2,7 +2,6 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
 use App\Entity\ApiKey;
 use App\Entity\Approval;
 use App\Entity\Domain;
@@ -13,8 +12,6 @@ use App\Entity\SendingProfile;
 use App\Entity\Subscriber;
 use App\Entity\SubscriberImport;
 use App\Entity\SubscriberMetadataDefinition;
-use App\Entity\User;
-use App\Entity\UserInvite;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +29,6 @@ class EntityResolver implements ValueResolverInterface
         'subscriber-metadata-definitions' => SubscriberMetadataDefinition::class,
         'issues' => Issue::class,
         'sending-profiles' => SendingProfile::class,
-        'users' => User::class,
-        'invites' => UserInvite::class,
         'imports' => SubscriberImport::class,
 //        'approvals' => Approval::class,
         'api-keys' => ApiKey::class,
@@ -41,10 +36,8 @@ class EntityResolver implements ValueResolverInterface
 
     public function __construct(
         private EntityManagerInterface $em,
-        private NewsletterResolver     $newsletterResolver,
-    )
-    {
-    }
+        private NewsletterResolver $newsletterResolver,
+    ) {}
 
     /**
      * @return iterable<mixed>
@@ -104,7 +97,7 @@ class EntityResolver implements ValueResolverInterface
             false,
             false,
             null,
-            controllerName: $controllerName
+            controllerName: $controllerName,
         );
         $currentNewsletter = (array)$this->newsletterResolver->resolve($request, $argumentMetadata);
         if ($newsletterOfEntity->getId() !== $currentNewsletter[0]->getId()) {

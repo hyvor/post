@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\OrganizationOptional;
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\OrganizationLevelEndpoint;
+use Hyvor\Internal\Auth\AuthInterface;
+use Hyvor\Internal\Bundle\Api\DataCarryingHttpException;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Object\ListObject;
 use App\Api\Console\Object\NewsletterListObject;
 use App\Api\Console\Object\NewsletterObject;
@@ -31,31 +30,40 @@ use Hyvor\Internal\InternalConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ConsoleController extends AbstractController
 {
     public function __construct(
-        private NewsletterService         $newsletterService,
-        private NewsletterListService     $listService,
-        private ListRepository            $listRepository,
-        private InternalConfig            $internalConfig,
-        private AppConfig                 $appConfig,
+        private NewsletterService $newsletterService,
+        private NewsletterListService $listService,
+        private ListRepository $listRepository,
+        private InternalConfig $internalConfig,
+        private AppConfig $appConfig,
         private SubscriberMetadataService $subscriberMetadataService,
-        private SendingProfileService     $sendingProfileService,
-        private BillingInterface          $billing,
-    )
-    {
-    }
+        private SendingProfileService $sendingProfileService,
+        private BillingInterface $billing,
+        private AuthInterface $auth,
+    ) {}
 
     #[Route('/init', methods: 'GET')]
-    #[OrganizationLevelEndpoint]
-    #[OrganizationOptional]
-    public function initConsole(Request $request): JsonResponse
+    public function init(Request $request): JsonResponse
     {
-        $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::hasOrganization($request) ? AuthorizationListener::getOrganization($request) : null;
+        $me = $this->auth->me($request);
+
+        if ($me === null) {
+            throw new DataCarryingHttpException(
+                401,
+                [
+                    'login_url' => $this->auth->authUrl('login'),
+                    'signup_url' => $this->auth->authUrl('signup'),
+                ],
+                'Unauthorized',
+            );
+        }
+
+        $user = $me->getUser();
+        $organization = $me->getOrganization();
 
         $newsletters = [];
         $license = new ResolvedLicense(ResolvedLicenseType::NONE);
@@ -63,7 +71,7 @@ class ConsoleController extends AbstractController
         if ($organization) {
             $newsletters = array_map(
                 fn(array $pair) => new NewsletterListObject($pair['newsletter'], $pair['user']),
-                $this->newsletterService->getUserNewslettersOfOrganization($user->id, $organization->id)
+                $this->newsletterService->getUserNewslettersOfOrganization($user->id, $organization->id),
             );
             $license = $this->billing->license($organization->id);
         }
@@ -81,7 +89,7 @@ class ConsoleController extends AbstractController
                     'default_email_domain' => $this->appConfig->getSystemMailDomain(),
                     'archive_url' => $this->appConfig->getUrlArchive(),
                     'api_keys' => [
-                        'scopes' => array_map(fn($scope) => $scope->value, Scope::cases()),
+                        'scopes' => array_map(fn($scope) => $scope->value, PostScope::cases()),
                     ],
                 ],
                 'newsletter_defaults' => NewsletterDefaults::getAll(),
@@ -90,7 +98,7 @@ class ConsoleController extends AbstractController
     }
 
     #[Route('/init/newsletter', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
+    #[ScopeRequired(PostScope::NEWSLETTER_READ)]
     public function initNewsletter(Newsletter $newsletter): JsonResponse
     {
         $newsletterStats = $this->newsletterService->getnewsletterStats($newsletter);
@@ -98,7 +106,7 @@ class ConsoleController extends AbstractController
             [
                 'newsletter' => $newsletter,
                 'deleted_at' => null,
-            ]
+            ],
         );
         $listIds = array_map(fn($list) => $list->getId(), $lists);
         $subscriberCounts = $this->listService->getSubscriberCountOfLists($listIds);
@@ -121,7 +129,8 @@ class ConsoleController extends AbstractController
         return new JsonResponse([
             'newsletter' => new NewsletterObject($newsletter),
             'lists' => array_map(fn($list) => new ListObject($list, $subscriberCounts[$list->getId()]), $lists),
-            'sending_profiles' => array_map(fn($address) => new SendingProfileObject($address), $this->sendingProfileService->getSendingProfiles($newsletter)),
+            'sending_profiles' => array_map(fn($address) => new SendingProfileObject($address),
+                $this->sendingProfileService->getSendingProfiles($newsletter)),
             'subscriber_metadata_definitions' => array_map(fn($def) => new SubscriberMetadataDefinitionObject($def),
                 $subscriberMetadataDefinitions),
             'stats' => $newsletterStats,

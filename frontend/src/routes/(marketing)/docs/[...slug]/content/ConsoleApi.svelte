@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Accordion, Callout, CodeBlock } from '@hyvor/design/components';
+	import { Callout, CodeBlock } from '@hyvor/design/components';
+	import { Accordion } from '@hyvor/design/marketing';
 </script>
 
 <h1>Console API</h1>
@@ -13,7 +14,8 @@
 
 <ul>
 	<li>
-		Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>.
+		Create a Console API key at <strong>Console &rarr; Settings &rarr; API Keys</strong>. Each key
+		must be granted one or more <a href="#api-keys">scopes</a>, which limit what it can access.
 	</li>
 	<li>The base URL: <code>https://post.hyvor.com/api/console</code></li>
 	<li>
@@ -52,13 +54,15 @@
 <ul>
 	<li><a href="#newsletter">Newsletter</a></li>
 	<li><a href="#issue">Issue</a></li>
-	<li><a href="#list">List</a></li>
+	<li><a href="#lists">Lists</a></li>
 	<li><a href="#subscriber">Subscriber</a></li>
 	<li><a href="#subscriber-metadata">Subscriber Metadata</a></li>
 	<li><a href="#sending-profile">Sending Profile</a></li>
 	<li><a href="#template">Template</a></li>
 	<li><a href="#user">User</a></li>
+	<li><a href="#api-keys">API Keys</a></li>
 	<li><a href="#media">Media</a></li>
+	<li><a href="#imports">Imports</a></li>
 	<li><a href="#export">Export</a></li>
 </ul>
 
@@ -72,6 +76,9 @@
 	<li><a href="#get-newsletter"><code>GET /newsletter</code></a> - Get newsletter data</li>
 	<li>
 		<a href="#update-newsletter"><code>PATCH /newsletter</code></a> - Update a newsletter
+	</li>
+	<li>
+		<a href="#delete-newsletter"><code>DELETE /newsletter</code></a> - Delete a newsletter
 	</li>
 </ul>
 
@@ -105,6 +112,22 @@
     `}
 />
 
+<h4 id="delete-newsletter">Delete a newsletter</h4>
+
+<code>DELETE /newsletter</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {}
+    `}
+/>
+
+<Callout type="warning">
+	This endpoint will soft-delete the newsletter, scheduling it for permanent deletion after 30 days.
+</Callout>
+
 <h3 id="issue">Issue</h3>
 
 <p>Endpoints:</p>
@@ -117,7 +140,16 @@
 	<li><a href="#delete-issue"><code>DELETE /issues/{'{id}'}</code></a> - Delete an issue</li>
 	<li><a href="#send-issue"><code>POST /issues/{'{id}'}/send</code></a> - Send an issue</li>
 	<li>
+		<a href="#preview-issue"><code>GET /issues/{'{id}'}/preview</code></a> - Preview an issue
+	</li>
+	<li>
+		<a href="#get-issue-progress"><code>GET /issues/{'{id}'}/progress</code></a> - Get issue sending progress
+	</li>
+	<li>
 		<a href="#get-issue-sends"><code>GET /issues/{'{id}'}/sends</code></a> - Get issue sends
+	</li>
+	<li>
+		<a href="#get-issue-report"><code>GET /issues/{'{id}'}/report</code></a> - Get issue report
 	</li>
 </ul>
 
@@ -208,6 +240,44 @@
     `}
 />
 
+<h4 id="preview-issue">Preview an issue</h4>
+
+<p>
+	Renders the HTML preview of an issue, and returns the number of subscribers it would be sendable
+	to.
+</p>
+
+<code>GET /issues/{'{id}'}/preview</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {
+            html: string;
+            sendable_subscribers_count: number;
+        }
+    `}
+/>
+
+<h4 id="get-issue-progress">Get issue sending progress</h4>
+
+<p>Get the sending progress of an issue that is currently being sent.</p>
+
+<code>GET /issues/{'{id}'}/progress</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {
+            total: number;
+            sent: number;
+            progress: number; // percentage, 0-100
+        } | null // null if the issue has no sends yet
+    `}
+/>
+
 <h4 id="get-issue-sends">Get issue sends</h4>
 
 <code>GET /issues/{'{id}'}/sends</code>
@@ -215,8 +285,37 @@
 <CodeBlock
 	language="ts"
 	code={`
-        type Request = {}
+        type Request = {
+            limit?: number; // default: 50
+            offset?: number; // default: 0
+            search?: string;
+            type?: string;
+        }
         type Response = Send[]
+    `}
+/>
+
+<h4 id="get-issue-report">Get issue report</h4>
+
+<p>Get the delivery, open, click, bounce, and complaint counts of an issue.</p>
+
+<code>GET /issues/{'{id}'}/report</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {
+            counts: {
+                total: number;
+                pending: number;
+                sent: number;
+                failed: number;
+                unsubscribed: number;
+                bounced: number;
+                complained: number;
+            }
+        }
     `}
 />
 
@@ -290,6 +389,10 @@
 	</li>
 	<li>
 		<a href="#create-update-subscriber"><code>POST /subscribers</code></a> - Create or update a subscriber
+	</li>
+	<li>
+		<a href="#resend-opt-in"><code>POST /subscribers/{'{id}'}/resend-opt-in</code></a> - Resend opt-in
+		confirmation email
 	</li>
 	<li>
 		<a href="#delete-subscriber"><code>DELETE /subscribers/{'{id}'}</code></a> - Delete a subscriber
@@ -386,15 +489,15 @@
             lists_strategy?: 'merge' | 'overwrite' | 'remove';
 
             // if the subscriber was previously removed from a list,
-            // define the reason(s) for ignoring the re-subscription to that list.
+            // define the reason(s) for skipping the re-subscription to that list.
             // see below for more info
             // default: ['unsubscribe', 'bounce', 'complaint']
-            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'complaint' | 'auto')[];
+            list_skip_resubscribe_on?: ('unsubscribe' | 'bounce' | 'complaint' | 'other')[];
 
             // define the reason for removing the subscriber from a list
             // (only when updating, see below for more info)
             // default: 'unsubscribe'
-            list_removal_reason?: 'unsubscribe' | 'bounce' | 'other';
+            list_removal_reason?: 'unsubscribe' | 'bounce' | 'complaint' | 'other';
 
             // whether to overwrite or merge the subscriber's metadata
             // when updating an existing subscriber.
@@ -419,21 +522,11 @@
 </p>
 
 <p>
-	<code>list_add_strategy_if_unsubscribed</code>:
+	<code>list_skip_resubscribe_on</code>: when adding an existing subscriber to a list they were
+	previously removed from, this setting controls which of the removal reasons below should block the
+	re-add. By default, previous unsubscribes, bounces, and complaints all block a re-add; pass an
+	empty array to always re-add regardless of why they left.
 </p>
-
-<ul>
-	<li>
-		<code>ignore</code> - use this strategy for most auto-subscribing cases (e.g. automatically subscribing
-		a user to a list when they start a trial). This makes sures that if the user has previously unsubscribed
-		from the list, they will not be re-subscribed.
-	</li>
-	<li>
-		<code>force_add</code> - use this strategy if the user is explicitly asking to subscribe to the list
-		again (e.g. they checked a checkbox to subscribe to the newsletter). This will add the subscriber
-		to the list even if they have previously unsubscribed.
-	</li>
-</ul>
 
 <p>
 	<code>list_removal_reason</code>:
@@ -443,13 +536,19 @@
 	<li>
 		<code>unsubscribe</code> - use this reason if the subscriber is explicitly asking to be removed
 		from the list (e.g. they unchecked a checkbox to unsubscribe). This will record an
-		unsubscription, blocking future re-adds unless
-		<code>list_add_strategy_if_unsubscribed=force_add</code>. Hyvor Post's default unsubscribe form
-		uses this.
+		unsubscription, blocking future re-adds unless the re-add request's
+		<code>list_skip_resubscribe_on</code> excludes <code>unsubscribe</code>. Hyvor Post's default
+		unsubscribe form uses this.
+	</li>
+	<li>
+		<code>bounce</code> - recorded automatically when a send to the subscriber hard-bounces.
+	</li>
+	<li>
+		<code>complaint</code> - recorded automatically when the subscriber marks a send as spam.
 	</li>
 	<li>
 		<code>other</code> - use this reason if you want to remove the subscriber from the list without recording
-		an unsubscription.
+		it as one of the reasons above (does not block future re-adds by default).
 	</li>
 </ul>
 
@@ -556,6 +655,20 @@
 		</p>
 	</Accordion>
 </div>
+
+<h4 id="resend-opt-in">Resend opt-in confirmation email</h4>
+
+<p>Resends the opt-in confirmation email to a pending subscriber.</p>
+
+<code>POST /subscribers/{'{id}'}/resend-opt-in</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = {}
+    `}
+/>
 
 <h4 id="delete-subscriber">Delete a subscriber</h4>
 
@@ -745,7 +858,7 @@
             brand_name?: string | null;
             brand_logo?: string | null; // a publicly accessible URL of the logo
             brand_url?: string | null;
-            is_default?: true;
+            is_default?: boolean;
         }
         type Response = SendingProfile
     `}
@@ -753,13 +866,15 @@
 
 <h4 id="delete-sending-profile">Delete a sending profile</h4>
 
+<p>The system sending profile cannot be deleted.</p>
+
 <code>DELETE /sending-profiles/{'{id}'}</code>
 
 <CodeBlock
 	language="ts"
 	code={`
         type Request = {}
-        type Response = {}
+        type Response = SendingProfile[] // the newsletter's remaining sending profiles
     `}
 />
 
@@ -832,25 +947,22 @@ appearance of your newsletters.
 <h3 id="user">User</h3>
 
 <p>
-	The owner of the newsletter can invite other users as Admins to collaborate on managing the
-	newsletter.
+	Admins of the organization that owns the newsletter can be added as users to collaborate on
+	managing it.
 </p>
 
 <p>Endpoints:</p>
 
 <ul>
 	<li><a href="#get-user"><code>GET /users</code></a> - Get user</li>
-	<li><a href="#delete-user"><code>DELETE /users/{'{id}'}</code></a> - Delete user</li>
-	<li><a href="#get-invites"><code>GET /invites</code></a> - Get invites</li>
-	<li><a href="#create-invite"><code>POST /invites</code></a> - Create an invite</li>
-	<li><a href="#delete-invite"><code>DELETE /invites/{'{id}'}</code></a> - Delete an invite</li>
+	<li><a href="#create-user"><code>POST /users</code></a> - Create user</li>
+	<li><a href="#delete-user"><code>DELETE /users</code></a> - Delete user</li>
 </ul>
 
 <p>Objects:</p>
 
 <ul>
 	<li><a href="#user-object">User Object</a></li>
-	<li><a href="#user-invite-object">User Invite Object</a></li>
 </ul>
 
 <h4 id="get-user">Get user</h4>
@@ -865,62 +977,169 @@ appearance of your newsletters.
     `}
 />
 
-<h4 id="delete-user">Delete user</h4>
+<h4 id="create-user">Create user</h4>
 
-<code>DELETE /users/{'{id}'}</code>
+<code>POST /users</code>
 
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {}
-        type Response = {}
-    `}
-/>
-
-<h4 id="get-invites">Get invites</h4>
-
-<code>GET /invites</code>
-
-<CodeBlock
-	language="ts"
-	code={`
-        type Request = {}
-        type Response = UserInvite[]
-    `}
-/>
-
-<h4 id="create-invite">Create an invite</h4>
-
-<code>POST /invites</code>
-
-<p>
-	You must ask your Admins to create a <a href="https://hyvor.com/signup" rel="noreferrer"
-		>HYVOR account</a
-	> before sending an invitation.
-</p>
+<p>The user must already be a member of the organization that owns this newsletter.</p>
 
 <CodeBlock
 	language="ts"
 	code={`
         type Request = {
-            username?: string;
-            email?: string;
+            user_id: number; // the user's id in HYVOR (AuthInterface)
+
+            // what to do if the user is already added to the newsletter
+            // throw: return a 400 error (default)
+            // ignore: return the existing user without an error
+            on_duplicate?: 'throw' | 'ignore';
         }
-        type Response = UserInvite
+        type Response = User
     `}
 />
 
 <Callout type="info">
 	<ul>
 		<li>
-			Either <code>username</code> or <code>email</code> of the invitee's HYVOR account is required.
+			Returns a 400 error if the user is not a member of the organization that owns this newsletter.
 		</li>
 	</ul>
 </Callout>
 
-<h4 id="delete-invite">Delete an invite</h4>
+<h4 id="delete-user">Delete user</h4>
 
-<code>DELETE /invites/{'{id}'}</code>
+<code>DELETE /users</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {
+            // one of user_id or id is required
+            user_id?: number; // the user's id in HYVOR (AuthInterface)
+            id?: number; // the user's id in this newsletter's user list
+        }
+        type Response = {}
+    `}
+/>
+
+<h3 id="api-keys">API Keys</h3>
+
+<p>
+	Every API key is granted one or more scopes, which limit what resources and actions it can access.
+	Available scopes:
+</p>
+
+<ul>
+	<li>
+		<code>newsletter.read</code> / <code>newsletter.write</code> /
+		<code>newsletter.delete</code>
+	</li>
+	<li><code>issues.read</code> / <code>issues.write</code></li>
+	<li><code>sending_profiles.read</code> / <code>sending_profiles.write</code></li>
+	<li><code>subscribers.read</code> / <code>subscribers.write</code></li>
+	<li><code>users.read</code> / <code>users.write</code></li>
+	<li><code>templates.read</code> / <code>templates.write</code></li>
+	<li><code>api_keys.read</code> / <code>api_keys.write</code></li>
+	<li><code>media.write</code></li>
+	<li>
+		<code>data.read</code> / <code>data.write</code> - subscriber lists, imports, and exports
+	</li>
+</ul>
+
+<p>Endpoints:</p>
+
+<ul>
+	<li><a href="#get-api-keys"><code>GET /api-keys</code></a> - Get API keys</li>
+	<li><a href="#create-api-key"><code>POST /api-keys</code></a> - Create an API key</li>
+	<li>
+		<a href="#update-api-key"><code>PATCH /api-keys/{'{id}'}</code></a> - Update an API key
+	</li>
+	<li>
+		<a href="#regenerate-api-key"><code>POST /api-keys/{'{id}'}</code></a> - Regenerate an API key
+	</li>
+	<li>
+		<a href="#delete-api-key"><code>DELETE /api-keys/{'{id}'}</code></a> - Delete an API key
+	</li>
+</ul>
+
+<p>Objects:</p>
+
+<ul>
+	<li><a href="#api-key-object">API Key Object</a></li>
+</ul>
+
+<h4 id="get-api-keys">Get API keys</h4>
+
+<p>The raw key is not returned; only its metadata is.</p>
+
+<code>GET /api-keys</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = ApiKey[]
+    `}
+/>
+
+<h4 id="create-api-key">Create an API key</h4>
+
+<code>POST /api-keys</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {
+            name: string;   // max length: 255
+            scopes: string[]; // see the list of scopes above
+        }
+        type Response = ApiKey
+    `}
+/>
+
+<Callout type="warning">
+	The <code>key</code> property (the raw key) is only returned once, on creation. Store it securely -
+	it cannot be retrieved again.
+</Callout>
+
+<h4 id="update-api-key">Update an API key</h4>
+
+<code>PATCH /api-keys/{'{id}'}</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {
+            name?: string;   // max length: 255
+            is_enabled?: boolean;
+            scopes?: string[];
+        }
+        type Response = ApiKey
+    `}
+/>
+
+<h4 id="regenerate-api-key">Regenerate an API key</h4>
+
+<p>
+	Regenerates the raw key of an API key. The previous key is invalidated immediately, and the new
+	raw key is returned once.
+</p>
+
+<code>POST /api-keys/{'{id}'}</code>
+
+<CodeBlock
+	language="ts"
+	code={`
+        type Request = {}
+        type Response = ApiKey
+    `}
+/>
+
+<h4 id="delete-api-key">Delete an API key</h4>
+
+<p>Requests made with the deleted key will be rejected immediately.</p>
+
+<code>DELETE /api-keys/{'{id}'}</code>
 
 <CodeBlock
 	language="ts"
@@ -1014,6 +1233,9 @@ appearance of your newsletters.
             subdomain: string;
             created_at: number; // unix timestamp
             name: string;
+            language_code: string | null;
+            is_rtl: boolean;
+            metadata: Record<string, string>;
 
             address: string | null;
             unsubscribe_text: string | null;
@@ -1151,7 +1373,6 @@ appearance of your newsletters.
             list_ids: number[];
             lists: string[]; // list names
             subscribe_ip: string | null;
-            is_opted_in: boolean;
             subscribed_at: number | null; // unix timestamp
             metadata: Record<string, string>;
         }
@@ -1228,21 +1449,6 @@ appearance of your newsletters.
             role: 'owner' | 'admin';
             created_at: number; // unix timestamp
             user: UserMiniObject;
-        }
-    `}
-/>
-
-<h3 id="user-invite-object">User Invite Object</h3>
-
-<CodeBlock
-	language="ts"
-	code={`
-        interface UserInvite {
-            id: number;
-            created_at: number; // unix timestamp
-            role: 'admin';
-            user: UserMiniObject;
-            expires_at: number; // unix timestamp
         }
     `}
 />

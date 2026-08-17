@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Api\Console\Input\UserInvite;
+namespace App\Api\Console\Input\User;
 
-use App\Entity\Type\UserRole;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUserInput
@@ -12,6 +11,6 @@ class CreateUserInput
     #[Assert\Positive]
     public int $user_id;
 
-//    #[Assert\NotBlank]
-//    public UserRole $role;
+    #[Assert\Choice(choices: ['throw', 'ignore'])]
+    public string $on_duplicate = 'throw';
 }

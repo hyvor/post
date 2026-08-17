@@ -2,8 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Import\ImportInput;
 use App\Api\Console\Input\Import\UploadImportInput;
 use App\Api\Console\Object\SubscriberImportObject;
@@ -14,32 +14,41 @@ use App\Entity\Type\SubscriberImportStatus;
 use App\Service\Import\Dto\UpdateSubscriberImportDto;
 use App\Service\Import\ImportService;
 use App\Service\Import\Message\ImportSubscribersMessage;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
-class ImportController extends AbstractController
+class ImportsController extends AbstractController
 {
     public function __construct(
-        private ImportService       $importService,
+        private ImportService $importService,
         private MessageBusInterface $messageBus,
-        private MediaController     $mediaController,
-    )
-    {
-    }
+        private MediaController $mediaController,
+    ) {}
 
     #[Route('/imports/upload', methods: 'POST')]
-    #[ScopeRequired(Scope::DATA_WRITE)]
+    #[ScopeRequired(PostScope::DATA_WRITE)]
+    #[OA\Post(
+        description: 'Uploads a CSV file of subscribers to import. Returns the parsed fields and row count so that ' .
+        'the fields can be mapped before starting the import.',
+        summary: 'Upload a subscriber import file',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created subscriber import object.',
+        content: new Model(type: SubscriberImportObject::class),
+    )]
     public function upload(
-        Newsletter                             $newsletter,
-        Request                                $request,
-        #[MapRequestPayload] UploadImportInput $input
-    ): JsonResponse
-    {
+        Newsletter $newsletter,
+        Request $request,
+        #[MapRequestPayload] UploadImportInput $input,
+    ): JsonResponse {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
         if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
@@ -62,13 +71,21 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/{id}', methods: 'POST')]
-    #[ScopeRequired(Scope::DATA_WRITE)]
-    public function import(
-        Newsletter                       $newsletter,
-        SubscriberImport                 $subscriberImport,
-        #[MapRequestPayload] ImportInput $input
-    ): JsonResponse
-    {
+    #[ScopeRequired(PostScope::DATA_WRITE)]
+    #[OA\Post(
+        description: 'Starts an import using the field mapping provided for a previously uploaded subscriber import file.',
+        summary: 'Start a subscriber import',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated subscriber import object.',
+        content: new Model(type: SubscriberImportObject::class),
+    )]
+    public function start(
+        Newsletter $newsletter,
+        SubscriberImport $subscriberImport,
+        #[MapRequestPayload] ImportInput $input,
+    ): JsonResponse {
         $importCounts = $this->importService->getNewsletterImportCounts($newsletter);
 
         if ($importCounts['month'] >= ImportService::MONTHLY_IMPORT_LIMIT) {
@@ -95,15 +112,27 @@ class ImportController extends AbstractController
 
         $subscriberImport = $this->importService->updateSubscriberImport(
             $subscriberImport,
-            $updates
+            $updates,
         );
 
         return new JsonResponse(new SubscriberImportObject($subscriberImport));
     }
 
     #[Route('/imports', methods: 'GET')]
-    #[ScopeRequired(Scope::DATA_READ)]
-    public function listImports(Newsletter $newsletter, Request $request): JsonResponse
+    #[ScopeRequired(PostScope::DATA_READ)]
+    #[OA\Get(
+        description: 'Get all subscriber imports of the newsletter.',
+        summary: 'Get subscriber imports',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of subscriber imports',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SubscriberImportObject::class)),
+        ),
+    )]
+    public function list(Newsletter $newsletter, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 30);
         $offset = $request->query->getInt('offset', 0);
@@ -116,8 +145,22 @@ class ImportController extends AbstractController
     }
 
     #[Route('/imports/limits', methods: 'GET')]
-    #[ScopeRequired(Scope::DATA_READ)]
-    public function importCounts(Newsletter $newsletter): JsonResponse
+    #[ScopeRequired(PostScope::DATA_READ)]
+    #[OA\Get(
+        description: 'Get whether the newsletter has reached its daily or monthly subscriber import limits.',
+        summary: 'Get subscriber import limits',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns whether the daily and monthly import limits have been exceeded.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'daily_limit_exceeded', type: 'boolean'),
+                new OA\Property(property: 'monthly_limit_exceeded', type: 'boolean'),
+            ],
+        ),
+    )]
+    public function getLimits(Newsletter $newsletter): JsonResponse
     {
         $counts = $this->importService->getNewsletterImportCounts($newsletter);
 

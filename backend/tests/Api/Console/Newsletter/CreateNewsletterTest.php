@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Newsletter;
 
-use App\Api\Console\Controller\NewsletterController;
+use App\Api\Console\Controller\Org\NewslettersController;
 use App\Entity\NewsletterList;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
@@ -16,11 +16,10 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use Hyvor\Internal\Bundle\Comms\Event\ToCore\Resource\ResourceCreated;
 use Hyvor\Internal\Component\Component;
-use Hyvor\Internal\Resource\ResourceFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
-#[CoversClass(NewsletterController::class)]
+#[CoversClass(NewslettersController::class)]
 #[CoversClass(NewsletterService::class)]
 #[CoversClass(NewsletterRepository::class)]
 #[CoversClass(Newsletter::class)]
@@ -40,12 +39,12 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => $subdomain
+                'subdomain' => $subdomain,
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertResponseStatusCodeSame(422);
@@ -63,12 +62,12 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => 'valid-newsletter-subdomain'
+                'subdomain' => 'valid-newsletter-subdomain',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -104,7 +103,7 @@ class CreateNewsletterTest extends WebTestCase
             Component::CORE,
             eventValidator: function (ResourceCreated $event) use ($newsletter) {
                 $this->assertSame($newsletter->getOrganizationId(), $event->getOrganizationId());
-            }
+            },
         );
     }
 
@@ -114,12 +113,12 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => $long_string,
-                'subdomain' => 'valid-newsletter-subdomain'
+                'subdomain' => 'valid-newsletter-subdomain',
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -136,7 +135,6 @@ class CreateNewsletterTest extends WebTestCase
     #[TestWith(['other', true])]
     public function test_subdomain_taken(string $subdomain, bool $create = false): void
     {
-
         if ($create) {
             NewsletterFactory::createOne(['subdomain' => $subdomain]);
         }
@@ -144,16 +142,82 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
-                'subdomain' => $subdomain
+                'subdomain' => $subdomain,
             ],
-            useSession: true
+            useSession: true,
         );
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertSame('Subdomain is already taken.', $this->getJson()['message']);
+    }
 
+    public function test_autogenerate_subdomain_on_duplicate(): void
+    {
+        NewsletterFactory::createOne(['subdomain' => 'taken-subdomain']);
+
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletters',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => 'taken-subdomain',
+                'autogenerate_subdomain_on_duplicate' => true,
+            ],
+            useSession: true,
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertIsString($json['subdomain']);
+        $this->assertNotSame('taken-subdomain', $json['subdomain']);
+        $this->assertMatchesRegularExpression('/^taken-subdomain-[a-z0-9]{4,6}$/', $json['subdomain']);
+
+        $newsletterId = $json['id'];
+        $this->assertIsInt($newsletterId);
+        $repository = $this->em->getRepository(Newsletter::class);
+        $newsletter = $repository->find($newsletterId);
+        $this->assertNotNull($newsletter);
+        $this->assertSame($json['subdomain'], $newsletter->getSubdomain());
+    }
+
+    public function test_create_newsletter_with_metadata(): void
+    {
+        $response = $this->consoleApi(
+            null,
+            'POST',
+            '/newsletters',
+            [
+                'name' => 'Valid Newsletter Name',
+                'subdomain' => 'valid-newsletter-metadata',
+                'metadata' => [
+                    'external_id' => 'abc123',
+                    'source' => 'onboarding',
+                ],
+            ],
+            useSession: true,
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $json = $this->getJson();
+        $this->assertSame([
+            'external_id' => 'abc123',
+            'source' => 'onboarding',
+        ], $json['metadata']);
+
+        $newsletterId = $json['id'];
+        $this->assertIsInt($newsletterId);
+        $repository = $this->em->getRepository(Newsletter::class);
+        $newsletter = $repository->find($newsletterId);
+        $this->assertNotNull($newsletter);
+        $this->assertSame([
+            'external_id' => 'abc123',
+            'source' => 'onboarding',
+        ], $newsletter->getMetadata());
     }
 }

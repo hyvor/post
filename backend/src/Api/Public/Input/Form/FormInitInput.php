@@ -7,8 +7,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 class FormInitInput
 {
 
-    #[Assert\NotBlank]
-    public string $newsletter_subdomain;
+    #[Assert\When(
+        expression: 'this.newsletter_id === null',
+        constraints: [
+            new Assert\NotBlank(),
+        ]
+    )]
+    public ?string $newsletter_subdomain = null;
+
+    #[Assert\When(
+        expression: 'this.newsletter_subdomain === null',
+        constraints: [
+            new Assert\NotBlank(),
+        ]
+    )]
+    public ?int $newsletter_id = null;
 
     public ?string $language = null;
 

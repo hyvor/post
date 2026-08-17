@@ -2,29 +2,30 @@
 
 namespace App\Tests\Api\Console;
 
-use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\Auth\Oidc\Testing\OidcTestingUtils;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\JwtSource\JwtSource;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Entity\ApiKey;
 use App\Entity\Newsletter;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Auth\AuthFake;
-use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
-use Hyvor\Internal\Bundle\Comms\Event\ToCore\License\GetLicensesResponse;
+use Hyvor\Internal\Component\Component;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
+use Hyvor\Internal\CloudApi\CloudApiService;
+use Hyvor\Internal\CloudApi\Scope\ScopeBuilder;
 
-#[CoversClass(AuthorizationListener::class)]
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
 {
@@ -56,7 +57,7 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
-            'Authorization header must start with "Bearer ".',
+            'Authorization header must be a Bearer token',
             $this->getJson()["message"],
         );
     }
@@ -71,8 +72,9 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame(
-            "API key is missing or empty.",
+        $this->assertIsString($this->getJson()["message"]);
+        $this->assertStringContainsString(
+            "Invalid Cloud API token", // weird error because it branches out to cloud API token
             $this->getJson()["message"],
         );
     }
@@ -83,11 +85,11 @@ class AuthorizationTest extends WebTestCase
             "GET",
             "/api/console/issues",
             server: [
-                "HTTP_AUTHORIZATION" => "Bearer InvalidApiKey",
+                "HTTP_AUTHORIZATION" => "Bearer " . bin2hex(random_bytes(16)),
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid API key.", $this->getJson()["message"]);
+        $this->assertSame("API key is invalid or does not exist.", $this->getJson()["message"]);
     }
 
     public function test_invalid_session(): void
@@ -118,7 +120,10 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Current organization is missing.", $this->getJson()["message"]);
+        $this->assertSame(
+            "User does not have a valid current organization, or the organization is not found.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_fails_organization_mismatch(): void
@@ -166,7 +171,10 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("X-Newsletter-ID is required for this endpoint.", $this->getJson()["message"]);
+        $this->assertSame(
+            "Unable to find the newsletter from the request. Please provide a valid x-newsletter-id header.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_invalid_newsletter_id(): void
@@ -190,7 +198,10 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid newsletter ID.", $this->getJson()["message"]);
+        $this->assertSame(
+            "Unable to find the newsletter from the request. Please provide a valid x-newsletter-id header.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_newsletter_does_not_belong_to_current_organization(): void
@@ -244,7 +255,7 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
-            "You do not have access to this newsletter.",
+            "You do not have access to this resource.",
             $this->getJson()["message"],
         );
     }
@@ -256,7 +267,7 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_WRITE],
+            scopes: [PostScope::ISSUES_WRITE],
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
@@ -274,15 +285,20 @@ class AuthorizationTest extends WebTestCase
             $newsletter,
             'GET',
             '/issues',
-            scopes: [Scope::ISSUES_READ],
+            scopes: [PostScope::ISSUES_READ],
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
-        $this->assertInstanceOf(
-            Newsletter::class,
-            $newsletterFromAttr,
+        $authResults = $this->client->getRequest()->attributes->get(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
         );
+        $this->assertInstanceOf(
+            ConsoleAuthResults::class,
+            $authResults,
+        );
+
+        $newsletterFromAttr = $authResults->getResource();
+        $this->assertInstanceOf(Newsletter::class, $newsletterFromAttr);
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
         $apiKey = $this->em->getRepository(ApiKey::class)->findOneBy(['newsletter' => $newsletter]);
@@ -324,16 +340,23 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
+        $authResults = $this->client->getRequest()->attributes->get(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+        );
+        $this->assertInstanceOf(
+            ConsoleAuthResults::class,
+            $authResults,
+        );
+
+        $newsletterFromAttr = $authResults->getResource();
         $this->assertInstanceOf(
             Newsletter::class,
             $newsletterFromAttr,
         );
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
-        $userFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_user');
-        $this->assertInstanceOf(AuthUser::class, $userFromAttr);
-        $this->assertSame(1, $userFromAttr->id);
+        $this->assertNotNull($authResults->getNullableUser());
+        $this->assertSame(1, $authResults->getNullableUser()->id);
     }
 
     public function test_user_level_endpoint_works(): void
@@ -387,4 +410,34 @@ class AuthorizationTest extends WebTestCase
         $this->assertArrayHasKey('newsletters', $json);
         $this->assertArrayHasKey('config', $json);
     }
+
+    // cloud JWT
+
+    public function test_works_with_cloud_jwt(): void
+    {
+        $orgId = 15;
+
+        $cloudApiService = $this->getService(CloudApiService::class);
+        $key = OidcTestingUtils::generateKey();
+
+        $scopeBuilder = new ScopeBuilder();
+        $scopeBuilder->addScopes(Component::POST, [PostScope::ISSUES_READ]);
+
+        $jwt = $cloudApiService->createJwtToken(
+            $orgId,
+            $scopeBuilder,
+            JwtSource::forCloud('testkey'),
+        );
+
+        $this->client->request(
+            "GET",
+            "/api/console/issues",
+            server: [
+                "HTTP_X_ORGANIZATION_ID" => $orgId,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $jwt->encode($key['privateKeyPem'], 'testkey'),
+            ],
+        );
+        $this->assertResponseStatusCodeSame(403);
+    }
+
 }

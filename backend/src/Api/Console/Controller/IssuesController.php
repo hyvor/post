@@ -2,8 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Authorization\ScopeRequired;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Issue\SendTestInput;
 use App\Api\Console\Input\Issue\UpdateIssueInput;
 use App\Api\Console\Object\IssueObject;
@@ -25,6 +25,7 @@ use App\Service\User\UserService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
 use Hyvor\Internal\Billing\License\Resolved\ResolvedLicenseType;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,25 +33,38 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
-class IssueController extends AbstractController
+class IssuesController extends AbstractController
 {
 
     public function __construct(
-        private IssueService          $issueService,
-        private SendService           $sendService,
+        private IssueService $issueService,
+        private SendService $sendService,
         private NewsletterListService $newsletterListService,
-        private TextTemplateRenderer  $textTemplateRenderer,
-        private HtmlTemplateRenderer  $htmlTemplateRenderer,
-        private BillingInterface      $billing,
-        private DomainService         $domainService,
-        private UserService           $userService,
-        private SendingProfileService $sendingProfileService
+        private TextTemplateRenderer $textTemplateRenderer,
+        private HtmlTemplateRenderer $htmlTemplateRenderer,
+        private BillingInterface $billing,
+        private DomainService $domainService,
+        private UserService $userService,
+        private SendingProfileService $sendingProfileService,
     ) {}
 
     #[Route('/issues', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function getIssues(Request $request, Newsletter $newsletter): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Get issues of the newsletter, paginated and ordered by most recently created.',
+        summary: 'Get issues',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of issues',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: IssueObject::class)),
+        ),
+    )]
+    public function list(Request $request, Newsletter $newsletter): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -64,8 +78,17 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
-    public function createIssue(Newsletter $newsletter): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Post(
+        description: 'Creates a new draft issue for the newsletter.',
+        summary: 'Create an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created issue object.',
+        content: new Model(type: IssueObject::class),
+    )]
+    public function create(Newsletter $newsletter): JsonResponse
     {
         $issue = $this->issueService->createIssueDraft($newsletter);
 
@@ -73,21 +96,41 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function getById(Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Get an issue by ID.',
+        summary: 'Get an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the issue object.',
+        content: new Model(type: IssueObject::class),
+    )]
+    public function get(Issue $issue): JsonResponse
     {
-        return $this->json(new IssueObject(
-            $issue,
-            $this->sendService->getSendableSubscribersCount($issue)
-        ));
+        return $this->json(
+            new IssueObject(
+                $issue,
+                $this->sendService->getSendableSubscribersCount($issue),
+            ),
+        );
     }
 
     #[Route('/issues/{id}', methods: 'PATCH')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
-    public function updateIssue(
-        Issue                                 $issue,
-        Newsletter                            $newsletter,
-        #[MapRequestPayload] UpdateIssueInput $input
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Patch(
+        description: 'Updates a draft issue: its subject, content, sending profile, or lists.',
+        summary: 'Update an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated issue object.',
+        content: new Model(type: IssueObject::class),
+    )]
+    public function update(
+        Issue $issue,
+        Newsletter $newsletter,
+        #[MapRequestPayload] UpdateIssueInput $input,
     ): JsonResponse {
         $updates = new UpdateIssueDto();
 
@@ -102,7 +145,7 @@ class IssueController extends AbstractController
         if ($input->has('sending_profile_id')) {
             $sendingProfile = $this->sendingProfileService->getSendingProfileOfNewsletterById(
                 $newsletter,
-                $input->sending_profile_id
+                $input->sending_profile_id,
             );
 
             if ($sendingProfile === null) {
@@ -124,15 +167,26 @@ class IssueController extends AbstractController
 
         $issueUpdated = $this->issueService->updateIssue($issue, $updates);
 
-        return $this->json(new IssueObject(
-            $issueUpdated,
-            $this->sendService->getSendableSubscribersCount($issue)
-        ));
+        return $this->json(
+            new IssueObject(
+                $issueUpdated,
+                $this->sendService->getSendableSubscribersCount($issue),
+            ),
+        );
     }
 
     #[Route('/issues/{id}', methods: 'DELETE')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
-    public function deleteIssue(Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Delete(
+        description: 'Deletes a draft issue. Issues that are not in draft status cannot be deleted.',
+        summary: 'Delete an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
+    public function delete(Issue $issue): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -142,8 +196,35 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/send', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
-    public function sendIssue(Issue $issue, MessageBusInterface $bus): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Post(
+        description: 'Sends a draft issue to its subscribers. Validates the issue, license, and monthly email ' .
+        'limits before queuing the send.',
+        summary: 'Send an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated issue object, now in sending status.',
+        content: new Model(type: IssueObject::class),
+    )]
+    #[OA\Response(
+        response: 422,
+        description: 'Returned when sending the issue would exceed the organization\'s monthly email limit.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'message', type: 'string', example: 'would_exceed_limit'),
+                new OA\Property(
+                    property: 'data',
+                    properties: [
+                        new OA\Property(property: 'limit', type: 'integer'),
+                        new OA\Property(property: 'exceed_amount', type: 'integer'),
+                    ],
+                    type: 'object',
+                ),
+            ],
+        ),
+    )]
+    public function send(Issue $issue, MessageBusInterface $bus): JsonResponse
     {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -175,7 +256,9 @@ class IssueController extends AbstractController
         }
 
         if ($resolvedLicense->type === ResolvedLicenseType::TRIAL) {
-            throw new UnprocessableEntityHttpException("Cannot send issues during trial. Please upgrade your subscription.");
+            throw new UnprocessableEntityHttpException(
+                "Cannot send issues during trial. Please upgrade your subscription.",
+            );
         }
 
         $sendCountThisMonth = $this->sendService->getSendsCountThisMonthOfOrganization($organizationId);
@@ -184,8 +267,8 @@ class IssueController extends AbstractController
                 'message' => 'would_exceed_limit',
                 'data' => [
                     'limit' => $license->emails,
-                    'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount)
-                ]
+                    'exceed_amount' => abs($license->emails - $sendCountThisMonth - $subscribersCount),
+                ],
             ], 422);
         }
 
@@ -209,7 +292,23 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/test', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Get(
+        description: 'Get data useful for sending a test email of an issue: verified domains, and suggested and ' .
+        'previously used test email addresses.',
+        summary: 'Get issue test data',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the test email data.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'verified_domains', type: 'array', items: new OA\Items(type: 'string')),
+                new OA\Property(property: 'suggested_emails', type: 'array', items: new OA\Items(type: 'string')),
+                new OA\Property(property: 'test_sent_emails', type: 'array', items: new OA\Items(type: 'string')),
+            ],
+        ),
+    )]
     public function getTestData(Issue $issue): JsonResponse
     {
         $newsletter = $issue->getNewsletter();
@@ -227,10 +326,24 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/test', methods: 'POST')]
-    #[ScopeRequired(Scope::ISSUES_WRITE)]
+    #[ScopeRequired(PostScope::ISSUES_WRITE)]
+    #[OA\Post(
+        description: 'Sends a test email of a draft issue to the given email addresses. Test emails can only be ' .
+        'sent to verified domains or emails of newsletter users.',
+        summary: 'Send a test issue email',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the number of test emails successfully sent.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'success_count', type: 'integer'),
+            ],
+        ),
+    )]
     public function sendTest(
-        Issue                              $issue,
-        #[MapRequestPayload] SendTestInput $input
+        Issue $issue,
+        #[MapRequestPayload] SendTestInput $input,
     ): JsonResponse {
         if ($issue->getStatus() != IssueStatus::DRAFT) {
             throw new UnprocessableEntityHttpException("Issue is not a draft.");
@@ -245,7 +358,9 @@ class IssueController extends AbstractController
         }
 
         if (!$this->issueService->isTestEmailAllowed($issue, $input->emails)) {
-            throw new UnprocessableEntityHttpException("Test emails can only be sent to verified domains or emails of newsletter users.");
+            throw new UnprocessableEntityHttpException(
+                "Test emails can only be sent to verified domains or emails of newsletter users.",
+            );
         }
 
         $sendCount = $this->issueService->sendTestEmails($issue, $input->emails);
@@ -256,8 +371,22 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/preview', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function previewIssue(Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Renders the HTML preview of an issue, and returns the number of subscribers it would be sendable to.',
+        summary: 'Preview an issue',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the rendered HTML and sendable subscribers count.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'html', type: 'string'),
+                new OA\Property(property: 'sendable_subscribers_count', type: 'integer'),
+            ],
+        ),
+    )]
+    public function preview(Issue $issue): JsonResponse
     {
         try {
             $preview = $this->htmlTemplateRenderer->renderFromIssue($issue);
@@ -267,21 +396,42 @@ class IssueController extends AbstractController
 
         return $this->json([
             'html' => $preview,
-            'sendable_subscribers_count' => $this->sendService->getSendableSubscribersCount($issue)
+            'sendable_subscribers_count' => $this->sendService->getSendableSubscribersCount($issue),
         ]);
     }
 
     #[Route('/issues/{id}/progress', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function getIssueProgress(Newsletter $newsletter, Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Get the sending progress of an issue that is currently being sent.',
+        summary: 'Get issue sending progress',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the issue sending progress.',
+        content: new OA\JsonContent(type: 'object'),
+    )]
+    public function getProgress(Newsletter $newsletter, Issue $issue): JsonResponse
     {
         $progress = $this->sendService->getIssueProgress($issue);
         return $this->json($progress);
     }
 
     #[Route('/issues/{id}/sends', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function getIssueSends(Request $request, Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Get individual sends of an issue, paginated and optionally filtered by search term or send type.',
+        summary: 'Get issue sends',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of sends',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SendObject::class)),
+        ),
+    )]
+    public function listSends(Request $request, Issue $issue): JsonResponse
     {
         $limit = $request->query->getInt('limit', 50);
         $offset = $request->query->getInt('offset', 0);
@@ -302,14 +452,27 @@ class IssueController extends AbstractController
     }
 
     #[Route('/issues/{id}/report', methods: 'GET')]
-    #[ScopeRequired(Scope::ISSUES_READ)]
-    public function getIssueReport(Issue $issue): JsonResponse
+    #[ScopeRequired(PostScope::ISSUES_READ)]
+    #[OA\Get(
+        description: 'Get the delivery, open, click, bounce, and complaint counts of an issue.',
+        summary: 'Get issue report',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the issue report counts.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'counts', type: 'object'),
+            ],
+        ),
+    )]
+    public function getReport(Issue $issue): JsonResponse
     {
         $counts = $this->sendService->getIssueStats($issue, full: true);
         return $this->json(
             [
-                'counts' => $counts
-            ]
+                'counts' => $counts,
+            ],
         );
     }
 }

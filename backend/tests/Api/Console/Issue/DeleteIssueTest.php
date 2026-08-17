@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
 use App\Repository\IssueRepository;
@@ -12,7 +12,7 @@ use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueService::class)]
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
@@ -26,7 +26,7 @@ class DeleteIssueTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => IssueStatus::DRAFT
+            'status' => IssueStatus::DRAFT,
         ]);
 
         $issueId = $issue->getId();
@@ -49,7 +49,7 @@ class DeleteIssueTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => IssueStatus::SENDING
+            'status' => IssueStatus::SENDING,
         ]);
 
         $issueId = $issue->getId();
@@ -76,7 +76,7 @@ class DeleteIssueTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/issues/1'
+            '/issues/1',
         );
 
         $this->assertSame(404, $response->getStatusCode());
@@ -90,13 +90,13 @@ class DeleteIssueTest extends WebTestCase
         $otherNewsletter = NewsletterFactory::createOne();
 
         $issue = IssueFactory::createOne([
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
             $otherNewsletter,
             'DELETE',
-            '/issues/' . $issue->getId()
+            '/issues/' . $issue->getId(),
         );
 
         $this->assertSame(403, $response->getStatusCode());

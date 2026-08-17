@@ -2,12 +2,8 @@
 
 namespace App\Api\Console\Controller;
 
-use App\Api\Console\Authorization\AuthorizationListener;
-use App\Api\Console\Authorization\Scope;
-use App\Api\Console\Authorization\ScopeRequired;
-use App\Api\Console\Authorization\OrganizationLevelEndpoint;
-use App\Api\Console\Input\Newsletter\CreateNewsletterInput;
-use App\Api\Console\Input\Newsletter\SubdomainAvailabilityInput;
+use Hyvor\Internal\CloudApi\Scope\PostScope;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -15,83 +11,68 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
 class NewsletterController extends AbstractController
 {
     public function __construct(
         private NewsletterService $newsletterService,
-    )
-    {
-    }
-
-    #[Route('/newsletter/subdomain', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
-    public function getSubdomainAvailability(
-        Request                                         $request,
-        #[MapRequestPayload] SubdomainAvailabilityInput $input
-    ): JsonResponse
-    {
-        if (!$input->subdomain) {
-            throw new UnprocessableEntityHttpException('Subdomain is required.');
-        }
-
-        $available = true;
-
-        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
-            $available = false;
-        }
-
-        return $this->json([
-            'available' => $available
-        ]);
-    }
-
-    #[Route('/newsletter', methods: 'POST')]
-    #[OrganizationLevelEndpoint]
-    public function createNewsletter(
-        Request                                    $request,
-        #[MapRequestPayload] CreateNewsletterInput $input
-    ): JsonResponse
-    {
-        $user = AuthorizationListener::getUser($request);
-        $organization = AuthorizationListener::getOrganization($request);
-
-        if ($this->newsletterService->isSubdomainTaken($input->subdomain)) {
-            throw new UnprocessableEntityHttpException('Subdomain is already taken.');
-        }
-
-        $newsletter = $this->newsletterService->createNewsletter($user->id, $organization->id, $input->name, $input->subdomain);
-        return $this->json(new NewsletterObject($newsletter));
-    }
+    ) {}
 
     #[Route('/newsletter', methods: 'GET')]
-    #[ScopeRequired(Scope::NEWSLETTER_READ)]
-    public function getNewsletter(Newsletter $newsletter): JsonResponse
+    #[ScopeRequired(PostScope::NEWSLETTER_READ)]
+    #[OA\Get(
+        description: 'Get the current newsletter, as resolved from the API key used to authenticate the request.',
+        summary: 'Get the current newsletter',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the newsletter object.',
+        content: new Model(type: NewsletterObject::class),
+    )]
+    public function get(Newsletter $newsletter): JsonResponse
     {
         return $this->json(new NewsletterObject($newsletter));
     }
 
     #[Route('/newsletter', methods: 'DELETE')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
-    public function deleteNewsletter(Newsletter $newsletter): JsonResponse
+    #[ScopeRequired(PostScope::NEWSLETTER_DELETE)]
+    #[OA\Delete(
+        description: 'Deletes the current newsletter, as resolved from the API key used to authenticate the request.',
+        summary: 'Delete the current newsletter',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
+    public function delete(Newsletter $newsletter): JsonResponse
     {
         $this->newsletterService->deleteNewsletter($newsletter);
         return $this->json([]);
     }
 
     #[Route('/newsletter', methods: 'PATCH')]
-    #[ScopeRequired(Scope::NEWSLETTER_WRITE)]
-    public function updateNewsletter(
-        Newsletter                                                                                 $newsletter,
-        #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input
-    ): JsonResponse
-    {
+    #[ScopeRequired(PostScope::NEWSLETTER_WRITE)]
+    #[OA\Patch(
+        description: 'Updates the current newsletter, as resolved from the API key used to authenticate the request.',
+        summary: 'Update the current newsletter',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the updated newsletter object.',
+        content: new Model(type: NewsletterObject::class),
+    )]
+    public function update(
+        Newsletter $newsletter,
+        #[MapRequestPayload(resolver: UpdateNewsletterInputResolver::class)] UpdateNewsletterInput $input,
+    ): JsonResponse {
         $updates = new UpdateNewsletterDto();
         if ($input->has('name')) {
             $updates->name = $input->name;

@@ -9,4 +9,5 @@ docker compose run --rm backend vendor/bin/phpstan --memory-limit=1G
 
 # prettier
 docker compose run --rm frontend npm run format
+docker compose run --rm embed npm run format
 ```

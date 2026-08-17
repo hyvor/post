@@ -2,9 +2,9 @@
 
 namespace App\Api\Console\Resolver;
 
-use App\Api\Console\Authorization\AuthorizationListener;
 use App\Entity\Newsletter;
-use App\Repository\NewsletterRepository;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -32,10 +32,13 @@ class NewsletterResolver implements ValueResolverInterface
             return [];
         }
 
-        if (!AuthorizationListener::hasNewsletter($request)) {
-            throw new BadRequestException('Missing X-Newsletter-Id header');
+        $consoleAuth = $request->attributes->get(ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY);
+        $resource = $consoleAuth instanceof ConsoleAuthResults ? $consoleAuth->getResource() : null;
+
+        if (!$resource instanceof Newsletter) {
+            throw new NotFoundHttpException('Missing X-Newsletter-Id header or newsletter not found');
         }
 
-        return [AuthorizationListener::getNewsletter($request)];
+        return [$resource];
     }
 }

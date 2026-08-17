@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Send;
@@ -31,7 +31,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueService::class)]
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
@@ -49,13 +49,13 @@ class SendIssueTest extends WebTestCase
 
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
-            'status' => IssueStatus::SENT
+            'status' => IssueStatus::SENT,
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
         $this->assertSame(422, $response->getStatusCode());
         $json = $this->getJson();
@@ -74,13 +74,13 @@ class SendIssueTest extends WebTestCase
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'subject' => null
+            'subject' => null,
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -100,13 +100,13 @@ class SendIssueTest extends WebTestCase
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
-            'listIds' => []
+            'listIds' => [],
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -129,13 +129,13 @@ class SendIssueTest extends WebTestCase
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list->getId()],
-            'content' => null
+            'content' => null,
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -159,13 +159,13 @@ class SendIssueTest extends WebTestCase
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list1->getId()],
-            'content' => 'content'
+            'content' => 'content',
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -183,14 +183,14 @@ class SendIssueTest extends WebTestCase
         static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
             'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
-            'lists' => [$list]
+            'lists' => [$list],
         ]);
 
         $sendingProfile = SendingProfileFactory::createOne([
@@ -211,13 +211,13 @@ class SendIssueTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -257,21 +257,21 @@ class SendIssueTest extends WebTestCase
         static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         SubscriberFactory::createOne([
             'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
-            'lists' => [$list]
+            'lists' => [$list],
         ]);
 
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list->getId()],
-            'content' => 'content'
+            'content' => 'content',
         ]);
 
         $license = PostLicense::trial();
@@ -279,13 +279,13 @@ class SendIssueTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, $license)]
+            [1 => new ResolvedLicense(ResolvedLicenseType::TRIAL, $license)],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -303,21 +303,21 @@ class SendIssueTest extends WebTestCase
         static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'organization_id' => 1
+            'organization_id' => 1,
         ]);
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
 
         $subscriber = SubscriberFactory::createOne([
             'newsletter' => $newsletter,
             'status' => SubscriberStatus::SUBSCRIBED,
-            'lists' => [$list]
+            'lists' => [$list],
         ]);
 
         $issueSent = IssueFactory::createOne([
             'newsletter' => $newsletter,
             'status' => IssueStatus::SENT,
             'list_ids' => [$list->getId()],
-            'content' => "content"
+            'content' => "content",
         ]);
 
         $sends = SendFactory::createMany(10, [
@@ -331,7 +331,7 @@ class SendIssueTest extends WebTestCase
             'newsletter' => $newsletter,
             'status' => IssueStatus::DRAFT,
             'list_ids' => [$list->getId()],
-            'content' => "content"
+            'content' => "content",
         ]);
 
         $license = PostLicense::trial();
@@ -339,13 +339,13 @@ class SendIssueTest extends WebTestCase
 
         BillingFake::enableForSymfony(
             $this->container,
-            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)]
+            [1 => new ResolvedLicense(ResolvedLicenseType::SUBSCRIPTION, $license)],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'POST',
-            "/issues/" . $issue->getId() . "/send"
+            "/issues/" . $issue->getId() . "/send",
         );
 
         $this->assertSame(422, $response->getStatusCode());

@@ -11,7 +11,6 @@ use App\Service\NotificationMail\NotificationMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Hyvor\Internal\Auth\AuthInterface;
 use Hyvor\Internal\Auth\AuthUser;
-use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -23,22 +22,24 @@ class ApprovalService
     use ClockAwareTrait;
 
     public function __construct(
-        private EntityManagerInterface  $em,
-        private AuthInterface           $auth,
-        private readonly Environment    $mailTemplate,
+        private EntityManagerInterface $em,
+        private AuthInterface $auth,
+        private readonly Environment $mailTemplate,
         private readonly StringsFactory $stringsFactory,
         private NotificationMailService $emailNotificationService,
-        private MessageBusInterface     $messageBus,
-        private AppConfig               $appConfig
-    )
-    {
-    }
+        private MessageBusInterface $messageBus,
+        private AppConfig $appConfig,
+    ) {}
 
     /**
      * @return Approval[]
      */
-    public function getApprovals(?int $userId = null, ?ApprovalStatus $status = null, int $limit = 50, int $offset = 0): array
-    {
+    public function getApprovals(
+        ?int $userId = null,
+        ?ApprovalStatus $status = null,
+        int $limit = 50,
+        int $offset = 0,
+    ): array {
         $criteria = [];
 
         if ($userId !== null) {
@@ -48,53 +49,56 @@ class ApprovalService
             $criteria['status'] = $status;
         }
 
-        return $this->em->getRepository(Approval::class)
+        return $this->em
+            ->getRepository(Approval::class)
             ->findBy(
                 $criteria,
                 ['id' => 'DESC'],
                 $limit,
-                $offset
+                $offset,
             );
     }
 
     public function getReviewingApprovalsCount(): int
     {
-        return $this->em->getRepository(Approval::class)
+        return $this->em
+            ->getRepository(Approval::class)
             ->count(['status' => ApprovalStatus::REVIEWING]);
     }
 
     public function getApporvalById(int $id): ?Approval
     {
-        return $this->em->getRepository(Approval::class)
+        return $this->em
+            ->getRepository(Approval::class)
             ->findOneBy(['id' => $id]);
     }
 
-    public function getApprovalOfOrganization(AuthUserOrganization $organization): ?Approval
+    public function getApprovalOfOrganization(int $orgId): ?Approval
     {
-        return $this->em->getRepository(Approval::class)
-            ->findOneBy(['organization_id' => $organization->id]);
+        return $this->em
+            ->getRepository(Approval::class)
+            ->findOneBy(['organization_id' => $orgId]);
     }
 
-    public function getApprovalStatusOfOrganization(AuthUserOrganization $organization): ApprovalStatus
+    public function getApprovalStatusOfOrganization(int $organizationId): ApprovalStatus
     {
-        $approval = $this->getApprovalOfOrganization($organization);
+        $approval = $this->getApprovalOfOrganization($organizationId);
         return $approval === null ? ApprovalStatus::PENDING : $approval->getStatus();
     }
 
     public function createApproval(
-        int     $userId,
-        int     $organizationId,
-        string  $companyName,
-        string  $country,
-        string  $website,
+        int $userId,
+        int $organizationId,
+        string $companyName,
+        string $country,
+        string $website,
         ?string $socialLinks,
         ?string $typeOfContent,
         ?string $frequency,
         ?string $existingList,
         ?string $sample,
-        ?string $whyPost
-    ): Approval
-    {
+        ?string $whyPost,
+    ): Approval {
         $otherInfo = [];
         if ($typeOfContent) {
             $otherInfo['type_of_content'] = $typeOfContent;
@@ -113,7 +117,8 @@ class ApprovalService
         }
 
         $approval = new Approval();
-        $approval->setUserId($userId)
+        $approval
+            ->setUserId($userId)
             ->setOrganizationId($organizationId)
             ->setStatus(ApprovalStatus::REVIEWING)
             ->setCompanyName($companyName)
@@ -133,10 +138,9 @@ class ApprovalService
     }
 
     public function updateApproval(
-        Approval          $approval,
-        UpdateApprovalDto $updates
-    ): Approval
-    {
+        Approval $approval,
+        UpdateApprovalDto $updates,
+    ): Approval {
         if ($updates->has('companyName')) {
             $approval->setCompanyName($updates->companyName);
         }
@@ -210,12 +214,11 @@ class ApprovalService
     }
 
     public function approvalSudoAction(
-        Approval       $approval,
+        Approval $approval,
         ApprovalStatus $status,
-        ?string        $public_note,
-        ?string        $private_note
-    ): Approval
-    {
+        ?string $public_note,
+        ?string $private_note,
+    ): Approval {
         $approval->setStatus($status);
         $approval->setPublicNote($public_note);
         $approval->setPrivateNote($private_note);
@@ -261,7 +264,6 @@ class ApprovalService
         $publicNote = $approval->getPublicNote();
 
         if ($status === ApprovalStatus::APPROVED) {
-
             $content['body'] = $strings->get('mail.approval.bodyApproved');
             $content['buttonText'] = $strings->get('mail.approval.buttonText');
             $renderContext['buttonUrl'] = $this->appConfig->getUrlApp() . '/console';
@@ -272,7 +274,6 @@ class ApprovalService
         }
 
         if ($status === ApprovalStatus::REJECTED) {
-
             $content['body'] = $strings->get('mail.approval.bodyRejected');
 
             if ($publicNote) {
@@ -286,7 +287,7 @@ class ApprovalService
         $this->emailNotificationService->send(
             $user->email,
             $subject,
-            $mail
+            $mail,
         );
     }
 }
