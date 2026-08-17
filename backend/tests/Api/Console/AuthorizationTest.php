@@ -72,6 +72,7 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
+        $this->assertIsString($this->getJson()["message"]);
         $this->assertStringContainsString(
             "Invalid Cloud API token", // weird error because it branches out to cloud API token
             $this->getJson()["message"],
