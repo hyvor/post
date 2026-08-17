@@ -45,7 +45,8 @@
         "twig/extra-bundle": "^3.21",
         "symfony/dom-crawler": "8.0.*",
         "zenstruck/messenger-monitor-bundle": "^0.6.0",
-        "sentry/sentry-symfony": "^5.9"
+        "sentry/sentry-symfony": "^5.9",
+        "nelmio/api-doc-bundle": "^5.10"
     },
     "bump-after-update": true,
     "sort-packages": true,

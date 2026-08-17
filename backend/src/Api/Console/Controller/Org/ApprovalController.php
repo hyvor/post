@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Api\Console\Controller;
+namespace App\Api\Console\Controller\Org;
 
 use App\Api\Console\Input\Approval\CreateApprovalInput;
 use App\Api\Console\Input\Approval\UpdateApprovalInput;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use App\Api\Console\Object\ApprovalObject;
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
 use App\Service\Approval\ApprovalService;
 use App\Service\Approval\Dto\UpdateApprovalDto;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -37,7 +37,7 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals', methods: 'GET')]
     #[OrgEndpoint]
-    public function getApproval(ConsoleAuthResults $consoleAuth): JsonResponse
+    public function get(ConsoleAuthResults $consoleAuth): JsonResponse
     {
         $organization = $consoleAuth->getOrganizationId();
         $approval = $this->approvalService->getApprovalOfOrganization($organization);
@@ -49,7 +49,7 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals', methods: 'POST')]
     #[OrgEndpoint]
-    public function approve(
+    public function create(
         #[MapRequestPayload] CreateApprovalInput $input,
         ConsoleAuthResults $consoleAuth,
     ): JsonResponse {
@@ -83,14 +83,16 @@ class ApprovalController extends AbstractController
 
     #[Route('/approvals/{id}', methods: 'PATCH')]
     #[OrgEndpoint]
-    public function updateApproval(
+    public function update(
         string $id,
         #[MapRequestPayload] UpdateApprovalInput $input,
         ConsoleAuthResults $consoleAuth,
     ): JsonResponse {
         $approval = $this->resolveApproval($id);
 
-        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization($consoleAuth->getOrganizationId());
+        $userApprovalStatus = $this->approvalService->getApprovalStatusOfOrganization(
+            $consoleAuth->getOrganizationId(),
+        );
         if (($userApprovalStatus !== ApprovalStatus::REVIEWING) && ($userApprovalStatus !== ApprovalStatus::PENDING)) {
             throw new UnprocessableEntityHttpException('Approval is not in pending or reviewing status');
         }

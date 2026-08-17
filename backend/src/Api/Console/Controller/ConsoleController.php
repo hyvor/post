@@ -31,7 +31,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 
 class ConsoleController extends AbstractController
 {
@@ -48,7 +47,7 @@ class ConsoleController extends AbstractController
     ) {}
 
     #[Route('/init', methods: 'GET')]
-    public function initConsole(Request $request): JsonResponse
+    public function init(Request $request): JsonResponse
     {
         $me = $this->auth->me($request);
 

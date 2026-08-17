@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Approval;
 
-use App\Api\Console\Controller\ApprovalController;
+use App\Api\Console\Controller\Org\ApprovalController;
 use App\Api\Console\Object\ApprovalObject;
 use App\Entity\Approval;
 use App\Entity\Type\ApprovalStatus;
@@ -32,7 +32,7 @@ class CreateApprovalTest extends WebTestCase
                 'existing_list' => 'Yes, from previous campaigns',
                 'sample' => null,
                 'why_post' => 'HYVOR is the best!',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -52,7 +52,8 @@ class CreateApprovalTest extends WebTestCase
         $this->assertSame('HYVOR is the best!', $data['why_post']);
         $this->assertSame(ApprovalStatus::REVIEWING->value, $data['status']);
 
-        $approval = $this->em->getRepository(Approval::class)
+        $approval = $this->em
+            ->getRepository(Approval::class)
             ->findOneBy(['id' => $data['id']]);
         $this->assertNotNull($approval);
         $this->assertSame(1, $approval->getOrganizationId());
@@ -87,7 +88,7 @@ class CreateApprovalTest extends WebTestCase
                 'country' => 'FR',
                 'website' => 'https://hyvor.com',
                 'type_of_content' => 'Tech',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -115,7 +116,7 @@ class CreateApprovalTest extends WebTestCase
                 'country' => 'FR',
                 'website' => 'https://hyvor.com',
                 'type_of_content' => 'Tech',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());

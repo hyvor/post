@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Controller\SendingProfilesController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Entity\Type\RelayDomainStatus;
@@ -13,7 +13,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfilesController::class)]
 #[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
 class CreateSendingProfileTest extends WebTestCase
@@ -25,8 +25,8 @@ class CreateSendingProfileTest extends WebTestCase
         DomainFactory::createOne([
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         $response = $this->consoleApi(
@@ -39,7 +39,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
-                'brand_url' => null
+                'brand_url' => null,
             ],
         );
 
@@ -63,13 +63,13 @@ class CreateSendingProfileTest extends WebTestCase
         $domain = DomainFactory::createOne([
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
-            'domain' => $domain
+            'domain' => $domain,
         ]);
 
         $response = $this->consoleApi(
@@ -82,7 +82,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
-                'brand_url' => null
+                'brand_url' => null,
             ],
         );
 
@@ -109,7 +109,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
-                'brand_url' => null
+                'brand_url' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());
@@ -124,7 +124,7 @@ class CreateSendingProfileTest extends WebTestCase
         DomainFactory::createOne([
             'domain' => 'hyvor.com',
             'relay_status' => RelayDomainStatus::PENDING,
-            'user_id' => 1
+            'user_id' => 1,
         ]);
         $response = $this->consoleApi(
             $newsletter,
@@ -136,7 +136,7 @@ class CreateSendingProfileTest extends WebTestCase
                 'reply_to_email' => null,
                 'brand_name' => null,
                 'brand_logo' => null,
-                'brand_url' => null
+                'brand_url' => null,
             ],
         );
         $this->assertSame(400, $response->getStatusCode());

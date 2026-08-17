@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Entity\Send;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\IssueFactory;
@@ -11,7 +11,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(Send::class)]
 class GetIssueProgressTest extends WebTestCase
 {
@@ -22,7 +22,7 @@ class GetIssueProgressTest extends WebTestCase
 
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
-            'total_sendable' => 20
+            'total_sendable' => 20,
         ]);
 
         SendFactory::createMany(15, [
@@ -49,7 +49,7 @@ class GetIssueProgressTest extends WebTestCase
 
         $issue = IssueFactory::createOne([
             'newsletter' => $newsletter,
-            'total_sendable' => 1
+            'total_sendable' => 1,
         ]);
 
         SendFactory::createOne([

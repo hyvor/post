@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Controller\SendingProfilesController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\Newsletter;
 use App\Entity\SendingProfile;
@@ -14,7 +14,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfilesController::class)]
 #[CoversClass(SendingProfileObject::class)]
 #[CoversClass(SendingProfileService::class)]
 class GetSendingProfilesTest extends WebTestCase
@@ -37,13 +37,13 @@ class GetSendingProfilesTest extends WebTestCase
             'newsletter' => NewsletterFactory::createOne(),
             'domain' => DomainFactory::createOne([
                 'relay_status' => RelayDomainStatus::ACTIVE,
-            ])
+            ]),
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/sending-profiles'
+            '/sending-profiles',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -65,13 +65,13 @@ class GetSendingProfilesTest extends WebTestCase
             'reply_to_email' => null,
             'brand_name' => null,
             'brand_logo' => null,
-            'is_system' => true
+            'is_system' => true,
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/sending-profiles'
+            '/sending-profiles',
         );
 
         $this->assertSame(200, $response->getStatusCode());

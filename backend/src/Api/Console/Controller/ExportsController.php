@@ -8,11 +8,13 @@ use App\Api\Console\Object\SubscriberExportObject;
 use App\Entity\Newsletter;
 use App\Service\Media\MediaService;
 use App\Service\Subscriber\SubscriberService;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
-class ExportController extends AbstractController
+class ExportsController extends AbstractController
 {
     public function __construct(
         private SubscriberService $subscriberService,
@@ -21,7 +23,16 @@ class ExportController extends AbstractController
 
     #[Route('/export', methods: 'POST')]
     #[ScopeRequired(PostScope::DATA_WRITE)]
-    public function exportSubscribers(Newsletter $newsletter): JsonResponse
+    #[OA\Post(
+        description: 'Starts a new export of all subscribers of the newsletter.',
+        summary: 'Export subscribers',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the created subscriber export object.',
+        content: new Model(type: SubscriberExportObject::class),
+    )]
+    public function create(Newsletter $newsletter): JsonResponse
     {
         $subscriberExport = $this->subscriberService->exportSubscribers($newsletter);
         return $this->json(new SubscriberExportObject($subscriberExport, null));
@@ -29,7 +40,19 @@ class ExportController extends AbstractController
 
     #[Route('/export', methods: 'GET')]
     #[ScopeRequired(PostScope::DATA_READ)]
-    public function listExports(Newsletter $newsletter): JsonResponse
+    #[OA\Get(
+        description: 'Get all subscriber exports of the newsletter.',
+        summary: 'Get subscriber exports',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of subscriber exports',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SubscriberExportObject::class)),
+        ),
+    )]
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $exports = $this->subscriberService->getExports($newsletter);
         $exportObjects = array_map(function ($export) {

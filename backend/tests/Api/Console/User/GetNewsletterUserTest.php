@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\User;
 
-use App\Api\Console\Controller\UserController;
+use App\Api\Console\Controller\UsersController;
 use App\Api\Console\Object\UserObject;
 use App\Service\User\UserService;
 use App\Tests\Case\WebTestCase;
@@ -12,7 +12,7 @@ use App\Entity\Type\UserRole;
 use Hyvor\Internal\Auth\AuthFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(UserController::class)]
+#[CoversClass(UsersController::class)]
 #[CoversClass(UserService::class)]
 #[CoversClass(UserObject::class)]
 class GetNewsletterUserTest extends WebTestCase
@@ -25,19 +25,19 @@ class GetNewsletterUserTest extends WebTestCase
             'id' => 1,
             'username' => 'supun',
             'name' => 'Supun Wimalasena',
-            'email' => 'supun@hyvor.com'
+            'email' => 'supun@hyvor.com',
         ]);
 
         $user = UserFactory::createOne([
             'newsletter' => $newsletter,
             'hyvor_user_id' => 1,
-            'role' => UserRole::ADMIN
+            'role' => UserRole::ADMIN,
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
-            '/users'
+            '/users',
         );
 
         $this->assertResponseStatusCodeSame(200);

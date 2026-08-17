@@ -13,11 +13,11 @@ class UserObject
     public int $created_at;
     public UserMiniObject $user;
 
-    public function __construct(User $user, AuthUser $authUser)
+    public function __construct(User $userEntity, AuthUser $authUser)
     {
-        $this->id = $user->getId();
-        $this->role = $user->getRole();
-        $this->created_at = $user->getCreatedAt()->getTimestamp();
+        $this->id = $userEntity->getId();
+        $this->role = $userEntity->getRole();
+        $this->created_at = $userEntity->getCreatedAt()->getTimestamp();
         $this->user = new UserMiniObject($authUser);
     }
 }

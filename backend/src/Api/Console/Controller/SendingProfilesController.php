@@ -18,8 +18,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
-class SendingProfileController extends AbstractController
+class SendingProfilesController extends AbstractController
 {
     public function __construct(
         private SendingProfileService $sendingProfileService,
@@ -41,7 +43,19 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles', methods: 'GET')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_READ)]
-    public function getSendingProfiles(Newsletter $newsletter): JsonResponse
+    #[OA\Get(
+        description: 'Get all sending profiles of the newsletter.',
+        summary: 'Get sending profiles',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of sending profiles',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SendingProfileObject::class)),
+        )
+    )]
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $sendingProfiles = array_map(
             fn(SendingProfile $sendingProfile) => new SendingProfileObject($sendingProfile),
@@ -52,7 +66,16 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles', methods: 'POST')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
-    public function createSendingProfile(
+    #[OA\Post(
+        description: 'Creates a new sending profile for the newsletter. The from email\'s domain must be a verified domain.',
+        summary: 'Create a sending profile',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Sending profile created successfully',
+        content: new Model(type: SendingProfileObject::class)
+    )]
+    public function create(
         #[MapRequestPayload] CreateSendingProfileInput $input,
         Newsletter $newsletter,
     ): JsonResponse {
@@ -73,7 +96,16 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles/{id}', methods: 'PATCH')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
-    public function updateSendingProfile(
+    #[OA\Patch(
+        description: 'Updates a sending profile of the newsletter.',
+        summary: 'Update a sending profile',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Sending profile updated successfully',
+        content: new Model(type: SendingProfileObject::class)
+    )]
+    public function update(
         SendingProfile $sendingProfile,
         #[MapRequestPayload] UpdateSendingProfileInput $input,
     ): JsonResponse {
@@ -115,7 +147,19 @@ class SendingProfileController extends AbstractController
 
     #[Route('/sending-profiles/{id}', methods: 'DELETE')]
     #[ScopeRequired(PostScope::SENDING_PROFILES_WRITE)]
-    public function deleteSendingProfile(SendingProfile $sendingProfile): JsonResponse
+    #[OA\Delete(
+        description: 'Deletes a non-system sending profile of the newsletter. The system sending profile cannot be deleted.',
+        summary: 'Delete a sending profile',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the remaining sending profiles of the newsletter.',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: SendingProfileObject::class)),
+        )
+    )]
+    public function delete(SendingProfile $sendingProfile): JsonResponse
     {
         if ($sendingProfile->getIsSystem()) {
             throw new BadRequestHttpException("Cannot delete system sending profile");

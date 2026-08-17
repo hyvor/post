@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\SendingProfile;
 
-use App\Api\Console\Controller\SendingProfileController;
+use App\Api\Console\Controller\SendingProfilesController;
 use App\Api\Console\Object\SendingProfileObject;
 use App\Entity\SendingProfile;
 use App\Service\SendingProfile\SendingProfileService;
@@ -11,7 +11,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SendingProfileController::class)]
+#[CoversClass(SendingProfilesController::class)]
 #[CoversClass(SendingProfileService::class)]
 #[CoversClass(SendingProfileObject::class)]
 class DeleteSendingProfileTest extends WebTestCase
@@ -29,7 +29,7 @@ class DeleteSendingProfileTest extends WebTestCase
         $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingProfile->getId()
+            '/sending-profiles/' . $sendingProfile->getId(),
         );
 
         $this->assertApiFailed(400, 'Cannot delete system sending profile');
@@ -47,7 +47,7 @@ class DeleteSendingProfileTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingProfile->getId()
+            '/sending-profiles/' . $sendingProfile->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -80,7 +80,7 @@ class DeleteSendingProfileTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/' . $sendingProfileDefault->getId()
+            '/sending-profiles/' . $sendingProfileDefault->getId(),
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -105,7 +105,7 @@ class DeleteSendingProfileTest extends WebTestCase
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
-            '/sending-profiles/1'
+            '/sending-profiles/1',
         );
 
         $this->assertSame(404, $response->getStatusCode());

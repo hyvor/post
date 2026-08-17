@@ -19,8 +19,10 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
-class UserController extends AbstractController
+class UsersController extends AbstractController
 {
     public function __construct(
         private AuthInterface $auth,
@@ -30,7 +32,19 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'GET')]
     #[ScopeRequired(PostScope::USERS_READ)]
-    public function getUsers(Newsletter $newsletter): JsonResponse
+    #[OA\Get(
+        description: 'Get all users of the newsletter.',
+        summary: 'Get newsletter users',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of newsletter users',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: UserObject::class)),
+        ),
+    )]
+    public function list(Newsletter $newsletter): JsonResponse
     {
         $users = $this->userService
             ->getNewsletterUsers($newsletter)
@@ -47,7 +61,16 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'DELETE')]
     #[ScopeRequired(PostScope::USERS_WRITE)]
-    public function deleteUser(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
+    #[OA\Delete(
+        description: 'Removes a user from the newsletter, identified by either its `id` or `user_id` (HYVOR user ID).',
+        summary: 'Remove a newsletter user',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns an empty object on success.',
+        content: new OA\JsonContent(),
+    )]
+    public function delete(Newsletter $newsletter, #[MapRequestPayload] DeleteUserInput $input): JsonResponse
     {
         if ($input->user_id === null && $input->id === null) {
             throw new BadRequestHttpException('Either user_id or id is required');
@@ -65,7 +88,16 @@ class UserController extends AbstractController
 
     #[Route('/users', methods: 'POST')]
     #[ScopeRequired(PostScope::USERS_WRITE)]
-    public function createUser(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
+    #[OA\Post(
+        description: 'Adds a HYVOR user (identified by `user_id`) who is already a member of the organization to the newsletter.',
+        summary: 'Add a newsletter user',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the added (or already-existing, if `on_duplicate` is `ignore`) newsletter user object.',
+        content: new Model(type: UserObject::class),
+    )]
+    public function create(Newsletter $newsletter, #[MapRequestPayload] CreateUserInput $input): JsonResponse
     {
         $hyvorUser = $this->auth->fromId($input->user_id);
 

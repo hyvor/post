@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console\ApiKey;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Controller\ApiKeyController;
+use App\Api\Console\Controller\ApiKeysController;
 use App\Api\Console\Input\ApiKey\CreateApiKeyInput;
 use App\Api\Console\Object\ApiKeyObject;
 use App\Entity\ApiKey;
@@ -13,7 +13,7 @@ use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ApiKeyController::class)]
+#[CoversClass(ApiKeysController::class)]
 #[CoversClass(ApiKeyService::class)]
 #[CoversClass(PostScope::class)]
 #[CoversClass(CreateApiKeyInput::class)]
@@ -30,8 +30,8 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Test name',
-                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
-            ]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE],
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -59,8 +59,8 @@ class CreateApiKeyTest extends WebTestCase
             'POST',
             '/api-keys',
             [
-                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
-            ]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE],
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -77,8 +77,8 @@ class CreateApiKeyTest extends WebTestCase
             'POST',
             '/api-keys',
             [
-                'name' => 'Test name'
-            ]
+                'name' => 'Test name',
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -96,8 +96,8 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Test name',
-                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE, 'invalid_scope']
-            ]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE, 'invalid_scope'],
+            ],
         );
         $this->assertSame(422, $response->getStatusCode());
         $this->assertHasViolation('scopes[2]', 'The value you selected is not a valid choice.');
@@ -118,8 +118,8 @@ class CreateApiKeyTest extends WebTestCase
             '/api-keys',
             [
                 'name' => 'Exceeding limit',
-                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE]
-            ]
+                'scopes' => [PostScope::ISSUES_READ, PostScope::ISSUES_WRITE],
+            ],
         );
 
         $this->assertSame(400, $response->getStatusCode());

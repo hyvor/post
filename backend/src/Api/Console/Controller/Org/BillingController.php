@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Api\Console\Controller;
+namespace App\Api\Console\Controller\Org;
 
 use App\Service\Issue\SendService;
+use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Hyvor\Internal\Billing\BillingInterface;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
-use Hyvor\Internal\CloudApi\ConsoleApiAuth\OrgEndpoint;
 
 class BillingController extends AbstractController
 {

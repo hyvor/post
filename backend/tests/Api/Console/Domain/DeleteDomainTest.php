@@ -2,13 +2,12 @@
 
 namespace App\Tests\Api\Console\Domain;
 
-use App\Api\Console\Controller\DomainController;
+use App\Api\Console\Controller\Org\DomainController;
 use App\Entity\Domain;
 use App\Service\Domain\DomainService;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\NewsletterFactory;
-use Aws\SesV2\SesV2Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
@@ -33,7 +32,7 @@ class DeleteDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'organization_id' => 1,
-            ]
+            ],
         );
 
         $domain_id = $domain->getId();
@@ -42,7 +41,7 @@ class DeleteDomainTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/domains/' . $domain->getId(),
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -61,7 +60,7 @@ class DeleteDomainTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/domains/123456789',
-            useSession: true
+            useSession: true,
 
         );
 
@@ -80,14 +79,14 @@ class DeleteDomainTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'organization_id' => 2,
-            ]
+            ],
         );
 
         $response = $this->consoleApi(
             $newsletter,
             'DELETE',
             '/domains/' . $domain->getId(),
-            useSession: true
+            useSession: true,
 
         );
 

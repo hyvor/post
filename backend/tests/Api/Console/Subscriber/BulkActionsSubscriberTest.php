@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Controller\SubscribersController;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
 use App\Repository\SubscriberRepository;
@@ -14,7 +14,7 @@ use App\Tests\Factory\SubscriberFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscribersController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]
@@ -38,7 +38,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'delete',
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -68,7 +68,7 @@ class BulkActionsSubscriberTest extends WebTestCase
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'status_change',
                 'status' => 'pending',
-            ]
+            ],
         );
 
 
@@ -100,11 +100,14 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'status_change',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Status must be provided for status change action', (string)$response->getContent());
+        $this->assertStringContainsString(
+            'Status must be provided for status change action',
+            (string)$response->getContent(),
+        );
     }
 
     public function test_bulk_status_update_invalid_status(): void
@@ -126,7 +129,7 @@ class BulkActionsSubscriberTest extends WebTestCase
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'status_change',
                 'status' => 'invalid_status',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -167,7 +170,7 @@ class BulkActionsSubscriberTest extends WebTestCase
                     'source' => 'test_source',
                     'campaign' => 'test_campaign',
                 ],
-            ]
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -177,8 +180,16 @@ class BulkActionsSubscriberTest extends WebTestCase
         foreach ($subscriberIds as $id) {
             $subscriber = $subscriberRepository->find($id);
             $this->assertNotNull($subscriber, "Subscriber with ID $id should exist after metadata update.");
-            $this->assertSame('test_source', $subscriber->getMetadata()['source'] ?? null, "Subscriber with ID $id should have updated source metadata.");
-            $this->assertSame('test_campaign', $subscriber->getMetadata()['campaign'] ?? null, "Subscriber with ID $id should have updated campaign metadata.");
+            $this->assertSame(
+                'test_source',
+                $subscriber->getMetadata()['source'] ?? null,
+                "Subscriber with ID $id should have updated source metadata.",
+            );
+            $this->assertSame(
+                'test_campaign',
+                $subscriber->getMetadata()['campaign'] ?? null,
+                "Subscriber with ID $id should have updated campaign metadata.",
+            );
         }
     }
 
@@ -199,11 +210,14 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'metadata_update',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Metadata must be provided for metadata update action', (string)$response->getContent());
+        $this->assertStringContainsString(
+            'Metadata must be provided for metadata update action',
+            (string)$response->getContent(),
+        );
     }
 
     public function test_bulk_metadata_update_metadata_not_found(): void
@@ -226,11 +240,14 @@ class BulkActionsSubscriberTest extends WebTestCase
                 'metadata' => [
                     'non_existent_key' => 'value',
                 ],
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Metadata definitions with keys non_existent_key not found', (string)$response->getContent());
+        $this->assertStringContainsString(
+            'Metadata definitions with keys non_existent_key not found',
+            (string)$response->getContent(),
+        );
     }
 
     public function test_bulk_action_invalid_subscriber_ids(): void
@@ -244,11 +261,14 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => [9999, 8888], // Non-existent IDs
                 'action' => 'delete',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertStringContainsString('Subscriber with ID 9999 not found in the newsletter', (string)$response->getContent());
+        $this->assertStringContainsString(
+            'Subscriber with ID 9999 not found in the newsletter',
+            (string)$response->getContent(),
+        );
     }
 
     public function test_bulk_action_exceeds_limit(): void
@@ -268,7 +288,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'delete',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
@@ -292,7 +312,7 @@ class BulkActionsSubscriberTest extends WebTestCase
             [
                 'subscribers_ids' => $subscriberIds,
                 'action' => 'invalid_action',
-            ]
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Domain;
 
-use App\Api\Console\Controller\DomainController;
+use App\Api\Console\Controller\Org\DomainController;
 use App\Api\Console\Object\DomainObject;
 use App\Entity\Domain;
 use App\Service\Domain\DomainService;
@@ -23,7 +23,7 @@ class GetDomainsTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/domains'
+            '/domains',
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -40,7 +40,7 @@ class GetDomainsTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'GET',
-            '/domains'
+            '/domains',
         );
 
         $this->assertSame(200, $response->getStatusCode());

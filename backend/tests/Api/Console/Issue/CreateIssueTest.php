@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Issue;
 
-use App\Api\Console\Controller\IssueController;
+use App\Api\Console\Controller\IssuesController;
 use App\Api\Console\Object\IssueObject;
 use App\Entity\Issue;
 use App\Entity\Type\IssueStatus;
@@ -19,7 +19,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
-#[CoversClass(IssueController::class)]
+#[CoversClass(IssuesController::class)]
 #[CoversClass(IssueService::class)]
 #[CoversClass(IssueRepository::class)]
 #[CoversClass(Issue::class)]
@@ -33,7 +33,7 @@ class CreateIssueTest extends WebTestCase
         static::mockTime(new \DateTimeImmutable('2025-02-21'));
 
         $newsletter = NewsletterFactory::createOne([
-            'subdomain' => 'thibault'
+            'subdomain' => 'thibault',
         ]);
         $sendingProfile = SendingProfileFactory::createOne([
             'newsletter' => $newsletter,
@@ -78,15 +78,15 @@ class CreateIssueTest extends WebTestCase
             [
                 'domain' => 'hyvor.com',
                 'relay_status' => RelayDomainStatus::ACTIVE,
-                'user_id' => 1
-            ]
+                'user_id' => 1,
+            ],
         );
 
         $sendingProfile = SendingProfileFactory::createOne([
             'from_email' => 'thibault@hyvor.com',
             'newsletter' => $newsletter,
             'domain' => $domain,
-            'is_default' => true
+            'is_default' => true,
         ]);
 
         $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);

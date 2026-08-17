@@ -18,16 +18,16 @@ class DomainObject
     public ?int $relay_last_checked_at;
     public ?string $relay_error_message;
 
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domainEntity)
     {
-        $this->id = $domain->getId();
-        $this->created_at = $domain->getCreatedAt()->getTimestamp();
-        $this->domain = $domain->getDomain();
-        $this->dkim_public_key = $domain->getDkimTxtvalue();
-        $this->dkim_txt_name = $domain->getDkimHost();
-        $this->dkim_txt_value = $domain->getDkimTxtvalue();
-        $this->relay_status = $domain->getRelayStatus();
-        $this->relay_last_checked_at = $domain->getRelayLastCheckedAt()?->getTimestamp() ?? null;
-        $this->relay_error_message = $domain->getRelayErrorMessage();
+        $this->id = $domainEntity->getId();
+        $this->created_at = $domainEntity->getCreatedAt()->getTimestamp();
+        $this->domain = $domainEntity->getDomain();
+        $this->dkim_public_key = $domainEntity->getDkimTxtvalue();
+        $this->dkim_txt_name = $domainEntity->getDkimHost();
+        $this->dkim_txt_value = $domainEntity->getDkimTxtvalue();
+        $this->relay_status = $domainEntity->getRelayStatus();
+        $this->relay_last_checked_at = $domainEntity->getRelayLastCheckedAt()?->getTimestamp() ?? null;
+        $this->relay_error_message = $domainEntity->getRelayErrorMessage();
     }
 }

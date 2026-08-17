@@ -3,7 +3,7 @@
 namespace App\Tests\Api\Console\ApiKey;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
-use App\Api\Console\Controller\ApiKeyController;
+use App\Api\Console\Controller\ApiKeysController;
 use App\Api\Console\Object\ApiKeyObject;
 use App\Service\ApiKey\ApiKeyService;
 use App\Tests\Case\WebTestCase;
@@ -11,7 +11,7 @@ use App\Tests\Factory\ApiKeyFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ApiKeyController::class)]
+#[CoversClass(ApiKeysController::class)]
 #[CoversClass(ApiKeyService::class)]
 #[CoversClass(PostScope::class)]
 #[CoversClass(ApiKeyObject::class)]
@@ -22,14 +22,14 @@ class GetApiKeysTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         ApiKeyFactory::createMany(4, [
             'newsletter' => $newsletter,
-            'scopes' => [PostScope::ISSUES_READ]
+            'scopes' => [PostScope::ISSUES_READ],
         ]);
 
         $response = $this->consoleApi(
             $newsletter,
             'GET',
             '/api-keys',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -54,7 +54,7 @@ class GetApiKeysTest extends WebTestCase
             $newsletter,
             'GET',
             '/api-keys',
-            useSession: true
+            useSession: true,
         );
 
         $this->assertSame(200, $response->getStatusCode());

@@ -6,14 +6,12 @@ use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Util\OptionalPropertyTrait;
-use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateSubscriberInput
 {
 
     use OptionalPropertyTrait;
-    use ClockAwareTrait;
 
     #[Assert\NotBlank]
     #[Assert\Email]
@@ -84,5 +82,4 @@ class CreateSubscriberInput
     {
         return array_map(fn($value) => $value->value, ListRemovalReason::cases());
     }
-
 }

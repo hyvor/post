@@ -2,7 +2,7 @@
 
 namespace Api\Console\Template;
 
-use App\Api\Console\Controller\TemplateController;
+use App\Api\Console\Controller\TemplatesController;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Template;
 use App\Service\Template\TemplateService;
@@ -11,7 +11,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(TemplateController::class)]
+#[CoversClass(TemplatesController::class)]
 #[CoversClass(TemplateService::class)]
 #[CoversClass(TemplateObject::class)]
 #[CoversClass(Template::class)]
@@ -46,7 +46,7 @@ class UpdateTemplateTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne([
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
@@ -69,8 +69,8 @@ class UpdateTemplateTest extends WebTestCase
                         <body>
                             {% block body %}{% endblock %}
                         </body>
-                    </html>'
-            ]
+                    </html>',
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());
@@ -93,7 +93,7 @@ class UpdateTemplateTest extends WebTestCase
         $newsletter = NewsletterFactory::createOne();
 
         $template = TemplateFactory::createOne([
-            'newsletter' => $newsletter
+            'newsletter' => $newsletter,
         ]);
 
         $response = $this->consoleApi(
@@ -101,8 +101,8 @@ class UpdateTemplateTest extends WebTestCase
             'PATCH',
             '/templates',
             [
-                'template' => null
-            ]
+                'template' => null,
+            ],
         );
 
         $this->assertSame(200, $response->getStatusCode());

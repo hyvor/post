@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api\Console\Subscriber;
 
-use App\Api\Console\Controller\SubscriberController;
+use App\Api\Console\Controller\SubscribersController;
 use App\Api\Console\Object\SubscriberObject;
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
@@ -15,7 +15,7 @@ use App\Tests\Factory\SubscriberFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 
-#[CoversClass(SubscriberController::class)]
+#[CoversClass(SubscribersController::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(SubscriberRepository::class)]
 #[CoversClass(Subscriber::class)]

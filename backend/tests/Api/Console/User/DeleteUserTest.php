@@ -2,7 +2,7 @@
 
 namespace Api\Console\User;
 
-use App\Api\Console\Controller\UserController;
+use App\Api\Console\Controller\UsersController;
 use App\Api\Console\Object\UserObject;
 use App\Entity\User;
 use App\Service\User\UserService;
@@ -13,7 +13,7 @@ use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Auth\AuthFake;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(UserController::class)]
+#[CoversClass(UsersController::class)]
 #[CoversClass(UserService::class)]
 #[CoversClass(UserObject::class)]
 class DeleteUserTest extends WebTestCase
@@ -39,7 +39,7 @@ class DeleteUserTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/users',
-            ['id' => $userId]
+            ['id' => $userId],
         );
 
         $this->assertResponseStatusCodeSame(200);
@@ -69,7 +69,7 @@ class DeleteUserTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/users',
-            ['user_id' => 1]
+            ['user_id' => 1],
         );
 
         $this->assertResponseStatusCodeSame(200);
@@ -97,7 +97,7 @@ class DeleteUserTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/users',
-            ['id' => $user->getId() + 1]
+            ['id' => $user->getId() + 1],
         );
 
         $this->assertResponseStatusCodeSame(404);
@@ -111,7 +111,7 @@ class DeleteUserTest extends WebTestCase
             $newsletter,
             'DELETE',
             '/users',
-            []
+            [],
         );
 
         $this->assertResponseStatusCodeSame(400);

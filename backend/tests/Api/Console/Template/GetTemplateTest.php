@@ -2,7 +2,7 @@
 
 namespace Api\Console\Template;
 
-use App\Api\Console\Controller\TemplateController;
+use App\Api\Console\Controller\TemplatesController;
 use App\Api\Console\Object\TemplateObject;
 use App\Entity\Template;
 use App\Service\Template\TemplateService;
@@ -11,7 +11,7 @@ use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(TemplateController::class)]
+#[CoversClass(TemplatesController::class)]
 #[CoversClass(TemplateService::class)]
 #[CoversClass(TemplateObject::class)]
 #[CoversClass(Template::class)]
@@ -318,7 +318,7 @@ class GetTemplateTest extends WebTestCase
 
 {% endapply %}
 ',
-            $json['template']
+            $json['template'],
         );
     }
 
@@ -329,8 +329,8 @@ class GetTemplateTest extends WebTestCase
         $template = TemplateFactory::createOne(
             [
                 'newsletter' => $newsletter,
-                'template' => 'MyCustomTemplate'
-            ]
+                'template' => 'MyCustomTemplate',
+            ],
         );
 
         $response = $this->consoleApi(

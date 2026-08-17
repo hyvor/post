@@ -2,15 +2,15 @@
 
 namespace App\Tests\Api\Console\List;
 
-use App\Api\Console\Controller\ListController;
+use App\Api\Console\Controller\ListsController;
 use App\Entity\NewsletterList;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\NewsletterFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(ListController::class)]
-#[CoversClass(ListController::class)]
+#[CoversClass(ListsController::class)]
+#[CoversClass(ListsController::class)]
 #[CoversClass(NewsletterList::class)]
 class CreateListTest extends WebTestCase
 {
@@ -56,8 +56,8 @@ class CreateListTest extends WebTestCase
             '/lists',
             [
                 'name' => $long_string,
-                'newsletter_id' => $newsletter->getId()
-            ]
+                'newsletter_id' => $newsletter->getId(),
+            ],
         );
 
         $this->assertSame(422, $response->getStatusCode());
