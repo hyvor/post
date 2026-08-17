@@ -26,7 +26,7 @@ class HyvorPostForm extends HTMLElement {
 			target: this.shadowRoot!,
 			props: {
 				newsletterSubdomain,
-				newsletterId:! newsletterId ? null : parseInt(newsletterId),
+				newsletterId: !newsletterId ? null : parseInt(newsletterId),
 				instance: this.getAttribute('instance') || 'https://post.hyvor.com',
 				shadowRoot: this.shadowRoot!,
 				lists: this.getListsArr('lists'),
