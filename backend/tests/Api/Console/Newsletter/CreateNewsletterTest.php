@@ -40,7 +40,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
                 'subdomain' => $subdomain,
@@ -114,7 +114,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => $long_string,
                 'subdomain' => 'valid-newsletter-subdomain',
@@ -143,7 +143,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
                 'subdomain' => $subdomain,
@@ -162,7 +162,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
                 'subdomain' => 'taken-subdomain',
@@ -191,7 +191,7 @@ class CreateNewsletterTest extends WebTestCase
         $response = $this->consoleApi(
             null,
             'POST',
-            '/newsletter',
+            '/newsletters',
             [
                 'name' => 'Valid Newsletter Name',
                 'subdomain' => 'valid-newsletter-metadata',

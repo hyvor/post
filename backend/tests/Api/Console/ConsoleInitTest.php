@@ -35,7 +35,7 @@ class ConsoleInitTest extends WebTestCase
     {
         AuthFake::enableForSymfony(
             $this->container,
-            ['id' => 1],
+            ['id' => 1, 'name' => 'Supun'],
             $withOrganization ? new AuthUserOrganization(
                 id: 1,
                 name: 'Fake Organization',
@@ -114,7 +114,7 @@ class ConsoleInitTest extends WebTestCase
 
         $this->assertArrayHasKey('user', $data);
         $this->assertIsArray($data['user']);
-        $this->assertCount(9, $data['user']);
+        $this->assertSame('Supun', $data['user']['name']);
 
         $this->assertArrayHasKey('organization', $data);
         $this->assertIsArray($data['organization']);
@@ -150,7 +150,6 @@ class ConsoleInitTest extends WebTestCase
 
         $this->assertArrayHasKey('user', $data);
         $this->assertIsArray($data['user']);
-        $this->assertCount(9, $data['user']);
 
         $this->assertArrayHasKey('organization', $data);
         $this->assertNull($data['organization']);

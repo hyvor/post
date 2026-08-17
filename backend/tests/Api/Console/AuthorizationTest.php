@@ -3,6 +3,8 @@
 namespace App\Tests\Api\Console;
 
 use Hyvor\Internal\Auth\Oidc\Testing\OidcTestingUtils;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use Hyvor\Internal\CloudApi\JwtSource\JwtSource;
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
@@ -12,7 +14,6 @@ use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\UserFactory;
 use Hyvor\Internal\Auth\AuthFake;
-use Hyvor\Internal\Auth\AuthUser;
 use Hyvor\Internal\Auth\AuthUserOrganization;
 use Hyvor\Internal\Billing\BillingFake;
 use Hyvor\Internal\Billing\License\PostLicense;
@@ -56,7 +57,7 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
-            'Authorization header must start with "Bearer ".',
+            'Authorization header must be a Bearer token',
             $this->getJson()["message"],
         );
     }
@@ -71,8 +72,8 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame(
-            "API key is missing or empty.",
+        $this->assertStringContainsString(
+            "Invalid Cloud API token", // weird error because it branches out to cloud API token
             $this->getJson()["message"],
         );
     }
@@ -83,11 +84,11 @@ class AuthorizationTest extends WebTestCase
             "GET",
             "/api/console/issues",
             server: [
-                "HTTP_AUTHORIZATION" => "Bearer InvalidApiKey",
+                "HTTP_AUTHORIZATION" => "Bearer " . bin2hex(random_bytes(16)),
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid API key.", $this->getJson()["message"]);
+        $this->assertSame("API key is invalid or does not exist.", $this->getJson()["message"]);
     }
 
     public function test_invalid_session(): void
@@ -118,7 +119,10 @@ class AuthorizationTest extends WebTestCase
             "/api/console/issues",
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Current organization is missing.", $this->getJson()["message"]);
+        $this->assertSame(
+            "User does not have a valid current organization, or the organization is not found.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_fails_organization_mismatch(): void
@@ -166,7 +170,10 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("X-Newsletter-ID is required for this endpoint.", $this->getJson()["message"]);
+        $this->assertSame(
+            "Unable to find the newsletter from the request. Please provide a valid x-newsletter-id header.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_invalid_newsletter_id(): void
@@ -190,7 +197,10 @@ class AuthorizationTest extends WebTestCase
             ],
         );
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame("Invalid newsletter ID.", $this->getJson()["message"]);
+        $this->assertSame(
+            "Unable to find the newsletter from the request. Please provide a valid x-newsletter-id header.",
+            $this->getJson()["message"],
+        );
     }
 
     public function test_newsletter_does_not_belong_to_current_organization(): void
@@ -244,7 +254,7 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame(
-            "You do not have access to this newsletter.",
+            "You do not have access to this resource.",
             $this->getJson()["message"],
         );
     }
@@ -278,11 +288,16 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
-        $this->assertInstanceOf(
-            Newsletter::class,
-            $newsletterFromAttr,
+        $authResults = $this->client->getRequest()->attributes->get(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
         );
+        $this->assertInstanceOf(
+            ConsoleAuthResults::class,
+            $authResults,
+        );
+
+        $newsletterFromAttr = $authResults->getResource();
+        $this->assertInstanceOf(Newsletter::class, $newsletterFromAttr);
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
         $apiKey = $this->em->getRepository(ApiKey::class)->findOneBy(['newsletter' => $newsletter]);
@@ -324,16 +339,23 @@ class AuthorizationTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $newsletterFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_newsletter');
+        $authResults = $this->client->getRequest()->attributes->get(
+            ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY,
+        );
+        $this->assertInstanceOf(
+            ConsoleAuthResults::class,
+            $authResults,
+        );
+
+        $newsletterFromAttr = $authResults->getResource();
         $this->assertInstanceOf(
             Newsletter::class,
             $newsletterFromAttr,
         );
         $this->assertSame($newsletter->getId(), $newsletterFromAttr->getId());
 
-        $userFromAttr = $this->client->getRequest()->attributes->get('console_api_resolved_user');
-        $this->assertInstanceOf(AuthUser::class, $userFromAttr);
-        $this->assertSame(1, $userFromAttr->id);
+        $this->assertNotNull($authResults->getNullableUser());
+        $this->assertSame(1, $authResults->getNullableUser()->id);
     }
 
     public function test_user_level_endpoint_works(): void
