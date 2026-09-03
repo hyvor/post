@@ -134,18 +134,15 @@
 		wrapStyle="margin-top:50px; padding-bottom: 20px;"
 	/>
 
-	<!-- Button Group -->
 	<div class="button-wrap">
-		<ButtonGroup>
-			{#each volumeOptions as option}
-				<Button
-					variant={selectedVolume === option ? 'fill' : 'outline'}
-					on:click={() => selectVolume(option)}
-				>
-					{option}
-				</Button>
-			{/each}
-		</ButtonGroup>
+		{#each volumeOptions as option}
+			<Button
+				variant={selectedVolume === option ? 'fill' : 'outline'}
+				on:click={() => selectVolume(option)}
+			>
+				{option}
+			</Button>
+		{/each}
 	</div>
 
 	<!-- Graph -->
@@ -177,6 +174,7 @@
 		display: flex;
 		justify-content: center;
 		margin: 1.5rem 0 2rem 0;
+		gap: 1rem;
 	}
 
 	.graph-container {

@@ -50,14 +50,12 @@
 
 <SingleBox>
 	<SettingsTop>
-		<ButtonGroup>
-			<Button on:click={handleExport} disabled={exporting}>
-				Export Subscribers
-				{#snippet end()}
-					<IconBoxArrowUp size={14} />
-				{/snippet}
-			</Button>
-		</ButtonGroup>
+		<Button on:click={handleExport} disabled={exporting}>
+			Export Subscribers
+			{#snippet end()}
+				<IconBoxArrowUp size={14} />
+			{/snippet}
+		</Button>
 	</SettingsTop>
 	<div class="content">
 		{#if loading}

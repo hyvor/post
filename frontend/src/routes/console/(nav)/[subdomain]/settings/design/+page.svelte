@@ -12,7 +12,7 @@
 </script>
 
 <SettingsTop>
-	<ButtonGroup>
+	<div class="button-wrap">
 		<Button on:click={() => (showPreviewModal = true)}>
 			Preview Email
 			{#snippet end()}
@@ -25,7 +25,7 @@
 				<IconCodeSlash />
 			{/snippet}
 		</Button>
-	</ButtonGroup>
+	</div>
 </SettingsTop>
 
 <div class="wrap">
@@ -40,5 +40,9 @@
 		padding: 25px 30px 60px;
 		overflow: auto;
 		flex: 1;
+	}
+	.button-wrap {
+		display: flex;
+		gap: 6px;
 	}
 </style>

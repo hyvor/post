@@ -11,7 +11,7 @@
 </script>
 
 <SettingsTop>
-	<ButtonGroup>
+	<div class="button-wrap">
 		<Button on:click={() => (preview = !preview)}>
 			Open Preview
 			{#snippet end()}
@@ -24,7 +24,7 @@
 				<IconBoxArrowUpRight size={12} />
 			{/snippet}
 		</Button>
-	</ButtonGroup>
+	</div>
 </SettingsTop>
 
 <SettingsBody>
@@ -32,3 +32,10 @@
 </SettingsBody>
 
 <PreviewModal bind:preview />
+
+<style>
+	.button-wrap {
+		display: flex;
+		gap: 6px;
+	}
+</style>
