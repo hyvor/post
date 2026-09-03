@@ -69,10 +69,8 @@
 	<div class="save">
 		<div class="note">Make sure you save your changes</div>
 
-		<ButtonGroup>
-			<Button color="gray" variant="invisible" on:click={ondiscard}>Discard</Button>
-			<Button on:click={save}>Save</Button>
-		</ButtonGroup>
+		<Button color="gray" variant="invisible" on:click={ondiscard}>Discard</Button>
+		<Button on:click={save}>Save</Button>
 
 		{#if loading}
 			<div class="loader">
