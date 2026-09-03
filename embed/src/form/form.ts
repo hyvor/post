@@ -12,6 +12,13 @@ class HyvorPostForm extends HTMLElement {
 		const style = document.createElement('style');
 		style.textContent = formCss;
 		this.shadowRoot!.appendChild(style);
+
+		window.addEventListener(
+			'hb:colorModeChanged',
+			(e: CustomEventInit<{ mode: 'light' | 'dark' }>) => {
+				this.form?.setPalette(e.detail?.mode);
+			}
+		);
 	}
 
 	connectedCallback() {
@@ -22,6 +29,12 @@ class HyvorPostForm extends HTMLElement {
 			throw new Error('newsletter or newsletter-id is required for Hyvor Post form.');
 		}
 
+		const colors =
+			this.getAttribute('colors') ||
+			(document.documentElement.classList.contains('mode-dark') && 'dark') ||
+			(document.documentElement.classList.contains('mode-light') && 'light') ||
+			'os';
+
 		this.form = mount(Form, {
 			target: this.shadowRoot!,
 			props: {
@@ -31,7 +44,8 @@ class HyvorPostForm extends HTMLElement {
 				shadowRoot: this.shadowRoot!,
 				lists: this.getListsArr('lists'),
 				listsDefaultUnselected: this.getListsArr('lists-default-unselected'),
-				listsHidden: this.hasAttribute('lists-hidden')
+				listsHidden: this.hasAttribute('lists-hidden'),
+				colors: colors as 'light' | 'dark' | 'os'
 			}
 		});
 	}
