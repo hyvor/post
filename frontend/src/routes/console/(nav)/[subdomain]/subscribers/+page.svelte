@@ -208,7 +208,7 @@
 			</div>
 		</div>
 		<div class="right">
-			<ButtonGroup>
+			<div class="button-wrap">
 				<Button size="small" color="input" as="a" href={consoleUrlWithNewsletter('/tools/import')}>
 					{#snippet end()}
 						<IconBoxArrowInDown />
@@ -221,7 +221,7 @@
 					{/snippet}
 					{I18n.t('console.subscribers.addSubscriber')}
 				</Button>
-			</ButtonGroup>
+			</div>
 		</div>
 	</div>
 
@@ -285,5 +285,10 @@
 		:global(input) {
 			font-size: 14px;
 		}
+	}
+
+	.button-wrap {
+		display: flex;
+		gap: 6px;
 	}
 </style>
