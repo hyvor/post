@@ -22,9 +22,7 @@ class NewsletterList
     /**
      * @var Collection<int, Subscriber>
      */
-    #[ORM\ManyToMany(targetEntity: Subscriber::class, inversedBy: 'lists', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\JoinTable(name: 'list_subscriber')]
-    #[ORM\JoinColumn(name: 'list_id')]
+    #[ORM\ManyToMany(targetEntity: Subscriber::class, mappedBy: 'lists')]
     private Collection $subscribers;
 
     #[ORM\Column(type: 'text')]
@@ -144,13 +142,16 @@ class NewsletterList
     {
         if (!$this->subscribers->contains($subscriber)) {
             $this->subscribers[] = $subscriber;
+            $subscriber->addList($this);
         }
         return $this;
     }
 
     public function removeSubscriber(Subscriber $subscriber): self
     {
-        $this->subscribers->removeElement($subscriber);
+        if ($this->subscribers->removeElement($subscriber)) {
+            $subscriber->removeList($this);
+        }
         return $this;
     }
 }
