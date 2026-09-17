@@ -426,7 +426,7 @@ class AuthorizationTest extends WebTestCase
             $this->assertSame('GET', $method);
             $this->assertStringEndsWith('/.well-known/jwks.json', $url);
             $jwks = $key['jwks'];
-            $jwks['keys'][0]['kid'] = 'testkey';
+            $jwks['keys'][0]['kid'] = 'testkey'; // @phpstan-ignore-line
             return new JsonMockResponse($jwks);
         });
         $this->container->set(HttpClientInterface::class, $httpClient);
