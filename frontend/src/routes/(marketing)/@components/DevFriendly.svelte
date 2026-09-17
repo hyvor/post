@@ -50,7 +50,7 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	:global(body) {
 		overflow-x: hidden;
 	}
@@ -77,9 +77,7 @@
 
 	.title h2 {
 		font-size: 20px !important;
-		//margin: 0 !important;
 		font-weight: normal;
-		// color: var(--gray-light) !important;
 	}
 
 	.item-card {

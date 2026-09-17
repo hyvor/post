@@ -35,7 +35,7 @@
 	<div class="right">&rarr;</div>
 </div>
 
-<style lang="scss">
+<style>
 	.wrap {
 		padding: 15px 25px;
 		background-color: var(--accent-light-mid);

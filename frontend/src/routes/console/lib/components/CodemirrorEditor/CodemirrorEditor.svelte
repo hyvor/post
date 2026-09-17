@@ -73,7 +73,7 @@
 
 <div class="editor" bind:this={editorDiv} {...$$restProps}></div>
 
-<style lang="scss">
+<style>
 	.editor {
 		height: 100%;
 	}
@@ -85,14 +85,14 @@
 		border-radius: 20px;
 		font-size: 14px;
 		line-height: 21px;
-		:global(.CodeMirror-line) {
-			padding-left: 15px !important;
-		}
-		:global(.CodeMirror-gutters) {
-			background-color: var(--hds-color-background);
-		}
-		:global(.CodeMirror-scroll) {
-			overflow-x: hidden !important;
-		}
+	}
+	.editor :global(.CodeMirror .CodeMirror-line) {
+		padding-left: 15px !important;
+	}
+	.editor :global(.CodeMirror .CodeMirror-gutters) {
+		background-color: var(--hds-color-background);
+	}
+	.editor :global(.CodeMirror .CodeMirror-scroll) {
+		overflow-x: hidden !important;
 	}
 </style>
