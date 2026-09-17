@@ -178,7 +178,7 @@
 	</Modal>
 </div>
 
-<style lang="scss">
+<style>
 	.modal-wrap :global(.inner[role='dialog']) {
 		width: 100%;
 		height: 100%;

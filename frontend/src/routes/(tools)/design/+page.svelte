@@ -118,51 +118,51 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	.demo-view {
 		display: flex;
 		height: 100vh;
+	}
 
-		.column {
-			flex: 2;
-			display: flex;
-			flex-direction: column;
-			margin: 0 10px;
-			flex-shrink: 0;
-			min-width: 0;
-		}
-		.column:nth-child(3) {
-			flex: 3;
-		}
+	.demo-view .column {
+		flex: 2;
+		display: flex;
+		flex-direction: column;
+		margin: 0 10px;
+		flex-shrink: 0;
+		min-width: 0;
+	}
+	.demo-view .column:nth-child(3) {
+		flex: 3;
+	}
 
-		.column-title {
-			font-size: 16px;
-			font-weight: 600;
-			padding: 10px;
-			text-align: center;
-		}
+	.demo-view .column-title {
+		font-size: 16px;
+		font-weight: 600;
+		padding: 10px;
+		text-align: center;
+	}
 
-		.column-content {
-			flex: 1;
-			overflow: auto;
-			background-color: var(--hds-color-background);
-		}
+	.demo-view .column-content {
+		flex: 1;
+		overflow: auto;
+		background-color: var(--hds-color-background);
+	}
 
-		.hds-box {
-			height: 100%;
-			background-color: var(--hds-color-background) !important;
-		}
+	.demo-view .hds-box {
+		height: 100%;
+		background-color: var(--hds-color-background) !important;
+	}
 
-		.user-interface-wrap {
-			overflow: auto;
-		}
+	.demo-view .user-interface-wrap {
+		overflow: auto;
+	}
 
-		:global(.CodeMirror) {
-			background-color: var(--hds-color-background) !important;
-			min-height: 100%;
-			:global(.CodeMirror-gutters) {
-				background-color: var(--hds-color-background) !important;
-			}
-		}
+	.demo-view :global(.CodeMirror) {
+		background-color: var(--hds-color-background) !important;
+		min-height: 100%;
+	}
+	.demo-view :global(.CodeMirror .CodeMirror-gutters) {
+		background-color: var(--hds-color-background) !important;
 	}
 </style>

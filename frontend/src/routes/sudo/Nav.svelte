@@ -90,7 +90,7 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	.nav {
 		width: 280px;
 		padding: 15px;

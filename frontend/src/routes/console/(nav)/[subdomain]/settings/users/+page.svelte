@@ -62,7 +62,7 @@
 	</div>
 {/if}
 
-<style lang="scss">
+<style>
 	.moderators {
 		padding: 15px 30px;
 	}

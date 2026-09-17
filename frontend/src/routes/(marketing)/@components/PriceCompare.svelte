@@ -165,7 +165,7 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	.wrap {
 		padding-top: 80px;
 	}

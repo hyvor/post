@@ -142,19 +142,19 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	.search-wrap {
 		display: inline;
+	}
 
-		.press-enter {
-			color: var(--text-light);
-			font-size: 14px;
-			margin-left: 4px;
-		}
+	.search-wrap .press-enter {
+		color: var(--text-light);
+		font-size: 14px;
+		margin-left: 4px;
+	}
 
-		:global(input) {
-			font-size: 14px;
-		}
+	.search-wrap :global(input) {
+		font-size: 14px;
 	}
 
 	.sends-wrap {

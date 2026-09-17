@@ -154,7 +154,7 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	.wrap {
 		padding-bottom: 15px;
 		padding-top: 5px;
@@ -185,24 +185,24 @@
 		width: calc(100% - 20px);
 		padding: 10px 20px;
 		border-radius: var(--box-radius);
-		&:not(.disabled) {
-			cursor: pointer;
-		}
-		&.disabled {
-			pointer-events: none;
-		}
+	}
+	.current:not(.disabled) {
+		cursor: pointer;
+	}
+	.current.disabled {
+		pointer-events: none;
+	}
 
-		.left {
-			flex: 1;
-		}
+	.current .left {
+		flex: 1;
+	}
 
-		.name {
-			font-weight: 600;
-		}
+	.current .name {
+		font-weight: 600;
+	}
 
-		&:hover:not(.disabled) {
-			background-color: var(--hover);
-		}
+	.current:hover:not(.disabled) {
+		background-color: var(--hover);
 	}
 
 	.nav-links :global(a.active) {
@@ -233,29 +233,29 @@
 			display: flex;
 			border-top: 1px solid var(--border);
 			overflow-x: auto;
+		}
 
-			:global(a .middle) {
-				display: none;
-			}
+		.nav-links :global(a .middle) {
+			display: none;
+		}
 
-			:global(a .start) {
-				margin-right: 0 !important;
-			}
+		.nav-links :global(a .start) {
+			margin-right: 0 !important;
+		}
 
-			:global(a) {
-				border-left: none !important;
-				border-top: 3px solid transparent;
-				flex: 1;
-				justify-content: center;
-			}
+		.nav-links :global(a) {
+			border-left: none !important;
+			border-top: 3px solid transparent;
+			flex: 1;
+			justify-content: center;
+		}
 
-			:global(a.active) {
-				border-top-color: var(--accent);
-			}
+		.nav-links :global(a.active) {
+			border-top-color: var(--accent);
+		}
 
-			:global(.line) {
-				display: none !important;
-			}
+		.nav-links :global(.line) {
+			display: none !important;
 		}
 
 		.current {

@@ -25,6 +25,9 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Hyvor\Internal\CloudApi\CloudApiService;
 use Hyvor\Internal\CloudApi\Scope\ScopeBuilder;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(ScopeRequired::class)]
 class AuthorizationTest extends WebTestCase
@@ -417,8 +420,18 @@ class AuthorizationTest extends WebTestCase
     {
         $orgId = 15;
 
-        $cloudApiService = $this->getService(CloudApiService::class);
         $key = OidcTestingUtils::generateKey();
+
+        $httpClient = new MockHttpClient(function ($method, $url) use ($key): JsonMockResponse {
+            $this->assertSame('GET', $method);
+            $this->assertStringEndsWith('/.well-known/jwks.json', $url);
+            $jwks = $key['jwks'];
+            $jwks['keys'][0]['kid'] = 'testkey'; // @phpstan-ignore-line
+            return new JsonMockResponse($jwks);
+        });
+        $this->container->set(HttpClientInterface::class, $httpClient);
+
+        $cloudApiService = $this->getService(CloudApiService::class);
 
         $scopeBuilder = new ScopeBuilder();
         $scopeBuilder->addScopes(Component::POST, [PostScope::ISSUES_READ]);

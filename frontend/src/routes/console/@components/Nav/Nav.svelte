@@ -26,7 +26,7 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	.account-nav {
 		margin-bottom: 15px;
 	}
