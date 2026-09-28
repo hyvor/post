@@ -1,0 +1,26 @@
+{
+    "languages": [{ "code": "fr", "name": "French" }],
+    "translatables": [
+        {
+            "source": "../../docs/docs/en/*.md",
+            "target": "../../docs/docs/{lang}/*.md",
+            "shortname": "docs"
+        },
+        {
+            "source": "../../docs/docs/locale/en.json",
+            "target": "../../docs/docs/locale/{lang}.json",
+            "shortname": "docs-nav"
+        },
+        {
+            "source": "../../docs/hosting/en/*.md",
+            "target": "../../docs/hosting/{lang}/*.md",
+            "shortname": "hosting"
+        },
+        {
+            "source": "../../docs/hosting/locale/en.json",
+            "target": "../../docs/hosting/locale/{lang}.json",
+            "shortname": "hosting-nav"
+        }
+    ],
+    "ignore": []
+}

@@ -21,6 +21,7 @@ COPY frontend/package.json \
 COPY frontend/src /app/frontend/src
 COPY frontend/static /app/frontend/static
 COPY shared /app/shared
+COPY docs /app/docs
 
 ###################################################
 FROM frontend-base AS frontend-dev

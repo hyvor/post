@@ -1,0 +1,26 @@
+{
+	"../../docs/docs/en/ConsoleApi.md": {
+		"fr": "e4eb33c8beeedd00c415e63c167e655b1230f78241c7ce431658ee2627433026"
+	},
+	"../../docs/docs/en/EmailDesign.md": {
+		"fr": "a951af5c22a5fb337e5aa9b5099a1dbabf274166e6fd5591c09390d24095b32b"
+	},
+	"../../docs/docs/en/Import.md": {
+		"fr": "1056ebb10d591fbedaea23c788cebc8ff7519b276d3576da369bf88a1291dfd4"
+	},
+	"../../docs/docs/en/Introduction.md": {
+		"fr": "0d10941584fca613ac2b0e286b12046431e0321715982027f97a41f08ebd58d9"
+	},
+	"../../docs/docs/en/SignupForm.md": {
+		"fr": "05eaf35a649b21d77928e5cd644f3928020576bb5ad0252403bc0e22b790adc6"
+	},
+	"../../docs/docs/locale/en.json": {
+		"fr": "2906f2231fe5a71fce12c3e09274602c7a7eba349370436433c99f14f6478aa1"
+	},
+	"../../docs/hosting/en/Introduction.md": {
+		"fr": "67ab749a4454dd2e51020e8ace3ae315947a9c80e8f1c910e96beadf792b3cb2"
+	},
+	"../../docs/hosting/locale/en.json": {
+		"fr": "5a4745bb654d41c2c6f621c56e105eec995b1a51783c5cab12941d16885310c1"
+	}
+}
