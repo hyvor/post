@@ -22,7 +22,7 @@ const config = {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
 
-			entries: ['*', '/fr/docs', '/fr/hosting']
+			entries: ['*']
 		},
 
 		alias: {

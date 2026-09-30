@@ -21,17 +21,18 @@ COPY frontend/package.json \
 COPY frontend/src /app/frontend/src
 COPY frontend/static /app/frontend/static
 COPY shared /app/shared
-COPY docs /app/docs
 
 ###################################################
 FROM frontend-base AS frontend-dev
+COPY docs /app/docs
 RUN npm install
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM frontend-base AS frontend-prod
-# build the frontend
-RUN  npm install \
+# build the frontend (docs removed)
+RUN  rm -rf "src/routes/(docs)" \
+    && npm install \
     && npm run build \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
 
