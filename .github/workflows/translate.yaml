@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/*/en/**'
-      - 'docs/*/locale/en.json'
+      - "docs/*/en/**"
+      - "docs/*/locale/en.json"
   workflow_dispatch:
     inputs:
       langs:
@@ -24,6 +24,8 @@ permissions:
 
 jobs:
   translate:
+    # disable temporarily
+    if: false
     name: "Translate Content"
     runs-on: ubuntu-latest
 
