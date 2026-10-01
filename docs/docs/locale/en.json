@@ -1,0 +1,13 @@
+{
+    "sections": {
+        "features": "Features",
+        "developer": "Developer"
+    },
+    "pages": {
+        "introduction": "Introduction",
+        "signupForm": "Signup Form",
+        "emailDesign": "Email Design",
+        "import": "Import",
+        "apiConsole": "Console API"
+    }
+}

@@ -13,6 +13,7 @@ services:
       - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
       - ./frontend/svelte.config.js:/app/frontend/svelte.config.js
       - ./shared:/app/shared
+      - ./docs:/app/docs
     labels:
       traefik.enable: true
       traefik.http.routers.hyvor-post-frontend.rule: Host(`post.hyvor.localhost`)

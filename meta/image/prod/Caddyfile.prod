@@ -8,7 +8,26 @@
 	reverse_proxy 127.0.0.1:3000
 }
 
+# marketing pages moved to hyvor.com/post
+(marketing_redirects) {
+	# ?query of the request, to be appended to the redirect URL
+	@has_query expression {query} != ""
+	vars @has_query query_suffix ?{query}
+
+	# homepage and marketing pages
+	# / -> https://hyvor.com/post, /pricing -> https://hyvor.com/post/pricing, etc.
+	@marketing path_regexp marketing ^(/pricing|/terms|/privacy)?/?$
+	redir @marketing https://hyvor.com/post{re.marketing.1}{vars.query_suffix} 301
+
+	# docs and self-hosting docs, now rendered at hyvor.com/post/docs and /post/hosting
+	# also handles the language prefix (/fr/docs -> https://hyvor.com/post/fr/docs)
+	@docs path_regexp docs ^((?:/fr)?)/(docs|hosting)((?:/[^/]+)*)/?$
+	redir @docs https://hyvor.com/post{re.docs.1}/{re.docs.2}{re.docs.3}{vars.query_suffix} 301
+}
+
 {$CADDY_ADDRESS} {
+
+	import marketing_redirects
 
     {$CADDY_TLS_CONFIG}
 

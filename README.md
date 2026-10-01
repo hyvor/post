@@ -2,20 +2,20 @@
 
 *For People, Not Funnels*
 
-[Hyvor Post](https://post.hyvor.com) is a simple, privacy-first newsletter platform. It is based on [Hyvor Relay](https://relay.hyvor.com), an open-source, self-hosted email API for developers.
+[Hyvor Post](https://hyvor.com/post) is a simple, privacy-first newsletter platform. It is based on [Hyvor Relay](https://relay.hyvor.com), an open-source, self-hosted email API for developers.
 
 <p align="center">
-  <a href="https://post.hyvor.com">
+  <a href="https://hyvor.com/post">
     <img src="https://hyvor.com/api/public/logo/post.svg" alt="Hyvor Post Logo" width="130"/>
   </a>
 </p>
 
 <p align="center">
-  <a href="https://post.hyvor.com">
+  <a href="https://hyvor.com/post">
     Newsletter Platform
   </a>
     <span> | </span>
-    <a href="https://post.hyvor.com/docs">
+    <a href="https://hyvor.com/post/docs">
     Docs
   </a>
 </p>

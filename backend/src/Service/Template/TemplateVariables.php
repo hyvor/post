@@ -2,7 +2,7 @@
 
 namespace App\Service\Template;
 
-// https://post.hyvor.com/docs/email-templates
+// https://hyvor.com/post/docs/email-templates
 use App\Entity\Newsletter;
 use App\Service\Newsletter\NewsletterDefaults;
 
