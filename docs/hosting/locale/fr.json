@@ -4,5 +4,8 @@
     },
     "pages": {
         "getStarted": "Premiers pas"
+    },
+    "descriptions": {
+        "getStarted": "Auto-hébergez Hyvor Post, la plateforme de newsletter axée sur la vie privée : configurez Hyvor Relay pour l'envoi d'e-mails et déployez sur votre infrastructure."
     }
 }
