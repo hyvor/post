@@ -14,6 +14,7 @@ You can embed Hyvor Post's signup form on your website to allow users to subscri
 
 - [Embed the Signup Form](#embed)
 - [Customize the Form](#customize)
+- [Customize the Confirmation Email](#confirmation-email)
 - [Working with Multiple Lists](#multiple-lists)
 - [Form Attributes](#attributes)
 
@@ -40,6 +41,17 @@ You can customize the text and appearance of the form at **Console &rarr; Settin
 <DocsImage src={imgFormCustomize} alt="Customize form" />
 
 This includes options like title, description, button text, colors and UI. Custom CSS can also be added for further customization. Note that the custom CSS is added to the form, which is a web component with a shadow DOM, so your custom CSS will only affect the form and not the rest of your website.
+
+<h2 id="confirmation-email">Customize the Confirmation Email</h2>
+
+When someone subscribes, they receive an email asking them to confirm their subscription. You can customize its subject and content at **Console &rarr; Settings &rarr; Confirmation Email**. Click **Edit Content** to open the editor, with a live preview of the email.
+
+The following placeholders are available in the subject and the content:
+
+- `{{newsletter_name}}` - the name of your newsletter
+- `{{confirm_url}}` - the confirmation link. The content must contain a button or a link to this URL.
+
+Click **Reset to Default** to go back to the default email.
 
 <h2 id="multiple-lists">Working with Multiple Lists</h2>
 
