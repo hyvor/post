@@ -4,6 +4,7 @@ namespace App\Api\Console\Controller;
 
 use Hyvor\Internal\CloudApi\Scope\PostScope;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ScopeRequired;
+use App\Api\Console\Input\Newsletter\PreviewConfirmationEmailInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInput;
 use App\Api\Console\Input\Newsletter\UpdateNewsletterInputResolver;
 use App\Api\Console\Object\NewsletterObject;
@@ -11,6 +12,8 @@ use App\Entity\Newsletter;
 use App\Service\Newsletter\Dto\UpdateNewsletterDto;
 use App\Service\Newsletter\Dto\UpdateNewsletterMetaDto;
 use App\Service\Newsletter\NewsletterService;
+use App\Service\Subscriber\ConfirmationMail\ConfirmationMailContent;
+use App\Service\Template\TemplateRenderException;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +26,7 @@ class NewsletterController extends AbstractController
 {
     public function __construct(
         private NewsletterService $newsletterService,
+        private ConfirmationMailContent $confirmationMailContent,
     ) {}
 
     #[Route('/newsletter', methods: 'GET')]
@@ -89,6 +93,17 @@ class NewsletterController extends AbstractController
         if ($input->has('is_rtl')) {
             $updates->is_rtl = $input->is_rtl;
         }
+        if ($input->isSet('confirmation_email_subject')) {
+            $subject = trim((string)$input->confirmation_email_subject);
+            $input->confirmation_email_subject = $subject === '' ? null : $subject;
+        }
+        if ($input->isSet('confirmation_email_content') && $input->confirmation_email_content !== null) {
+            $error = $this->confirmationMailContent->validateContent($input->confirmation_email_content);
+            if ($error !== null) {
+                throw new UnprocessableEntityHttpException($error);
+            }
+        }
+
         $newsletter = $this->newsletterService->updateNewsletter($newsletter, $updates);
 
         $updatesMeta = new UpdateNewsletterMetaDto();
@@ -103,6 +118,44 @@ class NewsletterController extends AbstractController
         $newsletter = $this->newsletterService->updateNewsletterMeta($newsletter, $updatesMeta);
 
         return $this->json(new NewsletterObject($newsletter));
+    }
+
+    #[Route('/newsletter/confirmation-email/preview', methods: 'POST')]
+    #[ScopeRequired(PostScope::NEWSLETTER_READ)]
+    #[OA\Post(
+        description: 'Renders the subscriber confirmation email to HTML, using the given (or the newsletter\'s current) subject and content.',
+        summary: 'Preview the confirmation email',
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the rendered subject and HTML.',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'subject', type: 'string'),
+                new OA\Property(property: 'html', type: 'string'),
+            ],
+        ),
+    )]
+    public function previewConfirmationEmail(
+        Newsletter $newsletter,
+        #[MapRequestPayload] PreviewConfirmationEmailInput $input = new PreviewConfirmationEmailInput(),
+    ): JsonResponse {
+        if ($input->content !== null) {
+            $error = $this->confirmationMailContent->validateContent($input->content);
+            if ($error !== null) {
+                throw new UnprocessableEntityHttpException($error);
+            }
+        }
+
+        $confirmUrl = $this->newsletterService->getArchiveUrl($newsletter) . '/confirm?token=preview';
+
+        try {
+            $mail = $this->confirmationMailContent->build($newsletter, $confirmUrl, $input->subject, $input->content);
+        } catch (TemplateRenderException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+
+        return $this->json($mail);
     }
 
 }
