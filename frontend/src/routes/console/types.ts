@@ -47,6 +47,8 @@ export interface AppConfig {
 		TEMPLATE_FONT_COLOR_ON_BACKGROUND: string;
 		TEMPLATE_FONT_COLOR_ON_BOX: string;
 		TEMPLATE_FONT_LINE_HEIGHT: string;
+		CONFIRMATION_EMAIL_SUBJECT: string;
+		CONFIRMATION_EMAIL_CONTENT: string;
 	};
 }
 
@@ -97,6 +99,8 @@ export type NewsletterMeta = {
 	form_dark_input_box_shadow: string | null;
 	form_dark_input_border: string | null;
 	form_dark_border_radius: string | null;
+	confirmation_email_subject: string | null;
+	confirmation_email_content: string | null;
 };
 
 export type UserMini = {
@@ -267,7 +271,11 @@ export type Media = {
 };
 
 export type ImportStatus =
-	'requires_input' | 'pending_approval' | 'importing' | 'failed' | 'completed';
+	| 'requires_input'
+	| 'pending_approval'
+	| 'importing'
+	| 'failed'
+	| 'completed';
 
 export type Import = {
 	id: number;
