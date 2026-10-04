@@ -9,6 +9,7 @@ use App\Entity\Newsletter;
 use App\Service\Subscriber\ConfirmationMail\ConfirmationMailContent;
 use App\Tests\Case\WebTestCase;
 use App\Tests\Factory\NewsletterFactory;
+use App\Tests\Factory\TemplateFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(NewsletterController::class)]
@@ -123,6 +124,19 @@ class ConfirmationEmailTest extends WebTestCase
         $response = $this->consoleApi($newsletter, 'POST', '/newsletter/confirmation-email/preview', [
             'content' => 'invalid',
         ]);
+
+        $this->assertSame(422, $response->getStatusCode());
+    }
+
+    public function test_preview_rejects_invalid_template(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        TemplateFactory::createOne([
+            'newsletter' => $newsletter,
+            'template' => '{% if %}',
+        ]);
+
+        $response = $this->consoleApi($newsletter, 'POST', '/newsletter/confirmation-email/preview', []);
 
         $this->assertSame(422, $response->getStatusCode());
     }
