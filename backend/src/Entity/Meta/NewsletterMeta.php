@@ -64,5 +64,7 @@ class NewsletterMeta
     public ?int $form_dark_border_radius = null;
     public NewsletterFormDefaultColorPalette $form_default_color_palette = NewsletterFormDefaultColorPalette::LIGHT;
     public int $form_input_border_radius = 20;
+    public ?string $confirmation_email_subject = null;
+    public ?string $confirmation_email_content = null;
 
 }

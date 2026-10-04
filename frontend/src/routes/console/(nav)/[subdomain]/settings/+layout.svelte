@@ -76,6 +76,16 @@
 			{I.t('console.settings.form.signupForm')}
 		</NavLink>
 
+		<NavLink
+			href="{prefix}/confirmation-email"
+			active={page.url.pathname.startsWith(prefix + '/confirmation-email')}
+		>
+			{#snippet start()}
+				<IconEnvelopeCheck />
+			{/snippet}
+			Confirmation Email
+		</NavLink>
+
 		<NavLink href="{prefix}/metadata" active={page.url.pathname === prefix + '/metadata'}>
 			{#snippet start()}
 				<IconDatabase />

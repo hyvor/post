@@ -328,8 +328,11 @@
             "text": "Your domain {domain} is verified. You can now use it with your Hyvor Post projects."
         },
         "subscriberConfirmation": {
-            "heading": "Confirm your subscription",
-            "buttonText": "Confirm Subscription"
+            "subject": "Confirm your subscription to {newsletterName}",
+            "greeting": "Hey \uD83D\uDC4B,",
+            "text": "Thank you for subscribing to {newsletterName}! To confirm your subscription and start receiving updates, please click the button below.",
+            "buttonText": "Confirm Subscription",
+            "footerText": "This link will expire in 24 hours. If you did not request or expect this invitation, you can safely ignore this email."
         },
         "approvalReviewing": {
             "subject": "Your Hyvor Post approval request is under review"
