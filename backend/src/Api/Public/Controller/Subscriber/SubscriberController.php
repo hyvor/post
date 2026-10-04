@@ -6,6 +6,7 @@ use App\Api\Public\Input\Subscriber\PreferencesInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\Issue\Dto\UpdateSendDto;
 use App\Service\Issue\SendService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
@@ -112,6 +113,12 @@ class SubscriberController extends AbstractController
             $updates,
             listRemovalReason: ListRemovalReason::UNSUBSCRIBE
         );
+
+        if (count($lists) === 0 && $send->getUnsubscribeAt() === null) {
+            $sendUpdates = new UpdateSendDto();
+            $sendUpdates->unsubscribeAt = $this->now();
+            $this->sendService->updateSend($send, $sendUpdates);
+        }
 
         $lists = $this->newsletterListService->getListsOfNewsletter($send->getNewsletter());
 
