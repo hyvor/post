@@ -12,7 +12,7 @@ FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
 FROM node AS frontend-base
 WORKDIR /app/frontend
 # install dependencies
-COPY frontend/package.json \
+COPY frontend/package.json frontend/package-lock.json \
     frontend/svelte.config.js \
     frontend/vite.config.ts \
     frontend/.prettierrc frontend/.prettierignore \
@@ -25,14 +25,14 @@ COPY shared /app/shared
 ###################################################
 FROM frontend-base AS frontend-dev
 COPY docs /app/docs
-RUN npm install
+RUN npm ci
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM frontend-base AS frontend-prod
 # build the frontend (docs removed)
 RUN  rm -rf "src/routes/(docs)" \
-    && npm install \
+    && npm ci \
     && npm run build \
     && find . -maxdepth 1 -not -name build -not -name . -exec rm -rf {} \;
 
@@ -59,13 +59,13 @@ COPY shared /app/shared
 ###################################################
 FROM archive-base AS archive-dev
 COPY archive/.env /app/archive/
-RUN npm install
+RUN npm ci
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM archive-base AS archive-prod
 # build the archive
-RUN  npm install \
+RUN  npm ci \
     && npm run build \
     && find . -maxdepth 1 \
         -not -name build \
@@ -97,13 +97,13 @@ COPY embed/src /app/embed/src
 ###################################################
 FROM embed-base AS embed-dev
 EXPOSE 80
-RUN npm install
+RUN npm ci
 CMD ["npm", "run", "dev"]
 
 ###################################################
 FROM embed-base AS embed-prod
 # build the embed
-RUN  npm install \
+RUN  npm ci \
     && npm run build \
     && find . -maxdepth 1 -not -name dist -not -name . -exec rm -rf {} \;
 
