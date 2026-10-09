@@ -71,6 +71,27 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame("List with id {$list2->getId()} not found", $json['message']);
     }
 
+    public function test_subscribes_email_with_newsletter_id(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $this->mockRelayClient(fn() => new JsonMockResponse());
+
+        $response = $this->publicApi('POST', '/form/subscribe', [
+            'newsletter_id' => $newsletter->getId(),
+            'email' => 'supun@hyvor.com',
+            'list_ids' => [$list->getId()],
+        ]);
+
+        $this->assertResponseStatusCodeSame(200, $response);
+        $this->assertSame('supun@hyvor.com', $this->getJson()['email']);
+    }
+
     public function test_subscribes_email(): void
     {
         $date = new \DateTimeImmutable('2025-04-14 00:00:00');
