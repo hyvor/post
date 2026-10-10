@@ -109,6 +109,7 @@
 
 		api<InitResponse>('/subscribe', {
 			newsletter_subdomain: newsletterSubdomain,
+			newsletter_id: newsletterId,
 			email,
 			list_ids: selectedListsIds
 		})
