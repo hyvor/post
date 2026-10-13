@@ -9,5 +9,12 @@
         "emailDesign": "Design des e-mails",
         "import": "Importation",
         "apiConsole": "API Console"
+    },
+    "descriptions": {
+        "introduction": "Découvrez Hyvor Post, une plateforme de newsletter axée sur la vie privée qui envoie vos e-mails sans pister vos abonnés. Les bases pour bien démarrer.",
+        "signupForm": "Intégrez le formulaire d'inscription à la newsletter Hyvor Post sur votre site : double opt-in par défaut, personnalisation, listes multiples et attributs du formulaire.",
+        "emailDesign": "Personnalisez le design de vos newsletters dans Hyvor Post : modifiez le modèle d'e-mail par défaut ou créez des modèles personnalisés à l'image de votre marque.",
+        "import": "Importez vos abonnés dans Hyvor Post depuis un fichier CSV. Migrez les abonnés de votre newsletter depuis un autre service d'e-mail avec correspondance des champs.",
+        "apiConsole": "Automatisez vos tâches de newsletter avec l'API Console de Hyvor Post : authentification par clé API pour gérer abonnés, listes et numéros via HTTP."
     }
 }
