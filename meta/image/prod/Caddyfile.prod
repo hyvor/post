@@ -1,6 +1,7 @@
 {
 	frankenphp {
         worker "/app/backend/public/index.php" {$WORKERS:0}
+        php_ini session.upload_progress.enabled Off
     }
 }
 
@@ -46,6 +47,11 @@
 		path /api/*
 	}
 	handle @backend {
+		@unauthorized_multipart_exploit {
+			header_regexp Content-Type (?i)multipart/form-data
+		}
+		respond @unauthorized_multipart_exploit "bad request" 400
+
 		root * /app/backend/public
 		php_server {
 		   file_server off
