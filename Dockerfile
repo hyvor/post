@@ -2,7 +2,7 @@
 # Alias for deppendencies
 FROM node:24.9.0 AS node
 FROM composer:2.8.8 AS composer
-FROM dunglas/frankenphp:1.4.4-php8.4 AS frankenphp
+FROM dunglas/frankenphp:1.13.1-php8.4 AS frankenphp
 
 ###################################################
 ################  FRONTEND STAGES  ################
