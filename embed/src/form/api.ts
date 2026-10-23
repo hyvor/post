@@ -24,11 +24,7 @@ export function apiFromInstance(instance: string) {
 		if (!response.ok) {
 			const error = await response.json();
 			const retryAfter = parseInt(response.headers.get('Retry-After') ?? '', 10);
-			throw new ApiError(
-				error.message,
-				response.status,
-				isNaN(retryAfter) ? null : retryAfter
-			);
+			throw new ApiError(error.message, response.status, isNaN(retryAfter) ? null : retryAfter);
 		}
 		const data = await response.json();
 		return data;

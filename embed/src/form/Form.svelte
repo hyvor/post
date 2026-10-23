@@ -45,10 +45,7 @@
 	// keep the seconds in the error message in sync with the countdown
 	let subscribingErrorMessage = $derived(
 		retryIn > 0
-			? subscribingError.replace(
-					/\d+ seconds?/,
-					`${retryIn} second${retryIn === 1 ? '' : 's'}`
-				)
+			? subscribingError.replace(/\d+ seconds?/, `${retryIn} second${retryIn === 1 ? '' : 's'}`)
 			: subscribingError
 	);
 
