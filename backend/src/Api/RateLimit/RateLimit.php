@@ -82,7 +82,7 @@ class RateLimit
 
     /**
      * Rate limit for the POST /subscribers endpoint.
-     * 1 subscribe per email per minute
+     * 2 subscribes per email per minute
      * @return RateLimitConfig
      */
     public function subscriberPerEmailPerMinute(): array
