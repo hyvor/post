@@ -20,6 +20,7 @@ use App\Service\Newsletter\NewsletterDefaults;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\SendingProfile\SendingProfileService;
+use App\Service\Subscriber\ConfirmationMail\ConfirmationMailContent;
 use App\Service\SubscriberMetadata\SubscriberMetadataService;
 use Hyvor\Internal\Billing\BillingInterface;
 use Hyvor\Internal\Billing\License\PostLicense;
@@ -44,6 +45,7 @@ class ConsoleController extends AbstractController
         private SendingProfileService $sendingProfileService,
         private BillingInterface $billing,
         private AuthInterface $auth,
+        private ConfirmationMailContent $confirmationMailContent,
     ) {}
 
     #[Route('/init', methods: 'GET')]
@@ -92,7 +94,11 @@ class ConsoleController extends AbstractController
                         'scopes' => array_map(fn($scope) => $scope->value, PostScope::cases()),
                     ],
                 ],
-                'newsletter_defaults' => NewsletterDefaults::getAll(),
+                'newsletter_defaults' => [
+                    ...NewsletterDefaults::getAll(),
+                    'CONFIRMATION_EMAIL_SUBJECT' => $this->confirmationMailContent->getDefaultSubject(),
+                    'CONFIRMATION_EMAIL_CONTENT' => $this->confirmationMailContent->getDefaultContent(),
+                ],
             ],
         ]);
     }
