@@ -24,9 +24,9 @@ class RateLimitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('RateLimit-Limit', '30');
-        $this->assertResponseHeaderSame('RateLimit-Remaining', '29');
-        $this->assertTrue($this->client->getResponse()->headers->has('RateLimit-Reset'));
+        $this->assertResponseHeaderSame('X-RateLimit-Limit', '30');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '29');
+        $this->assertTrue($this->client->getResponse()->headers->has('X-RateLimit-Reset'));
     }
 
     public function test_429_on_rate_limited(): void
@@ -47,8 +47,9 @@ class RateLimitTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(429);
-        $this->assertResponseHeaderSame('RateLimit-Limit', '30');
-        $this->assertResponseHeaderSame('RateLimit-Remaining', '0');
+        $this->assertResponseHeaderSame('X-RateLimit-Limit', '30');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '0');
+        $this->assertTrue($this->client->getResponse()->headers->has('Retry-After'));
     }
 
     public function test_rate_limit_per_ip(): void
@@ -76,6 +77,6 @@ class RateLimitTest extends WebTestCase
         ], clientIp: '192.168.1.2');
 
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('RateLimit-Remaining', '29');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '29');
     }
 }

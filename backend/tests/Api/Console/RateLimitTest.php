@@ -106,6 +106,7 @@ class RateLimitTest extends WebTestCase
         $this->assertResponseHeaderSame('X-RateLimit-Limit', '60');
         $this->assertResponseHeaderSame('X-RateLimit-Remaining', '0');
         $this->assertResponseHeaderSame('X-RateLimit-Reset', '60');
+        $this->assertResponseHeaderSame('Retry-After', '60');
     }
 
     public function test_adds_test_issue_rate_limit_headers(): void
@@ -209,6 +210,10 @@ class RateLimitTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(429);
+        // headers of the per-minute subscribe limit, not the public API one
+        $this->assertResponseHeaderSame('X-RateLimit-Limit', '2');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '0');
+        $this->assertTrue($this->client->getResponse()->headers->has('Retry-After'));
         $json = $this->getJson();
         $this->assertIsString($json['message']);
         $this->assertStringContainsString('You have recently requested a subscription confirm link', $json['message']);

@@ -448,9 +448,9 @@ class RelayWebhookTest extends WebTestCase
             $response = $this->callWebhook($data);
             $this->assertSame(200, $response->getStatusCode());
 
-            $this->assertFalse($response->headers->has('RateLimit-Limit'));
-            $this->assertFalse($response->headers->has('RateLimit-Remaining'));
-            $this->assertFalse($response->headers->has('RateLimit-Reset'));
+            $this->assertFalse($response->headers->has('X-RateLimit-Limit'));
+            $this->assertFalse($response->headers->has('X-RateLimit-Remaining'));
+            $this->assertFalse($response->headers->has('X-RateLimit-Reset'));
         }
     }
 }

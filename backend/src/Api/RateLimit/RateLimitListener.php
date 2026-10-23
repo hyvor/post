@@ -28,8 +28,7 @@ class RateLimitListener
     ) {
     }
 
-    private const string CONSOLE_RATE_LIMIT_HEADERS_KEY = 'console_api_rate_limit_headers';
-    private const string PUBLIC_RATE_LIMIT_HEADERS_KEY = 'public_api_rate_limit_headers';
+    private const string RATE_LIMIT_HEADERS_ATTRIBUTE_KEY = 'rate_limit_headers';
 
     private function isPublicApiRequest(Request $request): bool
     {
@@ -76,21 +75,30 @@ class RateLimitListener
         );
     }
 
-
     /**
-     * @param array{id: string, policy: string, limit: int, interval: string} $rateLimitConfig
-     * @param string $identifier
      * @param string $errorMessage Message with %d placeholder for resetIn seconds
-     * @return void
      */
-    private function checkRateLimit(array $rateLimitConfig, string $identifier, string $errorMessage): void
-    {
-        $limiter = $this->rateLimiterProvider->rateLimiter($rateLimitConfig, $identifier);
+    private function consume(
+        Request $request,
+        LimiterInterface $limiter,
+        string $errorMessage = 'Rate limit exceeded. Please try again in %d seconds.',
+    ): void {
         $limit = $limiter->consume();
+        $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
+
+        // when multiple limits apply, keep the headers of the one closest to being hit
+        $currentHeaders = $request->attributes->get(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY);
+        if (!is_array($currentHeaders) || $limit->getRemainingTokens() <= $currentHeaders['X-RateLimit-Remaining']) {
+            $request->attributes->set(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY, [
+                'X-RateLimit-Limit' => $limit->getLimit(),
+                'X-RateLimit-Remaining' => $limit->getRemainingTokens(),
+                'X-RateLimit-Reset' => $resetIn,
+            ]);
+        }
 
         if ($limit->isAccepted() === false) {
-            $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
             throw new TooManyRequestsHttpException(
+                retryAfter: $resetIn,
                 message: sprintf($errorMessage, $resetIn),
             );
         }
@@ -106,12 +114,11 @@ class RateLimitListener
 
         // Unified rate limiting logic
         if ($this->isPublicApiRequest($request)) {
+            $this->applyPublicApiRateLimit($request);
+
             if ($this->isSubscribePostRequest($request)) {
                 $this->applySubscribeRateLimit($request);
             }
-
-            $this->applyPublicApiRateLimit($request);
-
         } else if ($this->isConsoleApiRequest($request)) {
             $this->applyConsoleApiRateLimit($request);
         }
@@ -120,24 +127,13 @@ class RateLimitListener
 
     private function applyPublicApiRateLimit(Request $request): void
     {
-        $limiter = $this->rateLimiterProvider->rateLimiter(
-            $this->rateLimit->publicApi(),
-            'public_ip:' . $request->getClientIp()
+        $this->consume(
+            $request,
+            $this->rateLimiterProvider->rateLimiter(
+                $this->rateLimit->publicApi(),
+                'public_ip:' . $request->getClientIp()
+            ),
         );
-        $limit = $limiter->consume();
-
-        $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
-        $request->attributes->set(self::PUBLIC_RATE_LIMIT_HEADERS_KEY, [
-            'RateLimit-Limit' => $limit->getLimit(),
-            'RateLimit-Remaining' => $limit->getRemainingTokens(),
-            'RateLimit-Reset' => $resetIn,
-        ]);
-
-        if ($limit->isAccepted() === false) {
-            throw new TooManyRequestsHttpException(
-                message: 'Rate limit exceeded. Please try again in ' . $resetIn . ' seconds.',
-            );
-        }
     }
 
     private function applyConsoleApiRateLimit(Request $request): void
@@ -147,29 +143,11 @@ class RateLimitListener
             return; // auth bypassed paths (ex: /api/console/init)
         }
 
-        $this->consumeConsoleRateLimit($request, $this->getRateLimiter($consoleAuth));
+        $this->consume($request, $this->getRateLimiter($consoleAuth));
 
         // the test issue endpoint has a stricter limit on top of the general one
         if ($this->isTestIssueEndpoint($request)) {
-            $this->consumeConsoleRateLimit($request, $this->getTestIssueRateLimiter($consoleAuth));
-        }
-    }
-
-    private function consumeConsoleRateLimit(Request $request, LimiterInterface $limiter): void
-    {
-        $limit = $limiter->consume();
-
-        $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);
-        $request->attributes->set(self::CONSOLE_RATE_LIMIT_HEADERS_KEY, [
-            'X-RateLimit-Limit' => $limit->getLimit(),
-            'X-RateLimit-Remaining' => $limit->getRemainingTokens(),
-            'X-RateLimit-Reset' => $resetIn,
-        ]);
-
-        if ($limit->isAccepted() === false) {
-            throw new TooManyRequestsHttpException(
-                message: 'Rate limit exceeded. Please try again later in ' . $resetIn . ' seconds.',
-            );
+            $this->consume($request, $this->getTestIssueRateLimiter($consoleAuth));
         }
     }
 
@@ -189,15 +167,15 @@ class RateLimitListener
         $email = $data['email'];
         $identifier = 'subscriber_email:' . $email;
 
-        $this->checkRateLimit(
-            $this->rateLimit->subscriberPerEmailPerMinute(),
-            $identifier,
+        $this->consume(
+            $request,
+            $this->rateLimiterProvider->rateLimiter($this->rateLimit->subscriberPerEmailPerMinute(), $identifier),
             'You have recently requested a subscription confirm link. Please try again in %d seconds.'
         );
 
-        $this->checkRateLimit(
-            $this->rateLimit->subscriberPerEmailPerHour(),
-            $identifier,
+        $this->consume(
+            $request,
+            $this->rateLimiterProvider->rateLimiter($this->rateLimit->subscriberPerEmailPerHour(), $identifier),
             'You have recently requested a subscription confirm link. Please try again in %d seconds.'
         );
     }
@@ -209,28 +187,15 @@ class RateLimitListener
         }
 
         $request = $responseEvent->getRequest();
-        $response = $responseEvent->getResponse();
 
-        // Add rate limit headers for Console API
-        if ($this->isConsoleApiRequest($request)) {
-            if ($request->attributes->has(self::CONSOLE_RATE_LIMIT_HEADERS_KEY)) {
-                /** @var array<string, string|int> $rateLimitHeaders */
-                $rateLimitHeaders = $request->attributes->get(self::CONSOLE_RATE_LIMIT_HEADERS_KEY);
-                foreach ($rateLimitHeaders as $header => $value) {
-                    $response->headers->set($header, (string)$value);
-                }
-            }
+        if (!$request->attributes->has(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY)) {
+            return;
         }
 
-        // Add rate limit headers for Public API
-        if ($this->isPublicApiRequest($request)) {
-            if ($request->attributes->has(self::PUBLIC_RATE_LIMIT_HEADERS_KEY)) {
-                /** @var array<string, string|int> $rateLimitHeaders */
-                $rateLimitHeaders = $request->attributes->get(self::PUBLIC_RATE_LIMIT_HEADERS_KEY);
-                foreach ($rateLimitHeaders as $header => $value) {
-                    $response->headers->set($header, (string)$value);
-                }
-            }
+        /** @var array<string, string|int> $rateLimitHeaders */
+        $rateLimitHeaders = $request->attributes->get(self::RATE_LIMIT_HEADERS_ATTRIBUTE_KEY);
+        foreach ($rateLimitHeaders as $header => $value) {
+            $responseEvent->getResponse()->headers->set($header, (string)$value);
         }
     }
 
