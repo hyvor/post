@@ -77,7 +77,7 @@ class RateLimitTest extends WebTestCase
 
     public function test_429_on_rate_limited(): void
     {
-        $newsletter = NewsletterFactory::createOne(['user_id' => 1]);
+        $newsletter = NewsletterFactory::createOne(['organization_id' => 1]);
         $list = NewsletterListFactory::createOne([
             'newsletter' => $newsletter,
         ]);

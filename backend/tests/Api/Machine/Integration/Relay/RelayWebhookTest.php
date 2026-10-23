@@ -396,7 +396,7 @@ class RelayWebhookTest extends WebTestCase
             ]
         ];
 
-        $response = $this->publicApi(
+        $response = $this->machineApi(
             'POST',
             '/integration/relay/webhook',
             $data,
