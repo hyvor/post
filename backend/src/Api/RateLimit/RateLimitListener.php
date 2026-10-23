@@ -2,8 +2,11 @@
 
 namespace App\Api\RateLimit;
 
-use App\Api\Console\Authorization\AuthorizationListener;
+use App\Entity\Newsletter;
 use App\Service\App\RateLimit\RateLimiterProvider;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\AccessType;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
+use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -49,17 +52,33 @@ class RateLimitListener
             && $request->getPathInfo() === '/api/public/form/subscribe';
     }
 
-    private function getRateLimiter(Request $request): LimiterInterface
+    private function isTestIssueEndpoint(Request $request): bool
+    {
+        return $request->getMethod() === 'POST'
+            && preg_match('#^/api/console/issues/\d+/test$#', $request->getPathInfo()) === 1;
+    }
+
+    private function getRateLimiter(ConsoleAuthResults $consoleAuth): LimiterInterface
     {
         // check if this is a session request (user logged in)
-        if (AuthorizationListener::hasUser($request)) {
-            $user = AuthorizationListener::getUser($request);
+        $user = $consoleAuth->getNullableUser();
+        if ($consoleAuth->getAccessType() === AccessType::SESSION && $user !== null) {
             return $this->rateLimiterProvider->rateLimiter($this->rateLimit->session(), "user:" . $user->id);
         }
 
-        $apiKey = AuthorizationListener::getApiKey($request);
+        // product API key or cloud token
+        return $this->rateLimiterProvider->rateLimiter($this->rateLimit->apiKey(), $consoleAuth->getSourceString());
+    }
 
-        return $this->rateLimiterProvider->rateLimiter($this->rateLimit->apiKey(), 'api_key:' . $apiKey->getId());
+    private function getTestIssueRateLimiter(ConsoleAuthResults $consoleAuth): LimiterInterface
+    {
+        $newsletter = $consoleAuth->getResource();
+        assert($newsletter instanceof Newsletter);
+
+        return $this->rateLimiterProvider->rateLimiter(
+            $this->rateLimit->testIssues(),
+            'test:issue:newsletter:' . $newsletter->getId(),
+        );
     }
 
 
@@ -132,7 +151,21 @@ class RateLimitListener
 
     private function applyConsoleApiRateLimit(Request $request): void
     {
-        $limiter = $this->getRateLimiter($request);
+        $consoleAuth = $request->attributes->get(ConsoleApiAuthorizationListenerAbstract::ATTRIBUTE_KEY);
+        if (!$consoleAuth instanceof ConsoleAuthResults) {
+            return; // auth bypassed paths (ex: /api/console/init)
+        }
+
+        $this->consumeConsoleRateLimit($request, $this->getRateLimiter($consoleAuth));
+
+        // the test issue endpoint has a stricter limit on top of the general one
+        if ($this->isTestIssueEndpoint($request)) {
+            $this->consumeConsoleRateLimit($request, $this->getTestIssueRateLimiter($consoleAuth));
+        }
+    }
+
+    private function consumeConsoleRateLimit(Request $request, LimiterInterface $limiter): void
+    {
         $limit = $limiter->consume();
 
         $resetIn = max($limit->getRetryAfter()->getTimestamp() - time(), 0);

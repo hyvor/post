@@ -51,6 +51,21 @@ class RateLimit
     }
 
     /**
+     * Rate limit for the POST /issues/{id}/test endpoint.
+     * 10 per hour per newsletter
+     * @return RateLimitConfig
+     */
+    public function testIssues(): array
+    {
+        return [
+            'id' => 'console_api_test_issues',
+            'policy' => 'fixed_window',
+            'limit' => 10,
+            'interval' => '1 hour',
+        ];
+    }
+
+    /**
      * Rate limit for public API per IP.
      * 30 per minute per IP
      * @return RateLimitConfig
