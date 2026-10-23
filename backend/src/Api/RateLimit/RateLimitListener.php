@@ -41,11 +41,6 @@ class RateLimitListener
         return str_starts_with($request->getPathInfo(), '/api/console');
     }
 
-    private function isMachineApiRequest(Request $request): bool
-    {
-        return str_starts_with($request->getPathInfo(), '/api/machine');
-    }
-
     private function isSubscribePostRequest(Request $request): bool
     {
         return $request->getMethod() === 'POST'
@@ -119,12 +114,8 @@ class RateLimitListener
 
         } else if ($this->isConsoleApiRequest($request)) {
             $this->applyConsoleApiRateLimit($request);
-
-        } else if ($this->isMachineApiRequest($request)) {
-            // Machine API - no rate limiting
-            return;
         }
-        // Other API endpoints - no rate limiting
+        // Other API endpoints (machine, sudo, ...) - no rate limiting
     }
 
     private function applyPublicApiRateLimit(Request $request): void
