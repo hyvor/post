@@ -268,7 +268,7 @@ class RateLimitTest extends WebTestCase
         // Consume the hourly limit (6 requests)
         $perHourLimiter = $rateLimiterProvider->rateLimiter(
             $rateLimit->subscriberPerEmailPerHour(),
-            'subscriber_email:' . $email
+            'subscriber_email:' . hash('sha256', $email)
         );
         $perHourLimiter->consume(6);
 

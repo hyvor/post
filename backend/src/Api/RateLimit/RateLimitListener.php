@@ -4,6 +4,7 @@ namespace App\Api\RateLimit;
 
 use App\Entity\Newsletter;
 use App\Service\App\RateLimit\RateLimiterProvider;
+use App\Service\Ip\IpService;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\AccessType;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleApiAuthorizationListenerAbstract;
 use Hyvor\Internal\CloudApi\ConsoleApiAuth\ConsoleAuthResults;
@@ -25,6 +26,7 @@ class RateLimitListener
     public function __construct(
         private RateLimit $rateLimit,
         private RateLimiterProvider $rateLimiterProvider,
+        private IpService $ipService,
     ) {
     }
 
@@ -131,7 +133,7 @@ class RateLimitListener
             $request,
             $this->rateLimiterProvider->rateLimiter(
                 $this->rateLimit->publicApi(),
-                'public_ip:' . $request->getClientIp()
+                'public_ip:' . $this->ipService->resolveIp($request)
             ),
         );
     }
@@ -164,20 +166,19 @@ class RateLimitListener
             return; // Skip rate limiting if email is not provided or invalid
         }
 
-        $email = $data['email'];
-        $identifier = 'subscriber_email:' . $email;
+        $identifier = 'subscriber_email:' . hash('sha256', strtolower($data['email']));
 
-        $this->consume(
-            $request,
-            $this->rateLimiterProvider->rateLimiter($this->rateLimit->subscriberPerEmailPerMinute(), $identifier),
-            'You have recently requested a subscription confirm link. Please try again in %d seconds.'
-        );
-
-        $this->consume(
-            $request,
-            $this->rateLimiterProvider->rateLimiter($this->rateLimit->subscriberPerEmailPerHour(), $identifier),
-            'You have recently requested a subscription confirm link. Please try again in %d seconds.'
-        );
+        $subscribeRateLimits = [
+            $this->rateLimit->subscriberPerEmailPerMinute(),
+            $this->rateLimit->subscriberPerEmailPerHour(),
+        ];
+        foreach ($subscribeRateLimits as $rateLimitConfig) {
+            $this->consume(
+                $request,
+                $this->rateLimiterProvider->rateLimiter($rateLimitConfig, $identifier),
+                'You have recently requested a subscription confirm link. Please try again in %d seconds.',
+            );
+        }
     }
 
     public function onResponse(ResponseEvent $responseEvent): void
