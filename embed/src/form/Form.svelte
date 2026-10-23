@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Skeleton from './Skeleton.svelte';
 	import { fade, slide } from 'svelte/transition';
-	import { apiFromInstance } from './api';
+	import { apiFromInstance, ApiError } from './api';
 	import type { List, Palette, Newsletter } from './types';
 	import Switch from './Switch.svelte';
 	import Message from './Message.svelte';
@@ -37,6 +37,20 @@
 	let subscribing = $state(false);
 	let subscribingSuccess = $state(false);
 	let subscribingError = $state('');
+
+	// seconds left before subscribing again, when rate limited
+	let retryIn = $state(0);
+	let retryInterval: ReturnType<typeof setInterval> | undefined;
+
+	// keep the seconds in the error message in sync with the countdown
+	let subscribingErrorMessage = $derived(
+		retryIn > 0
+			? subscribingError.replace(
+					/\d+ seconds?/,
+					`${retryIn} second${retryIn === 1 ? '' : 's'}`
+				)
+			: subscribingError
+	);
 
 	let newsletter: Newsletter = $state({} as Newsletter);
 	let lists: List[] = $state([]);
@@ -122,11 +136,30 @@
 			.catch((err) => {
 				console.error('Error loading Hyvor Post form:', err);
 				subscribingError = err.message || 'An error occurred';
+
+				if (err instanceof ApiError && err.status === 429 && err.retryAfter) {
+					startRetryCountdown(err.retryAfter);
+				}
 			})
 			.finally(() => {
 				subscribing = false;
 			});
 	}
+
+	function startRetryCountdown(seconds: number) {
+		clearInterval(retryInterval);
+		retryIn = seconds;
+
+		retryInterval = setInterval(() => {
+			retryIn--;
+			if (retryIn <= 0) {
+				clearInterval(retryInterval);
+				subscribingError = '';
+			}
+		}, 1000);
+	}
+
+	onDestroy(() => clearInterval(retryInterval));
 
 	function setCustomCss() {
 		if (newsletter.form.custom_css) {
@@ -264,7 +297,7 @@
 				onblur={() => (focused = false)}
 				bind:value={email}
 			/>
-			<button type="submit" disabled={subscribing}>
+			<button type="submit" disabled={subscribing || retryIn > 0}>
 				{newsletter.form.button_text || 'Subscribe'}
 			</button>
 		</form>
@@ -278,7 +311,7 @@
 		{/if}
 
 		{#if subscribingError}
-			<Message message={subscribingError} type="error" />
+			<Message message={subscribingErrorMessage} type="error" />
 		{/if}
 
 		<div transition:slide={laterElementsAnimation}>
