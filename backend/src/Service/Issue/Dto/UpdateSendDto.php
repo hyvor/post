@@ -14,6 +14,7 @@ class UpdateSendDto
     public ?\DateTimeImmutable $failedAt;
     public ?\DateTimeImmutable $complainedAt;
     public ?\DateTimeImmutable $bouncedAt;
+    public ?\DateTimeImmutable $unsubscribeAt;
     public bool $hardBounce;
 }
 

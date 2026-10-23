@@ -194,6 +194,10 @@ class SendService
             $send->setComplainedAt($updates->complainedAt);
         }
 
+        if ($updates->has('unsubscribeAt')) {
+            $send->setUnsubscribeAt($updates->unsubscribeAt);
+        }
+
         if ($updates->has('hardBounce')) {
             $send->setHardBounce($updates->hardBounce);
         }
