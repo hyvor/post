@@ -34,9 +34,9 @@ class FormSubscribeTest extends WebTestCase
         $response = $this->publicApi('POST', '/form/subscribe');
 
         $this->assertResponseStatusCodeSame(422, $response);
-        $this->assertResponseHeaderSame('Ratelimit-Limit', '30');
-        $this->assertResponseHeaderSame('Ratelimit-Remaining', '29');
-        $this->assertResponseHeaderSame('Ratelimit-Reset', '0');
+        $this->assertResponseHeaderSame('X-RateLimit-Limit', '30');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '29');
+        $this->assertResponseHeaderSame('X-RateLimit-Reset', '0');
     }
 
     public function test_error_on_missing_newsletter(): void

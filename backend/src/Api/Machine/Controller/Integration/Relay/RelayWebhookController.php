@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Public\Controller\Integration\Relay;
+namespace App\Api\Machine\Controller\Integration\Relay;
 
 use App\Entity\Type\RelayDomainStatus;
 use App\Entity\Type\SendStatus;

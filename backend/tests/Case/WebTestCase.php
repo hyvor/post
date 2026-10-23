@@ -184,10 +184,15 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         string $uri,
         array $data = [],
         array $headers = [],
+        ?string $clientIp = null,
     ): Response {
         $server = [
             'CONTENT_TYPE' => 'application/json',
         ];
+
+        if ($clientIp !== null) {
+            $server['REMOTE_ADDR'] = $clientIp;
+        }
 
         foreach ($headers as $key => $value) {
             $server['HTTP_' . strtoupper(str_replace('-', '_', $key))] = $value;
@@ -198,6 +203,34 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             '/api/public' . $uri,
             server: $server,
             content: (string)json_encode($data),
+        );
+        return $this->client->getResponse();
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, string> $headers
+     */
+    public function machineApi(
+        string $method,
+        string $uri,
+        array  $data = [],
+        array  $headers = [],
+    ): Response
+    {
+        $server = [
+            'CONTENT_TYPE' => 'application/json',
+        ];
+
+        foreach ($headers as $key => $value) {
+            $server['HTTP_' . strtoupper(str_replace('-', '_', $key))] = $value;
+        }
+
+        $this->client->request(
+            $method,
+            '/api/machine' . $uri,
+            server: $server,
+            content: (string)json_encode($data)
         );
         return $this->client->getResponse();
     }
