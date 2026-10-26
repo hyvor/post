@@ -7,6 +7,7 @@ use App\Service\Newsletter\Constraint\Subdomain;
 use App\Util\OptionalPropertyTrait;
 use Nelmio\ApiDocBundle\Attribute\Ignore;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[OA\Schema(required: ['name'])]
 class UpdateNewsletterInput extends NewsletterObject
@@ -17,6 +18,9 @@ class UpdateNewsletterInput extends NewsletterObject
 
     #[Subdomain]
     public string $subdomain;
+
+    #[Assert\Length(max: 255)]
+    public ?string $confirmation_email_subject = null;
 
     /**
      * @var string[]
