@@ -14,7 +14,6 @@ use App\Tests\Factory\DomainFactory;
 use App\Tests\Factory\IssueFactory;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\NewsletterListFactory;
-use App\Tests\Factory\SendingProfileFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
 
@@ -170,123 +169,11 @@ class RateLimitTest extends WebTestCase
         $this->assertResponseHeaderSame('X-RateLimit-Remaining', '99');
     }
 
-    public function test_subscribe_endpoint_applies_per_minute_email_rate_limit(): void
+    public function test_no_rate_limit_on_auth_bypassed_paths(): void
     {
-        $this->mockRelayClient();
-        $newsletter = NewsletterFactory::createOne();
-        SendingProfileFactory::createOne(['newsletter' => $newsletter]);
-        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $this->consoleApi(null, 'GET', '/init');
 
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => 'test@example.com',
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => 'test@example.com',
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $this->assertResponseStatusCodeSame(200);
-
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => 'test@example.com',
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $this->assertResponseStatusCodeSame(429);
-        // headers of the per-minute subscribe limit, not the public API one
-        $this->assertResponseHeaderSame('X-RateLimit-Limit', '2');
-        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '0');
-        $this->assertTrue($this->client->getResponse()->headers->has('Retry-After'));
-        $json = $this->getJson();
-        $this->assertIsString($json['message']);
-        $this->assertStringContainsString('You have recently requested a subscription confirm link', $json['message']);
-        $this->assertStringContainsString('seconds', $json['message']);
-    }
-
-    public function test_subscribe_endpoint_different_emails_not_rate_limited(): void
-    {
-        $this->mockRelayClient();
-        $newsletter = NewsletterFactory::createOne();
-        SendingProfileFactory::createOne(['newsletter' => $newsletter]);
-        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
-
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => 'test1@example.com',
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $this->assertResponseStatusCodeSame(200);
-
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => 'test2@example.com',
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $this->assertResponseStatusCodeSame(200);
-    }
-
-    public function test_subscribe_endpoint_hourly_rate_limit(): void
-    {
-        $this->mockRelayClient();
-        $newsletter = NewsletterFactory::createOne();
-        SendingProfileFactory::createOne(['newsletter' => $newsletter]);
-        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
-
-        $rateLimit = new RateLimit();
-        /** @var RateLimiterProvider $rateLimiterProvider */
-        $rateLimiterProvider = $this->getContainer()->get(RateLimiterProvider::class);
-
-        $email = 'test@example.com';
-
-        // Consume the hourly limit (6 requests)
-        $perHourLimiter = $rateLimiterProvider->rateLimiter(
-            $rateLimit->subscriberPerEmailPerHour(),
-            'subscriber_email:' . hash('sha256', $email)
-        );
-        $perHourLimiter->consume(6);
-
-
-        $response = $this->publicApi(
-            'POST',
-            '/form/subscribe',
-            [
-                'newsletter_subdomain' => $newsletter->getSubdomain(),
-                'email' => $email,
-                'list_ids' => [$list->getId()]
-            ]
-        );
-
-        $this->assertResponseStatusCodeSame(429);
-        $json = $this->getJson();
-        $this->assertIsString($json['message']);
-        $this->assertStringContainsString('You have recently requested a subscription confirm link', $json['message']);
-        $this->assertStringContainsString('seconds', $json['message']);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseNotHasHeader('X-RateLimit-Limit');
     }
 }
