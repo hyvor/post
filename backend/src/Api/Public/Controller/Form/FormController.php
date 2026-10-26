@@ -9,6 +9,7 @@ use App\Api\Public\Input\Form\FormSubscribeInput;
 use App\Api\Public\Object\Form\FormListObject;
 use App\Api\Public\Object\Form\FormSubscriberObject;
 use App\Api\Public\Object\Form\Newsletter\FormNewsletterObject;
+use App\Entity\Newsletter;
 use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
@@ -41,11 +42,7 @@ class FormController extends AbstractController
     #[Route('/form/init', methods: 'POST')]
     public function init(#[MapRequestPayload] FormInitInput $input): JsonResponse
     {
-        if ($input->newsletter_id !== null) {
-            $newsletter = $this->newsletterService->getNewsletterById($input->newsletter_id);
-        } else {
-            $newsletter = $this->newsletterService->getNewsletterBySubdomain((string)$input->newsletter_subdomain);
-        }
+        $newsletter = $this->resolveNewsletter($input->newsletter_id, $input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
@@ -80,7 +77,7 @@ class FormController extends AbstractController
         Request $request,
     ): JsonResponse {
         $ip = $request->getClientIp();
-        $newsletter = $this->newsletterService->getNewsletterBySubdomain($input->newsletter_subdomain);
+        $newsletter = $this->resolveNewsletter($input->newsletter_id, $input->newsletter_subdomain);
 
         if (!$newsletter) {
             throw new UnprocessableEntityHttpException('Newsletter not found');
@@ -154,5 +151,14 @@ class FormController extends AbstractController
             HTML;
 
         return new Response($response);
+    }
+
+    private function resolveNewsletter(?int $id, ?string $subdomain): ?Newsletter
+    {
+        if ($id !== null) {
+            return $this->newsletterService->getNewsletterById($id);
+        }
+
+        return $this->newsletterService->getNewsletterBySubdomain((string)$subdomain);
     }
 }

@@ -11,7 +11,7 @@ import { writable } from 'svelte/store';
  * - padding is reduced
  * - account nav is hidden (billing and domains)
  * - nav bottom (language, dark toggle) is hidden
- * - blog nav hides:  
+ * - blog nav hides:
  *  - install
  */
 export const isEmbedded = writable(false);
