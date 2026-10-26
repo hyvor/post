@@ -53,6 +53,54 @@ class PreferencesTest extends WebTestCase
         $this->assertSame(ListRemovalReason::UNSUBSCRIBE, $listRemoval->getReason());
     }
 
+    public function test_unsubscribe_records_unsubscribe_at_on_send(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['lists' => [$list]]);
+        $send = SendFactory::createOne([
+            'subscriber' => $subscriber,
+            'newsletter' => $newsletter,
+        ]);
+
+        $this->assertNull($send->getUnsubscribeAt());
+
+        $response = $this->publicApi(
+            'POST',
+            '/subscriber/preferences',
+            [
+                'token' => $this->encryption->encrypt($send->getId()),
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertNotNull($send->getUnsubscribeAt());
+    }
+
+    public function test_preference_change_does_not_record_unsubscribe_at_on_send(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        $lists = NewsletterListFactory::createMany(2, ['newsletter' => $newsletter]);
+        $subscriber = SubscriberFactory::createOne(['lists' => $lists]);
+        $send = SendFactory::createOne([
+            'subscriber' => $subscriber,
+            'newsletter' => $newsletter,
+        ]);
+
+        $response = $this->publicApi(
+            'POST',
+            '/subscriber/preferences',
+            [
+                'token' => $this->encryption->encrypt($send->getId()),
+                'list_ids' => [$lists[0]->getId()],
+            ]
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertCount(1, $subscriber->getLists());
+        $this->assertNull($send->getUnsubscribeAt());
+    }
+
     public function test_unsubscribe_with_invalid_token(): void
     {
         $response = $this->publicApi(
