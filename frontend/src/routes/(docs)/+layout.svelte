@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { Button } from '@hyvor/design/components';
-	import { Header, HeaderNavLink } from '@hyvor/design/marketing';
-	import HeaderLanguageToggle, { buildLocalizedUrl } from './HeaderLanguageToggle.svelte';
+	import {
+		Header,
+		HeaderNavLink,
+		HeaderLanguageToggle,
+		buildLocalizedUrl
+	} from '@hyvor/design/marketing';
 	import IconBoxArrowUpRight from '@hyvor/icons/IconBoxArrowUpRight';
 	import IconGithub from '@hyvor/icons/IconGithub';
 	import { page } from '$app/state';
