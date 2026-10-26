@@ -8,6 +8,7 @@ use App\Entity\Subscriber;
 use App\Entity\SubscriberListRemoval;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
+use App\Service\Ip\IpService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Subscriber\SubscriberService;
 use App\Tests\Case\WebTestCase;
@@ -25,6 +26,7 @@ use function Zenstruck\Foundry\Persistence\refresh;
 #[CoversClass(SubscriberObject::class)]
 #[CoversClass(SubscriberService::class)]
 #[CoversClass(NewsletterListService::class)]
+#[CoversClass(IpService::class)]
 class FormSubscribeTest extends WebTestCase
 {
     use ClockSensitiveTrait;
@@ -34,9 +36,9 @@ class FormSubscribeTest extends WebTestCase
         $response = $this->publicApi('POST', '/form/subscribe');
 
         $this->assertResponseStatusCodeSame(422, $response);
-        $this->assertResponseHeaderSame('Ratelimit-Limit', '30');
-        $this->assertResponseHeaderSame('Ratelimit-Remaining', '29');
-        $this->assertResponseHeaderSame('Ratelimit-Reset', '0');
+        $this->assertResponseHeaderSame('X-RateLimit-Limit', '30');
+        $this->assertResponseHeaderSame('X-RateLimit-Remaining', '29');
+        $this->assertResponseHeaderSame('X-RateLimit-Reset', '0');
     }
 
     public function test_error_on_missing_newsletter(): void
@@ -141,6 +143,30 @@ class FormSubscribeTest extends WebTestCase
         $this->assertSame(SubscriberStatus::PENDING, $subscriber->getStatus());
         $this->assertNull($subscriber->getSubscribedAt()?->getTimestamp());
         $this->assertSame(SubscriberSource::FORM, $subscriber->getSource());
+    }
+
+    public function test_saves_cloudflare_client_ip(): void
+    {
+        $newsletter = NewsletterFactory::createOne();
+        SendingProfileFactory::createOne([
+            'newsletter' => $newsletter,
+            'is_system' => true,
+        ]);
+        $list = NewsletterListFactory::createOne(['newsletter' => $newsletter]);
+
+        $this->mockRelayClient(fn() => new JsonMockResponse());
+
+        $response = $this->publicApi('POST', '/form/subscribe', [
+            'newsletter_id' => $newsletter->getId(),
+            'email' => 'supun@hyvor.com',
+            'list_ids' => [$list->getId()],
+        ], ['CF-Connecting-IP' => '203.0.113.1'], clientIp: '172.64.0.1');
+
+        $this->assertResponseStatusCodeSame(200, $response);
+
+        $subscriber = $this->em->getRepository(Subscriber::class)->find($this->getJson()['id']);
+        $this->assertNotNull($subscriber);
+        $this->assertSame('203.0.113.1', $subscriber->getSubscribeIp());
     }
 
     public function test_updates_status_and_list_ids_on_duplicate(): void

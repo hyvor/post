@@ -14,6 +14,7 @@ use App\Entity\Type\ListRemovalReason;
 use App\Entity\Type\SubscriberSource;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\AppConfig;
+use App\Service\Ip\IpService;
 use App\Service\NewsletterList\NewsletterListService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Subscriber\Dto\UpdateSubscriberDto;
@@ -37,6 +38,7 @@ class FormController extends AbstractController
         private NewsletterListService $newsletterListService,
         private SubscriberService $subscriberService,
         private AppConfig $appConfig,
+        private IpService $ipService,
     ) {}
 
     #[Route('/form/init', methods: 'POST')]
@@ -76,7 +78,7 @@ class FormController extends AbstractController
         #[MapRequestPayload] FormSubscribeInput $input,
         Request $request,
     ): JsonResponse {
-        $ip = $request->getClientIp();
+        $ip = $this->ipService->resolveIp($request);
         $newsletter = $this->resolveNewsletter($input->newsletter_id, $input->newsletter_subdomain);
 
         if (!$newsletter) {

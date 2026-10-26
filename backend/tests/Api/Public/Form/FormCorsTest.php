@@ -30,4 +30,20 @@ class FormCorsTest extends WebTestCase
         $this->assertResponseHeaderSame('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH', $response);
     }
 
+    public function test_exposes_retry_after_header(): void
+    {
+        $response = $this->publicApi(
+            'POST',
+            '/form/init',
+            [
+                'newsletter_subdomain' => 'test',
+            ],
+            headers: [
+                'Origin' => 'https://example.com',
+            ]
+        );
+
+        $this->assertResponseHeaderSame('Access-Control-Expose-Headers', 'link, retry-after', $response);
+    }
+
 }

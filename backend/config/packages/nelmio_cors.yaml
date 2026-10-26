@@ -11,6 +11,8 @@ nelmio_cors:
     '^/api/public/':
       allow_origin: [ '*' ]
       allow_methods: [ 'GET', 'POST', 'OPTIONS', 'PATCH' ]
+      # Retry-After: for the embed form to show a countdown when rate limited
+      expose_headers: [ 'Link', 'Retry-After' ]
       max_age: 3600
 
     '^/api/embed/':
