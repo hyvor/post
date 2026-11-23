@@ -4,21 +4,14 @@ namespace App\Service\Subscriber\ConfirmationMail;
 
 use App\Entity\Subscriber;
 use App\Entity\Type\SubscriberStatus;
-use App\Service\Content\ContentService;
-use App\Service\Integration\Relay\RelayApiClient;
 use App\Service\Integration\Relay\RelayApiClientInterface;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\SendingProfile\SendingProfileService;
-use App\Service\Template\HtmlTemplateRenderer;
-use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariableService;
 use Doctrine\ORM\EntityManagerInterface;
-use Hyvor\Internal\Internationalization\StringsFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
-use Twig\Environment;
 
 #[AsMessageHandler]
 class SendConfirmationMailMessageHandler
@@ -29,14 +22,9 @@ class SendConfirmationMailMessageHandler
         private SendingProfileService $sendingProfileService,
         private Encryption $encryption,
         private NewsletterService $newsletterService,
-        private ContentService $contentService,
-        private TemplateService $templateService,
-        private TemplateVariableService $templateVariableService,
-        private HtmlTemplateRenderer $htmlTemplateRenderer,
-        private readonly StringsFactory $stringsFactory,
+        private ConfirmationMailContent $confirmationMailContent,
         private RelayApiClientInterface $relayApiClient,
         private EntityManagerInterface $em,
-        private Environment $twig,
     ) {}
 
     public function __invoke(SendConfirmationMailMessage $message): void
@@ -60,21 +48,9 @@ class SendConfirmationMailMessageHandler
         ];
 
         $token = $this->encryption->encrypt($data);
-        $strings = $this->stringsFactory->create();
+        $confirmUrl = $this->newsletterService->getArchiveUrl($newsletter) . "/confirm?token=" . $token;
 
-        $heading = $strings->get('mail.subscriberConfirmation.heading');
-        $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
-
-        $content = $this->twig->render('newsletter/mail/confirm.json.twig', [
-            'newsletterName' => $newsletter->getName(),
-            'buttonUrl' => $this->newsletterService->getArchiveUrl($newsletter) . "/confirm?token=" . $token,
-            'buttonText' => $strings->get('mail.subscriberConfirmation.buttonText'),
-        ]);
-
-        $variables->subject = $heading;
-        $variables->content = $this->contentService->getHtmlFromJson($content);
-
-        $template = $this->templateService->getTemplateStringFromNewsletter($newsletter);
+        $mail = $this->confirmationMailContent->build($newsletter, $confirmUrl);
 
         $email = new Email();
         $this->sendingProfileService->setSendingProfileToEmail(
@@ -84,8 +60,8 @@ class SendConfirmationMailMessageHandler
 
         $email
             ->to($subscriber->getEmail())
-            ->html($this->htmlTemplateRenderer->render($template, $variables))
-            ->subject($heading . ' to ' . $newsletter->getName());
+            ->html($mail['html'])
+            ->subject($mail['subject']);
 
         $this->relayApiClient->sendEmail($email);
     }

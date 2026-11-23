@@ -42,3 +42,10 @@ export function deleteNewsletter() {
 		endpoint: 'newsletter'
 	});
 }
+
+export function previewConfirmationEmail(subject: string | null, content: string | null) {
+	return consoleApi.post<{ subject: string; html: string }>({
+		endpoint: 'newsletter/confirmation-email/preview',
+		data: { subject, content }
+	});
+}

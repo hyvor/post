@@ -56,6 +56,7 @@ Endpoints:
 
 - [`GET /newsletter`](#get-newsletter) - Get newsletter data
 - [`PATCH /newsletter`](#update-newsletter) - Update a newsletter
+- [`POST /newsletter/confirmation-email/preview`](#preview-confirmation-email) - Preview the confirmation email
 - [`DELETE /newsletter`](#delete-newsletter) - Delete a newsletter
 
 Objects:
@@ -78,6 +79,21 @@ type Response = Newsletter
 ```ts
 type Request = Partial<Newsletter>  // except id, created_at
 type Response = Newsletter
+```
+
+<h4 id="preview-confirmation-email">Preview the confirmation email</h4>
+
+`POST /newsletter/confirmation-email/preview`
+
+```ts
+type Request = {
+    subject?: string | null; // null = current subject
+    content?: string | null; // ProseMirror JSON. null = current content
+}
+type Response = {
+    subject: string;
+    html: string;
+}
 ```
 
 <h4 id="delete-newsletter">Delete a newsletter</h4>
@@ -989,6 +1005,9 @@ interface Newsletter {
 
     form_default_color_palette: 'light' | 'dark' | 'os';
     form_input_border_radius: number;
+
+    confirmation_email_subject: string | null; // null = default. Supports {{newsletter_name}}
+    confirmation_email_content: string | null; // ProseMirror JSON. null = default. Must contain {{confirm_url}}
 }
 ```
 

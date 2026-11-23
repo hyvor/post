@@ -14,6 +14,7 @@ Vous pouvez intégrer le formulaire d'inscription de Hyvor Post à votre site we
 
 - [Intégrer le formulaire d'inscription](#embed)
 - [Personnaliser le formulaire](#customize)
+- [Personnaliser l'e-mail de confirmation](#confirmation-email)
 - [Utiliser plusieurs listes](#multiple-lists)
 - [Attributs du formulaire](#attributes)
 
@@ -40,6 +41,17 @@ Vous pouvez personnaliser le texte et l'apparence du formulaire dans **Console &
 <DocsImage src={imgFormCustomize} alt="Personnaliser le formulaire" />
 
 Cela inclut des options comme le titre, la description, le texte du bouton, les couleurs et l'interface. Vous pouvez également ajouter du CSS personnalisé pour aller plus loin. Notez que le CSS personnalisé est ajouté au formulaire, qui est un web component avec un shadow DOM : votre CSS n'affectera donc que le formulaire, et non le reste de votre site.
+
+<h2 id="confirmation-email">Personnaliser l'e-mail de confirmation</h2>
+
+Lorsqu'une personne s'inscrit, elle reçoit un e-mail lui demandant de confirmer son inscription. Vous pouvez personnaliser son sujet et son contenu dans **Console &rarr; Paramètres &rarr; Confirmation Email**. Cliquez sur **Edit Content** pour ouvrir l'éditeur, avec un aperçu de l'e-mail en direct.
+
+Les variables suivantes sont disponibles dans le sujet et le contenu :
+
+- `{{newsletter_name}}` - le nom de votre newsletter
+- `{{confirm_url}}` - le lien de confirmation. Le contenu doit contenir un bouton ou un lien vers cette URL.
+
+Cliquez sur **Reset to Default** pour revenir à l'e-mail par défaut.
 
 <h2 id="multiple-lists">Utiliser plusieurs listes</h2>
 

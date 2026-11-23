@@ -8,14 +8,11 @@ use App\Entity\Type\SubscriberStatus;
 use App\Service\Content\ContentService;
 use App\Service\Newsletter\NewsletterService;
 use App\Service\Template\HtmlTemplateRenderer;
-use App\Service\Template\TemplateService;
-use App\Service\Template\TemplateVariableService;
+use App\Service\Subscriber\ConfirmationMail\ConfirmationMailContent;
 use App\Tests\Factory\NewsletterFactory;
 use App\Tests\Factory\SendFactory;
 use App\Tests\Factory\SubscriberFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Hyvor\Internal\Component\InstanceUrlResolver;
-use Hyvor\Internal\InternalConfig;
 use Hyvor\Internal\Internationalization\StringsFactory;
 use Hyvor\Internal\Util\Crypt\Encryption;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,12 +38,8 @@ class TemplateController extends AbstractController
         private readonly Environment    $mailTemplate,
         private readonly StringsFactory $stringsFactory,
         private Encryption              $encryption,
-        private TemplateService         $templateService,
-        private TemplateVariableService $templateVariableService,
-        private HtmlTemplateRenderer    $htmlTemplateRenderer,
-        private InstanceUrlResolver     $instanceUrlResolver,
-        private InternalConfig          $internalConfig,
         private NewsletterService       $newsletterService,
+        private ConfirmationMailContent $confirmationMailContent,
     )
     {
     }
@@ -108,60 +101,11 @@ class TemplateController extends AbstractController
         ];
 
         $token = $this->encryption->encrypt($data);
+        $confirmUrl = $this->newsletterService->getArchiveUrl($subscriber->getNewsletter()) . "/confirm?token=" . $token;
 
-        $strings = $this->stringsFactory->create();
+        $mail = $this->confirmationMailContent->build($subscriber->getNewsletter(), $confirmUrl);
 
-        $subject = $strings->get('mail.subscriberConfirmation.heading');
-
-        $newsletter = $subscriber->getNewsletter();
-
-        $variables = $this->templateVariableService->variablesFromNewsletter($newsletter);
-
-        $variables->subject = $subject;
-        $content = (string)json_encode([
-            'type' => 'doc',
-            'content' => [
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => 'Hey 👋,',
-                        ],
-                    ],
-                ],
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => 'Thank you for subscribing to ' . $newsletter->getName() . '! To confirm your subscription and start receiving updates, please click the button below.',
-                        ],
-                    ],
-                ],
-                [
-                    'type' => 'button',
-                    'attrs' => [
-                        'href' => $this->instanceUrlResolver->publicUrlOf($this->internalConfig->getComponent()) . "/api/public/subscriber/confirm?token=" . $token,
-                        'text' => $strings->get('mail.subscriberConfirmation.buttonText'),
-                    ],
-                ],
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => 'If you did not request or expect this invitation, you can safely ignore this email.',
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $variables->content = $this->contentService->getHtmlFromJson($content);
-        $template = $this->templateService->getTemplateStringFromNewsletter($subscriber->getNewsletter());
-
-        return new Response($this->htmlTemplateRenderer->render($template, $variables));
+        return new Response($mail['html']);
     }
 
     #[Route('temp/unsubscribe-link', methods: 'GET')]
