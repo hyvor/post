@@ -44,7 +44,6 @@ Aller à une catégorie :
 - [Utilisateur](#user)
 - [Clés API](#api-keys)
 - [Médias](#media)
-- [Importations](#imports)
 - [Exportation](#export)
 
 <!-- ############################## CATEGORIES ################################# -->
@@ -798,10 +797,6 @@ Endpoints :
 - [`PATCH /api-keys/{id}`](#update-api-key) - Mettre à jour une clé API
 - [`POST /api-keys/{id}`](#regenerate-api-key) - Régénérer une clé API
 - [`DELETE /api-keys/{id}`](#delete-api-key) - Supprimer une clé API
-
-Objets :
-
-- [Objet ApiKey](#api-key-object)
 
 <h4 id="get-api-keys">Récupérer les clés API</h4>
 

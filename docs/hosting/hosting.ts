@@ -37,6 +37,7 @@ export async function getSections(lang: string): Promise<NavSectionConfig[]> {
                     type: "page",
                     slug: "",
                     name: s.pages.getStarted,
+                    description: s.descriptions.getStarted,
                     content: await getComponent("Introduction"),
                 },
             ],

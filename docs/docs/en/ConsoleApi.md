@@ -45,7 +45,6 @@ Jump to each category:
 - [User](#user)
 - [API Keys](#api-keys)
 - [Media](#media)
-- [Imports](#imports)
 - [Export](#export)
 
 <!-- ############################## CATEGORIES ################################# -->
@@ -800,10 +799,6 @@ Endpoints:
 - [`PATCH /api-keys/{id}`](#update-api-key) - Update an API key
 - [`POST /api-keys/{id}`](#regenerate-api-key) - Regenerate an API key
 - [`DELETE /api-keys/{id}`](#delete-api-key) - Delete an API key
-
-Objects:
-
-- [API Key Object](#api-key-object)
 
 <h4 id="get-api-keys">Get API keys</h4>
 

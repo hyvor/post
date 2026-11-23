@@ -4,5 +4,8 @@
     },
     "pages": {
         "getStarted": "Get Started"
+    },
+    "descriptions": {
+        "getStarted": "Self-host Hyvor Post, the privacy-first newsletter platform. Set up Hyvor Relay for sending email and deploy Hyvor Post on your own infrastructure."
     }
 }

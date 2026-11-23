@@ -9,5 +9,12 @@
         "emailDesign": "Email Design",
         "import": "Import",
         "apiConsole": "Console API"
+    },
+    "descriptions": {
+        "introduction": "Get started with Hyvor Post, a privacy-first newsletter platform that sends email newsletters without tracking subscribers. Learn the basics and sign up.",
+        "signupForm": "Embed the Hyvor Post newsletter signup form on your website. Double opt-in by default, customizable styling, multiple lists, and form attributes.",
+        "emailDesign": "Customize your newsletter email design in Hyvor Post. Edit the default email template or build custom templates to match your brand.",
+        "import": "Import subscribers into Hyvor Post from a CSV file. Migrate your newsletter subscribers from another email service with field mapping.",
+        "apiConsole": "Automate newsletter tasks with the Hyvor Post Console API. Authenticate with an API key to manage subscribers, lists, and issues over HTTP."
     }
 }
