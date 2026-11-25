@@ -40,7 +40,7 @@ class ImportSubscribersMessageHandler
 
         try {
             $this->em->beginTransaction();
-            $this->import($subscriberImport, $parser);
+            $this->import($subscriberImport, $parser, $message->getForcedListIds(), $message->getDelimiter());
             $this->em->commit();
         } catch (\Exception $e) {
             $this->em->rollback();
@@ -74,19 +74,24 @@ class ImportSubscribersMessageHandler
         }
     }
 
-    private function import(SubscriberImport $subscriberImport, CsvParser $parser): void
+    /**
+     * @param int[] $forcedListIds
+     */
+    private function import(SubscriberImport $subscriberImport, CsvParser $parser, array $forcedListIds = [], string $delimiter = ','): void
     {
-        $subscribers = $parser->parse($subscriberImport);
+        $subscribers = $parser->parse($subscriberImport, delimiter: $delimiter);
 
         $newsletter = $subscriberImport->getNewsletter();
         $lists = $this->newsletterListService->getListsOfNewsletter($newsletter);
+
+        $forcedLists = array_values(array_filter($lists, fn($l) => in_array($l->getId(), $forcedListIds, true)));
 
         $importedCount = 0;
         foreach ($subscribers as $dto) {
             $subscriberLists = [];
 
             if (count($dto->lists) === 0) {
-                $subscriberLists = $lists;
+                $subscriberLists = count($forcedLists) > 0 ? $forcedLists : $lists;
             } else {
                 foreach ($dto->lists as $listName) {
                     $list = array_find($lists, fn($l) => $l->getName() === $listName);
@@ -94,6 +99,11 @@ class ImportSubscribersMessageHandler
                     if ($list === null) {
                         continue;
                     }
+                    if (!in_array($list, $subscriberLists, true)) {
+                        $subscriberLists[] = $list;
+                    }
+                }
+                foreach ($forcedLists as $list) {
                     if (!in_array($list, $subscriberLists, true)) {
                         $subscriberLists[] = $list;
                     }

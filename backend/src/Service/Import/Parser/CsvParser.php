@@ -2,6 +2,7 @@
 
 namespace App\Service\Import\Parser;
 
+use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Import\Dto\ImportingSubscriberDto;
@@ -15,6 +16,8 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 #[Exclude]
 class CsvParser extends ParserAbstract
 {
+    public const string DEFAULT_DELIMITER = ',';
+
     public function __construct(
         private MediaService              $mediaService,
         private SubscriberMetadataService $subscriberMetadataService,
@@ -27,17 +30,18 @@ class CsvParser extends ParserAbstract
      * @return Collection<int, ImportingSubscriberDto>
      * @throws ParserException
      */
-    public function parse(SubscriberImport $subscriberImport, ?int $limit = null, ?int $offset = null): Collection
+    public function parse(
+        SubscriberImport $subscriberImport,
+        ?int $limit = null,
+        ?int $offset = null,
+        string $delimiter = self::DEFAULT_DELIMITER,
+    ): Collection
     {
         $fieldMapping = $subscriberImport->getFields();
 
         if ($fieldMapping === null) {
             throw new ParserException('Field mapping not set.');
         }
-
-        $metaFields = $this->getMetadataFields($fieldMapping);
-        $metaKeys = array_map(fn($meta) => $meta->getKey(), $this->subscriberMetadataService->getMetadataDefinitions($subscriberImport->getNewsletter()));
-
 
         try {
             $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia());
@@ -49,7 +53,32 @@ class CsvParser extends ParserAbstract
             throw new ParserException('Unable to read media stream.');
         }
 
-        $headers = fgetcsv($stream);
+        return $this->parseStream($stream, $subscriberImport->getNewsletter(), $fieldMapping, $limit, $offset, $delimiter);
+    }
+
+    /**
+     * Parses a CSV stream (columns separated by $delimiter). Closes the stream when done.
+     *
+     * @param resource $stream
+     * @param array<string, string|null> $fieldMapping
+     * @return Collection<int, ImportingSubscriberDto>
+     * @throws ParserException
+     */
+    public function parseStream(
+        $stream,
+        Newsletter $newsletter,
+        array $fieldMapping,
+        ?int $limit = null,
+        ?int $offset = null,
+        string $delimiter = self::DEFAULT_DELIMITER,
+    ): Collection {
+        $metaFields = $this->getMetadataFields($fieldMapping);
+        $metaKeys = array_map(
+            fn($meta) => $meta->getKey(),
+            $this->subscriberMetadataService->getMetadataDefinitions($newsletter)
+        );
+
+        $headers = fgetcsv($stream, separator: $delimiter);
         if ($headers === false) {
             fclose($stream);
             throw new ParserException('CSV header row missing or invalid.');
@@ -59,7 +88,7 @@ class CsvParser extends ParserAbstract
         $subscribers = [];
         $rowIndex = 1;
 
-        while (($row = fgetcsv($stream)) !== false) {
+        while (($row = fgetcsv($stream, separator: $delimiter)) !== false) {
             $rowIndex++;
 
             if ($offset !== null && $rowIndex <= ($offset + 1)) {
@@ -94,9 +123,8 @@ class CsvParser extends ParserAbstract
             }
 
             $lists = [];
-            if ($fieldMapping['lists'] !== null && isset($item[$fieldMapping['lists']])) {
-                /** @var string[] $lists */
-                $lists = json_decode($item[$fieldMapping['lists']], true) ?? [];
+            if (($fieldMapping['lists'] ?? null) !== null && isset($item[$fieldMapping['lists']])) {
+                $lists = self::parseLists($item[$fieldMapping['lists']]);
             }
 
             $metadata = [];
@@ -115,8 +143,8 @@ class CsvParser extends ParserAbstract
                 email: $email,
                 lists: $lists,
                 status: SubscriberStatus::SUBSCRIBED,
-                subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
-                subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
+                subscribedAt: ($fieldMapping['subscribed_at'] ?? null) && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
+                subscribeIp: ($fieldMapping['subscribe_ip'] ?? null) && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
                 metadata: $metadata
             );
         }
@@ -124,5 +152,36 @@ class CsvParser extends ParserAbstract
         fclose($stream);
 
         return new ArrayCollection($subscribers);
+    }
+
+    /**
+     * Parses the list names of a CSV cell.
+     * Supports a JSON array (["A", "B"]) and simple comma or semicolon separated values (A, B / A; B).
+     *
+     * @return string[]
+     */
+    public static function parseLists(string $value): array
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return [];
+        }
+
+        if (str_starts_with($value, '[')) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                $names = array_filter($decoded, is_string(...));
+            } else {
+                $names = [];
+            }
+        } else {
+            $names = preg_split('/[,;]/', $value) ?: [];
+        }
+
+        $names = array_map(trim(...), $names);
+        $names = array_filter($names, fn($n) => $n !== '');
+
+        return array_values(array_unique($names));
     }
 }
