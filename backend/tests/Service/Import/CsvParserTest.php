@@ -17,6 +17,7 @@ use App\Tests\Factory\NewsletterListFactory;
 use App\Tests\Factory\SubscriberImportFactory;
 use App\Tests\Factory\SubscriberMetadataDefinitionFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[CoversClass(CsvParser::class)]
@@ -90,5 +91,57 @@ class CsvParserTest extends KernelTestCase
         $this->assertSame('2024-10-03 10:45:00', $subscribers[0]->subscribedAt?->format('Y-m-d H:i:s'));
         $this->assertSame('192.168.1.1', $subscribers[0]->subscribeIp);
         $this->assertSame(['name' => 'John', 'address' => 'john_addr'], $subscribers[0]->metadata);
+    }
+
+    /**
+     * @return array<string, array{string, string[]}>
+     */
+    public static function listsProvider(): array
+    {
+        return [
+            'json' => ['["List 1", "List 2"]', ['List 1', 'List 2']],
+            'comma (mailchimp)' => ['List 1, List 2', ['List 1', 'List 2']],
+            'semicolon (buttondown)' => ['List 1; List 2', ['List 1', 'List 2']],
+            'single' => ['List 1', ['List 1']],
+            'empty' => ['', []],
+            'whitespace and empty items' => [' List 1 ,, ;List 2; ', ['List 1', 'List 2']],
+            'duplicates' => ['A,B,A', ['A', 'B']],
+            'invalid json' => ['[List 1', []],
+            'json with non-strings' => ['["A", 1, null]', ['A']],
+        ];
+    }
+
+    /**
+     * @param string[] $expected
+     */
+    #[DataProvider('listsProvider')]
+    public function test_parse_lists(string $input, array $expected): void
+    {
+        $this->assertSame($expected, CsvParser::parseLists($input));
+    }
+
+    public function test_parse_with_comma_and_semicolon_lists(): void
+    {
+        /** @var ParserFactory $parserFactory */
+        $parserFactory = $this->container->get(ParserFactory::class);
+        $parser = $parserFactory->csv();
+        $newsletter = NewsletterFactory::createOne();
+
+        $csv = "email,lists\n" .
+            "a@hyvor.com,\"List 1, List 2\"\n" .
+            "b@hyvor.com,List 1; List 2\n" .
+            "c@hyvor.com,\n";
+        $path = tempnam(sys_get_temp_dir(), 'import');
+        file_put_contents($path, $csv);
+
+        $stream = fopen($path, 'r');
+        $this->assertIsResource($stream);
+        $subscribers = $parser->parseStream($stream, $newsletter, ['email' => 'email', 'lists' => 'lists'])->toArray();
+        unlink($path);
+
+        $this->assertCount(3, $subscribers);
+        $this->assertSame(['List 1', 'List 2'], $subscribers[0]->lists);
+        $this->assertSame(['List 1', 'List 2'], $subscribers[1]->lists);
+        $this->assertSame([], $subscribers[2]->lists);
     }
 }

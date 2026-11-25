@@ -2,6 +2,7 @@
 
 namespace App\Service\Import\Parser;
 
+use App\Entity\Newsletter;
 use App\Entity\SubscriberImport;
 use App\Entity\Type\SubscriberStatus;
 use App\Service\Import\Dto\ImportingSubscriberDto;
@@ -35,10 +36,6 @@ class CsvParser extends ParserAbstract
             throw new ParserException('Field mapping not set.');
         }
 
-        $metaFields = $this->getMetadataFields($fieldMapping);
-        $metaKeys = array_map(fn($meta) => $meta->getKey(), $this->subscriberMetadataService->getMetadataDefinitions($subscriberImport->getNewsletter()));
-
-
         try {
             $stream = $this->mediaService->getMediaStream($subscriberImport->getMedia());
         } catch (MediaReadException $e) {
@@ -48,6 +45,30 @@ class CsvParser extends ParserAbstract
         if (!is_resource($stream)) {
             throw new ParserException('Unable to read media stream.');
         }
+
+        return $this->parseStream($stream, $subscriberImport->getNewsletter(), $fieldMapping, $limit, $offset);
+    }
+
+    /**
+     * Parses a CSV stream. Closes the stream when done.
+     *
+     * @param resource $stream
+     * @param array<string, string|null> $fieldMapping
+     * @return Collection<int, ImportingSubscriberDto>
+     * @throws ParserException
+     */
+    public function parseStream(
+        $stream,
+        Newsletter $newsletter,
+        array $fieldMapping,
+        ?int $limit = null,
+        ?int $offset = null,
+    ): Collection {
+        $metaFields = $this->getMetadataFields($fieldMapping);
+        $metaKeys = array_map(
+            fn($meta) => $meta->getKey(),
+            $this->subscriberMetadataService->getMetadataDefinitions($newsletter)
+        );
 
         $headers = fgetcsv($stream);
         if ($headers === false) {
@@ -94,9 +115,8 @@ class CsvParser extends ParserAbstract
             }
 
             $lists = [];
-            if ($fieldMapping['lists'] !== null && isset($item[$fieldMapping['lists']])) {
-                /** @var string[] $lists */
-                $lists = json_decode($item[$fieldMapping['lists']], true) ?? [];
+            if (($fieldMapping['lists'] ?? null) !== null && isset($item[$fieldMapping['lists']])) {
+                $lists = self::parseLists($item[$fieldMapping['lists']]);
             }
 
             $metadata = [];
@@ -115,8 +135,8 @@ class CsvParser extends ParserAbstract
                 email: $email,
                 lists: $lists,
                 status: SubscriberStatus::SUBSCRIBED,
-                subscribedAt: $fieldMapping['subscribed_at'] && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
-                subscribeIp: $fieldMapping['subscribe_ip'] && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
+                subscribedAt: ($fieldMapping['subscribed_at'] ?? null) && isset($item[$fieldMapping['subscribed_at']]) ? new \DateTimeImmutable($item[$fieldMapping['subscribed_at']]) : null,
+                subscribeIp: ($fieldMapping['subscribe_ip'] ?? null) && isset($item[$fieldMapping['subscribe_ip']]) ? $item[$fieldMapping['subscribe_ip']] : null,
                 metadata: $metadata
             );
         }
@@ -124,5 +144,36 @@ class CsvParser extends ParserAbstract
         fclose($stream);
 
         return new ArrayCollection($subscribers);
+    }
+
+    /**
+     * Parses the list names of a CSV cell.
+     * Supports a JSON array (["A", "B"]) and simple comma or semicolon separated values (A, B / A; B).
+     *
+     * @return string[]
+     */
+    public static function parseLists(string $value): array
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return [];
+        }
+
+        if (str_starts_with($value, '[')) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                $names = array_filter($decoded, is_string(...));
+            } else {
+                $names = [];
+            }
+        } else {
+            $names = preg_split('/[,;]/', $value) ?: [];
+        }
+
+        $names = array_map(trim(...), $names);
+        $names = array_filter($names, fn($n) => $n !== '');
+
+        return array_values(array_unique($names));
     }
 }
