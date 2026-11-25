@@ -24,6 +24,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -33,13 +34,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * Example (preview first, then import). For a CSV with the columns "Email,Tags,Name,Joined":
  *
- *     php bin/console app:subscribers:import my-newsletter subscribers.csv \
+ *     php bin/console app:subscribers:import subscribers.csv --subdomain=my-newsletter \
  *         --email-column=Email \
  *         --lists-column=Tags \
  *         --subscribed-at-column=Joined \
  *         -m name=Name \
  *         --preview
  *
+ * Add -l "Newsletter" (name or ID, repeatable) to add every subscriber to a list that is not in the file.
  * Remove --preview to run the import (add --yes to skip the confirmation prompt).
  */
 #[AsCommand(
@@ -64,30 +66,44 @@ class ImportSubscribersCommand
 
     /**
      * @param string[] $metadata
+     * @param string[] $list
      */
     public function __invoke(
         InputInterface $input,
         OutputInterface $output,
-        #[Argument(description: 'Newsletter ID or subdomain')] string $newsletter,
         #[Argument(description: 'Path to the CSV file (first row must be headers)')] string $file,
+        #[Option(description: 'Newsletter ID (use either --id or --subdomain)')] ?int $id = null,
+        #[Option(description: 'Newsletter subdomain (use either --id or --subdomain)')] ?string $subdomain = null,
         #[Option(description: 'CSV column of the email address')] string $emailColumn = 'email',
         #[Option(description: 'CSV column of list names (JSON array, or comma/semicolon separated). Subscribers without lists are added to all lists')] ?string $listsColumn = null,
         #[Option(description: 'CSV column of the subscribed-at date')] ?string $subscribedAtColumn = null,
         #[Option(description: 'CSV column of the subscribe IP')] ?string $subscribeIpColumn = null,
         #[Option(description: 'Metadata mapping as key=column (repeatable). The metadata key must be defined in the newsletter', shortcut: 'm')] array $metadata = [],
+        #[Option(description: 'CSV column delimiter, a single character (e.g. ";" or "|"), or "tab"')] string $delimiter = ',',
+        #[Option(description: 'Add all subscribers to this list (name or ID, repeatable). Use when the lists are not in the file; combined with the lists column if both are given', shortcut: 'l')] array $list = [],
         #[Option(description: 'Show what would be imported without making any changes', shortcut: 'p')] bool $preview = false,
         #[Option(description: 'Do not ask for confirmation', shortcut: 'y')] bool $yes = false,
     ): int {
         $io = new SymfonyStyle($input, $output);
 
+        $delimiter = in_array(strtolower($delimiter), ['tab', '\\t'], true) ? "\t" : $delimiter;
+        if (strlen($delimiter) !== 1) {
+            $io->error('--delimiter must be a single character (or "tab").');
+            return Command::FAILURE;
+        }
+
         // newsletter
-        $newsletterArg = $newsletter;
-        $newsletter = ctype_digit($newsletterArg)
-            ? $this->newsletterService->getNewsletterById((int) $newsletterArg)
-            : $this->newsletterService->getNewsletterBySubdomain($newsletterArg);
+        if (($id === null) === ($subdomain === null)) {
+            $io->error('Provide exactly one of --id or --subdomain.');
+            return Command::FAILURE;
+        }
+
+        $newsletter = $id !== null
+            ? $this->newsletterService->getNewsletterById($id)
+            : $this->newsletterService->getNewsletterBySubdomain((string) $subdomain);
 
         if ($newsletter === null) {
-            $io->error("Newsletter '$newsletterArg' not found.");
+            $io->error('Newsletter ' . ($id !== null ? "with ID $id" : "with subdomain '$subdomain'") . ' not found.');
             return Command::FAILURE;
         }
 
@@ -98,7 +114,7 @@ class ImportSubscribersCommand
             return Command::FAILURE;
         }
 
-        $headers = $this->readHeaders($path);
+        $headers = $this->readHeaders($path, $delimiter);
         if ($headers === null) {
             $io->error('Could not read the CSV header row. Is the file empty?');
             return Command::FAILURE;
@@ -110,23 +126,50 @@ class ImportSubscribersCommand
             return Command::FAILURE;
         }
 
-        $io->title(sprintf('Import subscribers into "%s" (#%d)', $newsletter->getName(), $newsletter->getId()));
+        $newsletterLists = $this->newsletterListService->getListsOfNewsletter($newsletter);
+        $availableLists = array_map(fn($l) => sprintf('%s (#%d)', $l->getName(), $l->getId()), $newsletterLists);
+
+        // forced lists
+        $forcedLists = [];
+        foreach ($list as $ref) {
+            $match = array_find($newsletterLists, fn($l) => $l->getName() === $ref)
+                ?? (ctype_digit($ref) ? array_find($newsletterLists, fn($l) => $l->getId() === (int) $ref) : null);
+
+            if ($match === null) {
+                $io->error(sprintf(
+                    "List '%s' not found in the newsletter. Available lists: %s",
+                    $ref,
+                    $availableLists ? implode(', ', $availableLists) : '(none)'
+                ));
+                return Command::FAILURE;
+            }
+            $forcedLists[$match->getId()] = $match;
+        }
+
+        $io->title(sprintf('Import subscribers into "%s"', $newsletter->getName()));
         $io->definitionList(
+            ['Newsletter ID' => $newsletter->getId()],
+            ['Subdomain' => $newsletter->getSubdomain()],
+            ['Available lists' => $availableLists ? implode(', ', $availableLists) : '(none)'],
+            new TableSeparator(),
             ['File' => $path],
             ['Columns' => implode(', ', $headers)],
             ['Mapping' => implode(', ', array_map(fn($k, $v) => "$k = $v", array_keys($mapping), $mapping))],
+            ['CSV delimiter' => $delimiter === "\t" ? 'tab' : $delimiter],
+            ['Forced lists' => $forcedLists ? implode(', ', array_map(fn($l) => $l->getName(), $forcedLists)) : '(none)'],
             ['Mode' => $preview ? 'PREVIEW (no changes will be made)' : 'IMPORT'],
         );
 
         return $preview
-            ? $this->preview($io, $newsletter, $path, $mapping)
-            : $this->import($io, $newsletter, $path, $mapping, $yes);
+            ? $this->preview($io, $newsletter, $path, $mapping, array_values(array_map(fn($l) => $l->getName(), $forcedLists)), $delimiter)
+            : $this->import($io, $newsletter, $path, $mapping, $yes, array_keys($forcedLists), $delimiter);
     }
 
     /**
      * @param array<string, string> $mapping
+     * @param string[] $forcedListNames
      */
-    private function preview(SymfonyStyle $io, Newsletter $newsletter, string $path, array $mapping): int
+    private function preview(SymfonyStyle $io, Newsletter $newsletter, string $path, array $mapping, array $forcedListNames, string $delimiter): int
     {
         $parser = $this->parserFactory->csv();
 
@@ -136,7 +179,7 @@ class ImportSubscribersCommand
                 $io->error('Unable to open the file.');
                 return Command::FAILURE;
             }
-            $subscribers = $parser->parseStream($stream, $newsletter, $mapping);
+            $subscribers = $parser->parseStream($stream, $newsletter, $mapping, delimiter: $delimiter);
         } catch (ParserException $e) {
             $io->error('Error parsing CSV. ' . $e->getMessage());
             $this->printWarnings($io, $parser->getWarnings()->toArray());
@@ -144,6 +187,23 @@ class ImportSubscribersCommand
         }
 
         $listNames = array_map(fn($l) => $l->getName(), $this->newsletterListService->getListsOfNewsletter($newsletter));
+
+        // same logic as ImportSubscribersMessageHandler. Lists added only because of --list are labelled "(forced)"
+        $effectiveLists = function (ImportingSubscriberDto $dto) use ($listNames, $forcedListNames): array {
+            $label = fn(string $n) => in_array($n, $forcedListNames, true) ? "$n (forced)" : $n;
+
+            if (count($dto->lists) === 0) {
+                return count($forcedListNames) > 0
+                    ? array_map($label, $forcedListNames)
+                    : $listNames;
+            }
+
+            $fromFile = array_values(array_unique(array_filter($dto->lists, fn($n) => in_array($n, $listNames, true))));
+            $forcedOnly = array_diff($forcedListNames, $fromFile);
+
+            return [...$fromFile, ...array_map($label, $forcedOnly)];
+        };
+
         $emails = [];
         $unknownLists = [];
         $noLists = 0;
@@ -167,10 +227,10 @@ class ImportSubscribersCommand
 
         $io->section('Sample');
         $io->table(
-            ['Email', 'Lists', 'Subscribed at', 'IP', 'Metadata'],
+            ['Email', 'Lists (after import)', 'Subscribed at', 'IP', 'Metadata'],
             array_map(fn(ImportingSubscriberDto $d) => [
                 $d->email,
-                implode(', ', $d->lists) ?: '(all lists)',
+                implode(', ', $effectiveLists($d)) ?: '(none)',
                 $d->subscribedAt?->format('Y-m-d H:i:s') ?? '(now)',
                 $d->subscribeIp ?? '',
                 json_encode($d->metadata ?: new \stdClass()),
@@ -191,7 +251,7 @@ class ImportSubscribersCommand
             ['Duplicate emails in file' => $total - $unique],
             ['Already subscribed (skipped)' => $existing],
             ['Would be imported' => $new],
-            ['Rows without lists (added to all lists)' => $noLists],
+            [(count($forcedListNames) > 0 ? 'Rows without lists in file (added to forced lists only)' : 'Rows without lists (added to all lists)') => $noLists],
         );
         $io->note('Preview only. No changes were made.');
 
@@ -200,8 +260,9 @@ class ImportSubscribersCommand
 
     /**
      * @param array<string, string> $mapping
+     * @param int[] $forcedListIds
      */
-    private function import(SymfonyStyle $io, Newsletter $newsletter, string $path, array $mapping, bool $yes): int
+    private function import(SymfonyStyle $io, Newsletter $newsletter, string $path, array $mapping, bool $yes, array $forcedListIds, string $delimiter): int
     {
         if (!$yes && !$io->confirm('Start the import? (use --yes to skip this prompt)', false)) {
             $io->writeln('Aborted.');
@@ -222,8 +283,8 @@ class ImportSubscribersCommand
                 new UploadedFile($path, $name, test: true),
             );
 
-            $fields = $this->importService->getFields($media);
-            $rows = $this->importService->getRowCount($media);
+            $fields = $this->importService->getFields($media, $delimiter);
+            $rows = $this->importService->getRowCount($media, $delimiter);
             $import = $this->importService->createSubscriberImport($media, 'cli', $fields, $rows);
 
             $updates = new UpdateSubscriberImportDto();
@@ -232,7 +293,7 @@ class ImportSubscribersCommand
             $import = $this->importService->updateSubscriberImport($import, $updates);
 
             $io->writeln("Importing $rows rows (import #{$import->getId()})...");
-            ($this->handler)(new ImportSubscribersMessage($import->getId()));
+            ($this->handler)(new ImportSubscribersMessage($import->getId(), $forcedListIds, $delimiter));
         } catch (\Throwable $e) {
             $io->error('Import failed: ' . $e->getMessage());
             return Command::FAILURE;
@@ -331,13 +392,13 @@ class ImportSubscribersCommand
     /**
      * @return string[]|null
      */
-    private function readHeaders(string $path): ?array
+    private function readHeaders(string $path, string $delimiter): ?array
     {
         $stream = fopen($path, 'r');
         if ($stream === false) {
             return null;
         }
-        $headers = fgetcsv($stream);
+        $headers = fgetcsv($stream, separator: $delimiter);
         fclose($stream);
 
         if ($headers === false) {

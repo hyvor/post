@@ -29,7 +29,7 @@ class ImportService
     /**
      * @return string[]
      */
-    public function getFields(Media $media): array
+    public function getFields(Media $media, string $delimiter = ','): array
     {
         $stream = $this->mediaService->getMediaStream($media);
 
@@ -37,7 +37,7 @@ class ImportService
             throw new ImportException("Invalid CSV stream.");
         }
 
-        $headers = fgetcsv($stream);
+        $headers = fgetcsv($stream, separator: $delimiter);
         fclose($stream);
 
         if ($headers === false) {
@@ -47,7 +47,7 @@ class ImportService
         return array_values(array_filter($headers, fn($h) => $h !== null));
     }
 
-    public function getRowCount(Media $media): int
+    public function getRowCount(Media $media, string $delimiter = ','): int
     {
         $stream = $this->mediaService->getMediaStream($media);
 
@@ -56,7 +56,7 @@ class ImportService
         }
 
         $rowCount = 0;
-        while (fgetcsv($stream) !== false) {
+        while (fgetcsv($stream, separator: $delimiter) !== false) {
             $rowCount++;
         }
         fclose($stream);

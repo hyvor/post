@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 #[Exclude]
 class CsvParser extends ParserAbstract
 {
+    public const string DEFAULT_DELIMITER = ',';
+
     public function __construct(
         private MediaService              $mediaService,
         private SubscriberMetadataService $subscriberMetadataService,
@@ -28,7 +30,12 @@ class CsvParser extends ParserAbstract
      * @return Collection<int, ImportingSubscriberDto>
      * @throws ParserException
      */
-    public function parse(SubscriberImport $subscriberImport, ?int $limit = null, ?int $offset = null): Collection
+    public function parse(
+        SubscriberImport $subscriberImport,
+        ?int $limit = null,
+        ?int $offset = null,
+        string $delimiter = self::DEFAULT_DELIMITER,
+    ): Collection
     {
         $fieldMapping = $subscriberImport->getFields();
 
@@ -46,11 +53,11 @@ class CsvParser extends ParserAbstract
             throw new ParserException('Unable to read media stream.');
         }
 
-        return $this->parseStream($stream, $subscriberImport->getNewsletter(), $fieldMapping, $limit, $offset);
+        return $this->parseStream($stream, $subscriberImport->getNewsletter(), $fieldMapping, $limit, $offset, $delimiter);
     }
 
     /**
-     * Parses a CSV stream. Closes the stream when done.
+     * Parses a CSV stream (columns separated by $delimiter). Closes the stream when done.
      *
      * @param resource $stream
      * @param array<string, string|null> $fieldMapping
@@ -63,6 +70,7 @@ class CsvParser extends ParserAbstract
         array $fieldMapping,
         ?int $limit = null,
         ?int $offset = null,
+        string $delimiter = self::DEFAULT_DELIMITER,
     ): Collection {
         $metaFields = $this->getMetadataFields($fieldMapping);
         $metaKeys = array_map(
@@ -70,7 +78,7 @@ class CsvParser extends ParserAbstract
             $this->subscriberMetadataService->getMetadataDefinitions($newsletter)
         );
 
-        $headers = fgetcsv($stream);
+        $headers = fgetcsv($stream, separator: $delimiter);
         if ($headers === false) {
             fclose($stream);
             throw new ParserException('CSV header row missing or invalid.');
@@ -80,7 +88,7 @@ class CsvParser extends ParserAbstract
         $subscribers = [];
         $rowIndex = 1;
 
-        while (($row = fgetcsv($stream)) !== false) {
+        while (($row = fgetcsv($stream, separator: $delimiter)) !== false) {
             $rowIndex++;
 
             if ($offset !== null && $rowIndex <= ($offset + 1)) {

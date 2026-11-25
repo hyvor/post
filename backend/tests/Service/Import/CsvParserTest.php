@@ -120,7 +120,7 @@ class CsvParserTest extends KernelTestCase
         $this->assertSame($expected, CsvParser::parseLists($input));
     }
 
-    public function test_parse_with_comma_and_semicolon_lists(): void
+    public function test_parse_stream_comma_and_semicolon_lists(): void
     {
         /** @var ParserFactory $parserFactory */
         $parserFactory = $this->container->get(ParserFactory::class);
@@ -143,5 +143,54 @@ class CsvParserTest extends KernelTestCase
         $this->assertSame(['List 1', 'List 2'], $subscribers[0]->lists);
         $this->assertSame(['List 1', 'List 2'], $subscribers[1]->lists);
         $this->assertSame([], $subscribers[2]->lists);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function delimiterProvider(): array
+    {
+        return [
+            'semicolon' => [';'],
+            'tab' => ["\t"],
+            'pipe' => ['|'],
+        ];
+    }
+
+    #[DataProvider('delimiterProvider')]
+    public function test_parse_stream_with_custom_delimiter(string $delimiter): void
+    {
+        /** @var ParserFactory $parserFactory */
+        $parserFactory = $this->container->get(ParserFactory::class);
+        $parser = $parserFactory->csv();
+        $newsletter = NewsletterFactory::createOne();
+
+        $rows = [
+            ['email', 'lists'],
+            ['a@hyvor.com', 'List 1, List 2'],
+            ['b@hyvor.com', 'List 1'],
+        ];
+        $path = tempnam(sys_get_temp_dir(), 'import');
+        $handle = fopen($path, 'w');
+        $this->assertIsResource($handle);
+        foreach ($rows as $row) {
+            fputcsv($handle, $row, $delimiter);
+        }
+        fclose($handle);
+
+        $stream = fopen($path, 'r');
+        $this->assertIsResource($stream);
+        $subscribers = $parser->parseStream(
+            $stream,
+            $newsletter,
+            ['email' => 'email', 'lists' => 'lists'],
+            delimiter: $delimiter,
+        )->toArray();
+        unlink($path);
+
+        $this->assertCount(2, $subscribers);
+        $this->assertSame('a@hyvor.com', $subscribers[0]->email);
+        $this->assertSame(['List 1', 'List 2'], $subscribers[0]->lists);
+        $this->assertSame(['List 1'], $subscribers[1]->lists);
     }
 }
